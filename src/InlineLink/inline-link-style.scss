@@ -1,0 +1,11 @@
+$blue : #41B0EE;
+$blue-dark : #0092E1;
+.custom-inline-link {
+    color: $blue-dark;
+    font-weight: 500;
+    cursor: pointer;
+    &:hover {
+        text-decoration: underline;
+        color: $blue;
+    }
+}

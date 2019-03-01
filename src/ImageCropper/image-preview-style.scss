@@ -1,0 +1,27 @@
+.profile-image-container {
+    height: 200px;
+    width: 200px;
+    position: relative;
+    >.profile-image {
+        width: 100%;
+        height: 100%;
+        position: relative;
+        img {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+    }
+    >button {
+        width: 100%;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 200px;
+        border-radius: 0;
+        cursor: pointer;
+    }
+    >#fileInput {
+        display: none;
+    }
+}

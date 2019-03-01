@@ -1,0 +1,94 @@
+@mixin transition($props) {
+    -webkit-transition: $props;
+    -moz-transition: $props;
+    -o-transition: $props;
+    transition: $props;
+}
+
+$transition-time: 200ms;
+$transparent: transparent;
+$red: #F03529;
+$white: #fff;
+$blue: #41B0EE;
+$black: #000;
+.form-group.custom-dropdown {
+    margin: 0;
+    min-width: 200px;
+    >.input-field {
+        >.custom-dropdown {
+            >.custom-dropdown__menu {
+                position: absolute;
+                bottom: auto;
+            }
+        }
+        >.custom-dropdown:not(.custom-dropdown--is-disabled) {
+            >.custom-dropdown__control {
+                @include transition(border-color $transition-time);
+                height: 42px;
+                min-width: 200px;
+                background-color: $white;
+                cursor: pointer;
+                >.custom-dropdown__value-container {
+                    height: 42px;
+                    .custom-dropdown__input {
+                        background: $transparent;
+                    }
+                    .custom-dropdown__placeholder,
+                    .custom-dropdown__single-value {
+                        color: $black;
+                    }
+                }
+                >.custom-dropdown__indicators {
+                    .custom-dropdown__indicator-separator {
+                        display: none;
+                    }
+                    .custom-dropdown__indicator {
+                        >svg {
+                            color: $blue;
+                        }
+                    }
+                }
+            }
+        }
+        >label.custom-label:not(.form-check-label):not(.custom-checkbox):not(.custom-radio):not(.custom-control-label) {
+            display: block;
+            margin-bottom: 4px;
+            line-height: 1;
+            font-weight: normal;
+            font-size: 12px;
+        }
+        >.alert {
+            opacity: 0;
+            margin: 0;
+            padding: 0;
+            background: $transparent;
+            max-height: 0;
+            overflow: hidden;
+            @include transition((opacity $transition-time, padding $transition-time, max-height $transition-time*2));
+            &.alert-danger {
+                color: $red;
+            }
+        }
+        >.dropdown-input {
+            height: 42px;
+        }
+        &.has-error {
+            >.custom-dropdown {
+                >.custom-dropdown__control {
+                    border: 1px solid $red;
+                    >.custom-dropdown__placeholder {
+                        color: $red;
+                    }
+                }
+            }
+            >.dropdown-input {
+                border: 1px solid $red;
+            }
+            >.alert {
+                opacity: 1;
+                padding-top: 2px;
+                max-height: 100px;
+            }
+        }
+    }
+}

@@ -1,0 +1,11 @@
+$icon-dimention: 18px;
+.icon-holder {
+    display: inline-block;
+    width: $icon-dimention;
+    height: $icon-dimention;
+    >svg {
+        width: 100%;
+        height: 100%;
+        vertical-align: top;
+    }
+}

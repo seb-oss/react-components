@@ -1,0 +1,292 @@
+$default: 16px;
+$blue-dark:#0092E1;
+$blue-darker:#007AC7;
+$blue-darkest: #05578c;
+$gray-300: #dedede;
+$white: #fff;
+$black: #000;
+$transparent: transparent;
+$backdrop-background: rgba(0, 0, 0, 0.7);
+$dialogue-background: #FFF;
+$material-box-shadow: 0 7px 28px rgba(0, 0, 0, 0.25),
+0 2px 2px rgba(0, 0, 0, 0.22);
+$header-font-size: 24px;
+$transition-time: 300ms;
+@mixin transition($props) {
+    -webkit-transition: $props;
+    -moz-transition: $props;
+    -o-transition: $props;
+    transition: $props;
+}
+
+@mixin animation($props) {
+    -webkit-animation: $props;
+    -moz-animation: $props;
+    -o-animation: $props;
+    animation: $props;
+}
+
+.custom-dialogue {
+    .dialogue-container {
+        display: block;
+        position: fixed;
+        top: 0;
+        right: 0;
+        left: 0;
+        bottom: 0;
+        z-index: 20;
+        overflow: hidden;
+        background-color: $backdrop-background;
+        transform: translateY(100%);
+        opacity: 0;
+        .dialogue {
+            display: block;
+            position: relative;
+            border-radius: 3px;
+            color: $black;
+            background: $dialogue-background;
+            width: 512px;
+            overflow: hidden;
+            z-index: 21;
+            top: 45%;
+            opacity: 0;
+            left: 0;
+            right: 0;
+            margin: auto;
+            transform: translateY(-50%);
+            @include transition($transition-time);
+            box-shadow: $material-box-shadow;
+            >.dialogue-header {
+                text-align: center;
+                font-size: $header-font-size;
+                line-height: 1;
+                padding: 16px;
+                font-weight: 500;
+            }
+            >.dialogue-desc {
+                position: relative;
+                overflow: auto;
+                padding: 16px;
+                padding-bottom: 32px;
+            }
+            >.dialogue-footer {
+                position: relative;
+                text-align: right;
+                padding: 16px;
+                .dialogue-action {
+                    min-width: 120px;
+                    display: inline-block;
+                    .dialogue-button {
+                        min-width: 120px;
+                        font-size: $default;
+                        box-shadow: none;
+                        &.btn-primary {
+                            background: $blue-dark;
+                            &:hover {
+                                background: $blue-darker;
+                            }
+                            &:active {
+                                background-color: $blue-darkest !important;
+                            }
+                        }
+                        &.btn-secondary {
+                            border: 1px solid $blue-dark;
+                        }
+                        &:active,
+                        &:hover,
+                        &:focus {
+                            color: $white;
+                            box-shadow: none !important;
+                            outline: 0 !important;
+                        }
+                    }
+                    &:first-child {
+                        padding-right: 16px;
+                    }
+                }
+            }
+            &.with-desc {
+                .dialogue-header {
+                    text-align: left;
+                    border-bottom: 1px solid $gray-300;
+                }
+            }
+        }
+    }
+}
+
+// Tablet size
+@media only screen and (max-width: 768px) {
+    .custom-dialogue {
+        .dialogue-container {
+            .dialogue {
+                width: 500px;
+                >.contents .input-holder .label-text {
+                    width: 100%;
+                }
+            }
+        }
+    }
+}
+
+@media only screen and (max-width: 520px) {
+    .custom-dialogue {
+        .dialogue-container {
+            .dialogue {
+                width: 90%;
+            }
+        }
+    }
+}
+
+@media only screen and (min-width: 421px) {
+    .custom-dialogue {
+        &.open-dialogue {
+            .dialogue-container {
+                @include animation(container-fade-in $transition-time forwards);
+                .dialogue {
+                    top: 50%;
+                    opacity: 1;
+                }
+            }
+        }
+        &.close-dialogue {
+            .dialogue-container {
+                @include animation(container-fade-out $transition-time forwards);
+            }
+        }
+    }
+}
+
+// Standard phone size
+@media only screen and (max-width: 420px) {
+    .custom-dialogue {
+        &.open-dialogue {
+            .dialogue-container {
+                @include animation(container-fade-in $transition-time forwards);
+                .dialogue {
+                    transform: translateY(0);
+                    opacity: 1;
+                }
+            }
+        }
+        &.close-dialogue {
+            .dialogue-container {
+                @include animation(container-fade-out $transition-time*2 forwards);
+            }
+        }
+        .dialogue-container {
+            .dialogue {
+                top: 0;
+                left: 0;
+                right: 0;
+                width: auto;
+                opacity: 0;
+                transform: translateY(-50%);
+                border-radius: 0;
+                transition: all $transition-time;
+                >.dialogue-footer {
+                    .dialogue-action {
+                        width: 50%;
+                        &:first-child {
+                            padding-right: 8px;
+                        }
+                        &:last-child {
+                            padding-left: 8px;
+                        }
+                        .dialogue-button {
+                            width: 100%;
+                            min-width: 0;
+                        }
+                        &:first-child:last-child {
+                            width: 100%;
+                            padding: 0;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+// Smallest phone screen
+@media only screen and (max-width: 375px) {
+    .custom-dialogue {
+        .dialogue-container {
+            .dialogue {
+                >.dialogue-footer {
+                    button.btn.dialogue-button {
+                        font-size: 13px;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@keyframes container-fade-in {
+    0% {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+    1% {
+        transform: translateY(0);
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes container-fade-out {
+    0% {
+        transform: translateY(0%);
+        opacity: 1;
+    }
+    99% {
+        transform: translateY(0%);
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+}
+
+@keyframes container-fade-out-delayed {
+    0% {
+        transform: translateY(0%);
+        opacity: 1;
+    }
+    99% {
+        transform: translateY(0%);
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+}
+
+@keyframes dialogue-slide-in {
+    0% {
+        transform: translateY(-50%);
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes dialogue-slide-out {
+    0% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(-50%);
+        opacity: 0;
+    }
+}

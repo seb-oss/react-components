@@ -1,0 +1,316 @@
+@import "../../node_modules/cropperjs/dist/cropper.css";
+$default: 14px;
+$blue-dark:#0092E1;
+$blue-darker:#007AC7;
+$blue-darkest: #05578c;
+$white: #fff;
+$transparent: transparent;
+$gray-300: #dedede;
+$backdrop-background: rgba(7, 6, 6, 0.7);
+$cropper-dialogue-background: #FFF;
+$material-box-shadow: 0 7px 28px rgba(0, 0, 0, 0.25),
+0 2px 2px rgba(0, 0, 0, 0.22);
+$header-font-size: 24px;
+$transition-time: 300ms;
+@mixin transition($props) {
+    -webkit-transition: $props;
+    -moz-transition: $props;
+    -o-transition: $props;
+    transition: $props;
+}
+
+@mixin animation($props) {
+    -webkit-animation: $props;
+    -moz-animation: $props;
+    -o-animation: $props;
+    animation: $props;
+}
+
+.custom-cropper-dialogue {
+    .cropper-dialogue-container {
+        display: block;
+        position: fixed;
+        top: 0;
+        right: 0;
+        left: 0;
+        bottom: 0;
+        z-index: 20;
+        overflow: hidden;
+        background-color: $backdrop-background;
+        transform: translateY(100%);
+        opacity: 0;
+        .cropper-dialogue {
+            display: block;
+            border-radius: 3px;
+            position: relative;
+            background: $cropper-dialogue-background;
+            max-width: 800px;
+            min-width: 400px;
+            overflow: hidden;
+            z-index: 21;
+            top: 45%;
+            opacity: 0;
+            left: 0;
+            right: 0;
+            margin: auto;
+            transform: translateY(-50%);
+            @include transition($transition-time);
+            box-shadow: $material-box-shadow;
+            height: 480px;
+            .custom-react-cropper {
+                position: relative;
+                max-width: 100%;
+                height: calc(100% - 80px);
+                >div,
+                button {
+                    position: relative;
+                }
+                .cropper-container {
+                    width: 100%;
+                    height: 100%;
+                }
+                .inner-loader {
+                    position: absolute;
+                    top: 50%;
+                    left: 0px;
+                    right: 0px;
+                    bottom: 0px;
+                    margin-top: -50px;
+                }
+            }
+            >.cropper-dialogue-footer {
+                position: relative;
+                text-align: right;
+                padding: 0 16px;
+                height: 80px;
+                &.control-container {
+                    justify-content: center;
+                    align-items: center;
+                    button.btn.custom-button {
+                        min-width: 120px;
+                        &.btn-anchor {
+                            background: $transparent;
+                            border: 0;
+                            color: $blue-darkest;
+                            &:hover {
+                                background: $transparent;
+                                color: $blue-dark;
+                                text-decoration: underline;
+                            }
+                            &:active {
+                                color: $blue-darkest;
+                            }
+                            &:active,
+                            &:focus {
+                                background: $transparent;
+                                text-decoration: underline;
+                            }
+                        }
+                        .custom-icon-left {
+                            float: left;
+                            padding-top: 4px;
+                        }
+                        .custom-icon-right {
+                            float: right;
+                            padding-top: 4px
+                        }
+                    }
+                    .right-controls {
+                        width: 70%;
+                        button {
+                            &:first-child {
+                                margin-right: 10px;
+                            }
+                        }
+                    }
+                    .btn-delete {
+                        width: 30%;
+                        >button {
+                            float: left;
+                        }
+                    }
+                }
+            }
+            &.with-desc {
+                .cropper-dialogue-header {
+                    text-align: left;
+                    border-bottom: 1px solid $gray-300;
+                }
+            }
+        }
+    }
+}
+
+// Tablet size
+@media only screen and (max-width: 768px) {
+    .custom-cropper-dialogue {
+        .cropper-dialogue-container {
+            .cropper-dialogue {
+                width: 500px;
+                >.contents .input-holder .label-text {
+                    width: 100%;
+                }
+            }
+        }
+    }
+}
+
+@media only screen and (max-width: 520px) {
+    .custom-cropper-dialogue {
+        .cropper-dialogue-container {
+            .cropper-dialogue {
+                width: 90%;
+            }
+        }
+    }
+}
+
+@media only screen and (min-width: 421px) {
+    .custom-cropper-dialogue {
+        &.open-cropper-dialogue {
+            .cropper-dialogue-container {
+                @include animation(container-fade-in $transition-time forwards);
+                .cropper-dialogue {
+                    top: 50%;
+                    opacity: 1;
+                }
+            }
+        }
+        &.close-cropper-dialogue {
+            .cropper-dialogue-container {
+                @include animation(container-fade-out $transition-time forwards);
+            }
+        }
+    }
+}
+
+// Standard phone size
+@media only screen and (max-width: 420px) {
+    .custom-cropper-dialogue {
+        &.open-cropper-dialogue {
+            .cropper-dialogue-container {
+                @include animation(container-fade-in $transition-time forwards);
+                .cropper-dialogue {
+                    transform: translateY(0);
+                    opacity: 1;
+                }
+            }
+        }
+        &.close-cropper-dialogue {
+            .cropper-dialogue-container {
+                @include animation(container-fade-out $transition-time*2 forwards);
+            }
+        }
+        .cropper-dialogue-container {
+            .cropper-dialogue {
+                top: 0;
+                left: 0;
+                right: 0;
+                width: auto;
+                opacity: 0;
+                transform: translateY(-50%);
+                border-radius: 0;
+                transition: all $transition-time;
+                >.cropper-dialogue-footer {
+                    padding: 0 16px;
+                    height: 80px;
+                    &.control-container {
+                        justify-content: center;
+                        align-items: center;
+                        div {
+                            &:first-child {
+                                margin-right: 10px;
+                            }
+                            width: 100%;
+                            button {
+                                width: 100%;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+// Smallest phone screen
+@media only screen and (max-width: 375px) {
+    .custom-cropper-dialogue {
+        .cropper-dialogue-container {
+            .cropper-dialogue {
+                >.cropper-dialogue-footer {
+                    button.btn.cropper-dialogue-button {
+                        font-size: 13px;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@keyframes container-fade-in {
+    0% {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+    1% {
+        transform: translateY(0);
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes container-fade-out {
+    0% {
+        transform: translateY(0%);
+        opacity: 1;
+    }
+    99% {
+        transform: translateY(0%);
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+}
+
+@keyframes container-fade-out-delayed {
+    0% {
+        transform: translateY(0%);
+        opacity: 1;
+    }
+    99% {
+        transform: translateY(0%);
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+}
+
+@keyframes cropper-dialogue-slide-in {
+    0% {
+        transform: translateY(-50%);
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes cropper-dialogue-slide-out {
+    0% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(-50%);
+        opacity: 0;
+    }
+}

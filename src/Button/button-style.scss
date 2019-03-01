@@ -1,0 +1,93 @@
+$default: 14px;
+$blue-dark:#0092E1;
+$blue-darker:#007AC7;
+$blue-darkest: #05578c;
+$white: #fff;
+$transparent: transparent;
+$icon-dimention: 18px;
+button.btn {
+    .button-content {
+        padding-top: 0;
+        padding-bottom: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        >.button-label {
+            line-height: 1px;
+            height: 24px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex-grow: 1;
+        }
+        >.svg-holder {
+            display: inline-block;
+            width: $icon-dimention;
+            height: $icon-dimention;
+            vertical-align: top;
+            overflow: hidden;
+            line-height: 0;
+            flex-shrink: 1;
+            >svg {
+                width: 100%;
+                height: 100%;
+            }
+        }
+    }
+    &:not(.btn-lg):not(.btn-sm) {
+        min-width: 120px;
+        height: 42px;
+    }
+    &.btn-anchor {
+        background: $transparent;
+        border: 0;
+        color: $blue-darker;
+        &:hover {
+            background: $transparent;
+            color: $blue-dark;
+            text-decoration: underline;
+        }
+        &:active {
+            color: $blue-darker;
+        }
+        &:active,
+        &:focus {
+            background: $transparent;
+            text-decoration: underline;
+        }
+    }
+    &.btn-primary {
+        >.button-content {
+            >.svg-holder {
+                >svg {
+                    fill: $white;
+                }
+            }
+        }
+    }
+    &:not(.btn-primary) {
+        >.button-content {
+            >.svg-holder {
+                >svg {
+                    fill: $blue-dark;
+                }
+            }
+        }
+    }
+    &.icon-left {
+        >.button-content {
+            -ms-flex-direction: row-reverse;
+            flex-direction: row-reverse;
+            >.svg-holder {
+                margin-right: 5px;
+            }
+        }
+    }
+    &.icon-right {
+        >.button-content {
+            >.svg-holder {
+                margin-left: 5px;
+            }
+        }
+    }
+}

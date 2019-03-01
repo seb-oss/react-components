@@ -1,0 +1,19 @@
+$default: 14px;
+$standard: 16px;
+$blue:#0092E1;
+$blue-dark:#007AC7;
+$blue-darker: #05578c;
+.custom-breadcrumb {
+    ol.breadcrumb {
+        li.breadcrumb-item {
+            font-size: $standard;
+            &:not(.active) {
+                color: $blue;
+                cursor: pointer;
+                &:hover {
+                    color: $blue-darker;
+                }
+            }
+        }
+    }
+}

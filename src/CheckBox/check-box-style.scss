@@ -1,0 +1,43 @@
+$standard: 16px;
+$white: #fff;
+$gray-300: #dedede;
+$gray-600: #868686;
+$blue: #41B0EE;
+$red: #F03529;
+$black: #000;
+.form-group.custom-checkbox {
+    .input-field {
+        margin-bottom: 5px;
+        .custom-control {
+            .custom-control-label,
+            .custom-control-input {
+                cursor: pointer;
+                user-select: none;
+            }
+            .checkbox-description {
+                color: $gray-600;
+                display: inline-block;
+                margin-left: 8px;
+            }
+        }
+    }
+    &.inline {
+        display: inline-block;
+        &:not(:first-child) {
+            .custom-control {
+                margin-left: 15px;
+            }
+        }
+    }
+    .alert {
+        padding: 0px 2px;
+        margin: 0;
+        &.alert-danger {
+            color: $red;
+            background: none;
+            border: none;
+            border-radius: 0px;
+            width: 100%;
+        }
+    }
+}

@@ -1,0 +1,20 @@
+$blue: #41B0EE;
+$gray: #868686;
+.custom-tabs {
+    .nav-tabs {
+        .nav-item {
+            &:not(.active) {
+                .nav-link {
+                    color: $blue;
+                    cursor: pointer;
+                }
+            }
+            &.disabled {
+                .nav-link {
+                    cursor: default;
+                    color: $gray;
+                }
+            }
+        }
+    }
+}

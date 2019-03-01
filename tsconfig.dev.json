@@ -1,0 +1,32 @@
+{
+    "compilerOptions": {
+        "outDir": "./docs",
+        "module": "esnext",
+        "moduleResolution": "node",
+        "target": "es5",
+        "lib": [
+            "es2015",
+            "es6",
+            "es7",
+            "dom"
+        ],
+        "jsx": "react",
+        "declaration": false,
+        "sourceMap": true,
+        "importHelpers": true,
+        "noImplicitReturns": false,
+        "noImplicitThis": false,
+        "noImplicitAny": false,
+        "strictNullChecks": false
+    },
+    "exclude": [
+        "node_modules",
+        "webpack",
+        "dist",
+        "develop",
+        "coverage"
+    ],
+    "types": [
+        "typePatches"
+    ]
+}

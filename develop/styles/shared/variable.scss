@@ -1,0 +1,24 @@
+//Fonts-size----------------------------------------------------
+$largest: 30px;
+$larger: 25px;
+$large: 20px;
+$medium: 18px;
+$standard: 16px;
+$default: 14px;
+$small: 12px;
+$white: #fff;
+$black: #000;
+//custom colors:
+$transparent-black: rgba(0, 0, 0, 0.4);
+$popup-background: rgba(0, 0, 0, 0.7);
+//Mixins
+@mixin container-holder-defaults {
+    overflow: auto;
+    position: absolute;
+    top: 50px;
+    bottom: 60px;
+    left: 0px;
+    right: 0px;
+    padding: 0px 14px 10px 14px;
+    margin: auto;
+}

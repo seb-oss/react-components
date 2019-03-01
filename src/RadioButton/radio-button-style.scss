@@ -1,0 +1,106 @@
+$default: 16px;
+//colors
+$blue: #41B0EE;
+$white: #ffffff;
+$gray-300: #dedede;
+$gray-600: #868686;
+$black: #000;
+$transition-time: 200ms;
+$pink: #ffd1d1;
+$red: #F03529;
+.form-group.radio-holder {
+    .input-field {
+        position: relative;
+        margin: 10px 20px 10px 0px;
+        user-select: none;
+        transition: all $transition-time;
+        .radio-item {
+            position: relative;
+            margin-bottom: 5px;
+            input[type=radio] {
+                position: absolute;
+                opacity: 0;
+                left: 1px;
+                height: 24px;
+                width: 24px;
+                z-index: 2;
+                cursor: pointer;
+                &:hover+span {
+                    border-color: $blue;
+                }
+                &:checked~.checkmark {
+                    background-color: $white;
+                    &:after {
+                        display: block;
+                    }
+                }
+                &[disabled]~.checkmark {
+                    border: 1px solid $gray-600;
+                    background-color: $gray-300;
+                }
+            }
+            .checkmark {
+                position: absolute;
+                top: 0;
+                left: 0;
+                height: 24px;
+                width: 24px;
+                background-color: $white;
+                border: 1px solid $gray-300;
+                border-radius: 50%;
+                &:after {
+                    content: "";
+                    display: none;
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    width: 15px;
+                    height: 15px;
+                    border-radius: 50%;
+                    background: $blue;
+                    margin: 0;
+                }
+            }
+            label.radio-label {
+                padding-left: 35px;
+                display: inline-block;
+                height: 24px;
+                cursor: pointer;
+                user-select: none;
+                font-size: $default;
+                font-weight: normal;
+            }
+            .radio-description {
+                color: $gray-600;
+                display: inline-block;
+                margin-left: 8px;
+            }
+        }
+        .alert {
+            opacity: 0;
+            margin: 0;
+            padding: 0;
+            background-color: transparent;
+            color: $black;
+            transition: all $transition-time;
+        }
+        &.has-error {
+            background-color: $pink;
+            border: 1px solid $red;
+            border-radius: 4px;
+            padding: 5px 10px;
+            .alert {
+                opacity: 1;
+            }
+        }
+        &.inline {
+            .radio-item {
+                display: inline-block;
+                &:not(:last-child) {
+                    margin-right: 10px;
+                }
+            }
+        }
+    }
+}

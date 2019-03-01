@@ -1,0 +1,34 @@
+{
+    "compilerOptions": {
+        "outDir": "./dist",
+        "rootDir": "src",
+        "module": "esnext",
+        "moduleResolution": "node",
+        "target": "es5",
+        "lib": [
+            "es2015",
+            "es6",
+            "es7",
+            "dom"
+        ],
+        "jsx": "react",
+        "declaration": true,
+        "sourceMap": true,
+        "importHelpers": true,
+        "noImplicitReturns": false,
+        "noImplicitThis": false,
+        "noImplicitAny": false,
+        "strictNullChecks": false,
+        "esModuleInterop": true
+    },
+    "exclude": [
+        "node_modules",
+        "webpack",
+        "dist",
+        "develop",
+        "coverage"
+    ],
+    "types": [
+        "typePatches"
+    ]
+}

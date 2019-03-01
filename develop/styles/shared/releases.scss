@@ -1,0 +1,46 @@
+@import './variable';
+
+.releases-page {
+    padding-bottom: 40px;
+    margin: 15px 20px;
+    width: 80%;
+    >.title {
+        font-size: $large;
+        border-bottom: 1px solid $gray-400;
+        padding: 5px 0px;
+        margin-bottom: 10px;
+    }
+    >.desc {
+        color: $gray-600;
+        margin-bottom: 30px;
+    }
+    >.note-holder {
+        .item {
+            padding-bottom: 25px;
+            >.name {
+                font-weight: bold;
+                font-size: $medium;
+            }
+            >.date {
+                font-style: italic;
+                font-size: $default;
+            }
+            >.desc {
+                padding-bottom: 5px;
+                color: $gray-600;
+            }
+            >.notes {
+                .noteItems {
+                    padding-bottom: 5px;
+                    >.note-title {
+                        font-weight: bold;
+                    }
+                    >.note-desc {
+                        color: $gray-600;
+                        padding-left: 10px;
+                    }
+                }
+            }
+        }
+    }
+}

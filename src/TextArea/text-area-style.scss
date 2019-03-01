@@ -1,0 +1,53 @@
+$red: #F03529;
+@mixin transition($props) {
+    -webkit-transition: $props;
+    -moz-transition: $props;
+    -o-transition: $props;
+    transition: $props;
+}
+
+$transition-time: 200ms;
+.form-group.text-area {
+    >.input-field {
+        >label.custom-label:not(.form-check-label):not(.custom-checkbox):not(.custom-radio):not(.custom-control-label) {
+            display: block;
+            margin-bottom: 4px;
+            line-height: 1;
+            font-size: 12px;
+            font-weight: normal;
+        }
+        >textarea.form-control {
+            &:not(.resizable) {
+                resize: none;
+            }
+            &.error {
+                border-color: $red;
+            }
+        }
+        >.alert {
+            opacity: 0;
+            margin: 0;
+            padding: 0;
+            background: transparent;
+            max-height: 0;
+            border: none;
+            border-radius: 0px;
+            overflow: hidden;
+            width: 100%;
+            @include transition((opacity $transition-time, padding $transition-time, max-height $transition-time*2));
+            &.alert-danger {
+                color: $red;
+            }
+        }
+        &.has-error {
+            >textarea {
+                border: 1px solid $red;
+            }
+            >.alert {
+                opacity: 1;
+                padding-top: 2px;
+                max-height: 100px;
+            }
+        }
+    }
+}

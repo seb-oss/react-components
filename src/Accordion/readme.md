@@ -1,0 +1,51 @@
+---
+title: Accordion
+componentid: component-accordion
+variantid: default
+guid: 'accordion-guid-default-component-react'
+---
+
+## Element name
+```javascript
+Name: Accordion Component
+Component: "Accordion"
+Selector: "<Accordion/>"
+Import: "@sebgroup/react-components/dist/Accordion"
+Type: Form Component
+```
+
+## Element information 
+This React component is based on SEB Bootstrap style. Supports customization and configurations. The module name of this component is `Accordion` and the selector is `<Accordion/>`.
+
+## Basic use
+```html
+<Accordion
+      list="accordionListObj"
+/>
+```
+
+## Properties
+These are the current available properties:
+
+| Property   | Type                                   | Descrition              |
+| ---------- | -------------------------------------- | ----------------------- |
+| list?      | `Array<AccrodionListItem>`<sup>1</sup> | List of accordion items |
+| className? | `string`                               | custom class            |
+
+## Footnote
+1. `list` has an exported interface named `AccordionListItem`:
+```typescript
+interface AccordionListItem {
+      category: string;
+      text?: AccordionText | Array<AccordionText>;
+}
+```
+`AccordionListItem`'s memeber `text` has an exported interface name `AccordionText` and accepts a single `AccordionText` object or an array of `AccordionText` objects
+```typescript
+interface AccordionText {
+      title?: string;
+      desc?: string;
+}
+```
+
+:::iframe(https://github.sebank.se/pages/DesignLibrary/ReactComponents/#/accordion?mode=DL, 250)

@@ -1,0 +1,22 @@
+# Node
+node_modules
+npm-debug.log
+
+# JetBrains
+.idea/
+
+# VS Code
+.vscode/
+
+# Windows
+Thumbs.db
+Desktop.ini
+
+# Mac
+.DS_Store
+
+# Temporary files and folders
+dist
+tmp
+build
+coverage

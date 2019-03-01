@@ -1,0 +1,291 @@
+$white: #ffffff;
+$arrow-size: 9px;
+$purple: #673AB6;
+$blue: #41B0EE;
+$green:#60cd18;
+$yellow:#FFC500;
+$red: #F03529;
+$black: #000000;
+$gray-200: #e9e9e9;
+@mixin theme($background-color, $font-color) {
+    .message-container {
+        background-color: $background-color;
+        color: $font-color;
+    }
+    .triangle {
+        background-color: $background-color;
+        &:after {
+            border-color: transparent transparent $background-color $background-color;
+        }
+    }
+}
+
+.tooltip-container {
+    display: inline-block;
+    position: relative;
+    border-radius: 4px;
+    .icon {
+        cursor: pointer;
+        height: 25px;
+        width: 25px;
+        margin: auto;
+        svg {
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            vertical-align: top;
+        }
+    }
+    .content {
+        position: absolute;
+        z-index: -1;
+        opacity: 0;
+        &.open {
+            opacity: 1;
+            z-index: 2;
+        }
+        .message-container {
+            position: relative;
+            background-color: $white;
+            min-width: 120px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 2px 2px rgba(0, 0, 0, 0.24);
+            padding: 5px 10px 10px;
+            text-align: center;
+            .title {
+                font-weight: bold;
+                margin-bottom: 5px;
+            }
+            .message-list-item:not(:first-child) {
+                margin-top: 10px;
+            }
+            .message {
+                -webkit-user-select: none;
+                -moz-user-select: none;
+                -ms-user-select: none;
+                user-select: none;
+            }
+        }
+        .triangle {
+            position: relative;
+            background-color: $white;
+            box-shadow: 0px 3px 3px 0 rgba(0, 0, 0, 0.4);
+            top: -2px;
+            &::after {
+                content: "";
+                position: absolute;
+                width: 0;
+                height: 0;
+                box-sizing: border-box;
+                border: 9px solid;
+                border-color: transparent;
+                transform-origin: 0 0;
+                transform: rotate(-45deg);
+                box-shadow: -2px 3px 3px -1px rgba(0, 0, 0, 0.4);
+                background-color: transparent;
+                border-collapse: collapse;
+            }
+        }
+        &.top {
+            right: 50%;
+            top: 4px;
+            transform: translate(50%, -100%);
+            .triangle {
+                display: block;
+                margin-bottom: 11px;
+                transform: translateX(-13px);
+                text-align: center;
+                @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+                    left: 50%;
+                }
+            }
+        }
+        &.top-right {
+            left: -16px;
+            top: -7px;
+            transform: translateY(-100%);
+            text-align: left;
+            .triangle {
+                left: 13px;
+                transform: unset;
+            }
+        }
+        &.top-left {
+            right: -15px;
+            top: -7px;
+            transform: translateY(-100%);
+            .triangle {
+                transform: translateX(-35px);
+                margin-left: 100%;
+                right: 3px;
+            }
+        }
+        &.bottom {
+            margin-top: 9px;
+            right: 50%;
+            transform: translateX(50%);
+            margin-bottom: 5px;
+            .triangle {
+                transform: translateX(-2px);
+                display: block;
+                text-align: center;
+                @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+                    left: 50%;
+                }
+                &:after {
+                    box-shadow: -3px 0px 2px -2px rgba(0, 0, 0, 0.24);
+                    top: 9px;
+                    transform: rotate(135deg);
+                    transform-origin: top;
+                }
+            }
+        }
+        &.bottom-right {
+            margin-top: 9px;
+            left: -14px;
+            transform: unset;
+            margin-bottom: 5px;
+            text-align: left;
+            .triangle {
+                left: 22px;
+                transform: unset;
+                &:after {
+                    box-shadow: -3px 0px 2px -2px rgba(0, 0, 0, 0.24);
+                    top: 9px;
+                    transform: rotate(135deg);
+                    transform-origin: top;
+                }
+            }
+        }
+        &.bottom-left {
+            margin-top: 9px;
+            right: -13px;
+            margin-bottom: 5px;
+            transform: unset;
+            .triangle {
+                transform: translateX(-22px);
+                margin-left: 100%;
+                right: 3px;
+                &:after {
+                    box-shadow: -3px 0px 2px -2px rgba(0, 0, 0, 0.24);
+                    top: 9px;
+                    transform: rotate(135deg);
+                    transform-origin: top;
+                }
+            }
+        }
+        &.right {
+            transform: translateY(-50%);
+            top: 50%;
+            left: 32px;
+            .triangle {
+                position: absolute;
+                top: 50%;
+                transform: translateY(-13px);
+                &:after {
+                    transform: rotate(45deg);
+                    left: 2px;
+                    box-shadow: -1px 5px 4px -3px rgba(0, 0, 0, 0.24);
+                }
+            }
+        }
+        &.right-bottom {
+            transform: unset;
+            top: -9px;
+            left: 32px;
+            .triangle {
+                position: absolute;
+                top: 11px;
+                transform: unset;
+                &:after {
+                    transform: rotate(45deg);
+                    left: 2px;
+                    box-shadow: -1px 5px 4px -3px rgba(0, 0, 0, 0.24);
+                }
+            }
+        }
+        &.right-top {
+            transform: translateY(-100%);
+            top: 34px;
+            left: 32px;
+            .triangle {
+                position: absolute;
+                transform: translateY(-32px);
+                top: 100%;
+                &:after {
+                    transform: rotate(45deg);
+                    left: 2px;
+                    box-shadow: -1px 5px 4px -3px rgba(0, 0, 0, 0.24);
+                }
+            }
+        }
+        &.left {
+            right: 32px;
+            transform: translateY(-50%);
+            top: 45%;
+            .triangle {
+                position: absolute;
+                top: 50%;
+                right: 0;
+                transform: translateY(15px);
+                &:after {
+                    transform: rotate(225deg);
+                    left: -2px;
+                    box-shadow: -4px 1px 2px -2px rgba(0, 0, 0, 0.24)
+                }
+            }
+        }
+        &.left-bottom {
+            margin-right: 1px;
+            right: 31px;
+            top: -8px;
+            .triangle {
+                position: absolute;
+                top: 37px;
+                right: 0;
+                &:after {
+                    transform: rotate(225deg);
+                    left: -2px;
+                    box-shadow: -4px 1px 2px -2px rgba(0, 0, 0, 0.24)
+                }
+            }
+        }
+        &.left-top {
+            transform: translateY(-100%);
+            top: 34px;
+            margin-right: 1px;
+            right: 31px;
+            .triangle {
+                position: absolute;
+                transform: translateY(-6px);
+                top: 100%;
+                right: 0;
+                &:after {
+                    transform: rotate(225deg);
+                    left: -2px;
+                    box-shadow: -4px 1px 2px -2px rgba(0, 0, 0, 0.24)
+                }
+            }
+        } // Themes
+        &.default {
+            @include theme($black, $white);
+        }
+        &.light {
+            @include theme($gray-200, $black);
+        }
+        &.danger {
+            @include theme($red, $white);
+        }
+        &.warning {
+            @include theme($yellow, $white);
+        }
+        &.success {
+            @include theme($green, $white);
+        }
+        &.primary {
+            @include theme($blue, $white);
+        }
+        &.purple {
+            @include theme($purple, $white);
+        }
+    }
+}
