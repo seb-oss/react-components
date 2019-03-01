@@ -2,10 +2,8 @@
 This is a set of react components which some of them are based on SEB's bootstrap. The plan for this project is to increase and improve components for future usages.
 
 -     The package name: `@sebgroup/react-components`
--     The package documentation: [Documentation](https://github.sebank.se/pages/DesignLibrary/ReactComponents) 
--     The package sourcecode: [Github Source Code](https://github.sebank.se/DesignLibrary/ReactComponents)
-
-We also have an awesome `React Base Project (boilerplate)` which contain every tech you need with highest performance possible to use it on your brand new project. Over there you can see the usage of these components as well. Here is the source code to it. [React Base](https://github.sebank.se/sebpensiondk/ReactBaseProject)
+-     The package documentation: [Documentation](https://github.com/pages/sebgroup/react-components) 
+-     The package sourcecode: [Github Source Code](https://github.com/sebgroup/react-components)
 
 ## Minimum requirements
 This version of components has been tested and developed on:
@@ -13,25 +11,8 @@ This version of components has been tested and developed on:
 -   Typescript `3.0.0` or above
 -   Webpack `4.16.0` or above
 
-then you need to add registry in your `npm config list`
-at the moment `package.lock.json` pointed to SEB's artifactory.
-
-you can set a new registry by: `npm config set registry https://repo.sebank.se/artifactory/api/npm/seb-npm`
-to delete the SEB artifactory, and resetting it to default npm. type: `npm config delete registry`
-then after u set the registry, type `npm config edit` and below conent under the registry which is part of 
-
-```javascript
-registry=https://repo.sebank.se/artifactory/api/npm/seb-npm/
-always-auth=false
-strict-ssl=false
-HTTP_PROXY=http://gia.sebank.se:8080
-HTTPS_PROXY=http://gia.sebank.se:8080
-NO_PROXY=sebank.se
-NODE_TLS_REJECT_UNAUTHORIZED=0
-```
-
 ## Installation
-As long as you are connected to SEB network. You should be able to install the NPM package.
+You should be able to install the NPM package.
 ```bash
 npm install @sebgroup/react-components --save
 ```
@@ -82,12 +63,3 @@ class YourParentComponent extends React.Component<any, any> {
 }
 export default YourParentComponent;
 ```
-
-## Contact us
-For your feedback please contact us via emails below:
-1.  mohsen.zaim@seb.se
-2.  yousif.alraheem@seb.se
-3.  nuru.salihuabdullahi@seb.se
-
-## For Angular Users
-For all Angular users, we are hosting the same version of components which is called `seb-angular-components`, and you can read the documentation [Here](https://github.sebank.se/pages/DesignLibrary/AngularComponents)
