@@ -34,7 +34,8 @@
 		"test": "rimraf ./coverage && jest",
 		"commit": "git-cz",
 		"travis-deploy-once": "travis-deploy-once --pro",
-		"semantic-release": "semantic-release && npm run build"
+		"semantic-release": "semantic-release && npm run build",
+		"package-lock-sanitizer": "package-lock-sanitizer"
 	},
 	"dependencies": {
 		"@sebgroup/bootstrap": "^3.1.1",
@@ -81,6 +82,7 @@
 		"jsdom-global": "^3.0.2",
 		"markdown-loader": "^5.0.0",
 		"node-sass": "^4.11.0",
+		"package-lock-sanitizer": "^1.0.0",
 		"raf": "^3.4.1",
 		"raw-loader": "^1.0.0",
 		"react-highlight": "^0.12.0",
