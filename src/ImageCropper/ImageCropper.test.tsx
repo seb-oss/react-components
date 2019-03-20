@@ -238,28 +238,28 @@ describe("Component: ImageCropper", () => {
         }, 1000);
     });*/
 
-    it(" should throw error when one of the unchangeable properties changed", () => {
-        // setAspectRatio and other unchangeable properties should be throw exception because aspectRatio is part of unchangeable props after rendering
-        try {
-            const wrapper = mount(<ImageCropper {...props} />);
-            const instance: any = wrapper.instance();
-            const setAspectRatioMock = jest.spyOn(instance, "setAspectRatio");
-            wrapper.setProps({ cropperConfigs: { aspectRatio: 1.90 } });
-            expect(setAspectRatioMock).toThrowError();
+    // it(" should throw error when one of the unchangeable properties changed", () => {
+    //     // setAspectRatio and other unchangeable properties should be throw exception because aspectRatio is part of unchangeable props after rendering
+    //     try {
+    //         const wrapper = mount(<ImageCropper {...props} />);
+    //         const instance: any = wrapper.instance();
+    //         const setAspectRatioMock = jest.spyOn(instance, "setAspectRatio");
+    //         wrapper.setProps({ cropperConfigs: { aspectRatio: 1.90 } });
+    //         expect(setAspectRatioMock).toThrowError();
 
-            // setData function should be called when the data props is change
-            const mockSetData = jest.spyOn(instance, "setData");
-            wrapper.setProps({ data: { y: 0, x: 0, height: 1, width: 3 }, });
-            expect(mockSetData).toThrowError();
+    //         // setData function should be called when the data props is change
+    //         const mockSetData = jest.spyOn(instance, "setData");
+    //         wrapper.setProps({ data: { y: 0, x: 0, height: 1, width: 3 }, });
+    //         expect(mockSetData).toThrowError();
 
-            // setDragMode function should be called when the setDragMode props is change
-            const mockSetDragMode = jest.spyOn(instance, "setDragMode");
-            wrapper.setProps({ dragMode: "move" });
-            expect(mockSetDragMode).toThrowError();
-            wrapper.unmount();
+    //         // setDragMode function should be called when the setDragMode props is change
+    //         const mockSetDragMode = jest.spyOn(instance, "setDragMode");
+    //         wrapper.setProps({ dragMode: "move" });
+    //         expect(mockSetDragMode).toThrowError();
+    //         wrapper.unmount();
 
-        } catch (err) {
-            // console.error(err);
-        }
-    });
+    //     } catch (err) {
+    //         // console.error(err);
+    //     }
+    // });
 });
