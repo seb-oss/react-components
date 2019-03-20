@@ -2,7 +2,7 @@
 	"name": "@sebgroup/react-components",
 	"version": "0.0.0-semantically-released",
 	"description": "A set of React base components based on SEB design",
-	"license": "ISC",
+	"license": "Apache-2.0",
 	"author": "Mohsen Asle Zaim",
 	"keywords": [
 		"react",
@@ -14,12 +14,12 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "https://github.sebank.se/DesignLibrary/ReactComponents"
+		"url": "https://github.com/sebgroup/react-components"
 	},
 	"bugs": {
-		"url": "https://github.sebank.se/DesignLibrary/ReactComponents/issues"
+		"url": "https://github.com/sebgroup/react-components/issues"
 	},
-	"homepage": "https://github.sebank.se/DesignLibrary/ReactComponents#readme",
+	"homepage": "https://sebgroup.github.io/react-components",
 	"scripts": {
 		"build:dev": "webpack-dev-server --config webpack.config.dev.js --host 0.0.0.0",
 		"build:docs": "webpack --config webpack.config.docs.js",

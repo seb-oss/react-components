@@ -36,7 +36,7 @@ module.exports = {
             'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development')
         }),
         new HtmlWebpackPlugin({
-            "template": "./develop/index.html",
+            "template": "./develop/index.dev.html",
             "filename": "./index.html"
         })
     ],
