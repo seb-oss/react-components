@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Image } from "../../../src/image/Image";
+import { Image } from "../../../src/Image/Image";
 import { getParameterByName } from "../../utils/queryString";
 const Highlight = (require("react-highlight")).default;
 const docMD = require("../../../src/Image/readme.md");
