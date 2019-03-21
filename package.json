@@ -31,7 +31,7 @@
 		"docs": "npm run clean && npm run test && npm run build:docs",
 		"build": "npm run clean && npm run lint &&  npm run test && npm run build:production && npm run build:docs",
 		"publish": "npm run clean && npm run build",
-		"test": "rimraf ./coverage && jest --detectOpenHandles",
+		"test": "rimraf ./coverage && jest --forceExit --detectOpenHandles",
 		"commit": "git-cz",
 		"travis-deploy-once": "travis-deploy-once --pro",
 		"semantic-release": "semantic-release && npm run build",
