@@ -29,7 +29,7 @@
 		"lint": "tslint -p tsconfig.json",
 		"start": "npm run build:dev",
 		"docs": "npm run clean && npm run test && npm run build:docs",
-		"build": "npm run clean && npm run lint && npm run build:production && npm run build:docs",
+		"build": "npm run clean && npm run lint &&  npm run test && npm run build:production && npm run build:docs",
 		"publish": "npm run clean && npm run build",
 		"test": "rimraf ./coverage && jest --detectOpenHandles",
 		"commit": "git-cz",

@@ -12,11 +12,7 @@ cache:
   - $HOME/.npm
 
 script:
-- npm run test
-- if [ "$TRAVIS_BRANCH" == "master" ];
-  then npm run build;
-  else npm run docs;
-  fi
+- npm run build
 - export APPLITOOLS_BATCH_ID=`echo ${TRAVIS_PULL_REQUEST_SHA:=$TRAVIS_COMMIT}`
 
 deploy:
