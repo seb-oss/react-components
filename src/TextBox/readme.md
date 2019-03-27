@@ -51,5 +51,3 @@ These are the current available properties:
 | autoComplete? | `boolean`                                                | Enable autocomplete. (default: `false`)         |
 | max?          | `number`                                                 | Input max length                                |
 | reference?    | `React.RefObject<HTMLInputElement>`                      | React Ref obj                                   |
-
-:::iframe(https://github.sebank.se/pages/DesignLibrary/ReactComponents/#/textbox?mode=DL, 210)

@@ -38,5 +38,3 @@ These are the current available properties:
 | onLoad?    | `(event: any) => void` | only works with `img` tag and returns when image is laoded      |
 | className? | `string`               | custom class                                                    |
 | useImgTag? | `boolean`              | this will switch between `div` and `img` tags. default is `div` |
-
-:::iframe(https://github.sebank.se/pages/DesignLibrary/ReactComponents/#/image?mode=DL, 240)

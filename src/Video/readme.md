@@ -50,5 +50,3 @@ These are the current available properties:
 1. Video source is obtained either:
       * `Local`: use `require()` method to require the video into your source code and use the returned string as `src`.
       * `Stream`: grab only the url from the **embed** sharing option and use it as `src`.
-
-:::iframe(https://github.sebank.se/pages/DesignLibrary/ReactComponents/#/video?mode=DL, 800)

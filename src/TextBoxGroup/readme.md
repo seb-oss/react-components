@@ -59,5 +59,3 @@ These are the current available properties:
 | onLeftClick?  | `(event: React.MouseEvent<HTMLDivElement>) => void`      | Click event on Left icon                              |
 | onRightClick? | `(event: React.MouseEvent<HTMLDivElement>) => void`      | Click event on Right icon                             |
 | reference?    | `React.RefObject<HTMLInputElement>`                      | React Ref obj                                   |
-
-:::iframe(https://github.sebank.se/pages/DesignLibrary/ReactComponents/#/textboxgroup?mode=DL, 300)

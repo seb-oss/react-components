@@ -41,5 +41,3 @@ These are the current available properties:
 | primaryAction?   | `() => void` | click event fired when primary button is clicked   |
 | secondaryAction? | `() => void` | click event fired when secondary button is clicked |
 | className?       | `string`     | custom class                                       |
-
-:::iframe(https://github.sebank.se/pages/DesignLibrary/ReactComponents/#/dialogue?mode=DL, 100)

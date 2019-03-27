@@ -41,6 +41,3 @@ These are the current available properties:
 
 ## Footnote
 1. Supported themes: `primary`, `secondary`, `anchor`
-```
-
-:::iframe(https://github.sebank.se/pages/DesignLibrary/ReactComponents/#/button?mode=DL, 360)

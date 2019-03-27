@@ -48,5 +48,3 @@ This component is a wrapper around [react-slick](https://www.npmjs.com/package/r
     image?: string;
 }
 ```
-
-:::iframe(https://github.sebank.se/pages/DesignLibrary/ReactComponents/#/carousel?mode=DL, 350)

@@ -30,5 +30,3 @@ These are the current available properties:
 | toggle      | `boolean` | toggle to true or false to show/hide                  |
 | fullscreen? | `boolean` | to show it in fullscreen mode or not. default is true |
 | className?  | `string`  | custom class                                          |
-
-:::iframe(https://github.sebank.se/pages/DesignLibrary/ReactComponents/#/loader?mode=DL, 120)

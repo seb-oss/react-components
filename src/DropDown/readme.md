@@ -54,5 +54,3 @@ This component is a wrapper around [react-select](https://github.com/JedWatson/r
       value = any
 }
 ```
-
-:::iframe(https://github.sebank.se/pages/DesignLibrary/ReactComponents/#/dropdown?mode=DL, 270)

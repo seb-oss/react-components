@@ -30,5 +30,3 @@ These are the current available properties:
 | value         | `number`  | the value of the progress bar          |
 | showProgress? | `boolean` | Show progress percentage value in text |
 | className?    | `string`  | custom class                           |
-
-:::iframe(https://github.sebank.se/pages/DesignLibrary/ReactComponents/#/progressbar?mode=DL, 110)

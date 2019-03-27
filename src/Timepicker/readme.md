@@ -51,5 +51,3 @@ enum TimepickerDayperiodTypes {
       PM = "PM"
 }
 ```
-
-:::iframe(https://github.sebank.se/pages/DesignLibrary/ReactComponents/#/timepicker?mode=DL, 130)

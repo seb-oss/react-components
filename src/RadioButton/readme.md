@@ -43,5 +43,3 @@ These are the current available properties:
 | disabled?    | `boolean`              | Disable the radio button                              |
 | inline?      | `boolean`              | Display radio items inline                            |
 | reference?         | `React.RefObject<any>` | React Ref obj                                         |
-
-:::iframe(https://github.sebank.se/pages/DesignLibrary/ReactComponents/#/radiobtn?mode=DL, 110)

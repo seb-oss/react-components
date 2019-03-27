@@ -29,5 +29,3 @@ These are the current available properties:
 | ---------- | ---------- | ------------- |
 | onClick?   | `()=>void` | Click handler |
 | className? | `string`   | Custom class  |
-
-:::iframe(https://github.sebank.se/pages/DesignLibrary/ReactComponents/#/inlinelink?mode=DL, 60)

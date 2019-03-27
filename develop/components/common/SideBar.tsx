@@ -20,7 +20,8 @@ const SideBar: React.StatelessComponent<SideBarProps> = (props: SideBarProps): R
                 <div className="title">How it works?</div>
                 <div className="nav-holder">
                     <Link to="/about" className={(page === "/" || page === "/about") ? "active" : ""}><span>About</span></Link>
-                    <Link to="/release" className={page === "/release" ? "active" : ""}><span>Release Notes</span></Link>
+                    <a href="https://github.com/sebgroup/react-components/issues" target="_blank"><span>Issues</span></a>
+                    <a href="https://github.com/sebgroup/react-components/releases" target="_blank"><span>Release notes</span></a>
                 </div>
             </div>
             <div className="category">

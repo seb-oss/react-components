@@ -33,5 +33,3 @@ These are the current available properties:
 | list       | `Array<string>`       | List of paths                            |
 | onClick    | `(i: number) => void` | Click action passed the index of the tab |
 | className? | `string`              | custom class                             |
-
-:::iframe(https://github.sebank.se/pages/DesignLibrary/ReactComponents/#/breadcrumb?mode=DL, 100)
