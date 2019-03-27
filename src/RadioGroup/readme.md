@@ -53,5 +53,3 @@ These are the current available properties:
       disabled?: boolean;
 }
 ```
-
-:::iframe(https://github.sebank.se/pages/DesignLibrary/ReactComponents/#/radiogroup?mode=DL, 130)

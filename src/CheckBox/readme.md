@@ -42,5 +42,3 @@ These are the current available properties:
 | description?   | `string`               | a option description                    |
 | error?         | `string`               | error message                           |
 | reference?           | `React.RefObject<any>` | React Ref obj                           |
-
-:::iframe(https://github.sebank.se/pages/DesignLibrary/ReactComponents/#/checkbox?mode=DL, 140)

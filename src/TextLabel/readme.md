@@ -35,5 +35,3 @@ These are the current available properties:
 | name?      | `string` | element name                    |
 | label?     | `string` | Element label                   |
 | className? | `string` | Custom class can be passed here |
-
-:::iframe(https://github.sebank.se/pages/DesignLibrary/ReactComponents/#/textlabel?mode=DL, 80)

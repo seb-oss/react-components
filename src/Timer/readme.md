@@ -33,6 +33,3 @@ These are the current available properties:
 | duration   | `number`               | duration of timer in `Millisecond`                               |
 | callback   | `() => void`           | This method will be triggered when timer reached ended           |
 | className? | `string`               | custom class                                                     |
-
-
-:::iframe(https://github.sebank.se/pages/DesignLibrary/ReactComponents/#/timer?mode=DL, 80)

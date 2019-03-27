@@ -75,5 +75,3 @@ const ExampleContainer: React.StatelessComponent = () => {
 ```
 2. Supported themes: `default`, `light`, `primary`, `warning`, `success`, `danger`, `purple`
 3. Mouse event is used to determine if the clicked happened outside the tooltip to dismiss it. If you wanted to force it to dismiss regardless, you should not pass the event.
-
-:::iframe(https://github.sebank.se/pages/DesignLibrary/ReactComponents/#/tooltip?mode=DL, 350)

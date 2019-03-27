@@ -47,5 +47,3 @@ These are the current available properties:
 
 ## Reference
 This component is a wrapper around [react-date-picker](https://www.npmjs.com/package/react-date-picker)
-
-:::iframe(https://github.sebank.se/pages/DesignLibrary/ReactComponents/#/datepicker?mode=DL, 400)

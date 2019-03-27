@@ -62,5 +62,4 @@ These are the current available properties:
 }
 ```
 2. Supported themes: `'primary'`, `'inverted'`, `'success'`, `'danger'`, `'warning'`, `'purple'`
-
-:::iframe(https://github.sebank.se/pages/DesignLibrary/ReactComponents/#/slider?mode=DL, 270)
+   

@@ -28,7 +28,7 @@ export default class IconPage extends React.Component<any, any>  {
                         <h2>Output</h2>
                         <p>Here are sample outputs</p>
                         <div className="result">
-                            <Icon src={mySvg} />
+                            <Icon src={mySvg} size={24}/>
                         </div>
                     </div>
 

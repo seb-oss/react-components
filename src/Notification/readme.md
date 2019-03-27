@@ -68,5 +68,3 @@ These are the current available properties:
       <div>content</div>
 </Notification
 ```
-
-:::iframe(https://github.sebank.se/pages/DesignLibrary/ReactComponents/#/notification?mode=DL, 260)

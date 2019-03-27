@@ -71,6 +71,3 @@ This component is based on [cropperjs](https://github.com/fengyuanchen/cropperjs
 ## Footnote
 1. The props from the property above is the cropperjs options object. cropperjs support set of properties namely, `drapMode`, `initialMode` , `aspectRation` etc. These and many more options are described in the cropperjs documentation [here](https://github.com/fengyuanchen/cropperjs#options). 
 `toggle` is an optional field. However, you need to pass toggle to be able to control the modal from your component.
-
-
-:::iframe(https://github.sebank.se/pages/DesignLibrary/ReactComponents/#/imagecropper?mode=DL, 300)

@@ -4,12 +4,10 @@ import * as Loadable from "react-loadable";
 import Routing from "./Routing";
 import TitleBar from "./common/TitleBar";
 import SideBar from "./common/SideBar";
-
 import { Loader } from "../../src/Loader/Loader";
 
 // Here we are asynchronously loading components based on their path
 const About = Loadable({ loader: () => import("./common/About"), loading: () => <Loader toggle={true} /> });
-const Release = Loadable({ loader: () => import("./common/Release"), loading: () => <Loader toggle={true} /> });
 
 const ButtonPage = Loadable({ loader: () => import("./pages/ButtonPage"), loading: () => <Loader toggle={true} /> });
 const TextBoxPage = Loadable({ loader: () => import("./pages/TextBoxPage"), loading: () => <Loader toggle={true} /> });
@@ -72,7 +70,6 @@ class App extends React.Component<any, AppState>  {
                     <Switch>
                         <Routing path="/" exact={true} component={About} props={propsToSend} />
                         <Routing path={"/about"} component={About} props={propsToSend} />
-                        <Routing path={"/release"} component={Release} props={propsToSend} />
                         <Routing path={"/button"} component={ButtonPage} props={propsToSend} />
                         <Routing path={"/textbox"} component={TextBoxPage} props={propsToSend} />
                         <Routing path={"/textboxgroup"} component={TextBoxGroupPage} props={propsToSend} />

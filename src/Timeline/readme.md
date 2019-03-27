@@ -43,4 +43,3 @@ These are the current available properties:
       desc?: string;
 }
 ```
-:::iframe(https://github.sebank.se/pages/DesignLibrary/ReactComponents/#/timeline?mode=DL, 780)

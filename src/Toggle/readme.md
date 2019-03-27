@@ -37,5 +37,3 @@ These are the current available properties:
 | onChange   | `(event: any) => void` | checkbox event          |
 | className? | `string`               | custom class            |
 | reference?       | `React.RefObject<any>` | React Ref obj           |
-
-:::iframe(https://github.sebank.se/pages/DesignLibrary/ReactComponents/#/toggle?mode=DL, 80)

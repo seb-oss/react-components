@@ -44,5 +44,3 @@ These are the current available properties:
       disabled?: boolean;
 }
 ```
-
-:::iframe(https://github.sebank.se/pages/DesignLibrary/ReactComponents/#/tabs?mode=DL, 80)

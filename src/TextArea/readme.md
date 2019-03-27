@@ -54,5 +54,3 @@ These are the current available properties:
 | readonly?    | `boolean`                                                   | Make textatrea readonly. (default: `false`) |
 | max?         | `number`                                                    | Input max length                            |
 | reference?   | `React.RefObject<HTMLTextAreaElement>`                      | React Ref obj                               |
-
-:::iframe(https://github.sebank.se/pages/DesignLibrary/ReactComponents/#/textarea?mode=DL, 400)

@@ -40,5 +40,3 @@ These are the current available properties:
 
 ## Footnote
 1. Label positions supported `top` and `bottom` for `horizontal` orientation, `left` and `right` for `vertical` orientation.
-
-:::iframe(https://github.sebank.se/pages/DesignLibrary/ReactComponents/#/steptracker?mode=DL, 390)

@@ -47,5 +47,3 @@ These are the current available properties:
 
 ## Footnote
 1. Dot navigation does not support `offset`, it is not meant to have big size navigation. For that, use the normal numbered navigation.
-
-:::iframe(https://github.sebank.se/pages/DesignLibrary/ReactComponents/#/pagination?mode=DL, 150)

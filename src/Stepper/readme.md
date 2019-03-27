@@ -45,5 +45,3 @@ These are the current available properties:
 | error?     | `string`                 | error message                   |
 | warning?   | `string`                 | warning message                 |
 | reference?       | `React.RefObject<any>`   | React Ref obj                   |
-
-:::iframe(https://github.sebank.se/pages/DesignLibrary/ReactComponents/#/stepper?mode=DL, 100)

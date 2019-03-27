@@ -47,5 +47,3 @@ interface AccordionText {
       desc?: string;
 }
 ```
-
-:::iframe(https://github.sebank.se/pages/DesignLibrary/ReactComponents/#/accordion?mode=DL, 250)

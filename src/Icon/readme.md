@@ -32,5 +32,3 @@ These are the current available properties:
 | onClick?   | `() => void` | Click action                                                  |
 | title?     | `string`     | HTML element title shown on hover and wait                    |
 | size?      | `number`     | Icon size to be applied to both dimentions (width and height) |
-
-:::iframe(https://github.sebank.se/pages/DesignLibrary/ReactComponents/#/icons?mode=DL, 70)

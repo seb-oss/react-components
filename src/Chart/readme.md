@@ -41,5 +41,3 @@ This component is a wrapper around [react-chartjs-2](https://www.npmjs.com/packa
 
 ## footnote
 1. Supported charts: `line`, `bar`, `horizontalBar`, `pie`, `doughnut`, `polar`, `radar`, `bubble`, `scatter`
-
-:::iframe(https://github.sebank.se/pages/DesignLibrary/ReactComponents/#/chart?mode=DL, 800)
