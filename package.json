@@ -119,6 +119,6 @@
 		}
 	},
 	"release": {
-		"pkgRoot": "dist"
+		"pkgRoot": "."
 	}
 }
