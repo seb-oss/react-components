@@ -11,7 +11,7 @@ export interface ImageProps {
     useImgTag?: boolean;
 }
 
-export const Image: React.StatelessComponent<ImageProps> = (props: ImageProps): React.ReactElement<void> => {
+export const Image: React.FunctionComponent<ImageProps> = React.memo((props: ImageProps): React.ReactElement<void> => {
     return (
         <>
             {!props.useImgTag &&
@@ -39,4 +39,4 @@ export const Image: React.StatelessComponent<ImageProps> = (props: ImageProps): 
             }
         </>
     );
-};
+});

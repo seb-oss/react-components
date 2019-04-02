@@ -15,7 +15,7 @@ export interface CheckBoxProps {
     reference?: React.RefObject<any>;
 }
 
-export const CheckBox: React.StatelessComponent<CheckBoxProps> = (props: CheckBoxProps): React.ReactElement<void> => {
+export const CheckBox: React.FunctionComponent<CheckBoxProps> = React.memo((props: CheckBoxProps): React.ReactElement<void> => {
     return (
         <div className={"form-group custom-checkbox" + (props.inline ? " inline" : "")}>
             <div className={"input-field" + (props.className ? ` ${props.className}` : "")}>
@@ -39,4 +39,4 @@ export const CheckBox: React.StatelessComponent<CheckBoxProps> = (props: CheckBo
             </div>
         </div>
     );
-};
+});

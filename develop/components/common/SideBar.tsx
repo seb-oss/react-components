@@ -10,7 +10,7 @@ interface SideBarProps {
     toggle: boolean;
 }
 
-const SideBar: React.StatelessComponent<SideBarProps> = (props: SideBarProps): React.ReactElement<void> => {
+const SideBar: React.FunctionComponent<SideBarProps> = (props: SideBarProps): React.ReactElement<void> => {
     const str = location.href.toLowerCase();
     const page = str.substr(str.lastIndexOf("/"));
 

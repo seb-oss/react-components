@@ -21,7 +21,7 @@ export interface PaginationProps {
     onChange?: (value: number) => void;
 }
 
-export const Pagination: React.StatelessComponent<PaginationProps> = (props: PaginationProps): React.ReactElement<void> => {
+export const Pagination: React.FunctionComponent<PaginationProps> = React.memo((props: PaginationProps): React.ReactElement<void> => {
     const Initialoffset: number = props.offset ? props.offset : 10;
 
     /**
@@ -142,4 +142,4 @@ export const Pagination: React.StatelessComponent<PaginationProps> = (props: Pag
             </nav>
         </div>
     );
-};
+});

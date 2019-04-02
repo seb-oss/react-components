@@ -28,7 +28,7 @@ export interface SliderProps {
     reference?: React.RefObject<any>;
 }
 
-export const Slider: React.StatelessComponent<SliderProps> = (props: SliderProps): React.ReactElement<void> => {
+export const Slider: React.FunctionComponent<SliderProps> = React.memo((props: SliderProps): React.ReactElement<void> => {
     const min: number = props.min ? props.min : 0;
     const max: number = props.max ? props.max : 100;
 
@@ -107,4 +107,4 @@ export const Slider: React.StatelessComponent<SliderProps> = (props: SliderProps
         </div>
 
     );
-};
+});

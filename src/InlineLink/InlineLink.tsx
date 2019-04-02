@@ -7,7 +7,7 @@ interface InlineLinkProps {
     children?: any;
 }
 
-export const InlineLink: React.StatelessComponent<InlineLinkProps> = (props: InlineLinkProps): React.ReactElement<void> => {
+export const InlineLink: React.FunctionComponent<InlineLinkProps> = React.memo((props: InlineLinkProps): React.ReactElement<void> => {
     return (
         <span
             className={"custom-inline-link" + (props.className ? ` ${props.className}` : "")}
@@ -16,4 +16,4 @@ export const InlineLink: React.StatelessComponent<InlineLinkProps> = (props: Inl
             {props.children}
         </span>
     );
-};
+});

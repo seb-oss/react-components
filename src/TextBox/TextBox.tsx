@@ -23,7 +23,7 @@ export interface TextBoxProps {
     reference?: React.RefObject<HTMLInputElement>;
 }
 
-export const TextBox: React.StatelessComponent<TextBoxProps> = (props: TextBoxProps): React.ReactElement<void> => {
+export const TextBox: React.FunctionComponent<TextBoxProps> = React.memo((props: TextBoxProps): React.ReactElement<void> => {
     return (
         <div className={"form-group input-box" + (props.className ? ` ${props.className}` : "")}>
             <div className={"input-field" + (props.error ? " has-error" : "")}>
@@ -51,4 +51,4 @@ export const TextBox: React.StatelessComponent<TextBoxProps> = (props: TextBoxPr
             </div>
         </div>
     );
-};
+});
