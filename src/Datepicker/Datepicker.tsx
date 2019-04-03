@@ -18,7 +18,7 @@ export interface DatepickerProps {
     locale?: string;
 }
 
-export const Datepicker: React.StatelessComponent<DatepickerProps> = (props: DatepickerProps): React.ReactElement<void> => {
+export const Datepicker: React.FunctionComponent<DatepickerProps> = (props: DatepickerProps): React.ReactElement<void> => {
     return (
         <div className={"form-group date-picker" + (props.className ? ` ${props.className}` : "")}>
             <div className={"input-field" + (props.error ? " has-error" : "")}>

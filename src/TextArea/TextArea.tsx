@@ -24,7 +24,7 @@ export interface TextAreaProps {
     reference?: React.RefObject<HTMLTextAreaElement>;
 }
 
-export const TextArea: React.StatelessComponent<TextAreaProps> = (props: TextAreaProps): React.ReactElement<void> => {
+export const TextArea: React.FunctionComponent<TextAreaProps> = (props: TextAreaProps): React.ReactElement<void> => {
     return (
         <div className={"form-group text-area" + (props.className ? ` ${props.className}` : "")}>
             <div className={"input-field" + (props.error ? " has-error" : "")}>

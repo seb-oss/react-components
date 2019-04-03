@@ -12,7 +12,7 @@ export interface ButtonProps {
     iconPosition?: string;
 }
 
-export const Button: React.StatelessComponent<ButtonProps> = (props: ButtonProps): React.ReactElement<void> => {
+export const Button: React.FunctionComponent<ButtonProps> = React.memo((props: ButtonProps): React.ReactElement<void> => {
     return (
         <button
             type="button"
@@ -32,4 +32,4 @@ export const Button: React.StatelessComponent<ButtonProps> = (props: ButtonProps
             </div>
         </button>
     );
-};
+});

@@ -29,7 +29,7 @@ function prepareList(list: Array<TimelineListItem>): Array<any> {
     return [topList, bottomList];
 }
 
-export const Timeline: React.StatelessComponent<TimelineProps> = (props: TimelineProps): React.ReactElement<void> => {
+export const Timeline: React.FunctionComponent<TimelineProps> = React.memo((props: TimelineProps): React.ReactElement<void> => {
     const direction: string = props.direction ? props.direction : "vertical";
     const preparedLists = prepareList(props.list);
     const topList: Array<TimelineListItem> = preparedLists[0];
@@ -87,4 +87,4 @@ export const Timeline: React.StatelessComponent<TimelineProps> = (props: Timelin
             </div>
         </div>
     );
-};
+});

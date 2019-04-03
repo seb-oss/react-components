@@ -12,41 +12,35 @@ export interface ChartProps {
     onClick?: (event: any) => void;
 }
 
-export class Chart extends React.Component<ChartProps, any> {
-    constructor(props) {
-        super(props);
-    }
-
-    renderChart(type: string) {
+export const Chart: React.FunctionComponent<ChartProps> = (props: ChartProps): React.ReactElement<void> => {
+    function renderChart(type: string) {
         switch (type) {
             case "line":
-                return <Line data={this.props.data} options={this.props.options} onElementsClick={this.props.onClick} />;
+                return <Line data={props.data} options={props.options} onElementsClick={props.onClick} />;
             case "bar":
-                return <Bar data={this.props.data} options={this.props.options} onElementsClick={this.props.onClick} />;
+                return <Bar data={props.data} options={props.options} onElementsClick={props.onClick} />;
             case "horizontalBar":
-                return <HorizontalBar data={this.props.data} options={this.props.options} onElementsClick={this.props.onClick} />;
+                return <HorizontalBar data={props.data} options={props.options} onElementsClick={props.onClick} />;
             case "pie":
-                return <Pie data={this.props.data} options={this.props.options} onElementsClick={this.props.onClick} />;
+                return <Pie data={props.data} options={props.options} onElementsClick={props.onClick} />;
             case "doughnut":
-                return <Doughnut data={this.props.data} options={this.props.options} onElementsClick={this.props.onClick} />;
+                return <Doughnut data={props.data} options={props.options} onElementsClick={props.onClick} />;
             case "polar":
-                return <Polar data={this.props.data} options={this.props.options} onElementsClick={this.props.onClick} />;
+                return <Polar data={props.data} options={props.options} onElementsClick={props.onClick} />;
             case "radar":
-                return <Radar data={this.props.data} options={this.props.options} onElementsClick={this.props.onClick} />;
+                return <Radar data={props.data} options={props.options} onElementsClick={props.onClick} />;
             case "bubble":
-                return <Bubble data={this.props.data} options={this.props.options} onElementsClick={this.props.onClick} />;
+                return <Bubble data={props.data} options={props.options} onElementsClick={props.onClick} />;
             case "scatter":
-                return <Scatter data={this.props.data} options={this.props.options} onElementsClick={this.props.onClick} />;
+                return <Scatter data={props.data} options={props.options} onElementsClick={props.onClick} />;
             default:
                 return <div>Unknown chart type</div>;
         }
     }
 
-    render() {
-        return (
-            <div className={"chart-wrapper " + (this.props.className ? this.props.className : "")}>
-                {this.renderChart(this.props.chartType)}
-            </div>
-        );
-    }
-}
+    return (
+        <div className={"chart-wrapper " + (props.className ? props.className : "")}>
+            {renderChart(props.chartType)}
+        </div>
+    );
+};

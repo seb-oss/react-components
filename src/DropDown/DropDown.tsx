@@ -23,7 +23,7 @@ export interface DropDownProps {
     disabled?: boolean;
 }
 
-export const DropDown: React.StatelessComponent<DropDownProps> = (props: DropDownProps): React.ReactElement<void> => {
+export const DropDown: React.FunctionComponent<DropDownProps> = (props: DropDownProps): React.ReactElement<void> => {
     return (
         <div
             className={"form-group custom-dropdown" + (props.className ? ` ${props.className}` : "")}

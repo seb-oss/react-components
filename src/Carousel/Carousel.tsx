@@ -20,7 +20,7 @@ interface CarouselProps {
     className?: string;
 }
 
-export const Carousel: React.StatelessComponent<CarouselProps> = (props: CarouselProps): React.ReactElement<void> => {
+export const Carousel: React.FunctionComponent<CarouselProps> = (props: CarouselProps): React.ReactElement<void> => {
     const settings: Settings = {
         direction: "horizontal",
         observer: true,

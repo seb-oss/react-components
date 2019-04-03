@@ -7,7 +7,7 @@ interface BreadcrumbProps {
     className?: string;
 }
 
-export const Breadcrumb: React.StatelessComponent<BreadcrumbProps> = (props: BreadcrumbProps): React.ReactElement<void> => {
+export const Breadcrumb: React.FunctionComponent<BreadcrumbProps> = React.memo((props: BreadcrumbProps): React.ReactElement<void> => {
     return (
         <div className={"custom-breadcrumb" + (props.className ? ` ${props.className}` : "")}>
             <nav aria-label="breadcrumb">
@@ -24,4 +24,4 @@ export const Breadcrumb: React.StatelessComponent<BreadcrumbProps> = (props: Bre
             </nav>
         </div>
     );
-};
+});
