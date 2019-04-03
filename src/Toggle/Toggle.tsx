@@ -10,7 +10,7 @@ export interface ToggleProps {
     reference?: React.RefObject<any>;
 }
 
-export const Toggle: React.FunctionComponent<ToggleProps> = React.memo((props: ToggleProps): React.ReactElement<void> => {
+export const Toggle: React.FunctionComponent<ToggleProps> = (props: ToggleProps): React.ReactElement<void> => {
     return (
         <div className={"form-group custom-toggle" + (props.className ? ` ${props.className}` : "")}>
             <div className="toggle-btn">
@@ -28,4 +28,4 @@ export const Toggle: React.FunctionComponent<ToggleProps> = React.memo((props: T
             {props.label && <div className="toggle-label">{props.label}</div>}
         </div>
     );
-});
+};

@@ -21,7 +21,7 @@ export interface RadioGroupProps {
     disableAll?: boolean;
 }
 
-export const RadioGroup: React.FunctionComponent<RadioGroupProps> = React.memo((props: RadioGroupProps): React.ReactElement<void> => {
+export const RadioGroup: React.FunctionComponent<RadioGroupProps> = (props: RadioGroupProps): React.ReactElement<void> => {
     let inputFieldClass: string = "input-field";
     if (props.error) { inputFieldClass += " has-error"; }
     if (props.inline) { inputFieldClass += " inline"; }
@@ -54,4 +54,4 @@ export const RadioGroup: React.FunctionComponent<RadioGroupProps> = React.memo((
             </div>
         </div>
     );
-});
+};

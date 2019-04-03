@@ -20,7 +20,7 @@ interface CarouselProps {
     className?: string;
 }
 
-export const Carousel: React.FunctionComponent<CarouselProps> = React.memo((props: CarouselProps): React.ReactElement<void> => {
+export const Carousel: React.FunctionComponent<CarouselProps> = (props: CarouselProps): React.ReactElement<void> => {
     const settings: Settings = {
         direction: "horizontal",
         observer: true,
@@ -67,4 +67,4 @@ export const Carousel: React.FunctionComponent<CarouselProps> = React.memo((prop
             }
         </Slider>
     );
-});
+};

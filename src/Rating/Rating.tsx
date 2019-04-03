@@ -20,7 +20,7 @@ interface RatingProps {
  */
 const initialColors: Array<string> = ["#A9A9A9", "#FFC500"];
 
-export const Rating: React.FunctionComponent<RatingProps> = React.memo((props: RatingProps): React.ReactElement<void> => {
+export const Rating: React.FunctionComponent<RatingProps> = (props: RatingProps): React.ReactElement<void> => {
     const height: number = props.iconHeight || 25;
     const width: number = props.iconWidth || 25;
 
@@ -58,4 +58,4 @@ export const Rating: React.FunctionComponent<RatingProps> = React.memo((props: R
             />
         </div>
     );
-});
+};

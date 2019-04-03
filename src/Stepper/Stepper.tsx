@@ -16,7 +16,7 @@ export interface StepperProps {
     reference?: React.RefObject<any>;
 }
 
-export const Stepper: React.FunctionComponent<StepperProps> = React.memo((props: StepperProps): React.ReactElement<void> => {
+export const Stepper: React.FunctionComponent<StepperProps> = (props: StepperProps): React.ReactElement<void> => {
     return (
         <div className={"form-group custom-stepper " + (props.className ? props.className : "")}>
             {props.label && <label className="custom-label">{props.label}</label>}
@@ -40,4 +40,4 @@ export const Stepper: React.FunctionComponent<StepperProps> = React.memo((props:
             {props.error && <div className="alert alert-danger">{props.error}</div>}
         </div>
     );
-});
+};

@@ -34,7 +34,7 @@ export interface TextBoxGroupProps {
     reference?: React.RefObject<HTMLInputElement>;
 }
 
-export const TextBoxGroup: React.FunctionComponent<TextBoxGroupProps> = React.memo((props: TextBoxGroupProps) => {
+export const TextBoxGroup: React.FunctionComponent<TextBoxGroupProps> = (props: TextBoxGroupProps) => {
     return (
         <div className={"form-group input-box-group" + (props.className ? ` ${props.className}` : "")}>
             {props.label && <label className="custom-label" htmlFor={props.name}>{props.label}</label>}
@@ -84,4 +84,4 @@ export const TextBoxGroup: React.FunctionComponent<TextBoxGroupProps> = React.me
             </div>
         </div>
     );
-});
+};
