@@ -21,7 +21,7 @@ export interface RadioGroupProps {
     disableAll?: boolean;
 }
 
-export const RadioGroup: React.StatelessComponent<RadioGroupProps> = (props: RadioGroupProps): React.ReactElement<void> => {
+export const RadioGroup: React.FunctionComponent<RadioGroupProps> = (props: RadioGroupProps): React.ReactElement<void> => {
     let inputFieldClass: string = "input-field";
     if (props.error) { inputFieldClass += " has-error"; }
     if (props.inline) { inputFieldClass += " inline"; }

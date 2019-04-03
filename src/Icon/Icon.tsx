@@ -9,7 +9,7 @@ export interface IconProps {
     onClick?: (event: any) => void;
 }
 
-export const Icon: React.StatelessComponent<IconProps> = (props: IconProps): React.ReactElement<void> => {
+export const Icon: React.FunctionComponent<IconProps> = React.memo((props: IconProps): React.ReactElement<void> => {
     return (
         <div
             className={"icon-holder" + (props.className ? ` ${props.className}` : "")}
@@ -20,4 +20,4 @@ export const Icon: React.StatelessComponent<IconProps> = (props: IconProps): Rea
             {props.src}
         </div>
     );
-};
+});

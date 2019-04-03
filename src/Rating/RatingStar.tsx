@@ -7,7 +7,7 @@ interface StarProps {
     title?: any;
 }
 
-export const SVGStarHollow: React.StatelessComponent<StarProps> = (props: StarProps): React.ReactElement<void> => {
+export const SVGStarHollow: React.FunctionComponent<StarProps> = (props: StarProps): React.ReactElement<void> => {
     return (
         <svg
             className="custom-svg-star-hollow"
@@ -48,7 +48,7 @@ export const SVGStarHollow: React.StatelessComponent<StarProps> = (props: StarPr
     );
 };
 
-export const SVGStar: React.StatelessComponent<StarProps> = (props: StarProps): React.ReactElement<void> => {
+export const SVGStar: React.FunctionComponent<StarProps> = (props: StarProps): React.ReactElement<void> => {
     return (
         <svg
             className="custom-svg-star"

@@ -15,7 +15,7 @@ export interface VideoProps {
     allowFullScreen?: boolean;
 }
 
-export const Video: React.StatelessComponent<VideoProps> = (props: VideoProps): React.ReactElement<void> => {
+export const Video: React.FunctionComponent<VideoProps> = (props: VideoProps): React.ReactElement<void> => {
     return (
         <div className={"video-holder-component" + (props.className ? ` ${props.className}` : "")}>
             {props.sourceType === "local" &&

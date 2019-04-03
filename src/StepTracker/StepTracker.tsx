@@ -13,7 +13,7 @@ export interface StepTrackerProps {
     orientation?: string;
 }
 
-export const StepTracker: React.StatelessComponent<StepTrackerProps> = (props: StepTrackerProps): React.ReactElement<void> => {
+export const StepTracker: React.FunctionComponent<StepTrackerProps> = React.memo((props: StepTrackerProps): React.ReactElement<void> => {
     let topLabel: boolean;
     let bottomLabel: boolean;
     let rightLabel: boolean;
@@ -171,4 +171,4 @@ export const StepTracker: React.StatelessComponent<StepTrackerProps> = (props: S
 
         </div>
     );
-};
+});

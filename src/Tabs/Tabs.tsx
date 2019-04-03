@@ -13,7 +13,7 @@ interface TabsProps {
     className?: string;
 }
 
-export const Tabs: React.StatelessComponent<TabsProps> = (props: TabsProps): React.ReactElement<void> => {
+export const Tabs: React.FunctionComponent<TabsProps> = React.memo((props: TabsProps): React.ReactElement<void> => {
     return (
         <div className={"custom-tabs" + (props.className ? ` ${props.className}` : "")}>
             <ul className="nav nav-tabs">
@@ -33,4 +33,4 @@ export const Tabs: React.StatelessComponent<TabsProps> = (props: TabsProps): Rea
             </ul>
         </div>
     );
-};
+});

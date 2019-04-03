@@ -16,7 +16,7 @@ export interface RadioButtonProps {
     reference?: React.RefObject<any>;
 }
 
-export const RadioButton: React.StatelessComponent<RadioButtonProps> = (props: RadioButtonProps): React.ReactElement<void> => {
+export const RadioButton: React.FunctionComponent<RadioButtonProps> = (props: RadioButtonProps): React.ReactElement<void> => {
     let inputFieldClass: string = "input-field";
     if (props.error) { inputFieldClass += " has-error"; }
     if (props.inline) { inputFieldClass += " inline"; }

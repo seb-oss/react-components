@@ -51,7 +51,7 @@ These are the public methods accessible via [React ref](https://reactjs.org/docs
 
 ##### Example usage of forceDismiss and ref. This example shows how to allow the tooltip to be dismissed when clicked outside
 ```javascript
-const ExampleContainer: React.StatelessComponent = () => {
+const ExampleContainer: React.FunctionComponent = () => {
     MyTooltip: Tooltip;
 
     return (
