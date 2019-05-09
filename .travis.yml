@@ -3,10 +3,10 @@ sudo: false
 addons:
   chrome: stable
 language: node_js
-node_js: node
+node_js: lts/*
 
 install:
-- npm install
+- npm ci
 cache:
   directories:
   - $HOME/.npm
