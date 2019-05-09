@@ -15,6 +15,7 @@ $red: #F03529;
         user-select: none;
         transition: all $transition-time;
         .radio-item {
+            vertical-align: top;
             position: relative;
             margin-bottom: 5px;
             input[type=radio] {
