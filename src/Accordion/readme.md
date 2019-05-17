@@ -15,7 +15,7 @@ Type: Form Component
 ```
 
 ## Element information 
-This React component is based on SEB Bootstrap style. Supports customization and configurations. The module name of this component is `Accordion` and the selector is `<Accordion/>`.
+This React component is based on SEB Bootstrap style. Supports customization and configurations. Use this component mainly for text content. The module name of this component is `Accordion` and the selector is `<Accordion/>`.
 
 ## Basic use
 ```html
@@ -37,6 +37,7 @@ These are the current available properties:
 ```typescript
 interface AccordionListItem {
       category: string;
+      subHeaderText?: string;
       text?: AccordionText | Array<AccordionText>;
 }
 ```

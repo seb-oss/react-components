@@ -1,7 +1,7 @@
 import * as React from "react";
 import "./accordion-style.scss";
 
-const angleRightIcon: JSX.Element = <svg name="angle-right" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 512"><path d="M166.9 264.5l-117.8 116c-4.7 4.7-12.3 4.7-17 0l-7.1-7.1c-4.7-4.7-4.7-12.3 0-17L127.3 256 25.1 155.6c-4.7-4.7-4.7-12.3 0-17l7.1-7.1c4.7-4.7 12.3-4.7 17 0l117.8 116c4.6 4.7 4.6 12.3-.1 17z" /></svg>;
+const chevronUpIcon: JSX.Element = <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M4.465 366.475l7.07 7.071c4.686 4.686 12.284 4.686 16.971 0L224 178.053l195.494 195.493c4.686 4.686 12.284 4.686 16.971 0l7.07-7.071c4.686-4.686 4.686-12.284 0-16.97l-211.05-211.051c-4.686-4.686-12.284-4.686-16.971 0L4.465 349.505c-4.687 4.686-4.687 12.284 0 16.97z"/></svg>;
 
 export interface AccordionText {
     title?: string;
@@ -10,6 +10,7 @@ export interface AccordionText {
 
 export interface AccrodionListItem {
     category: string;
+    subHeaderText?: string;
     text?: AccordionText | Array<AccordionText>;
 }
 
@@ -44,9 +45,10 @@ export class Accordion extends React.Component<AccordionProps, AccordionState> {
             <div className={"custom-accordion" + (this.props.className ? ` ${this.props.className}` : "")}>
                 {this.props.list.map((item: AccrodionListItem, index: number) =>
                     <div className={"accordion-item" + (this.state.active === index ? " active" : "")} key={index}>
-                        <div className="header-wrapper" onClick={() => { this.toggle(index); }}>
-                            {angleRightIcon}
-                            <div className="accordion-category">{item.category}</div>
+                        <div className={`header-wrapper${item.subHeaderText ? " with-sub-header" : ""}`} onClick={() => { this.toggle(index); }}>
+                            {chevronUpIcon}
+                            <div className={"accordion-header"}>{item.category}</div>
+                            {item.subHeaderText && <div className="accordion-sub-header">{item.subHeaderText}</div>}
                         </div>
                         <div className="content-wrapper">
                             {!(item.text instanceof Array) &&

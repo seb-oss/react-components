@@ -11,6 +11,7 @@ export default class AccordionPage extends React.Component<any, any>  {
             accordionList: [
                 {
                     category: "Accordion List Item 1",
+                    subHeaderText: "Accordion Sub Header",
                     text: {
                         title: "Tempor incididun",
                         desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, " +
