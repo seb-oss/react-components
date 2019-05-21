@@ -1,16 +1,13 @@
-$green: #60cd18;
-$green-dark: #45B400;
-$green-darker: #379D00;
-$blue: #41B0EE;
 $blue-dark: #0092E1;
-$blue-darker: #007AC7;
 $white: #fff;
-$gray-200: #e9e9e9 !default; // #e9ecef !default;
+$gray-8: #e6e6e6 !default;
+$gray-background: #f5f5f5;
 $transition-time: 300ms;
 $default: 14px;
 $standard: 16px;
 $header-size: 20px;
-$icon-size: 30px;
+$sub-header-size: 14px;
+$icon-size: 20px;
 @mixin transform($props) {
     -webkit-transform: $props;
     -moz-transform: $props;
@@ -35,33 +32,47 @@ $icon-size: 30px;
 
 .custom-accordion {
     position: relative;
+    background-color: $white;
     .accordion-item {
         position: relative;
-        border-bottom: 1px solid $gray-200;
-        border-left: 3px solid $white;
-        padding: 5px 0;
-        min-height: 50px;
+        border-bottom: 1px solid $gray-8;
+        &:hover {
+            background-color: $gray-background;
+        }    
         &:first-child {
-            border-top: 1px solid $gray-200;
+            border-top: 1px solid $gray-8;
         }
         .header-wrapper {
             position: relative;
             display: block;
             padding: 5px 10px 5px 35px;
             cursor: pointer;
+            min-height: 48px;
+
+            &.with-sub-header {
+                min-height: 64px;
+            }
             >svg {
                 position: absolute;
-                width: 30px;
-                height: 30px;
-                left: 0px;
+                width: $icon-size;
+                height: $icon-size;
+                left: 7px;
                 fill: $blue-dark;
                 will-change: transform;
                 @include transition($transition-time);
+                top: 14px;
             }
-            .accordion-category {
-                display: inline-block;
+            .accordion-header {
+                display: block;
                 font-size: $header-size;
                 font-weight: 500;
+                padding-top: 5px;
+                @include user-select(none);
+                line-height: 28px;
+            }
+            .accordion-sub-header {
+                display: block;
+                font-size: $sub-header-size;
                 @include user-select(none);
             }
         }
@@ -91,10 +102,9 @@ $icon-size: 30px;
             }
         }
         &.active {
-            border-left: 3px solid $green;
             .header-wrapper {
                 >svg {
-                    @include transform(rotate(90deg));
+                    @include transform(rotate(180deg));
                 }
             }
             .content-wrapper {
