@@ -20,9 +20,8 @@ This React component is based on `react-select`. Supports customization and conf
 ## Basic use
 ```html
 <DropDown
-    selectedValue={this.state.dropDownSelected}
     list={this.state.dropDownList}
-    onChange={(selectedItem: DropDownItem) => { this.setState({ dropDownSelected: selectedItem }) }}
+    onChange={(list: Array<DropdownItem>, name: string) => { this.setState({ [name]: list }) }}
     placeholder="dropdown placeholder"
 />
 ```
@@ -30,18 +29,15 @@ This React component is based on `react-select`. Supports customization and conf
 ## Properties
 These are the current available properties:
 
-| Property       | Type                               | Descrition                                                     |
-| -------------- | ---------------------------------- | -------------------------------------------------------------- |
-| list           | `Array<DropdownItem>` <sup>1</sup> | an array of DropdownItem                                       |
-| selectedValue  | `DropdownItem`                     | selected object from list                                      |
-| onChange       | `(event: any) => void`             | on change event                                                |
-| className?     | `string`                           | custom class                                                   |
-| native?        | `boolean`                          | it renders the native dropdown, default false                  |
-| searchable?    | `boolean`                          | works only with non-native ver                                 |
-| multi?         | `boolean`                          | enables searching, works only with non-native                  |
-| clearable?     | `boolean`                          | enables clearning the value, work only with non-native         |
-| error?         | `string`                           | error message (if any)                                         |
-| disabled?      | `boolean`                          | disabled status                                                |
+| Property       | Type                                                     | Descrition                                                              |
+| -------------- | -------------------------------------------------------- | ----------------------------------------------------------------------- |
+| list           | `Array<DropdownItem>` <sup>1</sup>                       | an array of DropdownItem                                                |
+| onChange       | `(list: Array<DropdownItem>, name: string) => void`      | on change event passing the updated list and the name of the list       |
+| className?     | `string`                                                 | custom class                                                            |
+| searchable?    | `boolean`                                                | enables searching                                                       |
+| multi?         | `boolean`                                                | enables selecting multiple choices                                      |
+| clearable?     | `boolean`                                                | enables clearning the value, ignored if `multi` is enabled              |
+| disabled?      | `boolean`                                                | disabled status                                                         |
 
 ## Reference
 This component is a wrapper around [react-select](https://github.com/JedWatson/react-select)
@@ -51,6 +47,7 @@ This component is a wrapper around [react-select](https://github.com/JedWatson/r
 ```javascript
 {
       label = string,
-      value = any
+      value = any,
+      selected = boolean
 }
 ```

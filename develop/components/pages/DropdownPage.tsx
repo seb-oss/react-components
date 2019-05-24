@@ -9,29 +9,33 @@ export default class DropdownPage extends React.Component<any, any>  {
         super(props);
         this.state = {
             dropDownList1: [
-                { value: "1", label: "1st item" },
-                { value: "2", label: "2nd item" },
-                { value: "3", label: "3rd item" },
+                { value: "1", selected: false, label: "1st item" },
+                { value: "2", selected: false, label: "2nd item" },
+                { value: "3", selected: false, label: "3rd item" },
             ],
-            dropDownSelected1: null,
             dropDownList2: [
-                { value: "1", label: "1st" },
-                { value: "2", label: "2nd" },
-                { value: "3", label: "3rd" },
-                { value: "4", label: "4th" },
-                { value: "5", label: "5th" },
+                { value: "1", selected: false, label: "1st item" },
+                { value: "2", selected: false, label: "2nd item" },
+                { value: "3", selected: false, label: "3rd item" },
+                { value: "4", selected: false, label: "4th item" },
+                { value: "5", selected: false, label: "5th item" },
             ],
-            dropDownSelected2: null,
             dropDownList3: [
-                { value: "1", label: "1st item" },
-                { value: "2", label: "2nd item" },
-                { value: "3", label: "3rd item" },
+                { value: "1", selected: false, label: "1st item" },
+                { value: "2", selected: false, label: "2nd item" },
+                { value: "3", selected: false, label: "3rd item" },
             ],
-            dropDownSelected3: null
         };
+
+        this.onChangeDropdown = this.onChangeDropdown.bind(this);
+    }
+
+    onChangeDropdown(list: Array<DropDownItem>, name: string) {
+        this.setState({ [name]: list });
     }
 
     render() {
+        // console.log(this.state);
         const mode = getParameterByName(this.props.location.search, "mode");
         return (
             <div className={"route-template " + ((mode === "dl" || mode === "DL") ? "brief" : "")}>
@@ -48,38 +52,25 @@ export default class DropdownPage extends React.Component<any, any>  {
                         <p>Here is the basic one:</p>
                         <div className="result">
                             <DropDown
-                                selectedValue={this.state.dropDownSelected1}
+                                name="dropDownList1"
                                 list={this.state.dropDownList1}
                                 label="Dropdown label"
-                                onChange={(selectedItem: DropDownItem) => { this.setState({ dropDownSelected1: selectedItem }); }}
-                                placeholder="Single option"
+                                onChange={this.onChangeDropdown}
+                                clearable={true}
                             />
                         </div>
 
                         <p>Here is the multi select one:</p>
                         <div className="result">
                             <DropDown
-                                selectedValue={this.state.dropDownSelected2}
+                                name="dropDownList2"
                                 list={this.state.dropDownList2}
-                                onChange={(selectedItem: DropDownItem) => { this.setState({ dropDownSelected2: selectedItem }); }}
+                                onChange={this.onChangeDropdown}
                                 searchable={true}
                                 placeholder="Multi option"
                                 multi={true}
-                                clearable={true}
                             />
                         </div>
-
-                        <p>Here is the native one:</p>
-                        <div className="result">
-                            <DropDown
-                                selectedValue={this.state.dropDownSelected3}
-                                list={this.state.dropDownList3}
-                                onChange={(selectedItem: DropDownItem) => { this.setState({ dropDownSelected3: selectedItem }); }}
-                                placeholder="Native option"
-                                native={true}
-                            />
-                        </div>
-
                     </div>
 
                 </div>

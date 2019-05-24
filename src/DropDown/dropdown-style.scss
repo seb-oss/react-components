@@ -1,3 +1,22 @@
+$transition-time: 300ms;
+$icon-size: 20px;
+$blue: #41b0ee;
+$darkBlue1: #0092e1;
+$darkBlue2: #007ac7;
+$text: #444444;
+$grey6: #999999;
+$grey7: #b3b3b3;
+// $grey8: #e6e6e6;
+$grey9: #f6f6f6;
+
+@mixin transform($props) {
+    -webkit-transform: $props;
+    -moz-transform: $props;
+    -o-transform: $props;
+    -ms-transform: $props;
+    transform: $props;
+}
+
 @mixin transition($props) {
     -webkit-transition: $props;
     -moz-transition: $props;
@@ -5,89 +24,167 @@
     transition: $props;
 }
 
-$transition-time: 200ms;
-$transparent: transparent;
-$red: #F03529;
-$white: #fff;
-$blue: #41B0EE;
-$black: #000;
-.form-group.custom-dropdown {
-    margin: 0;
-    min-width: 200px;
-    >.input-field {
-        >.custom-dropdown {
-            >.custom-dropdown__menu {
-                position: absolute;
-                bottom: auto;
-            }
-        }
-        >.custom-dropdown:not(.custom-dropdown--is-disabled) {
-            >.custom-dropdown__control {
-                @include transition(border-color $transition-time);
-                height: 42px;
-                min-width: 200px;
-                background-color: $white;
-                cursor: pointer;
-                >.custom-dropdown__value-container {
-                    height: 42px;
-                    .custom-dropdown__input {
-                        background: $transparent;
-                    }
-                    .custom-dropdown__placeholder,
-                    .custom-dropdown__single-value {
-                        color: $black;
-                    }
-                }
-                >.custom-dropdown__indicators {
-                    .custom-dropdown__indicator-separator {
-                        display: none;
-                    }
-                    .custom-dropdown__indicator {
-                        >svg {
-                            color: $blue;
-                        }
-                    }
-                }
-            }
-        }
-        >label.custom-label:not(.form-check-label):not(.custom-checkbox):not(.custom-radio):not(.custom-control-label) {
-            display: block;
-            margin-bottom: 4px;
-            line-height: 1;
+.custom-dropdown {
+    > .custom-dropdown-toggle {
+        padding: 0px;
+        height: 44px;
+        min-width: 230px;
+        border-color: $grey6;
+        text-align: left;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-left: 16px;
+
+        > .title {
             font-weight: normal;
-            font-size: 12px;
+            color: $text;
         }
-        >.alert {
-            opacity: 0;
-            margin: 0;
-            padding: 0;
-            background: $transparent;
-            max-height: 0;
-            overflow: hidden;
-            @include transition((opacity $transition-time, padding $transition-time, max-height $transition-time*2));
-            &.alert-danger {
-                color: $red;
-            }
-        }
-        >.dropdown-input {
-            height: 42px;
-        }
-        &.has-error {
-            >.custom-dropdown {
-                >.custom-dropdown__control {
-                    border: 1px solid $red;
-                    >.custom-dropdown__placeholder {
-                        color: $red;
+
+        > .right-items {
+            display: flex;
+            > .icon-holder {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                height: 44px;
+                width: 44px;
+
+                > svg {
+                    width: $icon-size;
+                    height: $icon-size;
+                    fill: $darkBlue1;
+                }
+
+                &.chevron {
+                    > svg {
+                        will-change: transform;
+                        @include transition($transition-time);
                     }
                 }
             }
-            >.dropdown-input {
-                border: 1px solid $red;
+        }
+
+        &:hover {
+            border-color: $blue;
+            background-color: white;
+        }
+
+        &.open {
+            > .right-items > .icon-holder {
+                &.chevron {
+                    > svg {
+                        @include transform(rotate(180deg));
+                    }
+                }
             }
-            >.alert {
-                opacity: 1;
-                padding-top: 2px;
-                max-height: 100px;
+        }
+
+        &:focus {
+            border-color: $darkBlue2;
+            box-shadow: none;
+            background-color: white;
+            &:active {
+                color: $text;
+                border-color: $darkBlue2;
+                box-shadow: none;
+                background-color: white;
+            }
+        }
+    }
+
+    > .custom-dropdown-menu {
+        border-radius: 4px;
+        border: 1px solid $darkBlue2;
+        margin: 4px 0px 14px 0px;
+
+        > .dropdown-divider {
+            margin: 0px;
+
+            &.blue {
+                border-color: $darkBlue2;
+            }
+        }
+
+        > .search-input {
+            height: 44px;
+            padding: 0px 0px 0px 16px;
+            border: none;
+            outline: none;
+        }
+
+        > .custom-dropdown-item {
+            display: flex;
+            padding-left: 16px;
+
+            &.multi {
+                > .icon-holder {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    height: 24px;
+                    width: 20px;
+                    margin-right: 16px;
+
+                    > svg {
+                        width: $icon-size;
+                        height: $icon-size;
+                        fill: $text;
+                    }
+                }
+            }
+
+            &:focus {
+                &:not(:hover) {
+                    color: $text;
+                    background-color: white;
+                }
+            }
+
+            &:hover {
+                > .icon-holder > svg {
+                    fill: white;
+                }
+            }
+
+            &.selected {
+                &:not(:hover) {
+                    background-color: white;
+                    color: $darkBlue1;
+
+                    &.multi {
+                        color: $text;
+                        > .icon-holder > svg {
+                            fill: $darkBlue1;
+                        }
+                    }    
+                }
+
+                &:hover {
+                    font-weight: 500;
+                    background-color: $darkBlue1;
+                }
+
+            }
+        }
+    }
+
+    &.disabled {
+        > .dropdown-label {
+            color: $grey7;
+        }
+
+        > .custom-dropdown-toggle {
+            border-color: $grey7;
+            background-color: $grey9;
+            cursor: default;
+
+            > .title {
+                color: $grey7;
+            }
+
+            > .right-items > .icon-holder > svg {
+                fill: $grey7;
             }
         }
     }
