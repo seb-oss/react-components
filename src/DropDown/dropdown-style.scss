@@ -1,5 +1,7 @@
 $transition-time: 300ms;
-$icon-size: 20px;
+$icon-size: 18px;
+$dropdown-width: 100%;
+$dropdown-toggle-height: 44px;
 $blue: #41b0ee;
 $darkBlue1: #0092e1;
 $darkBlue2: #007ac7;
@@ -27,10 +29,9 @@ $grey9: #f6f6f6;
 .custom-dropdown {
     > .custom-dropdown-toggle {
         padding: 0px;
-        height: 44px;
-        min-width: 230px;
+        height: $dropdown-toggle-height;
+        min-width: $dropdown-width;
         border-color: $grey6;
-        text-align: left;
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -47,27 +48,17 @@ $grey9: #f6f6f6;
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                height: 44px;
-                width: 44px;
+                height: $dropdown-toggle-height;
+                width: $dropdown-toggle-height;
 
                 > svg {
+                    will-change: transform;
+                    @include transition($transition-time);
                     width: $icon-size;
                     height: $icon-size;
                     fill: $darkBlue1;
                 }
-
-                &.chevron {
-                    > svg {
-                        will-change: transform;
-                        @include transition($transition-time);
-                    }
-                }
             }
-        }
-
-        &:hover {
-            border-color: $blue;
-            background-color: white;
         }
 
         &.open {
@@ -78,6 +69,11 @@ $grey9: #f6f6f6;
                     }
                 }
             }
+        }
+
+        &:hover {
+            border-color: $blue;
+            background-color: white;
         }
 
         &:focus {
@@ -91,9 +87,44 @@ $grey9: #f6f6f6;
                 background-color: white;
             }
         }
+
+        &.more {
+            padding: 0px;
+            min-width: $dropdown-toggle-height;
+            border-color: transparent;
+            margin: 0px 0px 0px auto;
+            > .right-items > .icon-holder > svg {
+                height: calc(#{$dropdown-toggle-height} / 1.2);
+                width: calc(#{$dropdown-toggle-height} / 1.2);
+                &:focus {
+                    &:active {
+                        fill: white;
+                    }
+                }
+            }
+
+            &:hover {
+                background-color: $darkBlue1;
+                > .right-items > .icon-holder > svg {
+                    fill: white;
+                }
+            }
+
+            &:focus &:active {
+                background-color: $darkBlue2;
+            }
+
+            &.open {
+                background-color: $darkBlue2;
+                > .right-items > .icon-holder > svg {
+                    fill: white;
+                }
+            }
+        }
     }
 
     > .custom-dropdown-menu {
+        min-width: $dropdown-width;
         border-radius: 4px;
         border: 1px solid $darkBlue2;
         margin: 4px 0px 14px 0px;
@@ -107,7 +138,7 @@ $grey9: #f6f6f6;
         }
 
         > .search-input {
-            height: 44px;
+            height: $dropdown-toggle-height;
             padding: 0px 0px 0px 16px;
             border: none;
             outline: none;
@@ -125,7 +156,7 @@ $grey9: #f6f6f6;
                         user-select: none;
                         &::before {
                             border-color: $darkBlue2;
-                            background-color: white;     
+                            background-color: white;
                         }
                         &::after {
                             background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3e%3cpath fill='%23fff' d='M6.564.75l-3.59 3.612-1.538-1.55L0 4.26 2.974 7.25 8 2.193z'/%3e%3c/svg%3e");
@@ -154,7 +185,7 @@ $grey9: #f6f6f6;
                     .custom-control-label,
                     .custom-control-input {
                         &::before {
-                            background-color: $darkBlue2;     
+                            background-color: $darkBlue2;
                         }
                     }
                 }
@@ -163,7 +194,7 @@ $grey9: #f6f6f6;
                     background-color: white;
                     color: $darkBlue2;
 
-                    &.multi { 
+                    &.multi {
                         color: $text;
                     }
                 }
@@ -179,7 +210,7 @@ $grey9: #f6f6f6;
                                 border-color: white;
                             }
                         }
-                    }    
+                    }
                 }
             }
         }

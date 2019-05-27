@@ -18,13 +18,12 @@ export interface DropDownProps {
     multi?: boolean;
     clearable?: boolean;
     disabled?: boolean;
+    more?: boolean;
 }
 
 const chevronDownIcon: JSX.Element = <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M443.5 162.6l-7.1-7.1c-4.7-4.7-12.3-4.7-17 0L224 351 28.5 155.5c-4.7-4.7-12.3-4.7-17 0l-7.1 7.1c-4.7 4.7-4.7 12.3 0 17l211 211.1c4.7 4.7 12.3 4.7 17 0l211-211.1c4.8-4.7 4.8-12.3.1-17z" /></svg>;
 const timesIcon: JSX.Element = <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path d="M217.5 256l137.2-137.2c4.7-4.7 4.7-12.3 0-17l-8.5-8.5c-4.7-4.7-12.3-4.7-17 0L192 230.5 54.8 93.4c-4.7-4.7-12.3-4.7-17 0l-8.5 8.5c-4.7 4.7-4.7 12.3 0 17L166.5 256 29.4 393.2c-4.7 4.7-4.7 12.3 0 17l8.5 8.5c4.7 4.7 12.3 4.7 17 0L192 281.5l137.2 137.2c4.7 4.7 12.3 4.7 17 0l8.5-8.5c4.7-4.7 4.7-12.3 0-17L217.5 256z" /></svg>;
-const squareIcon: JSX.Element = <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M400 32H48C21.5 32 0 53.5 0 80v352c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V80c0-26.5-21.5-48-48-48zm16 400c0 8.8-7.2 16-16 16H48c-8.8 0-16-7.2-16-16V80c0-8.8 7.2-16 16-16h352c8.8 0 16 7.2 16 16v352z" /></svg>;
-const checkSquareIcon: JSX.Element = <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M400 32H48C21.49 32 0 53.49 0 80v352c0 26.51 21.49 48 48 48h352c26.51 0 48-21.49 48-48V80c0-26.51-21.49-48-48-48zm0 32c8.823 0 16 7.178 16 16v352c0 8.822-7.177 16-16 16H48c-8.822 0-16-7.178-16-16V80c0-8.822 7.178-16 16-16h352m-34.301 98.293l-8.451-8.52c-4.667-4.705-12.265-4.736-16.97-.068l-163.441 162.13-68.976-69.533c-4.667-4.705-12.265-4.736-16.97-.068l-8.52 8.451c-4.705 4.667-4.736 12.265-.068 16.97l85.878 86.572c4.667 4.705 12.265 4.736 16.97.068l180.48-179.032c4.704-4.667 4.735-12.265.068-16.97z" /></svg>;
-
+const moreIcon: JSX.Element = <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path d="M192 256c0 17.7-14.3 32-32 32s-32-14.3-32-32 14.3-32 32-32 32 14.3 32 32zm88-32c-17.7 0-32 14.3-32 32s14.3 32 32 32 32-14.3 32-32-14.3-32-32-32zm-240 0c-17.7 0-32 14.3-32 32s14.3 32 32 32 32-14.3 32-32-14.3-32-32-32z"/></svg>;
 // helper function for updating object in array
 function updateObjectInArray<T extends object>(array: Array<T>, index: number, item: T): Array<T> {
     return array.map((v, k) => {
@@ -82,7 +81,7 @@ export const DropDown: React.FunctionComponent<DropDownProps> = (props: DropDown
                 return `All selected (${selectedList.length})`;
             }
             if (props.multi) {
-                return selectedList.length + " Selected";
+                return selectedList.length + " Selected"; // TODO should be like this example: 1st Item, 2nd Item... (+2)
             }
             return selectedList[0].label;
         }
@@ -90,29 +89,42 @@ export const DropDown: React.FunctionComponent<DropDownProps> = (props: DropDown
         return (props.placeholder && props.placeholder.length) ? props.placeholder : "Select ...";
     };
 
+    const toggleClassName = `btn btn-secondary custom-dropdown-toggle${open ? " open" : ""}`;
+
     return (
         <div className={`dropdown custom-dropdown${props.disabled ? " disabled" : ""}${props.className ? " " + props.className : ""}`}>
             {props.label && <label className="dropdown-label">{props.label}</label>}
 
-            <button
-                disabled={props.disabled}
-                ref={dropdownToggleRef}
-                className={`btn btn-secondary custom-dropdown-toggle${open ? " open" : ""}`}
-                type="button"
-                id="dropdownMenuButton"
-                onClick={(e) => setOpen(!open)}
-            >
-                <div className="title">
-                    {getTitleLabel()}
-                </div>
+            {!props.more ?
+                <button
+                    disabled={props.disabled}
+                    ref={dropdownToggleRef}
+                    className={toggleClassName}
+                    type="button"
+                    id="dropdownMenuButton"
+                    onClick={(e) => setOpen(!open)}
+                >
+                    <div className="title">
+                        {getTitleLabel()}
+                    </div>
 
-                <div className="right-items">
-                    {((props.clearable || props.multi) && selectedList.length > 0) ? <div className="icon-holder" onClick={handleClickClear}>{timesIcon}</div> : null}
-                    <div className="icon-holder chevron">{chevronDownIcon}</div>
-                </div>
-            </button>
+                    <div className="right-items">
+                        {((props.clearable || props.multi) && selectedList.length > 0) ? <div className="icon-holder" onClick={handleClickClear}>{timesIcon}</div> : null}
+                        <div className="icon-holder chevron">{chevronDownIcon}</div>
+                    </div>
+                </button> :
+                <button
+                    ref={dropdownToggleRef}
+                    type="button"
+                    id="dropdownMenuButton"
+                    className={`${toggleClassName} more`}
+                    onClick={(e) => setOpen(!open)}
+                >
+                    <div className="right-items"><div className="icon-holder">{moreIcon}</div></div>
+                </button>
+            }
 
-            <div ref={dropdownMenuRef} className={`dropdown-menu${open ? " show" : ""} custom-dropdown-menu`} >
+            <div ref={dropdownMenuRef} className={`dropdown-menu${open ? " show" : ""} dropdown-menu-right custom-dropdown-menu`} >
                 {props.searchable &&
                     <>
                         <input ref={searchRef} className="search-input" name="search-input" placeholder="Search ..." value={searchText} onChange={(e) => setSearchText(e.target.value)} />
@@ -125,7 +137,7 @@ export const DropDown: React.FunctionComponent<DropDownProps> = (props: DropDown
                         <a
                             key={"select-all-anchor"}
                             className={`dropdown-item custom-dropdown-item multi${(allSelected) ? " selected" : ""}`}
-                            href="#"
+                            href=""
                             onClick={(e) => {
                                 e.preventDefault();
                                 const newList = props.list.map((item) => {
@@ -151,11 +163,12 @@ export const DropDown: React.FunctionComponent<DropDownProps> = (props: DropDown
 
                 {props.list.map((item, index) => {
                     if (displayList.includes(item)) {
-                        return (// TODO this should be input checkbox and label elements instead of divs
+                        const uid = item.value.replace(" ", "_") + "-" + Math.floor(Math.random() * 100) + (new Date()).getTime();
+                        return (
                             <a
-                                key={item.value}
+                                key={uid}
                                 className={`dropdown-item custom-dropdown-item${item.selected ? " selected" : ""}${props.multi ? " multi" : ""}`}
-                                href="#"
+                                href=""
                                 onClick={(e) => {
                                     e.preventDefault();
                                     if (!props.multi) {
@@ -178,11 +191,11 @@ export const DropDown: React.FunctionComponent<DropDownProps> = (props: DropDown
                                         <input
                                             type="checkbox"
                                             className="custom-control-input"
-                                            id={item.value}
-                                            name={item.value}
+                                            id={uid}
+                                            name={uid}
                                             defaultChecked={item.selected}
                                         />
-                                        {item.label && <label className="custom-control-label" htmlFor={item.value}>{item.label}</label>}
+                                        {item.label && <label className="custom-control-label" htmlFor={uid}>{item.label}</label>}
                                     </div>
                                     : item.label && <div className="label">{item.label}</div>}
                             </a>

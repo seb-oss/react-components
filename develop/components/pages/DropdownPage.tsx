@@ -35,7 +35,6 @@ export default class DropdownPage extends React.Component<any, any>  {
     }
 
     render() {
-        // console.log(this.state);
         const mode = getParameterByName(this.props.location.search, "mode");
         return (
             <div className={"route-template " + ((mode === "dl" || mode === "DL") ? "brief" : "")}>
@@ -71,10 +70,18 @@ export default class DropdownPage extends React.Component<any, any>  {
                                 multi={true}
                             />
                         </div>
+
+                        <p>Here is the more button version:</p>
+                        <div className="result">
+                            <DropDown
+                                name="dropDownList3"
+                                list={this.state.dropDownList3}
+                                onChange={this.onChangeDropdown}
+                                more={true}
+                            />
+                        </div>
                     </div>
-
                 </div>
-
             </div>
         );
     }

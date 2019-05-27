@@ -20,8 +20,8 @@ This React component is based on `react-select`. Supports customization and conf
 ## Basic use
 ```html
 <DropDown
-    list={this.state.dropDownList}
-    onChange={(list: Array<DropdownItem>, name: string) => { this.setState({ [name]: list }) }}
+    list={this.state.list}
+    onChange={(list: Array<DropdownItem>, name: string) => { this.setState({ list }) }}
     placeholder="dropdown placeholder"
 />
 ```
@@ -38,6 +38,7 @@ These are the current available properties:
 | multi?         | `boolean`                                                | enables selecting multiple choices                                      |
 | clearable?     | `boolean`                                                | enables clearning the value, ignored if `multi` is enabled              |
 | disabled?      | `boolean`                                                | disabled status                                                         |
+| more?          | `boolean`                                                | version of the component with a more menu button alligned to the right  |
 
 ## Reference
 This component is a wrapper around [react-select](https://github.com/JedWatson/react-select)
