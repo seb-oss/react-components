@@ -95,15 +95,16 @@ export const DropDown: React.FunctionComponent<DropDownProps> = (props: DropDown
         <div className={`dropdown custom-dropdown${props.disabled ? " disabled" : ""}${props.className ? " " + props.className : ""}`}>
             {props.label && <label className="dropdown-label">{props.label}</label>}
 
-            {!props.more ?
-                <button
-                    disabled={props.disabled}
-                    ref={dropdownToggleRef}
-                    className={toggleClassName}
-                    type="button"
-                    id="dropdownMenuButton"
-                    onClick={(e) => setOpen(!open)}
-                >
+            <button
+                disabled={props.disabled}
+                ref={dropdownToggleRef}
+                className={`${toggleClassName}${props.more ? " more mx-right" : ""}`}
+                type="button"
+                id="dropdownMenuButton"
+                onClick={(e) => setOpen(!open)}
+            >
+                {!props.more ?
+                <>
                     <div className="title">
                         {getTitleLabel()}
                     </div>
@@ -112,19 +113,12 @@ export const DropDown: React.FunctionComponent<DropDownProps> = (props: DropDown
                         {((props.clearable || props.multi) && selectedList.length > 0) ? <div className="icon-holder" onClick={handleClickClear}>{timesIcon}</div> : null}
                         <div className="icon-holder chevron">{chevronDownIcon}</div>
                     </div>
-                </button> :
-                <button
-                    ref={dropdownToggleRef}
-                    type="button"
-                    id="dropdownMenuButton"
-                    className={`${toggleClassName} more`}
-                    onClick={(e) => setOpen(!open)}
-                >
-                    <div className="right-items"><div className="icon-holder">{moreIcon}</div></div>
-                </button>
-            }
+                </> :
+                <div className="right-items"><div className="icon-holder">{moreIcon}</div></div>
+                }
+            </button>
 
-            <div ref={dropdownMenuRef} className={`dropdown-menu${open ? " show" : ""} dropdown-menu-right custom-dropdown-menu`} >
+            <div ref={dropdownMenuRef} className={`dropdown-menu custom-dropdown-menu${open ? " show" : ""}${props.more ? " dropdown-menu-right" : ""}`} >
                 {props.searchable &&
                     <>
                         <input ref={searchRef} className="search-input" name="search-input" placeholder="Search ..." value={searchText} onChange={(e) => setSearchText(e.target.value)} />

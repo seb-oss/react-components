@@ -233,6 +233,17 @@ $grey9: #f6f6f6;
             > .right-items > .icon-holder > svg {
                 fill: $grey7;
             }
+
+            &.more {
+                border-color: transparent;
+
+                &:hover {
+                    background-color: $grey9;
+                    > .right-items > .icon-holder > svg {
+                        fill: $grey7;
+                    }        
+                }
+            }
         }
     }
 }
