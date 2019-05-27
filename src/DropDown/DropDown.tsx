@@ -20,10 +20,10 @@ export interface DropDownProps {
     disabled?: boolean;
 }
 
-const chevronDownIcon: JSX.Element = <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M443.5 162.6l-7.1-7.1c-4.7-4.7-12.3-4.7-17 0L224 351 28.5 155.5c-4.7-4.7-12.3-4.7-17 0l-7.1 7.1c-4.7 4.7-4.7 12.3 0 17l211 211.1c4.7 4.7 12.3 4.7 17 0l211-211.1c4.8-4.7 4.8-12.3.1-17z"/></svg>;
-const timesIcon: JSX.Element = <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path d="M217.5 256l137.2-137.2c4.7-4.7 4.7-12.3 0-17l-8.5-8.5c-4.7-4.7-12.3-4.7-17 0L192 230.5 54.8 93.4c-4.7-4.7-12.3-4.7-17 0l-8.5 8.5c-4.7 4.7-4.7 12.3 0 17L166.5 256 29.4 393.2c-4.7 4.7-4.7 12.3 0 17l8.5 8.5c4.7 4.7 12.3 4.7 17 0L192 281.5l137.2 137.2c4.7 4.7 12.3 4.7 17 0l8.5-8.5c4.7-4.7 4.7-12.3 0-17L217.5 256z"/></svg>;
-const squareIcon: JSX.Element = <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M400 32H48C21.5 32 0 53.5 0 80v352c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V80c0-26.5-21.5-48-48-48zm16 400c0 8.8-7.2 16-16 16H48c-8.8 0-16-7.2-16-16V80c0-8.8 7.2-16 16-16h352c8.8 0 16 7.2 16 16v352z"/></svg>;
-const checkSquareIcon: JSX.Element = <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M400 32H48C21.49 32 0 53.49 0 80v352c0 26.51 21.49 48 48 48h352c26.51 0 48-21.49 48-48V80c0-26.51-21.49-48-48-48zm0 32c8.823 0 16 7.178 16 16v352c0 8.822-7.177 16-16 16H48c-8.822 0-16-7.178-16-16V80c0-8.822 7.178-16 16-16h352m-34.301 98.293l-8.451-8.52c-4.667-4.705-12.265-4.736-16.97-.068l-163.441 162.13-68.976-69.533c-4.667-4.705-12.265-4.736-16.97-.068l-8.52 8.451c-4.705 4.667-4.736 12.265-.068 16.97l85.878 86.572c4.667 4.705 12.265 4.736 16.97.068l180.48-179.032c4.704-4.667 4.735-12.265.068-16.97z"/></svg>;
+const chevronDownIcon: JSX.Element = <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M443.5 162.6l-7.1-7.1c-4.7-4.7-12.3-4.7-17 0L224 351 28.5 155.5c-4.7-4.7-12.3-4.7-17 0l-7.1 7.1c-4.7 4.7-4.7 12.3 0 17l211 211.1c4.7 4.7 12.3 4.7 17 0l211-211.1c4.8-4.7 4.8-12.3.1-17z" /></svg>;
+const timesIcon: JSX.Element = <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path d="M217.5 256l137.2-137.2c4.7-4.7 4.7-12.3 0-17l-8.5-8.5c-4.7-4.7-12.3-4.7-17 0L192 230.5 54.8 93.4c-4.7-4.7-12.3-4.7-17 0l-8.5 8.5c-4.7 4.7-4.7 12.3 0 17L166.5 256 29.4 393.2c-4.7 4.7-4.7 12.3 0 17l8.5 8.5c4.7 4.7 12.3 4.7 17 0L192 281.5l137.2 137.2c4.7 4.7 12.3 4.7 17 0l8.5-8.5c4.7-4.7 4.7-12.3 0-17L217.5 256z" /></svg>;
+const squareIcon: JSX.Element = <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M400 32H48C21.5 32 0 53.5 0 80v352c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V80c0-26.5-21.5-48-48-48zm16 400c0 8.8-7.2 16-16 16H48c-8.8 0-16-7.2-16-16V80c0-8.8 7.2-16 16-16h352c8.8 0 16 7.2 16 16v352z" /></svg>;
+const checkSquareIcon: JSX.Element = <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M400 32H48C21.49 32 0 53.49 0 80v352c0 26.51 21.49 48 48 48h352c26.51 0 48-21.49 48-48V80c0-26.51-21.49-48-48-48zm0 32c8.823 0 16 7.178 16 16v352c0 8.822-7.177 16-16 16H48c-8.822 0-16-7.178-16-16V80c0-8.822 7.178-16 16-16h352m-34.301 98.293l-8.451-8.52c-4.667-4.705-12.265-4.736-16.97-.068l-163.441 162.13-68.976-69.533c-4.667-4.705-12.265-4.736-16.97-.068l-8.52 8.451c-4.705 4.667-4.736 12.265-.068 16.97l85.878 86.572c4.667 4.705 12.265 4.736 16.97.068l180.48-179.032c4.704-4.667 4.735-12.265.068-16.97z" /></svg>;
 
 // helper function for updating object in array
 function updateObjectInArray<T extends object>(array: Array<T>, index: number, item: T): Array<T> {
@@ -123,7 +123,7 @@ export const DropDown: React.FunctionComponent<DropDownProps> = (props: DropDown
                 {(props.multi && searchText.length === 0) &&
                     <>
                         <a
-                            key={"select-all"}
+                            key={"select-all-anchor"}
                             className={`dropdown-item custom-dropdown-item multi${(allSelected) ? " selected" : ""}`}
                             href="#"
                             onClick={(e) => {
@@ -134,8 +134,16 @@ export const DropDown: React.FunctionComponent<DropDownProps> = (props: DropDown
                                 props.onChange(newList, props.name);
                             }}
                         >
-                            <div className="icon-holder">{(allSelected) ? checkSquareIcon : squareIcon}</div>
-                            <div className="label">Select All</div>
+                            <div className="custom-control">
+                                <input
+                                    type="checkbox"
+                                    className="custom-control-input"
+                                    id={"select-all"}
+                                    name={"select-all"}
+                                    defaultChecked={allSelected}
+                                />
+                                <label className="custom-control-label" htmlFor={"select-all"}>Select All</label>
+                            </div>
                         </a>
                         <div className="dropdown-divider" />
                     </>
@@ -165,8 +173,18 @@ export const DropDown: React.FunctionComponent<DropDownProps> = (props: DropDown
                                     }
                                 }}
                             >
-                                {props.multi && <div className="icon-holder">{item.selected ? checkSquareIcon : squareIcon}</div>}
-                                <div className="label">{item.label}</div>
+                                {props.multi ?
+                                    <div className="custom-control">
+                                        <input
+                                            type="checkbox"
+                                            className="custom-control-input"
+                                            id={item.value}
+                                            name={item.value}
+                                            defaultChecked={item.selected}
+                                        />
+                                        {item.label && <label className="custom-control-label" htmlFor={item.value}>{item.label}</label>}
+                                    </div>
+                                    : item.label && <div className="label">{item.label}</div>}
                             </a>
                         );
                     }

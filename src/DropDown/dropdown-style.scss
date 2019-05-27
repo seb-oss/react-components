@@ -118,18 +118,18 @@ $grey9: #f6f6f6;
             padding-left: 16px;
 
             &.multi {
-                > .icon-holder {
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    height: 24px;
-                    width: 20px;
-                    margin-right: 16px;
-
-                    > svg {
-                        width: $icon-size;
-                        height: $icon-size;
-                        fill: $text;
+                .custom-control {
+                    .custom-control-label,
+                    .custom-control-input {
+                        cursor: pointer;
+                        user-select: none;
+                        &::before {
+                            border-color: $darkBlue2;
+                            background-color: white;     
+                        }
+                        &::after {
+                            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3e%3cpath fill='%23fff' d='M6.564.75l-3.59 3.612-1.538-1.55L0 4.26 2.974 7.25 8 2.193z'/%3e%3c/svg%3e");
+                        }
                     }
                 }
             }
@@ -142,29 +142,45 @@ $grey9: #f6f6f6;
             }
 
             &:hover {
-                > .icon-holder > svg {
-                    fill: white;
+                .custom-control {
+                    .custom-control-label {
+                        color: white;
+                    }
                 }
             }
 
             &.selected {
+                .custom-control {
+                    .custom-control-label,
+                    .custom-control-input {
+                        &::before {
+                            background-color: $darkBlue2;     
+                        }
+                    }
+                }
+
                 &:not(:hover) {
                     background-color: white;
-                    color: $darkBlue1;
+                    color: $darkBlue2;
 
-                    &.multi {
+                    &.multi { 
                         color: $text;
-                        > .icon-holder > svg {
-                            fill: $darkBlue1;
-                        }
-                    }    
+                    }
                 }
 
                 &:hover {
-                    font-weight: 500;
-                    background-color: $darkBlue1;
-                }
+                    // font-weight: 500;
+                    background-color: $darkBlue2;
 
+                    .custom-control {
+                        .custom-control-label,
+                        .custom-control-input {
+                            &::before {
+                                border-color: white;
+                            }
+                        }
+                    }    
+                }
             }
         }
     }
