@@ -166,6 +166,7 @@ $grey9: #f6f6f6;
             }
 
             &:focus {
+                outline: $darkBlue2 2px solid;
                 &:not(:hover) {
                     color: $text;
                     background-color: white;

@@ -37,6 +37,7 @@ function updateObjectInArray<T extends object>(array: Array<T>, index: number, i
 
 export const DropDown: React.FunctionComponent<DropDownProps> = (props: DropDownProps): React.ReactElement<void> => {
     const [open, setOpen] = React.useState(false);
+    const [currentFocused, setCurrentFocused] = React.useState(0);
     const [searchText, setSearchText] = React.useState("");
     const dropdownToggleRef = React.createRef<HTMLButtonElement>();
     const dropdownMenuRef = React.createRef<HTMLDivElement>();
@@ -46,9 +47,12 @@ export const DropDown: React.FunctionComponent<DropDownProps> = (props: DropDown
     const allSelected = selectedList.length === props.list.length;
     const shouldDisable = (props.disabled || !props.list.length);
 
+    const listRefs = props.list.map(() => React.createRef<HTMLButtonElement>());
+
     // Adding event listener to listen to clicks outside the component on mount, removing on unmount
     React.useEffect(() => {
         document.addEventListener("mousedown", handleClickOutside);
+        // document.addEventListener("keyup", (event) => console.log(event));
         return () => {
             document.removeEventListener("mousedown", handleClickOutside);
         };
@@ -62,14 +66,88 @@ export const DropDown: React.FunctionComponent<DropDownProps> = (props: DropDown
 
     // As soon as the menu opens focus the search text input
     React.useEffect(() => {
-        if (open && searchRef.current) {
-            searchRef.current.focus();
+        if (open) {
+            if (props.multi && searchRef.current) {
+                searchRef.current.focus();
+            } else {
+                focusCurrentItem();
+            }
         }
+        (currentFocused > 0) && setCurrentFocused(0);
     }, [open]);
 
-    // Function that runs when the clean icon is pressed
+    React.useEffect(() => {
+        if (open) {
+            focusCurrentItem();
+        }
+    }, [currentFocused]);
+
+    const focusCurrentItem = () => {
+        if (listRefs[currentFocused] && listRefs[currentFocused].current) {
+            listRefs[currentFocused].current.focus();
+        }
+    };
+
+    // The native event function that runs when a keyboard button is pressed
+    const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>): void => {
+        const target = event.target as HTMLDivElement;
+        console.log("keyboard event of type: ", event.type, " with key: ", event.key, " and keyCode: ", event.keyCode, " happened on target: ", target);
+        if (event.keyCode !== 9 && event.keyCode !== 16) { // NOT tab or shift + tab
+            event.preventDefault();
+            console.log("prevented default");
+        } else { // tab or shift + tab
+            open && setOpen(false);
+        }
+
+        if (open) {
+            // console.log("currentFocused: ", currentFocused);
+            if (event.keyCode === 40) { // down
+                if (currentFocused < (props.list.length - 1)) {
+                    setCurrentFocused(currentFocused + 1);
+                }
+            }
+            if (event.keyCode === 38) { // doupwn
+                if (currentFocused > 0) {
+                    setCurrentFocused(currentFocused - 1);
+                }
+            }
+            if (event.keyCode === 13 || event.keyCode === 32) { // enter or space
+                dropdownRowSelected(props.list[currentFocused], currentFocused);
+            }
+            if (event.keyCode === 27) { // ecsape
+                setOpen(false);
+            }
+        }
+
+        // Only check for following targets
+        switch (target.id) {
+            case "clearButton":
+                if (event.keyCode === 13 || event.keyCode === 32) { // enter or space
+                    handleClear();
+                }
+                break;
+            case "dropdownMenuButton":
+                if (event.keyCode === 32) { // space
+                    !open && setOpen(true);
+                }
+                break;
+            default:
+                break;
+        }
+
+    };
+
+    // The native event function that runs when the clean icon is clicked
     const handleClickClear = (event: React.MouseEvent<HTMLDivElement, MouseEvent>): void => {
+        event.stopPropagation();
         event.preventDefault();
+
+        handleClear();
+    };
+
+    // Function containing the clear button logic
+    const handleClear = (): void => {
+        console.log("Clear logic running ...");
         const newList = props.list.map((item) => {
             return { ...item, selected: false };
         });
@@ -77,17 +155,25 @@ export const DropDown: React.FunctionComponent<DropDownProps> = (props: DropDown
         !props.multi && setOpen(false);
     };
 
-    // Function that runs when the select all option is pressed
+    // The native event function that runs when the select all item is clicked
     const handleClickSelectAll = (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>): void => {
-        event.stopPropagation();
+        event.preventDefault();
+
+        handleSelectAll();
+    };
+
+    // Function containing the select all button logic
+    const handleSelectAll = (): void => {
+        console.log("Select All logic running ...");
         const newList = props.list.map((item) => {
             return { ...item, selected: (allSelected) ? false : true };
         });
         props.onChange(newList, props.name);
     };
 
-    // Function which will run when the item is clicked
+    // Function containing the select dropdown item logic
     const dropdownRowSelected = (item: DropDownItem, index: number): void => {
+        console.log("Dropdown selected ...");
         if (!props.multi) {
             const newItem = { ...item, selected: props.clearable ? !item.selected : true };
             const cleanList = props.list.map((el) => {
@@ -101,6 +187,12 @@ export const DropDown: React.FunctionComponent<DropDownProps> = (props: DropDown
             const newList = updateObjectInArray(props.list, index, newItem);
             props.onChange(newList, props.name);
         }
+    };
+
+    // The native event function that runs when the dropdown button is clicked
+    const handleClickToggle = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
+        console.log("Toggle clicked ...");
+        setOpen(!open);
     };
 
     // Returns the appropriate title for different situations and component types
@@ -125,7 +217,7 @@ export const DropDown: React.FunctionComponent<DropDownProps> = (props: DropDown
     };
 
     return (
-        <div className={`dropdown custom-dropdown${shouldDisable ? " disabled" : ""}${props.className ? " " + props.className : ""}`}>
+        <div onKeyDown={handleKeyDown} className={`dropdown custom-dropdown${shouldDisable ? " disabled" : ""}${props.className ? " " + props.className : ""}`}>
             {props.label && <label className="dropdown-label">{props.label}</label>}
 
             <button
@@ -134,7 +226,7 @@ export const DropDown: React.FunctionComponent<DropDownProps> = (props: DropDown
                 className={`btn btn-secondary custom-dropdown-toggle${open ? " open" : ""}${props.more ? " more mx-right" : ""}`}
                 type="button"
                 id="dropdownMenuButton"
-                onClick={(e) => setOpen(!open)}
+                onClick={handleClickToggle}
             >
                 {!props.more ?
                     <>
@@ -143,7 +235,9 @@ export const DropDown: React.FunctionComponent<DropDownProps> = (props: DropDown
                         </div>
 
                         <div className="right-items">
-                            {((props.clearable || props.multi) && selectedList.length > 0) ? <div className="icon-holder" onClick={handleClickClear}>{timesIcon}</div> : null}
+                            {((props.clearable || props.multi) && selectedList.length > 0) ?
+                                <div id="clearButton" className="icon-holder" tabIndex={0} onClick={handleClickClear}>{timesIcon}</div>
+                                : null}
                             <div className="icon-holder chevron">{chevronDownIcon}</div>
                         </div>
                     </> :
@@ -151,7 +245,10 @@ export const DropDown: React.FunctionComponent<DropDownProps> = (props: DropDown
                 }
             </button>
 
-            <div ref={dropdownMenuRef} className={`dropdown-menu custom-dropdown-menu${open ? " show" : ""}${props.more ? " dropdown-menu-right" : ""}`} >
+            <div
+                ref={dropdownMenuRef}
+                className={`dropdown-menu custom-dropdown-menu${open ? " show" : ""}${props.more ? " dropdown-menu-right" : ""}`}
+            >
                 {props.searchable &&
                     <>
                         <input
@@ -175,15 +272,16 @@ export const DropDown: React.FunctionComponent<DropDownProps> = (props: DropDown
                             href=""
                             onClick={handleClickSelectAll}
                         >
-                            <div className="custom-control">
+                            <div tabIndex={-1} className="custom-control">
                                 <input
+                                    tabIndex={-1}
                                     type="checkbox"
                                     className="custom-control-input"
                                     id={"select-all"}
                                     name={"select-all"}
                                     defaultChecked={allSelected}
                                 />
-                                <label className="custom-control-label" htmlFor={"select-all"}>Select All</label>
+                                <label tabIndex={-1} className="custom-control-label" htmlFor={"select-all"}>Select All</label>
                             </div>
                         </a>
                         <div className="dropdown-divider" />
@@ -192,30 +290,33 @@ export const DropDown: React.FunctionComponent<DropDownProps> = (props: DropDown
 
                 {props.list.map((item, index) => {
                     if (displayList.includes(item)) {
-                        const uid = item.value.replace(" ", "_") + "-" + Math.floor(Math.random() * 100) + (new Date()).getTime();
+                        // const uid = item.value.replace(" ", "_") + "-" + Math.floor(Math.random() * 10000) + (new Date()).getTime();
+                        const uid = `${index}_${item.value}`;
                         return (
-                            <a
+                            <button
+                                tabIndex={0}
                                 key={uid}
+                                ref={listRefs[index]}
                                 className={`dropdown-item custom-dropdown-item${item.selected ? " selected" : ""}${props.multi ? " multi" : ""}`}
-                                href=""
                                 onClick={(e) => {
                                     e.preventDefault();
                                     dropdownRowSelected(item, index);
                                 }}
                             >
                                 {props.multi ?
-                                    <div className="custom-control">
+                                    <div tabIndex={-1} className="custom-control">
                                         <input
+                                            tabIndex={-1}
                                             type="checkbox"
                                             className="custom-control-input"
                                             id={uid}
                                             name={uid}
                                             defaultChecked={item.selected}
                                         />
-                                        {item.label && <label className="custom-control-label" htmlFor={uid}>{item.label}</label>}
+                                        {item.label && <label tabIndex={-1} className="custom-control-label" htmlFor={uid}>{item.label}</label>}
                                     </div>
-                                    : item.label && <div className="label">{item.label}</div>}
-                            </a>
+                                    : item.label && <div tabIndex={-1} className="label">{item.label}</div>}
+                            </button>
                         );
                     }
                 })}
