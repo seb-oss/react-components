@@ -3,11 +3,15 @@ import { shallow, mount } from "enzyme";
 import { DropDown } from "./DropDown";
 
 describe("Component: DropDown", () => {
-    const props = {
+    const basicProps = {
         onChange: jest.fn(),
+        selectedValue: null,
+    };
+    const props = {
+        ...basicProps,
         list: [
-            { value: "Male", label: "Male", selected: false },
-            { value: "Female", label: "Female", selected: false },
+            { value: "Male", label: "Male" },
+            { value: "Female", label: "Female" },
         ]
     };
 
@@ -31,7 +35,7 @@ describe("Component: DropDown", () => {
     });
 
     it("Should display \"Empty\" if list prop is an empty array", () => {
-        const wrapper = mount(<DropDown onChange={props.onChange} list={[]} placeholder="myPlaceholder" />);
+        const wrapper = mount(<DropDown {...basicProps} list={[]} placeholder="myPlaceholder" />);
         expect(wrapper.find(".title").length).toBe(1);
         expect(wrapper.find(".title").text()).toEqual("Empty");
         wrapper.unmount();
@@ -49,9 +53,10 @@ describe("Component: DropDown", () => {
             <DropDown
                 onChange={props.onChange}
                 list={[
-                    { value: "Male", label: "Male", selected: true },
-                    { value: "Female", label: "Female", selected: false },
+                    { value: "Male", label: "Male" },
+                    { value: "Female", label: "Female" },
                 ]}
+                selectedValue={{ value: "Male", label: "Male" }}
                 placeholder="myPlaceholder"
             />
         );
@@ -64,9 +69,10 @@ describe("Component: DropDown", () => {
         const wrapper = mount(
             <DropDown
                 onChange={props.onChange}
+                selectedValue={[{ value: "Male", label: "Male" }]}
                 list={[
-                    { value: "Male", label: "Male", selected: true },
-                    { value: "Female", label: "Female", selected: false },
+                    { value: "Male", label: "Male" },
+                    { value: "Female", label: "Female" },
                 ]}
                 placeholder="myPlaceholder"
                 multi={true}
@@ -82,9 +88,13 @@ describe("Component: DropDown", () => {
             <DropDown
                 onChange={props.onChange}
                 list={[
-                    { value: "Male", label: "Male", selected: true },
-                    { value: "Female", label: "Female", selected: true },
-                    { value: "Other", label: "Other", selected: false },
+                    { value: "Male", label: "Male" },
+                    { value: "Female", label: "Female" },
+                    { value: "Other", label: "Other" },
+                ]}
+                selectedValue={[
+                    { value: "Male", label: "Male" },
+                    { value: "Female", label: "Female" }
                 ]}
                 placeholder="myPlaceholder"
                 multi={true}
@@ -100,10 +110,15 @@ describe("Component: DropDown", () => {
             <DropDown
                 onChange={props.onChange}
                 list={[
-                    { value: "Male", label: "Male", selected: true },
-                    { value: "Female", label: "Female", selected: true },
+                    { value: "Male", label: "Male" },
+                    { value: "Female", label: "Female" },
+                ]}
+                selectedValue={[
+                    { value: "Male", label: "Male" },
+                    { value: "Female", label: "Female" }
                 ]}
                 placeholder="myPlaceholder"
+                multi={true}
                 clearable={true}
             />
         );
@@ -135,9 +150,10 @@ describe("Component: DropDown", () => {
             <DropDown
                 onChange={props.onChange}
                 list={[
-                    { value: "Male", label: "Male", selected: true },
-                    { value: "Female", label: "Female", selected: false },
+                    { value: "Male", label: "Male" },
+                    { value: "Female", label: "Female" },
                 ]}
+                selectedValue={[{ value: "Male", label: "Male" }]}
                 multi={true}
             />
         );
@@ -150,9 +166,10 @@ describe("Component: DropDown", () => {
             <DropDown
                 onChange={props.onChange}
                 list={[
-                    { value: "Male", label: "Male", selected: true },
-                    { value: "Female", label: "Female", selected: false },
+                    { value: "Male", label: "Male" },
+                    { value: "Female", label: "Female" },
                 ]}
+                selectedValue={{ value: "Male", label: "Male" }}
                 clearable={true}
             />
         );

@@ -9,29 +9,32 @@ export default class DropdownPage extends React.Component<any, any>  {
         super(props);
         this.state = {
             dropDownList1: [
-                { value: "1", selected: false, label: "1st item" },
-                { value: "2", selected: false, label: "2nd item" },
-                { value: "3", selected: false, label: "3rd item" },
+                { value: "1", label: "1st item" },
+                { value: "2", label: "2nd item" },
+                { value: "3", label: "3rd item" },
             ],
+            dropDownList1Selected: null,
             dropDownList2: [
-                { value: "1", selected: false, label: "1st item" },
-                { value: "2", selected: false, label: "2nd item" },
-                { value: "3", selected: false, label: "3rd item" },
-                { value: "4", selected: false, label: "4th item" },
-                { value: "5", selected: false, label: "5th item" },
+                { value: "1", label: "1st item" },
+                { value: "2", label: "2nd item" },
+                { value: "3", label: "3rd item" },
+                { value: "4", label: "4th item" },
+                { value: "5", label: "5th item" },
             ],
+            dropDownList2Selected: null,
             dropDownList3: [
-                { value: "1", selected: false, label: "1st item" },
-                { value: "2", selected: false, label: "2nd item" },
-                { value: "3", selected: false, label: "3rd item" },
+                { value: "1", label: "1st item" },
+                { value: "2", label: "2nd item" },
+                { value: "3", label: "3rd item" },
             ],
+            dropDownList3Selected: null
         };
 
         this.onChangeDropdown = this.onChangeDropdown.bind(this);
     }
 
-    onChangeDropdown(list: Array<DropDownItem>, name: string) {
-        this.setState({ [name]: list });
+    onChangeDropdown(value: DropDownItem | Array<DropDownItem>, name: string) {
+        this.setState({ [name]: value });
     }
 
     render() {
@@ -54,7 +57,8 @@ export default class DropdownPage extends React.Component<any, any>  {
                                 name="dropDownList1"
                                 list={this.state.dropDownList1}
                                 label="Dropdown label"
-                                onChange={this.onChangeDropdown}
+                                selectedValue={this.state.dropDownList1Selected}
+                                onChange={(value: DropDownItem | Array<DropDownItem>) => this.onChangeDropdown(value, "dropDownList1Selected")}
                                 clearable={true}
                             />
                         </div>
@@ -64,7 +68,8 @@ export default class DropdownPage extends React.Component<any, any>  {
                             <DropDown
                                 name="dropDownList2"
                                 list={this.state.dropDownList2}
-                                onChange={this.onChangeDropdown}
+                                selectedValue={this.state.dropDownList2Selected}
+                                onChange={(value: DropDownItem | Array<DropDownItem>) => this.onChangeDropdown(value, "dropDownList2Selected")}
                                 searchable={true}
                                 placeholder="Multi option"
                                 multi={true}
@@ -76,7 +81,8 @@ export default class DropdownPage extends React.Component<any, any>  {
                             <DropDown
                                 name="dropDownList3"
                                 list={this.state.dropDownList3}
-                                onChange={this.onChangeDropdown}
+                                selectedValue={this.state.dropDownList3Selected}
+                                onChange={(value: DropDownItem | Array<DropDownItem>) => this.onChangeDropdown(value, "dropDownList3Selected")}
                                 more={true}
                             />
                         </div>

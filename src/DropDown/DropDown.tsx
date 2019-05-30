@@ -40,7 +40,6 @@ import "./dropdown-style.scss";
 export interface DropDownItem {
     value: any;
     label: string;
-    selected: boolean;
 }
 
 interface UniqueDropDownItem {
@@ -51,15 +50,19 @@ interface UniqueDropDownItem {
 interface DisplayDropDownItem extends UniqueDropDownItem {
     originalIndex?: number;
     className: string;
+    selected: boolean;
 }
 
 export interface DropDownProps {
+    selectedValue: DropDownItem | Array<DropDownItem>;
     list: Array<DropDownItem>;
-    onChange: (list: Array<DropDownItem>, name: string) => void;
+    onChange: (value: DropDownItem | Array<DropDownItem>) => void;
     name?: string;
     className?: string;
     label?: string;
     placeholder?: string;
+    error?: string;
+    native?: boolean;
     searchable?: boolean;
     multi?: boolean;
     clearable?: boolean;
@@ -84,26 +87,39 @@ function updateObjectInArray<T extends object>(array: Array<T>, index: number, i
 export const DropDown: React.FunctionComponent<DropDownProps> = (props: DropDownProps): React.ReactElement<void> => {
     const [open, setOpen] = React.useState(false);
     const [currentFocused, setCurrentFocused] = React.useState(-1);
-    // const [selectedItems, setSelectedItems] = React.useState<Array<string>>([]);
     const [searchText, setSearchText] = React.useState("");
     const dropdownToggleRef = React.createRef<HTMLButtonElement>();
     const dropdownMenuRef = React.createRef<HTMLDivElement>();
     const searchRef = React.createRef<HTMLInputElement>();
     const uniqueList: Array<UniqueDropDownItem> = props.list.map((e, i) => {
-        const id = e.value.replace(" ", "_") + `${i}`;
+        const id = e.value.replace(" ", "_") + "-" + `${i}`;
         return { dropdownItem: e, id };
     });
-    const selectedList = uniqueList.filter((e) => e.dropdownItem.selected);
-    const allSelected = selectedList.length === uniqueList.length;
     const shouldDisable = (props.disabled || !uniqueList.length);
 
     const displayList: Array<DisplayDropDownItem> = uniqueList.map((e, i) => {
+        let selected = false;
+
+        if (!props.multi) {
+            if ((props.selectedValue as DropDownItem) && e.dropdownItem.value === (props.selectedValue as DropDownItem).value) {
+                selected = true;
+            }
+        } else {
+            if ((props.selectedValue as Array<DropDownItem>) && (props.selectedValue as Array<DropDownItem>).find((el) => el.value === e.dropdownItem.value)) {
+                selected = true;
+            }
+        }
+
         return {
             ...e,
-            className: `dropdown-item custom-dropdown-item${props.multi ? " multi" : ""}${e.dropdownItem.selected ? " selected" : ""}`,
-            originalIndex: i
+            selected,
+            className: `dropdown-item custom-dropdown-item${props.multi ? " multi" : ""}${selected ? " selected" : ""}`,
+            originalIndex: i,
         };
     }).filter((e) => e.dropdownItem.label.includes(searchText));
+
+    const selectedList: Array<DropDownItem> = displayList.filter((e) => e.selected).map((e) => e.dropdownItem);
+    const allSelected = selectedList.length === uniqueList.length;
 
     if (props.multi && searchText.length === 0) {
         displayList.unshift(
@@ -112,8 +128,8 @@ export const DropDown: React.FunctionComponent<DropDownProps> = (props: DropDown
                 dropdownItem: {
                     value: "select-all",
                     label: "Select All",
-                    selected: allSelected
                 },
+                selected: allSelected,
                 className: `dropdown-item select-all custom-dropdown-item multi${(allSelected) ? " selected" : ""}`,
             }
         );
@@ -126,7 +142,8 @@ export const DropDown: React.FunctionComponent<DropDownProps> = (props: DropDown
     //     open,
     //     currentFocused,
     //     searchText,
-    //     uniqueList
+    //     uniqueList,
+    //     displayList
     // });
 
     // Adding event listener to listen to clicks outside the component on mount, removing on unmount
@@ -215,7 +232,7 @@ export const DropDown: React.FunctionComponent<DropDownProps> = (props: DropDown
                     if ((target as HTMLButtonElement).classList.contains("select-all")) {
                         handleSelectAll();
                     } else {
-                        dropdownItemSelected(displayList[currentFocused]);
+                        dropdownItemSelected(displayList[currentFocused].dropdownItem);
                     }
                 }
             }
@@ -255,10 +272,7 @@ export const DropDown: React.FunctionComponent<DropDownProps> = (props: DropDown
     // Function containing the clear button logic
     const handleClear = (): void => {
         console.log("Clear logic running ...");
-        const newList = props.list.map((item) => {
-            return { ...item, selected: false };
-        });
-        props.onChange(newList, props.name);
+        props.onChange(null);
         setOpen(false);
     };
 
@@ -271,25 +285,23 @@ export const DropDown: React.FunctionComponent<DropDownProps> = (props: DropDown
     };
 
     // Function containing the select dropdown item logic
-    const dropdownItemSelected = (item: DisplayDropDownItem): void => {
-        const index = item.originalIndex;
-        if (index === -1) {
-            console.warn("Can't find selected item index in the dropdown list");
-            return;
-        }
-        console.log("Dropdown selected ...", item, index);
+    const dropdownItemSelected = (item: DropDownItem): void => {
+        console.log("Dropdown selected ...", item);
         if (!props.multi) {
-            const newItem = { ...item.dropdownItem, selected: props.clearable ? !item.dropdownItem.selected : true };
-            const cleanList = props.list.map((el) => {
-                return { ...el, selected: false };
-            });
-            const newList = updateObjectInArray(cleanList, index, newItem);
-            props.onChange(newList, props.name);
+            const newItem = { ...item };
+            props.onChange(newItem);
             setOpen(false);
         } else {
-            const newItem = { ...item.dropdownItem, selected: !item.dropdownItem.selected };
-            const newList = updateObjectInArray(props.list, index, newItem);
-            props.onChange(newList, props.name);
+            const currentList = (props.selectedValue as Array<DropDownItem>) ? props.selectedValue as Array<DropDownItem> : [];
+            const index = currentList.findIndex((e) => e.value === item.value);
+            if (index === -1) {
+                const newItem = { ...item };
+                const newList = [...currentList, newItem];
+                props.onChange(newList);
+            } else {
+                const newList = currentList.filter((e) => e.value !== item.value);
+                props.onChange(newList);
+            }
         }
     };
 
@@ -302,10 +314,11 @@ export const DropDown: React.FunctionComponent<DropDownProps> = (props: DropDown
     // Function containing the select all button logic
     const handleSelectAll = (): void => {
         console.log("Select All logic running ...");
-        const newList = props.list.map((item) => {
-            return { ...item, selected: (allSelected) ? false : true };
-        });
-        props.onChange(newList, props.name);
+        if (allSelected) {
+            props.onChange([]);
+        } else {
+            props.onChange(props.list);
+        }
     };
 
     // Returns the appropriate title for different situations and component types
@@ -313,17 +326,17 @@ export const DropDown: React.FunctionComponent<DropDownProps> = (props: DropDown
         if (props.list && props.list.length === 0) {
             return "Empty";
         }
-        if (selectedList.length > 0) {
-            if (selectedList.length === props.list.length) {
+        if (selectedList && selectedList.length > 0) {
+            if (allSelected) {
                 return `All selected (${selectedList.length})`;
             }
             if (props.multi) {
                 if (selectedList.length === 1) {
-                    return selectedList[0].dropdownItem.label;
+                    return selectedList[0].label;
                 }
                 return selectedList.length + " Selected"; // TODO should be like this example: 1st Item, 2nd Item... (+2)
             }
-            return selectedList[0].dropdownItem.label;
+            return (props.selectedValue as DropDownItem).label;
         }
 
         return (props.placeholder && props.placeholder.length) ? props.placeholder : "Select ...";
@@ -391,12 +404,11 @@ export const DropDown: React.FunctionComponent<DropDownProps> = (props: DropDown
                                 onClick={(e) => {
                                     e.preventDefault();
                                     setCurrentFocused(index);
-                                    if (props.multi) {
-                                        if (index === 0) {
-                                            handleSelectAll();
-                                        }
+                                    if (props.multi && index === 0) {
+                                        handleSelectAll();
+                                    } else {
+                                        dropdownItemSelected(item.dropdownItem);
                                     }
-                                    dropdownItemSelected(item);
                                 }}
                             >
                                 {props.multi ?
@@ -407,7 +419,7 @@ export const DropDown: React.FunctionComponent<DropDownProps> = (props: DropDown
                                             className="custom-control-input"
                                             id={item.id}
                                             name={item.id}
-                                            defaultChecked={item.dropdownItem.selected}
+                                            defaultChecked={item.selected}
                                         />
                                         {item.dropdownItem.label && <label tabIndex={-1} className="custom-control-label" htmlFor={item.id}>{item.dropdownItem.label}</label>}
                                     </div>
