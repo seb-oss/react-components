@@ -22,8 +22,8 @@ describe("Component: DropDown", () => {
     });
 
     it("Should pass custom class", () => {
-        const wrapper = shallow(<DropDown {...props} className="myDropdown" />);
-        expect(wrapper.hasClass("myDropdown")).toBeTruthy();
+        const wrapper = mount(<DropDown {...props} className="test-custom-class" />);
+        expect(wrapper.hasClass("test-custom-class")).toBeTruthy();
         wrapper.unmount();
     });
 

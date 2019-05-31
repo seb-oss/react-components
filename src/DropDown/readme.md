@@ -15,14 +15,14 @@ Type: Form Component
 ```
 
 ## Element information 
-This React component is based on `react-select`. Supports customization and configurations. The component name is `DropDown` and the selector is `<DropDown/>`.
+This React component supports customization and configurations. The component name is `DropDown` and the selector is `<DropDown/>`.
 
 ## Basic use
 ```html
 <DropDown
     list={this.state.list}
-    onChange={(list: Array<DropdownItem>, name: string) => { this.setState({ list }) }}
-    placeholder="dropdown placeholder"
+    selectedValue={this.state.selectedValue}
+    onChange={(value: DropDownItem | Array<DropDownItem>) => { this.setState({ selectedValue: value }) }}
 />
 ```
 
@@ -31,10 +31,16 @@ These are the current available properties:
 
 | Property       | Type                                                     | Descrition                                                              |
 | -------------- | -------------------------------------------------------- | ----------------------------------------------------------------------- |
-| list           | `Array<DropdownItem>` <sup>1</sup>                       | an array of DropdownItem                                                |
-| onChange       | `(list: Array<DropdownItem>, name: string) => void`      | on change event passing the updated list and the name of the list       |
+| selectedValue  | `Array<DropdownItem> \| DropDownItem` <sup>1</sup>       | an array of the currently selected dropdown item(s)                     |
+| list           | `Array<DropdownItem>` <sup>1</sup>                       | an array of all the dropdown items to display                           |
+| onChange       | `(value: DropDownItem \| Array<DropDownItem> \| React.ChangeEvent<HTMLSelectElement>) => void`   | a callback passing the updated selectedValue list (multi) or item. In `native` mode the calback is the native onChange event       |
 | className?     | `string`                                                 | custom class                                                            |
+| label?         | `string`                                                 | optional label to display above the dropdown                            |
+| placeholder?   | `string`                                                 | optional text to display inside the toggle button when no item selected |
+| error?         | `string`                                                 | optional error string to be displayed under the dropdown                |
+| native?        | `boolean`                                                | a mobile friendly version using native `<select>` html element          |
 | searchable?    | `boolean`                                                | enables searching                                                       |
+| searchPlaceholder?| `string`                                              | optional text to display inside the empty search bar                    |
 | multi?         | `boolean`                                                | enables selecting multiple choices                                      |
 | clearable?     | `boolean`                                                | enables clearning the value, ignored if `multi` is enabled              |
 | disabled?      | `boolean`                                                | disabled status                                                         |
@@ -48,7 +54,6 @@ This component is a wrapper around [react-select](https://github.com/JedWatson/r
 ```javascript
 {
       label = string,
-      value = any,
-      selected = boolean
+      value = any
 }
 ```

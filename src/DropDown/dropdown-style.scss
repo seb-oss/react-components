@@ -10,6 +10,7 @@ $grey6: #999999;
 $grey7: #b3b3b3;
 // $grey8: #e6e6e6;
 $grey9: #f6f6f6;
+$red-dark: #d81a1a;
 
 @mixin transform($props) {
     -webkit-transform: $props;
@@ -111,11 +112,11 @@ $grey9: #f6f6f6;
             }
 
             &:focus {
-                border-color: $darkBlue2;                
+                border-color: $darkBlue2;
                 &:active {
                     background-color: $darkBlue2;
                 }
-            } 
+            }
 
             &.open {
                 background-color: $darkBlue2;
@@ -248,9 +249,21 @@ $grey9: #f6f6f6;
                     background-color: $grey9;
                     > .right-items > .icon-holder > svg {
                         fill: $grey7;
-                    }        
+                    }
                 }
             }
         }
+    }
+}
+
+.alert {
+    padding: 0px 2px;
+    margin: 0;
+    &.alert-danger {
+        color: $red-dark;
+        background: none;
+        border: none;
+        border-radius: 0px;
+        width: 100%;
     }
 }
