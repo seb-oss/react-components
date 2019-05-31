@@ -65,7 +65,6 @@ export default class DropdownPage extends React.Component<any, any>  {
                         <p>Here is the multi select one:</p>
                         <div className="result">
                             <DropDown
-                                searchPlaceholder="Koleraba Plevel ...."
                                 label="Dropdown label"
                                 name="dropDownList2"
                                 list={this.state.dropDownList2}
