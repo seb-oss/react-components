@@ -34,6 +34,15 @@ describe("Component: DropDown", () => {
         wrapper.unmount();
     });
 
+    it("Should open menu when clicked on trigger", () => {
+        const wrapper = mount(<DropDown {...props} label="label" />);
+        const toggleButton = wrapper.find(".custom-dropdown-toggle");
+        expect(toggleButton.length).toBe(1);
+        toggleButton.simulate("click");
+        expect(wrapper.find(".show").length).toBe(1);
+        wrapper.unmount();
+    });
+
     it("Should display \"Empty\" if list prop is an empty array", () => {
         const wrapper = mount(<DropDown {...basicProps} list={[]} placeholder="myPlaceholder" />);
         expect(wrapper.find(".title").length).toBe(1);
@@ -137,6 +146,26 @@ describe("Component: DropDown", () => {
         const wrapper = mount(<DropDown {...props} more={true} />);
         expect(wrapper.find("#dropdown-more-icon").length).toBe(1);
         expect(wrapper.find(".more").length).toBe(1);
+        wrapper.unmount();
+    });
+
+    it("Should display native dropdown if native prop set true", () => {
+        const wrapper = mount(<DropDown {...props} native={true} />);
+        expect(wrapper.find(".form-control").length).toBe(1);
+        wrapper.unmount();
+    });
+
+    it("Should not display native dropdown if multi prop set true", () => {
+        const wrapper = mount(<DropDown {...props} native={true} multi={true} />);
+        expect(wrapper.find(".form-control").length).toBe(0);
+        wrapper.unmount();
+    });
+
+    it("Should display error is error prop set", () => {
+        const wrapper = mount(<DropDown {...props} error={"error"} />);
+        expect(wrapper.find(".alert-danger").length).toBe(1);
+        expect(wrapper.find(".alert-danger").text()).toEqual("error");
+        wrapper.unmount();
     });
 
     it("Should disable component when disabled set to true", () => {
