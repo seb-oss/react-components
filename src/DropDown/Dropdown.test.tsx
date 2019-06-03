@@ -169,8 +169,8 @@ describe("Component: DropDown", () => {
     });
 
     it("Should disable component when disabled set to true", () => {
-        const wrapper = mount(<DropDown {...props} disabled={true} />);
-        expect(wrapper.find(".disabled").length).toBe(1);
+        const wrapper = shallow(<DropDown {...props} disabled={true} />);
+        expect(wrapper.find(".disabled").length).toBe(2);
         wrapper.unmount();
     });
 

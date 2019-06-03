@@ -9,11 +9,11 @@ export interface DropDownItem {
 interface UniqueDropDownItem {
     id: string;
     dropdownItem: DropDownItem;
+    selected: boolean;
 }
 
 interface DisplayDropDownItem extends UniqueDropDownItem {
     className: string;
-    selected: boolean;
 }
 
 export interface DropDownProps {
@@ -22,7 +22,7 @@ export interface DropDownProps {
     /** a list of all the dropdown items to display */
     list: Array<DropDownItem>;
     /** a callback function which will run everytime an item is selected or deselected. It contains the current element or list or element which are selected */
-    onChange: (value: DropDownItem | Array<DropDownItem> | React.ChangeEvent<HTMLSelectElement>) => void;
+    onChange: (value: any) => void;
     /** optional name to be applied to the dropdown button button element. Default: "dropdownMenuButton" */
     name?: string;
     /** optional classname which will be appended to the list of classnames of the dropdown root element */
@@ -61,34 +61,32 @@ export const DropDown: React.FunctionComponent<DropDownProps> = (props: DropDown
 
     // EXTRA CONFIG ================================
     /** array of dropdown item elements with a unique id and the original dropdownItem */
-    const uniqueList: Array<UniqueDropDownItem> = props.list.map((e, i) => {
-        const id = e.value.replace(" ", "_") + "-" + `${i}`;
-        return { dropdownItem: e, id };
+    const uniqueList: Array<UniqueDropDownItem> = props.list.filter((e) => (e && e.hasOwnProperty("value") && e.hasOwnProperty("label"))).map((e, i) => {
+        const id = e.value.toString().replace(" ", "_") + "-" + `${i}`;
+        let selected = false;
+
+        if (!props.multi) {
+            if ((props.selectedValue as DropDownItem) && e.value === (props.selectedValue as DropDownItem).value) {
+                selected = true;
+            }
+        } else {
+            if ((props.selectedValue as Array<DropDownItem>) && (props.selectedValue as Array<DropDownItem>).find((el) => el.value === e.value)) {
+                selected = true;
+            }
+        }
+        return { dropdownItem: e, id, selected };
     });
 
     /** Array of dropdown item elements which should be displayed in the current render cycle */
     const displayList: Array<DisplayDropDownItem> = uniqueList.map((e, i) => {
-        let selected = false;
-
-        if (!props.multi) {
-            if ((props.selectedValue as DropDownItem) && e.dropdownItem.value === (props.selectedValue as DropDownItem).value) {
-                selected = true;
-            }
-        } else {
-            if ((props.selectedValue as Array<DropDownItem>) && (props.selectedValue as Array<DropDownItem>).find((el) => el.value === e.dropdownItem.value)) {
-                selected = true;
-            }
-        }
-
         return {
             ...e,
-            selected,
-            className: `dropdown-item custom-dropdown-item${props.multi ? " multi" : ""}${selected ? " selected" : ""}`,
+            className: `dropdown-item custom-dropdown-item${props.multi ? " multi" : ""}${e.selected ? " selected" : ""}`,
         };
-    }).filter((e) => e.dropdownItem.label.includes(searchText)); // filtering based on search
+    }).filter((e) => e.dropdownItem.label.toLowerCase().includes(searchText.toLowerCase())); // filtering based on search
 
     // creating a list of only the currently selected items and a boolean which determines if all items are selected
-    const selectedList: Array<DropDownItem> = displayList.filter((e) => e.selected).map((e) => e.dropdownItem);
+    const selectedList: Array<DropDownItem> = uniqueList.filter((e) => e.selected).map((e) => e.dropdownItem);
     const allSelected = selectedList.length === uniqueList.length;
 
     // adding the select all row on top of the list for multi select option
@@ -111,7 +109,7 @@ export const DropDown: React.FunctionComponent<DropDownProps> = (props: DropDown
     const shouldDisable = (props.disabled || !uniqueList.length);
 
     // REFS ================================
-    const dropdownToggleRef = React.createRef<HTMLButtonElement>();
+    const dropdownToggleRef = React.createRef<HTMLDivElement>();
     const dropdownMenuRef = React.createRef<HTMLDivElement>();
     const searchRef = React.createRef<HTMLInputElement>();
     /** list of refs for each element in the displayList array */
@@ -137,6 +135,7 @@ export const DropDown: React.FunctionComponent<DropDownProps> = (props: DropDown
         if (open) {
             handleFocus();
         } else {
+            setSearchText("");
             if (currentFocused > -1) {
                 setCurrentFocused(-1);
             }
@@ -167,7 +166,7 @@ export const DropDown: React.FunctionComponent<DropDownProps> = (props: DropDown
     };
 
     const setInitialFocus = () => {
-        if (props.multi && searchRef.current) {
+        if (searchRef.current) {
             searchRef.current.focus();
         } else if (dropdownMenuRef.current) {
             dropdownMenuRef.current.focus();
@@ -192,9 +191,8 @@ export const DropDown: React.FunctionComponent<DropDownProps> = (props: DropDown
     const handleKeyDownMenu = (event: React.KeyboardEvent<HTMLDivElement>): void => {
         const target = event.target as HTMLElement;
         // console.log("keyboard event of type: ", event.type, " with key: ", event.key, " and keyCode: ", event.keyCode, " happened on target: ", target);
-
         if (open) {
-            if (event.keyCode === 9 || event.keyCode === 16 || event.keyCode === 27) { // tab or shift + tab or escape
+            if (event.keyCode === 9 || (event.shiftKey && event.keyCode === 9) || event.keyCode === 27) { // tab or shift + tab or escape
                 setOpen(false);
             }
             if (event.keyCode === 13 || event.keyCode === 32) { // enter or space
@@ -275,7 +273,7 @@ export const DropDown: React.FunctionComponent<DropDownProps> = (props: DropDown
     };
 
     /** The native event function that runs when the dropdown button is clicked */
-    const handleClickToggle = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
+    const handleClickToggle = (event: React.MouseEvent<HTMLDivElement, MouseEvent>): void => {
         setOpen(!open);
     };
 
@@ -291,7 +289,7 @@ export const DropDown: React.FunctionComponent<DropDownProps> = (props: DropDown
     // HELPERS ================================
     /** Returns the appropriate title for different situations and component types */
     const getTitleLabel = () => {
-        if (props.list && props.list.length === 0) {
+        if (uniqueList && uniqueList.length === 0) {
             return "Empty";
         }
         if (selectedList && selectedList.length > 0) {
@@ -336,18 +334,18 @@ export const DropDown: React.FunctionComponent<DropDownProps> = (props: DropDown
             <div className={`dropdown custom-dropdown${shouldDisable ? " disabled" : ""}${props.className ? " " + props.className : ""}`}>
                 {props.label && <label className="dropdown-label">{props.label}</label>}
 
-                <button
-                    onKeyDown={handleKeyDownToggle}
-                    disabled={shouldDisable}
+                <div
+                    onKeyDown={shouldDisable ? null : handleKeyDownToggle}
                     ref={dropdownToggleRef}
-                    className={`btn btn-secondary custom-dropdown-toggle${open ? " open" : ""}${props.more ? " more mx-right" : ""}`}
-                    type="button"
+                    className={`btn btn-secondary custom-dropdown-toggle${open ? " open" : ""}${props.more ? " more mx-right" : ""}${shouldDisable ? " disabled" : ""}`}
+                    // type="button"
                     id="dropdownMenuButton"
-                    name={props.name || "dropdownMenuButton"}
+                    // name={props.name || "dropdownMenuButton"}
                     aria-label={`Dropdown toggle: ${getTitleLabel()}`}
                     aria-haspopup={true}
                     aria-expanded={open}
-                    onClick={handleClickToggle}
+                    tabIndex={shouldDisable ? -1 : 0}
+                    onClick={shouldDisable ? null : handleClickToggle}
                 >
                     {!props.more ?
                         <>
@@ -357,14 +355,14 @@ export const DropDown: React.FunctionComponent<DropDownProps> = (props: DropDown
 
                             <div className="right-items">
                                 {((props.clearable || props.multi) && selectedList.length > 0) ?
-                                    <div id="clearButton" className="icon-holder" onClick={handleClickClear}>{timesIcon}</div>
+                                    <div id="clearButton" className="icon-holder" onClick={shouldDisable ? null : handleClickClear}>{timesIcon}</div>
                                     : null}
                                 <div className="icon-holder chevron">{chevronDownIcon}</div>
                             </div>
                         </> :
                         <div className="right-items"><div className="icon-holder">{moreIcon}</div></div>
                     }
-                </button>
+                </div>
 
                 <div
                     aria-labelledby="dropdownMenuButton"
@@ -377,7 +375,7 @@ export const DropDown: React.FunctionComponent<DropDownProps> = (props: DropDown
                         <>
                             <input
                                 ref={searchRef}
-                                type="text"
+                                type="search"
                                 className="search-input"
                                 name="search-input"
                                 placeholder={props.searchPlaceholder || "Search ..."}
@@ -394,11 +392,12 @@ export const DropDown: React.FunctionComponent<DropDownProps> = (props: DropDown
                                 <button
                                     tabIndex={0}
                                     ref={listRefs[index]}
-                                    className={item.className}
+                                    className={`${item.className}${(currentFocused === index) ? " highlighted" : ""}`}
+                                    onMouseEnter={(e) => setCurrentFocused(index)}
                                     onClick={(e) => {
                                         e.preventDefault();
                                         setCurrentFocused(index);
-                                        if (props.multi && index === 0) {
+                                        if (props.multi && searchText.length === 0 && index === 0) {
                                             handleSelectAll();
                                         } else {
                                             dropdownItemSelected(item.dropdownItem);
@@ -419,7 +418,7 @@ export const DropDown: React.FunctionComponent<DropDownProps> = (props: DropDown
                                         </div>
                                         : item.dropdownItem.label && <div tabIndex={-1} className="label">{item.dropdownItem.label}</div>}
                                 </button>
-                                {(props.multi && index === 0) && <div className="dropdown-divider" />}
+                                {(props.multi && searchText.length === 0 && index === 0) && <div className="dropdown-divider" />}
                             </React.Fragment>
                         );
                     })}

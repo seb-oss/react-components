@@ -33,7 +33,7 @@ These are the current available properties:
 | -------------- | -------------------------------------------------------- | ----------------------------------------------------------------------- |
 | selectedValue  | `Array<DropdownItem> \| DropDownItem` <sup>1</sup>       | an array of the currently selected dropdown item(s)                     |
 | list           | `Array<DropdownItem>` <sup>1</sup>                       | an array of all the dropdown items to display                           |
-| onChange       | `(value: DropDownItem \| Array<DropDownItem> \| React.ChangeEvent<HTMLSelectElement>) => void`   | a callback passing the updated selectedValue list (multi) or item. In `native` mode the calback is the native onChange event       |
+| onChange       | `(value: any) => void`                                   | a callback passing the updated selectedValue list (multi) or item. In `native` mode the calback is the native onChange event |
 | className?     | `string`                                                 | custom class                                                            |
 | label?         | `string`                                                 | optional label to display above the dropdown                            |
 | placeholder?   | `string`                                                 | optional text to display inside the toggle button when no item selected |
