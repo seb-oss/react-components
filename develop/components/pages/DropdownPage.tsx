@@ -9,6 +9,7 @@ export default class DropdownPage extends React.Component<any, any>  {
         super(props);
         this.state = {
             dropDownList1: [
+                { value: "1", label: "1nd item" },
                 { value: "2", label: "2nd item" },
                 { value: "3", label: "3rd item" },
             ],
@@ -53,7 +54,6 @@ export default class DropdownPage extends React.Component<any, any>  {
                         <p>Here is the basic one:</p>
                         <div className="result">
                             <DropDown
-                                searchable={true}
                                 name="dropDownList1"
                                 list={this.state.dropDownList1}
                                 selectedValue={this.state.dropDownList1Selected}
@@ -62,7 +62,7 @@ export default class DropdownPage extends React.Component<any, any>  {
                             />
                         </div>
 
-                        <p>Here is the multi select one:</p>
+                        <p>Here is the multi select one with search:</p>
                         <div className="result">
                             <DropDown
                                 label="Dropdown label"
@@ -79,7 +79,6 @@ export default class DropdownPage extends React.Component<any, any>  {
                         <p>Here is the more button version:</p>
                         <div className="result">
                             <DropDown
-                                searchable={true}
                                 name="dropDownList3"
                                 list={this.state.dropDownList3}
                                 selectedValue={this.state.dropDownList3Selected}

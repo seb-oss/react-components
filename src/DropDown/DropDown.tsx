@@ -130,7 +130,7 @@ export const DropDown: React.FunctionComponent<DropDownProps> = (props: DropDown
         }
     };
 
-    // As soon as the menu opens focus the search text input
+    // As soon as the menu opens focus the search text input or the menu
     React.useEffect(() => {
         if (open) {
             handleFocus();
@@ -150,10 +150,10 @@ export const DropDown: React.FunctionComponent<DropDownProps> = (props: DropDown
 
     const handleFocus = (): void => {
         const focusSuccess = focusCurrentItem();
-        if (focusSuccess) {
-            // console.log("focused on current item");
-        } else {
+        if (!focusSuccess) {
             setInitialFocus();
+        } else {
+            // console.log("focused on current item");
         }
     };
 
@@ -176,13 +176,14 @@ export const DropDown: React.FunctionComponent<DropDownProps> = (props: DropDown
     // NATIVE ONCLICK EVENTS ================================
     /** The native event function that runs when a keyboard button is pressed on dropdown toggle */
     const handleKeyDownToggle = (event: React.KeyboardEvent<any>): void => {
-        if (event.keyCode !== 9 && event.keyCode !== 16) { // NOT tab or shift + tab
+        const keyCode = event.which || event.keyCode;
+        if (keyCode !== 9 && keyCode !== 16) { // NOT tab or shift + tab
             event.preventDefault();
         } else { // tab or shift + tab
             open && setOpen(false);
         }
 
-        if (event.keyCode === 13 || event.keyCode === 32) { // enter or space
+        if (keyCode === 13 || keyCode === 32) { // enter or space
             !open && setOpen(true);
         }
     };
@@ -190,12 +191,14 @@ export const DropDown: React.FunctionComponent<DropDownProps> = (props: DropDown
     /** The native event function that runs when a keyboard button is pressed on dropdown menu */
     const handleKeyDownMenu = (event: React.KeyboardEvent<HTMLDivElement>): void => {
         const target = event.target as HTMLElement;
-        // console.log("keyboard event of type: ", event.type, " with key: ", event.key, " and keyCode: ", event.keyCode, " happened on target: ", target);
+        const keyCode = event.which || event.keyCode;
+        // console.log("keyboard event of type: ", event.type, " with key: ", event.key, " and keyCode: ", keyCode, " happened on target: ", target);
         if (open) {
-            if (event.keyCode === 9 || (event.shiftKey && event.keyCode === 9) || event.keyCode === 27) { // tab or shift + tab or escape
+            if (keyCode === 9 || (event.shiftKey && keyCode === 9) || keyCode === 27) { // tab or shift + tab or escape
                 setOpen(false);
             }
-            if (event.keyCode === 13 || event.keyCode === 32) { // enter or space
+            if (keyCode === 13 || keyCode === 32) { // enter or space
+                console.log("enter or space");
                 if ((target as HTMLButtonElement).classList.contains("dropdown-item")) {
                     event.preventDefault();
                     if ((target as HTMLButtonElement).classList.contains("select-all")) {
@@ -206,7 +209,7 @@ export const DropDown: React.FunctionComponent<DropDownProps> = (props: DropDown
                 }
             }
 
-            if (event.keyCode === 40) { // down
+            if (keyCode === 40) { // down
                 event.preventDefault();
                 if (currentFocused < (displayList.length - 1)) {
                     setCurrentFocused(currentFocused + 1);
@@ -215,7 +218,7 @@ export const DropDown: React.FunctionComponent<DropDownProps> = (props: DropDown
                     setCurrentFocused(-1);
                 }
             }
-            if (event.keyCode === 38) { // up
+            if (keyCode === 38) { // up
                 event.preventDefault();
                 if (currentFocused === -1) {
                     setCurrentFocused(displayList.length - 1);
@@ -395,6 +398,9 @@ export const DropDown: React.FunctionComponent<DropDownProps> = (props: DropDown
                                     className={`${item.className}${(currentFocused === index) ? " highlighted" : ""}`}
                                     onMouseEnter={(e) => setCurrentFocused(index)}
                                     onClick={(e) => {
+                                        if ((e as any).detail === 0) { // prevents onClick to run when space is pressed on firefox
+                                            return;
+                                        }
                                         e.preventDefault();
                                         setCurrentFocused(index);
                                         if (props.multi && searchText.length === 0 && index === 0) {
