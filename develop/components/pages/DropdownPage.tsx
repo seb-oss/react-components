@@ -9,31 +9,51 @@ export default class DropdownPage extends React.Component<any, any>  {
         super(props);
         this.state = {
             dropDownList1: [
-                { value: "1", label: "1nd item" },
-                { value: "2", label: "2nd item" },
-                { value: "3", label: "3rd item" },
+                { value: "1", label: "Serbia" },
+                { value: "2", label: "Nicaragua" },
+                { value: "3", label: "Singapore" },
+                { value: "4", label: "Guinea" },
+                { value: "5", label: "Syrian Arab Republic" },
+                { value: "6", label: "Tanzania" },
+                { value: "7", label: "Anguilla" },
             ],
             dropDownList1Selected: null,
             dropDownList2: [
-                { value: "1", label: "1st item" },
-                { value: "2", label: "2nd item" },
-                { value: "3", label: "3rd item" },
-                { value: "4", label: "4th item" },
-                { value: "5", label: "5th item" },
+                { value: "1", label: "Mexico" },
+                { value: "2", label: "Guernsey" },
+                { value: "3", label: "Lithuania" },
+                { value: "4", label: "Poland" },
+                { value: "5", label: "Montenegro" },
+                { value: "6", label: "Iran" },
+                { value: "7", label: "Myanmar" },
             ],
             dropDownList2Selected: null,
             dropDownList3: [
-                { value: "1", label: "1st item" },
-                { value: "2", label: "2nd item" },
-                { value: "3", label: "3rd item" },
+                { value: "1", label: "Paraguay" },
+                { value: "2", label: "Dominican Republic" },
+                { value: "3", label: "Mongolia" },
+                { value: "4", label: "Montserrat" },
+                { value: "5", label: "Thailand" },
+                { value: "6", label: "Japan" },
+                { value: "7", label: "Saint Vincent and the Grenadines" },
             ],
-            dropDownList3Selected: null
+            dropDownList3Selected: null,
+            dropDownList4: [
+                { value: "1", label: "Sierra Leone" },
+                { value: "2", label: "Malawi" },
+                { value: "3", label: "Marshall Islands" },
+                { value: "4", label: "Latvia" },
+                { value: "5", label: "Slovenia" },
+                { value: "6", label: "Argentina" },
+                { value: "7", label: "Solomon Islands" },
+            ],
+            dropDownList4Selected: null
         };
 
         this.onChangeDropdown = this.onChangeDropdown.bind(this);
     }
 
-    onChangeDropdown(value: DropDownItem | Array<DropDownItem>, name: string) {
+    onChangeDropdown(value: DropDownItem | Array<DropDownItem> | string, name: string) {
         this.setState({ [name]: value });
     }
 
@@ -54,11 +74,9 @@ export default class DropdownPage extends React.Component<any, any>  {
                         <p>Here is the basic one:</p>
                         <div className="result">
                             <DropDown
-                                name="dropDownList1"
                                 list={this.state.dropDownList1}
                                 selectedValue={this.state.dropDownList1Selected}
                                 onChange={(value: DropDownItem | Array<DropDownItem>) => this.onChangeDropdown(value, "dropDownList1Selected")}
-                                clearable={true}
                             />
                         </div>
 
@@ -82,8 +100,19 @@ export default class DropdownPage extends React.Component<any, any>  {
                                 name="dropDownList3"
                                 list={this.state.dropDownList3}
                                 selectedValue={this.state.dropDownList3Selected}
-                                onChange={(value: DropDownItem | Array<DropDownItem>) => this.onChangeDropdown(value, "dropDownList3Selected")}
+                                onChange={(item: DropDownItem) => console.log(`${item.label} - selected`)}
                                 more={true}
+                            />
+                        </div>
+
+                        <p>Here is the native version:</p>
+                        <div className="result">
+                            <DropDown
+                                name="dropDownList4"
+                                list={this.state.dropDownList4}
+                                selectedValue={this.state.dropDownList4Selected}
+                                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => this.onChangeDropdown({ value: e.target.value, label: "" }, "dropDownList4Selected")}
+                                native={true}
                             />
                         </div>
                     </div>

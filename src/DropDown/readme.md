@@ -22,7 +22,7 @@ This React component supports customization and configurations. The component na
 <DropDown
     list={this.state.list}
     selectedValue={this.state.selectedValue}
-    onChange={(value: DropDownItem | Array<DropDownItem>) => { this.setState({ selectedValue: value }) }}
+    onChange={(value: any) => { this.setState({ selectedValue: value }) }}
 />
 ```
 
