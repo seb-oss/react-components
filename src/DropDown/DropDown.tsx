@@ -56,13 +56,85 @@ const moreIcon: JSX.Element = <svg id="dropdown-more-icon" xmlns="http://www.w3.
 export const DropDown: React.FunctionComponent<DropDownProps> = (props: DropDownProps): React.ReactElement<void> => {
     // COMPONENT INTERNAL STATE INIT ================================
     const [open, setOpen] = React.useState(false);
+    const [shouldFocus, setShouldFocus] = React.useState(false);
     const [currentFocused, setCurrentFocused] = React.useState(-1);
     const [searchText, setSearchText] = React.useState("");
 
+    // REFS ================================
+    const dropdownToggleRef = React.createRef<HTMLDivElement>();
+    const dropdownMenuRef = React.createRef<HTMLDivElement>();
+    const searchRef = React.createRef<HTMLInputElement>();
+
+    // EFFECTS ================================
+    // Adding event listener to listen to clicks outside the component on mount, removing on unmount
+    React.useEffect(() => {
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    });
+
+    const handleClickOutside = (event) => {
+        if ((dropdownToggleRef.current && !dropdownToggleRef.current.contains(event.target)) && (dropdownMenuRef.current && !dropdownMenuRef.current.contains(event.target))) {
+            setOpen(false);
+        }
+    };
+
+    // As soon as the menu opens focus the search text input or the menu
+    React.useEffect(() => {
+        if (open) {
+            handleFocus();
+        } else {
+            setSearchText("");
+            if (currentFocused > -1) {
+                setCurrentFocused(-1);
+            }
+        }
+    }, [open]);
+
+    React.useEffect(() => {
+        if (open) {
+            handleFocus();
+        }
+    }, [currentFocused, shouldFocus]);
+
+    const handleFocus = (): void => {
+        const focusSuccess = focusCurrentItem();
+        if (!focusSuccess) {
+            setInitialFocus();
+        } else {
+            // console.log("focused on current item");
+        }
+    };
+
+    const focusCurrentItem = (): boolean => {
+        if (shouldFocus && listRefs[currentFocused] && listRefs[currentFocused].current) {
+            listRefs[currentFocused].current.focus();
+            return true;
+        }
+        return null;
+    };
+
+    const setInitialFocus = () => {
+        if (searchRef.current) {
+            searchRef.current.focus();
+        } else if (dropdownMenuRef.current) {
+            dropdownMenuRef.current.focus();
+        }
+    };
+
     // EXTRA CONFIG ================================
+    // Don't display anything if cannot evaluate the list
+    const isListAnArray = Array.isArray(props.list);
+    if (!props.list || !isListAnArray) {
+        return null;
+    }
+
+    console.log("dropdown recieved list: ", props.list);
+
     /** array of dropdown item elements with a unique id and the original dropdownItem */
     const uniqueList: Array<UniqueDropDownItem> = props.list.filter((e) => (e && e.hasOwnProperty("value") && e.hasOwnProperty("label"))).map((e, i) => {
-        const id = e.value.toString().replace(" ", "_") + "-" + `${i}`;
+        const id = `${e.value}-${i}`;
         let selected = false;
 
         if (!props.multi) {
@@ -107,71 +179,8 @@ export const DropDown: React.FunctionComponent<DropDownProps> = (props: DropDown
     // MISC ================================
     // show the component as disabled is disabled prop is true OR the list is empty
     const shouldDisable = (props.disabled || !uniqueList.length);
-
-    // REFS ================================
-    const dropdownToggleRef = React.createRef<HTMLDivElement>();
-    const dropdownMenuRef = React.createRef<HTMLDivElement>();
-    const searchRef = React.createRef<HTMLInputElement>();
     /** list of refs for each element in the displayList array */
     const listRefs = displayList.map(() => React.createRef<HTMLButtonElement>());
-
-    // EFFECTS ================================
-    // Adding event listener to listen to clicks outside the component on mount, removing on unmount
-    React.useEffect(() => {
-        document.addEventListener("mousedown", handleClickOutside);
-        return () => {
-            document.removeEventListener("mousedown", handleClickOutside);
-        };
-    });
-
-    const handleClickOutside = (event) => {
-        if ((dropdownToggleRef.current && !dropdownToggleRef.current.contains(event.target)) && (dropdownMenuRef.current && !dropdownMenuRef.current.contains(event.target))) {
-            setOpen(false);
-        }
-    };
-
-    // As soon as the menu opens focus the search text input or the menu
-    React.useEffect(() => {
-        if (open) {
-            handleFocus();
-        } else {
-            setSearchText("");
-            if (currentFocused > -1) {
-                setCurrentFocused(-1);
-            }
-        }
-    }, [open]);
-
-    React.useEffect(() => {
-        if (open) {
-            handleFocus();
-        }
-    }, [currentFocused]);
-
-    const handleFocus = (): void => {
-        const focusSuccess = focusCurrentItem();
-        if (!focusSuccess) {
-            setInitialFocus();
-        } else {
-            // console.log("focused on current item");
-        }
-    };
-
-    const focusCurrentItem = (): boolean => {
-        if (listRefs[currentFocused] && listRefs[currentFocused].current) {
-            listRefs[currentFocused].current.focus();
-            return true;
-        }
-        return null;
-    };
-
-    const setInitialFocus = () => {
-        if (searchRef.current) {
-            searchRef.current.focus();
-        } else if (dropdownMenuRef.current) {
-            dropdownMenuRef.current.focus();
-        }
-    };
 
     // NATIVE ONCLICK EVENTS ================================
     /** The native event function that runs when a keyboard button is pressed on dropdown toggle */
@@ -190,22 +199,20 @@ export const DropDown: React.FunctionComponent<DropDownProps> = (props: DropDown
 
     /** The native event function that runs when a keyboard button is pressed on dropdown menu */
     const handleKeyDownMenu = (event: React.KeyboardEvent<HTMLDivElement>): void => {
-        const target = event.target as HTMLElement;
+        if (!shouldFocus) {
+            setShouldFocus(true);
+        }
         const keyCode = event.which || event.keyCode;
-        // console.log("keyboard event of type: ", event.type, " with key: ", event.key, " and keyCode: ", keyCode, " happened on target: ", target);
         if (open) {
             if (keyCode === 9 || (event.shiftKey && keyCode === 9) || keyCode === 27) { // tab or shift + tab or escape
                 setOpen(false);
             }
-            if (keyCode === 13 || keyCode === 32) { // enter or space
-                console.log("enter or space");
-                if ((target as HTMLButtonElement).classList.contains("dropdown-item")) {
-                    event.preventDefault();
-                    if ((target as HTMLButtonElement).classList.contains("select-all")) {
-                        handleSelectAll();
-                    } else {
-                        dropdownItemSelected(displayList[currentFocused].dropdownItem);
-                    }
+            if (keyCode === 13) { // enter
+                event.preventDefault();
+                if (props.multi && searchText.length === 0 && currentFocused === 0) {
+                    handleSelectAll();
+                } else {
+                    dropdownItemSelected(displayList[currentFocused].dropdownItem);
                 }
             }
 
@@ -315,8 +322,10 @@ export const DropDown: React.FunctionComponent<DropDownProps> = (props: DropDown
     if (!props.multi && props.native) {
         return (
             <>
+                {props.label && <label className={`dropdown-label ${shouldDisable ? " disabled" : ""}`}>{props.label}</label>}
                 <select
-                    className={`form-control${props.className ? ` ${props.className}` : ""}`}
+                    disabled={shouldDisable}
+                    className={`form-control${shouldDisable ? " disabled" : ""}${props.className ? ` ${props.className}` : ""}`}
                     name={props.name}
                     value={props.selectedValue ? (props.selectedValue as DropDownItem).value : ""}
                     onChange={props.onChange}
@@ -341,9 +350,7 @@ export const DropDown: React.FunctionComponent<DropDownProps> = (props: DropDown
                     onKeyDown={shouldDisable ? null : handleKeyDownToggle}
                     ref={dropdownToggleRef}
                     className={`btn btn-secondary custom-dropdown-toggle${open ? " open" : ""}${props.more ? " more mx-right" : ""}${shouldDisable ? " disabled" : ""}`}
-                    // type="button"
                     id="dropdownMenuButton"
-                    // name={props.name || "dropdownMenuButton"}
                     aria-label={`Dropdown toggle: ${getTitleLabel()}`}
                     aria-haspopup={true}
                     aria-expanded={open}
@@ -396,13 +403,19 @@ export const DropDown: React.FunctionComponent<DropDownProps> = (props: DropDown
                                     tabIndex={0}
                                     ref={listRefs[index]}
                                     className={`${item.className}${(currentFocused === index) ? " highlighted" : ""}`}
-                                    onMouseEnter={(e) => setCurrentFocused(index)}
-                                    onClick={(e) => {
-                                        if ((e as any).detail === 0) { // prevents onClick to run when space is pressed on firefox
-                                            return;
+                                    onMouseMove={(e) => {
+                                        if (currentFocused !== index) {
+                                            setCurrentFocused(index);
                                         }
+                                        if (shouldFocus === true) {
+                                            setShouldFocus(false);
+                                        }
+                                    }}
+                                    onClick={(e) => {
                                         e.preventDefault();
-                                        setCurrentFocused(index);
+                                        if (shouldFocus === false) {
+                                            setShouldFocus(true);
+                                        }
                                         if (props.multi && searchText.length === 0 && index === 0) {
                                             handleSelectAll();
                                         } else {

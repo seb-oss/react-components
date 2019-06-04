@@ -46,9 +46,6 @@ These are the current available properties:
 | disabled?      | `boolean`                                                | disabled status                                                         |
 | more?          | `boolean`                                                | version of the component with a more menu button alligned to the right  |
 
-## Reference
-This component is a wrapper around [react-select](https://github.com/JedWatson/react-select)
-
 ## Footnote
 1. `list` items has an exported interface named `DropdownItem`
 ```javascript

@@ -263,6 +263,22 @@ $red-dark: #d81a1a;
     }
 }
 
+
+// Native version
+.form-control {
+    &.disabled {
+        border-color: $grey7;
+        color: $grey7;
+        background-color: white;
+    }
+}
+
+.dropdown-label {
+    &.disabled {
+        color: $grey7;
+    }
+}
+
 .alert {
     padding: 0px 2px;
     margin: 0;
