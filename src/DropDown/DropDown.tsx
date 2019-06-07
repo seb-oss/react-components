@@ -102,8 +102,6 @@ export const DropDown: React.FunctionComponent<DropDownProps> = (props: DropDown
         const focusSuccess = focusCurrentItem();
         if (!focusSuccess) {
             setInitialFocus();
-        } else {
-            // console.log("focused on current item");
         }
     };
 
@@ -130,9 +128,7 @@ export const DropDown: React.FunctionComponent<DropDownProps> = (props: DropDown
         return null;
     }
 
-    console.log("dropdown recieved list: ", props.list);
-
-    /** array of dropdown item elements with a unique id and the original dropdownItem */
+    /** array of dropdown item elements with a unique id, the original dropdownItem and calculated selected property */
     const uniqueList: Array<UniqueDropDownItem> = props.list.filter((e) => (e && e.hasOwnProperty("value") && e.hasOwnProperty("label"))).map((e, i) => {
         const id = `${e.value}-${i}`;
         let selected = false;
@@ -155,7 +151,7 @@ export const DropDown: React.FunctionComponent<DropDownProps> = (props: DropDown
             ...e,
             className: `dropdown-item custom-dropdown-item${props.multi ? " multi" : ""}${e.selected ? " selected" : ""}`,
         };
-    }).filter((e) => e.dropdownItem.label.toLowerCase().includes(searchText.toLowerCase())); // filtering based on search
+    }).filter((e) => e.dropdownItem.label.toLowerCase().includes(searchText.toLowerCase())); // filtering based on current search term
 
     // creating a list of only the currently selected items and a boolean which determines if all items are selected
     const selectedList: Array<DropDownItem> = uniqueList.filter((e) => e.selected).map((e) => e.dropdownItem);
@@ -185,14 +181,14 @@ export const DropDown: React.FunctionComponent<DropDownProps> = (props: DropDown
     // NATIVE ONCLICK EVENTS ================================
     /** The native event function that runs when a keyboard button is pressed on dropdown toggle */
     const handleKeyDownToggle = (event: React.KeyboardEvent<any>): void => {
-        const keyCode = event.which || event.keyCode;
-        if (keyCode !== 9 && keyCode !== 16) { // NOT tab or shift + tab
+        const key = event.key;
+        if (key !== "Tab" && !(event.shiftKey && key === "Tab")) { // NOT tab or shift + tab
             event.preventDefault();
         } else { // tab or shift + tab
             open && setOpen(false);
         }
 
-        if (keyCode === 13 || keyCode === 32) { // enter or space
+        if (key === " " || key === "Enter") {
             !open && setOpen(true);
         }
     };
@@ -202,12 +198,12 @@ export const DropDown: React.FunctionComponent<DropDownProps> = (props: DropDown
         if (!shouldFocus) {
             setShouldFocus(true);
         }
-        const keyCode = event.which || event.keyCode;
+        const key = event.key;
         if (open) {
-            if (keyCode === 9 || (event.shiftKey && keyCode === 9) || keyCode === 27) { // tab or shift + tab or escape
+            if (key === "Tab" || (event.shiftKey && key === "Tab") || key === "Escape") {
                 setOpen(false);
             }
-            if (keyCode === 13) { // enter
+            if (key === "Enter") {
                 event.preventDefault();
                 if (props.multi && searchText.length === 0 && currentFocused === 0) {
                     handleSelectAll();
@@ -216,7 +212,7 @@ export const DropDown: React.FunctionComponent<DropDownProps> = (props: DropDown
                 }
             }
 
-            if (keyCode === 40) { // down
+            if (key === "ArrowDown") {
                 event.preventDefault();
                 if (currentFocused < (displayList.length - 1)) {
                     setCurrentFocused(currentFocused + 1);
@@ -225,7 +221,7 @@ export const DropDown: React.FunctionComponent<DropDownProps> = (props: DropDown
                     setCurrentFocused(-1);
                 }
             }
-            if (keyCode === 38) { // up
+            if (key === "ArrowUp") {
                 event.preventDefault();
                 if (currentFocused === -1) {
                     setCurrentFocused(displayList.length - 1);
@@ -365,12 +361,12 @@ export const DropDown: React.FunctionComponent<DropDownProps> = (props: DropDown
 
                             <div className="right-items">
                                 {((props.clearable || props.multi) && selectedList.length > 0) ?
-                                    <div id="clearButton" className="icon-holder" onClick={shouldDisable ? null : handleClickClear}>{timesIcon}</div>
+                                    <div id="clearButton" className="custom-icon-holder" onClick={shouldDisable ? null : handleClickClear}>{timesIcon}</div>
                                     : null}
-                                <div className="icon-holder chevron">{chevronDownIcon}</div>
+                                <div className="custom-icon-holder chevron">{chevronDownIcon}</div>
                             </div>
                         </> :
-                        <div className="right-items"><div className="icon-holder">{moreIcon}</div></div>
+                        <div className="right-items"><div className="custom-icon-holder">{moreIcon}</div></div>
                     }
                 </div>
 

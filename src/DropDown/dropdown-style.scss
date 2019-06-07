@@ -46,7 +46,7 @@ $red-dark: #d81a1a;
 
         > .right-items {
             display: flex;
-            > .icon-holder {
+            > .custom-icon-holder {
                 display: flex;
                 align-items: center;
                 justify-content: center;
@@ -64,7 +64,7 @@ $red-dark: #d81a1a;
         }
 
         &.open {
-            > .right-items > .icon-holder {
+            > .right-items > .custom-icon-holder {
                 &.chevron {
                     > svg {
                         @include transform(rotate(180deg));
@@ -98,7 +98,7 @@ $red-dark: #d81a1a;
             padding: 0px;
             border-color: transparent;
             margin: 0px 0px 0px auto;
-            > .right-items > .icon-holder > svg {
+            > .right-items > .custom-icon-holder > svg {
                 height: calc(#{$dropdown-toggle-height} / 1.2);
                 width: calc(#{$dropdown-toggle-height} / 1.2);
                 &:focus {
@@ -109,8 +109,8 @@ $red-dark: #d81a1a;
             }
 
             &:hover {
-                background-color: $darkBlue1 !important;
-                > .right-items > .icon-holder > svg {
+                background-color: $blue !important;
+                > .right-items > .custom-icon-holder > svg {
                     fill: white;
                 }
             }
@@ -124,7 +124,7 @@ $red-dark: #d81a1a;
 
             &.open {
                 background-color: $darkBlue2 !important;
-                > .right-items > .icon-holder > svg {
+                > .right-items > .custom-icon-holder > svg {
                     fill: white;
                 }
             }
@@ -181,7 +181,7 @@ $red-dark: #d81a1a;
                     cursor: pointer;
                     user-select: none;
                     &::before {
-                        border-color: $darkBlue2;
+                        border-color: $text;
                         background-color: white;
                     }
                     &::after {
@@ -191,7 +191,7 @@ $red-dark: #d81a1a;
             }
 
             &.highlighted {
-                background-color: $darkBlue1;
+                background-color: $blue;
                 color: white;
                 .custom-control {
                     .custom-control-label {
@@ -222,6 +222,7 @@ $red-dark: #d81a1a;
                     .custom-control-input {
                         &::before {
                             color: white;
+                            border-color: $darkBlue2;
                             background-color: $darkBlue2;
                         }
                     }
@@ -245,7 +246,7 @@ $red-dark: #d81a1a;
                 color: $grey7;
             }
 
-            > .right-items > .icon-holder > svg {
+            > .right-items > .custom-icon-holder > svg {
                 fill: $grey7;
             }
 
@@ -254,7 +255,7 @@ $red-dark: #d81a1a;
 
                 &:hover {
                     background-color: $grey9;
-                    > .right-items > .icon-holder > svg {
+                    > .right-items > .custom-icon-holder > svg {
                         fill: $grey7;
                     }
                 }
