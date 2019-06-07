@@ -45,7 +45,7 @@ $icon-size: 20px;
         .header-wrapper {
             position: relative;
             display: block;
-            padding: 5px 10px 5px 35px;
+            padding: 5px 10px 5px 48px;
             cursor: pointer;
             min-height: 48px;
 
@@ -56,7 +56,7 @@ $icon-size: 20px;
                 position: absolute;
                 width: $icon-size;
                 height: $icon-size;
-                left: 7px;
+                left: 15px;
                 fill: $blue-dark;
                 will-change: transform;
                 @include transition($transition-time);
@@ -82,7 +82,7 @@ $icon-size: 20px;
             overflow: hidden;
             .text-wrapper {
                 position: relative;
-                padding: 0px 40px;
+                padding: 0px 48px;
                 max-height: 0;
                 will-change: margin;
                 opacity: 0;
