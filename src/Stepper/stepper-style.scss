@@ -33,13 +33,6 @@ $transparent: transparent;
 
 .form-group.custom-stepper {
     display: inline-block;
-    label.custom-label:not(.form-check-label):not(.custom-checkbox):not(.custom-radio):not(.custom-control-label) {
-        display: block;
-        margin-bottom: 4px;
-        line-height: 1;
-        font-size: 12px;
-        font-weight: normal;
-    }
     .stepper-container {
         height: 30px;
         border-radius: 4px;

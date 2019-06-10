@@ -1,7 +1,11 @@
-$blue: #41B0EE;
+$blue: #41b0ee;
+$darkBlue1: #0092e1;
+$darkBlue2: #007ac7;
+$text: #444444;
 $white: #ffffff;
 $grey: #cecece;
 $grey-dark: #494949;
+$grey6: #999999;
 $red: #FF0000;
 @mixin transition($props) {
     -webkit-transition: $props;
@@ -18,15 +22,29 @@ $red: #FF0000;
                 .react-date-picker__wrapper {
                     background: $white;
                     width: 100%;
-                    height: 42px;
+                    height: 44px;
                     min-width: 200px;
-                    min-height: 40px;
-                    color: $grey-dark;
+                    min-height: 44px;
+                    color: $text;
                     border-radius: 4px;
-                    border-color: $grey;
+                    border-color: $grey6;
                     @include transition(border-color 400ms);
+                    &:hover {
+                        border-color: $blue;
+                        background-color: white;
+                    }
+                    &:focus-within {
+                        border-color: $darkBlue2;
+                        box-shadow: none;
+                        background-color: white;
+                        &:active {
+                            border-color: $darkBlue2;
+                            box-shadow: none;
+                            background-color: white;
+                        }
+                    }        
                     .react-date-picker__inputGroup {
-                        height: 42px;
+                        height: 44px;
                         padding: 0 5px 0px 10px;
                     }
                     .react-date-picker__button {
@@ -81,13 +99,6 @@ $red: #FF0000;
                 width: 100%;
                 padding-left: 4px;
             }
-        }
-        label.custom-label:not(.form-check-label):not(.custom-checkbox):not(.custom-radio):not(.custom-control-label) {
-            display: block;
-            margin-bottom: 4px;
-            line-height: 1;
-            font-weight: normal;
-            font-size: 12px;
         }
     }
 }
