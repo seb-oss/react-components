@@ -6,6 +6,9 @@ $white: #ffffff;
 $grey: #cecece;
 $grey-dark: #494949;
 $grey6: #999999;
+$grey7: #b3b3b3;
+$grey8: #e6e6e6;
+$grey9: #f6f6f6;
 $red: #FF0000;
 @mixin transition($props) {
     -webkit-transition: $props;
@@ -48,6 +51,8 @@ $red: #FF0000;
                         padding: 0 5px 0px 10px;
                     }
                     .react-date-picker__button {
+                        border-top-right-radius: 3px;
+                        border-bottom-right-radius: 3px;
                         width: 40px;
                         >svg {
                             fill: $blue;
@@ -64,6 +69,19 @@ $red: #FF0000;
                         }
                     }
                 }
+
+                &.react-date-picker--disabled {
+                    .react-date-picker__wrapper {
+                        border-color: $grey7;    
+                        background-color: $grey9;
+                        .react-date-picker__button {
+                            background-color: $grey9;
+                            >svg {
+                                fill: $grey7;
+                            }
+                        }
+                    }
+                }    
             }
             .react-date-picker__calendar .react-calendar {
                 border-radius: 4px;
