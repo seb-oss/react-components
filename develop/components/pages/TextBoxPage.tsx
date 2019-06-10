@@ -8,7 +8,8 @@ export default class TextBoxPage extends React.Component<any, any>  {
     constructor(props: any) {
         super(props);
         this.state = {
-            textBoxValue: ""
+            textBoxValue: "",
+            textBoxValue2: ""
         };
     }
 
@@ -40,11 +41,11 @@ export default class TextBoxPage extends React.Component<any, any>  {
                         <p>Here is the input with error:</p>
                         <div className="result">
                             <TextBox
-                                name="textInput"
+                                name="textInput2"
                                 placeHolder="Text Box PlaceHolder"
-                                error="error msg will be show here"
-                                value={this.state.textBoxValue}
-                                onChange={(event) => { this.setState({ textBoxValue: event.target.value }); }}
+                                error="error msg will be shown here"
+                                value={this.state.textBoxValue2}
+                                onChange={(event) => { this.setState({ textBoxValue2: event.target.value }); }}
                             />
                         </div>
                     </div>
