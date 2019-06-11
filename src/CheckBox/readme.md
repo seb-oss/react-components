@@ -37,8 +37,9 @@ These are the current available properties:
 | label          | `string`               | checkbox label                          |
 | topLabel       | `string`               | a label which shows on top of component |
 | onChange       | `(event: any) => void` | on change action                        |
+| id?            | `string`               | id property (Default: same as name property)|
 | className?     | `string`               | custom class                            |
 | disabled?      | `boolean`              | Disabled status                         |
 | description?   | `string`               | a option description                    |
 | error?         | `string`               | error message                           |
-| reference?           | `React.RefObject<any>` | React Ref obj                           |
+| reference?     | `React.RefObject<any>` | React Ref obj                           |

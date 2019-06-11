@@ -5,6 +5,7 @@ export interface CheckBoxProps {
     name: string;
     checked: boolean;
     onChange: (event: any) => void;
+    id?: string;
     className?: string;
     label?: string;
     topLabel?: string;
@@ -25,7 +26,7 @@ export const CheckBox: React.FunctionComponent<CheckBoxProps> = (props: CheckBox
                     <input
                         type="checkbox"
                         className="custom-control-input"
-                        id={props.name}
+                        id={props.id || props.name}
                         disabled={props.disabled}
                         name={props.name}
                         checked={props.checked}

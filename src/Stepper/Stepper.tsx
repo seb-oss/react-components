@@ -8,6 +8,7 @@ export interface StepperProps {
     min: number;
     max: number;
     name?: string;
+    id?: string;
     label?: string;
     className?: string;
     disabled?: boolean;
@@ -27,7 +28,8 @@ export const Stepper: React.FunctionComponent<StepperProps> = (props: StepperPro
             </div>
             <input
                 className="stepper-input"
-                id={props.name}
+                id={props.id}
+                name={props.name}
                 value={props.value}
                 type="number"
                 min={props.min}

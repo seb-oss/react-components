@@ -38,6 +38,7 @@ These are the current available properties:
 | value              | `number`                              | value of slider                                                     |
 | name               | `string`                              | name of slider                                                      |
 | onChange           | `(event: any) => void`                | change action                                                       |
+| id?                | `string`                              | id property                                                         |
 | min?               | `number`                              | Minimum value (default: `0`)                                        |
 | max?               | `number`                              | Maximum value (default: `10`)                                       |
 | step?              | `number`                              | Step value (default: `1`)                                           |

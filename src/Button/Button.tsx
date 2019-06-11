@@ -4,6 +4,8 @@ import "./button-style.scss";
 export interface ButtonProps {
     label: string;
     onClick: (event: any) => void;
+    id?: string;
+    name?: string;
     className?: string;
     disabled?: boolean;
     theme?: string;
@@ -15,6 +17,8 @@ export interface ButtonProps {
 export const Button: React.FunctionComponent<ButtonProps> = React.memo((props: ButtonProps): React.ReactElement<void> => {
     return (
         <button
+            id={props.id}
+            name={props.name}
             type="button"
             disabled={props.disabled}
             className={
