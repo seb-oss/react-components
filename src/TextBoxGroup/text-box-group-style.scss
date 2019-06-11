@@ -1,13 +1,13 @@
 //colors
 $red: #f03529;
-$grey6: #999999;
-$grey7: #b3b3b3;
-$grey8: #e6e6e6;
-$grey9: #f6f6f6;
+$gray-100: #f8f8f8;
+$gray-500: #adadad !default;
 $blue: #41b0ee;
-$darkBlue1: #0092e1;
-$darkBlue2: #007ac7;
-$text: #444444;
+$blue-dark: #0092e1;
+$blue-darker: #007ac7;
+$body-color: #444 !default;
+$transition-time: 200ms;
+
 @mixin transition($props) {
     -webkit-transition: $props;
     -moz-transition: $props;
@@ -15,19 +15,17 @@ $text: #444444;
     transition: $props;
 }
 
-$transition-time: 200ms;
 .form-group.input-box-group {
     position: relative;
     > .input-group {
         position: relative;
         > .input-box-group-wrapper {
-            color: $text;
-            will-change: border;
+            color: $body-color;
             @include transition(border $transition-time / 2);
             position: relative;
             width: 100%;
             height: 42px;
-            border: 1px solid $grey6;
+            border: 1px solid $gray-500;
             border-radius: 4px;
             overflow: hidden;
             display: flex;
@@ -37,11 +35,11 @@ $transition-time: 200ms;
                 background-color: white;
             }
             &:focus-within {
-                border-color: $darkBlue2;
+                border-color: $blue-darker;
                 box-shadow: none;
                 background-color: white;
                 &:active {
-                    border-color: $darkBlue2;
+                    border-color: $blue-darker;
                     box-shadow: none;
                     background-color: white;
                 }
@@ -72,7 +70,7 @@ $transition-time: 200ms;
                     > .input-group-text {
                         color: $blue;
                         &:hover {
-                            color: $darkBlue1;
+                            color: $blue-dark;
                         }
                     }
                 }
@@ -128,21 +126,21 @@ $transition-time: 200ms;
         }
         &.disabled {
             .input-box-group-wrapper {
-                background-color: $grey9;
-                border-color: $grey7;    
+                background-color: $gray-100;
+                border-color: $gray-500;    
                 .input-group-prepend,
                 .input-group-append,
                 .form-control {
-                    color: $grey7;
-                    background-color: $grey9;
+                    color: $gray-500;
+                    background-color: $gray-100;
                 }
                 .input-group-prepend .input-group-text,
                 .form-control,
                 .input-group-append .input-group-text {
                     svg {
-                        fill: $grey7;
+                        fill: $gray-500;
                     }
-                    color: $grey7;
+                    color: $gray-500;
                 }
             }
         }

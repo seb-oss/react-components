@@ -9,7 +9,6 @@ $gray-800: #343434;
 $gray-900: #212121;
 $blue: #41B0EE;
 $blue-dark: #0092E1;
-$blue-darker: #007AC7;
 $white: #fff;
 $black: #000;
 $yellow-darker: #F8A000;
@@ -17,6 +16,7 @@ $yellow-dark: #FFB400;
 $yellow: #FFC500;
 $transition-time: 200ms;
 $transparent: transparent;
+
 @mixin no-user-select {
     -webkit-user-select: none;
     -moz-user-select: none;

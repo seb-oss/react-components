@@ -27,6 +27,7 @@ $white: #fff;
 $black: #000;
 $transition-time: 200ms;
 $box-shadow: rgba(85, 85, 85, 0.4) 0 2px 5px;
+
 @mixin appearance($props) {
     -webkit-appearance: $props;
     -moz-appearance: $props;
@@ -107,13 +108,6 @@ $box-shadow: rgba(85, 85, 85, 0.4) 0 2px 5px;
 
 .form-group.custom-slider {
     padding-right: 5px;
-    // label.custom-label:not(.form-check-label):not(.custom-checkbox):not(.custom-radio):not(.custom-control-label) {
-    //     display: block;
-    //     margin-bottom: 4px;
-    //     line-height: 1;
-    //     font-weight: normal;
-    //     font-size: 12px;
-    // }
     .input-field {
         position: relative;
         input[type=range] {

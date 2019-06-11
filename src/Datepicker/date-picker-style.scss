@@ -1,21 +1,18 @@
 $blue: #41b0ee;
-$darkBlue1: #0092e1;
-$darkBlue2: #007ac7;
-$text: #444444;
-$white: #ffffff;
-$grey: #cecece;
-$grey-dark: #494949;
-$grey6: #999999;
-$grey7: #b3b3b3;
-$grey8: #e6e6e6;
-$grey9: #f6f6f6;
+$blue-darker: #007ac7;
+$gray-100: #f8f8f8;
+$gray-500: #adadad !default;
 $red: #FF0000;
+$body-color: #444 !default;
+$white: #ffffff;
+
 @mixin transition($props) {
     -webkit-transition: $props;
     -moz-transition: $props;
     -o-transition: $props;
     transition: $props;
 }
+
 .form-group.date-picker {
     .input-field {
         .date-wrapper {
@@ -28,22 +25,22 @@ $red: #FF0000;
                     height: 44px;
                     min-width: 200px;
                     min-height: 44px;
-                    color: $text;
+                    color: $body-color;
                     border-radius: 4px;
-                    border-color: $grey6;
+                    border-color: $gray-500;
                     @include transition(border-color 400ms);
                     &:hover {
                         border-color: $blue;
-                        background-color: white;
+                        background-color: $white;
                     }
                     &:focus-within {
-                        border-color: $darkBlue2;
+                        border-color: $blue-darker;
                         box-shadow: none;
-                        background-color: white;
+                        background-color: $white;
                         &:active {
-                            border-color: $darkBlue2;
+                            border-color: $blue-darker;
                             box-shadow: none;
-                            background-color: white;
+                            background-color: $white;
                         }
                     }        
                     .react-date-picker__inputGroup {
@@ -72,20 +69,21 @@ $red: #FF0000;
 
                 &.react-date-picker--disabled {
                     .react-date-picker__wrapper {
-                        border-color: $grey7;    
-                        background-color: $grey9;
+                        border-color: $gray-500;    
+                        background-color: $gray-100;
                         .react-date-picker__button {
-                            background-color: $grey9;
+                            background-color: $gray-100;
                             >svg {
-                                fill: $grey7;
+                                fill: $gray-500;
                             }
                         }
                     }
                 }    
             }
             .react-date-picker__calendar .react-calendar {
+                margin-top: 4px;
                 border-radius: 4px;
-                border: 1px solid $grey;
+                border: 1px solid $gray-500;
             }
             .react-date-picker__calendar--above-label {
                 top: 100%;

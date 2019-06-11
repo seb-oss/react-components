@@ -1,9 +1,8 @@
 $red: #f03529;
-$grey6: #999999;
+$gray-500: #adadad !default;;
 $blue: #41b0ee;
-$darkBlue1: #0092e1;
-$darkBlue2: #007ac7;
-$text: #444444;
+$blue-darker: #007AC7;
+$body-color: #444 !default;
 
 @mixin transition($props) {
     -webkit-transition: $props;
@@ -16,9 +15,8 @@ $transition-time: 200ms;
 .form-group.text-area {
     > .input-field {
         > textarea.form-control {
-            color: $text;
-            border-color: $grey6;
-            will-change: border;
+            color: $body-color;
+            border-color: $gray-500;
             @include transition(border $transition-time / 2);
             &:not(.resizable) {
                 resize: none;
@@ -29,11 +27,11 @@ $transition-time: 200ms;
                     background-color: white;
                 }
                 &:focus {
-                    border-color: $darkBlue2;
+                    border-color: $blue-darker;
                     box-shadow: none;
                     background-color: white;
                     &:active {
-                        border-color: $darkBlue2;
+                        border-color: $blue-darker;
                         box-shadow: none;
                         background-color: white;
                     }
