@@ -3,13 +3,11 @@ $icon-size: 18px;
 $dropdown-width: 100%;
 $dropdown-toggle-height: 44px;
 $blue: #41b0ee;
-$darkBlue1: #0092e1;
-$darkBlue2: #007ac7;
-$text: #444444;
-$grey6: #999999;
-$grey7: #b3b3b3;
-// $grey8: #e6e6e6;
-$grey9: #f6f6f6;
+$blue-dark: #0092e1;
+$blue-darker: #007ac7;
+$body-color: #444 !default;
+$grey-500: #adadad !default;
+$gray-100: #f8f8f8;
 $red-dark: #d81a1a;
 
 @mixin transform($props) {
@@ -33,7 +31,7 @@ $red-dark: #d81a1a;
         height: $dropdown-toggle-height !important;
         min-width: $dropdown-width !important;
         padding: 0px;
-        border-color: $grey6;
+        border-color: $grey-500;
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -41,7 +39,7 @@ $red-dark: #d81a1a;
 
         > .title {
             font-weight: normal;
-            color: $text;
+            color: $body-color;
         }
 
         > .right-items {
@@ -58,7 +56,7 @@ $red-dark: #d81a1a;
                     @include transition($transition-time);
                     width: $icon-size;
                     height: $icon-size;
-                    fill: $darkBlue1;
+                    fill: $blue-dark;
                 }
             }
         }
@@ -79,12 +77,12 @@ $red-dark: #d81a1a;
         }
 
         &:focus {
-            border-color: $darkBlue2;
+            border-color: $blue-darker;
             box-shadow: none;
             background-color: white;
             &:active {
-                color: $text;
-                border-color: $darkBlue2;
+                color: $body-color;
+                border-color: $blue-darker;
                 box-shadow: none;
                 background-color: white;
             }
@@ -116,14 +114,14 @@ $red-dark: #d81a1a;
             }
 
             &:focus {
-                border-color: $darkBlue2;
+                border-color: $blue-darker;
                 &:active {
-                    background-color: $darkBlue2 !important;
+                    background-color: $blue-darker !important;
                 }
             }
 
             &.open {
-                background-color: $darkBlue2 !important;
+                background-color: $blue-darker !important;
                 > .right-items > .dropdown-icon-holder > svg {
                     fill: white;
                 }
@@ -134,7 +132,7 @@ $red-dark: #d81a1a;
     > .custom-dropdown-menu {
         min-width: $dropdown-width;
         border-radius: 4px;
-        border: 1px solid $darkBlue2;
+        border: 1px solid $blue-darker;
         padding: 0px;
         margin: 4px 0px 14px 0px;
         outline: none;
@@ -145,7 +143,7 @@ $red-dark: #d81a1a;
             margin: 0px;
 
             &.blue {
-                border-color: $darkBlue2;
+                border-color: $blue-darker;
             }
         }
 
@@ -160,7 +158,7 @@ $red-dark: #d81a1a;
             display: flex;
             padding-left: 16px;
             background: white;
-            color: $text;
+            color: $body-color;
 
             &:focus {
                 outline: none;
@@ -181,7 +179,7 @@ $red-dark: #d81a1a;
                     cursor: pointer;
                     user-select: none;
                     &::before {
-                        border-color: $text;
+                        border-color: $body-color;
                         background-color: white;
                     }
                     &::after {
@@ -200,7 +198,7 @@ $red-dark: #d81a1a;
                 }
 
                 &.selected {
-                    background-color: $darkBlue2;
+                    background-color: $blue-darker;
                     color: white;
                     .custom-control {
                         .custom-control-label,
@@ -216,14 +214,14 @@ $red-dark: #d81a1a;
 
             &.selected {
                 background-color: white;
-                color: $darkBlue2;
+                color: $blue-darker;
                 .custom-control {
                     .custom-control-label,
                     .custom-control-input {
                         &::before {
                             color: white;
-                            border-color: $darkBlue2;
-                            background-color: $darkBlue2;
+                            border-color: $blue-darker;
+                            background-color: $blue-darker;
                         }
                     }
                 }
@@ -234,29 +232,29 @@ $red-dark: #d81a1a;
     &.disabled {
         pointer-events: none;
         > .dropdown-label {
-            color: $grey7;
+            color: $grey-500;
         }
 
         > .custom-dropdown-toggle {
-            border-color: $grey7;
-            background-color: $grey9;
+            border-color: $grey-500;
+            background-color: $gray-100;
             cursor: default;
 
             > .title {
-                color: $grey7;
+                color: $grey-500;
             }
 
             > .right-items > .dropdown-icon-holder > svg {
-                fill: $grey7;
+                fill: $grey-500;
             }
 
             &.more {
                 border-color: transparent;
 
                 &:hover {
-                    background-color: $grey9;
+                    background-color: $gray-100;
                     > .right-items > .dropdown-icon-holder > svg {
-                        fill: $grey7;
+                        fill: $grey-500;
                     }
                 }
             }
@@ -268,15 +266,15 @@ $red-dark: #d81a1a;
 // Native version
 .form-control {
     &.disabled {
-        border-color: $grey7;
-        color: $grey7;
+        border-color: $grey-500;
+        color: $grey-500;
         background-color: white;
     }
 }
 
 .dropdown-label {
     &.disabled {
-        color: $grey7;
+        color: $grey-500;
     }
 }
 
