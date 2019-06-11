@@ -43,7 +43,7 @@ export class Accordion extends React.Component<AccordionProps, AccordionState> {
     render() {
         return (
             <div className={"custom-accordion" + (this.props.className ? ` ${this.props.className}` : "")}>
-                {this.props.list.map((item: AccrodionListItem, index: number) =>
+                {this.props.list && this.props.list.map((item: AccrodionListItem, index: number) =>
                     <div className={"accordion-item" + (this.state.active === index ? " active" : "")} key={index}>
                         <div className={`header-wrapper${item.subHeaderText ? " with-sub-header" : ""}`} onClick={() => { this.toggle(index); }}>
                             {chevronDownIcon}
