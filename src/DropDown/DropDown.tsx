@@ -181,15 +181,19 @@ export const DropDown: React.FunctionComponent<DropDownProps> = (props: DropDown
     // NATIVE ONCLICK EVENTS ================================
     /** The native event function that runs when a keyboard button is pressed on dropdown toggle */
     const handleKeyDownToggle = (event: React.KeyboardEvent<any>): void => {
-        const key = event.key;
-        if (key !== "Tab" && !(event.shiftKey && key === "Tab")) { // NOT tab or shift + tab
-            event.preventDefault();
-        } else { // tab or shift + tab
-            open && setOpen(false);
-        }
+        const key = event.key.toLowerCase();
 
-        if (key === " " || key === "Enter") {
-            !open && setOpen(true);
+        switch (key) {
+            case "tab":
+                open && setOpen(false);
+                break;
+            case " ":
+            case "enter":
+                event.preventDefault();
+                !open && setOpen(true);
+                break;
+            default:
+                break;
         }
     };
 
@@ -198,40 +202,45 @@ export const DropDown: React.FunctionComponent<DropDownProps> = (props: DropDown
         if (!shouldFocus) {
             setShouldFocus(true);
         }
-        const key = event.key;
+        const key = event.key.toLowerCase();
         if (open) {
-            if (key === "Tab" || (event.shiftKey && key === "Tab") || key === "Escape") {
-                setOpen(false);
-            }
-            if (key === "Enter") {
-                event.preventDefault();
-                if (props.multi && searchText.length === 0 && currentFocused === 0) {
-                    handleSelectAll();
-                } else {
-                    dropdownItemSelected(displayList[currentFocused].dropdownItem);
-                }
-            }
+            switch (key) {
+                case "tab":
+                case "escape":
+                    setOpen(false);
+                    break;
+                case "enter":
+                    event.preventDefault();
+                    if (props.multi && searchText.length === 0 && currentFocused === 0) {
+                        handleSelectAll();
+                    } else {
+                        dropdownItemSelected(displayList[currentFocused].dropdownItem);
+                    }
+                    break;
+                case "arrowdown":
+                    event.preventDefault();
+                    if (currentFocused < (displayList.length - 1)) {
+                        setCurrentFocused(currentFocused + 1);
+                    }
+                    if (currentFocused === (displayList.length - 1)) {
+                        setCurrentFocused(-1);
+                    }
+                    break;
+                case "arrowup":
+                    event.preventDefault();
+                    if (currentFocused === -1) {
+                        setCurrentFocused(displayList.length - 1);
+                    }
+                    if (currentFocused > 0) {
+                        setCurrentFocused(currentFocused - 1);
+                    }
+                    if (currentFocused === 0) {
+                        setCurrentFocused(-1);
+                    }
+                    break;
 
-            if (key === "ArrowDown") {
-                event.preventDefault();
-                if (currentFocused < (displayList.length - 1)) {
-                    setCurrentFocused(currentFocused + 1);
-                }
-                if (currentFocused === (displayList.length - 1)) {
-                    setCurrentFocused(-1);
-                }
-            }
-            if (key === "ArrowUp") {
-                event.preventDefault();
-                if (currentFocused === -1) {
-                    setCurrentFocused(displayList.length - 1);
-                }
-                if (currentFocused > 0) {
-                    setCurrentFocused(currentFocused - 1);
-                }
-                if (currentFocused === 0) {
-                    setCurrentFocused(-1);
-                }
+                default:
+                    break;
             }
         }
     };
@@ -361,12 +370,12 @@ export const DropDown: React.FunctionComponent<DropDownProps> = (props: DropDown
 
                             <div className="right-items">
                                 {((props.clearable || props.multi) && selectedList.length > 0) ?
-                                    <div id="clearButton" className="custom-icon-holder" onClick={shouldDisable ? null : handleClickClear}>{timesIcon}</div>
+                                    <div id="clearButton" className="dropdown-icon-holder" onClick={shouldDisable ? null : handleClickClear}>{timesIcon}</div>
                                     : null}
-                                <div className="custom-icon-holder chevron">{chevronDownIcon}</div>
+                                <div className="dropdown-icon-holder chevron">{chevronDownIcon}</div>
                             </div>
                         </> :
-                        <div className="right-items"><div className="custom-icon-holder">{moreIcon}</div></div>
+                        <div className="right-items"><div className="dropdown-icon-holder">{moreIcon}</div></div>
                     }
                 </div>
 

@@ -46,7 +46,7 @@ $red-dark: #d81a1a;
 
         > .right-items {
             display: flex;
-            > .custom-icon-holder {
+            > .dropdown-icon-holder {
                 display: flex;
                 align-items: center;
                 justify-content: center;
@@ -64,7 +64,7 @@ $red-dark: #d81a1a;
         }
 
         &.open {
-            > .right-items > .custom-icon-holder {
+            > .right-items > .dropdown-icon-holder {
                 &.chevron {
                     > svg {
                         @include transform(rotate(180deg));
@@ -98,7 +98,7 @@ $red-dark: #d81a1a;
             padding: 0px;
             border-color: transparent;
             margin: 0px 0px 0px auto;
-            > .right-items > .custom-icon-holder > svg {
+            > .right-items > .dropdown-icon-holder > svg {
                 height: calc(#{$dropdown-toggle-height} / 1.2);
                 width: calc(#{$dropdown-toggle-height} / 1.2);
                 &:focus {
@@ -110,7 +110,7 @@ $red-dark: #d81a1a;
 
             &:hover {
                 background-color: $blue !important;
-                > .right-items > .custom-icon-holder > svg {
+                > .right-items > .dropdown-icon-holder > svg {
                     fill: white;
                 }
             }
@@ -124,7 +124,7 @@ $red-dark: #d81a1a;
 
             &.open {
                 background-color: $darkBlue2 !important;
-                > .right-items > .custom-icon-holder > svg {
+                > .right-items > .dropdown-icon-holder > svg {
                     fill: white;
                 }
             }
@@ -246,7 +246,7 @@ $red-dark: #d81a1a;
                 color: $grey7;
             }
 
-            > .right-items > .custom-icon-holder > svg {
+            > .right-items > .dropdown-icon-holder > svg {
                 fill: $grey7;
             }
 
@@ -255,7 +255,7 @@ $red-dark: #d81a1a;
 
                 &:hover {
                     background-color: $grey9;
-                    > .right-items > .custom-icon-holder > svg {
+                    > .right-items > .dropdown-icon-holder > svg {
                         fill: $grey7;
                     }
                 }
