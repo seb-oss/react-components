@@ -37,7 +37,7 @@ These are the current available properties:
 | label          | `string`               | checkbox label                          |
 | topLabel       | `string`               | a label which shows on top of component |
 | onChange       | `(event: any) => void` | on change action                        |
-| id?            | `string`               | id property (Default: same as name property)|
+| id?            | `string`               | id property                             |
 | className?     | `string`               | custom class                            |
 | disabled?      | `boolean`              | Disabled status                         |
 | description?   | `string`               | a option description                    |
