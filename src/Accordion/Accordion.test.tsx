@@ -20,6 +20,13 @@ describe("Component: Accordion", () => {
         expect(wrapper.find(".my-accordion").length).toEqual(1);
     });
 
+    it("Should render subheader is included in props", () => {
+        const newAccordionList = [...accordionList];
+        newAccordionList[0].subHeaderText = "Test subheader";
+        const wrapper = shallow(<Accordion list={newAccordionList} />);
+        expect(wrapper.find(".with-sub-header").length).toEqual(1);
+    });
+
     it("Should toggle accordion when clicked", () => {
         const wrapper = shallow(<Accordion list={accordionList} />);
         wrapper.find(".accordion-item").first().find(".header-wrapper").simulate("click");
