@@ -38,10 +38,12 @@ These are the current available properties:
 | max        | `number`                 | max value                       |
 | onIncrease | `() => void`             | on increase event               |
 | onDecrease | `() => void`             | on decrease event               |
+| name?      | `string`                 | name property                   |
+| id?        | `string`                 | id property                     |
 | className? | `string`                 | Custom class can be passed here |
 | name?      | `string`                 | element name                    |
 | label?     | `string`                 | element label                   |
 | disabled?  | `boolean`                | disable                         |
 | error?     | `string`                 | error message                   |
 | warning?   | `string`                 | warning message                 |
-| reference?       | `React.RefObject<any>`   | React Ref obj                   |
+| reference? | `React.RefObject<any>`   | React Ref obj                   |

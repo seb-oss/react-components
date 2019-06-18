@@ -21,6 +21,11 @@ describe("Component: Slider", () => {
         expect(wrapper.hasClass("mySlider")).toBeTruthy();
     });
 
+    it("Should pass down the id to the slider component", () => {
+        const wrapper = shallow(<Slider {...props} id="slider-id" />);
+        expect(wrapper.find("#slider-id")).toHaveLength(1);
+    });
+
     it("Should render label", () => {
         const wrapper = shallow(<Slider {...props} label="Slider label" />);
         expect(wrapper.find(".custom-label")).toBeDefined();
