@@ -5,9 +5,12 @@ $gray-background: #f5f5f5;
 $transition-time: 300ms;
 $default: 14px;
 $standard: 16px;
-$header-size: 20px;
+$header-font-size: 20px;
 $sub-header-size: 14px;
 $icon-size: 20px;
+$padding-left-size: 48px;
+$accordion-min-height: 48px;
+
 @mixin transform($props) {
     -webkit-transform: $props;
     -moz-transform: $props;
@@ -45,9 +48,9 @@ $icon-size: 20px;
         .header-wrapper {
             position: relative;
             display: block;
-            padding: 5px 10px 5px 35px;
+            padding: 5px 10px 5px $padding-left-size;
             cursor: pointer;
-            min-height: 48px;
+            min-height: $accordion-min-height;
 
             &.with-sub-header {
                 min-height: 64px;
@@ -56,7 +59,7 @@ $icon-size: 20px;
                 position: absolute;
                 width: $icon-size;
                 height: $icon-size;
-                left: 7px;
+                left: 15px;
                 fill: $blue-dark;
                 will-change: transform;
                 @include transition($transition-time);
@@ -64,7 +67,7 @@ $icon-size: 20px;
             }
             .accordion-header {
                 display: block;
-                font-size: $header-size;
+                font-size: $header-font-size;
                 font-weight: 500;
                 padding-top: 5px;
                 @include user-select(none);
@@ -82,7 +85,7 @@ $icon-size: 20px;
             overflow: hidden;
             .text-wrapper {
                 position: relative;
-                padding: 0px 40px;
+                padding: 0px $padding-left-size;
                 max-height: 0;
                 will-change: margin;
                 opacity: 0;
