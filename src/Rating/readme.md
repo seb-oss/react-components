@@ -28,7 +28,7 @@ This React component is based on `react-rating`. Supports customization and conf
 ## Properties
 These are the current available properties:
 
-| Property      | Type                      | Descrition                                   |
+| Property      | Type                      | Description                                   |
 | ------------- | ------------------------- | -------------------------------------------- |
 | initialValue? | `any`                     | intial value, string or number               |
 | onChange      | `(value: number) => void` | onchange event, will return the value        |

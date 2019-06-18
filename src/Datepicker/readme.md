@@ -31,7 +31,7 @@ This React component is based on `react-date-picker`. Supports customization and
 ## Properties
 These are the current available properties:
 
-| Property     | Type                   | Descrition                                                         |
+| Property     | Type                   | Description                                                         |
 | ------------ | ---------------------- | ------------------------------------------------------------------ |
 | value        | js `Date` obj          | date obj                                                           |
 | name         | `string`               | name value                                                         |

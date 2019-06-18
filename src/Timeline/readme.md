@@ -27,7 +27,7 @@ This React component supports customization and configurations. The component na
 ## Properties
 These are the current available properties:
 
-| Property    | Type                                  | Descrition                                                  |
+| Property    | Type                                  | Description                                                  |
 | ----------  | ------------------------------------- | ----------------------------------------------------------- |
 | list        | `Array<TimelineListItem>`<sup>1</sup> | Timeline list                                               |
 | direction?  | `string`                              | Timeline direction. Accepts `'vertical'` and `'horizontal'` (default: `'vertical'`) |

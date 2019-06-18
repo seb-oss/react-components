@@ -29,7 +29,7 @@ This React component supports customization and configurations. The component na
 ## Properties
 These are the current available properties:
 
-| Property        | Type                                         | Descrition                                                                                    |
+| Property        | Type                                         | Description                                                                                    |
 | --------------- | -------------------------------------------- | --------------------------------------------------------------------------------------------- |
 | title?          | `string`                                     | Title                                                                                         |
 | message?        | `string`                                     | Description                                                                                   |

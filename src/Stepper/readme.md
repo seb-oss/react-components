@@ -31,7 +31,7 @@ This Angular component supports customization and configurations. The component 
 ## Properties
 These are the current available properties:
 
-| Property   | Type                     | Descrition                      |
+| Property   | Type                     | Description                      |
 | ---------- | ------------             | ------------------------------- |
 | value      | `number`                 | The current value               |
 | min        | `number`                 | min value                       |

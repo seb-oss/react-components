@@ -28,7 +28,7 @@ The component name is `Timer` and the selector is `<Timer/>`, it will support co
 ## Properties
 These are the current available properties:
 
-| Property   | Type                   | Descrition                                                       |
+| Property   | Type                   | Description                                                       |
 | ---------- | ---------------------- | ---------------------------------------------------------------- |
 | duration   | `number`               | duration of timer in `Millisecond`                               |
 | callback   | `() => void`           | This method will be triggered when timer reached ended           |
