@@ -54,7 +54,7 @@ $transition-time: 200ms;
             }
         }
         &.has-error {
-            > textarea {
+            > textarea.form-control {
                 border-bottom: 1px solid $red;
                 &:hover,
                 &:focus,
