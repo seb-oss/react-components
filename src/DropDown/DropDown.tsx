@@ -110,7 +110,7 @@ export const DropDown: React.FunctionComponent<DropDownProps> = (props: DropDown
             listRefs[currentFocused].current.focus();
             return true;
         }
-        return null;
+        return false;
     };
 
     const setInitialFocus = () => {

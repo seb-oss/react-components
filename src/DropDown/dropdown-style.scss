@@ -26,10 +26,11 @@ $red-dark: #d81a1a;
 }
 
 .custom-dropdown {
+    margin-bottom: 8px;
     > .custom-dropdown-toggle {
-        background-color: white !important;
-        height: $dropdown-toggle-height !important;
-        min-width: $dropdown-width !important;
+        background-color: white;
+        height: $dropdown-toggle-height;
+        min-width: $dropdown-width;
         padding: 0px;
         border-color: $grey-500;
         display: flex;
@@ -89,10 +90,10 @@ $red-dark: #d81a1a;
         }
 
         &.more {
-            background-color: inherit !important;
-            height: $dropdown-toggle-height !important;
-            min-width: $dropdown-toggle-height !important;
-            max-width: $dropdown-toggle-height !important;
+            background-color: inherit;
+            height: $dropdown-toggle-height;
+            min-width: $dropdown-toggle-height;
+            max-width: $dropdown-toggle-height;
             padding: 0px;
             border-color: transparent;
             margin: 0px 0px 0px auto;
