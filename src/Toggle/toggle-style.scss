@@ -7,6 +7,7 @@ $blue: #41B0EE;
 $blue-dark: #0092E1;
 $blue-darker: #007AC7;
 $transition-time: 200ms;
+$native-outline-color : #A5C7FE;
 @mixin transition($props) {
     -webkit-transition: $props;
     -moz-transition: $props;
@@ -35,13 +36,17 @@ $transition-time: 200ms;
     margin: 0;
     height: 40px;
     padding: 10px 15px;
+    &.focus-class {
+        outline: 1px solid $native-outline-color;
+    }
     .toggle-btn {
         display: inline-flex;
         align-items: center;
         height: 20px;
         .toggle {
             height: 20px;
-            display: none;
+            width: 0;
+            height: 0;
             +.toggle-switch {
                 background-color: $gray-500;
                 @include transition(all .4s ease);

@@ -28,6 +28,9 @@ $red: #F03529;
                 &:hover+span {
                     border-color: $blue;
                 }
+                &:focus+span {
+                    outline: 1px solid #A5C7FE;
+                }
                 &:checked~.checkmark {
                     background-color: $white;
                     &:after {
