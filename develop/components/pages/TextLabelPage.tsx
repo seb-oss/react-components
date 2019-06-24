@@ -7,9 +7,6 @@ const docMD = require("../../../src/TextLabel/readme.md");
 export default class TextLabelPage extends React.Component<any, any>  {
     constructor(props: any) {
         super(props);
-        this.state = {
-            textBoxValue: ""
-        };
     }
 
     render() {
