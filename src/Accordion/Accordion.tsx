@@ -53,43 +53,47 @@ export class Accordion extends React.Component<AccordionProps, AccordionState> {
     render() {
         return (
             <div className={"custom-accordion" + (this.props.className ? ` ${this.props.className}` : "")}>
-                {this.props.list && this.props.list.map((item: AccrodionListItem, index: number) =>
-                    <div
-                        className={"accordion-item" + (this.state.active === index ? " active" : "")}
-                        key={index}
-                        tabIndex={0}
-                        id={item.category}
-                        onKeyDown={(e: React.KeyboardEvent<HTMLDivElement>) => this.onKeyDown(index, e)}
-                        aria-expanded={this.state.active === index}
-                        aria-controls={`lbl-${item.category}`}
-                        role="button"
-                    >
-                        <div className={`header-wrapper${item.subHeaderText ? " with-sub-header" : ""}`} onClick={() => { this.toggle(index); }}>
-                            {chevronDownIcon}
-                            <div className={"accordion-header"}>{item.category}</div>
-                            {item.subHeaderText && <div className="accordion-sub-header">{item.subHeaderText}</div>}
-                        </div>
-                        <div className="content-wrapper" aria-labelledby={item.category} id={`lbl-${item.category}`} role="region">
-                            {!(item.text instanceof Array) &&
-                                <div className="text-wrapper">
-                                    <div className="text-item">
-                                        {item.text.title && <div className="accordion-title">{item.text.title}</div>}
-                                        {item.text.desc && <div className="accordion-desc">{item.text.desc}</div>}
-                                    </div>
-                                </div>
-                            }
-                            {(item.text instanceof Array) &&
-                                <div className="text-wrapper">
-                                    {item.text.map((text: AccordionText, textIndex: number) =>
-                                        <div className="text-item" key={textIndex}>
-                                            {text.title && <div className="accordion-title">{text.title}</div>}
-                                            {text.desc && <div className="accordion-desc">{text.desc}</div>}
+                {this.props.list && this.props.list.map((item: AccrodionListItem, index: number) => {
+                    const uniqueIdentifier = item.category.split(" ")[0].concat("-") + Math.floor(Math.random() * 100) + (new Date()).getTime();
+                    return (
+                        <div
+                            className={"accordion-item" + (this.state.active === index ? " active" : "")}
+                            key={index}
+                            tabIndex={0}
+                            id={uniqueIdentifier}
+                            onKeyDown={(e: React.KeyboardEvent<HTMLDivElement>) => this.onKeyDown(index, e)}
+                            aria-expanded={this.state.active === index}
+                            aria-controls={`lbl-${uniqueIdentifier}`}
+                            role="button"
+                        >
+                            <div className={`header-wrapper${item.subHeaderText ? " with-sub-header" : ""}`} onClick={() => { this.toggle(index); }}>
+                                {chevronDownIcon}
+                                <div className={"accordion-header"}>{item.category}</div>
+                                {item.subHeaderText && <div className="accordion-sub-header">{item.subHeaderText}</div>}
+                            </div>
+                            <div className="content-wrapper" aria-labelledby={uniqueIdentifier} id={`lbl-${uniqueIdentifier}`} role="region">
+                                {!(item.text instanceof Array) &&
+                                    <div className="text-wrapper">
+                                        <div className="text-item">
+                                            {item.text.title && <div className="accordion-title">{item.text.title}</div>}
+                                            {item.text.desc && <div className="accordion-desc">{item.text.desc}</div>}
                                         </div>
-                                    )}
-                                </div>
-                            }
+                                    </div>
+                                }
+                                {(item.text instanceof Array) &&
+                                    <div className="text-wrapper">
+                                        {item.text.map((text: AccordionText, textIndex: number) =>
+                                            <div className="text-item" key={textIndex}>
+                                                {text.title && <div className="accordion-title">{text.title}</div>}
+                                                {text.desc && <div className="accordion-desc">{text.desc}</div>}
+                                            </div>
+                                        )}
+                                    </div>
+                                }
+                            </div>
                         </div>
-                    </div>
+                    );
+                }
                 )
                 }
             </div>
