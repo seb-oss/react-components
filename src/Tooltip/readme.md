@@ -29,17 +29,19 @@ This React component supports customization and configurations. The component na
 ## Properties
 These are the current available properties:
 
-| Property        | Type                                         | Descrition                                                                                    |
-| --------------- | -------------------------------------------- | --------------------------------------------------------------------------------------------- |
-| title?          | `string`                                     | Title                                                                                         |
-| message?        | `string`                                     | Description                                                                                   |
-| messageGroup?   | `Array<TooltipMessageGroupItem>`<sup>1</sup> | Multiple titles/descriptions                                                                  |
-| position?       | `string`                                     | Css style positions: top/bottom/left/right                                                    |
-| customSvg?       | `any`                                     | A direct svg code or a component with svg                                                                       |
-| className?      | `string`                                     | Custom class                                                                                  |
-| width?          | `number`                                     | Width of the text holder                                                                      |
-| theme?          | `string`                                     | Based on SEB predefined colors. (default: `'default'`)<sup>2</sup>                            |
-| triggerOnHover? | `boolean`                                    | Enables the ability to show the tooltip on hover, click will be disabled (default: `'false'`) |
+| Property        | Type                                                 | Descrition                                                                                    |
+| --------------- | ---------------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| title?          | `string`                                             | Title                                                                                         |
+| message?        | `string`                                             | Description                                                                                   |
+| messageGroup?   | `Array<TooltipMessageGroupItem>`<sup>1</sup>         | Multiple titles/descriptions                                                                  |
+| position?       | `string`                                             | Css style positions: top/bottom/left/right                                                    |
+| customSvg?      | `any`                                                | A direct svg code or a component with svg                                                     |
+| className?      | `string`                                             | Custom class                                                                                  |
+| width?          | `number`                                             | Width of the text holder                                                                      |
+| theme?          | `string`                                             | Based on SEB predefined colors. (default: `'default'`)<sup>2</sup>                            |
+| triggerOnHover? | `boolean`                                            | Enables the ability to show the tooltip on hover, click will be disabled (default: `'false'`) |
+| onClick         | `(event?: React.MouseEvent<HTMLDivElement>) => void` | click action                                                                                  |
+
 
 ## Public Methods
 These are the public methods accessible via [React ref](https://reactjs.org/docs/refs-and-the-dom.html)
