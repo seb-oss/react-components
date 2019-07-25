@@ -3,27 +3,30 @@ import "./toggle-style.scss";
 
 export interface ToggleProps {
     name: string;
-    label?: string;
     value: boolean;
     onChange: (event: any) => void;
+    id?: string;
+    label?: string;
     className?: string;
     reference?: React.RefObject<any>;
 }
 
 export const Toggle: React.FunctionComponent<ToggleProps> = (props: ToggleProps): React.ReactElement<void> => {
+    const id = props.id || `${props.name}-${(Math.random() * 1000) + (new Date()).getTime()}`;
+
     return (
         <div className={"form-group custom-toggle" + (props.className ? ` ${props.className}` : "")}>
             <div className="toggle-btn">
                 <input
                     className="toggle"
-                    id={props.name}
+                    id={id}
                     name={props.name}
                     type="checkbox"
                     checked={props.value}
                     onChange={props.onChange}
                     ref={props.reference}
                 />
-                <label className="toggle-switch" htmlFor={props.name}><div className="toggle-nob" /></label>
+                <label className="toggle-switch" htmlFor={id}><div className="toggle-nob" /></label>
             </div>
             {props.label && <div className="toggle-label">{props.label}</div>}
         </div>

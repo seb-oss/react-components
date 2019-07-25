@@ -32,8 +32,9 @@ These are the current available properties:
 | Property   | Type                   | Descrition              |
 | ---------- | ---------------------- | ----------------------- |
 | name       | `string`               | element name            |
-| label?     | `string`               | Element label           |
+| id?        | `string`               | id property             |
 | value      | `boolean`              | the value of the toggle |
 | onChange   | `(event: any) => void` | checkbox event          |
+| label?     | `string`               | Element label           |
 | className? | `string`               | custom class            |
-| reference?       | `React.RefObject<any>` | React Ref obj           |
+| reference? | `React.RefObject<any>` | React Ref obj           |
