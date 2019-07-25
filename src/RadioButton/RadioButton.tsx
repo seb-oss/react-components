@@ -5,11 +5,12 @@ export interface RadioButtonProps {
     onChange: (value: any) => void;
     value: any;
     radioValue: any;
-    group: string;
-    name?: string;
+    group?: string;
+    name: string;
+    id?: string;
     description?: string;
     className?: string;
-    label?: string;
+    label: string;
     error?: string;
     inline?: boolean;
     disabled?: boolean;
@@ -20,19 +21,20 @@ export const RadioButton: React.FunctionComponent<RadioButtonProps> = (props: Ra
     let inputFieldClass: string = "input-field";
     if (props.error) { inputFieldClass += " has-error"; }
     if (props.inline) { inputFieldClass += " inline"; }
+    const id = props.id || props.label;
 
     return (
         <div className={"form-group radio-holder" + (props.className ? ` ${props.className}` : "")}>
             <div className={inputFieldClass}>
 
                 <div className="radio-item">
-                    {props.label && <label className="radio-label" htmlFor={props.label}>{props.label}</label>}
+                    {props.label && <label className="radio-label" htmlFor={id}>{props.label}</label>}
                     <input
                         className="radio-input"
                         type="radio"
                         value={props.value}
-                        name={props.group}
-                        id={props.label}
+                        name={props.name}
+                        id={id}
                         checked={props.value === props.radioValue}
                         disabled={props.disabled}
                         onChange={(e) => { props.onChange(props.radioValue); }}

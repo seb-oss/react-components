@@ -36,10 +36,13 @@ These are the current available properties:
 | value        | `any`                  | your state value, string or number                    |
 | radioValue   | `any`                  | the value of the radiobtn, it can be string or number |
 | onChange     | `(event: any) => void` | on change event                                       |
-| group        | `string`               | the name of the group to group the radios together    |
+| name         | `string`               | the name property                                     |
+| label        | `string`               | the label                                             |
+| id?          | `string`               | the id property                                       |
+| group?       | `string`               | the name of the group to group the radios together    |
 | description? | `string`               | optional extra description                            |
 | error?       | `string`               | error message (if any)                                |
 | className?   | `string`               | Custom class can be passed here                       |
 | disabled?    | `boolean`              | Disable the radio button                              |
 | inline?      | `boolean`              | Display radio items inline                            |
-| reference?         | `React.RefObject<any>` | React Ref obj                                         |
+| reference?   | `React.RefObject<any>` | React Ref obj                                         |
