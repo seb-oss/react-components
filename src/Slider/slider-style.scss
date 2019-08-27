@@ -120,11 +120,7 @@ $box-shadow: rgba(85, 85, 85, 0.4) 0 2px 5px;
             height: 15px;
             margin-top: 10px;
             margin-bottom: 7px;
-            &:focus,
-            &:active {
-                outline: 0;
-                box-shadow: none;
-            } // Thumb
+            // Thumb
             &::-webkit-slider-thumb {
                 @include thumb-styles();
             }

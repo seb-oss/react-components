@@ -41,7 +41,7 @@ export const TextBoxGroup: React.FunctionComponent<TextBoxGroupProps> = (props: 
             <div className={"input-group" + (props.error ? " has-error" : "") + (props.disabled ? " disabled" : "")} >
                 <div className="input-box-group-wrapper">
                     {(props.leftIcon || props.leftText) &&
-                        <div className={"input-group-prepend" + (props.onLeftClick ? " clickable" : "")} onClick={props.onLeftClick}>
+                        <div className={"input-group-prepend" + (props.onLeftClick ? " clickable" : "")} role={props.onLeftClick ? "button" : ""} onClick={props.onLeftClick}>
                             {props.leftText && <span className="input-group-text" title={props.leftTitle}>{props.leftText}</span>}
                             {(props.leftIcon && !props.leftText) &&
                                 <span className="input-group-text">
@@ -70,7 +70,7 @@ export const TextBoxGroup: React.FunctionComponent<TextBoxGroupProps> = (props: 
                         ref={props.reference}
                     />
                     {(props.rightIcon || props.rightText) &&
-                        <div className={"input-group-append" + (props.onRightClick ? " clickable" : "")} onClick={props.onRightClick}>
+                        <div className={"input-group-append" + (props.onRightClick ? " clickable" : "")} onClick={props.onRightClick} role={props.onRightClick ? "button" : ""}>
                             {props.rightText && <span className="input-group-text" title={props.rightTitle}>{props.rightText}</span>}
                             {(props.rightIcon && !props.rightText) &&
                                 <span className="input-group-text">
