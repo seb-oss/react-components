@@ -8,7 +8,8 @@ export default class TextAreaPage extends React.Component<any, any>  {
     constructor(props: any) {
         super(props);
         this.state = {
-            textBoxValue: ""
+            textBoxValue: "",
+            textBox2Value: ""
         };
     }
 
@@ -47,8 +48,8 @@ export default class TextAreaPage extends React.Component<any, any>  {
                                 error="error msg will be shown here"
                                 cols={30}
                                 rows={5}
-                                value={this.state.textBoxValue}
-                                onChange={(event) => { this.setState({ textBoxValue: event.target.value }); }}
+                                value={this.state.textBox2Value}
+                                onChange={(event) => { this.setState({ textBox2Value: event.target.value }); }}
                             />
                         </div>
                     </div>

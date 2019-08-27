@@ -4,9 +4,9 @@ $gray-500: #adadad;
 $white: #fff;
 $black: #000;
 $blue: #41B0EE;
-$blue-dark: #0092E1;
 $blue-darker: #007AC7;
 $transition-time: 200ms;
+
 @mixin transition($props) {
     -webkit-transition: $props;
     -moz-transition: $props;
