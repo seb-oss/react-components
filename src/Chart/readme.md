@@ -28,7 +28,7 @@ This React component is based on `Chart.js` with customization and configuration
 ## Properties
 These are the current available properties:
 
-| Property   | Type                   | Descrition                                  |
+| Property   | Type                   | Description                                  |
 | ---------- | ---------------------- | ------------------------------------------- |
 | chartType  | `string`               | type of charts based on chat.js<sup>1</sup> |
 | data       | `any`                  | chart.js data object                        |

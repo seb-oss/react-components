@@ -28,7 +28,7 @@ This React component is based on SEB Bootstrap style. Supports customization and
 ## Properties
 These are the current available properties:
 
-| Property   | Type                  | Descrition                               |
+| Property   | Type                  | Description                               |
 | ---------- | --------------------- | ---------------------------------------- |
 | list       | `Array<string>`       | List of paths                            |
 | onClick    | `(i: number) => void` | Click action passed the index of the tab |

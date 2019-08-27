@@ -28,7 +28,7 @@ This React component supports customization and configurations. The component na
 ## Properties
 These are the current available properties:
 
-| Property       | Type                      | Descrition                                                                             |
+| Property       | Type                      | Description                                                                             |
 | -------------- | ------------------------- | -------------------------------------------------------------------------------------- |
 | step           | `number`                  | Current step (value)                                                                   |
 | list           | `Array<string>`           | List of steps (titles)                                                                 |
