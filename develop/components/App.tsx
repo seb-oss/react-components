@@ -43,6 +43,7 @@ const NotificationPage = Loadable({ loader: () => import("./pages/NotificationPa
 const TimepickerPage = Loadable({ loader: () => import("./pages/TimepickerPage"), loading: () => <Loader toggle={true} /> });
 const ImageCropperPage = Loadable({ loader: () => import("./pages/ImageCropperPage"), loading: () => <Loader toggle={true} /> });
 const TimerPage = Loadable({ loader: () => import("./pages/TimerPage"), loading: () => <Loader toggle={true} /> });
+const ModalPage = Loadable({ loader: () => import("./pages/ModalPage"), loading: () => <Loader toggle={true} /> });
 const NotFound = Loadable({ loader: () => import("./common/NotFound"), loading: () => <Loader toggle={true} /> });
 
 interface AppState { sidebarToggle: boolean; }
@@ -81,6 +82,7 @@ class App extends React.Component<any, AppState>  {
                         <Routing path={"/radiogroup"} component={RadioGroupPage} props={propsToSend} />
                         <Routing path={"/radiobtn"} component={RadioButtonPage} props={propsToSend} />
                         <Routing path={"/dialogue"} component={DialoguePage} props={propsToSend} />
+                        <Routing path={"/modal"} component={ModalPage} props={propsToSend} />
                         <Routing path={"/tooltip"} component={TooltipPage} props={propsToSend} />
                         <Routing path={"/loader"} component={LoaderPage} props={propsToSend} />
                         <Routing path={"/rating"} component={RatingPage} props={propsToSend} />

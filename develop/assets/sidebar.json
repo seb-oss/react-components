@@ -117,6 +117,10 @@
             "path": "/dialogue"
         },
         {
+            "name": "Modal",
+            "path": "/modal"
+        },
+        {
             "name": "Charts",
             "path": "/chart"
         },
