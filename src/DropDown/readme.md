@@ -29,7 +29,7 @@ This React component supports customization and configurations. The component na
 ## Properties
 These are the current available properties:
 
-| Property       | Type                                                     | Descrition                                                              |
+| Property       | Type                                                     | Description                                                              |
 | -------------- | -------------------------------------------------------- | ----------------------------------------------------------------------- |
 | selectedValue  | `Array<DropdownItem> \| DropDownItem` <sup>1</sup>       | an array of the currently selected dropdown item(s)                     |
 | list           | `Array<DropdownItem>` <sup>1</sup>                       | an array of all the dropdown items to display                           |

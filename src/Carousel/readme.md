@@ -25,7 +25,7 @@ This React component is based on `react-slick`. Supports customization and confi
 ## Properties
 These are the current available properties:
 
-| Property             | Type                               | Descrition                                        |
+| Property             | Type                               | Description                                        |
 | -------------------- | ---------------------------------- | ------------------------------------------------- |
 | list                 | `Array<CarouselItem>` <sup>1</sup> | an array of CarouselItem                          |
 | carouselChanged      | `(index: number) => void`          | carousel change event                             |

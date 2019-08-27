@@ -30,7 +30,7 @@ This React component supports customization and configurations. The component na
 ## Properties
 These are the current available properties:
 
-| Property        | Type                                    | Descrition                                                                                      |
+| Property        | Type                                    | Description                                                                                      |
 | --------------- | --------------------------------------- | ----------------------------------------------------------------------------------------------- |
 | toggle          | `boolean`                               | element toggle                                                                                  |
 | style?          | `string`                                | notification style<sup>1</sup> (default: `slide-in`)                                            |
