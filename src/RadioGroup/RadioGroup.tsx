@@ -43,6 +43,7 @@ export const RadioGroup: React.FunctionComponent<RadioGroupProps> = (props: Radi
                                 name={item.group}
                                 id={identifier}
                                 checked={props.value === item.value}
+                                aria-labelledby={item.label}
                                 disabled={props.disableAll || item.disabled}
                                 onChange={(e) => { props.onChange(item.value); }}
                             />

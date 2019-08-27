@@ -11,6 +11,8 @@ export const InlineLink: React.FunctionComponent<InlineLinkProps> = React.memo((
     return (
         <span
             className={"custom-inline-link" + (props.className ? ` ${props.className}` : "")}
+            role="link"
+            tabIndex={0}
             onClick={() => { props.onClick && props.onClick(); }}
         >
             {props.children}
