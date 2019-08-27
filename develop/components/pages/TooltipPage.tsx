@@ -10,6 +10,12 @@ export default class TooltipPage extends React.Component<any, any>  {
     MyTooltip: Tooltip;
     constructor(props: any) {
         super(props);
+
+        this.onToolTipClick = this.onToolTipClick.bind(this);
+    }
+
+    onToolTipClick(e: React.MouseEvent<HTMLDivElement>): void {
+        alert("Clickable tootip has been Clicked");
     }
 
     render() {
@@ -44,6 +50,7 @@ export default class TooltipPage extends React.Component<any, any>  {
                                 width={200}
                                 customSvg={mySvg}
                                 ref={(el: Tooltip) => { this.MyTooltip = el; }}
+                                onClick={this.onToolTipClick}
                             />
                         </div>
                     </div>

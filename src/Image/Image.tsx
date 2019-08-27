@@ -9,6 +9,7 @@ export interface ImageProps {
     onLoad?: (event: any) => void;
     className?: string;
     useImgTag?: boolean;
+    alt?: string;
 }
 
 export const Image: React.FunctionComponent<ImageProps> = React.memo((props: ImageProps): React.ReactElement<void> => {
@@ -29,6 +30,7 @@ export const Image: React.FunctionComponent<ImageProps> = React.memo((props: Ima
                 <img
                     className={"img-tag " + (props.className ? props.className : "")}
                     src={props.src}
+                    alt={props.alt ? props.alt : ""}
                     style={{
                         width: props.width,
                         height: props.height

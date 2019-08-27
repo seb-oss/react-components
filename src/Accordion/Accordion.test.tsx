@@ -49,4 +49,11 @@ describe("Component: Accordion", () => {
         expect(wrapper.find(".accordion-item").at(1).hasClass("active")).toBeTruthy();
         expect(wrapper.state("active")).toBe(1);
     });
+
+    it("Should be able to toggle accordion using space-ctrl", () => {
+        const wrapper = shallow(<Accordion list={accordionList} />);
+        wrapper.find(".accordion-item").last().simulate("keydown", { key: " " });
+
+        expect(wrapper.find(".accordion-item").last().hasClass("active"));
+    });
 });
