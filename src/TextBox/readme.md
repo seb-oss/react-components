@@ -30,7 +30,7 @@ This React component is based on SEB Bootstrap style. Supports customization and
 ## Properties
 These are the current available properties:
 
-| Property      | Type                                                     | Descrition                                      |
+| Property      | Type                                                     | Description                                      |
 | ------------- | -------------------------------------------------------- | ----------------------------------------------- |
 | value         | `string`                                                 | Value string                                    |
 | name          | `string`                                                 | Name string                                     |

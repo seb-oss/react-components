@@ -12,7 +12,7 @@ This is a set of react components some of which are based on SEB's bootstrap. Th
 
 ## Minimum requirements
 This version of components has been developed and tested on:
--   React `16.4.0` or above
+-   React `16.8.3` or above
 -   Typescript `3.0.0` or above
 -   Webpack `4.16.0` or above
 

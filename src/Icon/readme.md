@@ -25,7 +25,7 @@ This is a SVG code base component. The component name is `Icon` and the selector
 ## Properties
 These are the current available properties:
 
-| Property   | Type         | Descrition                                                    |
+| Property   | Type         | Description                                                    |
 | ---------- | ------------ | ------------------------------------------------------------- |
 | src        | `any`        | A component which returns a `svg` or a svg directly.          |
 | className? | `number`     | Custom class can be passed here                               |

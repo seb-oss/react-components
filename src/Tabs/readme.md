@@ -29,7 +29,7 @@ This Angular component is based on SEB Bootstrap style. Supports customization a
 ## Properties
 These are the current available properties:
 
-| Property   | Type                              | Descrition                                             |
+| Property   | Type                              | Description                                             |
 | ---------- | --------------------------------- | ------------------------------------------------------ |
 | list       | `Array<TabsListItem>`<sup>1</sup> | List of tabs                                           |
 | activeTab  | `number`                          | Index of the the current active tab                    |
