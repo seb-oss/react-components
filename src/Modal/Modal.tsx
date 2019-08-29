@@ -40,11 +40,13 @@ export const Modal: React.FunctionComponent<ModalProps> = (props: ModalProps): R
      * @param {React.MouseEvent} event clicked element
      */
     function closeModal(event: React.MouseEvent): void {
-        const target: HTMLElement = event.target as HTMLElement;
-        if (event && event.target && target.classList && target.classList.length) {
-            const classList: DOMTokenList = target.classList;
-            if (classList.contains("modal")) {
-                props.onDismiss && props.onDismiss();
+        if (!props.disableBackdropDismiss) {
+            const target: HTMLElement = event.target as HTMLElement;
+            if (event && event.target && target.classList && target.classList.length) {
+                const classList: DOMTokenList = target.classList;
+                if (classList.contains("modal")) {
+                    props.onDismiss && props.onDismiss();
+                }
             }
         }
     }
@@ -52,7 +54,7 @@ export const Modal: React.FunctionComponent<ModalProps> = (props: ModalProps): R
     return (
         <div
             className={"modal-backdrop" + (props.toggle ? " show" : " fade")}
-            onClick={(event: React.MouseEvent) => { !props.disableBackdropDismiss && closeModal(event); }}
+            onClick={(event: React.MouseEvent) => { closeModal(event); }}
         >
             <div role="dialog" tabIndex={-1} className={"modal " + setModalClasses()}>
                 <div role="document" className="modal-dialog" tabIndex={-1}>
