@@ -7,14 +7,12 @@ describe("Component: Modal", () => {
     it("Should render and be hidden until toggled", () => {
         const wrapper = shallow(<Modal toggle={false} />);
         expect(wrapper).toBeDefined();
-        wrapper.instance().componentDidMount();
-        expect(wrapper.state("open")).toEqual(false);
+        expect(wrapper.hasClass("show")).toBeFalsy();
+        expect(wrapper.hasClass("fade")).toBeTruthy();
     });
 
     it("should render and be displayed when toggled", () => {
         const wrapper = shallow(<Modal toggle={true} />);
-        expect(wrapper.state("open")).toEqual(true);
-        expect(wrapper.state("close")).toEqual(false);
         expect(wrapper.hasClass("show")).toBeTruthy();
         expect(wrapper.hasClass("fade")).toBeFalsy();
         expect(wrapper.hasClass("modal-fullscreen")).toBeFalsy();
@@ -80,15 +78,10 @@ describe("Component: Modal", () => {
 
     it("should not update when parent re-renders until props are changed", () => {
         const wrapper = mount(<Modal toggle={false} />);
-        wrapper.instance().componentDidUpdate({ ...wrapper.instance().props }, {});
-        expect(wrapper.state("open")).toEqual(false);
-        expect(wrapper.state("close")).toEqual(false);
-        wrapper.instance().componentDidUpdate({ toggle: false }, {});
-        expect(wrapper.state("open")).toEqual(false);
-        expect(wrapper.state("close")).toEqual(false);
+        expect(wrapper.hasClass("show")).toBeFalsy();
+        wrapper.setProps({ toggle: false });
+        expect(wrapper.hasClass("show")).toBeFalsy();
         wrapper.setProps({ toggle: true });
-        wrapper.instance().componentDidUpdate({toggle: true}, {});
-        expect(wrapper.state("open")).toEqual(true);
-        expect(wrapper.state("close")).toEqual(false);
+        expect(wrapper.find(".show")).toBeTruthy();
     });
 });

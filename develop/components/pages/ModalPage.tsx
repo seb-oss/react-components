@@ -73,7 +73,7 @@ export default class ModalPage extends React.Component<any, any>  {
                                 fullscreen={this.state.fullscreen}
                                 disableBackdropDismiss={this.state.disableBackdropDismiss}
                                 position={this.state.position}
-                                dismissModal={() => this.closeModal()}
+                                onDismiss={() => this.closeModal()}
                                 header={<h3>Header</h3>}
                                 body={<p>this is the body</p>}
                                 footer={<Button

@@ -24,7 +24,7 @@ This React component is based on SEB Bootstrap style. Supports customization and
     fullscreen={this.state.fullscreen}
     position={this.state.position}
     disableBackdropDismiss={this.state.disableBackdropDismiss}
-    dismissModal={() => this.closeModal()}
+    onDismiss={() => this.closeModal()}
     header={<h3>Header</h3>}
     body={<p>this is the body</p>}
     footer={<Button
@@ -50,4 +50,4 @@ These are the current available properties:
 | ariaLabel?              | `string`       | Accessibility for label                                                |
 | ariaDescribedby?        | `string`       | Accessibility for description                                          |
 | disableBackdropDismiss? | `boolean`      | User cannot dismiss Dialog by clicking outside of it, default is false |
-| dismissModal?           | `() => void`   | click event when modal is toggled                                      |
+| onDismiss?           | `() => void`   | click event when modal is toggled                                      |
