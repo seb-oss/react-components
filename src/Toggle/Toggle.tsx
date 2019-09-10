@@ -13,9 +13,20 @@ export interface ToggleProps {
 
 export const Toggle: React.FunctionComponent<ToggleProps> = (props: ToggleProps): React.ReactElement<void> => {
     const id = props.id || `${props.name}-${(Math.random() * 1000) + (new Date()).getTime()}`;
+    const [hasFocus, setHasFocus] = React.useState(false);
+
+    /**
+     * set Focus
+     */
+    function handleSetFocus(e: React.FocusEvent<HTMLInputElement>) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        setHasFocus(!hasFocus);
+    }
 
     return (
-        <div className={"form-group custom-toggle" + (props.className ? ` ${props.className}` : "")}>
+        <div className={"form-group custom-toggle" + (props.className ? ` ${props.className}` : "") + (hasFocus ? " focus-class" : "")}>
             <div className="toggle-btn">
                 <input
                     className="toggle"
@@ -24,6 +35,8 @@ export const Toggle: React.FunctionComponent<ToggleProps> = (props: ToggleProps)
                     type="checkbox"
                     checked={props.value}
                     onChange={props.onChange}
+                    onFocus={handleSetFocus}
+                    onBlur={handleSetFocus}
                     ref={props.reference}
                 />
                 <label className="toggle-switch" htmlFor={id}><div className="toggle-nob" /></label>

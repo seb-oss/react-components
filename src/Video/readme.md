@@ -32,7 +32,7 @@ This React component supports customization and configurations. The component na
 ## Properties
 These are the current available properties:
 
-| Property         | Type      | Descrition                                                    |
+| Property         | Type      | Description                                                    |
 | ---------------- | --------- | ------------------------------------------------------------- |
 | src              | `string`  | your image source, it can be string<sup>1</sup>               |
 | width            | `string`  | this is css width such as 100% or 300px                       |

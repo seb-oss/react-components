@@ -69,6 +69,9 @@ $transition-time: 200ms;
                     cursor: pointer;
                     > .input-group-text {
                         color: $blue;
+                        svg {
+                            fill: $blue;
+                        }
                         &:hover {
                             color: $blue-dark;
                         }

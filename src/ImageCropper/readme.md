@@ -38,7 +38,7 @@ let cropperConfigs: {
 ## Properties
 These are the current available properties:
 
-| Property               | Type                          | Descrition                                                                                                                                                                 |
+| Property               | Type                          | Description                                                                                                                                                                 |
 | ---------------------- | ----------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | onCrop                 | `(imageData: string) => void` | the callBack to be called onCrop action, it passes `cropResult` string                                                                                                     |
 | cropperConfigs         | `OptionProps`                 | interface OptionProps, solely based on cropperjs props, see references                                                                                                     |

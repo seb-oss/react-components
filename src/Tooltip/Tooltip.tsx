@@ -22,6 +22,8 @@ export interface TooltipProps {
     theme?: string;
     className?: string;
     triggerOnHover?: boolean;
+    onClick?: (event?: React.MouseEvent<HTMLDivElement>) => void;
+
 }
 
 export class Tooltip extends React.Component<TooltipProps, TooltipState> {
@@ -65,12 +67,14 @@ export class Tooltip extends React.Component<TooltipProps, TooltipState> {
         return position.search(search) === 0;
     }
 
-    toggleTooltip(state?: boolean) {
+    toggleTooltip(state?: boolean, e?: React.MouseEvent<HTMLDivElement>) {
         if (state !== undefined) {
             this.setState({ toggle: state });
         } else {
             this.setState({ toggle: !this.state.toggle });
         }
+
+        this.props.onClick && this.props.onClick(e);
     }
 
     render() {
@@ -78,7 +82,7 @@ export class Tooltip extends React.Component<TooltipProps, TooltipState> {
             <div className={"tooltip-container" + (this.props.className ? ` ${this.props.className}` : "")}>
                 <div
                     className="icon"
-                    onClick={() => !this.props.triggerOnHover && this.toggleTooltip()}
+                    onClick={(e: React.MouseEvent<HTMLDivElement>) => !this.props.triggerOnHover && this.toggleTooltip(undefined, e)}
                     onMouseEnter={() => this.props.triggerOnHover && this.toggleTooltip(true)}
                     onMouseLeave={() => this.props.triggerOnHover && this.toggleTooltip(false)}
                 >
