@@ -14,12 +14,12 @@ describe("Component: TextBox", () => {
         expect(wrapper).toBeDefined();
     });
 
-    it("Should pass down the id to the button component", () => {
+    it("Should pass down the id to the textbox component", () => {
         const wrapper = shallow(<TextBox {...props} id="my-textbox-id" />);
         expect(wrapper.find("#my-textbox-id")).toHaveLength(1);
     });
 
-    it("Should pass down the name to the button component", () => {
+    it("Should pass down the name to the textbox component", () => {
         const wrapper = shallow(<TextBox {...props} name="my-textbox-name" />);
         expect(wrapper.find("input").getElement().props.name).toEqual("my-textbox-name");
     });
