@@ -29,13 +29,20 @@ export default class TextBoxPage extends React.Component<any, any>  {
                         <h2>Output</h2>
                         <p>Here is the basic bootstrap one:</p>
                         <div className="result">
-                            <TextBox
-                                name="textInput"
-                                label="Textbox label"
-                                placeHolder="Text Box PlaceHolder"
-                                value={this.state.textBoxValue}
-                                onChange={(event) => { this.setState({ textBoxValue: event.target.value }); }}
-                            />
+                            <form>
+
+                                <TextBox
+                                    id="my-id"
+                                    pattern="test"
+                                    name="textInput"
+                                    label="Textbox label"
+                                    placeHolder="Text Box PlaceHolder"
+                                    value={this.state.textBoxValue}
+                                    onChange={(event) => { this.setState({ textBoxValue: event.target.value }); }}
+                                />
+
+                                <input type="submit" />
+                            </form>
                         </div>
 
                         <p>Here is the input with error:</p>

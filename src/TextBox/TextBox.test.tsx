@@ -14,6 +14,25 @@ describe("Component: TextBox", () => {
         expect(wrapper).toBeDefined();
     });
 
+    it("Should pass down the id to the button component", () => {
+        const wrapper = shallow(<TextBox {...props} id="my-textbox-id" />);
+        expect(wrapper.find("#my-textbox-id")).toHaveLength(1);
+    });
+
+    it("Should pass down the name to the button component", () => {
+        const wrapper = shallow(<TextBox {...props} name="my-textbox-name" />);
+        expect(wrapper.find("input").getElement().props.name).toEqual("my-textbox-name");
+    });
+
+    it("Should pass down extra optional attributes to the component", () => {
+        const wrapper = shallow(<TextBox {...props} pattern="my-pattern" minLength={2} maxLength={4} required={true} />);
+        const componentProps = wrapper.find("input").getElement().props;
+        expect(componentProps.pattern).toEqual("my-pattern");
+        expect(componentProps.minLength).toEqual(2);
+        expect(componentProps.maxLength).toEqual(4);
+        expect(componentProps.required).toEqual(true);
+    });
+
     it("Should pass custom class", () => {
         const wrapper = shallow(<TextBox {...props} className="myTextbox" />);
         expect(wrapper.hasClass("myTextbox")).toBeTruthy();
