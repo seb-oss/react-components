@@ -20,6 +20,12 @@ describe("Component: Toggle ", () => {
         expect(wrapper.hasClass("myToggle")).toBeTruthy();
     });
 
+    it("Should pass custom id and name", () => {
+        const wrapper = shallow(<Toggle {...props} id="my-id" name="my-name" />);
+        expect(wrapper.find("#my-id")).toHaveLength(1);
+        expect(wrapper.find(".toggle").getElement().props.name).toEqual("my-name");
+    });
+
     it("Should fire change event when changed", () => {
         const wrapper = shallow(<Toggle {...props} />);
         wrapper.find(".toggle").simulate("change", { target: { value: false } });

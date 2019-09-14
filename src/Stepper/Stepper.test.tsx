@@ -21,6 +21,11 @@ describe("Component: Stepper", () => {
         expect(wrapper.hasClass("myStepper")).toBeTruthy();
     });
 
+    it("Should pass down the id to the hmtl input component", () => {
+        const wrapper = shallow(<Stepper {...props} id="my-stepper-id" />);
+        expect(wrapper.find("#my-stepper-id")).toHaveLength(1);
+    });
+
     it("Should render label", () => {
         const wrapper = shallow(<Stepper {...props} label="Stepper label" />);
         expect(wrapper.find(".custom-label")).toBeDefined();

@@ -4,6 +4,11 @@ import "./text-box-style.scss";
 export interface TextBoxProps {
     value: string | number;
     name: string;
+    id?: string;
+    pattern?: string;
+    required?: boolean;
+    minLength?: number;
+    maxLength?: number;
     onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
     onKeyDown?: (event: React.KeyboardEvent<HTMLInputElement>) => void;
     onKeyUp?: (event: React.KeyboardEvent<HTMLInputElement>) => void;
@@ -18,7 +23,6 @@ export interface TextBoxProps {
     focus?: boolean;
     readonly?: boolean;
     disabled?: boolean;
-    max?: number;
     autoComplete?: boolean;
     reference?: React.RefObject<HTMLInputElement>;
 }
@@ -29,8 +33,13 @@ export const TextBox: React.FunctionComponent<TextBoxProps> = (props: TextBoxPro
             <div className={"input-field" + (props.error ? " has-error" : "")}>
                 {props.label && <label className="custom-label" htmlFor={props.name}>{props.label}</label>}
                 <input
+                    id={props.id}
                     name={props.name}
                     type={props.type}
+                    pattern={props.pattern}
+                    required={props.required}
+                    minLength={props.minLength}
+                    maxLength={props.maxLength}
                     value={props.value}
                     onChange={props.onChange}
                     onKeyDown={props.onKeyDown}
@@ -44,7 +53,6 @@ export const TextBox: React.FunctionComponent<TextBoxProps> = (props: TextBoxPro
                     autoComplete={props.autoComplete ? "on" : "off"}
                     readOnly={props.readonly}
                     disabled={props.disabled}
-                    maxLength={props.max}
                     ref={props.reference}
                 />
                 <div className="alert alert-danger">{props.error}</div>

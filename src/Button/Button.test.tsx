@@ -26,6 +26,16 @@ describe("Component: Button", () => {
         expect(wrapper.hasClass("my-button")).toBeTruthy();
     });
 
+    it("Should pass down the id to the button component", () => {
+        wrapper.setProps({ id: "my-button-id" });
+        expect(wrapper.find("#my-button-id")).toHaveLength(1);
+    });
+
+    it("Should pass down the name to the button component", () => {
+        wrapper.setProps({ name: "my-button-name" });
+        expect(wrapper.find("button").getElement().props.name).toEqual("my-button-name");
+    });
+
     it("Should disable button when disabled prop is set to true", () => {
         wrapper.setProps({ disabled: true });
         expect(wrapper.html().indexOf("disabled")).not.toEqual(-1);

@@ -19,6 +19,16 @@ describe("Component: CheckBox", () => {
         expect(wrapper.find(".input-field").hasClass("myClassname")).toBeTruthy();
     });
 
+    it("Should pass down the id to the hmtl input component", () => {
+        const wrapper = shallow(<CheckBox {...props} id="my-checkbox-id" />);
+        expect(wrapper.find("#my-checkbox-id")).toHaveLength(1);
+    });
+
+    it("Should pass down the name to the html input component", () => {
+        const wrapper = shallow(<CheckBox {...props} />);
+        expect(wrapper.find("input").getElement().props.name).toEqual("myCheckbox");
+    });
+
     it("Should render inline when inline prop is set to true", () => {
         const wrapper = shallow(<CheckBox {...props} inline={true} />);
         expect(wrapper.hasClass("inline")).toBeTruthy();

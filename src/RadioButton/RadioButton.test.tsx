@@ -5,8 +5,9 @@ import { RadioButton } from "./RadioButton";
 describe("Component: RadioButton", () => {
     const props = {
         value: "wer",
+        label: "label",
         onChange: jest.fn(),
-        group: "Gender",
+        name: "Gender",
         radioValue: "male"
     };
 
@@ -18,6 +19,12 @@ describe("Component: RadioButton", () => {
     it("Should pass custom class", () => {
         const wrapper = shallow(<RadioButton {...props} className="myRadiobutton" />);
         expect(wrapper.hasClass("myRadiobutton")).toBeTruthy();
+    });
+
+    it("Should pass custom id and name", () => {
+        const wrapper = shallow(<RadioButton {...props} id="my-id" name="my-name" />);
+        expect(wrapper.find("#my-id")).toHaveLength(1);
+        expect(wrapper.find(".radio-input").getElement().props.name).toEqual("my-name");
     });
 
     it("Should fire a change event", () => {

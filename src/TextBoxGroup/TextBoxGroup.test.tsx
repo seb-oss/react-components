@@ -16,6 +16,25 @@ describe("Component: TextBoxGroup", () => {
         expect(wrapper.hasClass("input-box-group")).toBeTruthy();
     });
 
+    it("Should pass down the id to the TextBoxGroup component", () => {
+        wrapper.setProps({ id: "my-TextBoxGroup-id" });
+        expect(wrapper.find("#my-TextBoxGroup-id")).toHaveLength(1);
+    });
+
+    it("Should pass down the name to the TextBoxGroup component", () => {
+        wrapper.setProps({ name: "my-TextBoxGroup-name" });
+        expect(wrapper.find("input").getElement().props.name).toEqual("my-TextBoxGroup-name");
+    });
+
+    it("Should pass down extra optional attributes to the component", () => {
+        wrapper.setProps({ pattern: "my-pattern", minLength: 2, maxLength: 4, required: true });
+        const componentProps = wrapper.find("input").getElement().props;
+        expect(componentProps.pattern).toEqual("my-pattern");
+        expect(componentProps.minLength).toEqual(2);
+        expect(componentProps.maxLength).toEqual(4);
+        expect(componentProps.required).toEqual(true);
+    });
+
     it("Should trigger onChange callback when change to input element is detected", () => {
         wrapper.find("input").simulate("change", { target: { value: "test" } });
         expect(onChange).toBeCalledWith({ target: { value: "test" } });
@@ -82,11 +101,10 @@ describe("Component: TextBoxGroup", () => {
         expect(wrapper.find("input").prop("readOnly")).toEqual(true);
     });
 
-    it("Should allow passing type, placeholder, and max to the input field", () => {
-        wrapper.setProps({ type: "password", placeHolder: "myPlaceholder", max: 5 });
+    it("Should allow passing type and placeholder to the input field", () => {
+        wrapper.setProps({ type: "password", placeHolder: "myPlaceholder" });
         expect(wrapper.find("input").prop("type")).toEqual("password");
         expect(wrapper.find("input").prop("placeholder")).toEqual("myPlaceholder");
-        expect(wrapper.find("input").prop("maxLength")).toEqual(5);
     });
 
     describe("Test left append", () => {
