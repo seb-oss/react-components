@@ -1,34 +1,38 @@
 import * as React from "react";
-import { Modal } from "../../../src/Modal/Modal";
 import { Button } from "../../../src/Button/Button";
+import { Modal, ModalProps } from "../../../src/Modal/Modal";
+const docMD: string = require("../../../src/Modal/readme.md");
 import { getParameterByName } from "../../utils/queryString";
+import { RouteComponentProps } from "react-router";
 const Highlight = (require("react-highlight")).default;
-const docMD = require("../../../src/Modal/readme.md");
 
-export default class ModalPage extends React.Component<any, any>  {
+class ModalPage extends React.Component<RouteComponentProps, ModalProps>  {
+    initialState: ModalProps = {
+        toggle: false,
+        fullscreen: false,
+        position: null,
+        disableBackdropDismiss: false
+    };
+
     constructor(props: any) {
         super(props);
-        this.state = {
-            dialogue: false,
-            fullscreen: false,
-            position: "",
-            disableBackdropDismiss: false
-        };
+        this.state = { ...this.initialState };
+        this.toggleModal = this.toggleModal.bind(this);
     }
 
-    closeModal(): void {
-        this.setState({ dialogue: false });
-        this.resetModal();
-    }
-
-    resetModal(): void {
-        this.setState({ fullscreen: false, position: "", disableBackdropDismiss: false });
+    toggleModal(options?: Partial<ModalProps>): void {
+        let props: ModalProps = { ...this.initialState, toggle: !this.state.toggle };
+        if (options) {
+            props = { ...props, ...options };
+        }
+        this.setState({ ...props });
     }
 
     render() {
-        const mode = getParameterByName(this.props.location.search, "mode");
+        const mode: string = getParameterByName(this.props.location.search, "mode");
+        const brief: string = mode && mode.toLowerCase() === "dl" ? " brief" : "";
         return (
-            <div className={"route-template " + ((mode === "dl" || mode === "DL") ? "brief" : "")}>
+            <div className={"route-template" + brief}>
                 <div className="info-holder">
 
                     <div className="info">
@@ -41,45 +45,42 @@ export default class ModalPage extends React.Component<any, any>  {
                         <h2>Output</h2>
                         <p>Here are sample outputs</p>
                         <div className="result">
-                            <p>Modal with Backdrop</p>
+                            <p>Modal</p>
                             <Button
                                 label="Trigger Modal"
-                                onClick={() => { this.setState({ dialogue: true }); }}
+                                onClick={this.toggleModal}
                             />
                             <p>Modal without backdrop dismiss</p>
                             <Button
                                 label="No backdrop dismiss"
-                                onClick={() => { this.setState({ dialogue: true, disableBackdropDismiss: true }); }}
+                                onClick={() => { this.toggleModal({ disableBackdropDismiss: true }); }}
                             />
                             <p>Aside Modal</p>
                             <div className="d-flex">
                                 <Button
                                     className="mr-5"
-                                    label="Open aside"
-                                    onClick={() => { this.setState({ dialogue: true, position: "right" }); }}
+                                    label="Open aside left"
+                                    onClick={() => { this.toggleModal({ position: "left" }); }}
                                 />
                                 <Button
-                                    label="Open aside left"
-                                    onClick={() => { this.setState({ dialogue: true, position: "left" }); }}
+                                    label="Open aside right"
+                                    onClick={() => { this.toggleModal({ position: "right" }); }}
                                 />
                             </div>
                             <p>Fullscreen modal</p>
                             <Button
                                 label="Open fullscreen modal"
-                                onClick={() => { this.setState({ dialogue: true, fullscreen: true }); }}
+                                onClick={() => { this.toggleModal({ fullscreen: true }); }}
                             />
                             <Modal
-                                toggle={this.state.dialogue}
+                                toggle={this.state.toggle}
                                 fullscreen={this.state.fullscreen}
                                 disableBackdropDismiss={this.state.disableBackdropDismiss}
                                 position={this.state.position}
-                                onDismiss={() => this.closeModal()}
+                                onDismiss={this.toggleModal}
                                 header={<h3>Header</h3>}
-                                body={<p>this is the body</p>}
-                                footer={<Button
-                                    label="Close Modal"
-                                    onClick={() => this.closeModal()}
-                                />}
+                                body={<p>This is the body</p>}
+                                footer={<Button label="Close Modal" onClick={this.toggleModal} />}
                             />
                         </div>
                     </div>
@@ -90,3 +91,5 @@ export default class ModalPage extends React.Component<any, any>  {
         );
     }
 }
+
+export default ModalPage;

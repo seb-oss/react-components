@@ -9,7 +9,7 @@
 const specific = process.env.npm_config_comp;
 
 module.exports = {
-    setupTestFrameworkScriptFile: "<rootDir>/setupTests.js",
+    setupFilesAfterEnv: ["<rootDir>/setupTests.js"],
     testEnvironment: "jsdom",
     testMatch: [
         `**/${specific || "*"}.test.(ts|tsx|js|jsx)`,

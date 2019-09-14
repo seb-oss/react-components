@@ -1,71 +1,61 @@
 import * as React from "react";
-import "./modal-style.scss";
+import "./modal.scss";
+
+export type ModalPositionProp = "left" | "right";
 
 export interface ModalProps {
     toggle: boolean;
     id?: string;
     fullscreen?: boolean;
-    position?: "left" | "right";
+    position?: ModalPositionProp;
     className?: string;
     disableBackdropDismiss?: boolean;
     ariaLabel?: string;
     ariaDescribedby?: string;
-    onDismiss?: () => void;
+    onDismiss: () => void;
     header?: React.ReactNode;
     body?: React.ReactNode;
     footer?: React.ReactNode;
 }
 
 export const Modal: React.FunctionComponent<ModalProps> = (props: ModalProps): React.ReactElement<void> => {
-
     /**
-     * set modal class names
-     * @returns string of concatenated class names
-     */
-    function setModalClasses(): string {
-        const classes: { [key: string]: boolean } = {
-            "show": props.toggle,
-            "fade": !props.toggle,
-            "modal-aside": !!props.position,
-            "modal-aside-left": props.position === "left",
-            "modal-aside-right": props.position === "right",
-            "modal-fullscreen": props.fullscreen,
-            [props.className]: !!props.className
-        };
-        return Object.keys(classes).filter((key: string) => classes[key]).join(" ");
-    }
-
-    /**
-     * emit dismissModal event when backdrop is clicked
+     * Dismisses the modal
      * @param {React.MouseEvent} event clicked element
      */
-    function closeModal(event: React.MouseEvent): void {
+    function onDismiss(event: React.MouseEvent<HTMLDivElement>): void {
+        event && event.stopPropagation();
         if (!props.disableBackdropDismiss) {
-            const target: HTMLElement = event.target as HTMLElement;
-            if (event && event.target && target.classList && target.classList.length) {
-                const classList: DOMTokenList = target.classList;
-                if (classList.contains("modal")) {
-                    props.onDismiss && props.onDismiss();
-                }
-            }
+            props.onDismiss ? props.onDismiss() : console.warn("onDismiss is compulsory in Modal!");
         }
     }
 
+    let classNames: string = "modal";
+    classNames += props.toggle ? " show" : " fade";
+    classNames += !!props.position ? (" modal-aside modal-aside-" + (props.position === "left" ? "left" : "right")) : "";
+    classNames += props.fullscreen ? " modal-fullscreen" : "";
+    classNames += props.className ? " " + props.className : "";
+
     return (
         <div
-            className={"modal-backdrop" + (props.toggle ? " show" : " fade")}
-            onClick={(event: React.MouseEvent) => { closeModal(event); }}
+            role="dialog"
+            tabIndex={-1}
+            className={classNames}
+            id={props.id}
+            /**
+             * NOTE: Accessibility Feature
+             * @description Helps the user to use `tab` button to focus into elements inside the modal
+             */
+            ref={(el: HTMLDivElement) => { props.toggle && el && el.focus(); }}
         >
-            <div role="dialog" tabIndex={-1} className={"modal " + setModalClasses()}>
-                <div role="document" className="modal-dialog" tabIndex={-1}>
-                    <div className="modal-content">
-                        {props.header && <div className="modal-header">{props.header}</div>}
-                        {props.body && <div className="modal-body">{props.body}</div>}
-                        {props.footer && <div className="modal-footer">{props.footer}</div>}
-                    </div>
+            <div className="modal-backdrop" onClick={onDismiss} />
+            <div role="document" className="modal-dialog" tabIndex={-1}>
+                <div className="modal-content">
+                    {props.header && <div className="modal-header">{props.header}</div>}
+                    {props.body && <div className="modal-body">{props.body}</div>}
+                    {props.footer && <div className="modal-footer">{props.footer}</div>}
                 </div>
             </div>
-
         </div>
     );
 };

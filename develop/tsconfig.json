@@ -1,6 +1,7 @@
 {
     "compilerOptions": {
         "outDir": "./docs",
+        "baseUrl": ".",
         "module": "esnext",
         "moduleResolution": "node",
         "target": "es5",
@@ -20,14 +21,6 @@
         "strictNullChecks": false
     },
     "exclude": [
-        "node_modules",
-        "webpack",
-        "dist",
-        "develop",
-        "coverage",
         "**/*.test.tsx"
-    ],
-    "types": [
-        "typePatches"
     ]
 }
