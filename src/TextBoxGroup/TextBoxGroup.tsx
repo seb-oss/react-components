@@ -4,6 +4,11 @@ import "./text-box-group-style.scss";
 export interface TextBoxGroupProps {
     value: string | number;
     name: string;
+    id?: string;
+    pattern?: string;
+    required?: boolean;
+    minLength?: number;
+    maxLength?: number;
     onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
     onKeyDown?: (event: React.KeyboardEvent<HTMLInputElement>) => void;
     onKeyUp?: (event: React.KeyboardEvent<HTMLInputElement>) => void;
@@ -18,7 +23,6 @@ export interface TextBoxGroupProps {
     focus?: boolean;
     readonly?: boolean;
     disabled?: boolean;
-    max?: number;
     autoComplete?: boolean;
 
     leftText?: string;
@@ -51,8 +55,13 @@ export const TextBoxGroup: React.FunctionComponent<TextBoxGroupProps> = (props: 
                         </div>
                     }
                     <input
+                        id={props.id}
                         name={props.name}
                         type={props.type}
+                        pattern={props.pattern}
+                        required={props.required}
+                        minLength={props.minLength}
+                        maxLength={props.maxLength}
                         value={props.value}
                         onChange={props.onChange}
                         placeholder={props.placeHolder}
@@ -61,7 +70,6 @@ export const TextBoxGroup: React.FunctionComponent<TextBoxGroupProps> = (props: 
                         autoComplete={props.autoComplete ? "on" : "off"}
                         readOnly={props.readonly}
                         disabled={props.disabled}
-                        maxLength={props.max}
                         onKeyDown={props.onKeyDown}
                         onKeyUp={props.onKeyUp}
                         onKeyPress={props.onKeyPress}

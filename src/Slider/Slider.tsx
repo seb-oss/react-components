@@ -12,8 +12,9 @@ export interface RangeSliderLabel {
 export interface SliderProps {
     value: number;
     name: string;
-    label?: string;
     onChange: (event: any) => void;
+    id?: string;
+    label?: string;
     min?: number;
     max?: number;
     step?: number;
@@ -58,6 +59,7 @@ export const Slider: React.FunctionComponent<SliderProps> = (props: SliderProps)
             <div className={"input-field" + (props.labels && props.labels.length ? " has-labels" : "")}>
                 <input
                     type="range"
+                    id={props.id}
                     name={props.name}
                     min={min}
                     max={max}

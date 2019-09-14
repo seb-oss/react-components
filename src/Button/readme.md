@@ -32,6 +32,8 @@ These are the current available properties:
 | ---------- | ---------------------- | ---------------------------------------------------------------- |
 | label      | `string`               | button name                                                      |
 | onClick    | `() => void`           | click action                                                     |
+| name?      | `string`               | name property                                                    |
+| id?        | `string`               | id property                                                      |
 | className? | `string`               | custom class                                                     |
 | disabled?  | `boolean`              | disabled status                                                  |
 | theme?     | `string`               | Based on SEB predefined colors: (default: `primary`)<sup>1</sup> |
