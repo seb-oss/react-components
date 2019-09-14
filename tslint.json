@@ -67,6 +67,7 @@
         "no-submodule-imports": [
             true,
             "jsdom-global/register"
-        ]
+        ],
+        "no-string-literal": false
     }
 }

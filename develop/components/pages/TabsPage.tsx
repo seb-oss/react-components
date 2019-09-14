@@ -5,21 +5,26 @@ const Highlight = (require("react-highlight")).default;
 const docMD = require("../../../src/Tabs/readme.md");
 
 interface TabsPageState {
-    tabsList: Array<TabsListItem>;
     activeTab: number;
 }
 
 export default class TabsPage extends React.Component<any, TabsPageState>  {
+    tabList: Array<TabsListItem> = [
+        { text: "First" },
+        { text: "Second" },
+        { text: "Third" },
+        { text: "Fourth", disabled: true },
+    ];
+    tabContent: Array<string> = [
+        "First tab content",
+        "Second tab content",
+        "Third tab content",
+        "Fourth tab content"
+    ];
     constructor(props: any) {
         super(props);
 
         this.state = {
-            tabsList: [
-                { text: "First" },
-                { text: "Second" },
-                { text: "Third" },
-                { text: "Fourth", disabled: true },
-            ],
             activeTab: 0
         };
         this.onClick = this.onClick.bind(this);
@@ -46,10 +51,15 @@ export default class TabsPage extends React.Component<any, TabsPageState>  {
                         <p>Here are sample outputs</p>
                         <div className="result wide">
                             <Tabs
-                                list={this.state.tabsList}
+                                list={this.tabList}
                                 activeTab={this.state.activeTab}
                                 onClick={this.onClick}
                             />
+                            <div className="content">
+                                {this.state.activeTab >= 0 &&
+                                    <p>{this.tabContent[this.state.activeTab]}</p>
+                                }
+                            </div>
                         </div>
                     </div>
 

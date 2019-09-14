@@ -49,6 +49,7 @@ export default class TitleBar extends React.Component<TitleBarProps, TitleBarSta
      * @param {React.ChangeEvent<HTMLInputElement>} event Change event
      */
     searchTermChange(event: React.ChangeEvent<HTMLInputElement>) {
+        event.preventDefault();
         this.setState({ searchTerm: event.target.value.toLowerCase(), highlighted: 0 }, () => this.searchComponents());
     }
 
@@ -109,18 +110,33 @@ export default class TitleBar extends React.Component<TitleBarProps, TitleBarSta
         this.setState({ searchInFocus: false, searchList: [] });
     }
 
+    /**
+     * Checks whether the input key is an `Escape` key
+     * @param {React.KeyboardEvent<HTMLInputElement>} event The keyboard event
+     * @returns {boolean} True if it is `Escape` key
+     */
+    isEscapeKey(event: React.KeyboardEvent<HTMLInputElement>): boolean {
+        if (event.key === "Escape" || event.key === "Esc") {
+            return true;
+        } else if (event.keyCode === 27) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     componentDidMount() {
         this.setState({ componentsList: [].concat(...[sidebarData.form, sidebarData.ui, sidebarData.other]) }, () => {
             console.log("Number of Components: ", this.state.componentsList.length);
         });
 
-        document.addEventListener("keypress", (e: KeyboardEvent) => {
+        const onKeyPress: EventListener = (e: KeyboardEvent) => {
             if (e.ctrlKey && e.shiftKey && (e.key.toLowerCase() === "f" || e.keyCode === 6)) {
                 this.searchRef.current.focus();
             }
-        });
+        };
 
-        document.addEventListener("keyup", (e: KeyboardEvent) => {
+        const onKeyUp: EventListener = (e: KeyboardEvent) => {
             if (document.activeElement === this.searchRef.current) {
                 if (e.key === "Escape" || e.keyCode === 27) {
                     if (document.activeElement === this.searchRef.current) {
@@ -140,7 +156,10 @@ export default class TitleBar extends React.Component<TitleBarProps, TitleBarSta
                     }
                 }
             }
-        });
+        };
+
+        document.addEventListener("keyup", onKeyUp);
+        document.addEventListener("keypress", onKeyPress);
     }
 
     render() {
@@ -159,6 +178,7 @@ export default class TitleBar extends React.Component<TitleBarProps, TitleBarSta
                             value={this.state.searchTerm}
                             className="text-input"
                             onChange={this.searchTermChange}
+                            onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => (e.key === "Escape") && e.preventDefault()}
                             reference={this.searchRef}
                             rightIcon={<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M508.5 481.6l-129-129c-2.3-2.3-5.3-3.5-8.5-3.5h-10.3C395 312 416 262.5 416 208 416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c54.5 0 104-21 141.1-55.2V371c0 3.2 1.3 6.2 3.5 8.5l129 129c4.7 4.7 12.3 4.7 17 0l9.9-9.9c4.7-4.7 4.7-12.3 0-17zM208 384c-97.3 0-176-78.7-176-176S110.7 32 208 32s176 78.7 176 176-78.7 176-176 176z" /></svg>}
                         />
