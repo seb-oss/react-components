@@ -6,8 +6,8 @@ import { getParameterByName } from "../../utils/queryString";
 import { RouteComponentProps } from "react-router";
 const Highlight = (require("react-highlight")).default;
 
-class ModalPage extends React.Component<RouteComponentProps, ModalProps>  {
-    initialState: ModalProps = {
+class ModalPage extends React.Component<RouteComponentProps, Partial<ModalProps>>  {
+    initialState: Partial<ModalProps> = {
         toggle: false,
         fullscreen: false,
         position: null,
@@ -21,7 +21,7 @@ class ModalPage extends React.Component<RouteComponentProps, ModalProps>  {
     }
 
     toggleModal(options?: Partial<ModalProps>): void {
-        let props: ModalProps = { ...this.initialState, toggle: !this.state.toggle };
+        let props: Partial<ModalProps> = { ...this.initialState, toggle: !this.state.toggle };
         if (options) {
             props = { ...props, ...options };
         }
@@ -81,6 +81,8 @@ class ModalPage extends React.Component<RouteComponentProps, ModalProps>  {
                                 header={<h3>Header</h3>}
                                 body={<p>This is the body</p>}
                                 footer={<Button label="Close Modal" onClick={this.toggleModal} />}
+                                ariaLabel="My Label"
+                                ariaDescribedby="My Description"
                             />
                         </div>
                     </div>

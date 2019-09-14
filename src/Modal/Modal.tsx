@@ -30,6 +30,16 @@ export const Modal: React.FunctionComponent<ModalProps> = (props: ModalProps): R
         }
     }
 
+    /**
+     * NOTE: Accessibility Feature
+     * @description Helps the user to use `tab` button to focus into elements inside the modal
+     */
+    function focusWhenToggled(el: HTMLDivElement): void {
+        if (props.toggle && el) {
+            el.focus();
+        }
+    }
+
     let classNames: string = "modal";
     classNames += props.toggle ? " show" : " fade";
     classNames += !!props.position ? (" modal-aside modal-aside-" + (props.position === "left" ? "left" : "right")) : "";
@@ -42,11 +52,9 @@ export const Modal: React.FunctionComponent<ModalProps> = (props: ModalProps): R
             tabIndex={-1}
             className={classNames}
             id={props.id}
-            /**
-             * NOTE: Accessibility Feature
-             * @description Helps the user to use `tab` button to focus into elements inside the modal
-             */
-            ref={(el: HTMLDivElement) => { props.toggle && el && el.focus(); }}
+            ref={focusWhenToggled}
+            aria-label={props.ariaLabel}
+            aria-describedby={props.ariaDescribedby}
         >
             <div className="modal-backdrop" onClick={onDismiss} />
             <div role="document" className="modal-dialog" tabIndex={-1}>
