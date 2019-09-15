@@ -40,7 +40,7 @@ export function whichBrowser(): BrowserType {
     if (isFirefox) { return "Firefox"; }
 
     // Safari 3.0+ "[object HTMLElementConstructor]"
-    const isSafari: boolean = /constructor/i.test(window["HTMLElement"])
+    const isSafari: boolean = /constructor/i.test(window["HTMLElement"].toString())
         || !!window["safari"]
         || (!!window["safari"] && window["safari"].pushNotification);
     if (isSafari) { return "Safari"; }

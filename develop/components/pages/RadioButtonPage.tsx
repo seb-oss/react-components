@@ -30,15 +30,16 @@ export default class RadioButtonPage extends React.Component<any, any>  {
                         <p>Here are sample outputs, here is selected value: {this.state.radioListSelected}</p>
                         <div className="result">
                             <RadioButton
-                                group="radioGroupName"
+                                name="radioName"
                                 radioValue="first"
+                                id="my-id"
                                 label="Single radio - first value"
                                 value={this.state.radioListSelected}
                                 onChange={(value) => { this.setState({ radioListSelected: value }); }}
                             />
 
                             <RadioButton
-                                group="radioGroupName"
+                                name="radioName"
                                 radioValue="second"
                                 label="Single radio - second value"
                                 value={this.state.radioListSelected}

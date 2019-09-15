@@ -14,9 +14,10 @@ export interface AccrodionListItem {
     text?: AccordionText | Array<AccordionText>;
 }
 
-interface AccordionProps {
+export interface AccordionProps {
     list: Array<AccrodionListItem>;
     className?: string;
+    id?: string;
 }
 
 interface AccordionState {
@@ -41,18 +42,18 @@ export class Accordion extends React.Component<AccordionProps, AccordionState> {
     }
 
     /**
-     *
+     * Activates the accordion when `space` or `enter` is registered
      * @param event: Keyboard event
      */
     onKeyDown(index: number, e: React.KeyboardEvent<HTMLDivElement>): void {
-        if (e.key.toLowerCase() === " ") {
+        if (e.key.toLowerCase() === " " || e.key.toLowerCase() === "space" || e.key.toLowerCase() === "enter") {
             this.toggle(index);
         }
     }
 
     render() {
         return (
-            <div className={"custom-accordion" + (this.props.className ? ` ${this.props.className}` : "")}>
+            <div className={"custom-accordion" + (this.props.className ? ` ${this.props.className}` : "")} id={this.props.id}>
                 {this.props.list && this.props.list.map((item: AccrodionListItem, index: number) => {
                     const uniqueIdentifier = item.category.split(" ")[0].concat("-") + Math.floor(Math.random() * 100) + (new Date()).getTime();
                     return (

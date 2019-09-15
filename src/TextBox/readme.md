@@ -30,11 +30,16 @@ This React component is based on SEB Bootstrap style. Supports customization and
 ## Properties
 These are the current available properties:
 
-| Property      | Type                                                     | Description                                      |
+| Property      | Type                                                     | Description                                     |
 | ------------- | -------------------------------------------------------- | ----------------------------------------------- |
 | value         | `string`                                                 | Value string                                    |
 | name          | `string`                                                 | Name string                                     |
 | onChange      | `(event: React.ChangeEvent<HTMLInputElement>) => void`   | On `'change'` event                             |
+| id?           | `string`                                                 | Id string                                       |
+| pattern?      | `string`                                                 | Pattern string                                  |
+| required?     | `boolean`                                                | Required atribute                               |
+| minLength?    | `number`                                                 | Input min length                                |
+| maxLength?    | `number`                                                 | Input max length                                |
 | onKeyDown?    | `(event: React.KeyboardEvent<HTMLInputElement>) => void` | On `'keydown'` event                            |
 | onKeyUp?      | `(event: React.KeyboardEvent<HTMLInputElement>) => void` | On `'keyup'` event                              |
 | onKeyPress?   | `(event: React.KeyboardEvent<HTMLInputElement>) => void` | On `'keypress'` event                           |
@@ -49,5 +54,4 @@ These are the current available properties:
 | focus?        | `boolean`                                                | Enable autofocus. (default: `false`)            |
 | readonly?     | `boolean`                                                | Make input element readonly. (default: `false`) |
 | autoComplete? | `boolean`                                                | Enable autocomplete. (default: `false`)         |
-| max?          | `number`                                                 | Input max length                                |
 | reference?    | `React.RefObject<HTMLInputElement>`                      | React Ref obj                                   |

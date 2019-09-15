@@ -1,6 +1,8 @@
 import * as React from "react";
-import { shallow } from "enzyme";
-import { Accordion, AccrodionListItem } from "./Accordion";
+import { shallow, ShallowWrapper } from "enzyme";
+import { Accordion, AccrodionListItem, AccordionProps } from "./Accordion";
+
+type keyboardTestUnit = { key: string, registeredAt: number, expectedValue: boolean };
 
 describe("Component: Accordion", () => {
 
@@ -15,9 +17,12 @@ describe("Component: Accordion", () => {
         expect(wrapper).toBeDefined();
     });
 
-    it("Should render custom className", () => {
-        const wrapper = shallow(<Accordion list={accordionList} className="my-accordion" />);
-        expect(wrapper.find(".my-accordion").length).toEqual(1);
+    it("Should render custom className and id", () => {
+        const className: string = "myAccordionClass";
+        const id: string = "myAccordionId";
+        const wrapper = shallow(<Accordion list={accordionList} className={className} id={id} />);
+        expect(wrapper.hasClass(className)).toBeTruthy();
+        expect(wrapper.find(`#${id}`).length).toBeGreaterThan(0);
     });
 
     it("Should render subheader is included in props", () => {
@@ -50,10 +55,24 @@ describe("Component: Accordion", () => {
         expect(wrapper.state("active")).toBe(1);
     });
 
-    it("Should be able to toggle accordion using space-ctrl", () => {
-        const wrapper = shallow(<Accordion list={accordionList} />);
-        wrapper.find(".accordion-item").last().simulate("keydown", { key: " " });
+    describe("Should be able to toggle accordion using `space` or `enter`", () => {
+        let wrapper: ShallowWrapper<AccordionProps>;
+        const testList: Array<keyboardTestUnit> = [
+            { key: " ", registeredAt: 1, expectedValue: true },
+            { key: "space", registeredAt: 1, expectedValue: true },
+            { key: "enter", registeredAt: 1, expectedValue: true },
+            { key: "backspace", registeredAt: 1, expectedValue: false }, // Should not do anything
+        ];
 
-        expect(wrapper.find(".accordion-item").last().hasClass("active"));
+        beforeEach(() => {
+            wrapper = shallow(<Accordion list={accordionList} />);
+        });
+
+        testList.map((item: keyboardTestUnit) => {
+            it(`Testing key [${item.key}]`, () => {
+                wrapper.find(".accordion-item").at(1).simulate("keydown", { key: item.key });
+                expect(wrapper.find(".accordion-item").at(1).hasClass("active"));
+            });
+        });
     });
 });

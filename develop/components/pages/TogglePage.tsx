@@ -30,6 +30,7 @@ export default class TogglePage extends React.Component<any, any>  {
                         <div className="result">
                             <Toggle
                                 name="myToggle"
+                                id="myToggleId"
                                 label="Field label"
                                 value={this.state.toggleValue}
                                 onChange={(event) => { this.setState({ toggleValue: event.target.checked }); }}

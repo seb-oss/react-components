@@ -24,10 +24,7 @@
             true,
             "double"
         ],
-        "no-implicit-dependencies": [
-            true,
-            "dev"
-        ],
+        "no-implicit-dependencies": false,
         "no-unused-expression": [
             true,
             "allow-fast-null-checks"
@@ -64,10 +61,8 @@
             "allow-declarations",
             "allow-named-functions"
         ],
-        "no-submodule-imports": [
-            true,
-            "jsdom-global/register"
-        ],
-        "no-string-literal": false
+        "no-submodule-imports": false,
+        "no-string-literal": false,
+        "interface-over-type-literal": false
     }
 }
