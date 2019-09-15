@@ -20,7 +20,7 @@ class ModalPage extends React.Component<RouteComponentProps, Partial<ModalProps>
         this.toggleModal = this.toggleModal.bind(this);
     }
 
-    toggleModal(options?: Partial<ModalProps>): void {
+    toggleModal(e?: React.MouseEvent<HTMLButtonElement>, options?: Partial<ModalProps>): void {
         let props: Partial<ModalProps> = { ...this.initialState, toggle: !this.state.toggle };
         if (options) {
             props = { ...props, ...options };
@@ -53,24 +53,24 @@ class ModalPage extends React.Component<RouteComponentProps, Partial<ModalProps>
                             <p>Modal without backdrop dismiss</p>
                             <Button
                                 label="No backdrop dismiss"
-                                onClick={() => { this.toggleModal({ disableBackdropDismiss: true }); }}
+                                onClick={(e) => { this.toggleModal(e, { disableBackdropDismiss: true }); }}
                             />
                             <p>Aside Modal</p>
                             <div className="d-flex">
                                 <Button
                                     className="mr-5"
                                     label="Open aside left"
-                                    onClick={() => { this.toggleModal({ position: "left" }); }}
+                                    onClick={(e) => { this.toggleModal(e, { position: "left" }); }}
                                 />
                                 <Button
                                     label="Open aside right"
-                                    onClick={() => { this.toggleModal({ position: "right" }); }}
+                                    onClick={(e) => { this.toggleModal(e, { position: "right" }); }}
                                 />
                             </div>
                             <p>Fullscreen modal</p>
                             <Button
                                 label="Open fullscreen modal"
-                                onClick={() => { this.toggleModal({ fullscreen: true }); }}
+                                onClick={(e) => { this.toggleModal(e, { fullscreen: true }); }}
                             />
                             <Modal
                                 toggle={this.state.toggle}

@@ -1,23 +1,37 @@
 import * as React from "react";
 import { CheckBox } from "../../../src/CheckBox/CheckBox";
-import { getParameterByName } from "../../utils/queryString";
+import { AppSharedProps } from "typings/generic.type";
 const Highlight = (require("react-highlight")).default;
-const docMD = require("../../../src/CheckBox/readme.md");
+const docMD: string = require("../../../src/CheckBox/readme.md");
 
-export default class CheckBoxPage extends React.Component<any, any>  {
+interface CheckBoxPageState {
+    [key: string]: any;
+    checkbox1: boolean;
+    checkbox2: boolean;
+    checkbox3: boolean;
+}
+
+class CheckBoxPage extends React.Component<AppSharedProps, CheckBoxPageState>  {
+
     constructor(props: any) {
         super(props);
+
         this.state = {
             checkbox1: true,
             checkbox2: false,
             checkbox3: true
         };
+
+        this.handleCheckboxChange = this.handleCheckboxChange.bind(this);
+    }
+
+    handleCheckboxChange(event: React.ChangeEvent<HTMLInputElement>): void {
+        this.setState({ [event.currentTarget.name]: event.currentTarget.checked });
     }
 
     render() {
-        const mode = getParameterByName(this.props.location.search, "mode");
         return (
-            <div className={"route-template " + ((mode === "dl" || mode === "DL") ? "brief" : "")}>
+            <div className={"route-template" + this.props.brief}>
                 <div className="info-holder">
 
                     <div className="info">
@@ -31,23 +45,23 @@ export default class CheckBoxPage extends React.Component<any, any>  {
                         <p>Here are few checkboxes with different configurations:</p>
                         <div className="result">
                             <CheckBox
-                                name="checkbox-1"
+                                name="checkbox1"
                                 label="Checkbox 1"
                                 checked={this.state.checkbox1}
-                                onChange={(event) => { this.setState({ checkbox1: event.target.checked }); }}
+                                onChange={this.handleCheckboxChange}
                             />
                             <CheckBox
-                                name="checkbox-2"
+                                name="checkbox2"
                                 label="Checkbox 2"
                                 checked={this.state.checkbox2}
-                                onChange={(event) => { this.setState({ checkbox2: event.target.checked }); }}
+                                onChange={this.handleCheckboxChange}
                                 description="Some description"
                             />
                             <CheckBox
-                                name="checkbox-3"
+                                name="checkbox3"
                                 label="Checkbox 3"
                                 checked={this.state.checkbox3}
-                                onChange={(event) => { this.setState({ checkbox3: event.target.checked }); }}
+                                onChange={this.handleCheckboxChange}
                                 disabled={true}
                                 description="Disabled"
                             />
@@ -60,3 +74,5 @@ export default class CheckBoxPage extends React.Component<any, any>  {
         );
     }
 }
+
+export default CheckBoxPage;

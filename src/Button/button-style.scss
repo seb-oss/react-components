@@ -1,18 +1,24 @@
 $default: 14px;
-$blue-dark:#0092E1;
-$blue-darker:#007AC7;
+$blue-dark: #0092e1;
+$blue-darker: #007ac7;
 $blue-darkest: #05578c;
 $white: #fff;
 $transparent: transparent;
-$icon-dimention: 18px;
+$icon-dimention-sm: 15px;
+$icon-dimention-md: 18px;
+$icon-dimention-lg: 20px;
+$black: #000;
+$gray-500: #adadad;
+$gray-800: #343434;
 button.btn {
+    transition: color 200ms linear, background 200ms linear;
     .button-content {
         padding-top: 0;
         padding-bottom: 0;
         display: flex;
         align-items: center;
         justify-content: center;
-        >.button-label {
+        > .button-label {
             line-height: 1px;
             height: 24px;
             display: inline-flex;
@@ -20,17 +26,34 @@ button.btn {
             justify-content: center;
             flex-grow: 1;
         }
-        >.svg-holder {
-            display: inline-block;
-            width: $icon-dimention;
-            height: $icon-dimention;
-            vertical-align: top;
+        > .svg-holder {
+            display: inline-flex;
+            width: $icon-dimention-md;
+            height: $icon-dimention-md;
+            align-items: center;
             overflow: hidden;
             line-height: 0;
             flex-shrink: 1;
-            >svg {
+            > svg {
                 width: 100%;
                 height: 100%;
+                transition: fill 200ms linear;
+            }
+            > .loaderWrapper {
+                position: relative;
+                width: 100%;
+                height: 100%;
+                > .loader-holder {
+                    position: relative;
+                    width: 100%;
+                    height: 100%;
+                    > .loader {
+                        position: relative;
+                        width: 100%;
+                        height: 100%;
+                        border-width: 3px;
+                    }
+                }
             }
         }
     }
@@ -38,54 +61,156 @@ button.btn {
         min-width: 120px;
         height: 42px;
     }
+    &.btn-sm {
+        min-width: 100px;
+        > .button-content {
+            > .svg-holder {
+                width: $icon-dimention-sm;
+                height: $icon-dimention-sm;
+            }
+        }
+    }
+    &.btn-lg {
+        min-width: 140px;
+        > .button-content {
+            > .svg-holder {
+                width: $icon-dimention-lg;
+                height: $icon-dimention-lg;
+            }
+        }
+    }
     &.btn-anchor {
-        background: $transparent;
-        border: 0;
-        color: $blue-darker;
-        &:hover {
+        &:not(:disabled) {
             background: $transparent;
-            color: $blue-dark;
-            text-decoration: underline;
-        }
-        &:active {
+            border: 0;
             color: $blue-darker;
+
+            > .button-content > .svg-holder > svg {
+                fill: $blue-darker;
+            }
+
+            &:hover {
+                background: $transparent;
+                color: $blue-dark;
+                text-decoration: underline;
+                > .button-content > .svg-holder > svg {
+                    fill: $blue-dark;
+                }
+            }
+
+            &:active {
+                color: $blue-darker;
+            }
+
+            &:active,
+            &:focus {
+                background: $transparent;
+                text-decoration: underline;
+            }
         }
-        &:active,
-        &:focus {
-            background: $transparent;
-            text-decoration: underline;
+        &:disabled {
+            > .button-content > .svg-holder > svg {
+                fill: $gray-500;
+            }
         }
     }
     &.btn-primary {
-        >.button-content {
-            >.svg-holder {
-                >svg {
+        > .button-content > .svg-holder > svg {
+            fill: $white;
+        }
+    }
+    &.btn-ghost-light {
+        background-color: transparent;
+        &:not(:disabled) {
+            color: $white;
+            border-color: $white;
+            > .button-content > .svg-holder > svg {
+                fill: $white;
+            }
+            &:hover,
+            &:active {
+                color: $gray-800;
+                background-color: $white;
+                > .button-content > .svg-holder > svg {
+                    fill: $gray-800;
+                }
+            }
+        }
+        &:disabled {
+            border-color: rgba(255, 255, 255, 0.35);
+            color: rgba(255, 255, 255, 0.35);
+            > .button-content > .svg-holder > svg {
+                fill: rgba(255, 255, 255, 0.35);
+            }
+        }
+    }
+    &.btn-ghost-dark {
+        background-color: transparent;
+        &:not(:disabled) {
+            color: $black;
+            border-color: $black;
+            > .button-content > .svg-holder > svg {
+                fill: $black;
+            }
+            &:hover,
+            &:active {
+                color: $white;
+                background-color: $gray-800;
+                > .button-content > .svg-holder > svg {
                     fill: $white;
                 }
             }
         }
+        &:disabled {
+            border-color: rgba(0, 0, 0, 0.35);
+            color: rgba(0, 0, 0, 0.35);
+            > .button-content > .svg-holder > svg {
+                fill: rgba(0, 0, 0, 0.35);
+            }
+        }
     }
-    &:not(.btn-primary) {
-        >.button-content {
-            >.svg-holder {
-                >svg {
-                    fill: $blue-dark;
+    &.btn-outline-primary,
+    &.btn-secondary {
+        &:not(:disabled) {
+            > .button-content > .svg-holder > svg {
+                fill: $blue-darker;
+            }
+            &:hover {
+                > .button-content > .svg-holder > svg {
+                    fill: $white;
                 }
+            }
+        }
+        &:disabled {
+            > .button-content > .svg-holder > svg {
+                fill: #adadad;
+            }
+        }
+    }
+    &.btn-danger {
+        &:not(:disabled) {
+            > .button-content > .svg-holder > svg {
+                fill: $white;
+            }
+        }
+        &:disabled {
+            > .button-content > .svg-holder > svg {
+                fill: $white;
             }
         }
     }
     &.icon-left {
-        >.button-content {
+        > .button-content {
             -ms-flex-direction: row-reverse;
             flex-direction: row-reverse;
-            >.svg-holder {
+            > .svg-holder {
                 margin-right: 5px;
             }
         }
     }
     &.icon-right {
-        >.button-content {
-            >.svg-holder {
+        > .button-content {
+            > .svg-holder {
                 margin-left: 5px;
             }
         }

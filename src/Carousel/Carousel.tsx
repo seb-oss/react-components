@@ -10,32 +10,31 @@ export interface CarouselItem {
     image?: string;
 }
 
-interface CarouselProps {
+export interface CarouselProps {
     list: Array<CarouselItem>;
     height?: number;
     autoPlay?: boolean;
     autoPlaySpeed?: number;
     backgroundPlacement?: string;
-    carouselChanged?: (index: number) => void;
+    afterChange?: (index: number) => void;
     className?: string;
+    id?: string;
+    infinite?: boolean;
 }
 
 export const Carousel: React.FunctionComponent<CarouselProps> = (props: CarouselProps): React.ReactElement<void> => {
     const settings: Settings = {
-        direction: "horizontal",
-        observer: true,
-        slidesPerView: 1,
-        mousewheel: true,
-        keyboard: true,
-        infinite: false,
-        navigation: true,
-        spaceBetween: 1,
-        grabCursor: true,
+        vertical: false,
+        slidesPerRow: 1,
+        arrows: true,
+        infinite: !!props.infinite,
+        draggable: true,
+        touchMove: true,
         slidesToShow: 1,
         slidesToScroll: 1,
         autoplay: props.autoPlay ? true : false,
         autoplaySpeed: props.autoPlaySpeed ? props.autoPlaySpeed : 3000,
-        afterChange: (index: number): void => { props.carouselChanged && props.carouselChanged(index); }
+        afterChange: props.afterChange
     };
 
     return (
@@ -43,9 +42,13 @@ export const Carousel: React.FunctionComponent<CarouselProps> = (props: Carousel
             {props.list &&
                 props.list.map((item, index) => {
                     return (
-                        <div key={index} className="custom-carousel">
+                        <div
+                            key={index}
+                            className={"custom-carousel" + (props.className ? ` ${props.className}` : "")}
+                            id={props.id}
+                        >
                             <div
-                                className={"carousel-slide" + (props.className ? ` ${props.className}` : "")}
+                                className="carousel-slide"
                                 style={{ height: props.height || 300 }}
                             >
                                 {item.image &&

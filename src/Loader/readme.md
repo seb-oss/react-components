@@ -2,10 +2,11 @@
 title: Loader
 componentid: component-loader
 variantid: default
-guid: 'loader-guid-default-component-react'
+guid: "loader-guid-default-component-react"
 ---
 
 ## Element name
+
 ```javascript
 Name: Loader Component
 Component: "Loader"
@@ -14,19 +15,23 @@ Import: "@sebgroup/react-components/dist/Loader"
 Type: UI Component
 ```
 
-## Element information 
+## Element information
+
 This React component supports customization and configurations. The component name is `Loader` and the selector is `<Loader/>`.
 
 ## Basic use
+
 ```html
-<Loader toggle={true} />
+<Loader toggle="{true}" />
 ```
 
 ## Properties
+
 These are the current available properties:
 
-| Property    | Type      | Description                                            |
-| ----------- | --------- | ----------------------------------------------------- |
-| toggle      | `boolean` | toggle to true or false to show/hide                  |
-| fullscreen? | `boolean` | to show it in fullscreen mode or not. default is true |
-| className?  | `string`  | custom class                                          |
+| Property    | Type      | Description                   |
+| ----------- | --------- | ----------------------------- |
+| toggle      | `boolean` | Toggle                        |
+| fullscreen? | `boolean` | Show the loader in fullscreen |
+| className?  | `string`  | Element class                 |
+| id?         | `string`  | Element id                    |

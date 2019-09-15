@@ -3,7 +3,32 @@
 	"version": "0.0.0-semantically-released",
 	"description": "A set of React components based on SEB design",
 	"license": "Apache-2.0",
-	"author": "Mohsen Asle Zaim",
+	"contributors": [
+		{
+			"name": "Mohsen Asle Zaim",
+			"url": "https://github.com/mohsenZaim"
+		},
+		{
+			"name": "Yousif Al-Raheem",
+			"url": "https://github.com/yousifalraheem"
+		},
+		{
+			"name": "Nuru Salihu",
+			"url": "https://github.com/DanSallau"
+		},
+		{
+			"name": "Omar Boudfoust",
+			"url": "https://github.com/omarVodiaK"
+		},
+		{
+			"name": "Mario Subotic",
+			"url": "https://github.com/mario-subo"
+		},
+		{
+			"name": "Robert Hjalmers",
+			"url": "https://github.com/hjalmers"
+		}
+	],
 	"keywords": [
 		"react",
 		"components"
@@ -58,29 +83,32 @@
 	"devDependencies": {
 		"@commitlint/cli": "^8.1.0",
 		"@commitlint/config-conventional": "^8.1.0",
+		"@types/chart.js": "^2.8.5",
 		"@types/enzyme": "^3.10.3",
 		"@types/jest": "^24.0.18",
 		"@types/node": "^12.7.5",
 		"@types/react": "^16.9.2",
 		"@types/react-dom": "^16.9.0",
+		"@types/react-highlight": "^0.12.1",
 		"@types/react-router": "^5.0.3",
+		"@types/react-slick": "^0.23.4",
 		"@types/systemjs": "^0.20.6",
+		"babel-core": "^6.26.3",
 		"babel-polyfill": "^6.26.0",
 		"canvas": "^2.6.0",
 		"case-sensitive-paths-webpack-plugin": "^2.2.0",
-		"codelyzer": "^5.1.0",
 		"commitizen": "^4.0.3",
 		"copy-webpack-plugin": "^5.0.4",
 		"css-loader": "^3.2.0",
 		"cz-conventional-changelog": "^3.0.2",
 		"enzyme": "^3.10.0",
 		"enzyme-adapter-react-16": "^1.14.0",
+		"fibers": "^4.0.1",
 		"file-loader": "^4.2.0",
 		"html-loader": "^0.5.5",
 		"html-webpack-plugin": "^3.2.0",
 		"husky": "^3.0.5",
 		"jest": "^24.9.0",
-		"jest-babel": "^1.0.1",
 		"jest-enzyme": "^7.1.1",
 		"jsdom": "^15.1.1",
 		"jsdom-global": "^3.0.2",
@@ -91,6 +119,7 @@
 		"raw-loader": "^3.1.0",
 		"react-highlight": "^0.12.0",
 		"react-loadable": "^5.5.0",
+		"sass": "^1.22.12",
 		"sass-loader": "^8.0.0",
 		"semantic-release": "^15.13.24",
 		"style-loader": "^1.0.0",
