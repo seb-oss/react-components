@@ -1,7 +1,8 @@
 import * as React from "react";
 import "./button-style.scss";
 
-type ButtonTheme = "primary" | "secondary" | "danger" | "alternative" | "ghost-dark" | "ghost-light" | "anchor";
+export type ButtonTheme = "primary" | "secondary" | "danger" | "alternative" | "ghost-dark" | "ghost-light" | "anchor";
+export type ButtonSizes = "lg" | "md" | "sm";
 
 export interface ButtonProps {
     label: string;
@@ -14,7 +15,7 @@ export interface ButtonProps {
     title?: string;
     icon?: any;
     iconPosition?: "right" | "left";
-    size?: "lg" | "md" | "sm";
+    size?: ButtonSizes;
 }
 
 export const Button: React.FunctionComponent<ButtonProps> = React.memo((props: ButtonProps): React.ReactElement<void> => {

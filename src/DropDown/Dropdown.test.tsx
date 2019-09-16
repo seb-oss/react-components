@@ -144,7 +144,7 @@ describe("Component: DropDown", () => {
 
     it("Should enable more button when set to true", () => {
         const wrapper = mount(<DropDown {...props} more={true} />);
-        expect(wrapper.find("#dropdown-more-icon").length).toBe(1);
+        expect(wrapper.find(".custom-dropdown-toggle").length).toBe(1);
         expect(wrapper.find(".more").length).toBe(1);
         wrapper.unmount();
     });
@@ -186,7 +186,7 @@ describe("Component: DropDown", () => {
                 multi={true}
             />
         );
-        expect(wrapper.find("#dropdown-times-icon").length).toBe(1);
+        expect(wrapper.find(".dropdown-times-icon").length).toBe(1);
         wrapper.unmount();
     });
 
@@ -202,7 +202,7 @@ describe("Component: DropDown", () => {
                 clearable={true}
             />
         );
-        expect(wrapper.find("#dropdown-times-icon").length).toBe(1);
+        expect(wrapper.find(".dropdown-times-icon").length).toBe(1);
         wrapper.unmount();
     });
 
@@ -213,7 +213,7 @@ describe("Component: DropDown", () => {
                 clearable={true}
             />
         );
-        expect(wrapper.find("#dropdown-times-icon").length).toBe(0);
+        expect(wrapper.find(".dropdown-times-icon").length).toBe(0);
         wrapper.unmount();
     });
 });

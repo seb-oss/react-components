@@ -1,6 +1,8 @@
 import * as React from "react";
 import { shallow, ShallowWrapper, HTMLAttributes } from "enzyme";
-import { Button, ButtonProps } from "./Button";
+import { Button, ButtonProps, ButtonTheme, ButtonSizes } from "./Button";
+
+type ButtonTestItem<T, K> = { value: T, expected: K };
 
 describe("Component: Button", () => {
 
@@ -21,35 +23,54 @@ describe("Component: Button", () => {
         expect(onClick).toHaveBeenCalled();
     });
 
-    it("Should render custom className", () => {
-        wrapper.setProps({ className: "my-button" });
-        expect(wrapper.hasClass("my-button")).toBeTruthy();
+    it("Should render custom className and id", () => {
+        const className: string = "myButtonClass";
+        const id: string = "myButtonId";
+        wrapper.setProps({ className, id });
+        expect(wrapper.hasClass(className)).toBeTruthy();
+        expect(wrapper.find(`#${id}`).length).toBeTruthy();
     });
 
-    it("Should pass down the id to the button component", () => {
-        wrapper.setProps({ id: "my-button-id" });
-        expect(wrapper.find("#my-button-id")).toHaveLength(1);
+    describe("Should render supported themes", () => {
+        const list: Array<ButtonTestItem<ButtonTheme, string>> = [
+            { value: "primary", expected: "btn-primary" },
+            { value: "secondary", expected: "btn-outline-primary" },
+            { value: "alternative", expected: "btn-secondary" },
+            { value: "ghost-dark", expected: "btn-ghost-dark" },
+            { value: "ghost-light", expected: "btn-ghost-light" },
+            { value: "anchor", expected: "btn-anchor" },
+            { value: "danger", expected: "btn-danger" },
+            { value: "unsupported-theme" as any, expected: "btn-primary" },
+        ];
+        list.map((item: ButtonTestItem<ButtonTheme, string>) => {
+            it(`Theme: ${item.value} - Expected to render (btn-${item.expected})`, () => {
+                wrapper.setProps({ theme: item.value });
+                expect(wrapper.hasClass(item.expected));
+            });
+        });
     });
 
-    it("Should pass down the name to the button component", () => {
-        wrapper.setProps({ name: "my-button-name" });
-        expect(wrapper.find("button").getElement().props.name).toEqual("my-button-name");
+    describe("Should render supported sizes", () => {
+        const list: Array<ButtonTestItem<ButtonSizes, string>> = [
+            { value: "lg", expected: "btn-lg" },
+            { value: "md", expected: "btn-md" },
+            { value: "sm", expected: "btn-sm" },
+        ];
+        list.map((item: ButtonTestItem<ButtonSizes, string>) => {
+            it(`Size: ${item.value} - Expected to render (btn-${item.expected})`, () => {
+                wrapper.setProps({ size: item.value });
+                expect(wrapper.hasClass(item.expected));
+            });
+        });
     });
 
-    it("Should disable button when disabled prop is set to true", () => {
-        wrapper.setProps({ disabled: true });
-        expect(wrapper.html().indexOf("disabled")).not.toEqual(-1);
-    });
-
-    it("Should render custom theme", () => {
-        expect(wrapper.hasClass("btn-primary")).toBeTruthy();
-        wrapper.setProps({ theme: "secondary" });
-        expect(wrapper.hasClass("btn-secondary")).toBeTruthy();
-    });
-
-    it("Should render HTML title attribute when passed", () => {
-        wrapper.setProps({ title: "someTitle" });
-        expect(wrapper.html().indexOf(`title="someTitle"`)).not.toEqual(-1);
+    it("Should pass name, title, disabled to native button element", () => {
+        const name: string = "myButtonName";
+        const title: string = "myButtonTitle";
+        wrapper.setProps({ name, title, disabled: true });
+        expect(wrapper.find("button").getElement().props.name).toEqual(name);
+        expect(wrapper.find("button").getElement().props.title).toEqual(title);
+        expect(wrapper.find("button").getElement().props.disabled).toEqual(true);
     });
 
     it("Should render icon inside button", () => {
