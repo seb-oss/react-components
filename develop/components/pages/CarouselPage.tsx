@@ -1,6 +1,5 @@
 import * as React from "react";
 import { Carousel, CarouselItem } from "../../../src/Carousel/Carousel";
-import { AppSharedProps } from "typings/generic.type";
 const Highlight = (require("react-highlight")).default;
 const docMD: string = require("../../../src/Carousel/readme.md");
 
@@ -8,7 +7,7 @@ const firstImg: string = require("../../assets/images/cat-pet-animal-1.jpeg");
 const secondImg: string = require("../../assets/images/cat-pet-animal-2.jpg");
 const thirdImg: string = require("../../assets/images/cat-pet-animal-3.jpg");
 
-const CarouselPage: React.FunctionComponent<AppSharedProps> = (props: AppSharedProps) => {
+const CarouselPage: React.FunctionComponent = () => {
     const carouselList: Array<CarouselItem> = [
         {
             title: "Ipsum consequat nisl",
@@ -28,7 +27,7 @@ const CarouselPage: React.FunctionComponent<AppSharedProps> = (props: AppSharedP
     ];
 
     return (
-        <div className={"route-template" + props.brief}>
+        <div className="route-template">
             <div className="info-holder">
 
                 <div className="info">

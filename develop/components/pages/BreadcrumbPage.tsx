@@ -1,14 +1,13 @@
 import * as React from "react";
 import { Breadcrumb } from "../../../src/Breadcrumb/Breadcrumb";
-import { AppSharedProps } from "typings/generic.type";
 const Highlight = require("react-highlight").default;
 const docMD: string = require("../../../src/Breadcrumb/readme.md");
 
-const BreadcrumbPage: React.FunctionComponent<AppSharedProps> = (props: AppSharedProps) => {
+const BreadcrumbPage: React.FunctionComponent = () => {
     const breadcrumbList: Array<string> = ["First", "Second", "Third"];
 
     return (
-        <div className={"route-template" + props.brief}>
+        <div className="route-template">
             <div className="info-holder">
 
                 <div className="info">

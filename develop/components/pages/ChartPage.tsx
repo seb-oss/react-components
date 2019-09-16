@@ -1,11 +1,10 @@
 import * as React from "react";
 import { Chart, ExtendedChartOptions } from "../../../src/Chart/Chart";
 import { ChartData, ChartOptions } from "chart.js";
-import { AppSharedProps } from "typings/generic.type";
 const Highlight = (require("react-highlight")).default;
 const docMD: string = require("../../../src/Chart/readme.md");
 
-const ChartPage: React.FunctionComponent<AppSharedProps> = (props: AppSharedProps) => {
+const ChartPage: React.FunctionComponent = () => {
 
     function randomScalingFactor() {
         return Math.round(Math.random() * 100);
@@ -72,7 +71,7 @@ const ChartPage: React.FunctionComponent<AppSharedProps> = (props: AppSharedProp
     };
 
     return (
-        <div className={"route-template" + props.brief}>
+        <div className="route-template">
             <div className="info-holder">
 
                 <div className="info">

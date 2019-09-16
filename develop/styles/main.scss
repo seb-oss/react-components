@@ -1,9 +1,8 @@
-@import '~@sebgroup/bootstrap/scss/bootstrap';
-@import url('../../node_modules/highlight.js/styles/vs2015.css');
-@import './shared/titleBar';
-@import './shared/sideBar';
-@import './shared/releases';
-@import './shared/route-template';
+@import "~@sebgroup/bootstrap/scss/bootstrap";
+@import url("../../node_modules/highlight.js/styles/vs2015.css");
+@import "./shared/titleBar";
+@import "./shared/sideBar";
+@import "./shared/releases";
 .app-container {
     position: absolute;
     top: 0px;
@@ -12,6 +11,7 @@
     left: 0px;
     overflow: hidden;
     .route-holder {
+        @import "./shared/route-template";
         position: absolute;
         top: 100px;
         left: 0;
@@ -21,6 +21,38 @@
         transition: 200ms;
         &.sidebar-opened {
             left: 250px;
+        }
+        &.brief {
+            > .route-template {
+                position: fixed;
+                top: 0px;
+                left: 0px;
+                right: 0px;
+                bottom: 0px;
+                background: white;
+                z-index: 10;
+                overflow: auto;
+                .info-holder {
+                    .info {
+                        > h2,
+                        p:first-child {
+                            display: none;
+                        }
+                        > .md-file {
+                            display: none;
+                            > div {
+                                > * {
+                                    display: none;
+                                }
+                                #basic-use,
+                                #basic-use + pre {
+                                    display: inherit;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }

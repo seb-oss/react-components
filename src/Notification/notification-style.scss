@@ -83,13 +83,13 @@ $small: 12px;
         }
         .notification-message {
             font-size: $small;
-            padding-right: 10px;
+            padding-right: 18px;
             @include user-select(none);
         }
     }
     .dismiss-btn {
         position: absolute;
-        top: 8px;
+        top: 12px;
         right: 8px;
         cursor: pointer;
         will-change: top, right;

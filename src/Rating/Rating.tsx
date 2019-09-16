@@ -53,7 +53,7 @@ export const Rating: React.FunctionComponent<RatingProps> = (props: RatingProps)
                         : <SVGStar fill={getColors()[1]} width={width} height={height} />
                 }
                 fractions={1}
-                onChange={(value) => { props.onChange && props.onChange(value); }}
+                onChange={props.onChange}
                 readonly={props.readOnly}
             />
         </div>

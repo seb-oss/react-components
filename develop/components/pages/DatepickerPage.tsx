@@ -1,13 +1,12 @@
 import * as React from "react";
 import { Datepicker } from "../../../src/Datepicker/Datepicker";
-import { AppSharedProps } from "typings/generic.type";
 const Highlight = (require("react-highlight")).default;
 const docMD: string = require("../../../src/Datepicker/readme.md");
 
-const DatepickerPage: React.FunctionComponent<AppSharedProps> = (props: AppSharedProps) => {
+const DatepickerPage: React.FunctionComponent = () => {
     const [datepicker, setDatepicker] = React.useState(new Date());
     return (
-        <div className={"route-template" + props.brief}>
+        <div className="route-template">
             <div className="info-holder">
 
                 <div className="info">

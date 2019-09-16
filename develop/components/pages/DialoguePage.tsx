@@ -1,14 +1,13 @@
 import * as React from "react";
 import { Dialogue } from "../../../src/Dialogue/Dialogue";
 import { Button } from "../../../src/Button/Button";
-import { AppSharedProps } from "typings/generic.type";
 const Highlight = (require("react-highlight")).default;
 const docMD: string = require("../../../src/Dialogue/readme.md");
 
-const DialoguePage: React.FunctionComponent<AppSharedProps> = (props: AppSharedProps) => {
+const DialoguePage: React.FunctionComponent = () => {
     const [dialogue, setDialogue] = React.useState(false);
     return (
-        <div className={"route-template " + props.brief}>
+        <div className="route-template">
             <div className="info-holder">
 
                 <div className="info">

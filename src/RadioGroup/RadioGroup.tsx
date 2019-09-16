@@ -11,7 +11,7 @@ export interface RadioListModel {
 
 export interface RadioGroupProps {
     list: Array<RadioListModel>;
-    onChange: (value: any) => void;
+    onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
     value: any;
     name?: string;
     className?: string;
@@ -45,7 +45,7 @@ export const RadioGroup: React.FunctionComponent<RadioGroupProps> = (props: Radi
                                 checked={props.value === item.value}
                                 aria-labelledby={item.label}
                                 disabled={props.disableAll || item.disabled}
-                                onChange={(e) => { props.onChange(item.value); }}
+                                onChange={props.onChange}
                             />
                             <span className="checkmark" />
                             {item.description && <span className="radio-description">{item.description}</span>}

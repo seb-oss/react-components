@@ -1,10 +1,10 @@
 import * as React from "react";
 import { Button } from "../../../src/Button/Button";
 import { Modal, ModalProps } from "../../../src/Modal/Modal";
-const docMD: string = require("../../../src/Modal/readme.md");
 import { getParameterByName } from "../../utils/queryString";
 import { RouteComponentProps } from "react-router";
 const Highlight = (require("react-highlight")).default;
+const docMD: string = require("../../../src/Modal/readme.md");
 
 class ModalPage extends React.Component<RouteComponentProps, Partial<ModalProps>>  {
     initialState: Partial<ModalProps> = {
@@ -29,10 +29,8 @@ class ModalPage extends React.Component<RouteComponentProps, Partial<ModalProps>
     }
 
     render() {
-        const mode: string = getParameterByName(this.props.location.search, "mode");
-        const brief: string = mode && mode.toLowerCase() === "dl" ? " brief" : "";
         return (
-            <div className={"route-template" + brief}>
+            <div className="route-template">
                 <div className="info-holder">
 
                     <div className="info">

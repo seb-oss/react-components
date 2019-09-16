@@ -1,10 +1,9 @@
 import * as React from "react";
 import { Accordion, AccrodionListItem } from "../../../src/Accordion/Accordion";
-import { AppSharedProps } from "typings/generic.type";
 const Highlight = (require("react-highlight")).default;
 const docMD: string = require("../../../src/Accordion/readme.md");
 
-const AccordionPage: React.FunctionComponent<AppSharedProps> = (props: AppSharedProps) => {
+const AccordionPage: React.FunctionComponent = () => {
     const accordionList: Array<AccrodionListItem> = [
         {
             category: "Accordion List Item 1",
@@ -46,7 +45,7 @@ const AccordionPage: React.FunctionComponent<AppSharedProps> = (props: AppShared
     ];
 
     return (
-        <div className={"route-template" + props.brief}>
+        <div className="route-template">
             <div className="info-holder">
 
                 <div className="info">

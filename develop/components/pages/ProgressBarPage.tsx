@@ -1,14 +1,19 @@
 import * as React from "react";
-import { ProgressBar } from "../../../src/ProgressBar/ProgressBar";
-import { getParameterByName } from "../../utils/queryString";
+import { ProgressBar, ProgressBarProps } from "../../../src/ProgressBar/ProgressBar";
+import { RouteComponentProps } from "react-router";
 const Highlight = (require("react-highlight")).default;
-const docMD = require("../../../src/ProgressBar/readme.md");
+const docMD: string = require("../../../src/ProgressBar/readme.md");
 
-export default class ProgressBarPage extends React.Component<any, any>  {
-    progress: number = 0;
+interface ProgressBarPageState {
+    progress: number;
+}
+
+class ProgressBarPage extends React.Component<RouteComponentProps, ProgressBarPageState>  {
     timerRef: any;
-    constructor(props: any) {
+
+    constructor(props: RouteComponentProps) {
         super(props);
+
         this.state = {
             progress: 1,
         };
@@ -38,9 +43,8 @@ export default class ProgressBarPage extends React.Component<any, any>  {
     }
 
     render() {
-        const mode = getParameterByName(this.props.location.search, "mode");
         return (
-            <div className={"route-template " + ((mode === "dl" || mode === "DL") ? "brief" : "")}>
+            <div className="route-template">
                 <div className="info-holder">
 
                     <div className="info">
@@ -73,3 +77,5 @@ export default class ProgressBarPage extends React.Component<any, any>  {
         );
     }
 }
+
+export default ProgressBarPage;

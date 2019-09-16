@@ -1,58 +1,62 @@
 import * as React from "react";
 import { Pagination } from "../../../src/Pagination/Pagination";
-import { getParameterByName } from "../../utils/queryString";
 const Highlight = (require("react-highlight")).default;
-const docMD = require("../../../src/Pagination/readme.md");
+const docMD: string = require("../../../src/Pagination/readme.md");
 
-export default class PaginationPage extends React.Component<any, any>  {
-    constructor(props: any) {
-        super(props);
+const PaginationPage: React.FunctionComponent = () => {
+    const [pagination, setPagination] = React.useState(1);
+    const [pagination2, setPagination2] = React.useState(1);
+    const [dotnav, setDotnav] = React.useState(1);
 
-        this.state = {
-            pagination: 1,
-            dotnav: 1
-        };
-    }
+    return (
+        <div className="route-template">
+            <div className="info-holder">
 
-    render() {
-        const mode = getParameterByName(this.props.location.search, "mode");
-        return (
-            <div className={"route-template " + ((mode === "dl" || mode === "DL") ? "brief" : "")}>
-                <div className="info-holder">
+                <div className="info">
+                    <div className="md-file">
+                        <Highlight innerHTML={true}>{docMD}</Highlight>
+                    </div>
+                </div>
 
-                    <div className="info">
-                        <div className="md-file">
-                            <Highlight innerHTML={true}>{docMD}</Highlight>
-                        </div>
+                <div className="info">
+                    <h2>Output</h2>
+
+                    <p>Here are sample outputs</p>
+                    <div className="result">
+                        <Pagination
+                            value={pagination}
+                            onChange={(value: number) => setPagination(value)}
+                            size={20}
+                            offset={5}
+                        />
                     </div>
 
-                    <div className="info">
-                        <h2>Output</h2>
-
-                        <p>Here are sample outputs</p>
-                        <div className="result">
-                            <Pagination
-                                value={this.state.pagination}
-                                onChange={(value: number) => { this.setState({ pagination: value }); }}
-                                size={20}
-                                offset={5}
-                            />
-                        </div>
-
-                        <p>Here are sample outputs of DotNav: {this.state.dotnav}</p>
-                        <div className="result">
-                            <Pagination
-                                value={this.state.dotnav}
-                                onChange={(value: number) => { this.setState({ dotnav: value }); }}
-                                size={8}
-                                useDotNav={true}
-                            />
-                        </div>
+                    <p>With <b>first</b> and <b>last</b> enabled</p>
+                    <div className="result">
+                        <Pagination
+                            value={pagination2}
+                            onChange={(value: number) => setPagination2(value)}
+                            size={20}
+                            offset={5}
+                            useFirstAndLast={true}
+                        />
                     </div>
 
+                    <p>Here are sample outputs of DotNav: {dotnav}</p>
+                    <div className="result">
+                        <Pagination
+                            value={dotnav}
+                            onChange={(value: number) => setDotnav(value)}
+                            size={8}
+                            useDotNav={true}
+                        />
+                    </div>
                 </div>
 
             </div>
-        );
-    }
-}
+
+        </div>
+    );
+};
+
+export default PaginationPage;

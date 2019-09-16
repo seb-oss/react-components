@@ -165,6 +165,9 @@ $box-shadow: rgba(85, 85, 85, 0.4) 0 2px 5px;
                     }
                 }
             }
+            &:focus {
+                outline: none;
+            }
         }
         .custom-slider-holder {
             position: absolute;
@@ -209,7 +212,8 @@ $box-shadow: rgba(85, 85, 85, 0.4) 0 2px 5px;
                     @include transform(translateX(-50%));
                     pointer-events: none;
                     box-shadow: $box-shadow;
-                    @include transition(all 50ms ease);
+                    will-change: left;
+                    @include transition(left 50ms ease);
                     z-index: 2;
                     .custom-slider-preview {
                         pointer-events: none;
