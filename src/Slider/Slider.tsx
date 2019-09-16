@@ -27,25 +27,42 @@ export interface SliderProps {
     alternative?: boolean;
     error?: string;
     reference?: React.RefObject<any>;
+    disabled?: boolean;
 }
 
 const Slider: React.FunctionComponent<SliderProps> = (props: SliderProps): React.ReactElement<void> => {
-    const min: number = props.min ? props.min : 0;
-    const max: number = props.max ? props.max : 100;
+    const min: number = props.min || 0;
+    const max: number = props.max || 100;
 
     // Resetting if the values are exceeding the limits
-    if (props.value > max) {
-        props.onChange({ target: { value: max } });
-    } else if (props.value < min || props.value === null || props.value === undefined) {
-        props.onChange({ target: { value: min } });
-    }
+    React.useEffect(() => {
+        if (props.value > max) {
+            props.onChange({ target: { value: max } });
+        } else if (props.value < min || props.value === null || props.value === undefined) {
+            props.onChange({ target: { value: min } });
+        }
+    }, [props.value]);
 
     /**
      * Converts the current value to percentage based on min and max
-     * @param {number} num value to be converted to percentage
+     * @param {number} value value to be converted to percentage
      * @returns {number} The precentage
      */
-    const getPercentage: (num: number) => number = (num: number): number => ((num - min) / (max - min)) * 100;
+    function getPercentage(value: number): number {
+        const offset: number = Math.abs(0 - min);
+        const result: number = Math.abs(((value - min) / (max - offset)) * 100);
+        return result;
+    }
+
+    function getLabelPosition(value: number): number {
+        if (value > max) {
+            return 100;
+        } else if (value < min) {
+            return 0;
+        }
+        const result: number = Math.abs(((value - min) / (max - min)) * 100);
+        return result;
+    }
 
     return (
         <div
@@ -53,6 +70,7 @@ const Slider: React.FunctionComponent<SliderProps> = (props: SliderProps): React
                 "form-group custom-slider"
                 + (props.className ? ` ${props.className}` : "")
                 + (props.alternative ? " alternative" : "")
+                + (props.disabled ? " disabled" : "")
             }
         >
             {props.label && <label className="custom-label">{props.label}</label>}
@@ -67,6 +85,7 @@ const Slider: React.FunctionComponent<SliderProps> = (props: SliderProps): React
                     value={props.value}
                     onChange={props.onChange}
                     ref={props.reference}
+                    disabled={props.disabled}
                 />
                 <div className={"custom-slider-holder" + (props.theme ? ` ${props.theme}` : " primary")}>
                     <div className="custom-slider-track">
@@ -97,7 +116,7 @@ const Slider: React.FunctionComponent<SliderProps> = (props: SliderProps): React
                                 <div
                                     key={i}
                                     className={"custom-slider-label" + (props.showTicks ? " show-ticks" : "")}
-                                    style={{ left: getPercentage(label.position) + "%" }}
+                                    style={{ left: getLabelPosition(label.position) + "%" }}
                                 >{label.text}
                                 </div>
                             )

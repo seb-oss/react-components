@@ -2,23 +2,26 @@ import * as React from "react";
 import ReactRating from "react-rating";
 import { SVGStar, SVGStarHollow } from "./RatingStar";
 
-interface RatingProps {
+export interface RatingProps {
     initialValue?: any;
     onChange?: (value: number) => void;
     tooltipList?: Array<string>;
     iconHeight?: number;
     iconWidth?: number;
     useHollow?: boolean;
-    colors?: Array<string>;
+    colors?: [string, string];
     readOnly?: boolean;
     className?: string;
+    disabled?: boolean;
+    id?: string;
 }
 
 /**
  * @member 0 Grey (Unselected)
  * @member 1 Yellow (Selected)
  */
-const initialColors: Array<string> = ["#A9A9A9", "#FFC500"];
+const initialColors: [string, string] = ["#A9A9A9", "#FFC500"];
+const disabledColors: [string, string] = ["#dddddd", "#bfbfbf"];
 
 export const Rating: React.FunctionComponent<RatingProps> = (props: RatingProps): React.ReactElement<void> => {
     const height: number = props.iconHeight || 25;
@@ -35,12 +38,13 @@ export const Rating: React.FunctionComponent<RatingProps> = (props: RatingProps)
                 default: return initialColors;
             }
         }
-        return initialColors;
+        return props.disabled ? disabledColors : initialColors;
     }
 
     return (
-        <div className={"custom-rating" + (props.className ? ` ${props.className}` : "")}>
+        <div className={"custom-rating" + (props.className ? ` ${props.className}` : "")} id={props.id}>
             <ReactRating
+                className={props.disabled ? "disabled" : ""}
                 initialRating={props.initialValue}
                 emptySymbol={!props.useHollow
                     ? <SVGStar fill={getColors()[0]} width={width} height={height} />
@@ -53,8 +57,8 @@ export const Rating: React.FunctionComponent<RatingProps> = (props: RatingProps)
                         : <SVGStar fill={getColors()[1]} width={width} height={height} />
                 }
                 fractions={1}
-                onChange={props.onChange}
-                readonly={props.readOnly}
+                onChange={props.disabled ? () => null : props.onChange}
+                readonly={props.readOnly || props.disabled}
             />
         </div>
     );

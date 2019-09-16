@@ -7,6 +7,8 @@ const SliderPage: React.FunctionComponent = () => {
     const [slider, setSlider] = React.useState<number>(25);
     const [alternativeSlider, setAlternativeSlider] = React.useState<number>(50);
     const [currencySlider, setCurrencySlider] = React.useState<number>(25000);
+    const [disabledSlider1, setDisabledSlider1] = React.useState<number>(25000);
+    const [disabledSlider2, setDisabledSlider2] = React.useState<number>(20000);
 
     return (
         <div className="route-template">
@@ -67,6 +69,34 @@ const SliderPage: React.FunctionComponent = () => {
                     </div>
                 </div>
 
+                <div className="info">
+                    <p>Disabled</p>
+                    <div className="result">
+                        <Slider
+                            value={disabledSlider1}
+                            min={10000}
+                            max={30000}
+                            step={5000}
+                            name="advancedSlider"
+                            labels={currencySliderLabels}
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setDisabledSlider1(Number(e.target.value))}
+                            disabled={true}
+                        />
+                    </div>
+                    <div className="result">
+                        <Slider
+                            value={disabledSlider2}
+                            min={10000}
+                            max={30000}
+                            step={5000}
+                            name="alternativeSlider"
+                            labels={currencySliderLabels}
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setDisabledSlider2(Number(e.target.value))}
+                            alternative={true}
+                            disabled={true}
+                        />
+                    </div>
+                </div>
             </div>
 
         </div>

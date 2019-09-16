@@ -75,7 +75,6 @@ $box-shadow: rgba(85, 85, 85, 0.4) 0 2px 5px;
     outline: 0;
     box-shadow: 0;
     transform: translateY(-14px);
-    cursor: pointer;
 }
 
 @mixin theme($dark, $light, $alternative: 0) {
@@ -123,14 +122,24 @@ $box-shadow: rgba(85, 85, 85, 0.4) 0 2px 5px;
             // Thumb
             &::-webkit-slider-thumb {
                 @include thumb-styles();
+                &:not(:disabled) {
+                    cursor: pointer;
+                }
             }
             &::-moz-range-thumb {
                 @include thumb-styles();
                 transform: none;
+                &:not(:disabled) {
+                    cursor: pointer;
+                }
             }
             &::-ms-thumb {
                 @include thumb-styles();
-            } // Track
+                &:not(:disabled) {
+                    cursor: pointer;
+                }
+            }
+            // Track
             &::-webkit-slider-runnable-track {
                 @include track-styles();
             }
@@ -369,6 +378,30 @@ $box-shadow: rgba(85, 85, 85, 0.4) 0 2px 5px;
                                 top: -6px;
                                 font-size: 8px;
                             }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    &.disabled {
+        >div.input-field {
+            >input[type=range] {
+                cursor: default !important;
+            }
+            >div.custom-slider-holder {
+                >div.custom-slider-track {
+                    >div.custom-slider-slider-before {
+                        background-color: #adadad !important;
+                    }
+                    >div.custom-slider-slider-after {
+                        background-color: #cccccc !important;
+                    }
+                    >div.custom-slider-thumb {
+                        background-color: #9a9a9a !important;
+                        border-color: #8c8c8c !important;
+                        &:after {
+                            background-color: #c5c5c5 !important;
                         }
                     }
                 }

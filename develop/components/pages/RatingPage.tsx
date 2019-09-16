@@ -23,6 +23,16 @@ const RatingPage: React.FunctionComponent = () => {
                         <Rating
                             initialValue={rating}
                             onChange={(value: number) => setRating(value)}
+                            tooltipList={["Very Poor", "Poor", "Average", "Very Good", "Excellent"]}
+                        />
+                    </div>
+
+                    <p>Disabled</p>
+                    <div className="result">
+                        <Rating
+                            initialValue={rating}
+                            onChange={(value: number) => setRating(value)}
+                            disabled={true}
                         />
                     </div>
                 </div>
