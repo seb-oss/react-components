@@ -4,7 +4,7 @@ const Highlight = (require("react-highlight")).default;
 const docMD = require("../../../src/Stepper/readme.md");
 
 const StepperPage: React.FunctionComponent = () => {
-    const [stepper, setStepper] = React.useState(1);
+    const [stepper, setStepper] = React.useState<number>(1);
 
     return (
         <div className="route-template">

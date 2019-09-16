@@ -4,8 +4,7 @@ const Highlight = (require("react-highlight")).default;
 const docMD = require("../../../src/StepTracker/readme.md");
 
 const StepTrackerPage: React.FunctionComponent = () => {
-    const stepList: Array<string> = ["Getting Started", "Personal Information", "Account Information", "Finish"];
-    const [stepTracker, setStepTracker] = React.useState(1);
+    const [stepTracker, setStepTracker] = React.useState<number>(1);
 
     return (
         <div className="route-template">
@@ -45,5 +44,7 @@ const StepTrackerPage: React.FunctionComponent = () => {
         </div>
     );
 };
+
+const stepList: Array<string> = ["Getting Started", "Personal Information", "Account Information", "Finish"];
 
 export default StepTrackerPage;

@@ -2,18 +2,19 @@ import * as React from "react";
 import { Notification, NotificationAction } from "../../../src/Notification/Notification";
 import { Button } from "../../../src/Button/Button";
 const Highlight = (require("react-highlight")).default;
-const docMD = require("../../../src/Notification/readme.md");
+const docMD: string = require("../../../src/Notification/readme.md");
 
 const NotificationPage: React.FunctionComponent = () => {
-    const [notification1Toggle, setNotification1Toggle] = React.useState(false);
-    const [notification2Toggle, setNotification2Toggle] = React.useState(false);
-    const [notification3Toggle, setNotification3Toggle] = React.useState(false);
+    const [notification1Toggle, setNotification1Toggle] = React.useState<boolean>(false);
+    const [notification2Toggle, setNotification2Toggle] = React.useState<boolean>(false);
+    const [notification3Toggle, setNotification3Toggle] = React.useState<boolean>(false);
 
     const description: string = "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.";
     const notificationActions: Array<NotificationAction> = [
         { text: "Yes, I'm in", action: () => setNotification2Toggle(false) },
         { text: "Ignore", action: () => setNotification2Toggle(false) },
     ];
+
     return (
         <div className="route-template">
             <div className="info-holder">

@@ -33,7 +33,7 @@ const ImagePage: React.FunctionComponent = () => {
                             width="100%"
                             useImgTag={true}
                             height="200px"
-                            onLoad={(e) => { console.log("img loaded"); }}
+                            onLoad={() => { console.log("img loaded"); }}
                         />
                     </div>
                 </div>

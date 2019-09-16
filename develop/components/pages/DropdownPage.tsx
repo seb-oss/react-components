@@ -4,10 +4,10 @@ const Highlight = (require("react-highlight")).default;
 const docMD: string = require("../../../src/DropDown/readme.md");
 
 const DropdownPage: React.FunctionComponent = () => {
-    const [dropDownList1Selected, setDropDownList1Selected] = React.useState(null);
-    const [dropDownList2Selected, setDropDownList2Selected] = React.useState(null);
-    const [dropDownList3Selected, setDropDownList3Selected] = React.useState(null);
-    const [dropDownList4Selected, setDropDownList4Selected] = React.useState(null);
+    const [dropDownList1Selected, setDropDownList1Selected] = React.useState<DropDownItem>(null);
+    const [dropDownList2Selected, setDropDownList2Selected] = React.useState<Array<DropDownItem>>(null);
+    const [dropDownList3Selected, setDropDownList3Selected] = React.useState<DropDownItem>(null);
+    const [dropDownList4Selected, setDropDownList4Selected] = React.useState<DropDownItem>(null);
 
     return (
         <div className="route-template">
@@ -26,7 +26,7 @@ const DropdownPage: React.FunctionComponent = () => {
                         <DropDown
                             list={dropDownList1}
                             selectedValue={dropDownList1Selected}
-                            onChange={(value: DropDownItem) => setDropDownList1Selected(value)}
+                            onChange={(value: DropDownItem) => setDropDownList1Selected}
                         />
                     </div>
 
@@ -61,8 +61,11 @@ const DropdownPage: React.FunctionComponent = () => {
                             name="dropDownList4"
                             list={dropDownList4}
                             selectedValue={dropDownList4Selected}
-                            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setDropDownList4Selected(e.target.value)}
+                            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+                                setDropDownList4Selected({ value: e.target.value, label: dropDownList4[e.target.selectedIndex].label });
+                            }}
                             native={true}
+                            id="test-dropdown"
                         />
                     </div>
                 </div>

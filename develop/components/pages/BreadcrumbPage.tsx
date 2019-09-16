@@ -4,8 +4,6 @@ const Highlight = require("react-highlight").default;
 const docMD: string = require("../../../src/Breadcrumb/readme.md");
 
 const BreadcrumbPage: React.FunctionComponent = () => {
-    const breadcrumbList: Array<string> = ["First", "Second", "Third"];
-
     return (
         <div className="route-template">
             <div className="info-holder">
@@ -32,5 +30,7 @@ const BreadcrumbPage: React.FunctionComponent = () => {
         </div>
     );
 };
+
+const breadcrumbList: Array<string> = ["First", "Second", "Third"];
 
 export default BreadcrumbPage;

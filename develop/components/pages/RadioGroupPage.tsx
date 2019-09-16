@@ -4,12 +4,7 @@ const Highlight = (require("react-highlight")).default;
 const docMD: string = require("../../../src/RadioGroup/readme.md");
 
 const RadioGroupPage: React.FunctionComponent = () => {
-    const radioList: Array<RadioListModel> = [
-        { value: "first", group: "my-group", label: "Radio 1", },
-        { value: "second", group: "my-group", label: "Radio 2", description: "Some description" },
-        { value: "third", group: "my-group", label: "Radio 3", description: "Disabled", disabled: true },
-    ];
-    const [radioListSelected, setRadioListSelected] = React.useState("second");
+    const [radioListSelected, setRadioListSelected] = React.useState<string>("second");
 
     return (
         <div className="route-template">
@@ -39,5 +34,11 @@ const RadioGroupPage: React.FunctionComponent = () => {
         </div>
     );
 };
+
+const radioList: Array<RadioListModel> = [
+    { value: "first", group: "my-group", label: "Radio 1", },
+    { value: "second", group: "my-group", label: "Radio 2", description: "Some description" },
+    { value: "third", group: "my-group", label: "Radio 3", description: "Disabled", disabled: true },
+];
 
 export default RadioGroupPage;

@@ -4,7 +4,8 @@ const Highlight = (require("react-highlight")).default;
 const docMD: string = require("../../../src/Datepicker/readme.md");
 
 const DatepickerPage: React.FunctionComponent = () => {
-    const [datepicker, setDatepicker] = React.useState(new Date());
+    const [datepicker, setDatepicker] = React.useState<Date>(new Date());
+
     return (
         <div className="route-template">
             <div className="info-holder">

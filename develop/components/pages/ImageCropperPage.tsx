@@ -4,7 +4,7 @@ const Highlight = (require("react-highlight")).default;
 const docMD: string = require("../../../src/ImageCropper/readme.md");
 
 const ImageCropperPage: React.FunctionComponent = () => {
-    const [cropResult, setCropResult] = React.useState("");
+    const [cropResult, setCropResult] = React.useState<any>("");
 
     return (
         <div className="route-template">

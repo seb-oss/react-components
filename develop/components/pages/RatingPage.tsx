@@ -4,7 +4,7 @@ const Highlight = (require("react-highlight")).default;
 const docMD: string = require("../../../src/Rating/readme.md");
 
 const RatingPage: React.FunctionComponent = () => {
-    const [rating, setRating] = React.useState(3.5);
+    const [rating, setRating] = React.useState<number>(3.5);
 
     return (
         <div className="route-template">

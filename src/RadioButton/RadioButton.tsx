@@ -1,6 +1,8 @@
 import * as React from "react";
 import "./radio-button-style.scss";
 
+const randomId = () => String((Math.random() * 1000) + (new Date()).getTime());
+
 export interface RadioButtonProps {
     onChange: (value: any) => void;
     value: any;
@@ -17,11 +19,14 @@ export interface RadioButtonProps {
     reference?: React.RefObject<any>;
 }
 
-export const RadioButton: React.FunctionComponent<RadioButtonProps> = (props: RadioButtonProps): React.ReactElement<void> => {
+const RadioButton: React.FunctionComponent<RadioButtonProps> = (props: RadioButtonProps): React.ReactElement<void> => {
     let inputFieldClass: string = "input-field";
     if (props.error) { inputFieldClass += " has-error"; }
     if (props.inline) { inputFieldClass += " inline"; }
-    const id = props.id || props.label;
+    const [id, setId] = React.useState<string>("");
+    React.useEffect(() => {
+        setId(props.id || (props.label ? randomId() : null));
+    }, [props.id]);
 
     return (
         <div className={"form-group radio-holder" + (props.className ? ` ${props.className}` : "")}>
@@ -37,7 +42,7 @@ export const RadioButton: React.FunctionComponent<RadioButtonProps> = (props: Ra
                         id={id}
                         checked={props.value === props.radioValue}
                         disabled={props.disabled}
-                        onChange={(e) => { props.onChange(props.radioValue); }}
+                        onChange={() => { props.onChange(props.radioValue); }}
                         ref={props.reference}
                     />
 
@@ -49,3 +54,5 @@ export const RadioButton: React.FunctionComponent<RadioButtonProps> = (props: Ra
         </div>
     );
 };
+
+export { RadioButton };

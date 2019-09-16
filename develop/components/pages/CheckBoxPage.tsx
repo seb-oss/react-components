@@ -4,9 +4,9 @@ const Highlight = (require("react-highlight")).default;
 const docMD: string = require("../../../src/CheckBox/readme.md");
 
 const CheckBoxPage: React.FunctionComponent = () => {
-    const [checkbox1, setCheckbox1] = React.useState(true);
-    const [checkbox2, setCheckbox2] = React.useState(false);
-    const [checkbox3, setCheckbox3] = React.useState(true);
+    const [checkbox1, setCheckbox1] = React.useState<boolean>(true);
+    const [checkbox2, setCheckbox2] = React.useState<boolean>(false);
+    const [checkbox3, setCheckbox3] = React.useState<boolean>(true);
 
     return (
         <div className="route-template">

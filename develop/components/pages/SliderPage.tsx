@@ -4,11 +4,9 @@ const Highlight = (require("react-highlight")).default;
 const docMD: string = require("../../../src/Slider/readme.md");
 
 const SliderPage: React.FunctionComponent = () => {
-    const [slider, setSlider] = React.useState(25);
-    const [alternativeSlider, setAlternativeSlider] = React.useState(50);
-    const [currencySlider, setCurrencySlider] = React.useState(25000);
-
-    function setSliderSmooth(e: React.ChangeEvent<HTMLInputElement>) { setSlider(Number(e.target.value)); }
+    const [slider, setSlider] = React.useState<number>(25);
+    const [alternativeSlider, setAlternativeSlider] = React.useState<number>(50);
+    const [currencySlider, setCurrencySlider] = React.useState<number>(25000);
 
     return (
         <div className="route-template">
@@ -31,7 +29,7 @@ const SliderPage: React.FunctionComponent = () => {
                             step={1}
                             labels={sliderLabels}
                             name="normalSlider"
-                            onChange={setSliderSmooth}
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSlider(Number(e.target.value))}
                         />
                     </div>
                 </div>

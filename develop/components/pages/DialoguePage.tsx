@@ -5,7 +5,8 @@ const Highlight = (require("react-highlight")).default;
 const docMD: string = require("../../../src/Dialogue/readme.md");
 
 const DialoguePage: React.FunctionComponent = () => {
-    const [dialogue, setDialogue] = React.useState(false);
+    const [dialogue, setDialogue] = React.useState<boolean>(false);
+
     return (
         <div className="route-template">
             <div className="info-holder">

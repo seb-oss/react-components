@@ -4,19 +4,7 @@ const Highlight = (require("react-highlight")).default;
 const docMD = require("../../../src/Tabs/readme.md");
 
 const TabsPage: React.FunctionComponent = () => {
-    const tabList: Array<TabsListItem> = [
-        { text: "First" },
-        { text: "Second" },
-        { text: "Third" },
-        { text: "Fourth", disabled: true },
-    ];
-    const tabContent: Array<string> = [
-        "First tab content",
-        "Second tab content",
-        "Third tab content",
-        "Fourth tab content"
-    ];
-    const [activeTab, setActiveTab] = React.useState(0);
+    const [activeTab, setActiveTab] = React.useState<number>(0);
 
     return (
         <div className="route-template">
@@ -50,5 +38,18 @@ const TabsPage: React.FunctionComponent = () => {
         </div>
     );
 };
+
+const tabList: Array<TabsListItem> = [
+    { text: "First" },
+    { text: "Second" },
+    { text: "Third" },
+    { text: "Fourth", disabled: true },
+];
+const tabContent: Array<string> = [
+    "First tab content",
+    "Second tab content",
+    "Third tab content",
+    "Fourth tab content"
+];
 
 export default TabsPage;

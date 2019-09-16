@@ -4,7 +4,7 @@ const Highlight = (require("react-highlight")).default;
 const docMD: string = require("../../../src/RadioButton/readme.md");
 
 const RadioButtonPage: React.FunctionComponent = () => {
-    const [radioListSelected, setRadioListSelected] = React.useState("second");
+    const [radioListSelected, setRadioListSelected] = React.useState("");
 
     return (
         <div className="route-template">
@@ -21,20 +21,19 @@ const RadioButtonPage: React.FunctionComponent = () => {
                     <p>Here are sample outputs, here is selected value: {radioListSelected}</p>
                     <div className="result">
                         <RadioButton
-                            name="radioName"
+                            name="example"
                             radioValue="first"
-                            id="my-id"
                             label="Single radio - first value"
                             value={radioListSelected}
-                            onChange={(value) => setRadioListSelected(value)}
+                            onChange={(value: string) => setRadioListSelected(value)}
                         />
 
                         <RadioButton
-                            name="radioName"
+                            name="example"
                             radioValue="second"
                             label="Single radio - second value"
                             value={radioListSelected}
-                            onChange={(value) => setRadioListSelected(value)}
+                            onChange={(value: string) => setRadioListSelected(value)}
                         />
                     </div>
                 </div>

@@ -1,11 +1,11 @@
 import * as React from "react";
 import { TextArea } from "../../../src/TextArea/TextArea";
 const Highlight = (require("react-highlight")).default;
-const docMD = require("../../../src/TextArea/readme.md");
+const docMD: string = require("../../../src/TextArea/readme.md");
 
 const TextAreaPage: React.FunctionComponent = () => {
-    const [textBoxValue, setTextBoxValue] = React.useState("");
-    const [textBox2Value, setTextBox2Value] = React.useState("");
+    const [textBoxValue, setTextBoxValue] = React.useState<string>("");
+    const [textBox2Value, setTextBox2Value] = React.useState<string>("");
 
     return (
         <div className="route-template">

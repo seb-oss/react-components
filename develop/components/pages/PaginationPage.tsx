@@ -4,9 +4,9 @@ const Highlight = (require("react-highlight")).default;
 const docMD: string = require("../../../src/Pagination/readme.md");
 
 const PaginationPage: React.FunctionComponent = () => {
-    const [pagination, setPagination] = React.useState(1);
-    const [pagination2, setPagination2] = React.useState(1);
-    const [dotnav, setDotnav] = React.useState(1);
+    const [pagination, setPagination] = React.useState<number>(1);
+    const [pagination2, setPagination2] = React.useState<number>(1);
+    const [dotnav, setDotnav] = React.useState<number>(1);
 
     return (
         <div className="route-template">
@@ -25,7 +25,7 @@ const PaginationPage: React.FunctionComponent = () => {
                     <div className="result">
                         <Pagination
                             value={pagination}
-                            onChange={(value: number) => setPagination(value)}
+                            onChange={setPagination}
                             size={20}
                             offset={5}
                         />
@@ -35,7 +35,7 @@ const PaginationPage: React.FunctionComponent = () => {
                     <div className="result">
                         <Pagination
                             value={pagination2}
-                            onChange={(value: number) => setPagination2(value)}
+                            onChange={setPagination2}
                             size={20}
                             offset={5}
                             useFirstAndLast={true}
@@ -46,7 +46,7 @@ const PaginationPage: React.FunctionComponent = () => {
                     <div className="result">
                         <Pagination
                             value={dotnav}
-                            onChange={(value: number) => setDotnav(value)}
+                            onChange={setDotnav}
                             size={8}
                             useDotNav={true}
                         />

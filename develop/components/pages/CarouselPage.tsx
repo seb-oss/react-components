@@ -8,24 +8,6 @@ const secondImg: string = require("../../assets/images/cat-pet-animal-2.jpg");
 const thirdImg: string = require("../../assets/images/cat-pet-animal-3.jpg");
 
 const CarouselPage: React.FunctionComponent = () => {
-    const carouselList: Array<CarouselItem> = [
-        {
-            title: "Ipsum consequat nisl",
-            desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-            image: firstImg
-        },
-        {
-            title: "Interdum velit euismod",
-            desc: "Lectus quam id leo in",
-            image: secondImg
-        },
-        {
-            title: "Risus in hendrerit",
-            desc: "Augue eget arcu dictum varius",
-            image: thirdImg
-        }
-    ];
-
     return (
         <div className="route-template">
             <div className="info-holder">
@@ -54,5 +36,23 @@ const CarouselPage: React.FunctionComponent = () => {
         </div>
     );
 };
+
+const carouselList: Array<CarouselItem> = [
+    {
+        title: "Ipsum consequat nisl",
+        desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+        image: firstImg
+    },
+    {
+        title: "Interdum velit euismod",
+        desc: "Lectus quam id leo in",
+        image: secondImg
+    },
+    {
+        title: "Risus in hendrerit",
+        desc: "Augue eget arcu dictum varius",
+        image: thirdImg
+    }
+];
 
 export default CarouselPage;
