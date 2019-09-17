@@ -41,6 +41,10 @@ export const Rating: React.FunctionComponent<RatingProps> = (props: RatingProps)
         return props.disabled ? disabledColors : initialColors;
     }
 
+    function onChange(value: number): void {
+        !props.disabled && props.onChange && props.onChange(value);
+    }
+
     return (
         <div className={"custom-rating" + (props.className ? ` ${props.className}` : "")} id={props.id}>
             <ReactRating
@@ -57,7 +61,7 @@ export const Rating: React.FunctionComponent<RatingProps> = (props: RatingProps)
                         : <SVGStar fill={getColors()[1]} width={width} height={height} />
                 }
                 fractions={1}
-                onChange={props.disabled ? () => null : props.onChange}
+                onChange={onChange}
                 readonly={props.readOnly || props.disabled}
             />
         </div>

@@ -95,7 +95,6 @@
 		"@types/systemjs": "^0.20.6",
 		"babel-core": "^6.26.3",
 		"babel-polyfill": "^6.26.0",
-		"canvas": "^2.6.0",
 		"case-sensitive-paths-webpack-plugin": "^2.2.0",
 		"commitizen": "^4.0.3",
 		"copy-webpack-plugin": "^5.0.4",

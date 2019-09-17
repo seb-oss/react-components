@@ -1,45 +1,45 @@
 import * as React from "react";
-import { shallow } from "enzyme";
-import { Slider, RangeSliderLabel } from "./Slider";
+import { shallow, ShallowWrapper, ReactWrapper, mount } from "enzyme";
+import { Slider, RangeSliderLabel, SliderProps } from "./Slider";
 
 describe("Component: Slider", () => {
-    const props = {
+    let wrapper: ShallowWrapper<SliderProps>;
+    const props: SliderProps = {
         value: 90,
         onChange: jest.fn(),
         name: "slider",
     };
-
     const labels: Array<RangeSliderLabel> = [{ position: 0, text: "empty" }, { position: 100, text: "full" }];
 
-    it("Should render", () => {
-        const wrapper = shallow(<Slider {...props} />);
-        expect(wrapper).toBeDefined();
+    beforeEach(() => {
+        wrapper = shallow(<Slider {...props} />);
     });
 
-    it("Should pass custom class", () => {
-        const wrapper = shallow(<Slider {...props} className="mySlider" />);
-        expect(wrapper.hasClass("mySlider")).toBeTruthy();
-    });
+    it("Should render", () => expect(wrapper).toBeDefined());
 
-    it("Should pass down the id to the slider component", () => {
-        const wrapper = shallow(<Slider {...props} id="slider-id" />);
-        expect(wrapper.find("#slider-id")).toHaveLength(1);
+    it("Should pass custom class and id", () => {
+        const className: string = "mySliderClass";
+        const id: string = "mySliderId";
+        wrapper.setProps({ className, id });
+        expect(wrapper.hasClass(className)).toBeTruthy();
+        expect(wrapper.find(`#${id}`).length).toBeTruthy();
     });
 
     it("Should render label", () => {
-        const wrapper = shallow(<Slider {...props} label="Slider label" />);
+        const label: string = "Slider label";
+        wrapper.setProps({ label });
         expect(wrapper.find(".custom-label")).toBeDefined();
-        expect(wrapper.find(".custom-label").text()).toEqual("Slider label");
+        expect(wrapper.find(".custom-label").text()).toEqual(label);
     });
 
     it("Should render error message", () => {
-        const wrapper = shallow(<Slider {...props} error="Some error" />);
+        const error: string = "Some error";
+        wrapper.setProps({ error });
         expect(wrapper.find(".alert")).toBeDefined();
-        expect(wrapper.find(".alert").text()).toEqual("Some error");
+        expect(wrapper.find(".alert").text()).toEqual(error);
     });
 
     it("Should render with default min and max if not passed", () => {
-        const wrapper = shallow(<Slider {...props} />);
         expect(wrapper.find("input").prop("min")).toEqual(0);
         expect(wrapper.find("input").prop("max")).toEqual(100);
         wrapper.setProps({ min: 20, max: 60 });
@@ -48,37 +48,73 @@ describe("Component: Slider", () => {
     });
 
     it("Should render labels when passed", () => {
-        const wrapper = shallow(<Slider {...props} labels={labels} />);
+        wrapper.setProps({ labels });
         expect(wrapper.find(".custom-slider-label").length).toBeGreaterThan(0);
     });
 
-    it("Should fire change event and reset value if value passed is out of boundries", () => {
-        const wrapper = shallow(<Slider {...props} min={0} max={100} />);
-        wrapper.setProps({ value: -12 });
-        expect(props.onChange).toBeCalledWith({ target: { value: 0 } });
-        wrapper.setProps({ value: 112 });
-        expect(props.onChange).toBeCalledWith({ target: { value: 100 } });
+    describe("Should reset when value is out of boundries", () => {
+        let mountedWrapper: ReactWrapper<SliderProps>;
+        beforeEach(() => {
+            mountedWrapper = mount(<Slider {...props} />);
+        });
+        test("Value is lower that the minimum", async (done: jest.DoneCallback) => {
+            expect.assertions(1);
+            mountedWrapper.setProps({ value: -12 }, () => {
+                setTimeout(() => {
+                    expect(props.onChange).toBeCalledWith({ target: { value: 0, name: props.name, valueAsNumber: 0 } });
+                    done();
+                });
+            });
+        });
+        test("Value is higher that the maximum", async (done: jest.DoneCallback) => {
+            expect.assertions(1);
+            mountedWrapper.setProps({ value: 112 }, () => {
+                setTimeout(() => {
+                    expect(props.onChange).toBeCalledWith({ target: { value: 100, name: props.name, valueAsNumber: 100 } });
+                    done();
+                });
+            });
+        });
     });
 
     it("Should always show tooltip when alwaysShowTooltip is set to true", () => {
-        const wrapper = shallow(<Slider {...props} alwaysShowTooltip={true} />);
+        wrapper.setProps({ alwaysShowTooltip: true });
         expect(wrapper.find(".custom-slider-preview").hasClass("always-show")).toBeTruthy();
     });
 
     it("Should show ticks when showTicks is set to true", () => {
-        const wrapper = shallow(<Slider {...props} showTicks={true} labels={labels} />);
+        wrapper.setProps({ showTicks: true, labels });
         expect(wrapper.find(".custom-slider-label").first().hasClass("show-ticks")).toBeTruthy();
     });
 
     it("Should be able to pick a different theme", () => {
-        const wrapper = shallow(<Slider {...props} theme="danger" tooltipTheme="danger" />);
-        expect(wrapper.find(".custom-slider-holder").hasClass("danger")).toBeTruthy(); // theme
-        expect(wrapper.find(".custom-slider-preview").hasClass("danger")).toBeTruthy(); // tooltipTheme
+        const theme: string = "danger";
+        wrapper.setProps({ theme, tooltipTheme: theme });
+        expect(wrapper.find(".custom-slider-holder").hasClass(theme)).toBeTruthy(); // theme
+        expect(wrapper.find(".custom-slider-preview").hasClass(theme)).toBeTruthy(); // tooltipTheme
     });
 
     it("Should render alternative version of slider", () => {
-        const wrapper = shallow(<Slider {...props} alternative={true} />);
+        wrapper.setProps({ alternative: true });
         expect(wrapper.find(".custom-slider").hasClass("alternative")).toBeTruthy();
+    });
+
+    it("Should be disabled when disabled prop is set to true", () => {
+        wrapper.setProps({ disabled: true });
+        expect(wrapper.hasClass("disabled")).toBeTruthy();
+    });
+
+    it("Should render labels out of bounds at the edges of the slider", () => {
+        wrapper.setProps({
+            labels: [
+                { position: -12, text: "lower than minimum" },
+                { position: 112, text: "higher than maximum" },
+            ]
+        });
+        const firstLabelStyle: React.CSSProperties = wrapper.find(".custom-slider-label").first().getElement().props.style;
+        const secondLabelStyle: React.CSSProperties = wrapper.find(".custom-slider-label").last().getElement().props.style;
+        expect(firstLabelStyle.left).toEqual("0%");
+        expect(secondLabelStyle.left).toEqual("100%");
     });
 
 });

@@ -1,7 +1,7 @@
 import * as React from "react";
 import "./radio-button-style.scss";
 
-const randomId = () => String((Math.random() * 1000) + (new Date()).getTime());
+const randomId = (): string => String((Math.random() * 1000) + (new Date()).getTime());
 
 export interface RadioButtonProps {
     onChange: (value: any) => void;
@@ -24,9 +24,7 @@ const RadioButton: React.FunctionComponent<RadioButtonProps> = (props: RadioButt
     if (props.error) { inputFieldClass += " has-error"; }
     if (props.inline) { inputFieldClass += " inline"; }
     const [id, setId] = React.useState<string>("");
-    React.useEffect(() => {
-        setId(props.id || (props.label ? randomId() : null));
-    }, [props.id]);
+    React.useEffect(() => setId(props.id || randomId()), [props.id]);
 
     return (
         <div className={"form-group radio-holder" + (props.className ? ` ${props.className}` : "")}>

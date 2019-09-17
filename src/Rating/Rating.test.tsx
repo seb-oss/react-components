@@ -3,11 +3,15 @@ import { shallow, mount, ShallowWrapper, ReactWrapper } from "enzyme";
 import { Rating, RatingProps } from "./Rating";
 import { SVGStarHollow } from "./RatingStar";
 
+const initialColors: [string, string] = ["#A9A9A9", "#FFC500"];
+const disabledColors: [string, string] = ["#dddddd", "#bfbfbf"];
+
 describe("Component: Rating", () => {
     let wrapper: ShallowWrapper<RatingProps>;
     let mountedWrapper: ReactWrapper<RatingProps>;
 
     beforeEach(() => {
+        mountedWrapper && mountedWrapper.unmount();
         wrapper = shallow(<Rating />);
         mountedWrapper = mount(<Rating />);
     });
@@ -35,33 +39,29 @@ describe("Component: Rating", () => {
         expect(mountedWrapper.find("svg").last().hasClass("custom-svg-star")).toBeTruthy();
     });
 
-    it("Should accept custom colors only when an array of two colors are passed", () => {
+    it("Should render with default colors if colors passed incorrectly", () => {
         mountedWrapper.setProps({ initialValue: 3, colors: ["#0F0"] as any });
-        // Filled star
-        expect(mountedWrapper.find("svg").first().find(".star-fill").first().prop("fill")).toEqual("#A9A9A9");
-        expect(mountedWrapper.find("svg").last().find(".star-fill").first().prop("fill")).toEqual("#FFC500");
-        mountedWrapper.setProps({ colors: ["#0F0", "#F00"] });
-        expect(mountedWrapper.find("svg").first().find(".star-fill").first().prop("fill")).toEqual("#0F0");
-        expect(mountedWrapper.find("svg").last().find(".star-fill").first().prop("fill")).toEqual("#F00");
-        // Hollow star
+        expect(mountedWrapper.find("svg").first().find(".star-fill").first().prop("fill")).toEqual(initialColors[0]);
+        expect(mountedWrapper.find("svg").last().find(".star-fill").first().prop("fill")).toEqual(initialColors[1]);
         mountedWrapper.setProps({ useHollow: true });
-        expect(mountedWrapper.find("svg").first().find(".star-fill").first().prop("fill")).toEqual("#A9A9A9");
-        expect(mountedWrapper.find("svg").last().find(".star-fill").first().prop("fill")).toEqual("#FFC500");
-        mountedWrapper.setProps({ colors: ["#0F0", "#F00"] });
-        expect(mountedWrapper.find("svg").first().find(".star-fill").first().prop("fill")).toEqual("#0F0");
-        expect(mountedWrapper.find("svg").last().find(".star-fill").first().prop("fill")).toEqual("#F00");
+        expect(mountedWrapper.find("svg").first().find(".star-fill").first().prop("fill")).toEqual(initialColors[0]);
+        expect(mountedWrapper.find("svg").last().find(".star-fill").first().prop("fill")).toEqual(initialColors[1]);
     });
 
-    it("Should fire change event", () => {
+    it("Should accept custom colors only when an array of two colors are passed", () => {
+        const colors: [string, string] = ["#0F0", "#F00"];
+        mountedWrapper.setProps({ initialValue: 3, colors });
+        expect(mountedWrapper.find("svg").first().find(".star-fill").first().prop("fill")).toEqual(colors[0]);
+        expect(mountedWrapper.find("svg").last().find(".star-fill").first().prop("fill")).toEqual(colors[1]);
+        mountedWrapper.setProps({ useHollow: true });
+        expect(mountedWrapper.find("svg").first().find(".star-fill").first().prop("fill")).toEqual(colors[0]);
+        expect(mountedWrapper.find("svg").last().find(".star-fill").first().prop("fill")).toEqual(colors[1]);
+    });
+
+    it("Should fire change event when passed", () => {
         const onChange: jest.Mock = jest.fn();
         mountedWrapper.setProps({ onChange });
-        mountedWrapper
-            .children().first()
-            .children().first()
-            .children().first()
-            .children().first()
-            .children().last()
-            .simulate("click");
+        mountedWrapper.children().first().children().first().children().first().children().first().children().last().simulate("click");
         expect(onChange).toBeCalled();
     });
 
@@ -74,5 +74,14 @@ describe("Component: Rating", () => {
         const starWrapper: ShallowWrapper<RatingProps> = shallow(<SVGStarHollow width={25} height={25} fill="#F00" title="title" />);
         expect(starWrapper.find("title").length).toBe(1);
         expect(starWrapper.find("title").first().text()).toEqual("title");
+    });
+
+    it("Should be disabled when disabled prop is set to true", () => {
+        mountedWrapper.setProps({ initialValue: 3, disabled: true });
+        expect(mountedWrapper.find("svg").first().find(".star-fill").first().prop("fill")).toEqual(disabledColors[0]);
+        expect(mountedWrapper.find("svg").last().find(".star-fill").first().prop("fill")).toEqual(disabledColors[1]);
+        mountedWrapper.setProps({ useHollow: true });
+        expect(mountedWrapper.find("svg").first().find(".star-fill").first().prop("fill")).toEqual(disabledColors[0]);
+        expect(mountedWrapper.find("svg").last().find(".star-fill").first().prop("fill")).toEqual(disabledColors[1]);
     });
 });

@@ -36,10 +36,13 @@ const Slider: React.FunctionComponent<SliderProps> = (props: SliderProps): React
 
     // Resetting if the values are exceeding the limits
     React.useEffect(() => {
+        let target: Partial<EventTarget & HTMLInputElement>;
         if (props.value > max) {
-            props.onChange({ target: { value: max } });
+            target = { value: max as any, name: props.name, valueAsNumber: max };
+            props.onChange({ target });
         } else if (props.value < min || props.value === null || props.value === undefined) {
-            props.onChange({ target: { value: min } });
+            target = { value: min as any, name: props.name, valueAsNumber: min };
+            props.onChange({ target });
         }
     }, [props.value]);
 
