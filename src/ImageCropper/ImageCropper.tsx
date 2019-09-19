@@ -61,8 +61,12 @@ export interface OptionProps {
     center?: boolean;
     checkCrossOrigin?: boolean;
     checkOrientation?: boolean;
+    crop?: (event: CustomEvent) => void;
     cropBoxMovable?: boolean;
     cropBoxResizable?: boolean;
+    cropend?: (event: CustomEvent) => void;
+    cropmove?: (event: CustomEvent) => void;
+    cropstart?: (event: CustomEvent) => void;
     data?: Cropper.Data;
     dragMode?: Cropper.DragMode;
     guides?: boolean;
@@ -77,6 +81,7 @@ export interface OptionProps {
     modal?: boolean;
     movable?: boolean;
     preview?: Element | Array<Element> | NodeList | string;
+    ready?: (event: CustomEvent) => void;
     responsive?: boolean;
     restore?: boolean;
     rotatable?: boolean;
@@ -84,15 +89,10 @@ export interface OptionProps {
     toggleDragModeOnDblclick?: boolean;
     viewMode?: Cropper.ViewMode;
     wheelZoomRatio?: number;
+    zoom?: (event: CustomEvent) => void;
+    zoomable?: boolean;
     zoomOnTouch?: boolean;
     zoomOnWheel?: boolean;
-    zoomable?: boolean;
-    ready?(event: CustomEvent): void;
-    zoom?(event: CustomEvent): void;
-    crop?(event: CustomEvent): void;
-    cropend?(event: CustomEvent): void;
-    cropmove?(event: CustomEvent): void;
-    cropstart?(event: CustomEvent): void;
 }
 
 export interface CanvasData {

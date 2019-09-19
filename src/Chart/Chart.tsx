@@ -9,12 +9,15 @@ export interface ExtendedChartOptions extends ChartOptions {
     annotation?: ChartAnnotation;
 }
 
+export type ChartType = "line" | "bar" | "horizontalBar" | "pie" | "doughnut" | "polar" | "radar" | "bubble" | "scatter";
+
 export interface ChartProps {
-    chartType: string;
-    data: ChartData;
-    options?: ExtendedChartOptions;
+    chartType: ChartType;
     className?: string;
+    data: ChartData;
+    id?: string;
     onClick?: (event: React.MouseEvent<HTMLElement>) => void;
+    options?: ExtendedChartOptions;
 }
 
 export class Chart extends React.Component<ChartProps, any> {
@@ -22,7 +25,7 @@ export class Chart extends React.Component<ChartProps, any> {
         super(props);
     }
 
-    renderChart(type: string) {
+    renderChart(type: ChartType) {
         switch (type) {
             case "line":
                 return <Line data={this.props.data} options={this.props.options} onElementsClick={this.props.onClick} />;
@@ -49,7 +52,7 @@ export class Chart extends React.Component<ChartProps, any> {
 
     render() {
         return (
-            <div className={"chart-wrapper " + (this.props.className ? this.props.className : "")}>
+            <div className={"chart-wrapper " + (this.props.className ? this.props.className : "")} id={this.props.id}>
                 {this.renderChart(this.props.chartType)}
             </div>
         );

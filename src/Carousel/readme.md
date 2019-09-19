@@ -31,15 +31,15 @@ These are the current available properties:
 
 | Property             | Type                               | Description                                                                        |
 | -------------------- | ---------------------------------- | ---------------------------------------------------------------------------------- |
-| list                 | `Array<CarouselItem>` <sup>1</sup> | An array of `CarouselItem`                                                           |
-| afterChange          | `(index: number) => void`          | Callback triggered after carousel is changed                                       |
-| className?           | `string`                           | Element class                                                                      |
-| id?                  | `string`                           | Element id                                                                         |
-| height?              | `number`                           | Height of carousel                                                                 |
+| afterChange?         | `(index: number) => void`          | Callback triggered after carousel is changed                                       |
 | autoPlay?            | `boolean`                          | Enable auto change mode. default is `false`                                        |
 | autoPlaySpeed?       | `number`                           | Autoplay speed in milliseconds (default: 3000)                                     |
+| backgroundPlacement? | `string`                           | CSS background-placement property, default is `cover`                              |
+| className?           | `string`                           | Element class                                                                      |
+| height?              | `number`                           | Height of carousel                                                                 |
+| id?                  | `string`                           | Element id                                                                         |
 | infinite?            | `boolean`                          | Coupled with autoPlay, enables the carousel to loop infinitely. default is `false` |
-| backgroundPlacement? | `string`                           | CSS background-placement property, default is `cover`                                  |
+| list                 | `Array<CarouselItem>` <sup>1</sup> | An array of `CarouselItem`                                                         |
 
 ## Reference
 

@@ -11,15 +11,15 @@ export interface CarouselItem {
 }
 
 export interface CarouselProps {
-    list: Array<CarouselItem>;
-    height?: number;
+    afterChange?: (index: number) => void;
     autoPlay?: boolean;
     autoPlaySpeed?: number;
     backgroundPlacement?: string;
-    afterChange?: (index: number) => void;
     className?: string;
+    height?: number;
     id?: string;
     infinite?: boolean;
+    list: Array<CarouselItem>;
 }
 
 export const Carousel: React.FunctionComponent<CarouselProps> = (props: CarouselProps): React.ReactElement<void> => {

@@ -2,10 +2,10 @@ import * as React from "react";
 import "./loader-style.scss";
 
 export interface LoaderProps {
-    toggle: boolean;
-    fullscreen?: boolean;
     className?: string;
+    fullscreen?: boolean;
     id?: string;
+    toggle: boolean;
 }
 
 export const Loader: React.FunctionComponent<LoaderProps> = React.memo((props: LoaderProps): React.ReactElement<void> => {

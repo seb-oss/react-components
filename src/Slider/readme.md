@@ -33,25 +33,26 @@ This React component supports customization and configurations. The component na
 ## Properties
 These are the current available properties:
 
-| Property           | Type                                  | Description                                                          |
+| Property           | Type                                  | Description                                                         |
 | ------------------ | ------------------------------------- | ------------------------------------------------------------------- |
-| value              | `number`                              | value of slider                                                     |
-| name               | `string`                              | name of slider                                                      |
-| onChange           | `(event: any) => void`                | change action                                                       |
-| id?                | `string`                              | id property                                                         |
+| value              | `number`                              | Value of slider                                                     |
+| name               | `string`                              | Name of slider                                                      |
+| onChange           | `(event: any) => void`                | Change action                                                       |
+| id?                | `string`                              | Id property                                                         |
+| label?             | `string`                              | The component label                                                 |
 | min?               | `number`                              | Minimum value (default: `0`)                                        |
 | max?               | `number`                              | Maximum value (default: `10`)                                       |
 | step?              | `number`                              | Step value (default: `1`)                                           |
 | className?         | `string`                              | Custom class can be passed here                                     |
 | labels?            | `Array<RangeSliderLabel>`<sup>1</sup> | Labels to be displayed below the slider                             |
-| label?             | `string`                              | the component label                                                 |
-| error?             | `string`                              | the component error message                                         |
 | showTicks?         | `boolean`                             | Show ticks with labels (default: `false`)                           |
-| alwaysShowTooltip? | `boolean`                             | Always Show tooltip (default: `false`)                              |
 | theme?             | `string`                              | Based on SEB predefined colors. (default: `'primary'`)<sup>2</sup>  |
 | tooltipTheme?      | `string`                              | Based on SEB predefined colors. (default: `'inverted'`)<sup>2</sup> |
+| alwaysShowTooltip? | `boolean`                             | Always Show tooltip (default: `false`)                              |
 | alternative?       | `boolean`                             | Use an alternative version of the slider                            |
+| error?             | `string`                              | The component error message                                         |
 | reference?         | `React.RefObject<any>`                | React Ref obj                                                       |
+| disabled?          | `string`                              | Disabled state                                                      |
 
 
 ## Footnote

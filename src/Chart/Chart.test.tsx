@@ -65,13 +65,16 @@ describe("Component: Chart", () => {
         expect(scatterWrapper).toBeDefined();
     });
 
-    it("Should pass custom class", () => {
-        const wrapper = shallow(<Chart chartType="bar" data={barData} className="myChart" />);
-        expect(wrapper.hasClass("myChart")).toBeTruthy();
+    it("Should pass custom class and id", () => {
+        const className: string = "myChartClass";
+        const id: string = "myChartId";
+        const wrapper = shallow(<Chart chartType="bar" data={barData} className={className} id={id} />);
+        expect(wrapper.hasClass(className)).toBeTruthy();
+        expect(wrapper.find(`#${id}`).length).toBeTruthy();
     });
 
     it("Should render an error message if an unknown chart type is passed", () => {
-        const wrapper = shallow(<Chart chartType="bingo" data={barData} />);
+        const wrapper = shallow(<Chart chartType={"bingo" as any} data={barData} />);
         expect(wrapper.children().first().text()).toEqual("Unknown chart type");
     });
 

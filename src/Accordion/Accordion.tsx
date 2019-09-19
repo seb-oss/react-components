@@ -15,9 +15,9 @@ export interface AccrodionListItem {
 }
 
 export interface AccordionProps {
-    list: Array<AccrodionListItem>;
     className?: string;
     id?: string;
+    list: Array<AccrodionListItem>;
 }
 
 interface AccordionState {

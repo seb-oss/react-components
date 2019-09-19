@@ -34,24 +34,24 @@ These are the current available properties:
 | ------------- | -------------------------------------------------------- | ----------------------------------------------- |
 | value         | `string`                                                 | Value string                                    |
 | name          | `string`                                                 | Name string                                     |
-| onChange      | `(event: React.ChangeEvent<HTMLInputElement>) => void`   | On `'change'` event                             |
 | id?           | `string`                                                 | Id string                                       |
 | pattern?      | `string`                                                 | Pattern string                                  |
 | required?     | `boolean`                                                | Required atribute                               |
 | minLength?    | `number`                                                 | Input min length                                |
 | maxLength?    | `number`                                                 | Input max length                                |
+| onChange      | `(event: React.ChangeEvent<HTMLInputElement>) => void`   | On `'change'` event                             |
 | onKeyDown?    | `(event: React.KeyboardEvent<HTMLInputElement>) => void` | On `'keydown'` event                            |
 | onKeyUp?      | `(event: React.KeyboardEvent<HTMLInputElement>) => void` | On `'keyup'` event                              |
 | onKeyPress?   | `(event: React.KeyboardEvent<HTMLInputElement>) => void` | On `'keypress'` event                           |
 | onFocus?      | `(event: React.FocusEvent<HTMLInputElement>) => void`    | On `'focus'` event                              |
 | onBlur?       | `(event: React.FocusEvent<HTMLInputElement>) => void`    | On `'blur'` event                               |
 | type?         | `string`                                                 | Input type. (default: `'text'`)                 |
-| className?    | `string`                                                 | Custom class                                    |
-| placeHolder?  | `string`                                                 | Placeholder text                                |
 | label?        | `string`                                                 | The small label on top of the textbox           |
 | error?        | `string`                                                 | Error text                                      |
-| disabled?     | `boolean`                                                | Disable input element. (default: `false`)       |
+| placeHolder?  | `string`                                                 | Placeholder text                                |
+| className?    | `string`                                                 | Custom class                                    |
 | focus?        | `boolean`                                                | Enable autofocus. (default: `false`)            |
 | readonly?     | `boolean`                                                | Make input element readonly. (default: `false`) |
+| disabled?     | `boolean`                                                | Disable input element. (default: `false`)       |
 | autoComplete? | `boolean`                                                | Enable autocomplete. (default: `false`)         |
 | reference?    | `React.RefObject<HTMLInputElement>`                      | React Ref obj                                   |

@@ -2,17 +2,17 @@ import * as React from "react";
 import "./image-style.scss";
 
 export interface ImageProps {
-    src: string;
-    width: string;
+    alt?: string;
+    ariaDescribedBy?: string;
+    ariaLabel?: string;
+    className?: string;
     height: string;
+    id?: string;
     onClick?: (event: any) => void;
     onLoad?: (event: any) => void;
-    className?: string;
+    src: string;
     useImgTag?: boolean;
-    alt?: string;
-    id?: string;
-    ariaLabel?: string;
-    ariaDescribedBy?: string;
+    width: string;
 }
 
 export const Image: React.FunctionComponent<ImageProps> = React.memo((props: ImageProps): React.ReactElement<void> => {

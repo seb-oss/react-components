@@ -2,10 +2,10 @@ import * as React from "react";
 import "./breadcrumb-style.scss";
 
 export interface BreadcrumbProps {
-    list: Array<string>;
-    onClick?: (i: number) => void;
     className?: string;
     id?: string;
+    list: Array<string>;
+    onClick?: (i: number) => void;
 }
 
 export const Breadcrumb: React.FunctionComponent<BreadcrumbProps> = React.memo((props: BreadcrumbProps): React.ReactElement<void> => {

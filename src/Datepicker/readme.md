@@ -33,23 +33,23 @@ These are the current available properties:
 
 | Property          | Type                    | Description                                                                                   |
 | ----------------- | ----------------------- | --------------------------------------------------------------------------------------------- |
-| value             | `Date`                  | Value                                                                                         |
-| name              | `string`                | Input element name                                                                            |
-| onChange          | `(value: Date) => void` | On change event                                                                               |
+| calendarIcon?     | `JSX.ELement`           | Custom calednar icon                                                                          |
 | className?        | `string`                | Custom class                                                                                  |
-| id?               | `string`                | Element id                                                                                    |
-| label?            | `string`                | Label text                                                                                    |
-| error?            | `string`                | Error message                                                                                 |
-| placeHolder?      | `string`                | Placeholder value                                                                             |
-| disabled?         | `boolean`               | Default set to false                                                                          |
-| minDate?          | `Date`                  | Min date range                                                                                |
-| maxDate?          | `Date`                  | Max date range                                                                                |
-| locale?           | `string`                | Can be any IETF language tag. defaults to user's browser settings.                            |
-| format?           | `string`                | Date format (e.g. `YYYY-DD-MM`)                                                               |
-| showLeadingZeros? | `boolean`               | Show leading zeroes for values less that 10 (e.g. show `01` instead of `1`) (default: `true`) |
 | clearable?        | `boolean`               | Shows a clear button (default: `false`)                                                       |
 | clearIcon?        | `JSX.ELement`           | Custom clear icon                                                                             |
-| calendarIcon?     | `JSX.ELement`           | Custom calednar icon                                                                          |
+| disabled?         | `boolean`               | Default set to false                                                                          |
+| error?            | `string`                | Error message                                                                                 |
+| format?           | `string`                | Date format (e.g. `YYYY-DD-MM`)                                                               |
+| id?               | `string`                | Element id                                                                                    |
+| label?            | `string`                | Label text                                                                                    |
+| locale?           | `string`                | Can be any IETF language tag. defaults to user's browser settings.                            |
+| maxDate?          | `Date`                  | Max date range                                                                                |
+| minDate?          | `Date`                  | Min date range                                                                                |
+| name              | `string`                | Input element name                                                                            |
+| onChange          | `(value: Date) => void` | On change event                                                                               |
+| placeHolder?      | `string`                | Placeholder value                                                                             |
+| showLeadingZeros? | `boolean`               | Show leading zeroes for values less that 10 (e.g. show `01` instead of `1`) (default: `true`) |
+| value             | `Date`                  | Value                                                                                         |
 
 ## Reference
 This component is a wrapper around [react-date-picker](https://www.npmjs.com/package/react-date-picker)

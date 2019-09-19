@@ -19,38 +19,22 @@ interface DisplayDropDownItem extends UniqueDropDownItem {
 export type DropdownChangeEvent = DropDownItem | Array<DropDownItem> | React.ChangeEvent<HTMLSelectElement>;
 
 export interface DropDownProps {
-    /** a list of the currently selected dropdown item(s) */
-    selectedValue: DropDownItem | Array<DropDownItem>;
-    /** a list of all the dropdown items to display */
-    list: Array<DropDownItem>;
-    /** a callback function which will run everytime an item is selected or deselected. It contains the current element or list or element which are selected */
-    onChange: (event: DropdownChangeEvent) => void;
-    /** name to be applied to the dropdown button button element. Default: "dropdownMenuButton" */
-    name?: string;
-    /** Custom class name */
     className?: string;
-    /** ID */
-    id?: string;
-    /** label to display above the dropdown */
-    label?: string;
-    /** text to display inside the toggle button when no item has been selected yet */
-    placeholder?: string;
-    /** error string to be displayed under the dropdown */
-    error?: string;
-    /** version of the dropdown with native `<select>` and `<option>` html elements which trigger the native dropdown on mobile phones */
-    native?: boolean;
-    /** display a search bar in the dropdown menu */
-    searchable?: boolean;
-    /** text to display inside the empty search bar. Default: "Search ..." */
-    searchPlaceholder?: string;
-    /** enable selecting more than one elements */
-    multi?: boolean;
-    /** should a clear(X) icon button appear on the menu when one or more items are selected */
     clearable?: boolean;
-    /** disabled state of the component, default: `false` */
     disabled?: boolean;
-    /** version of the dropdown with a "more" or "three dots" icon button as the menu trigger alligned to the right */
+    error?: string;
+    id?: string;
+    label?: string;
+    list: Array<DropDownItem>;
     more?: boolean;
+    multi?: boolean;
+    name?: string;
+    native?: boolean;
+    onChange: (event: DropdownChangeEvent) => void;
+    placeholder?: string;
+    searchable?: boolean;
+    searchPlaceholder?: string;
+    selectedValue: DropDownItem | Array<DropDownItem>;
 }
 
 const chevronDownIcon: JSX.Element = <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M443.5 162.6l-7.1-7.1c-4.7-4.7-12.3-4.7-17 0L224 351 28.5 155.5c-4.7-4.7-12.3-4.7-17 0l-7.1 7.1c-4.7 4.7-4.7 12.3 0 17l211 211.1c4.7 4.7 12.3 4.7 17 0l211-211.1c4.8-4.7 4.8-12.3.1-17z" /></svg>;

@@ -28,17 +28,19 @@ This React component is based on `react-rating`. Supports customization and conf
 ## Properties
 These are the current available properties:
 
-| Property      | Type                      | Description                                   |
+| Property      | Type                      | Description                                  |
 | ------------- | ------------------------- | -------------------------------------------- |
-| initialValue? | `any`                     | intial value, string or number               |
-| onChange      | `(value: number) => void` | onchange event, will return the value        |
-| className?    | `string`                  | custom class                                 |
-| tooltipList?  | `Array<string>`           | array of strings which reperesent each start |
-| colors?       | `Array<string>`           | array of strings which reperesent each color |
-| iconHeight?   | `number`                  | height of icons                              |
-| iconWidth?    | `number`                  | width of icons                               |
-| useHollow?    | `boolean`                 | use empty icon                               |
-| readOnly?     | `boolean`                 | for viewing only, default false              |
+| initialValue? | `any`                     | Intial value, string or number               |
+| onChange?     | `(value: number) => void` | Onchange event, will return the value        |
+| tooltipList?  | `Array<string>`           | Array of strings which reperesent each start |
+| iconHeight?   | `number`                  | Height of icons                              |
+| iconWidth?    | `number`                  | Width of icons                               |
+| useHollow?    | `boolean`                 | Use empty icon                               |
+| colors?       | `Array<string>`           | Array of strings which reperesent each color |
+| readOnly?     | `boolean`                 | For viewing only, default false              |
+| className?    | `string`                  | Custom class                                 |
+| disabled?     | `string`                  | Disabled state                               |
+| id?           | `string`                  | Element id                                   |
 
 
 ## Reference

@@ -3,19 +3,20 @@ import "./button-style.scss";
 
 export type ButtonTheme = "primary" | "secondary" | "danger" | "alternative" | "ghost-dark" | "ghost-light" | "anchor";
 export type ButtonSizes = "lg" | "md" | "sm";
+export type ButtonIconPosition = "right" | "left";
 
 export interface ButtonProps {
-    label: string;
-    onClick: (e?: React.MouseEvent<HTMLButtonElement>) => void;
-    id?: string;
-    name?: string;
     className?: string;
     disabled?: boolean;
+    icon?: any;
+    iconPosition?: ButtonIconPosition;
+    id?: string;
+    label: string;
+    name?: string;
+    onClick: (e?: React.MouseEvent<HTMLButtonElement>) => void;
+    size?: ButtonSizes;
     theme?: ButtonTheme;
     title?: string;
-    icon?: any;
-    iconPosition?: "right" | "left";
-    size?: ButtonSizes;
 }
 
 export const Button: React.FunctionComponent<ButtonProps> = React.memo((props: ButtonProps): React.ReactElement<void> => {

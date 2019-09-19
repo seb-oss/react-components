@@ -8,6 +8,7 @@ export interface StepTrackerProps {
     list: Array<string>;
     onClick?: (index: number) => void;
     className?: string;
+    id?: string;
     labelPosition?: string;
     useNumbers?: boolean;
     orientation?: string;
@@ -76,7 +77,7 @@ export const StepTracker: React.FunctionComponent<StepTrackerProps> = React.memo
     }
 
     return (
-        <div className={wrapperClass}>
+        <div className={wrapperClass} id={props.id}>
 
             {topLabel &&
                 <div className="text-wrapper">

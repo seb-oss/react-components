@@ -31,7 +31,7 @@ These are the current available properties:
 
 | Property   | Type                  | Description                                     |
 | ---------- | --------------------- | ----------------------------------------------- |
-| list       | `Array<string>`       | List of string representing stages of depth     |
-| onClick    | `(i: number) => void` | Callback triggered when a breadcrumb is clicked |
 | className? | `string`              | Element class                                   |
 | id?        | `string`              | Element id                                      |
+| list       | `Array<string>`       | List of string representing stages of depth     |
+| onClick?   | `(i: number) => void` | Callback triggered when a breadcrumb is clicked |

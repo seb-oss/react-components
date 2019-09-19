@@ -31,16 +31,17 @@ These are the current available properties:
 
 | Property      | Type                                               | Description                                          |
 | ------------- | -------------------------------------------------- | ---------------------------------------------------- |
-| label         | `string`                                           | Button label                                         |
-| onClick       | `(e: React.MouseEvent<HTMLButtonElement>) => void` | Click action                                         |
-| name?         | `string`                                           | Name property                                        |
-| id?           | `string`                                           | Id property                                          |
 | className?    | `string`                                           | Element class                                        |
 | disabled?     | `boolean`                                          | Disabled status                                      |
-| theme?        | `string`<sup>1</sup>                               | Based on SEB predefined colors: (default: `primary`) |
-| size?         | `string`<sup>2</sup>                               | Based on Bootstrap predefined sizes: (default: `md`) |
 | icon?         | `ReactNode`                                        | Icon to be rendered inside the button                |
 | iconPosition? | `string`<sup>3</sup>                               | Icon position. (default is `left`)                   |
+| id?           | `string`                                           | Id property                                          |
+| label         | `string`                                           | Button label                                         |
+| name?         | `string`                                           | Name property                                        |
+| onClick       | `(e: React.MouseEvent<HTMLButtonElement>) => void` | Click action                                         |
+| size?         | `string`<sup>2</sup>                               | Based on Bootstrap predefined sizes: (default: `md`) |
+| theme?        | `string`<sup>1</sup>                               | Based on SEB predefined colors: (default: `primary`) |
+| title?        | `string`                                           | Element title                                        |
 
 ## Footnote
 

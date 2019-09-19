@@ -30,16 +30,17 @@ This React component is based on SEB Bootstrap style. Supports customization and
 ## Properties
 These are the current available properties:
 
-| Property       | Type                   | Description                              |
-| -------------- | ---------------------- | --------------------------------------- |
-| name           | `string`               | name property                           |
-| checked        | `boolean`              | the checked value                       |
-| label          | `string`               | checkbox label                          |
-| topLabel       | `string`               | a label which shows on top of component |
-| onChange       | `(event: any) => void` | on change action                        |
-| id?            | `string`               | id property                             |
-| className?     | `string`               | custom class                            |
-| disabled?      | `boolean`              | Disabled status                         |
-| description?   | `string`               | a option description                    |
-| error?         | `string`               | error message                           |
-| reference?     | `React.RefObject<any>` | React Ref obj                           |
+| Property     | Type                                                   | Description                             |
+| ------------ | ------------------------------------------------------ | --------------------------------------- |
+| checked      | `boolean`                                              | the checked value                       |
+| className?   | `string`                                               | custom class                            |
+| description? | `string`                                               | a option description                    |
+| disabled?    | `boolean`                                              | Disabled status                         |
+| error?       | `string`                                               | error message                           |
+| id?          | `string`                                               | id property                             |
+| inline?      | `boolean`                                              | Renders inline checkbox                 |
+| label?       | `string`                                               | checkbox label                          |
+| name         | `string`                                               | name property                           |
+| onChange     | `(event: React.ChangeEvent<HTMLInputElement>) => void` | on change action                        |
+| reference?   | `React.RefObject<HTMLInputElement>`                    | React Ref obj                           |
+| topLabel?    | `string`                                               | a label which shows on top of component |

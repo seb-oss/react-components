@@ -31,19 +31,18 @@ This Angular component supports customization and configurations. The component 
 ## Properties
 These are the current available properties:
 
-| Property   | Type                     | Description                      |
-| ---------- | ------------             | ------------------------------- |
-| value      | `number`                 | The current value               |
-| min        | `number`                 | min value                       |
-| max        | `number`                 | max value                       |
-| onIncrease | `() => void`             | on increase event               |
-| onDecrease | `() => void`             | on decrease event               |
-| name?      | `string`                 | name property                   |
-| id?        | `string`                 | id property                     |
-| className? | `string`                 | Custom class can be passed here |
-| name?      | `string`                 | element name                    |
-| label?     | `string`                 | element label                   |
-| disabled?  | `boolean`                | disable                         |
-| error?     | `string`                 | error message                   |
-| warning?   | `string`                 | warning message                 |
-| reference? | `React.RefObject<any>`   | React Ref obj                   |
+| Property   | Type                   | Description                     |
+| ---------- | ---------------------- | ------------------------------- |
+| value      | `number`               | The current value               |
+| onIncrease | `() => void`           | On increase event               |
+| onDecrease | `() => void`           | On decrease event               |
+| min        | `number`               | Min value                       |
+| max        | `number`               | Max value                       |
+| id?        | `string`               | Id property                     |
+| name?      | `string`               | Name property                   |
+| label?     | `string`               | Element label                   |
+| className? | `string`               | Custom class can be passed here |
+| disabled?  | `boolean`              | Disable                         |
+| error?     | `string`               | Error message                   |
+| warning?   | `string`               | Warning message                 |
+| reference? | `React.RefObject<any>` | React Ref obj                   |

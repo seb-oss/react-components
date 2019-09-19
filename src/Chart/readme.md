@@ -29,13 +29,14 @@ This React component is based on `Chart.js` with customization and configuration
 
 These are the current available properties:
 
-| Property   | Type                                             | Description                                 |
-| ---------- | ------------------------------------------------ | ------------------------------------------- |
-| chartType  | `string`                                         | type of charts based on chat.js<sup>1</sup> |
-| data       | `ChartData`                                      | chart.js data object                        |
-| options?   | `ExtendedChartOptions`                           | chart.js options object                     |
-| onClick?   | `(event: React.MouseEvent<HTMLElement>) => void` | Click action                                |
-| className? | `string`                                         | custom class                                |
+| Property   | Type                                             | Description                                          |
+| ---------- | ------------------------------------------------ | ---------------------------------------------------- |
+| chartType  | `ChartType`<sup>1</sup>                          | Type of charts based on chat.js                      |
+| className? | `string`                                         | Custom class                                         |
+| data       | `ChartData`                                      | Chart data object from chart.js                      |
+| id?        | `string`                                         | Element id                                           |
+| onClick?   | `(event: React.MouseEvent<HTMLElement>) => void` | Click action                                         |
+| options?   | `ExtendedChartOptions`                           | Chart options object extended to support annotations |
 
 ## Reference
 

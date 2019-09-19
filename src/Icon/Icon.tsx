@@ -2,11 +2,12 @@ import * as React from "react";
 import "./icon-style.scss";
 
 export interface IconProps {
-    src: any;
     className?: string;
-    title?: string;
+    id?: string;
+    onClick?: (event: React.MouseEvent<HTMLDivElement>) => void;
     size?: number;
-    onClick?: (event: any) => void;
+    src: JSX.Element;
+    title?: string;
 }
 
 export const Icon: React.FunctionComponent<IconProps> = React.memo((props: IconProps): React.ReactElement<void> => {
@@ -14,8 +15,9 @@ export const Icon: React.FunctionComponent<IconProps> = React.memo((props: IconP
         <div
             className={"icon-holder" + (props.className ? ` ${props.className}` : "")}
             title={props.title}
-            onClick={(e: React.MouseEvent<HTMLDivElement>) => { props.onClick && props.onClick(e); }}
+            onClick={props.onClick}
             style={props.size ? { width: props.size, height: props.size } : null}
+            id={props.id}
         >
             {props.src}
         </div>

@@ -31,7 +31,7 @@ These are the current available properties:
 
 | Property    | Type      | Description                   |
 | ----------- | --------- | ----------------------------- |
-| toggle      | `boolean` | Toggle                        |
-| fullscreen? | `boolean` | Show the loader in fullscreen |
 | className?  | `string`  | Element class                 |
+| fullscreen? | `boolean` | Show the loader in fullscreen |
 | id?         | `string`  | Element id                    |
+| toggle      | `boolean` | Toggle                        |

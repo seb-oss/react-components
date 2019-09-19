@@ -32,7 +32,7 @@ This React component is based on SEB Bootstrap style. Supports customization and
 ## Properties
 These are the current available properties:
 
-| Property     | Type                                                        | Description                                  |
+| Property     | Type                                                        | Description                                 |
 | ------------ | ----------------------------------------------------------- | ------------------------------------------- |
 | value        | `string`                                                    | Value string                                |
 | name         | `string`                                                    | Name string                                 |
@@ -42,15 +42,16 @@ These are the current available properties:
 | onKeyPress?  | `(event: React.KeyboardEvent<HTMLTextAreaElement>) => void` | On `'keypress'` event                       |
 | onFocus?     | `(event: React.FocusEvent<HTMLTextAreaElement>) => void`    | On `'focus'` event                          |
 | onBlur?      | `(event: React.FocusEvent<HTMLTextAreaElement>) => void`    | On `'blur'` event                           |
-| cols?        | `number`                                                    | Jumber of cols                              |
-| rows?        | `number`                                                    | Number of rows                              |
-| className?   | `string`                                                    | Custom class                                |
-| placeHolder? | `string`                                                    | Placeholder text                            |
 | label?       | `string`                                                    | The small label on top of the textbox       |
-| resizable?   | `boolean`                                                   | Disable textarea resize. (default: `true`)  |
 | error?       | `string`                                                    | Error text                                  |
-| disabled?    | `boolean`                                                   | Disable textarea. (default: `false`)        |
+| placeHolder? | `string`                                                    | Placeholder text                            |
+| className?   | `string`                                                    | Custom class                                |
+| id?          | `string`                                                    | Element id                                  |
 | focus?       | `boolean`                                                   | Enable autofocus. (default: `false`)        |
 | readonly?    | `boolean`                                                   | Make textatrea readonly. (default: `false`) |
+| disabled?    | `boolean`                                                   | Disable textarea. (default: `false`)        |
+| cols?        | `number`                                                    | Jumber of cols                              |
+| rows?        | `number`                                                    | Number of rows                              |
+| resizable?   | `boolean`                                                   | Disable textarea resize. (default: `true`)  |
 | max?         | `number`                                                    | Input max length                            |
 | reference?   | `React.RefObject<HTMLTextAreaElement>`                      | React Ref obj                               |

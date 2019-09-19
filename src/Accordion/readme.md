@@ -31,9 +31,9 @@ These are the current available properties:
 
 | Property   | Type                                   | Description             |
 | ---------- | -------------------------------------- | ----------------------- |
-| list?      | `Array<AccrodionListItem>`<sup>1</sup> | List of accordion items |
 | className? | `string`                               | Element class           |
 | id?        | `string`                               | Element id              |
+| list       | `Array<AccrodionListItem>`<sup>1</sup> | List of accordion items |
 
 ## Footnote
 

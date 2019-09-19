@@ -29,22 +29,24 @@ This React component supports customization and configurations. The component na
 ## Properties
 These are the current available properties:
 
-| Property       | Type                                                     | Description                                                              |
-| -------------- | -------------------------------------------------------- | ----------------------------------------------------------------------- |
-| selectedValue  | `Array<DropdownItem> \| DropDownItem` <sup>1</sup>       | an array of the currently selected dropdown item(s)                     |
-| list           | `Array<DropdownItem>` <sup>1</sup>                       | an array of all the dropdown items to display                           |
-| onChange       | `(value: any) => void`                                   | a callback passing the updated selectedValue list (multi) or item. In `native` mode the calback is the native onChange event |
-| className?     | `string`                                                 | custom class                                                            |
-| label?         | `string`                                                 | optional label to display above the dropdown                            |
-| placeholder?   | `string`                                                 | optional text to display inside the toggle button when no item selected |
-| error?         | `string`                                                 | optional error string to be displayed under the dropdown                |
-| native?        | `boolean`                                                | a mobile friendly version using native `<select>` html element          |
-| searchable?    | `boolean`                                                | enables searching                                                       |
-| searchPlaceholder?| `string`                                              | optional text to display inside the empty search bar                    |
-| multi?         | `boolean`                                                | enables selecting multiple choices                                      |
-| clearable?     | `boolean`                                                | enables clearning the value, ignored if `multi` is enabled              |
-| disabled?      | `boolean`                                                | disabled status                                                         |
-| more?          | `boolean`                                                | version of the component with a more menu button alligned to the right  |
+| Property           | Type                                               | Description                                                                                                                  |
+| ------------------ | -------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| className?         | `string`                                           | Custom class                                                                                                                 |
+| clearable?         | `boolean`                                          | Enables clearning the value, ignored if `multi` is enabled                                                                   |
+| disabled?          | `boolean`                                          | Disabled status                                                                                                              |
+| error?             | `string`                                           | Optional error string to be displayed under the dropdown                                                                     |
+| id?                | `string`                                           | Element id                                                                                                                   |
+| label?             | `string`                                           | Optional label to display above the dropdown                                                                                 |
+| list               | `Array<DropdownItem>` <sup>1</sup>                 | An array of all the dropdown items to display                                                                                |
+| more?              | `boolean`                                          | Version of the component with a more menu button alligned to the right                                                       |
+| multi?             | `boolean`                                          | Enables selecting multiple choices                                                                                           |
+| name?              | `string`                                           | Element name                                                                                                                 |
+| native?            | `boolean`                                          | A mobile friendly version using native `<select>` html element                                                               |
+| onChange           | `(value: any) => void`                             | A callback passing the updated selectedValue list (multi) or item. In `native` mode the calback is the native onChange event |
+| placeholder?       | `string`                                           | Optional text to display inside the toggle button when no item selected                                                      |
+| searchable?        | `boolean`                                          | Enables searching                                                                                                            |
+| searchPlaceholder? | `string`                                           | Optional text to display inside the empty search bar                                                                         |
+| selectedValue      | `Array<DropdownItem> \| DropDownItem` <sup>1</sup> | An array of the currently selected dropdown item(s)                                                                          |
 
 ## Footnote
 1. `list` items has an exported interface named `DropdownItem`

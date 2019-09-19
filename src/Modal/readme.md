@@ -37,17 +37,17 @@ This React component is based on SEB Bootstrap style. Supports customization and
 ## Properties
 These are the current available properties:
 
-| Property                | Type           | Descrition                                                             |
-| ----------------------- | -------------- | ---------------------------------------------------------------------- |
-| toggle                  | `boolean`      | Show or hide the modal, default is false                               |
-| id?                     | `string`       | the id property of the modal                                           |
-| fullscreen?             | `boolean`      | Toggle fullscreen modal, default is false                              |
-| position?               | `right or left`| Stick modal to one of the sides, accepted values (right or left)       |
-| className?              | `string`       | Custom class                                                           |
-| header?                 | `ReactNode`    | HTML element to be displayed on the header                             |
-| body?                   | `ReactNode`    | HTML element to be displayed on the body                               |
-| footer?                 | `ReactNode`    | HTML element to be displayed on the footer                             |
-| ariaLabel?              | `string`       | Accessibility for label                                                |
-| ariaDescribedby?        | `string`       | Accessibility for description                                          |
-| disableBackdropDismiss? | `boolean`      | User cannot dismiss Dialog by clicking outside of it, default is false |
-| onDismiss?           | `() => void`   | click event when modal is toggled                                      |
+| Property                | Type            | Descrition                                                             |
+| ----------------------- | --------------- | ---------------------------------------------------------------------- |
+| ariaDescribedby?        | `string`        | Accessibility for description                                          |
+| ariaLabel?              | `string`        | Accessibility for label                                                |
+| body?                   | `ReactNode`     | HTML element to be displayed on the body                               |
+| className?              | `string`        | Custom class                                                           |
+| disableBackdropDismiss? | `boolean`       | User cannot dismiss Dialog by clicking outside of it, default is false |
+| footer?                 | `ReactNode`     | HTML element to be displayed on the footer                             |
+| fullscreen?             | `boolean`       | Toggle fullscreen modal, default is false                              |
+| header?                 | `ReactNode`     | HTML element to be displayed on the header                             |
+| id?                     | `string`        | the id property of the modal                                           |
+| onDismiss?              | `() => void`    | click event when modal is toggled                                      |
+| position?               | `right or left` | Stick modal to one of the sides, accepted values (right or left)       |
+| toggle                  | `boolean`       | Show or hide the modal, default is false                               |

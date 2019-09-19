@@ -15,6 +15,8 @@ export interface TextBoxGroupProps {
     onKeyPress?: (event: React.KeyboardEvent<HTMLInputElement>) => void;
     onFocus?: (event: React.FocusEvent<HTMLInputElement>) => void;
     onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void;
+    onRightClick?: (event: React.MouseEvent<HTMLDivElement>) => void;
+    onLeftClick?: (event: React.MouseEvent<HTMLDivElement>) => void;
     type?: string;
     label?: string;
     error?: string;
@@ -24,17 +26,12 @@ export interface TextBoxGroupProps {
     readonly?: boolean;
     disabled?: boolean;
     autoComplete?: boolean;
-
     leftText?: string;
     rightText?: string;
-
     leftIcon?: any;
     rightIcon?: any;
-
     rightTitle?: string;
     leftTitle?: string;
-    onRightClick?: (event: React.MouseEvent<HTMLDivElement>) => void;
-    onLeftClick?: (event: React.MouseEvent<HTMLDivElement>) => void;
     reference?: React.RefObject<HTMLInputElement>;
 }
 
