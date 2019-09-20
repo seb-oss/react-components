@@ -29,11 +29,20 @@ This React component is based on SEB Bootstrap style. Supports customization and
 
 These are the current available properties:
 
-| Property   | Type                                   | Description             |
-| ---------- | -------------------------------------- | ----------------------- |
-| className? | `string`                               | Element class           |
-| id?        | `string`                               | Element id              |
-| list       | `Array<AccrodionListItem>`<sup>1</sup> | List of accordion items |
+| Property            | Type                                   | Description                                                                            |
+| ------------------- | -------------------------------------- | -------------------------------------------------------------------------------------- |
+| className?          | `string`                               | Element class                                                                          |
+| customIcon?         | `JSX.Element`                          | Custom icon for the accordion trigger                                                  |
+| customIconExpanded? | `JSX.Element`                          | Custom icon to be used when expanded. This will add a transition between the two icons |
+| iconPosition?       | `"left" | "right"`                     | Accordion icon placement. Can be placed on `right` or `left`                           |
+| iconTransition?     | `AccordionIconTransition`              | Icon transition rotation degree                                                        |
+| id?                 | `string`                               | Element id                                                                             |
+| list                | `Array<AccrodionListItem>`<sup>1</sup> | List of accordion items                                                                |
+
+customIcon?: JSX.Element;
+customIconExpanded?: JSX.Element;
+iconPosition?: "left" | "right";
+iconTransition?: AccordionIconTransition;
 
 ## Footnote
 

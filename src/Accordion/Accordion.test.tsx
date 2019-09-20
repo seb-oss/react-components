@@ -1,62 +1,97 @@
 import * as React from "react";
-import { shallow, ShallowWrapper } from "enzyme";
-import { Accordion, AccrodionListItem, AccordionProps } from "./Accordion";
+import { shallow, ShallowWrapper, ReactWrapper, mount } from "enzyme";
+import { Accordion, AccrodionListItem, AccordionProps, AccordionIconRotation } from "./Accordion";
 
 type keyboardTestUnit = { key: string, registeredAt: number, expectedValue: boolean };
 
 describe("Component: Accordion", () => {
-
+    let wrapper: ShallowWrapper<AccordionProps>;
+    let mountedWrapper: ReactWrapper<AccordionProps>;
     const accordionList: Array<AccrodionListItem> = [
         { category: "Item 1", text: { title: "title", desc: "desc" } },
         { category: "Item 2", text: [{ title: "title", desc: "desc" }, { title: "title", desc: "desc" }] },
         { category: "Item 2", text: [{ desc: "desc" }, { desc: "desc" }] }
     ];
 
+    beforeEach(() => {
+        wrapper = shallow(<Accordion list={accordionList} />);
+        mountedWrapper = mount(<Accordion list={accordionList} />);
+    });
+
     it("Should render", () => {
-        const wrapper = shallow(<Accordion list={accordionList} />);
         expect(wrapper).toBeDefined();
     });
 
     it("Should render custom className and id", () => {
         const className: string = "myAccordionClass";
         const id: string = "myAccordionId";
-        const wrapper = shallow(<Accordion list={accordionList} className={className} id={id} />);
+        wrapper.setProps({ className, id });
         expect(wrapper.hasClass(className)).toBeTruthy();
         expect(wrapper.find(`#${id}`).length).toBeGreaterThan(0);
     });
 
     it("Should render subheader is included in props", () => {
-        const newAccordionList = [...accordionList];
+        const newAccordionList = JSON.parse(JSON.stringify(accordionList));
         newAccordionList[0].subHeaderText = "Test subheader";
-        const wrapper = shallow(<Accordion list={newAccordionList} />);
+        wrapper.setProps({ list: newAccordionList });
         expect(wrapper.find(".with-sub-header").length).toEqual(1);
     });
 
-    it("Should toggle accordion when clicked", () => {
-        const wrapper = shallow(<Accordion list={accordionList} />);
-        wrapper.find(".accordion-item").first().find(".header-wrapper").simulate("click");
-        expect(wrapper.find(".accordion-item").first().hasClass("active")).toBeTruthy();
+    it("Should toggle accordion when clicked, and toggled off when another item is clicked", () => {
+        mountedWrapper.find(".accordion-item").first().find(".header-wrapper").simulate("click");
+        expect(mountedWrapper.find(".accordion-item").first().hasClass("active")).toBeTruthy();
+        mountedWrapper.find(".accordion-item").at(1).find(".header-wrapper").simulate("click");
+        expect(mountedWrapper.find(".accordion-item").first().hasClass("active")).toBeFalsy();
+        expect(mountedWrapper.find(".accordion-item").at(1).hasClass("active")).toBeTruthy();
     });
 
     it("Should untoggle accordion when clicked again", () => {
-        const wrapper = shallow(<Accordion list={accordionList} />);
-        wrapper.find(".accordion-item").first().find(".header-wrapper").simulate("click");
-        wrapper.find(".accordion-item").first().find(".header-wrapper").simulate("click");
-        expect(wrapper.state("active")).toBe(null);
+        mountedWrapper.find(".accordion-item").first().find(".header-wrapper").simulate("click");
+        mountedWrapper.find(".accordion-item").first().find(".header-wrapper").simulate("click");
+        expect(mountedWrapper.find(".active").length).toBe(0);
     });
 
     it("Should untoggle accordion item when clicked on another accordion item", () => {
-        const wrapper = shallow(<Accordion list={accordionList} />);
-        wrapper.find(".accordion-item").first().find(".header-wrapper").simulate("click");
-        wrapper.find(".accordion-item").at(1).find(".header-wrapper").simulate("click");
+        mountedWrapper.find(".accordion-item").first().find(".header-wrapper").simulate("click");
+        mountedWrapper.find(".accordion-item").at(1).find(".header-wrapper").simulate("click");
 
-        expect(wrapper.find(".accordion-item").first().hasClass("active")).toBeFalsy();
-        expect(wrapper.find(".accordion-item").at(1).hasClass("active")).toBeTruthy();
-        expect(wrapper.state("active")).toBe(1);
+        expect(mountedWrapper.find(".accordion-item").first().hasClass("active")).toBeFalsy();
+        expect(mountedWrapper.find(".accordion-item").at(1).hasClass("active")).toBeTruthy();
+        expect(mountedWrapper.find(".active").length).toBe(1);
+    });
+
+    it("Should render with a custom icon", () => {
+        mountedWrapper.setProps({ customIcon: <svg id="testIcon" /> });
+        expect(mountedWrapper.find("#testIcon").length).toBeTruthy();
+    });
+
+    it("Should render with a custom icon when expanded", () => {
+        mountedWrapper = mount(<Accordion list={accordionList} customIconExpanded={<svg id="testIcon" />} />);
+        expect(mountedWrapper.find("#testIcon").length).toBeTruthy();
+        expect(mountedWrapper.find(".transform").length).toBeTruthy();
+    });
+
+    describe("Should show icon to either sides (right or left)", () => {
+        const testCases: Array<"right" | "left"> = ["right", "left"];
+        testCases.map((testCase: "right" | "left") => {
+            test(`Icon aligned to the ${testCase}`, () => {
+                mountedWrapper = mount(<Accordion list={accordionList} iconPosition={testCase} />);
+                expect(mountedWrapper.find(`.${testCase}`).length).toBeTruthy();
+            });
+        });
+    });
+
+    describe("Should allow multiple rotation functions to be applied to the icons", () => {
+        const testCases: Array<AccordionIconRotation> = ["deg-180", "deg-180-counter", "deg-90", "deg-90-counter"];
+        testCases.map((testCase: AccordionIconRotation) => {
+            test(`Icon rotation is ${testCase}`, () => {
+                mountedWrapper = mount(<Accordion list={accordionList} iconRotation={testCase} />);
+                expect(mountedWrapper.find(`.${testCase}`).length).toBeTruthy();
+            });
+        });
     });
 
     describe("Should be able to toggle accordion using `space` or `enter`", () => {
-        let wrapper: ShallowWrapper<AccordionProps>;
         const testList: Array<keyboardTestUnit> = [
             { key: " ", registeredAt: 1, expectedValue: true },
             { key: "space", registeredAt: 1, expectedValue: true },
@@ -65,14 +100,21 @@ describe("Component: Accordion", () => {
         ];
 
         beforeEach(() => {
-            wrapper = shallow(<Accordion list={accordionList} />);
+            mountedWrapper.setProps({ list: accordionList });
         });
 
         testList.map((item: keyboardTestUnit) => {
             it(`Testing key [${item.key}]`, () => {
-                wrapper.find(".accordion-item").at(1).simulate("keydown", { key: item.key });
-                expect(wrapper.find(".accordion-item").at(1).hasClass("active"));
+                mountedWrapper.find(".accordion-item").at(1).simulate("keydown", { key: item.key });
+                expect(mountedWrapper.find(".accordion-item").at(1).hasClass("active"));
             });
+        });
+
+        it("Should be toggled off with keyboard events", () => {
+            mountedWrapper.find(".accordion-item").first().simulate("keydown", { key: "space" });
+            expect(mountedWrapper.find(".accordion-item").first().hasClass("active")).toBeTruthy();
+            mountedWrapper.find(".accordion-item").first().simulate("keydown", { key: "space" });
+            expect(mountedWrapper.find(".accordion-item").first().hasClass("active")).toBeFalsy();
         });
     });
 });

@@ -4,7 +4,7 @@ import "./accordion-style.scss";
 const chevronDownIcon: JSX.Element = <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M443.5 162.6l-7.1-7.1c-4.7-4.7-12.3-4.7-17 0L224 351 28.5 155.5c-4.7-4.7-12.3-4.7-17 0l-7.1 7.1c-4.7 4.7-4.7 12.3 0 17l211 211.1c4.7 4.7 12.3 4.7 17 0l211-211.1c4.8-4.7 4.8-12.3.1-17z" /></svg>;
 const randomId = (): string => String((Math.random() * 1000) + (new Date()).getTime());
 
-type AccordionIconTransition = "deg-180" | "deg-180-counter" | "deg-90" | "deg-90-counter";
+export type AccordionIconRotation = "deg-180" | "deg-180-counter" | "deg-90" | "deg-90-counter";
 
 export interface AccordionText {
     title?: string;
@@ -19,12 +19,12 @@ export interface AccrodionListItem {
 
 export interface AccordionProps {
     className?: string;
-    id?: string;
-    list: Array<AccrodionListItem>;
     customIcon?: JSX.Element;
     customIconExpanded?: JSX.Element;
     iconPosition?: "left" | "right";
-    iconTransition?: AccordionIconTransition;
+    iconRotation?: AccordionIconRotation;
+    id?: string;
+    list: Array<AccrodionListItem>;
 }
 
 const Accordion: React.FunctionComponent<AccordionProps> = (props: AccordionProps) => {
@@ -37,6 +37,11 @@ const Accordion: React.FunctionComponent<AccordionProps> = (props: AccordionProp
         constructClassName();
     }, []);
 
+    React.useEffect(() => {
+        constructIds();
+        constructClassName();
+    }, [props.id, props.className, props.iconPosition, props.iconRotation, props.customIconExpanded, props.list]);
+
     function constructIds(): void {
         const idListToSet: Array<string> = [];
         props.list.map(() => idListToSet.push(randomId()));
@@ -46,7 +51,7 @@ const Accordion: React.FunctionComponent<AccordionProps> = (props: AccordionProp
     function constructClassName(): void {
         let cn: string = "accordion-item";
         cn += " " + (props.iconPosition ? props.iconPosition : "left");
-        cn += " " + (props.iconTransition ? props.iconTransition : "deg-180");
+        cn += " " + (props.iconRotation ? props.iconRotation : "deg-180");
         cn += props.customIconExpanded ? " transform" : "";
         setClassName(cn);
     }
