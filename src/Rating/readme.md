@@ -30,17 +30,17 @@ These are the current available properties:
 
 | Property      | Type                      | Description                                  |
 | ------------- | ------------------------- | -------------------------------------------- |
-| initialValue? | `any`                     | Intial value, string or number               |
-| onChange?     | `(value: number) => void` | Onchange event, will return the value        |
-| tooltipList?  | `Array<string>`           | Array of strings which reperesent each start |
+| className?    | `string`                  | Custom class                                 |
+| colors?       | `Array<string>`           | Array of strings which reperesent each color |
+| disabled?     | `string`                  | Disabled state                               |
 | iconHeight?   | `number`                  | Height of icons                              |
 | iconWidth?    | `number`                  | Width of icons                               |
-| useHollow?    | `boolean`                 | Use empty icon                               |
-| colors?       | `Array<string>`           | Array of strings which reperesent each color |
-| readOnly?     | `boolean`                 | For viewing only, default false              |
-| className?    | `string`                  | Custom class                                 |
-| disabled?     | `string`                  | Disabled state                               |
 | id?           | `string`                  | Element id                                   |
+| initialValue? | `any`                     | Intial value, string or number               |
+| onChange?     | `(value: number) => void` | Onchange event, will return the value        |
+| readOnly?     | `boolean`                 | For viewing only, default false              |
+| tooltipList?  | `Array<string>`           | Array of strings which reperesent each start |
+| useHollow?    | `boolean`                 | Use empty icon                               |
 
 
 ## Reference

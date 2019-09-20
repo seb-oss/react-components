@@ -1,4 +1,4 @@
-$blue-dark: #0092E1;
+$blue-dark: #0092e1;
 $white: #fff;
 $gray-8: #e6e6e6 !default;
 $gray-background: #f5f5f5;
@@ -41,29 +41,31 @@ $accordion-min-height: 48px;
         border-bottom: 1px solid $gray-8;
         &:hover {
             background-color: $gray-background;
-        }    
+        }
         &:first-child {
             border-top: 1px solid $gray-8;
         }
         .header-wrapper {
             position: relative;
             display: block;
-            padding: 5px 10px 5px $padding-left-size;
             cursor: pointer;
             min-height: $accordion-min-height;
 
             &.with-sub-header {
                 min-height: 64px;
             }
-            >svg {
+            > svg {
                 position: absolute;
                 width: $icon-size;
                 height: $icon-size;
-                left: 15px;
                 fill: $blue-dark;
                 will-change: transform;
-                @include transition($transition-time);
+                @include transition((transform $transition-time, opacity $transition-time));
                 top: 14px;
+                &:last-of-type:not(:first-of-type) {
+                    opacity: 0;
+                    transform: rotate(180deg);
+                }
             }
             .accordion-header {
                 display: block;
@@ -104,10 +106,70 @@ $accordion-min-height: 48px;
                 }
             }
         }
-        &.active {
+        &.right {
             .header-wrapper {
-                >svg {
+                padding: 5px $padding-left-size 5px 10px;
+                > svg {
+                    right: 15px;
+                }
+            }
+        }
+        &.left {
+            .header-wrapper {
+                padding: 5px 10px 5px $padding-left-size;
+                > svg {
+                    left: 15px;
+                }
+            }
+        }
+        &.deg-90 {
+            .header-wrapper >svg:last-of-type:not(:first-of-type) {
+                @include transform(rotate(-90deg));
+            }
+        }
+        &.deg-90-counter {
+            .header-wrapper >svg:last-of-type:not(:first-of-type) {
+                @include transform(rotate(90deg));
+            }
+        }
+        &.deg-180 {
+            .header-wrapper >svg:last-of-type:not(:first-of-type) {
+                @include transform(rotate(-18deg0));
+            }
+        }
+        &.deg-180-counter {
+            .header-wrapper >svg:last-of-type:not(:first-of-type) {
+                @include transform(rotate(180deg));
+            }
+        }
+        &.active {
+            &.deg-90 {
+                .header-wrapper > svg:first-of-type {
+                    @include transform(rotate(90deg));
+                }
+            }
+            &.deg-90-counter {
+                .header-wrapper > svg:first-of-type {
+                    @include transform(rotate(-90deg));
+                }
+            }
+            &.deg-180 {
+                .header-wrapper > svg:first-of-type {
                     @include transform(rotate(180deg));
+                }
+            }
+            &.deg-180-counter {
+                .header-wrapper > svg:first-of-type {
+                    @include transform(rotate(-180deg));
+                }
+            }
+            .header-wrapper > svg:last-of-type:not(:first-of-type) {
+                transform: rotate(0);
+                opacity: 1;
+            }
+            &.transform {
+                .header-wrapper > svg:first-of-type:not(:last-of-type) {
+                    opacity: 0;
                 }
             }
             .content-wrapper {

@@ -4,19 +4,19 @@ import "./radio-button-style.scss";
 const randomId = (): string => String((Math.random() * 1000) + (new Date()).getTime());
 
 export interface RadioButtonProps {
-    onChange: (value: any) => void;
-    value: any;
-    radioValue: any;
-    group?: string;
-    name: string;
-    id?: string;
-    description?: string;
     className?: string;
-    label: string;
-    error?: string;
-    inline?: boolean;
+    description?: string;
     disabled?: boolean;
-    reference?: React.RefObject<any>;
+    error?: string;
+    group?: string;
+    id?: string;
+    inline?: boolean;
+    label: string;
+    name: string;
+    onChange: (value: any) => void;
+    radioValue: any;
+    reference?: React.RefObject<HTMLInputElement>;
+    value: any;
 }
 
 const RadioButton: React.FunctionComponent<RadioButtonProps> = (props: RadioButtonProps): React.ReactElement<void> => {

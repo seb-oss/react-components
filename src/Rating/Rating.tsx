@@ -3,17 +3,17 @@ import ReactRating from "react-rating";
 import { SVGStar, SVGStarHollow } from "./RatingStar";
 
 export interface RatingProps {
-    initialValue?: any;
-    onChange?: (value: number) => void;
-    tooltipList?: Array<string>;
+    className?: string;
+    colors?: [string, string];
+    disabled?: boolean;
     iconHeight?: number;
     iconWidth?: number;
-    useHollow?: boolean;
-    colors?: [string, string];
-    readOnly?: boolean;
-    className?: string;
-    disabled?: boolean;
     id?: string;
+    initialValue?: any;
+    onChange?: (value: number) => void;
+    readOnly?: boolean;
+    tooltipList?: Array<string>;
+    useHollow?: boolean;
 }
 
 /**

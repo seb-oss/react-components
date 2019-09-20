@@ -10,15 +10,16 @@ export interface RadioListModel {
 }
 
 export interface RadioGroupProps {
+    className?: string;
+    disableAll?: boolean;
+    error?: string;
+    id?: string;
+    inline?: boolean;
+    label?: string;
     list: Array<RadioListModel>;
+    name?: string;
     onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
     value: any;
-    name?: string;
-    className?: string;
-    label?: string;
-    error?: string;
-    inline?: boolean;
-    disableAll?: boolean;
 }
 
 export const RadioGroup: React.FunctionComponent<RadioGroupProps> = (props: RadioGroupProps): React.ReactElement<void> => {
@@ -27,7 +28,7 @@ export const RadioGroup: React.FunctionComponent<RadioGroupProps> = (props: Radi
     if (props.inline) { inputFieldClass += " inline"; }
 
     return (
-        <div className={"form-group radio-holder" + (props.className ? ` ${props.className}` : "")}>
+        <div className={"form-group radio-holder" + (props.className ? ` ${props.className}` : "")} id={props.id}>
             <div className={inputFieldClass}>
                 {props.label && <label className="radio-group-label" htmlFor={props.name}>{props.label}</label>}
 

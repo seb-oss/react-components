@@ -9,6 +9,7 @@ const angleDoubleRightIcon: JSX.Element = <svg name="angle-double-right" xmlns="
 export interface PaginationProps {
     className?: string;
     firstText?: string;
+    id?: string;
     lastText?: string;
     nextText?: string;
     offset?: number;
@@ -56,7 +57,7 @@ export const Pagination: React.FunctionComponent<PaginationProps> = React.memo((
     }
 
     return (
-        <div className={"pagination-wrapper" + (props.className ? ` ${props.className}` : "")}>
+        <div className={"pagination-wrapper" + (props.className ? ` ${props.className}` : "")} id={props.id}>
             <nav className="custom-pagination">
                 {!props.useDotNav &&
                     <ul className={"pagination"}>
