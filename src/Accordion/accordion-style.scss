@@ -69,16 +69,17 @@ $accordion-min-height: 48px;
             }
             .accordion-header {
                 display: block;
-                font-size: $header-font-size;
                 font-weight: 500;
                 padding-top: 5px;
                 @include user-select(none);
                 line-height: 28px;
+                margin: 0;
             }
             .accordion-sub-header {
                 display: block;
-                font-size: $sub-header-size;
                 @include user-select(none);
+                margin: 0;
+                margin-bottom: 10px;
             }
         }
         .content-wrapper {
@@ -93,9 +94,10 @@ $accordion-min-height: 48px;
                 opacity: 0;
                 @include transition(all $transition-time ease);
                 .text-item {
-                    padding-bottom: 8px;
+                    &:not(:last-child) {
+                        padding-bottom: 8px;
+                    }
                     .accordion-title {
-                        padding-top: 8px;
                         font-size: $standard;
                         font-weight: 500;
                     }
@@ -143,6 +145,9 @@ $accordion-min-height: 48px;
             }
         }
         &.active {
+            >.content-wrapper {
+                padding-bottom: 18px;
+            }
             &.deg-90 {
                 .header-wrapper > svg:first-of-type {
                     @include transform(rotate(90deg));

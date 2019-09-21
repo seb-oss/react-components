@@ -6,15 +6,17 @@ const randomId = (): string => String((Math.random() * 1000) + (new Date()).getT
 
 export type AccordionIconRotation = "deg-180" | "deg-180-counter" | "deg-90" | "deg-90-counter";
 
-export interface AccordionText {
+export interface AccordionContent {
     title?: string;
     desc?: string;
 }
 
+export type AccordionContentType = AccordionContent | Array<AccordionContent> | React.ReactNode;
+
 export interface AccrodionListItem {
-    category: string;
+    header: string;
     subHeaderText?: string;
-    text?: AccordionText | Array<AccordionText>;
+    content?: AccordionContentType;
 }
 
 export interface AccordionProps {
@@ -88,34 +90,48 @@ const Accordion: React.FunctionComponent<AccordionProps> = (props: AccordionProp
                         >
                             {props.customIcon || chevronDownIcon}
                             {props.customIconExpanded ? props.customIconExpanded : null}
-                            <div className={"accordion-header"}>{item.category}</div>
-                            {item.subHeaderText && <div className="accordion-sub-header">{item.subHeaderText}</div>}
+                            <h4 className={"accordion-header"}>{item.header}</h4>
+                            {item.subHeaderText && <h6 className="accordion-sub-header">{item.subHeaderText}</h6>}
                         </div>
                         <div className="content-wrapper" aria-labelledby={idList[index]} id={`lbl-${idList[index]}`} role="region">
-                            {!(item.text instanceof Array) &&
-                                <div className="text-wrapper">
-                                    <div className="text-item">
-                                        {item.text.title && <div className="accordion-title">{item.text.title}</div>}
-                                        {item.text.desc && <div className="accordion-desc">{item.text.desc}</div>}
-                                    </div>
-                                </div>
-                            }
-                            {(item.text instanceof Array) &&
-                                <div className="text-wrapper">
-                                    {item.text.map((text: AccordionText, textIndex: number) =>
-                                        <div className="text-item" key={textIndex}>
-                                            {text.title && <div className="accordion-title">{text.title}</div>}
-                                            {text.desc && <div className="accordion-desc">{text.desc}</div>}
-                                        </div>
-                                    )}
-                                </div>
-                            }
+                            {item && <AccordionContentRenderer {...item} />}
                         </div>
                     </div>
                 );
             })}
         </div>
     );
+};
+
+const AccordionContentRenderer: React.FunctionComponent<AccrodionListItem> = (props: AccrodionListItem) => {
+    if (React.isValidElement(props.content)) {
+        const nodeContent: React.ReactNode = props.content as React.ReactNode;
+        return (
+            <div className="text-wrapper">{nodeContent}</div>
+        );
+    } else if (props.content instanceof Array) {
+        const arrayContent: Array<AccordionContent> = props.content as Array<AccordionContent>;
+        return (
+            <div className="text-wrapper">
+                {arrayContent.map((text: AccordionContent, textIndex: number) =>
+                    <div className="text-item" key={textIndex}>
+                        {text.title && <div className="accordion-title">{text.title}</div>}
+                        {text.desc && <div className="accordion-desc">{text.desc}</div>}
+                    </div>
+                )}
+            </div>
+        );
+    } else {
+        const objectContent: AccordionContent = props.content as AccordionContent;
+        return (
+            <div className="text-wrapper">
+                <div className="text-item">
+                    {objectContent.title && <div className="accordion-title">{objectContent.title}</div>}
+                    {objectContent.desc && <div className="accordion-desc">{objectContent.desc}</div>}
+                </div>
+            </div>
+        );
+    }
 };
 
 export { Accordion };

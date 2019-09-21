@@ -7,11 +7,6 @@ const plusIcon: JSX.Element = <svg version="1.1" xmlns="http://www.w3.org/2000/s
 const angleDoubleRightIcon: JSX.Element = <svg name="angle-double-right" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path d="M166.9 264.5l-117.8 116c-4.7 4.7-12.3 4.7-17 0l-7.1-7.1c-4.7-4.7-4.7-12.3 0-17L127.3 256 25.1 155.6c-4.7-4.7-4.7-12.3 0-17l7.1-7.1c4.7-4.7 12.3-4.7 17 0l117.8 116c4.6 4.7 4.6 12.3-.1 17zm128-17l-117.8-116c-4.7-4.7-12.3-4.7-17 0l-7.1 7.1c-4.7 4.7-4.7 12.3 0 17L255.3 256 153.1 356.4c-4.7 4.7-4.7 12.3 0 17l7.1 7.1c4.7 4.7 12.3 4.7 17 0l117.8-116c4.6-4.7 4.6-12.3-.1-17z" /></svg>;
 
 const AccordionPage: React.FunctionComponent = () => {
-    const [test, setTest] = React.useState<"left" | "right">("left");
-
-    setTimeout(() => {
-        setTest("right");
-    }, 4000);
     return (
         <div className="route-template">
             <div className="info-holder">
@@ -26,9 +21,7 @@ const AccordionPage: React.FunctionComponent = () => {
                     <h2>Output</h2>
                     <p>Here is a sample output</p>
                     <div className="result wide">
-                        <Accordion
-                            list={accordionList}
-                        />
+                        <Accordion list={accordionList} />
                     </div>
 
                     <p>Custom icon when expanded</p>
@@ -45,7 +38,7 @@ const AccordionPage: React.FunctionComponent = () => {
                         <Accordion
                             list={accordionList}
                             customIcon={angleDoubleRightIcon}
-                            iconPosition={test}
+                            iconPosition="right"
                             iconRotation="deg-90"
                         />
                     </div>
@@ -58,17 +51,17 @@ const AccordionPage: React.FunctionComponent = () => {
 
 const accordionList: Array<AccrodionListItem> = [
     {
-        category: "Accordion List Item 1",
+        header: "Accordion List Item 1",
         subHeaderText: "Accordion Sub Header",
-        text: {
+        content: {
             title: "Tempor incididun",
             desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, " +
                 "sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Morbi tristique senectus et netus. Lectus mauris ultrices eros in cursus turpis massa tincidunt."
         }
     },
     {
-        category: "Accordion List Item 2",
-        text: [
+        header: "Accordion List Item 2",
+        content: [
             {
                 title: "Excepteur sint",
                 desc: "Vitae suscipit tellus mauris a diam maecenas sed. Feugiat in fermentum posuere urna nec tincidunt praesent semper." +
@@ -82,17 +75,11 @@ const accordionList: Array<AccrodionListItem> = [
         ]
     },
     {
-        category: "Accordion List Item 3",
-        text: [
-            {
-                desc: "Vitae suscipit tellus mauris a diam maecenas sed. Feugiat in fermentum posuere urna nec tincidunt praesent semper." +
-                    "Tellus id interdum velit laoreet id donec. Morbi enim nunc faucibus a pellentesque sit. Vitae congue mauris rhoncus aenean."
-            },
-            {
-                desc: "Eleifend donec pretium vulputate sapien nec sagittis. Malesuada fames ac turpis egestas. Molestie ac feugiat sed lectus vestibulum mattis." +
-                    "Suscipit adipiscing bibendum est ultricies integer quis auctor elit sed."
-            },
-        ]
+        header: "Accordion List Item 3",
+        content: <>
+            <p className="m-0">Ut nemo corporis inventore neque qui. Est quos facere et id praesentium ut in iusto qui. Labore vel est ab.</p>
+            <a href="https://seb.se" target="_blank">Link to seb.se</a>
+        </>
     }
 ];
 
