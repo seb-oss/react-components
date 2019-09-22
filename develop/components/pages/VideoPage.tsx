@@ -8,7 +8,7 @@ const youtubeSrc: string = "https://www.youtube.com/embed/f19fctL72CY";
 
 const VideoPage: React.FunctionComponent = () => {
     return (
-        <div className="route-template">
+        <div className="route-template container">
             <div className="info-holder">
 
                 <div className="info">

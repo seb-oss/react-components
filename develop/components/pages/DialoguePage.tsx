@@ -8,7 +8,7 @@ const DialoguePage: React.FunctionComponent = () => {
     const [dialogue, setDialogue] = React.useState<boolean>(false);
 
     return (
-        <div className="route-template">
+        <div className="route-template container">
             <div className="info-holder">
 
                 <div className="info">

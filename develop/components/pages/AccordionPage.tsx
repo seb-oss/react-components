@@ -8,7 +8,7 @@ const angleDoubleRightIcon: JSX.Element = <svg name="angle-double-right" xmlns="
 
 const AccordionPage: React.FunctionComponent = () => {
     return (
-        <div className="route-template">
+        <div className="route-template container">
             <div className="info-holder">
 
                 <div className="info">

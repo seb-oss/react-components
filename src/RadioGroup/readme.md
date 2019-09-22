@@ -49,10 +49,10 @@ These are the current available properties:
 
 ```typescript
 {
-      group: string;
-      value: any;
-      label: string;
       description?: string;
       disabled?: boolean;
+      group: string;
+      label: string;
+      value: any;
 }
 ```

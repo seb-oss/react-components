@@ -18,6 +18,7 @@ describe("Component: Breadcrumb", () => {
         const className: string = "myBreadcrumbClass";
         const id: string = "myBreadcrubID";
         wrapper.setProps({ className, id });
+        wrapper.find(".breadcrumb-item").first().simulate("click"); // Simulates scenario where there is no onClick
         expect(wrapper.hasClass(className)).toBeTruthy();
         expect(wrapper.find(`#${id}`).length).toBeGreaterThan(0);
     });

@@ -27,7 +27,8 @@
         "dist",
         "develop",
         "coverage",
-        "**/*.test.tsx"
+        "**/*.test.tsx",
+        "src/__utils"
     ],
     "types": [
         "typePatches"

@@ -1,6 +1,6 @@
 import * as React from "react";
 import { shallow, ShallowWrapper, ReactWrapper, mount } from "enzyme";
-import { Slider, RangeSliderLabel, SliderProps } from "./Slider";
+import { Slider, RangeSliderLabel, SliderProps, SliderTheme } from "./Slider";
 
 describe("Component: Slider", () => {
     let wrapper: ShallowWrapper<SliderProps>;
@@ -88,7 +88,7 @@ describe("Component: Slider", () => {
     });
 
     it("Should be able to pick a different theme", () => {
-        const theme: string = "danger";
+        const theme: SliderTheme = "danger";
         wrapper.setProps({ theme, tooltipTheme: theme });
         expect(wrapper.find(".custom-slider-holder").hasClass(theme)).toBeTruthy(); // theme
         expect(wrapper.find(".custom-slider-preview").hasClass(theme)).toBeTruthy(); // tooltipTheme

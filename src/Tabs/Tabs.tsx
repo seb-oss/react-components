@@ -7,11 +7,11 @@ export interface TabsListItem {
 }
 
 export interface TabsProps {
-    list: Array<TabsListItem>;
     activeTab: number;
-    onClick: (index: number) => any;
     className?: string;
     id?: string;
+    list: Array<TabsListItem>;
+    onClick: (index: number) => any;
 }
 
 const Tabs: React.FunctionComponent<TabsProps> = (props: TabsProps) => {

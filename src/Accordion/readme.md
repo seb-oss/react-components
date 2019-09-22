@@ -34,32 +34,29 @@ These are the current available properties:
 | className?          | `string`                               | Element class                                                                          |
 | customIcon?         | `JSX.Element`                          | Custom icon for the accordion trigger                                                  |
 | customIconExpanded? | `JSX.Element`                          | Custom icon to be used when expanded. This will add a transition between the two icons |
-| iconPosition?       | `"left" | "right"`                     | Accordion icon placement. Can be placed on `right` or `left`                           |
-| iconTransition?     | `AccordionIconTransition`              | Icon transition rotation degree                                                        |
+| iconPosition?       | `string`                               | Accordion icon placement<sup>1</sup>                           |
+| iconTransition?     | `string`                               | Icon transition rotation degree<sup>2</sup>                                             |
 | id?                 | `string`                               | Element id                                                                             |
-| list                | `Array<AccrodionListItem>`<sup>1</sup> | List of accordion items                                                                |
-
-customIcon?: JSX.Element;
-customIconExpanded?: JSX.Element;
-iconPosition?: "left" | "right";
-iconTransition?: AccordionIconTransition;
+| list                | `Array<AccrodionListItem>`<sup>3</sup> | List of accordion items                                                                |
 
 ## Footnote
 
-1. `list` has an exported interface named `AccordionListItem`:
+1. Icon positions supported are: `right` and `left`
+2. Icon transitions supported are: `"deg-180"`, `"deg-180-counter"`, `"deg-90"`, `"deg-90-counter"`
+3. Property `list` has an exported interface named `AccordionListItem`:
 
 ```typescript
 interface AccordionListItem {
-    category: string;
+    header: string;
     subHeaderText?: string;
-    text?: AccordionText | Array<AccordionText>;
+    content?: AccordionContent | Array<AccordionContent> | React.ReactNode;
 }
 ```
 
-`AccordionListItem`'s memeber `text` has an exported interface name `AccordionText` and accepts a single `AccordionText` object or an array of `AccordionText` objects
+`AccordionListItem`'s memeber `content` has an exported interface name `AccordionContent` and accepts a single `AccordionContent` object or an array of `AccordionContent` objects
 
 ```typescript
-interface AccordionText {
+interface AccordionContent {
     title?: string;
     desc?: string;
 }

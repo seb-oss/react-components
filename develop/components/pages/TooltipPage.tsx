@@ -9,7 +9,7 @@ const TooltipPage: React.FunctionComponent = () => {
     let MyTooltip: Tooltip;
 
     return (
-        <div className="route-template" onClick={(e?: React.MouseEvent<HTMLDivElement>) => MyTooltip.forceDismiss(e)}>
+        <div className="route-template container" onClick={(e?: React.MouseEvent<HTMLDivElement>) => MyTooltip.forceDismiss(e)}>
             <div className="info-holder">
 
                 <div className="info">

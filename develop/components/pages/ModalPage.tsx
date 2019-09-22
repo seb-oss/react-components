@@ -30,7 +30,7 @@ class ModalPage extends React.Component<RouteComponentProps, Partial<ModalProps>
 
     render() {
         return (
-            <div className="route-template">
+            <div className="route-template container">
                 <div className="info-holder">
 
                     <div className="info">

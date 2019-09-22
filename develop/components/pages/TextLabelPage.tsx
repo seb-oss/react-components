@@ -5,7 +5,7 @@ const docMD: string = require("../../../src/TextLabel/readme.md");
 
 const TextLabelPage: React.FunctionComponent = () => {
     return (
-        <div className="route-template">
+        <div className="route-template container">
             <div className="info-holder">
 
                 <div className="info">

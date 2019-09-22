@@ -7,7 +7,7 @@ const RatingPage: React.FunctionComponent = () => {
     const [rating, setRating] = React.useState<number>(3.5);
 
     return (
-        <div className="route-template">
+        <div className="route-template container">
             <div className="info-holder">
 
                 <div className="info">

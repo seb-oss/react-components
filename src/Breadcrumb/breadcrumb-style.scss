@@ -1,7 +1,7 @@
 $default: 14px;
 $standard: 16px;
-$blue:#0092E1;
-$blue-dark:#007AC7;
+$blue: #0092e1;
+$blue-dark: #007ac7;
 $blue-darker: #05578c;
 .custom-breadcrumb {
     ol.breadcrumb {
@@ -10,8 +10,16 @@ $blue-darker: #05578c;
             &:not(.active) {
                 color: $blue;
                 cursor: pointer;
+                > svg {
+                    fill: $blue;
+                    width: $standard;
+                    height: $standard;
+                }
                 &:hover {
                     color: $blue-darker;
+                    >svg {
+                        fill: $blue-darker;
+                    }
                 }
             }
         }

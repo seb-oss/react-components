@@ -9,7 +9,7 @@ const thirdImg: string = require("../../assets/images/cat-pet-animal-3.jpg");
 
 const CarouselPage: React.FunctionComponent = () => {
     return (
-        <div className="route-template">
+        <div className="route-template container">
             <div className="info-holder">
 
                 <div className="info">

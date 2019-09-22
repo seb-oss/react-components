@@ -8,7 +8,7 @@ const mysvg: JSX.Element = <svg id="PIKTO_REGULAR" xmlns="http://www.w3.org/2000
 
 const ButtonPage: React.FunctionComponent= () => {
     return (
-        <div className="route-template">
+        <div className="route-template container">
             <div className="info-holder">
 
                 <div className="info">

@@ -7,7 +7,7 @@ const ImageCropperPage: React.FunctionComponent = () => {
     const [cropResult, setCropResult] = React.useState<any>("");
 
     return (
-        <div className="route-template">
+        <div className="route-template container">
             <div className="info-holder">
                 <div className="info">
                     <div className="md-file">

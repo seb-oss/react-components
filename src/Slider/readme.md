@@ -35,24 +35,24 @@ These are the current available properties:
 
 | Property           | Type                                  | Description                                                         |
 | ------------------ | ------------------------------------- | ------------------------------------------------------------------- |
-| value              | `number`                              | Value of slider                                                     |
-| name               | `string`                              | Name of slider                                                      |
-| onChange           | `(event: any) => void`                | Change action                                                       |
+| alternative?       | `boolean`                             | Use an alternative version of the slider                            |
+| alwaysShowTooltip? | `boolean`                             | Always Show tooltip (default: `false`)                              |
+| className?         | `string`                              | Custom class can be passed here                                     |
+| disabled?          | `string`                              | Disabled state                                                      |
+| error?             | `string`                              | The component error message                                         |
 | id?                | `string`                              | Id property                                                         |
 | label?             | `string`                              | The component label                                                 |
-| min?               | `number`                              | Minimum value (default: `0`)                                        |
-| max?               | `number`                              | Maximum value (default: `10`)                                       |
-| step?              | `number`                              | Step value (default: `1`)                                           |
-| className?         | `string`                              | Custom class can be passed here                                     |
 | labels?            | `Array<RangeSliderLabel>`<sup>1</sup> | Labels to be displayed below the slider                             |
+| max?               | `number`                              | Maximum value (default: `10`)                                       |
+| min?               | `number`                              | Minimum value (default: `0`)                                        |
+| name               | `string`                              | Name of slider                                                      |
+| onChange           | `(event: any) => void`                | Change action                                                       |
+| reference?         | `React.RefObject<any>`                | React Ref obj                                                       |
 | showTicks?         | `boolean`                             | Show ticks with labels (default: `false`)                           |
+| step?              | `number`                              | Step value (default: `1`)                                           |
 | theme?             | `string`                              | Based on SEB predefined colors. (default: `'primary'`)<sup>2</sup>  |
 | tooltipTheme?      | `string`                              | Based on SEB predefined colors. (default: `'inverted'`)<sup>2</sup> |
-| alwaysShowTooltip? | `boolean`                             | Always Show tooltip (default: `false`)                              |
-| alternative?       | `boolean`                             | Use an alternative version of the slider                            |
-| error?             | `string`                              | The component error message                                         |
-| reference?         | `React.RefObject<any>`                | React Ref obj                                                       |
-| disabled?          | `string`                              | Disabled state                                                      |
+| value              | `number`                              | Value of slider                                                     |
 
 
 ## Footnote

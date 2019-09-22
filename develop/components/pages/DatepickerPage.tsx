@@ -11,7 +11,7 @@ const DatepickerPage: React.FunctionComponent = () => {
     const [datepicker3, setDatepicker3] = React.useState<Date>(new Date());
 
     return (
-        <div className="route-template">
+        <div className="route-template container">
             <div className="info-holder">
 
                 <div className="info">

@@ -29,9 +29,9 @@ This React component is based on SEB Bootstrap style. Supports customization and
 
 These are the current available properties:
 
-| Property   | Type                  | Description                                     |
-| ---------- | --------------------- | ----------------------------------------------- |
-| className? | `string`              | Element class                                   |
-| id?        | `string`              | Element id                                      |
-| list       | `Array<string>`       | List of string representing stages of depth     |
-| onClick?   | `(i: number) => void` | Callback triggered when a breadcrumb is clicked |
+| Property   | Type                                                       | Description                                     |
+| ---------- | ---------------------------------------------------------- | ----------------------------------------------- |
+| className? | `string`                                                   | Element class                                   |
+| id?        | `string`                                                   | Element id                                      |
+| list       | `Array<string | React.ReactNode>`                          | List of string representing stages of depth     |
+| onClick?   | `(i: number, e?: React.MouseEvent<HTMLLIElement>) => void` | Callback triggered when a breadcrumb is clicked |

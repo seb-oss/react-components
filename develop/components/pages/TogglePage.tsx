@@ -7,7 +7,7 @@ const TogglePage: React.FunctionComponent = () => {
     const [toggleValue, setToggleValue] = React.useState<boolean>(true);
 
     return (
-        <div className="route-template">
+        <div className="route-template container">
             <div className="info-holder">
 
                 <div className="info">

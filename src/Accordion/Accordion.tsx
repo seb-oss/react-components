@@ -1,8 +1,8 @@
 import * as React from "react";
+import { randomId } from "../__utils/randomId";
 import "./accordion-style.scss";
 
 const chevronDownIcon: JSX.Element = <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M443.5 162.6l-7.1-7.1c-4.7-4.7-12.3-4.7-17 0L224 351 28.5 155.5c-4.7-4.7-12.3-4.7-17 0l-7.1 7.1c-4.7 4.7-4.7 12.3 0 17l211 211.1c4.7 4.7 12.3 4.7 17 0l211-211.1c4.8-4.7 4.8-12.3.1-17z" /></svg>;
-const randomId = (): string => String((Math.random() * 1000) + (new Date()).getTime());
 
 export type AccordionIconRotation = "deg-180" | "deg-180-counter" | "deg-90" | "deg-90-counter";
 
@@ -46,7 +46,7 @@ const Accordion: React.FunctionComponent<AccordionProps> = (props: AccordionProp
 
     function constructIds(): void {
         const idListToSet: Array<string> = [];
-        props.list.map(() => idListToSet.push(randomId()));
+        props.list.map(() => idListToSet.push(randomId("accordion-")));
         setIdList(idListToSet);
     }
 

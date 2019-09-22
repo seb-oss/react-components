@@ -5,7 +5,7 @@ const docMD: string = require("../../../src/Timer/readme.md");
 
 const TimerPage: React.FunctionComponent = () => {
     return (
-        <div className="route-template">
+        <div className="route-template container">
             <div className="info-holder">
 
                 <div className="info">

@@ -8,7 +8,7 @@ const TextAreaPage: React.FunctionComponent = () => {
     const [textBox2Value, setTextBox2Value] = React.useState<string>("");
 
     return (
-        <div className="route-template">
+        <div className="route-template container">
             <div className="info-holder">
 
                 <div className="info">

@@ -11,7 +11,7 @@ const SliderPage: React.FunctionComponent = () => {
     const [disabledSlider2, setDisabledSlider2] = React.useState<number>(20000);
 
     return (
-        <div className="route-template">
+        <div className="route-template container">
             <div className="info-holder">
 
                 <div className="info">

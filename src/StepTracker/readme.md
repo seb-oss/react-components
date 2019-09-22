@@ -30,14 +30,14 @@ These are the current available properties:
 
 | Property       | Type                      | Description                                                                            |
 | -------------- | ------------------------- | -------------------------------------------------------------------------------------- |
-| step           | `number`                  | Current step (value)                                                                   |
-| list           | `Array<string>`           | List of steps (titles)                                                                 |
-| onClick?       | `(index: number) => void` | onClick event, passes the array index of the clicked step                              |
 | className?     | `string`                  | Custom class                                                                           |
 | id?            | `string`                  | Element id                                                                             |
 | labelPosition? | `string`                  | Label position<sup>1</sup> (defaut: `bottom` for `horizontal`, `right` for `vertical`) |
-| useNumbers?    | `boolean`                 | Use numbers for each step                                                              |
+| list           | `Array<string>`           | List of steps (titles)                                                                 |
+| onClick?       | `(index: number) => void` | onClick event, passes the array index of the clicked step                              |
 | orientation?   | `string`                  | Tracker orientation (default: `horizontal`)                                            |
+| step           | `number`                  | Current step (value)                                                                   |
+| useNumbers?    | `boolean`                 | Use numbers for each step                                                              |
 
 ## Footnote
 1. Label positions supported `top` and `bottom` for `horizontal` orientation, `left` and `right` for `vertical` orientation.

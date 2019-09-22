@@ -9,7 +9,7 @@ const TimepickerPage: React.FunctionComponent = () => {
     );
 
     return (
-        <div className="route-template">
+        <div className="route-template container">
             <div className="info-holder">
 
                 <div className="info">

@@ -1,35 +1,35 @@
 import * as React from "react";
+import { randomId } from "../__utils/randomId";
 import "./text-area-style.scss";
 
-const randomId = (): string => String((Math.random() * 1000) + (new Date()).getTime());
 export interface TextAreaProps {
-    value: string;
-    name: string;
-    onChange: (event: React.ChangeEvent<HTMLTextAreaElement>) => void;
-    onKeyDown?: (event: React.KeyboardEvent<HTMLTextAreaElement>) => void;
-    onKeyUp?: (event: React.KeyboardEvent<HTMLTextAreaElement>) => void;
-    onKeyPress?: (event: React.KeyboardEvent<HTMLTextAreaElement>) => void;
-    onFocus?: (event: React.FocusEvent<HTMLTextAreaElement>) => void;
-    onBlur?: (event: React.FocusEvent<HTMLTextAreaElement>) => void;
-    label?: string;
-    error?: string;
-    placeHolder?: string;
     className?: string;
-    id?: string;
-    focus?: boolean;
-    readonly?: boolean;
-    disabled?: boolean;
     cols?: number;
-    rows?: number;
-    resizable?: boolean;
+    disabled?: boolean;
+    error?: string;
+    focus?: boolean;
+    id?: string;
+    label?: string;
     max?: number;
+    name: string;
+    onBlur?: (event: React.FocusEvent<HTMLTextAreaElement>) => void;
+    onChange: (event: React.ChangeEvent<HTMLTextAreaElement>) => void;
+    onFocus?: (event: React.FocusEvent<HTMLTextAreaElement>) => void;
+    onKeyDown?: (event: React.KeyboardEvent<HTMLTextAreaElement>) => void;
+    onKeyPress?: (event: React.KeyboardEvent<HTMLTextAreaElement>) => void;
+    onKeyUp?: (event: React.KeyboardEvent<HTMLTextAreaElement>) => void;
+    placeHolder?: string;
+    readonly?: boolean;
     reference?: React.RefObject<HTMLTextAreaElement>;
+    resizable?: boolean;
+    rows?: number;
+    value: string;
 }
 
 export const TextArea: React.FunctionComponent<TextAreaProps> = (props: TextAreaProps): React.ReactElement<void> => {
     let id: string;
     React.useEffect(() => {
-        id = randomId();
+        id = randomId("textarea-");
     }, [props.id]);
     return (
         <div className={"form-group text-area" + (props.className ? ` ${props.className}` : "")}>

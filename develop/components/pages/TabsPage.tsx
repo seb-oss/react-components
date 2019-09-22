@@ -7,7 +7,7 @@ const TabsPage: React.FunctionComponent = () => {
     const [activeTab, setActiveTab] = React.useState<number>(0);
 
     return (
-        <div className="route-template">
+        <div className="route-template container">
             <div className="info-holder">
 
                 <div className="info">

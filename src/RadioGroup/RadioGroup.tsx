@@ -2,11 +2,11 @@ import * as React from "react";
 import "./radio-group-style.scss";
 
 export interface RadioListModel {
-    value: any;
-    group: string;
-    label: string;
     description?: string;
     disabled?: boolean;
+    group: string;
+    label: string;
+    value: any;
 }
 
 export interface RadioGroupProps {

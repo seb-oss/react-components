@@ -7,7 +7,7 @@ const RadioGroupPage: React.FunctionComponent = () => {
     const [radioListSelected, setRadioListSelected] = React.useState<string>("second");
 
     return (
-        <div className="route-template">
+        <div className="route-template container">
             <div className="info-holder">
 
                 <div className="info">

@@ -1,4 +1,5 @@
 import * as React from "react";
+import { randomId } from "../__utils/randomId";
 import "./dropdown-style.scss";
 
 export interface DropDownItem {
@@ -43,10 +44,11 @@ const moreIcon: JSX.Element = <svg className="dropdown-more-icon" xmlns="http://
 
 const DropDown: React.FunctionComponent<DropDownProps> = (props: DropDownProps): React.ReactElement<void> => {
     // COMPONENT INTERNAL STATE INIT ================================
-    const [open, setOpen] = React.useState(false);
-    const [shouldFocus, setShouldFocus] = React.useState(false);
-    const [currentFocused, setCurrentFocused] = React.useState(-1);
-    const [searchText, setSearchText] = React.useState("");
+    const [open, setOpen] = React.useState<boolean>(false);
+    const [shouldFocus, setShouldFocus] = React.useState<boolean>(false);
+    const [currentFocused, setCurrentFocused] = React.useState<number>(-1);
+    const [searchText, setSearchText] = React.useState<string>("");
+    const [id, setId] = React.useState<string>("");
 
     // REFS ================================
     const dropdownToggleRef: React.RefObject<HTMLDivElement> = React.createRef<HTMLDivElement>();
@@ -86,6 +88,10 @@ const DropDown: React.FunctionComponent<DropDownProps> = (props: DropDownProps):
         }
     }, [currentFocused, shouldFocus]);
 
+    React.useEffect(() => {
+        setId(randomId("dd-"));
+    }, []);
+
     const handleFocus = (): void => {
         const focusSuccess: boolean = focusCurrentItem();
         if (!focusSuccess) {
@@ -121,7 +127,7 @@ const DropDown: React.FunctionComponent<DropDownProps> = (props: DropDownProps):
     const uniqueList: Array<UniqueDropDownItem> = props.list
         .filter((e: DropDownItem) => (e && e.hasOwnProperty("value") && e.hasOwnProperty("label")))
         .map((e: DropDownItem, i: number) => {
-            const id: string = `${e.value}-${i}`;
+            const uniqueListId: string = `${e.value}-${i}`;
             let selected: boolean = false;
 
             if (!props.multi) {
@@ -133,7 +139,7 @@ const DropDown: React.FunctionComponent<DropDownProps> = (props: DropDownProps):
                     selected = true;
                 }
             }
-            return { dropdownItem: e, id, selected };
+            return { dropdownItem: e, id: uniqueListId, selected };
         });
 
     /** Array of dropdown item elements which should be displayed in the current render cycle */
@@ -325,7 +331,7 @@ const DropDown: React.FunctionComponent<DropDownProps> = (props: DropDownProps):
                     value={props.selectedValue ? (props.selectedValue as DropDownItem).value : ""}
                     onChange={props.onChange}
                     id={props.id}
-                    placeholder={props.placeholder || ""}
+                    placeholder={props.placeholder || null}
                     multiple={!!props.multi}
                 >
                     {props.list.map((item: DropDownItem) =>
@@ -339,8 +345,6 @@ const DropDown: React.FunctionComponent<DropDownProps> = (props: DropDownProps):
         );
     }
 
-    const dropdownMenuButtonId: string = `dd-${(Math.random() * 1000) + (new Date()).getTime()}`;
-
     return (
         <>
             <div
@@ -353,7 +357,7 @@ const DropDown: React.FunctionComponent<DropDownProps> = (props: DropDownProps):
                     onKeyDown={shouldDisable ? null : handleKeyDownToggle}
                     ref={dropdownToggleRef}
                     className={`btn btn-secondary custom-dropdown-toggle${open ? " open" : ""}${props.more ? " more mx-right" : ""}${shouldDisable ? " disabled" : ""}`}
-                    id={dropdownMenuButtonId}
+                    id={id}
                     aria-label={`Dropdown toggle: ${getTitleLabel()}`}
                     aria-haspopup={true}
                     aria-expanded={open}
@@ -378,7 +382,7 @@ const DropDown: React.FunctionComponent<DropDownProps> = (props: DropDownProps):
                 </div>
 
                 <div
-                    aria-labelledby={dropdownMenuButtonId}
+                    aria-labelledby={id}
                     onKeyDown={handleKeyDownMenu}
                     tabIndex={0}
                     ref={dropdownMenuRef}

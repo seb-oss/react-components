@@ -7,7 +7,7 @@ const StepperPage: React.FunctionComponent = () => {
     const [stepper, setStepper] = React.useState<number>(1);
 
     return (
-        <div className="route-template">
+        <div className="route-template container">
             <div className="info-holder">
 
                 <div className="info">

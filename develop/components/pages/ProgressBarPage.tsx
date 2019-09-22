@@ -44,7 +44,7 @@ class ProgressBarPage extends React.Component<RouteComponentProps, ProgressBarPa
 
     render() {
         return (
-            <div className="route-template">
+            <div className="route-template container">
                 <div className="info-holder">
 
                     <div className="info">
