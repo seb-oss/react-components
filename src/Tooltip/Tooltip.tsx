@@ -13,16 +13,16 @@ interface TooltipState {
 }
 
 export interface TooltipProps {
-    title?: string;
+    className?: string;
+    customSvg?: any;
     message?: string;
     messageGroup?: Array<TooltipMessageGroupItem>;
-    position?: string;
-    customSvg?: any;
-    width?: number;
-    theme?: string;
-    className?: string;
-    triggerOnHover?: boolean;
     onClick?: (event?: React.MouseEvent<HTMLDivElement>) => void;
+    position?: string;
+    theme?: string;
+    title?: string;
+    triggerOnHover?: boolean;
+    width?: number;
 
 }
 

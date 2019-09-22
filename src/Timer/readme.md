@@ -2,10 +2,11 @@
 title: Timer
 componentid: component-timer
 variantid: default
-guid: 'timer-guid-default-component-react'
+guid: "timer-guid-default-component-react"
 ---
 
 ## Element name
+
 ```javascript
 Name: Timer Component
 Component: "Timer"
@@ -14,22 +15,22 @@ Import: "@sebgroup/react-components/dist/Timer"
 Type: Other Component
 ```
 
-## Element information 
+## Element information
+
 The component name is `Timer` and the selector is `<Timer/>`, it will support count down for hrs, mins and seconds.
 
 ## Basic use
+
 ```html
-<Timer
-    duration={90000}
-    callback={() => { console.log("TIMER ENDED callback"); }}
-/>
+<Timer duration={90000} callback={() => { console.log("TIMER ENDED callback"); }} />
 ```
 
 ## Properties
+
 These are the current available properties:
 
-| Property   | Type                   | Description                                                       |
-| ---------- | ---------------------- | ---------------------------------------------------------------- |
-| duration   | `number`               | duration of timer in `Millisecond`                               |
-| callback   | `() => void`           | This method will be triggered when timer reached ended           |
-| className? | `string`               | custom class                                                     |
+| Property   | Type         | Description                                            |
+| ---------- | ------------ | ------------------------------------------------------ |
+| callback   | `() => void` | This method will be triggered when timer reached ended |
+| className? | `string`     | custom class                                           |
+| duration   | `number`     | duration of timer in `Millisecond`                     |

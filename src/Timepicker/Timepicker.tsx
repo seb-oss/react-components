@@ -27,10 +27,10 @@ const enum TimerStepperContext {
 }
 
 interface TimepickerProps {
-    value: TimepickerValue;
-    onChange: (value: TimepickerValue) => any;
-    name: string;
     className?: string;
+    name: string;
+    onChange: (value: TimepickerValue) => void;
+    value: TimepickerValue;
 }
 
 export class Timepicker extends React.Component<TimepickerProps, any> {

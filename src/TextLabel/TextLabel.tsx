@@ -2,10 +2,10 @@ import * as React from "react";
 import "./text-label-style.scss";
 
 export interface TextLabelProps {
-    value: string | number;
-    name?: string;
-    label?: string;
     className?: string;
+    label?: string;
+    name?: string;
+    value: string | number;
 }
 
 export const TextLabel: React.FunctionComponent<TextLabelProps> = React.memo((props: TextLabelProps): React.ReactElement<void> => {

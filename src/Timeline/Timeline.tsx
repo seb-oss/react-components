@@ -7,11 +7,13 @@ export interface TimelineListItem {
     desc?: string;
 }
 
+type TimelineDirection = "vertical" | "horizontal";
+
 interface TimelineProps {
-    list: Array<TimelineListItem>;
-    direction?: string;
-    onClick?: (index: number) => void;
     className?: string;
+    direction?: TimelineDirection;
+    list: Array<TimelineListItem>;
+    onClick?: (index: number) => void;
 }
 
 function prepareList(list: Array<TimelineListItem>): Array<any> {

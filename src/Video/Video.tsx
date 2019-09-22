@@ -2,17 +2,17 @@ import * as React from "react";
 import "./video-style.scss";
 
 export interface VideoProps {
-    src: string;
-    width: string;
-    height: string;
-    name: string;
-    sourceType: string;
-    className?: string;
+    allowFullScreen?: boolean;
     autoplay?: boolean;
+    className?: string;
+    height: string;
     loop?: boolean;
+    name: string;
     showControls?: boolean;
     showInfo?: boolean;
-    allowFullScreen?: boolean;
+    sourceType: string;
+    src: string;
+    width: string;
 }
 
 export const Video: React.FunctionComponent<VideoProps> = (props: VideoProps): React.ReactElement<void> => {

@@ -1,9 +1,9 @@
 import * as React from "react";
 
 interface TimerProps {
-    duration: number;
     callback?: () => void;
     className?: string;
+    duration: number;
 }
 
 interface TimerState {

@@ -2,13 +2,13 @@ import * as React from "react";
 import "./toggle-style.scss";
 
 export interface ToggleProps {
-    name: string;
-    value: boolean;
-    onChange: (event: any) => void;
+    className?: string;
     id?: string;
     label?: string;
-    className?: string;
+    name: string;
+    onChange: (event: any) => void;
     reference?: React.RefObject<any>;
+    value: boolean;
 }
 
 export const Toggle: React.FunctionComponent<ToggleProps> = (props: ToggleProps): React.ReactElement<void> => {

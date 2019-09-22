@@ -2,29 +2,29 @@ import * as React from "react";
 import "./text-box-style.scss";
 
 export interface TextBoxProps {
-    value: string | number;
-    name: string;
-    id?: string;
-    pattern?: string;
-    required?: boolean;
-    minLength?: number;
-    maxLength?: number;
-    onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-    onKeyDown?: (event: React.KeyboardEvent<HTMLInputElement>) => void;
-    onKeyUp?: (event: React.KeyboardEvent<HTMLInputElement>) => void;
-    onKeyPress?: (event: React.KeyboardEvent<HTMLInputElement>) => void;
-    onFocus?: (event: React.FocusEvent<HTMLInputElement>) => void;
-    onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void;
-    type?: string;
-    label?: string;
-    error?: string;
-    placeHolder?: string;
-    className?: string;
-    focus?: boolean;
-    readonly?: boolean;
-    disabled?: boolean;
     autoComplete?: boolean;
+    className?: string;
+    disabled?: boolean;
+    error?: string;
+    focus?: boolean;
+    id?: string;
+    label?: string;
+    maxLength?: number;
+    minLength?: number;
+    name: string;
+    onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void;
+    onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+    onFocus?: (event: React.FocusEvent<HTMLInputElement>) => void;
+    onKeyDown?: (event: React.KeyboardEvent<HTMLInputElement>) => void;
+    onKeyPress?: (event: React.KeyboardEvent<HTMLInputElement>) => void;
+    onKeyUp?: (event: React.KeyboardEvent<HTMLInputElement>) => void;
+    pattern?: string;
+    placeHolder?: string;
+    readonly?: boolean;
     reference?: React.RefObject<HTMLInputElement>;
+    required?: boolean;
+    type?: string;
+    value: string | number;
 }
 
 export const TextBox: React.FunctionComponent<TextBoxProps> = (props: TextBoxProps): React.ReactElement<void> => {
