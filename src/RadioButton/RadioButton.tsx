@@ -4,49 +4,57 @@ import "./radio-button-style.scss";
 
 export interface RadioButtonProps {
     className?: string;
+    condensed?: boolean;
     description?: string;
     disabled?: boolean;
-    error?: string;
     group?: string;
     id?: string;
     inline?: boolean;
     label: string;
     name: string;
-    onChange: (value: any) => void;
+    onChange: (value: any, e?: React.ChangeEvent<HTMLInputElement>) => void;
     radioValue: any;
     reference?: React.RefObject<HTMLInputElement>;
+    topLabel?: string;
     value: any;
 }
 
 const RadioButton: React.FunctionComponent<RadioButtonProps> = (props: RadioButtonProps): React.ReactElement<void> => {
-    let inputFieldClass: string = "input-field";
-    if (props.error) { inputFieldClass += " has-error"; }
-    if (props.inline) { inputFieldClass += " inline"; }
+    const [className, setClassName] = React.useState<string>("form-group custom-radio");
     const [id, setId] = React.useState<string>("");
+
     React.useEffect(() => setId(props.id || randomId("radiobtn-")), [props.id]);
 
-    return (
-        <div className={"form-group radio-holder" + (props.className ? ` ${props.className}` : "")}>
-            <div className={inputFieldClass}>
+    React.useEffect(() => {
+        let elementClassName: string = "form-group custom-radio";
+        elementClassName += props.inline ? " inline" : "";
+        elementClassName += props.condensed ? " condensed" : "";
+        elementClassName += props.className ? ` ${props.className}` : "";
+        setClassName(elementClassName);
+    }, [props.className, props.inline, props.condensed]);
 
-                <div className="radio-item">
-                    {props.label && <label className="radio-label" htmlFor={id}>{props.label}</label>}
+    return (
+        <div className={className}>
+            <div className="input-field">
+            {props.topLabel && <label htmlFor={id} className="radio-toplabel">{props.topLabel}</label>}
+
+                <div className="custom-control">
                     <input
-                        className="radio-input"
+                        className="custom-control-input"
                         type="radio"
                         value={props.value}
                         name={props.name}
                         id={id}
                         checked={props.value === props.radioValue}
                         disabled={props.disabled}
-                        onChange={() => { props.onChange(props.radioValue); }}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => { props.onChange(props.radioValue, e); }}
                         ref={props.reference}
                     />
-
-                    <span className="checkmark" />
-                    {props.description && <span className="radio-description">{props.description}</span>}
+                    <label className="custom-control-label" htmlFor={id}>
+                        {props.label}
+                        {props.description && <span className="radio-description">{props.description}</span>}
+                    </label>
                 </div>
-                {props.error && <div className="alert alert-danger">{props.error}</div>}
             </div>
         </div>
     );

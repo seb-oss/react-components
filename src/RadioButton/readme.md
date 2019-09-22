@@ -30,18 +30,19 @@ value={this.state.radioListSelected} onChange={(value) => { this.setState({ radi
 
 These are the current available properties:
 
-| Property     | Type                   | Description                                           |
-| ------------ | ---------------------- | ----------------------------------------------------- |
-| className?   | `string`               | Custom class can be passed here                       |
-| description? | `string`               | optional extra description                            |
-| disabled?    | `boolean`              | Disable the radio button                              |
-| error?       | `string`               | error message (if any)                                |
-| group?       | `string`               | the name of the group to group the radios together    |
-| id?          | `string`               | the id property                                       |
-| inline?      | `boolean`              | Display radio items inline                            |
-| label        | `string`               | the label                                             |
-| name         | `string`               | the name property                                     |
-| onChange     | `(event: any) => void` | on change event                                       |
-| radioValue   | `any`                  | the value of the radiobtn, it can be string or number |
-| reference?   | `React.RefObject<any>` | React Ref obj                                         |
-| value        | `any`                  | your state value, string or number                    |
+| Property     | Type                                                            | Description                                                       |
+| ------------ | --------------------------------------------------------------- | ----------------------------------------------------------------- |
+| className?   | `string`                                                        | Custom class can be passed here                                   |
+| condensed?   | `boolean`                                                       | Condenses the element. Great for rendering them below each others |
+| description? | `string`                                                        | Optional extra description                                        |
+| disabled?    | `boolean`                                                       | Disable the radio button                                          |
+| group?       | `string`                                                        | The name of the group to group the radios together                |
+| id?          | `string`                                                        | The id property                                                   |
+| inline?      | `boolean`                                                       | Display radio items inline                                        |
+| label        | `string`                                                        | The label                                                         |
+| name         | `string`                                                        | The name property                                                 |
+| onChange     | `(value: any, e?: React.ChangeEvent<HTMLInputElement>) => void` | On change event                                                   |
+| radioValue   | `any`                                                           | The value of the radiobtn, it can be string or number             |
+| reference?   | `React.RefObject<any>`                                          | React Ref obj                                                     |
+| topLabel?    | `string`                                                        | A label which shows on top of component                           |
+| value        | `any`                                                           | Your state value, string or number                                |

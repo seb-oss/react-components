@@ -1,10 +1,12 @@
 import * as React from "react";
 import { RadioGroup, RadioListModel } from "../../../src/RadioGroup/RadioGroup";
+import { Tabs } from "../../../src/Tabs/Tabs";
 const Highlight = (require("react-highlight")).default;
 const docMD: string = require("../../../src/RadioGroup/readme.md");
 
 const RadioGroupPage: React.FunctionComponent = () => {
     const [radioListSelected, setRadioListSelected] = React.useState<string>("second");
+    const [tabValue, setTabValue] = React.useState<number>(0);
 
     return (
         <div className="route-template container">
@@ -19,12 +21,23 @@ const RadioGroupPage: React.FunctionComponent = () => {
                 <div className="info">
                     <h2>Output</h2>
                     <p>Here are sample outputs, here is selected value: {radioListSelected}</p>
-                    <div className="result">
+                    <div className={"result" + (tabValue === 2 ? " wide" : "")}>
+                        <Tabs
+                            activeTab={tabValue}
+                            onClick={(index: number) => setTabValue(index)}
+                            list={[
+                                { text: "Normal" },
+                                { text: "Condensed" },
+                                { text: "Inline" }
+                            ]}
+                        />
                         <RadioGroup
                             name="radioGroupName"
                             list={radioList}
                             value={radioListSelected}
                             onChange={(e: React.ChangeEvent<HTMLInputElement>) => setRadioListSelected(e.target.value)}
+                            condensed={tabValue === 1}
+                            inline={tabValue === 2}
                         />
                     </div>
                 </div>

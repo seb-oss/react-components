@@ -43,23 +43,20 @@ describe("Component: RadioButton", () => {
         expect(props.onChange).toHaveBeenCalled();
     });
 
-    it("Should render and display label, description and error", () => {
-        const label: string = "label";
-        const description: string = "description";
-        const error: string = "error";
-        wrapper.setProps({ label, description, error });
-        expect(wrapper.find(".radio-label").length).toBe(1);
-        expect(wrapper.find(".radio-label").text()).toEqual(label);
+    it("Should render and display label and description", () => {
+        const label: string = "my label";
+        const description: string = "my description";
+        wrapper.setProps({ label, description });
+        expect(wrapper.find(".custom-control-label").length).toBe(1);
+        expect(wrapper.find(".custom-control-label").text().indexOf(label)).not.toEqual(-1);
         expect(wrapper.find(".radio-description").length).toBe(1);
         expect(wrapper.find(".radio-description").text()).toEqual(description);
-        expect(wrapper.find(".alert").length).toBe(1);
-        expect(wrapper.find(".alert").text()).toEqual(error);
-        expect(wrapper.find(".input-field").hasClass("has-error")).toBeTruthy();
     });
 
-    it("Should render inline when inline prop is set to true", () => {
-        wrapper.setProps({ inline: true });
-        expect(wrapper.find(".input-field").hasClass("inline")).toBeTruthy();
+    it("Should render inline and condensed when inline prop is set to true", () => {
+        const mountedWrapper: ReactWrapper<RadioButtonProps> = mount(<RadioButton {...props} inline={true} condensed={true} />);
+        expect(mountedWrapper.find(".custom-radio").hasClass("inline")).toBeTruthy();
+        expect(mountedWrapper.find(".custom-radio").hasClass("condensed")).toBeTruthy();
     });
 
 });

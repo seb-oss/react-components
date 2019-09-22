@@ -11,8 +11,8 @@ export interface RadioListModel {
 
 export interface RadioGroupProps {
     className?: string;
+    condensed?: boolean;
     disableAll?: boolean;
-    error?: string;
     id?: string;
     inline?: boolean;
     label?: string;
@@ -23,22 +23,27 @@ export interface RadioGroupProps {
 }
 
 export const RadioGroup: React.FunctionComponent<RadioGroupProps> = (props: RadioGroupProps): React.ReactElement<void> => {
-    let inputFieldClass: string = "input-field";
-    if (props.error) { inputFieldClass += " has-error"; }
-    if (props.inline) { inputFieldClass += " inline"; }
+    const [className, setClassName] = React.useState<string>("form-group custom-radio");
+
+    React.useEffect(() => {
+        let elementClassName: string = "form-group custom-radio";
+        elementClassName += props.inline ? " inline" : "";
+        elementClassName += props.condensed ? " condensed" : "";
+        elementClassName += props.className ? ` ${props.className}` : "";
+        setClassName(elementClassName);
+    }, [props.className, props.inline, props.condensed]);
 
     return (
-        <div className={"form-group radio-holder" + (props.className ? ` ${props.className}` : "")} id={props.id}>
-            <div className={inputFieldClass}>
+        <div className={className} id={props.id}>
+            <div className="input-field">
                 {props.label && <label className="radio-group-label" htmlFor={props.name}>{props.label}</label>}
 
-                {props.list && props.list.map((item, index) => {
+                {props.list && props.list.map((item: RadioListModel, index: number) => {
                     const identifier: string = item.label.replace(" ", "_") + Math.floor(Math.random() * 100) + (new Date()).getTime();
                     return (
-                        <div key={index} className="radio-item">
-                            <label className="radio-label" htmlFor={identifier}>{item.label}</label>
+                        <div key={index} className="custom-control">
                             <input
-                                className="radio-input"
+                                className="custom-control-input"
                                 type="radio"
                                 value={item.value}
                                 name={item.group}
@@ -48,12 +53,13 @@ export const RadioGroup: React.FunctionComponent<RadioGroupProps> = (props: Radi
                                 disabled={props.disableAll || item.disabled}
                                 onChange={props.onChange}
                             />
-                            <span className="checkmark" />
-                            {item.description && <span className="radio-description">{item.description}</span>}
+                            <label className="custom-control-label" htmlFor={identifier}>
+                                {item.label}
+                                {item.description && <span className="radio-description">{item.description}</span>}
+                            </label>
                         </div>
                     );
                 })}
-                {props.error && <div className={"alert alert-danger"}>{props.error}</div>}
             </div>
         </div>
     );

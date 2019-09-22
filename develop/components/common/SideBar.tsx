@@ -17,10 +17,14 @@ interface SideBarProps {
 const SideBar: React.FunctionComponent<SideBarProps> = (props: SideBarProps): React.ReactElement<void> => {
     const page: string = props.history.location.pathname;
 
+    function noHash(path: string): string {
+        return path.replace("#", "");
+    }
+
     function navigate(e: React.MouseEvent<HTMLAnchorElement>): void {
         e.preventDefault();
-        if (props.history.location.pathname !== e.currentTarget.getAttribute("href")) {
-            props.history.push(e.currentTarget.getAttribute("href"));
+        if (noHash(props.history.location.pathname) !== noHash(e.currentTarget.getAttribute("href"))) {
+            props.history.push(noHash(e.currentTarget.getAttribute("href")));
         }
     }
 
@@ -29,7 +33,7 @@ const SideBar: React.FunctionComponent<SideBarProps> = (props: SideBarProps): Re
             <div className="category">
                 <div className="title">How it works?</div>
                 <div className="nav-holder">
-                    <a href="/about" onClick={navigate} className={(page === "/" || page === "/about") ? "active" : ""}><span>About</span></a>
+                    <a href="#/about" onClick={navigate} className={(page === "/" || page === "/about") ? "active" : ""}><span>About</span></a>
                     <a href="https://github.com/sebgroup/react-components/issues" target="_blank"><span>Issues</span></a>
                     <a href="https://github.com/sebgroup/react-components/releases" target="_blank"><span>Release notes</span></a>
                 </div>
@@ -41,7 +45,7 @@ const SideBar: React.FunctionComponent<SideBarProps> = (props: SideBarProps): Re
                     {forms && forms.map((item: SideBarItem, index: number) =>
                         <a
                             key={index}
-                            href={item.path}
+                            href={"#" + item.path}
                             onClick={navigate}
                             className={page === item.path ? "active" : null}
                         >
@@ -52,7 +56,7 @@ const SideBar: React.FunctionComponent<SideBarProps> = (props: SideBarProps): Re
                     {uis && uis.map((item: SideBarItem, index: number) =>
                         <a
                             key={index}
-                            href={item.path}
+                            href={"#" + item.path}
                             onClick={navigate}
                             className={page === item.path ? "active" : null}
                         >
@@ -63,7 +67,7 @@ const SideBar: React.FunctionComponent<SideBarProps> = (props: SideBarProps): Re
                     {others && others.map((item: SideBarItem, index: number) =>
                         <a
                             key={index}
-                            href={item.path}
+                            href={"#" + item.path}
                             onClick={navigate}
                             className={page === item.path ? "active" : null}
                         >
