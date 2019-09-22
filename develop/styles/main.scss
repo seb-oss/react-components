@@ -3,14 +3,14 @@
 @import "./shared/titleBar";
 @import "./shared/sideBar";
 @import "./shared/releases";
-.app-container {
+div.app-container {
     position: absolute;
     top: 0px;
     bottom: 0px;
     right: 0px;
     left: 0px;
     overflow: hidden;
-    .route-holder {
+    div.route-holder {
         @import "./shared/route-template";
         position: absolute;
         top: 100px;
@@ -23,15 +23,19 @@
             left: 250px;
         }
         &.brief {
-            > .route-template {
+            > div.route-template {
                 position: fixed;
                 top: 0px;
                 left: 0px;
                 right: 0px;
                 bottom: 0px;
-                background: white;
+                background: $white;
                 z-index: 10;
                 overflow: auto;
+                min-width: inherit;
+                max-width: inherit;
+                padding: 0;
+                margin: 0;
                 .info-holder {
                     .info {
                         > h2,
