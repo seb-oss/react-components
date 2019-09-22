@@ -1,43 +1,71 @@
-$standard: 16px;
-$white: #fff;
-$gray-300: #dedede;
-$gray-600: #868686;
-$blue: #41B0EE;
-$red: #F03529;
-$black: #000;
+@import "../colours";
+$form-element-height: 44px;
+$checkbox-size: 16px;
+$checkbox-padding-left: 40px;
+$transition-time: 200ms;
+
+@mixin transition($props) {
+    -webkit-transition: $props;
+    -moz-transition: $props;
+    -o-transition: $props;
+    transition: $props;
+}
 .form-group.custom-checkbox {
-    .input-field {
-        margin-bottom: 5px;
-        .custom-control {
-            .custom-control-label,
-            .custom-control-input {
+    > .input-field {
+        > .custom-control {
+            display: flex;
+            align-items: center;
+            height: 100%;
+            padding-left: 0;
+            height: $form-element-height;
+            > .custom-control-label,
+            > .custom-control-input {
                 cursor: pointer;
                 user-select: none;
             }
-            .checkbox-description {
-                color: $gray-600;
-                display: inline-block;
-                margin-left: 8px;
+            > .custom-control-input {
+                left: 13px;
+                &:focus,
+                &:active {
+                    & + label {
+                        box-shadow: inset 0 0 0 0.1rem rgba(65, 176, 238, 0.5);
+                    }
+                }
+                &:disabled ~ .custom-control-label {
+                    > .checkbox-description {
+                        color: $gray-400;
+                    }
+                }
+            }
+            > .custom-control-label {
+                height: 100%;
+                width: 100%;
+                display: flex;
+                align-items: center;
+                padding-left: $checkbox-padding-left;
+                padding-right: 16px;
+                &:before,
+                &:after {
+                    left: ($checkbox-padding-left / 2) - ($checkbox-size / 2);
+                    top: ($form-element-height / 2) - ($checkbox-size / 2);
+                }
+                > .checkbox-description {
+                    color: $gray-600;
+                    display: inline-block;
+                    margin-left: 8px;
+                }
             }
         }
     }
     &.inline {
         display: inline-block;
         &:not(:first-child) {
-            .custom-control {
+            > .custom-control {
                 margin-left: 15px;
             }
         }
     }
-    .alert {
-        padding: 0px 2px;
+    &.condensed {
         margin: 0;
-        &.alert-danger {
-            color: $red;
-            background: none;
-            border: none;
-            border-radius: 0px;
-            width: 100%;
-        }
     }
 }

@@ -1,55 +1,64 @@
 import * as React from "react";
-import { shallow } from "enzyme";
-import { CheckBox } from "./CheckBox";
+import { shallow, ShallowWrapper, ReactWrapper, mount } from "enzyme";
+import { CheckBox, CheckBoxProps } from "./CheckBox";
 
 describe("Component: CheckBox", () => {
-    const props = {
+    const props: CheckBoxProps = {
         name: "myCheckbox",
+        label: "myLabel",
         checked: false,
         onChange: jest.fn()
     };
+    let wrapper: ShallowWrapper<CheckBoxProps>;
+
+    beforeEach(() => {
+        wrapper = shallow(<CheckBox {...props} />);
+    });
 
     it("Should render", () => {
-        const wrapper = shallow(<CheckBox {...props} />);
         expect(wrapper).toBeDefined();
     });
 
     it("Should renders and pass custom class", () => {
-        const wrapper = shallow(<CheckBox {...props} className="myClassname" />);
-        expect(wrapper.find(".input-field").hasClass("myClassname")).toBeTruthy();
+        const className: string = "myCheckboxClass";
+        const id: string = "myCheckboxId";
+        const mountedWrapper: ReactWrapper<CheckBoxProps> = mount(<CheckBox {...props} className={className} id={id} />);
+        expect(mountedWrapper.find(".custom-checkbox").hasClass(className)).toBeTruthy();
+        expect(mountedWrapper.find(`#${id}`)).toHaveLength(2); // Input and label
     });
 
-    it("Should pass down the id to the hmtl input component", () => {
-        const wrapper = shallow(<CheckBox {...props} id="my-checkbox-id" />);
-        expect(wrapper.find("#my-checkbox-id")).toHaveLength(1);
+    it("Should generated a random id when id is not passed", () => {
+        const mountedWrapper: ReactWrapper<CheckBoxProps> = mount(<CheckBox {...props} />);
+        expect(mountedWrapper.find("input").getElement().props.id).toBeDefined();
     });
 
     it("Should pass down the name to the html input component", () => {
-        const wrapper = shallow(<CheckBox {...props} />);
         expect(wrapper.find("input").getElement().props.name).toEqual("myCheckbox");
     });
 
-    it("Should render inline when inline prop is set to true", () => {
-        const wrapper = shallow(<CheckBox {...props} inline={true} />);
-        expect(wrapper.hasClass("inline")).toBeTruthy();
+    it("Should render inline and condensed when passed", () => {
+        const mountedWrapper: ReactWrapper<CheckBoxProps> = mount(<CheckBox {...props} inline={true} condensed={true} />);
+        expect(mountedWrapper.find(".custom-checkbox").hasClass("inline")).toBeTruthy();
+        expect(mountedWrapper.find(".custom-checkbox").hasClass("condensed")).toBeTruthy();
     });
 
-    it("Should render labels, description and error when passed", () => {
-        const wrapper = shallow(<CheckBox {...props} label="label" topLabel="topLabel" description="description" error="error" />);
-        expect(wrapper.find(".custom-control-label").length).toBe(1); // Label
+    it("Should render top label and description when passed", () => {
+        const topLabel: string = "my top label";
+        const description: string = "my description";
+        wrapper.setProps({ topLabel, description });
         expect(wrapper.find(".checkbox-toplabel").length).toBe(1); // Top Label
+        expect(wrapper.find(".checkbox-toplabel").text()).toEqual(topLabel); // Top Label
         expect(wrapper.find(".checkbox-description").length).toBe(1); // Description
-        expect(wrapper.find(".alert").length).toBe(1); // Error
+        expect(wrapper.find(".checkbox-description").text()).toEqual(description); // Description
     });
 
     it("Should fire a change event when checkbox input value is changed", () => {
-        const wrapper = shallow(<CheckBox {...props} />);
         wrapper.find("input").simulate("change");
         expect(props.onChange).toHaveBeenCalled();
     });
 
     it("Should disable checkbox when disabled prop is set to true", () => {
-        const wrapper = shallow(<CheckBox {...props} disabled={true} />);
+        wrapper.setProps({ disabled: true });
         expect(wrapper.find("input").props().disabled).toBeTruthy();
     });
 
