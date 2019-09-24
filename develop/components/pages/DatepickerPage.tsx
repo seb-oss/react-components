@@ -1,9 +1,13 @@
 import * as React from "react";
 import { Datepicker } from "../../../src/Datepicker/Datepicker";
+import * as moment from "moment";
 const Highlight = (require("react-highlight")).default;
 const docMD: string = require("../../../src/Datepicker/readme.md");
 
 const moreIcon: JSX.Element = <svg className="dropdown-more-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path d="M192 256c0 17.7-14.3 32-32 32s-32-14.3-32-32 14.3-32 32-32 32 14.3 32 32zm88-32c-17.7 0-32 14.3-32 32s14.3 32 32 32 32-14.3 32-32-14.3-32-32-32zm-240 0c-17.7 0-32 14.3-32 32s14.3 32 32 32 32-14.3 32-32-14.3-32-32-32z" /></svg>;
+
+const minDate: Date = moment().subtract(30, "years").toDate();
+const maxDate: Date = moment().add(8, "years").toDate();
 
 const DatepickerPage: React.FunctionComponent = () => {
     const [datepicker, setDatepicker] = React.useState<Date>(new Date());
@@ -28,8 +32,8 @@ const DatepickerPage: React.FunctionComponent = () => {
                             name="datepicker"
                             value={datepicker}
                             onChange={setDatepicker}
-                            minDate={new Date("1970-10-10")}
-                            maxDate={new Date("2022-10-10")}
+                            minDate={minDate}
+                            maxDate={maxDate}
                             label="Datepicker label"
                         />
                     </div>
@@ -40,8 +44,8 @@ const DatepickerPage: React.FunctionComponent = () => {
                             name="datepicker"
                             value={datepicker2}
                             onChange={setDatepicker2}
-                            minDate={new Date("1970-10-10")}
-                            maxDate={new Date("2022-10-10")}
+                            minDate={minDate}
+                            maxDate={maxDate}
                             label="Swedish date"
                             locale="sv-se"
                         />
@@ -53,8 +57,8 @@ const DatepickerPage: React.FunctionComponent = () => {
                             name="datepicker"
                             value={datepicker3}
                             onChange={setDatepicker3}
-                            minDate={new Date("1970-10-10")}
-                            maxDate={new Date("2022-10-10")}
+                            minDate={minDate}
+                            maxDate={maxDate}
                             calendarIcon={moreIcon}
                             clearable={true}
                             showLeadingZeros={false}
@@ -67,8 +71,8 @@ const DatepickerPage: React.FunctionComponent = () => {
                             name="datepicker"
                             value={datepicker3}
                             onChange={setDatepicker3}
-                            minDate={new Date("1970-10-10")}
-                            maxDate={new Date("2022-10-10")}
+                            minDate={minDate}
+                            maxDate={maxDate}
                             clearable={true}
                             disabled={true}
                         />

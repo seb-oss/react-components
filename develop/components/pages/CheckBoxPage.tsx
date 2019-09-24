@@ -33,7 +33,7 @@ const CheckBoxPage: React.FunctionComponent = () => {
                                 { text: "Inline" }
                             ]}
                             activeTab={tabValue}
-                            onClick={(index: number) => setTabValue(index)}
+                            onClick={setTabValue}
                         />
                         <CheckBox
                             name="checkbox1"

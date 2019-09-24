@@ -27,7 +27,7 @@ export interface TooltipProps {
 }
 
 export class Tooltip extends React.Component<TooltipProps, TooltipState> {
-    constructor(props) {
+    constructor(props: TooltipProps) {
         super(props);
 
         this.state = {
