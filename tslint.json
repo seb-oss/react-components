@@ -15,6 +15,7 @@
         "no-var-requires": false,
         "object-literal-shorthand": false,
         "no-console": false,
+        "prefer-for-of": false,
         "indent": [
             true,
             "spaces",

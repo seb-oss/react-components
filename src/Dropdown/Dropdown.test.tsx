@@ -1,8 +1,8 @@
 import * as React from "react";
 import { shallow, mount } from "enzyme";
-import { DropDown } from "./DropDown";
+import { Dropdown } from "./Dropdown";
 
-describe("Component: DropDown", () => {
+describe("Component: Dropdown", () => {
     const basicProps = {
         onChange: jest.fn(),
         selectedValue: null,
@@ -16,26 +16,26 @@ describe("Component: DropDown", () => {
     };
 
     it("Should render", () => {
-        const wrapper = shallow(<DropDown {...props} />);
+        const wrapper = shallow(<Dropdown {...props} />);
         expect(wrapper).toBeDefined();
         wrapper.unmount();
     });
 
     it("Should pass custom class", () => {
-        const wrapper = mount(<DropDown {...props} className="test-custom-class" />);
+        const wrapper = mount(<Dropdown {...props} className="test-custom-class" />);
         expect(wrapper.hasClass("test-custom-class")).toBeTruthy();
         wrapper.unmount();
     });
 
     it("Should render label when passed", () => {
-        const wrapper = shallow(<DropDown {...props} label="label" />);
+        const wrapper = shallow(<Dropdown {...props} label="label" />);
         expect(wrapper.find("label").length).toBe(1);
         expect(wrapper.find("label").text()).toEqual("label");
         wrapper.unmount();
     });
 
     it("Should open menu when clicked on trigger", () => {
-        const wrapper = mount(<DropDown {...props} label="label" />);
+        const wrapper = mount(<Dropdown {...props} label="label" />);
         const toggleButton = wrapper.find(".custom-dropdown-toggle");
         expect(toggleButton.length).toBe(1);
         toggleButton.simulate("click");
@@ -44,14 +44,14 @@ describe("Component: DropDown", () => {
     });
 
     it("Should display \"Empty\" if list prop is an empty array", () => {
-        const wrapper = mount(<DropDown {...basicProps} list={[]} placeholder="myPlaceholder" />);
+        const wrapper = mount(<Dropdown {...basicProps} list={[]} placeholder="myPlaceholder" />);
         expect(wrapper.find(".title").length).toBe(1);
         expect(wrapper.find(".title").text()).toEqual("Empty");
         wrapper.unmount();
     });
 
     it("Should render placeholder", () => {
-        const wrapper = mount(<DropDown {...props} placeholder="myPlaceholder" />);
+        const wrapper = mount(<Dropdown {...props} placeholder="myPlaceholder" />);
         expect(wrapper.find(".title").length).toBe(1);
         expect(wrapper.find(".title").text()).toEqual("myPlaceholder");
         wrapper.unmount();
@@ -59,7 +59,7 @@ describe("Component: DropDown", () => {
 
     it("Should display item label when one item is selected instead of placeholder", () => {
         const wrapper = mount(
-            <DropDown
+            <Dropdown
                 onChange={props.onChange}
                 list={[
                     { value: "Male", label: "Male" },
@@ -76,7 +76,7 @@ describe("Component: DropDown", () => {
 
     it("Should display item label when one item is selected even when multi is enabled", () => {
         const wrapper = mount(
-            <DropDown
+            <Dropdown
                 onChange={props.onChange}
                 selectedValue={[{ value: "Male", label: "Male" }]}
                 list={[
@@ -94,7 +94,7 @@ describe("Component: DropDown", () => {
 
     it("Should display \"[selectedList.length] Selected\" label if selected more than one and less that total amount of items. (multi only)", () => {
         const wrapper = mount(
-            <DropDown
+            <Dropdown
                 onChange={props.onChange}
                 list={[
                     { value: "Male", label: "Male" },
@@ -116,7 +116,7 @@ describe("Component: DropDown", () => {
 
     it("Should display label: All selected (list.length) when all items are selected", () => {
         const wrapper = mount(
-            <DropDown
+            <Dropdown
                 onChange={props.onChange}
                 list={[
                     { value: "Male", label: "Male" },
@@ -137,46 +137,40 @@ describe("Component: DropDown", () => {
     });
 
     it("Should enable searchable prop when set to true", () => {
-        const wrapper = mount(<DropDown {...props} searchable={true} />);
+        const wrapper = mount(<Dropdown {...props} searchable={true} />);
         expect(wrapper.find(".search-input").length).toBe(1);
         wrapper.unmount();
     });
 
     it("Should enable more button when set to true", () => {
-        const wrapper = mount(<DropDown {...props} more={true} />);
+        const wrapper = mount(<Dropdown {...props} more={true} />);
         expect(wrapper.find(".custom-dropdown-toggle").length).toBe(1);
         expect(wrapper.find(".more").length).toBe(1);
         wrapper.unmount();
     });
 
     it("Should display native dropdown if native prop set true", () => {
-        const wrapper = mount(<DropDown {...props} native={true} />);
+        const wrapper = mount(<Dropdown {...props} native={true} />);
         expect(wrapper.find(".form-control").length).toBe(1);
         wrapper.unmount();
     });
 
-    it("Should not display native dropdown if multi prop set true", () => {
-        const wrapper = mount(<DropDown {...props} native={true} multi={true} />);
-        expect(wrapper.find(".form-control").length).toBe(0);
-        wrapper.unmount();
-    });
-
     it("Should display error is error prop set", () => {
-        const wrapper = mount(<DropDown {...props} error={"error"} />);
+        const wrapper = mount(<Dropdown {...props} error={"error"} />);
         expect(wrapper.find(".alert-danger").length).toBe(1);
         expect(wrapper.find(".alert-danger").text()).toEqual("error");
         wrapper.unmount();
     });
 
     it("Should disable component when disabled set to true", () => {
-        const wrapper = shallow(<DropDown {...props} disabled={true} />);
+        const wrapper = shallow(<Dropdown {...props} disabled={true} />);
         expect(wrapper.find(".disabled").length).toBe(2);
         wrapper.unmount();
     });
 
     it("Should display clear button when multi prop set to true and at least one item selected", () => {
         const wrapper = mount(
-            <DropDown
+            <Dropdown
                 onChange={props.onChange}
                 list={[
                     { value: "Male", label: "Male" },
@@ -192,7 +186,7 @@ describe("Component: DropDown", () => {
 
     it("Should display clear button when clearable prop set to true and at least one item selected", () => {
         const wrapper = mount(
-            <DropDown
+            <Dropdown
                 onChange={props.onChange}
                 list={[
                     { value: "Male", label: "Male" },
@@ -208,7 +202,7 @@ describe("Component: DropDown", () => {
 
     it("Should not display clear button if all items are unselected even when clearable prop set to true", () => {
         const wrapper = mount(
-            <DropDown
+            <Dropdown
                 {...props}
                 clearable={true}
             />
