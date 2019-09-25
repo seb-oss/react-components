@@ -1,5 +1,5 @@
 import * as React from "react";
-import { shallow, ShallowWrapper } from "enzyme";
+import { shallow, ShallowWrapper, mount } from "enzyme";
 import { Loader, LoaderProps } from "./Loader";
 
 describe("Component: Loader", () => {
@@ -29,6 +29,27 @@ describe("Component: Loader", () => {
     it("Should hide loader when toggle is true", () => {
         wrapper.setProps({ toggle: false });
         expect(wrapper.find(".loader-holder").length).toBe(0);
+    });
+
+    it("should be able to set sizes by sizeClass or size parameter", () => {
+        wrapper.setProps({ toggle: true, fullscreen: false, sizeClassName: "loader-sm" });
+        expect(wrapper.find(".seb-loader.loader-sm")).toBeTruthy();
+
+        wrapper.setProps({ toggle: true, fullscreen: false, size: "extraLarge", sizeClassName: undefined });
+        expect(wrapper.find(".seb-loader.loader-xl")).toBeTruthy();
+
+        wrapper.setProps({ toggle: true, fullscreen: false, size: "large" });
+        expect(wrapper.find(".seb-loader.loader-lg")).toBeTruthy();
+
+        wrapper.setProps({ toggle: true, fullscreen: false, size: "medium" });
+        expect(wrapper.find(".seb-loader.loader-md")).toBeTruthy();
+
+        wrapper.setProps({ toggle: true, fullscreen: false, size: "small" });
+        console.log(wrapper);
+        expect(wrapper.find(".seb-loader.loader-sm")).toBeTruthy();
+
+        wrapper.setProps({ toggle: true, fullscreen: false, size: "tiny" });
+        expect(wrapper.find(".seb-loader.loader-xs")).toBeTruthy();
     });
 
 });
