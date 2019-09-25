@@ -9,9 +9,10 @@ export interface TimelineListItem {
 
 type TimelineDirection = "vertical" | "horizontal";
 
-interface TimelineProps {
+export interface TimelineProps {
     className?: string;
     direction?: TimelineDirection;
+    id?: string;
     list: Array<TimelineListItem>;
     onClick?: (index: number) => void;
 }
@@ -37,7 +38,7 @@ export const Timeline: React.FunctionComponent<TimelineProps> = React.memo((prop
     const topList: Array<TimelineListItem> = preparedLists[0];
     const bottomList: Array<TimelineListItem> = preparedLists[1];
     return (
-        <div className={"form-group custom-timeline" + (props.className ? ` ${props.className}` : "")}>
+        <div className={"form-group custom-timeline" + (props.className ? ` ${props.className}` : "")} id={props.id}>
             <div className={`timeline ${direction}` + (props.onClick ? " clickable" : "")}>
 
                 {direction === "vertical" && props.list.map((item: TimelineListItem, i: number) =>

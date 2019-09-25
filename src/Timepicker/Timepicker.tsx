@@ -26,20 +26,15 @@ const enum TimerStepperContext {
     Dayperiod = "DAYPERIOD"
 }
 
-interface TimepickerProps {
+export interface TimepickerProps {
     className?: string;
+    id?: string;
     name: string;
     onChange: (value: TimepickerValue) => void;
     value: TimepickerValue;
 }
 
-export class Timepicker extends React.Component<TimepickerProps, any> {
-    constructor(props) {
-        super(props);
-        this.handleClick = this.handleClick.bind(this);
-        this.handleChange = this.handleChange.bind(this);
-    }
-
+class Timepicker extends React.Component<TimepickerProps> {
     handleClick(context: TimerStepperContext, type: TimerStepperTypes, currentValue: TimepickerValue): TimepickerValue {
         const newValue: TimepickerValue = { ...currentValue };
         switch (context) {
@@ -106,8 +101,9 @@ export class Timepicker extends React.Component<TimepickerProps, any> {
     }
 
     render() {
+
         return (
-            <div className={"custom-timepicker" + (this.props.className ? ` ${this.props.className}` : "")}>
+            <div className={"custom-timepicker" + (this.props.className ? ` ${this.props.className}` : "")} id={this.props.id}>
                 <div className="timepicker-hours">
                     <div
                         className="triangle-before"
@@ -184,3 +180,5 @@ export class Timepicker extends React.Component<TimepickerProps, any> {
         );
     }
 }
+
+export { Timepicker };

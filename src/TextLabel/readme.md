@@ -32,6 +32,7 @@ These are the current available properties:
 | Property   | Type     | Description                     |
 | ---------- | -------- | ------------------------------- |
 | className? | `string` | Custom class can be passed here |
+| id?        | `string` | Element id                      |
 | label?     | `string` | Element label                   |
 | name?      | `string` | element name                    |
 | value      | `string` | The current value               |

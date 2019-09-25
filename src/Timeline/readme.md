@@ -31,8 +31,9 @@ These are the current available properties:
 
 | Property   | Type                                  | Description                                                                         |
 | ---------- | ------------------------------------- | ----------------------------------------------------------------------------------- |
-| className? | `string`                              | custom class                                                                        |
+| className? | `string`                              | Custom class                                                                        |
 | direction? | `string`                              | Timeline direction. Accepts `'vertical'` and `'horizontal'` (default: `'vertical'`) |
+| id?        | `string`                              | Element id                                                                          |
 | list       | `Array<TimelineListItem>`<sup>1</sup> | Timeline list                                                                       |
 | onClick?   | `(index: number)=>void`               | Click event returns the index of array item clicked                                 |
 

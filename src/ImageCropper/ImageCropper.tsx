@@ -123,6 +123,7 @@ interface ImageCropperProps {
     selectButtonText?: string;
     previewClassName?: string;
     imageCropperClassName?: string;
+    id?: string;
 
     // cropper options
     previewSrc?: string;
@@ -477,7 +478,7 @@ export class ImageCropper extends React.Component<ImageCropperProps, ImageCroppe
     render() {
         return (
             <React.Fragment>
-                <div className={"custom-cropper-dialogue" + (this.state.toggle ? " open-cropper-dialogue" : " close-cropper-dialogue")}>
+                <div className={"custom-cropper-dialogue" + (this.state.toggle ? " open-cropper-dialogue" : " close-cropper-dialogue")} id={this.props.id}>
                     <div className="cropper-dialogue-container">
                         <div className={"cropper-dialogue " + (this.props.imageCropperClassName ? this.props.imageCropperClassName : "")} onClick={this.stopProp}>
 

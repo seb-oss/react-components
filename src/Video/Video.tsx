@@ -1,23 +1,26 @@
 import * as React from "react";
 import "./video-style.scss";
 
+export type VideoSourceType = "stream" | "local";
+
 export interface VideoProps {
     allowFullScreen?: boolean;
     autoplay?: boolean;
     className?: string;
     height: string;
+    id?: string;
     loop?: boolean;
     name: string;
     showControls?: boolean;
     showInfo?: boolean;
-    sourceType: string;
+    sourceType: VideoSourceType;
     src: string;
     width: string;
 }
 
 export const Video: React.FunctionComponent<VideoProps> = (props: VideoProps): React.ReactElement<void> => {
     return (
-        <div className={"video-holder-component" + (props.className ? ` ${props.className}` : "")}>
+        <div className={"video-holder-component" + (props.className ? ` ${props.className}` : "")} id={props.id}>
             {props.sourceType === "local" &&
                 <video
                     width={props.width}

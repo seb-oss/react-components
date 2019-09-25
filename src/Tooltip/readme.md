@@ -37,6 +37,7 @@ These are the current available properties:
 | --------------- | ---------------------------------------------------- | --------------------------------------------------------------------------------------------- |
 | className?      | `string`                                             | Custom class                                                                                  |
 | customSvg?      | `any`                                                | A direct svg code or a component with svg                                                     |
+| id?             | `string`                                             | Element id                                                                                    |
 | message?        | `string`                                             | Description                                                                                   |
 | messageGroup?   | `Array<TooltipMessageGroupItem>`<sup>1</sup>         | Multiple titles/descriptions                                                                  |
 | onClick         | `(event?: React.MouseEvent<HTMLDivElement>) => void` | click action                                                                                  |

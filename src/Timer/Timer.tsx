@@ -1,9 +1,10 @@
 import * as React from "react";
 
-interface TimerProps {
+export interface TimerProps {
     callback?: () => void;
     className?: string;
     duration: number;
+    id?: string;
 }
 
 interface TimerState {
@@ -74,7 +75,7 @@ export class Timer extends React.Component<TimerProps, TimerState> {
 
     render(): React.ReactNode {
         return (
-            <div className={"custom-timer" + (this.props.className ? ` ${this.props.className}` : "")}>
+            <div className={"custom-timer" + (this.props.className ? ` ${this.props.className}` : "")} id={this.props.id}>
                 {this.state.timer}
             </div>
         );

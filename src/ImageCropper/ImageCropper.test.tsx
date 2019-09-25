@@ -48,9 +48,12 @@ describe("Component: ImageCropper", () => {
         wrapper.unmount();
     });
 
-    it("Should pass custom class", () => {
-        const wrapper = mount(<ImageCropper {...props} previewClassName="my-image-preview" />);
-        expect(wrapper.find(".my-image-preview").exists()).toBeTruthy();
+    it("Should pass custom class and id", () => {
+        const className: string = "myImageCropperClass";
+        const id: string = "myImageCropperId";
+        const wrapper = mount(<ImageCropper {...props} previewClassName={className} id={id} />);
+        expect(wrapper.find(`.${className}`).length).toBeTruthy();
+        expect(wrapper.find(`#${id}`).length).toBeTruthy();
         wrapper.unmount();
     });
 

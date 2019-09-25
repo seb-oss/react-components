@@ -32,10 +32,11 @@ These are the current available properties:
 
 | Property   | Type                               | Description                 |
 | ---------- | ---------------------------------- | --------------------------- |
-| className? | `string`                           | custom class                |
-| name       | `string`                           | element name                |
+| className? | `string`                           | Custom class                |
+| id?        | `string`                           | Element id                  |
+| name       | `string`                           | Element name                |
 | onChange   | `(value: TimepickerValue) => void` | Timepicker change event     |
-| value      | `TimepickerValue`<sup>1</sup>      | the value of the timepicker |
+| value      | `TimepickerValue`<sup>1</sup>      | The value of the timepicker |
 
 ## Footnote
 

@@ -32,5 +32,6 @@ These are the current available properties:
 | Property   | Type         | Description                                            |
 | ---------- | ------------ | ------------------------------------------------------ |
 | callback   | `() => void` | This method will be triggered when timer reached ended |
-| className? | `string`     | custom class                                           |
-| duration   | `number`     | duration of timer in `Millisecond`                     |
+| className? | `string`     | Custom class                                           |
+| duration   | `number`     | Duration of timer in `Millisecond`                     |
+| id?        | `string`     | Element id                                             |

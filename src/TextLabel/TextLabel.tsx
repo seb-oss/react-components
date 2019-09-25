@@ -3,6 +3,7 @@ import "./text-label-style.scss";
 
 export interface TextLabelProps {
     className?: string;
+    id?: string;
     label?: string;
     name?: string;
     value: string | number;
@@ -10,7 +11,7 @@ export interface TextLabelProps {
 
 export const TextLabel: React.FunctionComponent<TextLabelProps> = React.memo((props: TextLabelProps): React.ReactElement<void> => {
     return (
-        <div className={"text-label" + (props.className ? ` ${props.className}` : "")}>
+        <div className={"text-label" + (props.className ? ` ${props.className}` : "")} id={props.id}>
             {props.label && <label className="custom-label" htmlFor={props.name}>{props.label}</label>}
             <div className="custom-label-value">{props.value}</div>
         </div>

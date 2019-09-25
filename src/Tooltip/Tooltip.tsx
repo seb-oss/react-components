@@ -15,6 +15,7 @@ interface TooltipState {
 export interface TooltipProps {
     className?: string;
     customSvg?: any;
+    id?: string;
     message?: string;
     messageGroup?: Array<TooltipMessageGroupItem>;
     onClick?: (event?: React.MouseEvent<HTMLDivElement>) => void;
@@ -23,7 +24,6 @@ export interface TooltipProps {
     title?: string;
     triggerOnHover?: boolean;
     width?: number;
-
 }
 
 export class Tooltip extends React.Component<TooltipProps, TooltipState> {
@@ -79,7 +79,7 @@ export class Tooltip extends React.Component<TooltipProps, TooltipState> {
 
     render() {
         return (
-            <div className={"tooltip-container" + (this.props.className ? ` ${this.props.className}` : "")}>
+            <div className={"tooltip-container" + (this.props.className ? ` ${this.props.className}` : "")} id={this.props.id}>
                 <div
                     className="icon"
                     onClick={(e: React.MouseEvent<HTMLDivElement>) => !this.props.triggerOnHover && this.toggleTooltip(undefined, e)}

@@ -15,9 +15,12 @@ describe("Component: Timepicker", () => {
         expect(wrapper).toBeDefined();
     });
 
-    it("Should pass custom class", () => {
-        const wrapper = shallow(<Timepicker {...props} className="myTimepicker" />);
-        expect(wrapper.hasClass("myTimepicker")).toBeTruthy();
+    it("Should pass custom class and id", () => {
+        const className: string = "myTimepickerClass";
+        const id: string = "myTimepickerId";
+        const wrapper = shallow(<Timepicker {...props} className={className} id={id} />);
+        expect(wrapper.hasClass(className)).toBeTruthy();
+        expect(wrapper.find(`#${id}`).length).toBeTruthy();
     });
 
     it("Should fire change event", () => {
