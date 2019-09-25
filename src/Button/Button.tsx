@@ -17,6 +17,7 @@ export interface ButtonProps {
     size?: ButtonSizes;
     theme?: ButtonTheme;
     title?: string;
+    children?: React.ReactNode;
 }
 
 export const Button: React.FunctionComponent<ButtonProps> = React.memo((props: ButtonProps): React.ReactElement<void> => {
@@ -47,8 +48,10 @@ export const Button: React.FunctionComponent<ButtonProps> = React.memo((props: B
             onClick={props.onClick}
         >
             <div className="button-content">
+                {props.iconPosition === "left" && props.children}
                 <div className="button-label">{props.label}</div>
                 {(props.icon) && <div className="svg-holder">{props.icon}</div>}
+                {(props.iconPosition === "right" || !props.icon) && props.children}
             </div>
         </button>
     );
