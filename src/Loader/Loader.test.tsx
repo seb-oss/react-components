@@ -1,5 +1,5 @@
 import * as React from "react";
-import { shallow, ShallowWrapper, mount } from "enzyme";
+import { shallow, ShallowWrapper } from "enzyme";
 import { Loader, LoaderProps } from "./Loader";
 
 describe("Component: Loader", () => {
