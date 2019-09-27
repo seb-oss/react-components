@@ -1,5 +1,6 @@
 import * as React from "react";
 import "./text-box-group-style.scss";
+import { randomId } from "../__utils/randomId";
 
 export interface TextBoxGroupProps {
     autoComplete?: boolean;
@@ -33,13 +34,20 @@ export interface TextBoxGroupProps {
     rightTitle?: string;
     type?: string;
     value: string | number;
+    success?: boolean;
 }
 
 export const TextBoxGroup: React.FunctionComponent<TextBoxGroupProps> = (props: TextBoxGroupProps) => {
+    const [id, setId] = React.useState<string>(null);
+
+    React.useEffect(() => {
+        setId(props.id ? props.id : (props.label ? randomId("tbg-") : null));
+    }, [props.id, props.label]);
+
     return (
         <div className={"form-group input-box-group" + (props.className ? ` ${props.className}` : "")}>
-            {props.label && <label className="custom-label" htmlFor={props.name}>{props.label}</label>}
-            <div className={"input-group" + (props.error ? " has-error" : "") + (props.disabled ? " disabled" : "")} >
+            {props.label && <label className="custom-label" htmlFor={id}>{props.label}</label>}
+            <div className={"input-group" + (props.error ? " has-error" : "") + (props.disabled ? " disabled" : "") + (props.success ? " success" : "")} >
                 <div className="input-box-group-wrapper">
                     {(props.leftIcon || props.leftText) &&
                         <div className={"input-group-prepend" + (props.onLeftClick ? " clickable" : "")} role={props.onLeftClick ? "button" : ""} onClick={props.onLeftClick}>
@@ -52,7 +60,7 @@ export const TextBoxGroup: React.FunctionComponent<TextBoxGroupProps> = (props: 
                         </div>
                     }
                     <input
-                        id={props.id}
+                        id={id}
                         name={props.name}
                         type={props.type}
                         pattern={props.pattern}

@@ -39,12 +39,14 @@ These are the current available properties:
 | label         | `string`                                           | Button label                                         |
 | name?         | `string`                                           | Name property                                        |
 | onClick       | `(e: React.MouseEvent<HTMLButtonElement>) => void` | Click action                                         |
-| size?         | `string`<sup>2</sup>                               | Based on Bootstrap predefined sizes: (default: `md`) |
-| theme?        | `string`<sup>1</sup>                               | Based on SEB predefined colors: (default: `primary`) |
+| size?         | `string`<sup>2</sup>                               | Based on Bootstrap predefined sizes. (default: `md`) |
+| theme?        | `string`<sup>1</sup>                               | Based on SEB predefined colors. (default: `primary`) |
 | title?        | `string`                                           | Element title                                        |
+| type?         | `string`                                           | Button type<sup>4</sup>. (default: `button`)         |
 
 ## Footnote
 
 1. Supported themes: `primary` | `secondary` | `danger` | `alternative` | `ghost-dark` | `ghost-light` | `anchor`
 2. Supported size: `sm` | `md` | `lg`
 3. Supported icon positions: `left` | `right`
+4. Supported button types: `button` | `submit` | `reset`

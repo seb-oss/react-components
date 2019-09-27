@@ -1,10 +1,5 @@
 //colors
-$red: #f03529;
-$gray-100: #f8f8f8;
-$gray-500: #adadad !default;
-$blue: #41b0ee;
-$blue-dark: #0092e1;
-$blue-darker: #007ac7;
+@import "../colours";
 $body-color: #444 !default;
 $transition-time: 200ms;
 
@@ -32,16 +27,16 @@ $transition-time: 200ms;
             align-items: center;
             &:hover {
                 border-color: $blue;
-                background-color: white;
+                background-color: $white;
             }
             &:focus-within {
                 border-color: $blue-darker;
                 box-shadow: none;
-                background-color: white;
+                background-color: $white;
                 &:active {
                     border-color: $blue-darker;
                     box-shadow: none;
-                    background-color: white;
+                    background-color: $white;
                 }
             }
             > .input-group-prepend,
@@ -59,10 +54,13 @@ $transition-time: 200ms;
                     background: none;
                     padding: 0;
                     margin: 0 auto;
+                    width: 100%;
+                    height: 100%;
+                    justify-content: center;
                     svg {
                         width: 16px;
                         height: 16px;
-                        fill: black;
+                        fill: $black;
                     }
                 }
                 &.clickable {
@@ -78,29 +76,15 @@ $transition-time: 200ms;
                     }
                 }
             }
-            > div:only-of-type {
-                & ~ input {
-                    padding-left: 0;
-                    width: calc(100% - 40px);
-                }
-            }
-            > div:not(:only-of-type) {
-                & ~ input {
-                    padding-right: 0;
-                    padding-left: 0;
-                    width: calc(100% - 80px);
-                }
+            >.input-group-prepend + input.form-control {
+                padding-left: 0;
             }
             > input.form-control {
-                display: inline-block;
+                display: inline-flex;
                 z-index: 1;
                 border: none;
                 border-radius: 0;
                 height: 42px;
-                &:nth-child(1) {
-                    padding-right: 0;
-                    width: calc(100% - 40px);
-                }
                 &:focus {
                     box-shadow: none;
                 }
@@ -110,16 +94,15 @@ $transition-time: 200ms;
                     -moz-appearance: none;
                     appearance: none;
                 }
+                &:nth-child(2):not(:last-child),
+                &:first-child:not(:last-child) {
+                    padding-right: 0;
+                }
             }
         }
         &.has-error {
             > .input-box-group-wrapper {
-                border-bottom: 1px solid $red;
-                &:hover,
-                &:focus,
-                &:focus:active {
-                    border-bottom: 2px solid $red;
-                }
+                border-bottom: 2px solid $red;
             }
             > .alert {
                 opacity: 1;
@@ -127,10 +110,15 @@ $transition-time: 200ms;
                 max-height: 100px;
             }
         }
+        &.success {
+            > .input-box-group-wrapper {
+                border-bottom: 2px solid $green;
+            }
+        }
         &.disabled {
             .input-box-group-wrapper {
                 background-color: $gray-100;
-                border-color: $gray-500;    
+                border-color: $gray-500;
                 .input-group-prepend,
                 .input-group-append,
                 .form-control {

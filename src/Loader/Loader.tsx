@@ -4,43 +4,32 @@ import "./loader-style.scss";
 export interface LoaderProps {
     className?: string;
     fullscreen?: boolean;
-    sizeClassName?: string;
     id?: string;
-    size?: Size;
+    size?: LoaderSize;
     toggle: boolean;
 }
 
-export type Size = "large" | "medium" | "small" | "extraLarge" | "tiny";
+export type LoaderSize = "lg" | "md" | "sm";
 
 export const Loader: React.FunctionComponent<LoaderProps> = React.memo((props: LoaderProps): React.ReactElement<void> => {
-    const fullscreen: boolean = props.fullscreen === undefined ? false : props.fullscreen;
-    let loaderWrapper: string = "seb-loader-wrapper ";
-    if (fullscreen) { loaderWrapper += "fullscreen "; }
+    const [size, setSize] = React.useState<string>("");
+    const [className, setClassName] = React.useState<string>("seb-loader-wrapper");
 
-    function setSizeClass(): string {
-        if (props.sizeClassName) {
-            return props.sizeClassName;
-        }
-        switch (props.size) {
-            case "large":
-                return "loader-lg";
-            case "small":
-                return "loader-sm";
-            case "extraLarge":
-                return "loader-xl";
-            case "medium":
-                return "loader-md";
-            case "tiny":
-                return "loader-xs";
-            default:
-                return "loader-sm";
-        }
-    }
+    React.useEffect(() => {
+        let classNameToSet: string = "seb-loader-wrapper";
+        classNameToSet += props.fullscreen !== undefined ? (props.fullscreen ? " fullscreen" : "") : "";
+        classNameToSet += props.className ? ` ${props.className}` : "";
+        setClassName(classNameToSet);
+    }, [props.className, props.fullscreen]);
+
+    React.useEffect(() => {
+        setSize(`loader-${props.size || "md"}`);
+    }, [props.size]);
 
     return (
-        <div className={loaderWrapper + (props.className ? props.className : "")} id={props.id}>
+        <div className={className} id={props.id}>
             {props.toggle &&
-                <div className={"seb-loader " + setSizeClass()}>
+                <div className={"seb-loader" + (size ? ` ${size}` : "")}>
                     <div className="seb-loader-container">
                         <div className="seb-loader-rotator">
                             <div className="seb-loader-left">

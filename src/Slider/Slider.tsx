@@ -12,7 +12,6 @@ export interface RangeSliderLabel {
 }
 
 export interface SliderProps {
-    alternative?: boolean;
     alwaysShowTooltip?: boolean;
     className?: string;
     disabled?: boolean;
@@ -29,6 +28,7 @@ export interface SliderProps {
     step?: number;
     theme?: SliderTheme;
     tooltipTheme?: SliderTheme;
+    tooltipValue?: string;
     value: number;
 }
 
@@ -74,7 +74,6 @@ const Slider: React.FunctionComponent<SliderProps> = (props: SliderProps): React
             className={
                 "form-group custom-slider"
                 + (props.className ? ` ${props.className}` : "")
-                + (props.alternative ? " alternative" : "")
                 + (props.disabled ? " disabled" : "")
             }
         >
@@ -111,7 +110,7 @@ const Slider: React.FunctionComponent<SliderProps> = (props: SliderProps): React
                                     "custom-slider-preview" +
                                     (props.alwaysShowTooltip ? " always-show" : "") +
                                     (props.tooltipTheme ? ` ${props.tooltipTheme}` : " inverted")}
-                            >{props.value}
+                            >{props.tooltipValue || props.value}
                             </div>
                             <span className="custom-slider-icon-left">{angleLeftIcon}</span>
                             <span className="custom-slider-icon-right">{angleRightIcon}</span>

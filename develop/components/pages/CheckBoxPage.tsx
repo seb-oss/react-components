@@ -54,13 +54,12 @@ const CheckBoxPage: React.FunctionComponent = () => {
                         />
                         <CheckBox
                             name="checkbox3"
-                            label="Checkbox 3"
+                            label="Disabled"
                             checked={checkbox3}
                             onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCheckbox3(e.target.checked)}
                             condensed={tabValue === 1}
                             inline={tabValue === 2}
                             disabled={true}
-                            description="Disabled"
                         />
                     </div>
                 </div>

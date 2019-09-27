@@ -9,7 +9,8 @@ const userIcon: JSX.Element = <svg xmlns="http://www.w3.org/2000/svg" viewBox="0
 const TextBoxGroupPage: React.FunctionComponent = () => {
     const [textBoxGroupValue, setTextBoxGroupValue] = React.useState<string>("");
     const [textBoxGroupValue2, setTextBoxGroupValue2] = React.useState<string>("");
-    const [textBoxGroupValue3, setTextBoxGroupValue3] = React.useState<string>("");
+    const [textBoxGroupValue3, setTextBoxGroupValue3] = React.useState<string>("Not good");
+    const [textBoxGroupValue4, setTextBoxGroupValue4] = React.useState<string>("All good");
 
     return (
         <div className="route-template container">
@@ -59,6 +60,23 @@ const TextBoxGroupPage: React.FunctionComponent = () => {
                             leftTitle="Click to view more of the left"
                             rightTitle="Click to view more of the right"
                             error="some error message"
+                        />
+                    </div>
+
+                    <p>text box group with both sides and error:</p>
+                    <div className="result">
+                        <TextBoxGroup
+                            name="textInput3"
+                            placeHolder="Text Box PlaceHolder"
+                            value={textBoxGroupValue4}
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTextBoxGroupValue4(e.target.value)}
+                            leftIcon={moneyIcon}
+                            rightIcon={userIcon}
+                            onLeftClick={() => alert("Im clicking on Left icon")}
+                            onRightClick={() => alert("Im clicking on Right icon")}
+                            leftTitle="Click to view more of the left"
+                            rightTitle="Click to view more of the right"
+                            success={true}
                         />
                     </div>
                 </div>

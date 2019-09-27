@@ -26,6 +26,7 @@ This React component supports customization and configurations. The component na
 ```
 
 ## Usage with button
+
 ```html
  <Button label="Test Label" onClick={() => { alert('Button Clicked') }}>
       <Loader toggle={true} fullscreen={false} />
@@ -36,12 +37,14 @@ This React component supports customization and configurations. The component na
 
 These are the current available properties:
 
-| Property       | Type      | Description                                                                                                       |
-| -------------- | --------- | ----------------------------------------------------------------------------------------------------------------- |
-| className?     | `string`  | Element class                                                                                                     |
-| fullscreen?    | `boolean` | Show the loader in fullscreen                                                                                     |
-| id?            | `string`  | Element id                                                                                                        |
-| toggle         | `boolean` | Toggle                                                                                                            |
-| size?          | `Size`    | can be `large` , `small`, `medium`, `extraLarge` and `tiny`                                                       |
-| sizeClassName? | `string`  | sizeClassName such as `loader-lg`, `loader-sm`, `loader-md`, `loader-xs`, `loader-xl` can be alternatively passed |
+| Property    | Type      | Description                                              |
+| ----------- | --------- | -------------------------------------------------------- |
+| className?  | `string`  | Element class                                            |
+| fullscreen? | `boolean` | Show the loader in fullscreen                            |
+| id?         | `string`  | Element id                                               |
+| size?       | `Size`    | Define the size of the loader<sup>1</sup>. (default: md) |
+| toggle      | `boolean` | Toggle                                                   |
 
+## Footnote
+
+1. Supported sizes: `lg` , `md`, `sm`

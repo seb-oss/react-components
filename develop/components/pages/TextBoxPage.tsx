@@ -5,7 +5,8 @@ const docMD: string = require("../../../src/TextBox/readme.md");
 
 const TextBoxPage: React.FunctionComponent = () => {
     const [textBoxValue, setTextBoxValue] = React.useState<string>("");
-    const [textBoxValue2, setTextBoxValue2] = React.useState<string>("");
+    const [textBoxValue2, setTextBoxValue2] = React.useState<string>("Not good");
+    const [textBoxValue3, setTextBoxValue3] = React.useState<string>("All good");
 
     return (
         <div className="route-template container">
@@ -38,6 +39,17 @@ const TextBoxPage: React.FunctionComponent = () => {
                             error="error msg will be shown here"
                             value={textBoxValue2}
                             onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTextBoxValue2(e.target.value)}
+                        />
+                    </div>
+
+                    <p>Here is the input with success:</p>
+                    <div className="result">
+                        <TextBox
+                            name="textInput3"
+                            placeHolder="Text Box PlaceHolder"
+                            success={true}
+                            value={textBoxValue3}
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTextBoxValue3(e.target.value)}
                         />
                     </div>
                 </div>

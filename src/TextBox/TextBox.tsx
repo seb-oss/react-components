@@ -23,6 +23,7 @@ export interface TextBoxProps {
     readonly?: boolean;
     reference?: React.RefObject<HTMLInputElement>;
     required?: boolean;
+    success?: boolean;
     type?: string;
     value: string | number;
 }
@@ -30,7 +31,7 @@ export interface TextBoxProps {
 export const TextBox: React.FunctionComponent<TextBoxProps> = (props: TextBoxProps): React.ReactElement<void> => {
     return (
         <div className={"form-group input-box" + (props.className ? ` ${props.className}` : "")}>
-            <div className={"input-field" + (props.error ? " has-error" : "")}>
+            <div className={"input-field" + (props.error ? " has-error" : "") + (props.success ? " success" : "")}>
                 {props.label && <label className="custom-label" htmlFor={props.name}>{props.label}</label>}
                 <input
                     id={props.id}

@@ -4,8 +4,10 @@ import "./button-style.scss";
 export type ButtonTheme = "primary" | "secondary" | "danger" | "alternative" | "ghost-dark" | "ghost-light" | "anchor";
 export type ButtonSizes = "lg" | "md" | "sm";
 export type ButtonIconPosition = "right" | "left";
+export type ButtonType = "button" | "reset" | "submit";
 
 export interface ButtonProps {
+    children?: React.ReactNode;
     className?: string;
     disabled?: boolean;
     icon?: any;
@@ -17,33 +19,39 @@ export interface ButtonProps {
     size?: ButtonSizes;
     theme?: ButtonTheme;
     title?: string;
-    children?: React.ReactNode;
+    type?: ButtonType;
 }
 
 export const Button: React.FunctionComponent<ButtonProps> = React.memo((props: ButtonProps): React.ReactElement<void> => {
-    let theme: string;
-    switch (props.theme) {
-        case "primary": theme = "btn-primary"; break;
-        case "secondary": theme = "btn-outline-primary"; break;
-        case "alternative": theme = "btn-secondary"; break;
-        case "ghost-dark": theme = "btn-ghost-dark"; break;
-        case "ghost-light": theme = "btn-ghost-light"; break;
-        case "anchor": theme = "btn-anchor"; break;
-        case "danger": theme = "btn-danger"; break;
-        default: theme = "btn-primary"; break;
+    const [className, setClassName] = React.useState<string>("btn");
+
+    function getButtonTheme(): string {
+        switch (props.theme) {
+            case "secondary": return "outline-primary";
+            case "alternative": return "secondary";
+            case "primary": case "ghost-dark": case "ghost-light": case "anchor": case "danger": return props.theme;
+            default: return "primary";
+        }
     }
+
+    React.useEffect(() => {
+        let classNameToSet: string = "btn";
+        classNameToSet += props.size ? ` btn-${props.size}` : "";
+        classNameToSet += ` btn-${getButtonTheme()}`;
+        if (props.icon) {
+            classNameToSet += props.iconPosition ? ` icon-${props.iconPosition}` : " icon-left";
+        }
+        classNameToSet += props.className ? ` ${props.className}` : "";
+        setClassName(classNameToSet);
+    }, [props.theme, props.className, props.size, props.icon, props.iconPosition, props.size]);
+
     return (
         <button
             id={props.id}
             name={props.name}
-            type="button"
+            type={props.type || "button"}
             disabled={props.disabled}
-            className={
-                `btn ${theme}`
-                + (props.size ? ` btn-${props.size}` : "")
-                + (props.className ? ` ${props.className}` : "")
-                + (props.icon ? (props.iconPosition ? ` icon-${props.iconPosition}` : " icon-left") : "")
-            }
+            className={className}
             title={props.title}
             onClick={props.onClick}
         >

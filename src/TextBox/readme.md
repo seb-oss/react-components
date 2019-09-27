@@ -2,10 +2,11 @@
 title: TextBox
 componentid: component-input
 variantid: default
-guid: 'input-textbox-guid-default-component-react'
+guid: "input-textbox-guid-default-component-react"
 ---
 
 ## Element name
+
 ```javascript
 Name: TextBox Component
 Component: "TextBox"
@@ -14,20 +15,19 @@ Import: "@sebgroup/react-components/dist/TextBox"
 Type: Form Component
 ```
 
-## Element information 
+## Element information
+
 This React component is based on SEB Bootstrap style. Supports customization and configurations. The component name is `TextBox` and the selector is `<TextBox/>`.
 
 ## Basic use
+
 ```html
-<TextBox
-    name="textInput"
-    placeholder="Text Box placeholder"
-    value={this.state.textBox}
-    onChange={(event) => { this.setState({ textBoxValue: event.target.value }); }}
-/>
+<TextBox name="textInput" placeholder="Text Box placeholder" value={this.state.textBox} onChange={(event) => {
+this.setState({ textBoxValue: event.target.value }); }} />
 ```
 
 ## Properties
+
 These are the current available properties:
 
 | Property      | Type                                                     | Description                                     |
@@ -53,5 +53,6 @@ These are the current available properties:
 | readonly?     | `boolean`                                                | Make input element readonly. (default: `false`) |
 | reference?    | `React.RefObject<HTMLInputElement>`                      | React Ref obj                                   |
 | required?     | `boolean`                                                | Required atribute                               |
+| success       | `boolean`                                                | Success status                                  |
 | type?         | `string`                                                 | Input type. (default: `'text'`)                 |
 | value         | `string`                                                 | Value string                                    |
