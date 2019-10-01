@@ -32,31 +32,37 @@ export interface AccordionProps {
 
 const Accordion: React.FunctionComponent<AccordionProps> = (props: AccordionProps) => {
     const [active, setActive] = React.useState<number>(null);
-    const [className, setClassName] = React.useState<string>("custom-accordion");
+    const [itemClassName, setItemClassName] = React.useState<string>("custom-accordion");
     const [idList, setIdList] = React.useState<Array<string>>([]);
 
     React.useEffect(() => {
         constructIds();
-        constructClassName();
+        constructItemClassName();
     }, []);
 
     React.useEffect(() => {
         constructIds();
-        constructClassName();
+        constructItemClassName();
     }, [props.id, props.className, props.iconPosition, props.iconRotation, props.customIconExpanded, props.list]);
 
+    /**
+     * Constructs the component's `id` if `id` prop is passed
+     */
     function constructIds(): void {
         const idListToSet: Array<string> = [];
         props.list.map(() => idListToSet.push(randomId("accordion-")));
         setIdList(idListToSet);
     }
 
-    function constructClassName(): void {
+    /**
+     * Constructs the `classname` to be used in accordion items
+     */
+    function constructItemClassName(): void {
         let cn: string = "accordion-item";
         cn += " " + (props.iconPosition ? props.iconPosition : "left");
         cn += " " + (props.iconRotation ? props.iconRotation : "deg-180");
         cn += props.customIconExpanded ? " transform" : "";
-        setClassName(cn);
+        setItemClassName(cn);
     }
 
     const toggle = (i: number): void => setActive(active === i ? null : i);
@@ -76,7 +82,7 @@ const Accordion: React.FunctionComponent<AccordionProps> = (props: AccordionProp
             {props.list && props.list.map((item: AccrodionListItem, index: number) => {
                 return (
                     <div
-                        className={className + (active === index ? " active" : "")}
+                        className={itemClassName + (active === index ? " active" : "")}
                         key={index}
                         tabIndex={0}
                         id={idList[index]}
