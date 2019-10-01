@@ -32,18 +32,21 @@ export interface AccordionProps {
 
 const Accordion: React.FunctionComponent<AccordionProps> = (props: AccordionProps) => {
     const [active, setActive] = React.useState<number>(null);
+    const [accordionClassName, setAccordionClassName] = React.useState<string>("custom-accordion");
     const [itemClassName, setItemClassName] = React.useState<string>("custom-accordion");
     const [idList, setIdList] = React.useState<Array<string>>([]);
 
     React.useEffect(() => {
         constructIds();
+        constructClassName();
         constructItemClassName();
     }, []);
 
     React.useEffect(() => {
         constructIds();
+        constructClassName();
         constructItemClassName();
-    }, [props.id, props.className, props.iconPosition, props.iconRotation, props.customIconExpanded, props.list]);
+    }, [props.id, props.className, props.alternative, props.iconPosition, props.iconRotation, props.customIconExpanded, props.list]);
 
     /**
      * Constructs the component's `id` if `id` prop is passed
@@ -52,6 +55,18 @@ const Accordion: React.FunctionComponent<AccordionProps> = (props: AccordionProp
         const idListToSet: Array<string> = [];
         props.list.map(() => idListToSet.push(randomId("accordion-")));
         setIdList(idListToSet);
+    }
+
+    /**
+     * Constructs the `classname` to be used in accordion wrapper
+     */
+    function constructClassName(): void {
+        let cn: string = "custom-accordion";
+        cn  += props.className ? ` ${props.className}` : "";
+        if (props.alternative) {
+            cn  += " alternate-accordion";
+        }
+        setAccordionClassName(cn);
     }
 
     /**
@@ -78,7 +93,7 @@ const Accordion: React.FunctionComponent<AccordionProps> = (props: AccordionProp
     }
 
     return (
-        <div className={"custom-accordion" + (props.className ? ` ${props.className}` : "") + (props.alternative ? " alternate-accordion" : "")} id={props.id} >
+        <div className={accordionClassName} id={props.id} >
             {props.list && props.list.map((item: AccrodionListItem, index: number) => {
                 return (
                     <div
@@ -92,7 +107,7 @@ const Accordion: React.FunctionComponent<AccordionProps> = (props: AccordionProp
                         role="button"
                     >
                         <div
-                            className={"header-wrapper" + (item.subHeaderText ? " with-sub-header" : "") + (props.alternative && !props.customIcon ? " alternate-header" : "")}
+                            className={"header-wrapper" + (item.subHeaderText ? " with-sub-header" : "")}
                             onClick={() => setActive(active === index ? null : index)}
                         >
                             {props.customIcon || chevronDownIcon}

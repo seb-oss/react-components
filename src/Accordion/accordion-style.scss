@@ -85,6 +85,7 @@ $accordion-min-height: 48px;
         }
         .content-wrapper {
             padding: 0;
+            @include transition(all $transition-time ease);
             position: relative;
             overflow: hidden;
             .text-wrapper {
@@ -93,7 +94,6 @@ $accordion-min-height: 48px;
                 max-height: 0;
                 will-change: margin;
                 opacity: 0;
-                @include transition(all $transition-time ease);
                 .text-item {
                     &:not(:last-child) {
                         padding-bottom: 8px;
@@ -208,11 +208,6 @@ $accordion-min-height: 48px;
                 > svg {
                     top: 5px;
                     width: $default;
-                }
-                &.alternate-header {
-                    > svg {
-                        @include transform(rotate(-90deg));
-                    }
                 }
             }
             &.right {

@@ -25,9 +25,9 @@ describe("Component: Accordion", () => {
     it("Should render custom className and id", () => {
         const className: string = "myAccordionClass";
         const id: string = "myAccordionId";
-        wrapper.setProps({ className, id });
-        expect(wrapper.hasClass(className)).toBeTruthy();
-        expect(wrapper.find(`#${id}`).length).toBeGreaterThan(0);
+        mountedWrapper.setProps({ className, id });
+        expect(mountedWrapper.hasClass(className)).toBeTruthy();
+        expect(mountedWrapper.find(`#${id}`).length).toBeGreaterThan(0);
     });
 
     it("Should render subheader is included in props", () => {
@@ -130,9 +130,13 @@ describe("Component: Accordion", () => {
         expect(mountedWrapper.find(".text-wrapper").length).toBeFalsy();
     });
 
-    it("Should render alternate theme", () => {
-        const alternative: boolean = true;
-        wrapper.setProps({ alternative });
-        expect(wrapper.hasClass("alternate-accordion")).toBeTruthy();
+    describe("Should render alternate theme", () => {
+        beforeEach(() => {
+            mountedWrapper = mount(<Accordion list={accordionList} alternative={true} />);
+        });
+
+        it("Should render alternate theme", () => {
+            expect(mountedWrapper.find(".custom-accordion").hasClass("alternate-accordion")).toBeTruthy();
+        });
     });
 });
