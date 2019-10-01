@@ -129,4 +129,10 @@ describe("Component: Accordion", () => {
         mountedWrapper.setProps({ list: [] });
         expect(mountedWrapper.find(".text-wrapper").length).toBeFalsy();
     });
+
+    it("Should render alternate theme", () => {
+        const alternative: boolean = true;
+        wrapper.setProps({ alternative });
+        expect(wrapper.hasClass("alternate-accordion")).toBeTruthy();
+    });
 });

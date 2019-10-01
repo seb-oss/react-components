@@ -9,6 +9,7 @@ $header-font-size: 20px;
 $sub-header-size: 14px;
 $icon-size: 20px;
 $padding-left-size: 48px;
+$alternate-padding-left-size: 30px;
 $accordion-min-height: 48px;
 
 @mixin transform($props) {
@@ -181,6 +182,63 @@ $accordion-min-height: 48px;
                 .text-wrapper {
                     opacity: 1;
                     max-height: 10000px;
+                }
+            }
+        }
+    }
+    &.alternate-accordion {
+        .accordion-item {
+            border-bottom: 0;
+            &:hover {
+                background-color: transparent;
+                .accordion-header {
+                    text-decoration: underline;
+                }
+            }
+            &:first-child {
+                border-top: 0;
+            }
+            .header-wrapper {
+                min-height: auto;
+                .accordion-header {
+                    font-size: $standard;
+                    color: $blue-dark;
+                    padding: 0;
+                }
+                > svg {
+                    top: 5px;
+                    width: $default;
+                }
+                &.alternate-header {
+                    > svg {
+                        @include transform(rotate(-90deg));
+                    }
+                }
+            }
+            &.right {
+                .header-wrapper {
+                    padding: 0 $padding-left-size 0 10px;
+                    > svg {
+                        right: 15px;
+                    }
+                }
+                .content-wrapper {
+                    .text-wrapper {
+                        padding: 0 $alternate-padding-left-size 0 10px;
+                    }
+                }
+            }
+            &.left {
+                .header-wrapper {
+                    padding: 0 10px 0 $alternate-padding-left-size;
+                    > svg {
+                        left: 5px;
+                    }
+                }
+                .content-wrapper {
+                    .text-wrapper {
+                        padding: 0 $alternate-padding-left-size;
+                    }
                 }
             }
         }

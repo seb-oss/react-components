@@ -27,6 +27,7 @@ export interface AccordionProps {
     iconRotation?: AccordionIconRotation;
     id?: string;
     list: Array<AccrodionListItem>;
+    alternative?: boolean;
 }
 
 const Accordion: React.FunctionComponent<AccordionProps> = (props: AccordionProps) => {
@@ -71,7 +72,7 @@ const Accordion: React.FunctionComponent<AccordionProps> = (props: AccordionProp
     }
 
     return (
-        <div className={"custom-accordion" + (props.className ? ` ${props.className}` : "")} id={props.id} >
+        <div className={"custom-accordion" + (props.className ? ` ${props.className}` : "") + (props.alternative ? " alternate-accordion" : "")} id={props.id} >
             {props.list && props.list.map((item: AccrodionListItem, index: number) => {
                 return (
                     <div
@@ -85,7 +86,7 @@ const Accordion: React.FunctionComponent<AccordionProps> = (props: AccordionProp
                         role="button"
                     >
                         <div
-                            className={"header-wrapper" + (item.subHeaderText ? " with-sub-header" : "")}
+                            className={"header-wrapper" + (item.subHeaderText ? " with-sub-header" : "") + (props.alternative && !props.customIcon ? " alternate-header" : "")}
                             onClick={() => setActive(active === index ? null : index)}
                         >
                             {props.customIcon || chevronDownIcon}
