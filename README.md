@@ -14,9 +14,9 @@ This is a set of react components some of which are based on SEB's bootstrap. Th
 
 This version of components has been developed with:
 
--   React `16.9.0`
+-   React `16.10.1`
 -   Typescript `3.6.3`
--   Webpack `4.40.2`
+-   SEB Bootstrap `4.0.0`
 
 ## Installation
 
