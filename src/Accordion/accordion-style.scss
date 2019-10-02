@@ -9,7 +9,7 @@ $header-font-size: 20px;
 $sub-header-size: 14px;
 $icon-size: 20px;
 $padding-left-size: 48px;
-$alternate-padding-left-size: 30px;
+$alternative-padding-left-size: 30px;
 $accordion-min-height: 48px;
 
 @mixin transform($props) {
@@ -186,7 +186,7 @@ $accordion-min-height: 48px;
             }
         }
     }
-    &.alternate-accordion {
+    &.alternative-accordion {
         >.accordion-item {
             border-bottom: 0;
             &:hover {
@@ -219,20 +219,20 @@ $accordion-min-height: 48px;
                 }
                 >.content-wrapper {
                     >.text-wrapper {
-                        padding: 0 $alternate-padding-left-size 0 10px;
+                        padding: 0 $alternative-padding-left-size 0 10px;
                     }
                 }
             }
             &.left {
                 >.header-wrapper {
-                    padding: 0 10px 0 $alternate-padding-left-size;
+                    padding: 0 10px 0 $alternative-padding-left-size;
                     > svg {
                         left: 5px;
                     }
                 }
                 >.content-wrapper {
                     >.text-wrapper {
-                        padding: 0 $alternate-padding-left-size;
+                        padding: 0 $alternative-padding-left-size;
                     }
                 }
             }

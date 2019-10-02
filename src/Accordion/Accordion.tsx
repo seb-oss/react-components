@@ -62,10 +62,8 @@ const Accordion: React.FunctionComponent<AccordionProps> = (props: AccordionProp
      */
     function constructClassName(): void {
         let cn: string = "custom-accordion";
-        cn  += props.className ? ` ${props.className}` : "";
-        if (props.alternative) {
-            cn  += " alternate-accordion";
-        }
+        cn += props.className ? ` ${props.className}` : "";
+        cn += props.alternative ? " alternative-accordion" : "";
         setAccordionClassName(cn);
     }
 

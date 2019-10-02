@@ -130,13 +130,13 @@ describe("Component: Accordion", () => {
         expect(mountedWrapper.find(".text-wrapper").length).toBeFalsy();
     });
 
-    describe("Should render alternate theme", () => {
+    describe("Should render alternative theme", () => {
         beforeEach(() => {
             mountedWrapper = mount(<Accordion list={accordionList} alternative={true} />);
         });
 
-        it("Should render alternate theme", () => {
-            expect(mountedWrapper.find(".custom-accordion").hasClass("alternate-accordion")).toBeTruthy();
+        it("Should render alternative theme", () => {
+            expect(mountedWrapper.find(".custom-accordion").hasClass("alternative-accordion")).toBeTruthy();
         });
     });
 });

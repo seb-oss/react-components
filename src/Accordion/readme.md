@@ -31,6 +31,7 @@ These are the current available properties:
 
 | Property            | Type                                   | Description                                                                            |
 | ------------------- | -------------------------------------- | -------------------------------------------------------------------------------------- |
+| alternative?        | `boolean`                              | Toggle alternative style of accordion                                                  |
 | className?          | `string`                               | Element class                                                                          |
 | customIcon?         | `JSX.Element`                          | Custom icon for the accordion trigger                                                  |
 | customIconExpanded? | `JSX.Element`                          | Custom icon to be used when expanded. This will add a transition between the two icons |
@@ -38,7 +39,6 @@ These are the current available properties:
 | iconTransition?     | `string`                               | Icon transition rotation degree<sup>2</sup>                                             |
 | id?                 | `string`                               | Element id                                                                             |
 | list                | `Array<AccrodionListItem>`<sup>3</sup> | List of accordion items                                                                |
-| alternative?        | `boolean`                              | Toggle alternative style of accordion                                                  |
 
 ## Footnote
 
