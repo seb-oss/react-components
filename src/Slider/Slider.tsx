@@ -22,7 +22,7 @@ export interface SliderProps {
     max?: number;
     min?: number;
     name: string;
-    onChange: (event: any) => void;
+    onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
     reference?: React.RefObject<any>;
     showTicks?: boolean;
     step?: number;
@@ -33,20 +33,24 @@ export interface SliderProps {
 }
 
 const Slider: React.FunctionComponent<SliderProps> = (props: SliderProps): React.ReactElement<void> => {
-    const min: number = props.min || 0;
-    const max: number = props.max || 100;
+    const [min, setMin] = React.useState<number>(props.min || 0);
+    const [max, setMax] = React.useState<number>(props.max || 100);
+    const [labelsPositions, setLabelsPositions] = React.useState<Array<string>>([]);
 
-    // Resetting if the values are exceeding the limits
     React.useEffect(() => {
-        let target: Partial<EventTarget & HTMLInputElement>;
-        if (props.value > max) {
-            target = { value: max as any, name: props.name, valueAsNumber: max };
-            props.onChange({ target });
-        } else if (props.value < min || props.value === null || props.value === undefined) {
-            target = { value: min as any, name: props.name, valueAsNumber: min };
-            props.onChange({ target });
+        setMin(props.min || 0);
+        setMax(props.max || 100);
+    }, [props.min, props.max]);
+
+    React.useEffect(() => {
+        if (props.labels && props.labels.length) {
+            const positions: Array<string> = [];
+            props.labels.map((label: RangeSliderLabel) => {
+                positions.push(getLabelPosition(label.position) + "%");
+            });
+            setLabelsPositions(positions);
         }
-    }, [props.value]);
+    }, [props.labels]);
 
     /**
      * Converts the current value to percentage based on min and max
@@ -54,9 +58,15 @@ const Slider: React.FunctionComponent<SliderProps> = (props: SliderProps): React
      * @returns {number} The precentage
      */
     function getPercentage(value: number): number {
-        const offset: number = Math.abs(0 - min);
-        const result: number = Math.abs(((value - min) / (max - offset)) * 100);
-        return result;
+        if (value < min) {
+            return 0;
+        } else if (value > max) {
+            return 100;
+        } else {
+            const offset: number = Math.abs(0 - min);
+            const result: number = Math.abs(((value - min) / (max - offset)) * 100);
+            return result;
+        }
     }
 
     function getLabelPosition(value: number): number {
@@ -120,8 +130,9 @@ const Slider: React.FunctionComponent<SliderProps> = (props: SliderProps): React
                                 <div
                                     key={i}
                                     className={"custom-slider-label" + (props.showTicks ? " show-ticks" : "")}
-                                    style={{ left: getLabelPosition(label.position) + "%" }}
-                                >{label.text}
+                                    style={{ left: labelsPositions[i] }}
+                                >
+                                    {label.text}
                                 </div>
                             )
                         }

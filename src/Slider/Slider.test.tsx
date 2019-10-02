@@ -94,11 +94,6 @@ describe("Component: Slider", () => {
         expect(wrapper.find(".custom-slider-preview").hasClass(theme)).toBeTruthy(); // tooltipTheme
     });
 
-    it("Should render alternative version of slider", () => {
-        wrapper.setProps({ alternative: true });
-        expect(wrapper.find(".custom-slider").hasClass("alternative")).toBeTruthy();
-    });
-
     it("Should be disabled when disabled prop is set to true", () => {
         wrapper.setProps({ disabled: true });
         expect(wrapper.hasClass("disabled")).toBeTruthy();

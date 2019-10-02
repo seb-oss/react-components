@@ -1,30 +1,4 @@
-$red: #f03529;
-$red-dark: #d81a1a; // SEB specific
-$red-darker: #bb000c; // SEB specific
-$yellow-darker: #f8a000; // SEB specific
-$yellow-dark: #ffb400; // SEB specific
-$yellow: #ffc500;
-$green: #60cd18;
-$green-dark: #45b400; // SEB specific
-$green-darker: #379d00; // SEB specific
-$blue: #41b0ee;
-$blue-dark: #0092e1; // SEB specific
-$blue-darker: #007ac7; // SEB specific
-$purple: #673ab6;
-$purple-dark: #4f2c99; // SEB specific
-$purple-darker: #3f2587; // SEB specific
-$gray-100: #f8f8f8 !default; // #f8f9fa !default;
-$gray-200: #e9e9e9 !default; // #e9ecef !default;
-$gray-300: #dedede !default; // #dee2e6 !default;
-$gray-400: #cecece !default; // #ced4da !default;
-$gray-500: #adadad !default; // #adb5bd !default;
-$gray-600: #868686 !default; // #868e96 !default;
-$gray-700: #494949 !default; // #495057 !default;
-$gray-800: #343434 !default; // #343a40 !default;
-$gray-900: #212121 !default; // #212529 !default;
-$transparent: transparent;
-$white: #fff;
-$black: #000;
+@import "../colours";
 $transition-time: 80ms;
 $box-shadow: rgba(85, 85, 85, 0.4) 0 2px 5px;
 
@@ -159,7 +133,7 @@ $box-shadow: rgba(85, 85, 85, 0.4) 0 2px 5px;
                 display: none;
                 color: $transparent;
             }
-            &:active:hover {
+            &:active {
                 & + .custom-slider-holder {
                     .custom-slider-thumb {
                         .custom-slider-preview:not(.always-show) {
@@ -196,18 +170,17 @@ $box-shadow: rgba(85, 85, 85, 0.4) 0 2px 5px;
                     bottom: 0;
                     height: 100%;
                     z-index: 2;
+                    @include transition(width $transition-time ease-out);
                 }
                 .custom-slider-slider-before {
                     left: 0px;
                     background-color: $blue-dark;
                     will-change: width;
-                    @include transition(width $transition-time ease-out);
                 }
                 .custom-slider-slider-after {
                     right: -2px;
                     background-color: $gray-500;
                     will-change: width;
-                    @include transition(width $transition-time ease-out);
                 }
                 .custom-slider-thumb {
                     position: relative;
