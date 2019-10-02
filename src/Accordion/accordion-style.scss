@@ -9,6 +9,7 @@ $header-font-size: 20px;
 $sub-header-size: 14px;
 $icon-size: 20px;
 $padding-left-size: 48px;
+$alternative-padding-left-size: 30px;
 $accordion-min-height: 48px;
 
 @mixin transform($props) {
@@ -84,6 +85,7 @@ $accordion-min-height: 48px;
         }
         .content-wrapper {
             padding: 0;
+            @include transition(all $transition-time ease);
             position: relative;
             overflow: hidden;
             .text-wrapper {
@@ -92,7 +94,6 @@ $accordion-min-height: 48px;
                 max-height: 0;
                 will-change: margin;
                 opacity: 0;
-                @include transition(all $transition-time ease);
                 .text-item {
                     &:not(:last-child) {
                         padding-bottom: 8px;
@@ -181,6 +182,58 @@ $accordion-min-height: 48px;
                 .text-wrapper {
                     opacity: 1;
                     max-height: 10000px;
+                }
+            }
+        }
+    }
+    &.alternative-accordion {
+        >.accordion-item {
+            border-bottom: 0;
+            &:hover {
+                background-color: transparent;
+                .accordion-header {
+                    text-decoration: underline;
+                }
+            }
+            &:first-child {
+                border-top: 0;
+            }
+            >.header-wrapper {
+                min-height: auto;
+                >.accordion-header {
+                    font-size: $standard;
+                    color: $blue-dark;
+                    padding: 0;
+                }
+                > svg {
+                    top: 5px;
+                    width: $default;
+                }
+            }
+            &.right {
+                >.header-wrapper {
+                    padding: 0 $padding-left-size 0 10px;
+                    > svg {
+                        right: 15px;
+                    }
+                }
+                >.content-wrapper {
+                    >.text-wrapper {
+                        padding: 0 $alternative-padding-left-size 0 10px;
+                    }
+                }
+            }
+            &.left {
+                >.header-wrapper {
+                    padding: 0 10px 0 $alternative-padding-left-size;
+                    > svg {
+                        left: 5px;
+                    }
+                }
+                >.content-wrapper {
+                    >.text-wrapper {
+                        padding: 0 $alternative-padding-left-size;
+                    }
                 }
             }
         }

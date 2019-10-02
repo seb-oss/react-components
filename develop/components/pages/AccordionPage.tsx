@@ -42,6 +42,14 @@ const AccordionPage: React.FunctionComponent = () => {
                             iconRotation="deg-90"
                         />
                     </div>
+
+                    <p>Alternative theme</p>
+                    <div className="result wide">
+                        <Accordion
+                            list={accordionList}
+                            alternative={true}
+                        />
+                    </div>
                 </div>
             </div>
 
