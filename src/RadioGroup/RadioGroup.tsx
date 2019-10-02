@@ -48,7 +48,7 @@ export const RadioGroup: React.FunctionComponent<RadioGroupProps> = (props: Radi
     return (
         <div className={className} id={props.id}>
             <div className="input-field">
-                {props.label && <label className="radio-group-label" htmlFor={props.name}>{props.label}</label>}
+                {props.label && <label className="radio-group-label">{props.label}</label>}
 
                 {props.list && props.list.map((item: RadioListModel, index: number) => {
                     return (

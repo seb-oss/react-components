@@ -9,7 +9,8 @@ const userIcon: JSX.Element = <svg xmlns="http://www.w3.org/2000/svg" viewBox="0
 const TextBoxGroupPage: React.FunctionComponent = () => {
     const [textBoxGroupValue, setTextBoxGroupValue] = React.useState<string>("");
     const [textBoxGroupValue2, setTextBoxGroupValue2] = React.useState<string>("");
-    const [textBoxGroupValue3, setTextBoxGroupValue3] = React.useState<string>("");
+    const [textBoxGroupValue3, setTextBoxGroupValue3] = React.useState<string>("Not good");
+    const [textBoxGroupValue4, setTextBoxGroupValue4] = React.useState<string>("All good");
 
     return (
         <div className="route-template container">
@@ -28,7 +29,7 @@ const TextBoxGroupPage: React.FunctionComponent = () => {
                         <TextBoxGroup
                             name="textInput"
                             label="Textbox group label"
-                            placeHolder="Text Box PlaceHolder"
+                            placeholder="Text Box PlaceHolder"
                             value={textBoxGroupValue}
                             onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTextBoxGroupValue(e.target.value)}
                             rightText="kr"
@@ -38,7 +39,7 @@ const TextBoxGroupPage: React.FunctionComponent = () => {
                     <div className="result">
                         <TextBoxGroup
                             name="textInput2"
-                            placeHolder="Text Box PlaceHolder"
+                            placeholder="Text Box PlaceHolder"
                             value={textBoxGroupValue2}
                             onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTextBoxGroupValue2(e.target.value)}
                             leftIcon={moneyIcon}
@@ -49,7 +50,7 @@ const TextBoxGroupPage: React.FunctionComponent = () => {
                     <div className="result">
                         <TextBoxGroup
                             name="textInput3"
-                            placeHolder="Text Box PlaceHolder"
+                            placeholder="Text Box PlaceHolder"
                             value={textBoxGroupValue3}
                             onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTextBoxGroupValue3(e.target.value)}
                             leftIcon={moneyIcon}
@@ -59,6 +60,23 @@ const TextBoxGroupPage: React.FunctionComponent = () => {
                             leftTitle="Click to view more of the left"
                             rightTitle="Click to view more of the right"
                             error="some error message"
+                        />
+                    </div>
+
+                    <p>text box group with both sides and error:</p>
+                    <div className="result">
+                        <TextBoxGroup
+                            name="textInput3"
+                            placeholder="Text Box PlaceHolder"
+                            value={textBoxGroupValue4}
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTextBoxGroupValue4(e.target.value)}
+                            leftIcon={moneyIcon}
+                            rightIcon={userIcon}
+                            onLeftClick={() => alert("Im clicking on Left icon")}
+                            onRightClick={() => alert("Im clicking on Right icon")}
+                            leftTitle="Click to view more of the left"
+                            rightTitle="Click to view more of the right"
+                            success={true}
                         />
                     </div>
                 </div>

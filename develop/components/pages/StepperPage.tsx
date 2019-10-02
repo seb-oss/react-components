@@ -29,6 +29,17 @@ const StepperPage: React.FunctionComponent = () => {
                             onDecrease={() => setStepper(stepper - 1)}
                         />
                     </div>
+                    <div className="result">
+                        <Stepper
+                            value={stepper}
+                            min={0}
+                            max={10}
+                            label="Disabled Stepper"
+                            onIncrease={() => setStepper(stepper + 1)}
+                            onDecrease={() => setStepper(stepper - 1)}
+                            disabled={true}
+                        />
+                    </div>
                 </div>
 
             </div>

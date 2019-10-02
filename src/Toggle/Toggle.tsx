@@ -1,47 +1,43 @@
 import * as React from "react";
-import "./toggle-style.scss";
+import { randomId } from "../__utils/randomId";
+import "./toggle.scss";
 
 export interface ToggleProps {
     className?: string;
+    disabled?: boolean;
     id?: string;
     label?: string;
     name: string;
-    onChange: (event: any) => void;
+    onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
     reference?: React.RefObject<any>;
     value: boolean;
 }
 
 export const Toggle: React.FunctionComponent<ToggleProps> = (props: ToggleProps): React.ReactElement<void> => {
-    const id = props.id || `${props.name}-${(Math.random() * 1000) + (new Date()).getTime()}`;
-    const [hasFocus, setHasFocus] = React.useState(false);
+    const [id, setId] = React.useState<string>("");
 
-    /**
-     * set Focus
-     */
-    function handleSetFocus(e: React.FocusEvent<HTMLInputElement>) {
-        e.preventDefault();
-        e.stopPropagation();
-
-        setHasFocus(!hasFocus);
-    }
+    React.useEffect(() => {
+        setId(props.id || randomId("toggle-"));
+    }, [props.id]);
 
     return (
-        <div className={"form-group custom-toggle" + (props.className ? ` ${props.className}` : "") + (hasFocus ? " focus-class" : "")}>
-            <div className="toggle-btn">
+        <div className={"form-group custom-toggle" + (props.className ? ` ${props.className}` : "")}>
+            <div className="custom-control custom-slide-toggle">
                 <input
-                    className="toggle"
+                    className="custom-control-input"
                     id={id}
                     name={props.name}
                     type="checkbox"
                     checked={props.value}
                     onChange={props.onChange}
-                    onFocus={handleSetFocus}
-                    onBlur={handleSetFocus}
                     ref={props.reference}
+                    disabled={props.disabled}
+                    aria-checked={!!props.value}
+                    tabIndex={0}
+                    role="switch"
                 />
-                <label className="toggle-switch" htmlFor={id}><div className="toggle-nob" /></label>
+                <label className="custom-control-label" htmlFor={id}>{props.label}</label>
             </div>
-            {props.label && <div className="toggle-label">{props.label}</div>}
         </div>
     );
 };

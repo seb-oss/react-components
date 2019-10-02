@@ -22,10 +22,28 @@ const TogglePage: React.FunctionComponent = () => {
                     <div className="result">
                         <Toggle
                             name="myToggle"
-                            id="myToggleId"
-                            label="Field label"
+                            label="Toggle label"
                             value={toggleValue}
+                            id="my-toggle"
                             onChange={(e: React.ChangeEvent<HTMLInputElement>) => setToggleValue(e.target.checked)}
+                        />
+                    </div>
+
+                    <p>Disabled</p>
+                    <div className="result">
+                        <Toggle
+                            name="checked-disabled"
+                            label="Disabled - Checked"
+                            value={true}
+                            disabled={true}
+                            onChange={() => null}
+                        />
+                        <Toggle
+                            name="unchecked-disabled"
+                            label="Disabled - Unchecked"
+                            value={false}
+                            disabled={true}
+                            onChange={() => null}
                         />
                     </div>
                 </div>

@@ -1,7 +1,4 @@
-$red: #f03529;
-$gray-500: #adadad !default;;
-$blue: #41b0ee;
-$blue-darker: #007ac7;
+@import "../colours";
 $body-color: #444 !default;
 $transition-time: 200ms;
 
@@ -15,6 +12,7 @@ $transition-time: 200ms;
 .form-group.input-box {
     > .input-field {
         > input.form-control {
+            @import "../colours";
             color: $body-color;
             border: 1px solid $gray-500;
             @include transition(border $transition-time / 2);
@@ -51,18 +49,18 @@ $transition-time: 200ms;
             }
         }
         &.has-error {
-            > input.form-control {
-                border-bottom: 1px solid $red;
-                &:hover,
-                &:focus,
-                &:focus:active {
-                    border-bottom: 2px solid $red;
-                }
+            > input.form-control:not(:disabled) {
+                border-bottom: 2px inset $red;
             }
             > .alert {
                 opacity: 1;
                 padding-top: 2px;
                 max-height: 100px;
+            }
+        }
+        &.success {
+            > input.form-control:not(:disabled) {
+                border-bottom: 2px inset $green;
             }
         }
     }

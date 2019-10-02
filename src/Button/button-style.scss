@@ -11,49 +11,29 @@ $black: #000;
 $gray-500: #adadad;
 $gray-800: #343434;
 button.btn {
+    position: relative;
     transition: color 200ms linear, background 200ms linear;
     .button-content {
+        position: relative;
         padding-top: 0;
         padding-bottom: 0;
         display: flex;
-        align-items: center;
         justify-content: center;
+        align-items: center;
         > .button-label {
-            line-height: 1px;
             height: 24px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            flex-grow: 1;
+            display: inline-block;
         }
         > .svg-holder {
-            display: inline-flex;
+            display: inline-block;
             width: $icon-dimention-md;
             height: $icon-dimention-md;
-            align-items: center;
             overflow: hidden;
             line-height: 0;
-            flex-shrink: 1;
             > svg {
                 width: 100%;
                 height: 100%;
                 transition: fill 200ms linear;
-            }
-            > .loaderWrapper {
-                position: relative;
-                width: 100%;
-                height: 100%;
-                > .loader-holder {
-                    position: relative;
-                    width: 100%;
-                    height: 100%;
-                    > .loader {
-                        position: relative;
-                        width: 100%;
-                        height: 100%;
-                        border-width: 3px;
-                    }
-                }
             }
         }
     }

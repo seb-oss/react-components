@@ -4,15 +4,17 @@ import { Slider, RangeSliderLabel, SliderProps, SliderTheme } from "./Slider";
 
 describe("Component: Slider", () => {
     let wrapper: ShallowWrapper<SliderProps>;
+    let mountedWrapper: ReactWrapper<SliderProps>;
     const props: SliderProps = {
         value: 90,
         onChange: jest.fn(),
-        name: "slider",
+        name: "slider"
     };
     const labels: Array<RangeSliderLabel> = [{ position: 0, text: "empty" }, { position: 100, text: "full" }];
 
     beforeEach(() => {
         wrapper = shallow(<Slider {...props} />);
+        mountedWrapper = mount(<Slider {...props} />);
     });
 
     it("Should render", () => expect(wrapper).toBeDefined());
@@ -40,41 +42,16 @@ describe("Component: Slider", () => {
     });
 
     it("Should render with default min and max if not passed", () => {
-        expect(wrapper.find("input").prop("min")).toEqual(0);
-        expect(wrapper.find("input").prop("max")).toEqual(100);
-        wrapper.setProps({ min: 20, max: 60 });
-        expect(wrapper.find("input").prop("min")).toEqual(20);
-        expect(wrapper.find("input").prop("max")).toEqual(60);
+        expect(mountedWrapper.find("input").prop("min")).toEqual(0);
+        expect(mountedWrapper.find("input").prop("max")).toEqual(100);
+        mountedWrapper = mount(<Slider {...props} min={20} max={60} />);
+        expect(mountedWrapper.find("input").prop("min")).toEqual(20);
+        expect(mountedWrapper.find("input").prop("max")).toEqual(60);
     });
 
     it("Should render labels when passed", () => {
         wrapper.setProps({ labels });
         expect(wrapper.find(".custom-slider-label").length).toBeGreaterThan(0);
-    });
-
-    describe("Should reset when value is out of boundries", () => {
-        let mountedWrapper: ReactWrapper<SliderProps>;
-        beforeEach(() => {
-            mountedWrapper = mount(<Slider {...props} />);
-        });
-        test("Value is lower that the minimum", async (done: jest.DoneCallback) => {
-            expect.assertions(1);
-            mountedWrapper.setProps({ value: -12 }, () => {
-                setTimeout(() => {
-                    expect(props.onChange).toBeCalledWith({ target: { value: 0, name: props.name, valueAsNumber: 0 } });
-                    done();
-                });
-            });
-        });
-        test("Value is higher that the maximum", async (done: jest.DoneCallback) => {
-            expect.assertions(1);
-            mountedWrapper.setProps({ value: 112 }, () => {
-                setTimeout(() => {
-                    expect(props.onChange).toBeCalledWith({ target: { value: 100, name: props.name, valueAsNumber: 100 } });
-                    done();
-                });
-            });
-        });
     });
 
     it("Should always show tooltip when alwaysShowTooltip is set to true", () => {
@@ -94,27 +71,51 @@ describe("Component: Slider", () => {
         expect(wrapper.find(".custom-slider-preview").hasClass(theme)).toBeTruthy(); // tooltipTheme
     });
 
-    it("Should render alternative version of slider", () => {
-        wrapper.setProps({ alternative: true });
-        expect(wrapper.find(".custom-slider").hasClass("alternative")).toBeTruthy();
-    });
-
     it("Should be disabled when disabled prop is set to true", () => {
         wrapper.setProps({ disabled: true });
         expect(wrapper.hasClass("disabled")).toBeTruthy();
     });
 
     it("Should render labels out of bounds at the edges of the slider", () => {
-        wrapper.setProps({
-            labels: [
+        mountedWrapper = mount(<Slider
+            {...props}
+            labels={[
                 { position: -12, text: "lower than minimum" },
                 { position: 112, text: "higher than maximum" },
-            ]
-        });
-        const firstLabelStyle: React.CSSProperties = wrapper.find(".custom-slider-label").first().getElement().props.style;
-        const secondLabelStyle: React.CSSProperties = wrapper.find(".custom-slider-label").last().getElement().props.style;
+            ]}
+        />);
+        const firstLabelStyle: React.CSSProperties = mountedWrapper.find(".custom-slider-label").first().getElement().props.style;
+        const secondLabelStyle: React.CSSProperties = mountedWrapper.find(".custom-slider-label").last().getElement().props.style;
         expect(firstLabelStyle.left).toEqual("0%");
         expect(secondLabelStyle.left).toEqual("100%");
     });
 
+    it("Should reset the slider thumb to min and max if the value is less than min or exceeds max", () => {
+        mountedWrapper = mount(<Slider {...props} min={0} value={-5} />);
+        expect(mountedWrapper.find(".custom-slider-thumb").getElement().props.style.left).toBe("0%");
+        mountedWrapper = mount(<Slider {...props} max={100} value={110} />);
+        expect(mountedWrapper.find(".custom-slider-thumb").getElement().props.style.left).toBe("100%");
+    });
+
+    it("Should render labels correctly", () => {
+        mountedWrapper = mount(
+            <Slider
+                {...props}
+                labels={[
+                    { position: 0, text: "0%" },
+                    { position: 50, text: "50%" },
+                    { position: 100, text: "100%" },
+                ]}
+            />
+        );
+        expect(mountedWrapper.find(".custom-slider-label")).toHaveLength(3);
+        expect(mountedWrapper.find(".custom-slider-label").at(0).getElement().props.style.left).toBe("0%");
+        expect(mountedWrapper.find(".custom-slider-label").at(0).text()).toBe("0%");
+        expect(mountedWrapper.find(".custom-slider-label").at(1).getElement().props.style.left).toBe("50%");
+        expect(mountedWrapper.find(".custom-slider-label").at(1).text()).toBe("50%");
+        expect(mountedWrapper.find(".custom-slider-label").at(2).getElement().props.style.left).toBe("100%");
+        expect(mountedWrapper.find(".custom-slider-label").at(2).text()).toBe("100%");
+    });
+
+    afterEach(() => mountedWrapper.unmount());
 });

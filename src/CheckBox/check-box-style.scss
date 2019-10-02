@@ -20,7 +20,6 @@ $transition-time: 200ms;
             height: $form-element-height;
             > .custom-control-label,
             > .custom-control-input {
-                cursor: pointer;
                 user-select: none;
             }
             > .custom-control-input {
@@ -34,6 +33,12 @@ $transition-time: 200ms;
                 &:disabled ~ .custom-control-label {
                     > .checkbox-description {
                         color: $gray-400;
+                    }
+                }
+                &:not(:disabled) {
+                    cursor: pointer;
+                    & ~ .custom-control-label {
+                        cursor: pointer;
                     }
                 }
             }

@@ -28,7 +28,7 @@ export const Datepicker: React.FunctionComponent<DatepickerProps> = (props: Date
     return (
         <div className={"form-group date-picker" + (props.className ? ` ${props.className}` : "")} id={props.id}>
             <div className={"input-field" + (props.error ? " has-error" : "")}>
-                {props.label && <label className="custom-label" htmlFor={name}>{props.label}</label>}
+                {props.label && <label className="custom-label">{props.label}</label>}
                 <div className="date-wrapper">
                     <DatePicker
                         name={props.name}

@@ -1,8 +1,9 @@
 import * as React from "react";
 import "./text-box-style.scss";
+import { randomId } from "../__utils/randomId";
 
 export interface TextBoxProps {
-    autoComplete?: boolean;
+    autoComplete?: "on" | "off";
     className?: string;
     disabled?: boolean;
     error?: string;
@@ -19,21 +20,34 @@ export interface TextBoxProps {
     onKeyPress?: (event: React.KeyboardEvent<HTMLInputElement>) => void;
     onKeyUp?: (event: React.KeyboardEvent<HTMLInputElement>) => void;
     pattern?: string;
-    placeHolder?: string;
-    readonly?: boolean;
+    placeholder?: string;
+    readOnly?: boolean;
     reference?: React.RefObject<HTMLInputElement>;
     required?: boolean;
+    success?: boolean;
     type?: string;
     value: string | number;
+    showErrorMessage?: boolean;
 }
 
 export const TextBox: React.FunctionComponent<TextBoxProps> = (props: TextBoxProps): React.ReactElement<void> => {
+    const [id, setId] = React.useState<string>(null);
+    const [showErrorMessage, setShowErrorMessage] = React.useState<boolean>(true);
+
+    React.useEffect(() => {
+        setId(props.id ? props.id : (props.label ? randomId("tbg-") : null));
+    }, [props.id, props.label]);
+
+    React.useEffect(() => {
+        setShowErrorMessage(props.showErrorMessage === undefined || props.showErrorMessage === null ? true : !!props.showErrorMessage);
+    }, [props.showErrorMessage]);
+
     return (
         <div className={"form-group input-box" + (props.className ? ` ${props.className}` : "")}>
-            <div className={"input-field" + (props.error ? " has-error" : "")}>
-                {props.label && <label className="custom-label" htmlFor={props.name}>{props.label}</label>}
+            <div className={"input-field" + (props.success ? " success" : props.error ? " has-error" : "")}>
+                {props.label && <label className="custom-label" htmlFor={id}>{props.label}</label>}
                 <input
-                    id={props.id}
+                    id={id}
                     name={props.name}
                     type={props.type}
                     pattern={props.pattern}
@@ -47,15 +61,15 @@ export const TextBox: React.FunctionComponent<TextBoxProps> = (props: TextBoxPro
                     onKeyPress={props.onKeyPress}
                     onFocus={props.onFocus}
                     onBlur={props.onBlur}
-                    placeholder={props.placeHolder}
+                    placeholder={props.placeholder}
                     className="form-control"
                     autoFocus={props.focus}
-                    autoComplete={props.autoComplete ? "on" : "off"}
-                    readOnly={props.readonly}
+                    autoComplete={props.autoComplete}
+                    readOnly={props.readOnly}
                     disabled={props.disabled}
                     ref={props.reference}
                 />
-                <div className="alert alert-danger">{props.error}</div>
+                {showErrorMessage && !props.success ? <div className="alert alert-danger">{props.error}</div> : null}
             </div>
         </div>
     );

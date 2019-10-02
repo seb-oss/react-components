@@ -27,10 +27,12 @@ export interface TextAreaProps {
 }
 
 export const TextArea: React.FunctionComponent<TextAreaProps> = (props: TextAreaProps): React.ReactElement<void> => {
-    let id: string;
+    const [id, setId] = React.useState<string>();
+
     React.useEffect(() => {
-        id = randomId("textarea-");
-    }, [props.id]);
+        setId(props.id ? props.id : (props.label ? randomId("textarea-") : null));
+    }, [props.id, props.label]);
+
     return (
         <div className={"form-group text-area" + (props.className ? ` ${props.className}` : "")}>
             <div className={"input-field" + (props.error ? " has-error" : "")}>
@@ -38,7 +40,7 @@ export const TextArea: React.FunctionComponent<TextAreaProps> = (props: TextArea
                 <textarea
                     name={props.name}
                     className={"form-control" + (props.resizable || props.resizable === undefined ? " resizable" : "")}
-                    id={props.id || id}
+                    id={id}
                     placeholder={props.placeHolder}
                     maxLength={props.max}
                     autoFocus={props.focus}

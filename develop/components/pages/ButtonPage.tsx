@@ -26,14 +26,14 @@ const ButtonPage: React.FunctionComponent = () => {
                         <Button
                             title="Click me"
                             label="Primary"
-                            onClick={() => { alert("Button Clicked"); }}
+                            onClick={() => true}
                             theme="primary"
                             className="mr-1"
                         />
                         <Button
                             title="Click me"
-                            label="Ghost Light"
-                            onClick={() => { alert("Button Clicked"); }}
+                            label="Primary disabled"
+                            onClick={() => true}
                             theme="primary"
                             disabled={true}
                         />
@@ -44,14 +44,14 @@ const ButtonPage: React.FunctionComponent = () => {
                         <Button
                             title="Click me"
                             label="Secondary"
-                            onClick={() => { alert("Button Clicked"); }}
+                            onClick={() => true}
                             theme="secondary"
                             className="mr-1"
                         />
                         <Button
                             title="Click me"
                             label="Secondary disabled"
-                            onClick={() => { alert("Button Clicked"); }}
+                            onClick={() => true}
                             theme="secondary"
                             disabled={true}
                         />
@@ -62,14 +62,14 @@ const ButtonPage: React.FunctionComponent = () => {
                         <Button
                             title="Click me"
                             label="Alternative"
-                            onClick={() => { alert("Button Clicked"); }}
+                            onClick={() => true}
                             theme="alternative"
                             className="mr-1"
                         />
                         <Button
                             title="Click me"
                             label="Alternative disabled"
-                            onClick={() => { alert("Button Clicked"); }}
+                            onClick={() => true}
                             theme="alternative"
                             disabled={true}
                         />
@@ -80,14 +80,14 @@ const ButtonPage: React.FunctionComponent = () => {
                         <Button
                             title="Click me"
                             label="Delete"
-                            onClick={() => { alert("Button Clicked"); }}
+                            onClick={() => true}
                             theme="danger"
                             className="mr-1"
                         />
                         <Button
                             title="Click me"
                             label="Delete disabled"
-                            onClick={() => { alert("Button Clicked"); }}
+                            onClick={() => true}
                             theme="danger"
                             disabled={true}
                         />
@@ -98,14 +98,14 @@ const ButtonPage: React.FunctionComponent = () => {
                         <Button
                             title="Click me"
                             label="Ghost light"
-                            onClick={() => { alert("Button Clicked"); }}
+                            onClick={() => true}
                             theme="ghost-light"
                             className="mr-1"
                         />
                         <Button
                             title="Click me"
                             label="Ghost light disabled"
-                            onClick={() => { alert("Button Clicked"); }}
+                            onClick={() => true}
                             theme="ghost-light"
                             disabled={true}
                         />
@@ -116,14 +116,14 @@ const ButtonPage: React.FunctionComponent = () => {
                         <Button
                             title="Click me"
                             label="Ghost dark"
-                            onClick={() => { alert("Button Clicked"); }}
+                            onClick={() => true}
                             theme="ghost-dark"
                             className="mr-1"
                         />
                         <Button
                             title="Click me"
                             label="Ghost dark disabled"
-                            onClick={() => { alert("Button Clicked"); }}
+                            onClick={() => true}
                             theme="ghost-dark"
                             disabled={true}
                         />
@@ -134,12 +134,13 @@ const ButtonPage: React.FunctionComponent = () => {
                         <Button
                             label="Test Label"
                             theme="anchor"
-                            onClick={() => { alert("Button Clicked"); }}
+                            onClick={() => true}
+                            className="mr-1"
                         />
                         <Button
                             label="Test Label"
                             theme="anchor"
-                            onClick={() => { alert("Button Clicked"); }}
+                            onClick={() => true}
                             disabled={true}
                         />
                     </div>
@@ -150,14 +151,14 @@ const ButtonPage: React.FunctionComponent = () => {
                             label="Test Label"
                             iconPosition="left"
                             icon={mysvg}
-                            onClick={() => { alert("Button Clicked"); }}
+                            onClick={() => true}
                             className="mr-1"
                         />
                         <Button
                             label="Test Label"
                             iconPosition="right"
                             icon={mysvg}
-                            onClick={() => { alert("Button Clicked"); }}
+                            onClick={() => true}
                         />
                     </div>
 
@@ -165,16 +166,15 @@ const ButtonPage: React.FunctionComponent = () => {
                     <div className="result wide">
                         <Button
                             label="Test Label"
-                            iconPosition="left"
                             icon={<Loader toggle={true} />}
-                            onClick={() => { alert("Button Clicked"); }}
+                            onClick={() => true}
                             className="mr-1"
                         />
                         <Button
                             label="Test Label"
                             iconPosition="right"
                             icon={<Loader toggle={true} />}
-                            onClick={() => { alert("Button Clicked"); }}
+                            onClick={() => true}
                             disabled={true}
                         />
                     </div>
@@ -183,18 +183,18 @@ const ButtonPage: React.FunctionComponent = () => {
                     <div className="result wide">
                         <Button
                             label="Large"
-                            onClick={() => { alert("Button Clicked"); }}
+                            onClick={() => true}
                             size="lg"
                             className="mr-1"
                         />
                         <Button
                             label="Medium"
-                            onClick={() => { alert("Button Clicked"); }}
+                            onClick={() => true}
                             className="mr-1"
                         />
                         <Button
                             label="Small"
-                            onClick={() => { alert("Button Clicked"); }}
+                            onClick={() => true}
                             size="sm"
                             className="mr-1"
                         />

@@ -178,7 +178,7 @@ export default class TitleBar extends React.Component<TitleBarProps, TitleBarSta
                         {this.state.searchInFocus && <div className="input-cover" onClick={this.dismissSearch} />}
                         <TextBoxGroup
                             name="textInput"
-                            placeHolder="Find components (cnt+shift+f)"
+                            placeholder="Find components (cnt+shift+f)"
                             value={this.state.searchTerm}
                             className="text-input"
                             onChange={this.searchTermChange}

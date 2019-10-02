@@ -21,7 +21,6 @@ $radio-padding-left: 40px;
             height: $form-element-height;
             > .custom-control-label,
             > .custom-control-input {
-                cursor: pointer;
                 user-select: none;
             }
             > .custom-control-input {
@@ -34,6 +33,12 @@ $radio-padding-left: 40px;
                 &:disabled ~ .custom-control-label {
                     > .radio-description {
                         color: $gray-400;
+                    }
+                }
+                &:not(:disabled) {
+                    cursor: pointer;
+                    & ~ .custom-control-label {
+                        cursor: pointer;
                     }
                 }
             }
