@@ -25,9 +25,9 @@ describe("Component: Accordion", () => {
     it("Should render custom className and id", () => {
         const className: string = "myAccordionClass";
         const id: string = "myAccordionId";
-        wrapper.setProps({ className, id });
-        expect(wrapper.hasClass(className)).toBeTruthy();
-        expect(wrapper.find(`#${id}`).length).toBeGreaterThan(0);
+        mountedWrapper.setProps({ className, id });
+        expect(mountedWrapper.hasClass(className)).toBeTruthy();
+        expect(mountedWrapper.find(`#${id}`).length).toBeGreaterThan(0);
     });
 
     it("Should render subheader is included in props", () => {
@@ -128,5 +128,10 @@ describe("Component: Accordion", () => {
     it("Should not render any item if the list is empty", () => {
         mountedWrapper.setProps({ list: [] });
         expect(mountedWrapper.find(".text-wrapper").length).toBeFalsy();
+    });
+
+    it("Should render alternative theme", () => {
+        mountedWrapper = mount(<Accordion list={accordionList} alternative={true} />);
+        expect(mountedWrapper.find(".custom-accordion").hasClass("alternative-accordion")).toBeTruthy();
     });
 });
