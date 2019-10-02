@@ -18,12 +18,19 @@ describe("Component: TextArea", () => {
         expect(wrapper).toBeDefined();
     });
 
-    it("Should pass custom class and id", () => {
+    it("Should pass custom class", () => {
         const className: string = "myTextareaClass";
-        const id: string = "myTextareaId";
-        wrapper.setProps({ className, id });
+        wrapper.setProps({ className });
         expect(wrapper.hasClass(className)).toBeTruthy();
-        expect(wrapper.find(`#${id}`).length).toBeTruthy();
+    });
+
+    it("Should pass id", () => {
+        const id: string = "myTextareaId";
+        let mountedWrapper: ReactWrapper<TextAreaProps>;
+        mountedWrapper = mount(<TextArea {...props} id={id} />);
+        expect(mountedWrapper.find(`#${id}`).length).toBeTruthy();
+        mountedWrapper = mount(<TextArea {...props} label="test label" />);
+        expect(mountedWrapper.find("textarea").getElement().props.id).toBeTruthy();
     });
 
     it("Should fire change event", () => {

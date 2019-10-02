@@ -1,5 +1,6 @@
 import * as React from "react";
 import "./text-box-style.scss";
+import { randomId } from "../__utils/randomId";
 
 export interface TextBoxProps {
     autoComplete?: "on" | "off";
@@ -20,7 +21,7 @@ export interface TextBoxProps {
     onKeyUp?: (event: React.KeyboardEvent<HTMLInputElement>) => void;
     pattern?: string;
     placeholder?: string;
-    readonly?: boolean;
+    readOnly?: boolean;
     reference?: React.RefObject<HTMLInputElement>;
     required?: boolean;
     success?: boolean;
@@ -30,7 +31,12 @@ export interface TextBoxProps {
 }
 
 export const TextBox: React.FunctionComponent<TextBoxProps> = (props: TextBoxProps): React.ReactElement<void> => {
+    const [id, setId] = React.useState<string>(null);
     const [showErrorMessage, setShowErrorMessage] = React.useState<boolean>(true);
+
+    React.useEffect(() => {
+        setId(props.id ? props.id : (props.label ? randomId("tbg-") : null));
+    }, [props.id, props.label]);
 
     React.useEffect(() => {
         setShowErrorMessage(props.showErrorMessage === undefined || props.showErrorMessage === null ? true : !!props.showErrorMessage);
@@ -39,9 +45,9 @@ export const TextBox: React.FunctionComponent<TextBoxProps> = (props: TextBoxPro
     return (
         <div className={"form-group input-box" + (props.className ? ` ${props.className}` : "")}>
             <div className={"input-field" + (props.success ? " success" : props.error ? " has-error" : "")}>
-                {props.label && <label className="custom-label" htmlFor={props.name}>{props.label}</label>}
+                {props.label && <label className="custom-label" htmlFor={id}>{props.label}</label>}
                 <input
-                    id={props.id}
+                    id={id}
                     name={props.name}
                     type={props.type}
                     pattern={props.pattern}
@@ -59,7 +65,7 @@ export const TextBox: React.FunctionComponent<TextBoxProps> = (props: TextBoxPro
                     className="form-control"
                     autoFocus={props.focus}
                     autoComplete={props.autoComplete}
-                    readonly={props.readonly}
+                    readOnly={props.readOnly}
                     disabled={props.disabled}
                     ref={props.reference}
                 />

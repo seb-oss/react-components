@@ -11,21 +11,27 @@ describe("Component: TextBox", () => {
     let wrapper: ShallowWrapper<TextBoxProps>;
     let mountedWrapper: ReactWrapper<TextBoxProps>;
 
-    beforeEach(async () => {
+    beforeEach(() => {
         wrapper = shallow(<TextBox {...props} />);
-        mountedWrapper = await mount(<TextBox {...props} />);
+        mountedWrapper = mount(<TextBox {...props} />);
     });
 
     it("Should render", () => {
         expect(wrapper).toBeDefined();
     });
 
-    it("Should render with custom className, id and name when passed", () => {
-        const className: string = "myTextboxClass";
-        const id: string = "myTextboxId";
-        wrapper.setProps({ className, id, name });
+    it("Should pass custom class", () => {
+        const className: string = "myTextBoxClass";
+        wrapper.setProps({ className });
         expect(wrapper.hasClass(className)).toBeTruthy();
-        expect(wrapper.find(`#${id}`)).toHaveLength(1);
+    });
+
+    it("Should pass down the id or random id to the TextBoxGroup component", () => {
+        const id: string = "my-TextBoxGroup-id";
+        mountedWrapper = mount(<TextBox {...props} id={id} />);
+        expect(mountedWrapper.find(`#${id}`).length).toBeTruthy();
+        mountedWrapper = mount(<TextBox {...props} label="test label" />);
+        expect(mountedWrapper.find("input").getElement().props.id).toBeTruthy();
     });
 
     describe("Testing optional properties", () => {
@@ -39,7 +45,7 @@ describe("Component: TextBox", () => {
             { autoComplete: "on" },
             { type: "number" },
             { disabled: true },
-            { readonly: true },
+            { readOnly: true },
             { placeholder: "my placeholder" },
         ];
         optionals.map((optional: Pick<TextBoxProps, keyof TextBoxProps>) => {
@@ -79,7 +85,7 @@ describe("Component: TextBox", () => {
         expect(mountedWrapper.find(".alert-danger").length).toBe(0);
     });
 
-    describe("- Testing optional event listners:", () => {
+    describe("Testing optional event listners:", () => {
         const eventListeners = {
             onKeyDown: jest.fn(),
             onKeyUp: jest.fn(),

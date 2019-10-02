@@ -26,7 +26,7 @@ export interface TextBoxGroupProps {
     onRightClick?: (event: React.MouseEvent<HTMLDivElement>) => void;
     pattern?: string;
     placeholder?: string;
-    readonly?: boolean;
+    readOnly?: boolean;
     reference?: React.RefObject<HTMLInputElement>;
     required?: boolean;
     rightIcon?: any;
@@ -79,7 +79,7 @@ export const TextBoxGroup: React.FunctionComponent<TextBoxGroupProps> = (props: 
                         className="form-control"
                         autoFocus={props.focus}
                         autoComplete={props.autoComplete}
-                        readonly={props.readonly}
+                        readOnly={props.readOnly}
                         disabled={props.disabled}
                         onKeyDown={props.onKeyDown}
                         onKeyUp={props.onKeyUp}

@@ -1,9 +1,10 @@
 import * as React from "react";
-import { shallow, ShallowWrapper } from "enzyme";
-import { Loader, LoaderProps } from "./Loader";
+import { shallow, ShallowWrapper, ReactWrapper, mount } from "enzyme";
+import { Loader, LoaderProps, LoaderSize } from "./Loader";
 
 describe("Component: Loader", () => {
     let wrapper: ShallowWrapper<LoaderProps>;
+    let mountedWrapper: ReactWrapper<LoaderProps>;
 
     beforeEach(() => {
         wrapper = shallow(<Loader toggle={true} />);
@@ -16,14 +17,16 @@ describe("Component: Loader", () => {
     it("Should pass custom class and id", () => {
         const className: string = "myLoaderClass";
         const id: string = "myLoaderId";
-        wrapper.setProps({ className, id });
-        expect(wrapper.hasClass(className)).toBeTruthy();
-        expect(wrapper.find(`#${id}`).length).toBeTruthy();
+        mountedWrapper = mount(<Loader toggle={true} className={className} id={id} />);
+        expect(mountedWrapper.find(".seb-loader-wrapper").hasClass(className)).toBeTruthy();
+        expect(mountedWrapper.find(`#${id}`).length).toBeTruthy();
     });
 
     it("Should enable fullscreen when set to true", () => {
-        wrapper.setProps({ fullscreen: true });
-        expect(wrapper.hasClass("fullscreen")).toBeTruthy();
+        mountedWrapper = mount(<Loader toggle={true} fullscreen={true} />);
+        expect(mountedWrapper.find(".seb-loader-wrapper").hasClass("fullscreen")).toBeTruthy();
+        mountedWrapper = mount(<Loader toggle={true} fullscreen={false} />);
+        expect(mountedWrapper.find(".seb-loader-wrapper").hasClass("fullscreen")).toBeFalsy();
     });
 
     it("Should hide loader when toggle is true", () => {
@@ -31,25 +34,14 @@ describe("Component: Loader", () => {
         expect(wrapper.find(".loader-holder").length).toBe(0);
     });
 
-    it("should be able to set sizes by sizeClass or size parameter", () => {
-        wrapper.setProps({ toggle: true, fullscreen: false, sizeClassName: "loader-sm" });
-        expect(wrapper.find(".seb-loader.loader-sm")).toBeTruthy();
-
-        wrapper.setProps({ toggle: true, fullscreen: false, size: "extraLarge", sizeClassName: undefined });
-        expect(wrapper.find(".seb-loader.loader-xl")).toBeTruthy();
-
-        wrapper.setProps({ toggle: true, fullscreen: false, size: "large" });
-        expect(wrapper.find(".seb-loader.loader-lg")).toBeTruthy();
-
-        wrapper.setProps({ toggle: true, fullscreen: false, size: "medium" });
-        expect(wrapper.find(".seb-loader.loader-md")).toBeTruthy();
-
-        wrapper.setProps({ toggle: true, fullscreen: false, size: "small" });
-        console.log(wrapper);
-        expect(wrapper.find(".seb-loader.loader-sm")).toBeTruthy();
-
-        wrapper.setProps({ toggle: true, fullscreen: false, size: "tiny" });
-        expect(wrapper.find(".seb-loader.loader-xs")).toBeTruthy();
+    describe("Should render with different sizes", () => {
+        const testCases: Array<LoaderSize> = ["lg", "md", "sm"];
+        testCases.map((size: LoaderSize) => {
+            test(`Loader size: ${size}`, () => {
+                mountedWrapper = mount(<Loader toggle={true} size={size} />);
+                expect(mountedWrapper.find(".seb-loader").hasClass(`loader-${size}`));
+            });
+        });
     });
 
 });

@@ -75,8 +75,7 @@ const Slider: React.FunctionComponent<SliderProps> = (props: SliderProps): React
         } else if (value < min) {
             return 0;
         }
-        const result: number = Math.abs(((value - min) / (max - min)) * 100);
-        return result;
+        return Math.abs(((value - min) / (max - min)) * 100);
     }
 
     return (

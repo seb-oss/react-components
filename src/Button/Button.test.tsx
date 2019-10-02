@@ -1,17 +1,21 @@
 import * as React from "react";
-import { shallow, ShallowWrapper, HTMLAttributes } from "enzyme";
+import { shallow, ShallowWrapper, ReactWrapper, mount } from "enzyme";
 import { Button, ButtonProps, ButtonTheme, ButtonSizes } from "./Button";
 
 type ButtonTestItem<T, K> = { value: T, expected: K };
 
 describe("Component: Button", () => {
-
     let wrapper: ShallowWrapper<ButtonProps>;
-    let onClick: jest.Mock;
+    let mountedWrapper: ReactWrapper<ButtonProps>;
+
+    const props: ButtonProps = {
+        label: "label",
+        onClick: jest.fn()
+    };
 
     beforeEach(() => {
-        onClick = jest.fn();
-        wrapper = shallow(<Button label="label" onClick={onClick} />);
+        wrapper = shallow(<Button {...props} />);
+        mountedWrapper = mount(<Button {...props} />);
     });
 
     it("Should render", () => expect(wrapper).toBeDefined());
@@ -19,15 +23,21 @@ describe("Component: Button", () => {
     it("Should render label correctly", () => expect(wrapper.find(".button-content").children(".button-label").text()).toEqual("label"));
 
     it("Should fire onClick callback when clicked", () => {
-        wrapper.find(".btn").simulate("click");
+        const onClick: jest.Mock = jest.fn();
+        wrapper.setProps({ onClick });
+        wrapper.find("button").simulate("click");
         expect(onClick).toHaveBeenCalled();
     });
 
-    it("Should render custom className and id", () => {
+    it("Should render custom className", () => {
         const className: string = "myButtonClass";
+        mountedWrapper = mount(<Button {...props} className={className} />);
+        expect(mountedWrapper.hasClass(className)).toBeTruthy();
+    });
+
+    it("Should pass id", () => {
         const id: string = "myButtonId";
-        wrapper.setProps({ className, id });
-        expect(wrapper.hasClass(className)).toBeTruthy();
+        wrapper.setProps({ id });
         expect(wrapper.find(`#${id}`).length).toBeTruthy();
     });
 
@@ -44,8 +54,8 @@ describe("Component: Button", () => {
         ];
         list.map((item: ButtonTestItem<ButtonTheme, string>) => {
             it(`Theme: ${item.value} - Expected to render (btn-${item.expected})`, () => {
-                wrapper.setProps({ theme: item.value });
-                expect(wrapper.hasClass(item.expected));
+                mountedWrapper = mount(<Button {...props} theme={item.value} />);
+                expect(mountedWrapper.hasClass(item.expected));
             });
         });
     });
@@ -58,8 +68,8 @@ describe("Component: Button", () => {
         ];
         list.map((item: ButtonTestItem<ButtonSizes, string>) => {
             it(`Size: ${item.value} - Expected to render (btn-${item.expected})`, () => {
-                wrapper.setProps({ size: item.value });
-                expect(wrapper.hasClass(item.expected));
+                mountedWrapper = mount(<Button {...props} size={item.value} />);
+                expect(mountedWrapper.find("button").hasClass(item.expected));
             });
         });
     });
@@ -75,10 +85,12 @@ describe("Component: Button", () => {
 
     it("Should render icon inside button", () => {
         const icon: React.ReactElement<SVGElement> = <svg className="customIcon" />;
-        wrapper.setProps({ icon: icon, iconPosition: "right" });
-        expect(wrapper.hasClass("icon-right")).toBeTruthy();
-        expect(wrapper.find(".svg-holder").length).toBe(1);
-        expect(wrapper.find(".svg-holder").children("svg.customIcon")).toBeDefined();
+        mountedWrapper = mount(<Button {...props} icon={icon} />);
+        expect(mountedWrapper.find("button").hasClass("icon-left")).toBeTruthy();
+        expect(mountedWrapper.find(".svg-holder").length).toBe(1);
+        expect(mountedWrapper.find(".svg-holder").children("svg.customIcon")).toBeDefined();
+        mountedWrapper = mount(<Button {...props} icon={icon} iconPosition="right" />);
+        expect(mountedWrapper.find("button").hasClass("icon-right")).toBeTruthy();
     });
 
     it("Should render icon to the left as default if no position is passed", () => {
@@ -86,4 +98,12 @@ describe("Component: Button", () => {
         wrapper.setProps({ icon: icon });
         expect(wrapper.hasClass("icon-left"));
     });
+
+    it("Should render children in replacement for icons", () => {
+        const svgId: string = "my-test-svg";
+        wrapper = shallow(<Button {...props} iconPosition="left"><svg id={svgId} /></Button>);
+        expect(wrapper.find(`#${svgId}`).length).toBeDefined();
+    });
+
+    afterEach(() => mountedWrapper.unmount());
 });

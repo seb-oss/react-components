@@ -62,6 +62,7 @@ These are the current available properties:
 | rightText?        | `string`                                                 | Right side text                                             |
 | rightTitle?       | `string`                                                 | Right side HTML title                                       |
 | showErrorMessage? | `boolean`                                                | Show or hide the error message<sup>1</sup>(default: `true`) |
+| success           | `boolean`                                                | Success status                                              |
 | type?             | `string`                                                 | Input type. (default: `'text'`)                             |
 | value             | `string | number`                                        | Value string                                                |
 

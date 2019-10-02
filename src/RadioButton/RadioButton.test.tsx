@@ -32,7 +32,7 @@ describe("Component: RadioButton", () => {
         expect.assertions(2);
         const mountedWrapper: ReactWrapper<RadioButtonProps> = mount(<RadioButton {...props} label="label" />);
         setTimeout(() => {
-            expect(mountedWrapper.find("input").getElement().props.id).toBeDefined();
+            expect(mountedWrapper.find("input").getElement().props.id).toBeTruthy();
             expect(mountedWrapper.find("label").getElement().props.htmlFor).toBeDefined();
             done();
         });

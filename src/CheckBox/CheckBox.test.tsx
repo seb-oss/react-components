@@ -29,7 +29,7 @@ describe("Component: CheckBox", () => {
 
     it("Should generated a random id when id is not passed", () => {
         const mountedWrapper: ReactWrapper<CheckBoxProps> = mount(<CheckBox {...props} />);
-        expect(mountedWrapper.find("input").getElement().props.id).toBeDefined();
+        expect(mountedWrapper.find("input").getElement().props.id).toBeTruthy();
     });
 
     it("Should pass down the name to the html input component", () => {
