@@ -40,12 +40,6 @@ const Accordion: React.FunctionComponent<AccordionProps> = (props: AccordionProp
         constructIds();
         constructClassName();
         constructItemClassName();
-    }, []);
-
-    React.useEffect(() => {
-        constructIds();
-        constructClassName();
-        constructItemClassName();
     }, [props.id, props.className, props.alternative, props.iconPosition, props.iconRotation, props.customIconExpanded, props.list]);
 
     /**
