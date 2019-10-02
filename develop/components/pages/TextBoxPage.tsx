@@ -25,7 +25,7 @@ const TextBoxPage: React.FunctionComponent = () => {
                         <TextBox
                             name="textInput"
                             label="Textbox label"
-                            placeHolder="Text Box PlaceHolder"
+                            placeholder="Text Box PlaceHolder"
                             value={textBoxValue}
                             onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTextBoxValue(e.target.value)}
                         />
@@ -35,7 +35,7 @@ const TextBoxPage: React.FunctionComponent = () => {
                     <div className="result">
                         <TextBox
                             name="textInput2"
-                            placeHolder="Text Box PlaceHolder"
+                            placeholder="Text Box PlaceHolder"
                             error="error msg will be shown here"
                             value={textBoxValue2}
                             onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTextBoxValue2(e.target.value)}
@@ -46,9 +46,9 @@ const TextBoxPage: React.FunctionComponent = () => {
                     <div className="result">
                         <TextBox
                             name="textInput3"
-                            placeHolder="Text Box PlaceHolder"
-                            success={true}
+                            placeholder="Text Box PlaceHolder"
                             value={textBoxValue3}
+                            success
                             onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTextBoxValue3(e.target.value)}
                         />
                     </div>

@@ -3,7 +3,7 @@ import "./text-box-group-style.scss";
 import { randomId } from "../__utils/randomId";
 
 export interface TextBoxGroupProps {
-    autoComplete?: boolean;
+    autoComplete?: "on" | "off";
     className?: string;
     disabled?: boolean;
     error?: string;
@@ -25,7 +25,7 @@ export interface TextBoxGroupProps {
     onLeftClick?: (event: React.MouseEvent<HTMLDivElement>) => void;
     onRightClick?: (event: React.MouseEvent<HTMLDivElement>) => void;
     pattern?: string;
-    placeHolder?: string;
+    placeholder?: string;
     readonly?: boolean;
     reference?: React.RefObject<HTMLInputElement>;
     required?: boolean;
@@ -35,19 +35,25 @@ export interface TextBoxGroupProps {
     type?: string;
     value: string | number;
     success?: boolean;
+    showErrorMessage?: boolean;
 }
 
 export const TextBoxGroup: React.FunctionComponent<TextBoxGroupProps> = (props: TextBoxGroupProps) => {
     const [id, setId] = React.useState<string>(null);
+    const [showErrorMessage, setShowErrorMessage] = React.useState<boolean>(true);
 
     React.useEffect(() => {
         setId(props.id ? props.id : (props.label ? randomId("tbg-") : null));
     }, [props.id, props.label]);
 
+    React.useEffect(() => {
+        setShowErrorMessage(props.showErrorMessage === undefined || props.showErrorMessage === null ? true : !!props.showErrorMessage);
+    }, [props.showErrorMessage]);
+
     return (
         <div className={"form-group input-box-group" + (props.className ? ` ${props.className}` : "")}>
             {props.label && <label className="custom-label" htmlFor={id}>{props.label}</label>}
-            <div className={"input-group" + (props.error ? " has-error" : "") + (props.disabled ? " disabled" : "") + (props.success ? " success" : "")} >
+            <div className={"input-group" + (props.success ? " success" : props.error ? " has-error" : "") + (props.disabled ? " disabled" : "")} >
                 <div className="input-box-group-wrapper">
                     {(props.leftIcon || props.leftText) &&
                         <div className={"input-group-prepend" + (props.onLeftClick ? " clickable" : "")} role={props.onLeftClick ? "button" : ""} onClick={props.onLeftClick}>
@@ -69,11 +75,11 @@ export const TextBoxGroup: React.FunctionComponent<TextBoxGroupProps> = (props: 
                         maxLength={props.maxLength}
                         value={props.value}
                         onChange={props.onChange}
-                        placeholder={props.placeHolder}
+                        placeholder={props.placeholder}
                         className="form-control"
                         autoFocus={props.focus}
-                        autoComplete={props.autoComplete ? "on" : "off"}
-                        readOnly={props.readonly}
+                        autoComplete={props.autoComplete}
+                        readonly={props.readonly}
                         disabled={props.disabled}
                         onKeyDown={props.onKeyDown}
                         onKeyUp={props.onKeyUp}
@@ -93,7 +99,7 @@ export const TextBoxGroup: React.FunctionComponent<TextBoxGroupProps> = (props: 
                         </div>
                     }
                 </div>
-                <div className="alert alert-danger">{props.error}</div>
+                {showErrorMessage && !props.success ? <div className="alert alert-danger">{props.error}</div> : null}
             </div>
         </div>
     );

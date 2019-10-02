@@ -29,7 +29,7 @@ const TextBoxGroupPage: React.FunctionComponent = () => {
                         <TextBoxGroup
                             name="textInput"
                             label="Textbox group label"
-                            placeHolder="Text Box PlaceHolder"
+                            placeholder="Text Box PlaceHolder"
                             value={textBoxGroupValue}
                             onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTextBoxGroupValue(e.target.value)}
                             rightText="kr"
@@ -39,7 +39,7 @@ const TextBoxGroupPage: React.FunctionComponent = () => {
                     <div className="result">
                         <TextBoxGroup
                             name="textInput2"
-                            placeHolder="Text Box PlaceHolder"
+                            placeholder="Text Box PlaceHolder"
                             value={textBoxGroupValue2}
                             onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTextBoxGroupValue2(e.target.value)}
                             leftIcon={moneyIcon}
@@ -50,7 +50,7 @@ const TextBoxGroupPage: React.FunctionComponent = () => {
                     <div className="result">
                         <TextBoxGroup
                             name="textInput3"
-                            placeHolder="Text Box PlaceHolder"
+                            placeholder="Text Box PlaceHolder"
                             value={textBoxGroupValue3}
                             onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTextBoxGroupValue3(e.target.value)}
                             leftIcon={moneyIcon}
@@ -67,7 +67,7 @@ const TextBoxGroupPage: React.FunctionComponent = () => {
                     <div className="result">
                         <TextBoxGroup
                             name="textInput3"
-                            placeHolder="Text Box PlaceHolder"
+                            placeholder="Text Box PlaceHolder"
                             value={textBoxGroupValue4}
                             onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTextBoxGroupValue4(e.target.value)}
                             leftIcon={moneyIcon}

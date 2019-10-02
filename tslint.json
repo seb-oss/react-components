@@ -16,6 +16,7 @@
         "object-literal-shorthand": false,
         "no-console": false,
         "prefer-for-of": false,
+        "jsx-boolean-value": false,
         "indent": [
             true,
             "spaces",

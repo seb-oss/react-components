@@ -165,7 +165,7 @@ class Timepicker extends React.Component<TimepickerProps> {
                         type="text"
                         name={this.props.name + "-dayperiod"}
                         className="timepicker-input"
-                        readOnly={true}
+                        readonly={true}
                         disabled={true}
                         value={this.props.value.dayperiod}
                     />
