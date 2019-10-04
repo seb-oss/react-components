@@ -85,28 +85,25 @@ describe("Component: TextBoxGroup", () => {
         expect(wrapper.find("label").text()).toEqual(label);
     });
 
-    it("Should show error and success indicators", () => {
-        wrapper.setProps({ error: "error" });
-        expect(wrapper.find(".input-group").hasClass("has-error")).toBeTruthy();
-        wrapper.setProps({ success: true });
-        expect(wrapper.find(".input-group").hasClass("has-error")).toBeFalsy();
-        expect(wrapper.find(".input-group").hasClass("success")).toBeTruthy();
-        expect(wrapper.find(".alert-danger")).toHaveLength(0);
-    });
-
     it("Should show error and success indicators, hide error message when `showErrorMessage` props is set to `false`", () => {
         const error: string = "some error";
-        mountedWrapper.setProps({ error });
+        mountedWrapper = mount(<TextBoxGroup {...props} error={error} />);
         expect(mountedWrapper.find(".input-group").hasClass("has-error")).toBeTruthy();
         expect(mountedWrapper.find(".alert-danger").length).toBe(1);
         expect(mountedWrapper.find(".alert-danger").text()).toEqual(error);
-        mountedWrapper.setProps({ success: true });
+        mountedWrapper = mount(<TextBoxGroup {...props} error={error} showErrorMessage={false} success />);
         expect(mountedWrapper.find(".input-group").hasClass("has-error")).toBeFalsy();
         expect(mountedWrapper.find(".input-group").hasClass("success")).toBeTruthy();
         expect(mountedWrapper.find(".alert-danger").length).toBe(0);
-        mountedWrapper = mount(<TextBoxGroup {...props} error="Error" showErrorMessage={false} />);
+        mountedWrapper = mount(<TextBoxGroup {...props} error={error} showErrorMessage={false} />);
         expect(mountedWrapper.find(".input-group").hasClass("has-error")).toBeTruthy();
         expect(mountedWrapper.find(".alert-danger").length).toBe(0);
+        mountedWrapper = mount(<TextBoxGroup {...props} error={error} showErrorMessage={true} />);
+        expect(mountedWrapper.find(".input-group").hasClass("has-error")).toBeTruthy();
+        expect(mountedWrapper.find(".alert-danger").length).toBe(1);
+        mountedWrapper = mount(<TextBoxGroup {...props} error={error} showErrorMessage={null} />);
+        expect(mountedWrapper.find(".input-group").hasClass("has-error")).toBeTruthy();
+        expect(mountedWrapper.find(".alert-danger").length).toBe(1);
     });
 
     describe("Testing optional properties", () => {

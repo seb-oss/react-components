@@ -72,17 +72,23 @@ describe("Component: TextBox", () => {
 
     it("Should show error and success indicators, hide error message when `showErrorMessage` props is set to `false`", () => {
         const error: string = "some error";
-        mountedWrapper.setProps({ error });
+        mountedWrapper = mount(<TextBox {...props} error={error} />);
         expect(mountedWrapper.find(".input-field").hasClass("has-error")).toBeTruthy();
         expect(mountedWrapper.find(".alert-danger").length).toBe(1);
         expect(mountedWrapper.find(".alert-danger").text()).toEqual(error);
-        mountedWrapper.setProps({ success: true });
+        mountedWrapper = mount(<TextBox {...props} error={error} showErrorMessage={false} success />);
         expect(mountedWrapper.find(".input-field").hasClass("has-error")).toBeFalsy();
         expect(mountedWrapper.find(".input-field").hasClass("success")).toBeTruthy();
         expect(mountedWrapper.find(".alert-danger").length).toBe(0);
-        mountedWrapper = mount(<TextBox {...props} error="Error" showErrorMessage={false} />);
+        mountedWrapper = mount(<TextBox {...props} error={error} showErrorMessage={false} />);
         expect(mountedWrapper.find(".input-field").hasClass("has-error")).toBeTruthy();
         expect(mountedWrapper.find(".alert-danger").length).toBe(0);
+        mountedWrapper = mount(<TextBox {...props} error={error} showErrorMessage={true} />);
+        expect(mountedWrapper.find(".input-field").hasClass("has-error")).toBeTruthy();
+        expect(mountedWrapper.find(".alert-danger").length).toBe(1);
+        mountedWrapper = mount(<TextBox {...props} error={error} showErrorMessage={null} />);
+        expect(mountedWrapper.find(".input-field").hasClass("has-error")).toBeTruthy();
+        expect(mountedWrapper.find(".alert-danger").length).toBe(1);
     });
 
     describe("Testing optional event listners:", () => {

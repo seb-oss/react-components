@@ -8,7 +8,7 @@ export interface InlineLinkProps {
     onClick?: () => void;
 }
 
-export const InlineLink: React.FunctionComponent<InlineLinkProps> = React.memo((props: InlineLinkProps): React.ReactElement<void> => {
+export const InlineLink: React.NamedExoticComponent<InlineLinkProps> = React.memo((props: InlineLinkProps): React.ReactElement<void> => {
     return (
         <span
             className={"custom-inline-link" + (props.className ? ` ${props.className}` : "")}

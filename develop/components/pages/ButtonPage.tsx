@@ -26,14 +26,14 @@ const ButtonPage: React.FunctionComponent = () => {
                         <Button
                             title="Click me"
                             label="Primary"
-                            onClick={() => true}
+                            onClick={null}
                             theme="primary"
                             className="mr-1"
                         />
                         <Button
                             title="Click me"
                             label="Primary disabled"
-                            onClick={() => true}
+                            onClick={null}
                             theme="primary"
                             disabled={true}
                         />
@@ -44,14 +44,14 @@ const ButtonPage: React.FunctionComponent = () => {
                         <Button
                             title="Click me"
                             label="Secondary"
-                            onClick={() => true}
+                            onClick={null}
                             theme="secondary"
                             className="mr-1"
                         />
                         <Button
                             title="Click me"
                             label="Secondary disabled"
-                            onClick={() => true}
+                            onClick={null}
                             theme="secondary"
                             disabled={true}
                         />
@@ -62,14 +62,14 @@ const ButtonPage: React.FunctionComponent = () => {
                         <Button
                             title="Click me"
                             label="Alternative"
-                            onClick={() => true}
+                            onClick={null}
                             theme="alternative"
                             className="mr-1"
                         />
                         <Button
                             title="Click me"
                             label="Alternative disabled"
-                            onClick={() => true}
+                            onClick={null}
                             theme="alternative"
                             disabled={true}
                         />
@@ -80,14 +80,14 @@ const ButtonPage: React.FunctionComponent = () => {
                         <Button
                             title="Click me"
                             label="Delete"
-                            onClick={() => true}
+                            onClick={null}
                             theme="danger"
                             className="mr-1"
                         />
                         <Button
                             title="Click me"
                             label="Delete disabled"
-                            onClick={() => true}
+                            onClick={null}
                             theme="danger"
                             disabled={true}
                         />
@@ -98,14 +98,14 @@ const ButtonPage: React.FunctionComponent = () => {
                         <Button
                             title="Click me"
                             label="Ghost light"
-                            onClick={() => true}
+                            onClick={null}
                             theme="ghost-light"
                             className="mr-1"
                         />
                         <Button
                             title="Click me"
                             label="Ghost light disabled"
-                            onClick={() => true}
+                            onClick={null}
                             theme="ghost-light"
                             disabled={true}
                         />
@@ -116,14 +116,14 @@ const ButtonPage: React.FunctionComponent = () => {
                         <Button
                             title="Click me"
                             label="Ghost dark"
-                            onClick={() => true}
+                            onClick={null}
                             theme="ghost-dark"
                             className="mr-1"
                         />
                         <Button
                             title="Click me"
                             label="Ghost dark disabled"
-                            onClick={() => true}
+                            onClick={null}
                             theme="ghost-dark"
                             disabled={true}
                         />
@@ -134,13 +134,13 @@ const ButtonPage: React.FunctionComponent = () => {
                         <Button
                             label="Test Label"
                             theme="anchor"
-                            onClick={() => true}
+                            onClick={null}
                             className="mr-1"
                         />
                         <Button
                             label="Test Label"
                             theme="anchor"
-                            onClick={() => true}
+                            onClick={null}
                             disabled={true}
                         />
                     </div>
@@ -151,14 +151,14 @@ const ButtonPage: React.FunctionComponent = () => {
                             label="Test Label"
                             iconPosition="left"
                             icon={mysvg}
-                            onClick={() => true}
+                            onClick={null}
                             className="mr-1"
                         />
                         <Button
                             label="Test Label"
                             iconPosition="right"
                             icon={mysvg}
-                            onClick={() => true}
+                            onClick={null}
                         />
                     </div>
 
@@ -166,35 +166,37 @@ const ButtonPage: React.FunctionComponent = () => {
                     <div className="result wide">
                         <Button
                             label="Test Label"
-                            icon={<Loader toggle={true} />}
-                            onClick={() => true}
+                            onClick={null}
                             className="mr-1"
-                        />
+                        >
+                            <Loader toggle={true} />
+                        </Button>
                         <Button
                             label="Test Label"
                             iconPosition="right"
-                            icon={<Loader toggle={true} />}
-                            onClick={() => true}
+                            onClick={null}
                             disabled={true}
-                        />
+                        >
+                            <Loader toggle={true} />
+                        </Button>
                     </div>
 
                     <p>It also comes in different sizes</p>
                     <div className="result wide">
                         <Button
                             label="Large"
-                            onClick={() => true}
+                            onClick={null}
                             size="lg"
                             className="mr-1"
                         />
                         <Button
                             label="Medium"
-                            onClick={() => true}
+                            onClick={null}
                             className="mr-1"
                         />
                         <Button
                             label="Small"
-                            onClick={() => true}
+                            onClick={null}
                             size="sm"
                             className="mr-1"
                         />

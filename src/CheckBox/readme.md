@@ -22,8 +22,12 @@ This React component is based on SEB Bootstrap style. Supports customization and
 ## Basic use
 
 ```html
-<CheckBox name="checkbox" label="Checkbox label" checked={this.state.checkbox} onChange={(event) => { this.setState({
-checkbox: event.target.checked }); }} />
+<CheckBox
+    name="checkbox"
+    label="Checkbox label"
+    checked={this.state.checkbox}
+    onChange={(event) => { this.setState({ checkbox: event.target.checked }); }}
+/>
 ```
 
 ## Properties

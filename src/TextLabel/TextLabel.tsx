@@ -5,7 +5,6 @@ export interface TextLabelProps {
     className?: string;
     id?: string;
     label?: string;
-    name?: string;
     value: string | number;
 }
 

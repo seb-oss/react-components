@@ -39,8 +39,17 @@ export const TextBox: React.FunctionComponent<TextBoxProps> = (props: TextBoxPro
     }, [props.id, props.label]);
 
     React.useEffect(() => {
-        setShowErrorMessage(props.showErrorMessage === undefined || props.showErrorMessage === null ? true : !!props.showErrorMessage);
-    }, [props.showErrorMessage]);
+        if (props.success) {
+            // Only false when success is enabled
+            setShowErrorMessage(false);
+        } else if (props.showErrorMessage === false) {
+            // `showErrorMessage` is set to boolean false
+            setShowErrorMessage(false);
+        } else {
+            // If set to true, or it will be defaulted if the value is not passed
+            setShowErrorMessage(true);
+        }
+    }, [props.showErrorMessage, props.success]);
 
     return (
         <div className={"form-group input-box" + (props.className ? ` ${props.className}` : "")}>
@@ -69,7 +78,7 @@ export const TextBox: React.FunctionComponent<TextBoxProps> = (props: TextBoxPro
                     disabled={props.disabled}
                     ref={props.reference}
                 />
-                {showErrorMessage && !props.success ? <div className="alert alert-danger">{props.error}</div> : null}
+                {showErrorMessage && <div className="alert alert-danger">{props.error}</div>}
             </div>
         </div>
     );

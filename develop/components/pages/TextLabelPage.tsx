@@ -19,7 +19,6 @@ const TextLabelPage: React.FunctionComponent = () => {
                     <p>Here is the basic bootstrap one:</p>
                     <div className="result">
                         <TextLabel
-                            name="textname"
                             value="400,000 kr"
                             label="Current savings"
                         />

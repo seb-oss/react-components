@@ -22,7 +22,7 @@ export interface ButtonProps {
     type?: ButtonType;
 }
 
-export const Button: React.FunctionComponent<ButtonProps> = React.memo((props: ButtonProps): React.ReactElement<void> => {
+export const Button: React.NamedExoticComponent<ButtonProps> = React.memo((props: ButtonProps): React.ReactElement<void> => {
     const [className, setClassName] = React.useState<string>("btn");
 
     function getButtonTheme(): string {

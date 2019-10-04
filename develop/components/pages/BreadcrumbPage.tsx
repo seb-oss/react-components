@@ -22,7 +22,7 @@ const BreadcrumbPage: React.FunctionComponent = () => {
                     <div className="result">
                         <Breadcrumb
                             list={breadcrumbList}
-                            onClick={(i: number) => { alert(`Should navigate to ${breadcrumbList[i]}`); }}
+                            onClick={(i: number) => alert(`Should navigate to ${breadcrumbList[i]}`)}
                         />
                     </div>
 
@@ -30,7 +30,7 @@ const BreadcrumbPage: React.FunctionComponent = () => {
                     <div className="result">
                         <Breadcrumb
                             list={breadcrumbList2}
-                            onClick={(i: number) => { alert(`Should navigate to ${i}`); }}
+                            onClick={(i: number) => alert(`Should navigate to ${i}`)}
                         />
                     </div>
                 </div>

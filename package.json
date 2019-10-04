@@ -68,6 +68,7 @@
 		"chart.js": "^2.8.0",
 		"chartjs-plugin-annotation": "^0.5.7",
 		"cropperjs": "^1.5.5",
+		"lodash": "^4.17.15",
 		"moment": "^2.24.0",
 		"react": "^16.10.1",
 		"react-chartjs-2": "^2.8.0",
@@ -76,7 +77,6 @@
 		"react-rating": "^2.0.0",
 		"react-router": "^5.1.1",
 		"react-router-dom": "^5.1.1",
-		"react-select": "^3.0.5",
 		"react-slick": "^0.25.2",
 		"slick-carousel": "^1.8.1"
 	},

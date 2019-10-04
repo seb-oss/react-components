@@ -12,7 +12,6 @@ export interface NotificationAction {
 
 export interface NotificationProps {
     actions?: Array<NotificationAction>;
-    children?: React.ReactNode;
     className?: string;
     dismissable?: boolean;
     dismissTimeout?: number;

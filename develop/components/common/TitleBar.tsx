@@ -3,7 +3,7 @@ import { TextBoxGroup } from "../../../src/TextBoxGroup/TextBoxGroup";
 import { Icon } from "../../../src/Icon/Icon";
 const SEBLogo: string = require("../../assets/images/icons/seblogo.svg");
 const reactLogo: string = require("../../assets/images/icons/ReactLogo.png");
-const sidebarData = require("../../assets/sidebar.json");
+const sidebarData = require("../../assets/components-list.json");
 
 interface SideBarDataItem {
     name: string;
@@ -154,9 +154,7 @@ export default class TitleBar extends React.Component<TitleBarProps, TitleBarSta
     }
 
     componentDidMount() {
-        this.setState({ componentsList: [].concat(...[sidebarData.form, sidebarData.ui, sidebarData.other]) }, () => {
-            console.log("Number of Components: ", this.state.componentsList.length);
-        });
+        this.setState({ componentsList: [].concat(...[sidebarData.form, sidebarData.ui, sidebarData.other]) });
         document.addEventListener("keyup", this.onKeyUpListener);
         document.addEventListener("keypress", this.onKeyPressListener);
     }
