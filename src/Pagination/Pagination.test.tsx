@@ -3,9 +3,10 @@ import { shallow, ShallowWrapper } from "enzyme";
 import { Pagination, PaginationProps } from "./Pagination";
 
 describe("Component: RadioButton", () => {
+    const props: PaginationProps = { size: 20, value: 1 };
     let wrapper: ShallowWrapper<PaginationProps>;
 
-    beforeEach(() => wrapper = shallow(<Pagination size={20} value={1} />));
+    beforeEach(() => wrapper = shallow(<Pagination {...props} />));
 
     it("Should render in both numbered and dotnav modes", () => {
         expect(wrapper).toBeDefined();
@@ -16,9 +17,12 @@ describe("Component: RadioButton", () => {
         expect(wrapper.find(".dotnav").length).toBe(1);
     });
 
-    it("Should pass custom class", () => {
-        wrapper.setProps({ className: "myPagination" });
-        expect(wrapper.hasClass("myPagination")).toBeTruthy();
+    it("Should pass custom class and id", () => {
+        const className: string = "myPaginationClass";
+        const id: string = "myPaginationId";
+        wrapper.setProps({ className, id });
+        expect(wrapper.hasClass(className)).toBeTruthy();
+        expect(wrapper.find(`#${id}`).length).toBeTruthy();
     });
 
     it("Should render with custom offset", () => {

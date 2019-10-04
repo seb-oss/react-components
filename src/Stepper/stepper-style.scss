@@ -1,22 +1,8 @@
-$gray-100: #f8f8f8;
-$gray-200: #e9e9e9;
-$gray-300: #dedede;
-$gray-400: #cecece;
-$gray-500: #adadad;
-$gray-600: #868686;
-$gray-700: #494949;
-$gray-800: #343434;
-$gray-900: #212121;
-$blue: #41B0EE;
-$blue-dark: #0092E1;
-$blue-darker: #007AC7;
-$white: #fff;
-$black: #000;
-$yellow-darker: #F8A000;
-$yellow-dark: #FFB400;
-$yellow: #FFC500;
+@import "../colours";
 $transition-time: 200ms;
 $transparent: transparent;
+$stepper-font-size: 24px;
+
 @mixin no-user-select {
     -webkit-user-select: none;
     -moz-user-select: none;
@@ -33,20 +19,14 @@ $transparent: transparent;
 
 .form-group.custom-stepper {
     display: inline-block;
-    label.custom-label:not(.form-check-label):not(.custom-checkbox):not(.custom-radio):not(.custom-control-label) {
-        display: block;
-        margin-bottom: 4px;
-        line-height: 1;
-        font-size: 12px;
-        font-weight: normal;
-    }
     .stepper-container {
-        height: 30px;
+        height: 44px;
         border-radius: 4px;
         overflow: hidden;
         padding: 0;
         &:not(.disabled) {
             background-color: $white;
+            border: 1px solid $grey-6;
             .stepper-decrement,
             .stepper-increment {
                 &:not(.disabled) {
@@ -55,6 +35,9 @@ $transparent: transparent;
                     &:hover {
                         background-color: $blue;
                         color: $white;
+                    }
+                    &:active {
+                        background-color: $blue-dark;
                     }
                 }
                 &.disabled {
@@ -66,8 +49,17 @@ $transparent: transparent;
                 border-color: $blue;
             }
         }
+        &.disabled {
+            background-color: $grey-8;
+            border: 1px solid $grey-7;
+            [class^=stepper-] {
+                color: $grey-7;
+            }
+        }
         [class^=stepper-] {
-            display: inline-block;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
             height: 100%;
             vertical-align: top;
             @include no-user-select;
@@ -75,31 +67,28 @@ $transparent: transparent;
         .stepper-decrement,
         .stepper-increment {
             padding: 0 10px;
-            font-size: 25px;
-            line-height: 24px;
             will-change: background-color, color;
             @include transition((background-color $transition-time, color $transition-time));
-        }
-        .stepper-increment {
-            border: 1px solid $gray-500;
-            border-left: none;
-            border-radius: 0 4px 4px 0;
-        }
-        .stepper-decrement {
-            border: 1px solid $gray-500;
-            border-right: none;
-            border-radius: 4px 0px 0px 4px;
+            padding-bottom: 3px;
+            font-size: 38px;
+            font-weight: 100;
+            line-height: 0;
+            border: none;
+            background: transparent;
+            border: 1px solid transparent;
+            outline: none;
+            box-shadow: none;
+            &:focus {
+                border-color: $blue;
+            }
+            >span {
+                padding-bottom: 5px;
+            }
         }
         .stepper-preview {
-            line-height: 27px;
-            width: 65px;
+            min-width: 64px;
             text-align: center;
-            border: 1px solid $gray-500;
-            border-right: none;
-            border-left: none;
-        }
-        &.disabled {
-            background-color: $gray-300;
+            font-size: $stepper-font-size;
         }
         &.has-warning,
         &.has-warning:hover {

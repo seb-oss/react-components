@@ -26,7 +26,9 @@
         "webpack",
         "dist",
         "develop",
-        "coverage"
+        "coverage",
+        "**/*.test.tsx",
+        "src/__utils"
     ],
     "types": [
         "typePatches"

@@ -13,9 +13,12 @@ describe("Component: Tooltip ", () => {
         expect(wrapper).toBeDefined();
     });
 
-    it("Should pass custom class", () => {
-        wrapper.setProps({ className: "myTooltip" });
-        expect(wrapper.hasClass("myTooltip")).toBeTruthy();
+    it("Should pass custom class and id", () => {
+        const className: string = "myTooltipClass";
+        const id: string = "myTooltipId";
+        wrapper.setProps({ className, id });
+        expect(wrapper.hasClass(className)).toBeTruthy();
+        expect(wrapper.find(`#${id}`).length).toBeTruthy();
     });
 
     it("Should render a title and a message", () => {
@@ -97,9 +100,18 @@ describe("Component: Tooltip ", () => {
     });
 
     it("Should render with custom SVG", () => {
-        const testIcon: JSX.Element = <svg/>;
+        const testIcon: JSX.Element = <svg />;
         wrapper.setProps({ customSvg: testIcon });
         expect(wrapper.find(".icon").childAt(0).matchesElement(testIcon)).toBeTruthy();
+    });
+
+    it("should be able to call click event onClick when clickAction is provided ", () => {
+        const clickActionSpy = jest.fn();
+        wrapper = shallow(<Tooltip onClick={clickActionSpy} className="my-tooltip" />);
+
+        wrapper.find(".my-tooltip > .icon").simulate("click", [null, { target: { value: false } }]);
+
+        expect(clickActionSpy).toHaveBeenCalled();
     });
 
     describe("Test the component's public methods", () => {

@@ -1,17 +1,21 @@
 import * as React from "react";
 import "./inline-link-style.scss";
 
-interface InlineLinkProps {
-    onClick?: () => void;
-    className?: string;
+export interface InlineLinkProps {
     children?: any;
+    className?: string;
+    id?: string;
+    onClick?: () => void;
 }
 
-export const InlineLink: React.FunctionComponent<InlineLinkProps> = React.memo((props: InlineLinkProps): React.ReactElement<void> => {
+export const InlineLink: React.NamedExoticComponent<InlineLinkProps> = React.memo((props: InlineLinkProps): React.ReactElement<void> => {
     return (
         <span
             className={"custom-inline-link" + (props.className ? ` ${props.className}` : "")}
+            role="link"
+            tabIndex={0}
             onClick={() => { props.onClick && props.onClick(); }}
+            id={props.id}
         >
             {props.children}
         </span>

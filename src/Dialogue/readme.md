@@ -31,13 +31,17 @@ This React component is based on SEB Bootstrap style. Supports customization and
 ## Properties
 These are the current available properties:
 
-| Property         | Type         | Descrition                                         |
-| ---------------- | ------------ | -------------------------------------------------- |
-| toggle           | `boolean`    | show or hide the popup                             |
-| header?          | `string`     | header text                                        |
-| desc?            | `string`     | description text                                   |
-| primaryBtn?      | `string`     | primary btn text                                   |
-| secondaryBtn?    | `string`     | secondary btn text                                 |
-| primaryAction?   | `() => void` | click event fired when primary button is clicked   |
-| secondaryAction? | `() => void` | click event fired when secondary button is clicked |
-| className?       | `string`     | custom class                                       |
+| Property               | Type                                                | Description                                             |
+| ---------------------- | --------------------------------------------------- | ------------------------------------------------------- |
+| className?             | `string`                                            | Custom class                                            |
+| desc?                  | `string`                                            | Description text                                        |
+| enableBackdropDismiss? | `boolean`                                           | Enables backdrop dismiss. Requires `onDismiss`          |
+| enableCloseButton?     | `boolean`                                           | Enables close button. Requires `onDismiss`              |
+| header?                | `string`                                            | Header text                                             |
+| id?                    | `string`                                            | Element id                                              |
+| onDismiss?             | `(event: React.MouseEvent<HTMLDivElement>) => void` | Click event fired when backdrop or close button clicked |
+| primaryAction?         | `() => void`                                        | Click event fired when primary button is clicked        |
+| primaryBtn?            | `string`                                            | Primary btn text                                        |
+| secondaryAction?       | `() => void`                                        | Click event fired when secondary button is clicked      |
+| secondaryBtn?          | `string`                                            | Secondary btn text                                      |
+| toggle                 | `boolean`                                           | Show or hide the popup                                  |

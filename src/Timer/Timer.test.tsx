@@ -13,9 +13,12 @@ describe("Component: Timer", () => {
         expect(wrapper).toBeDefined();
     });
 
-    it("Should pass custom class", () => {
-        const wrapper = shallow(<Timer {...props} className="myTimer" />);
-        expect(wrapper.hasClass("myTimer")).toBeTruthy();
+    it("Should pass custom class and id", () => {
+        const className: string = "myTimerClass";
+        const id: string = "myTimerId";
+        const wrapper = shallow(<Timer {...props} className={className} id={id} />);
+        expect(wrapper.hasClass(className)).toBeTruthy();
+        expect(wrapper.find(`#${id}`).length).toBeTruthy();
 
     });
 

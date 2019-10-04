@@ -1,60 +1,157 @@
-$blue: #41B0EE;
-$white: #ffffff;
-$grey: #cecece;
-$grey-dark: #494949;
+$blue: #41b0ee;
+$blue-darker: #007ac7;
+$gray-100: #f8f8f8;
+$gray-500: #adadad;
 $red: #FF0000;
+$body-color: #444;
+$white: #ffffff;
+$gray-800: #343434;
+
 @mixin transition($props) {
     -webkit-transition: $props;
     -moz-transition: $props;
     -o-transition: $props;
     transition: $props;
 }
+
 .form-group.date-picker {
     .input-field {
         .date-wrapper {
+            position: relative;
+
             .react-date-picker,
             .react-date-picker.react-date-picker--closed {
                 width: 100%;
+
                 .react-date-picker__wrapper {
                     background: $white;
                     width: 100%;
-                    height: 42px;
+                    height: 44px;
                     min-width: 200px;
-                    min-height: 40px;
-                    color: $grey-dark;
+                    min-height: 44px;
+                    color: $body-color;
                     border-radius: 4px;
-                    border-color: $grey;
+                    border-color: $gray-500;
                     @include transition(border-color 400ms);
+
+                    &:hover {
+                        border-color: $blue;
+                        background-color: $white;
+                    }
+
+                    &:focus-within {
+                        border-color: $blue-darker;
+                        box-shadow: none;
+                        background-color: $white;
+
+                        &:active {
+                            border-color: $blue-darker;
+                            box-shadow: none;
+                            background-color: $white;
+                        }
+                    }
+
                     .react-date-picker__inputGroup {
-                        height: 42px;
+                        height: 44px;
                         padding: 0 5px 0px 10px;
                     }
+
                     .react-date-picker__button {
+                        border-top-right-radius: 3px;
+                        border-bottom-right-radius: 3px;
                         width: 40px;
+
                         >svg {
                             fill: $blue;
                             width: 16px;
                             height: 16px;
                             margin: auto;
                         }
+
                         &:hover,
                         &:active {
                             background-color: $blue;
-                            >svg  {
+
+                            >svg {
                                 fill: $white;
+                            }
+                        }
+                    }
+
+                    .react-date-picker__clear-button {
+                        svg {
+                            stroke: $gray-500;
+                        }
+                        &:hover {
+                            background-color: transparent;
+                            svg {
+                                stroke: $gray-800;
+                            }
+                        }
+                    }
+                }
+
+                &.react-date-picker--disabled {
+                    .react-date-picker__wrapper {
+                        border-color: $gray-500;
+                        background-color: $gray-100;
+
+                        .react-date-picker__button {
+                            background-color: $gray-100;
+
+                            >svg {
+                                fill: $gray-500;
+                            }
+                        }
+                    }
+                    .react-date-picker__clear-button {
+                        &:hover {
+                            svg {
+                                stroke: $gray-500;
                             }
                         }
                     }
                 }
             }
+
             .react-date-picker__calendar .react-calendar {
+                margin-top: 4px;
                 border-radius: 4px;
-                border: 1px solid $grey;
+                border: 1px solid $gray-500;
             }
+
             .react-date-picker__calendar--above-label {
                 top: 100%;
             }
+
+            >.date-placeholder {
+                position: absolute;
+                left: 2px;
+                top: 2px;
+                bottom: 2px;
+                right: calc(100% - 80px);
+                background-color: $white;
+                padding-left: 10px;
+                display: flex;
+                align-items: center;
+                overflow: hidden;
+                pointer-events: none;
+
+                >p {
+                    margin: 0;
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
+                    overflow: hidden;
+                }
+            }
+
+            >.react-date-picker--open {
+                &+.date-placeholder {
+                    display: none;
+                }
+            }
         }
+
         &.has-error {
             .date-wrapper {
                 .react-date-picker {
@@ -63,16 +160,19 @@ $red: #FF0000;
                     }
                 }
             }
+
             .alert {
                 opacity: 1;
                 margin-top: -2px;
             }
         }
+
         .alert {
             opacity: 0;
             margin: 0;
             padding: 0;
             @include transition((opacity 200ms, margin 200ms));
+
             &.alert-danger {
                 color: $red;
                 background: none;
@@ -81,13 +181,6 @@ $red: #FF0000;
                 width: 100%;
                 padding-left: 4px;
             }
-        }
-        label.custom-label:not(.form-check-label):not(.custom-checkbox):not(.custom-radio):not(.custom-control-label) {
-            display: block;
-            margin-bottom: 4px;
-            line-height: 1;
-            font-weight: normal;
-            font-size: 12px;
         }
     }
 }

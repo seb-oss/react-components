@@ -1,6 +1,6 @@
 import * as React from "react";
-import { shallow } from "enzyme";
-import { Stepper } from "./Stepper";
+import { shallow, ReactWrapper, mount } from "enzyme";
+import { Stepper, StepperProps } from "./Stepper";
 
 describe("Component: Stepper", () => {
     const props = {
@@ -19,6 +19,15 @@ describe("Component: Stepper", () => {
     it("Should pass custom class", () => {
         const wrapper = shallow(<Stepper {...props} className="myStepper" />);
         expect(wrapper.hasClass("myStepper")).toBeTruthy();
+    });
+
+    it("Should pass down the id to the html input component", () => {
+        let mountedWrapper: ReactWrapper<StepperProps>;
+        const id: string = "my-stepper-id";
+        mountedWrapper = mount(<Stepper {...props} id={id} />);
+        expect(mountedWrapper.find(`#${id}`).length).toBeDefined();
+        mountedWrapper = mount(<Stepper {...props} />);
+        expect(mountedWrapper.find("input").getElement().props.id).toBeTruthy();
     });
 
     it("Should render label", () => {

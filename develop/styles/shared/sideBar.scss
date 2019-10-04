@@ -1,5 +1,5 @@
-@import './mixins';
-@import './variable';
+@import "./mixins";
+@import "./variable";
 
 $sidebar-width: 250px;
 
@@ -17,37 +17,44 @@ $sidebar-width: 250px;
     &.open {
         left: 0;
     }
-    .category {
-        >.title {
+    > .category {
+        > .title {
             font-size: $large;
             font-weight: bold;
             padding: 10px 5px 0px 10px;
+            >.badge {
+                line-height: 22px;
+                float: right;
+                margin: 0;
+            }
         }
-        >.nav-holder {
-            .sub-title {
+        > .nav-holder {
+            > .sub-title {
                 font-size: $medium;
                 color: $green;
                 font-weight: bold;
                 padding: 5px 20px;
             }
-            a {
+            > a {
                 display: block;
                 color: $black;
                 height: 50px;
                 position: relative;
                 font-weight: normal;
-                cursor: pointer;
-                >span {
+                > span {
                     position: absolute;
                     top: 13px;
                     left: 30px;
                 }
-            }
-            a:hover,
-            a:active,
-            .active {
-                background: $green;
-                color: $white;
+                &:hover,
+                &:active,
+                &.active {
+                    background: $green;
+                    color: $white;
+                }
+                &.active {
+                    cursor: default;
+                }
             }
         }
     }

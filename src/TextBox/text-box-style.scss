@@ -1,25 +1,39 @@
-$red: #F03529;
+@import "../colours";
+$body-color: #444 !default;
+$transition-time: 200ms;
+
 @mixin transition($props) {
     -webkit-transition: $props;
     -moz-transition: $props;
     -o-transition: $props;
     transition: $props;
 }
-$transition-time: 200ms;
+
 .form-group.input-box {
-    >.input-field {
-        >input.form-control {
-            height: 42px;
-            @include transition(border-color $transition-time);
+    > .input-field {
+        > input.form-control {
+            @import "../colours";
+            color: $body-color;
+            border: 1px solid $gray-500;
+            @include transition(border $transition-time / 2);
+            &:not(:disabled) {
+                &:hover {
+                    border-color: $blue;
+                    background-color: white;
+                }
+                &:focus {
+                    border-color: $blue-darker;
+                    box-shadow: none;
+                    background-color: white;
+                    &:active {
+                        border-color: $blue-darker;
+                        box-shadow: none;
+                        background-color: white;
+                    }
+                }
+            }
         }
-        >label.custom-label:not(.form-check-label):not(.custom-checkbox):not(.custom-radio):not(.custom-control-label) {
-            display: block;
-            margin-bottom: 4px;
-            line-height: 1;
-            font-size: 12px;
-            font-weight: normal;
-        }
-        >.alert {
+        > .alert {
             opacity: 0;
             margin: 0;
             padding: 0;
@@ -29,19 +43,24 @@ $transition-time: 200ms;
             border-radius: 0px;
             overflow: hidden;
             width: 100%;
-            @include transition((opacity $transition-time, padding $transition-time, max-height $transition-time*2));
+            @include transition((opacity $transition-time, padding $transition-time, max-height $transition-time * 2));
             &.alert-danger {
                 color: $red;
             }
         }
         &.has-error {
-            >input.form-control {
-                border: 1px solid $red;
+            > input.form-control:not(:disabled) {
+                border-bottom: 2px inset $red;
             }
-            >.alert {
+            > .alert {
                 opacity: 1;
                 padding-top: 2px;
                 max-height: 100px;
+            }
+        }
+        &.success {
+            > input.form-control:not(:disabled) {
+                border-bottom: 2px inset $green;
             }
         }
     }

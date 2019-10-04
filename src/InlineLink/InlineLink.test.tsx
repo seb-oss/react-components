@@ -1,25 +1,32 @@
 import * as React from "react";
-import { shallow } from "enzyme";
-import { InlineLink } from "./InlineLink";
+import { shallow, ShallowWrapper } from "enzyme";
+import { InlineLink, InlineLinkProps } from "./InlineLink";
 
 describe("Component: InlineLink", () => {
+    let wrapper: ShallowWrapper<InlineLinkProps>;
+
+    beforeEach(() => {
+        wrapper = shallow(<InlineLink>Link</InlineLink>);
+    });
 
     it("Should render", () => {
-        const wrapper = shallow(<InlineLink>Link</InlineLink>);
         expect(wrapper).toBeDefined();
         expect(wrapper.text()).toEqual("Link");
     });
 
-    it("Should pass custom class", () => {
-        const wrapper = shallow(<InlineLink className="myInlineLink">Link</InlineLink>);
-        expect(wrapper.hasClass("myInlineLink")).toBeTruthy();
+    it("Should pass custom class and id", () => {
+        const className: string = "myInlineLinkClass";
+        const id: string = "myInlineLinkId";
+        wrapper.setProps({ className, id });
+        expect(wrapper.hasClass(className)).toBeTruthy();
+        expect(wrapper.find(`#${id}`).length).toBeTruthy();
     });
 
     it("Should fire click event when clicked", () => {
-        const action = jest.fn();
-        const wrapper = shallow(<InlineLink onClick={action}>Link</InlineLink>);
+        const onClick: jest.Mock = jest.fn();
+        wrapper.setProps({ onClick });
         wrapper.simulate("click");
-        expect(action).toBeCalled();
+        expect(onClick).toBeCalled();
     });
 
 });

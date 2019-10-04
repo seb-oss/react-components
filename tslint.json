@@ -15,6 +15,8 @@
         "no-var-requires": false,
         "object-literal-shorthand": false,
         "no-console": false,
+        "prefer-for-of": false,
+        "jsx-boolean-value": false,
         "indent": [
             true,
             "spaces",
@@ -24,10 +26,7 @@
             true,
             "double"
         ],
-        "no-implicit-dependencies": [
-            true,
-            "dev"
-        ],
+        "no-implicit-dependencies": false,
         "no-unused-expression": [
             true,
             "allow-fast-null-checks"
@@ -64,9 +63,8 @@
             "allow-declarations",
             "allow-named-functions"
         ],
-        "no-submodule-imports": [
-            true,
-            "jsdom-global/register"
-        ]
+        "no-submodule-imports": false,
+        "no-string-literal": false,
+        "interface-over-type-literal": false
     }
 }

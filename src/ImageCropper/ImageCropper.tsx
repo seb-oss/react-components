@@ -61,8 +61,12 @@ export interface OptionProps {
     center?: boolean;
     checkCrossOrigin?: boolean;
     checkOrientation?: boolean;
+    crop?: (event: CustomEvent) => void;
     cropBoxMovable?: boolean;
     cropBoxResizable?: boolean;
+    cropend?: (event: CustomEvent) => void;
+    cropmove?: (event: CustomEvent) => void;
+    cropstart?: (event: CustomEvent) => void;
     data?: Cropper.Data;
     dragMode?: Cropper.DragMode;
     guides?: boolean;
@@ -77,6 +81,7 @@ export interface OptionProps {
     modal?: boolean;
     movable?: boolean;
     preview?: Element | Array<Element> | NodeList | string;
+    ready?: (event: CustomEvent) => void;
     responsive?: boolean;
     restore?: boolean;
     rotatable?: boolean;
@@ -84,15 +89,10 @@ export interface OptionProps {
     toggleDragModeOnDblclick?: boolean;
     viewMode?: Cropper.ViewMode;
     wheelZoomRatio?: number;
+    zoom?: (event: CustomEvent) => void;
+    zoomable?: boolean;
     zoomOnTouch?: boolean;
     zoomOnWheel?: boolean;
-    zoomable?: boolean;
-    ready?(event: CustomEvent): void;
-    zoom?(event: CustomEvent): void;
-    crop?(event: CustomEvent): void;
-    cropend?(event: CustomEvent): void;
-    cropmove?(event: CustomEvent): void;
-    cropstart?(event: CustomEvent): void;
 }
 
 export interface CanvasData {
@@ -123,6 +123,7 @@ interface ImageCropperProps {
     selectButtonText?: string;
     previewClassName?: string;
     imageCropperClassName?: string;
+    id?: string;
 
     // cropper options
     previewSrc?: string;
@@ -477,7 +478,7 @@ export class ImageCropper extends React.Component<ImageCropperProps, ImageCroppe
     render() {
         return (
             <React.Fragment>
-                <div className={"custom-cropper-dialogue" + (this.state.toggle ? " open-cropper-dialogue" : " close-cropper-dialogue")}>
+                <div className={"custom-cropper-dialogue" + (this.state.toggle ? " open-cropper-dialogue" : " close-cropper-dialogue")} id={this.props.id}>
                     <div className="cropper-dialogue-container">
                         <div className={"cropper-dialogue " + (this.props.imageCropperClassName ? this.props.imageCropperClassName : "")} onClick={this.stopProp}>
 

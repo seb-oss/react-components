@@ -13,19 +13,21 @@ interface TooltipState {
 }
 
 export interface TooltipProps {
-    title?: string;
+    className?: string;
+    customSvg?: any;
+    id?: string;
     message?: string;
     messageGroup?: Array<TooltipMessageGroupItem>;
+    onClick?: (event?: React.MouseEvent<HTMLDivElement>) => void;
     position?: string;
-    customSvg?: any;
-    width?: number;
     theme?: string;
-    className?: string;
+    title?: string;
     triggerOnHover?: boolean;
+    width?: number;
 }
 
 export class Tooltip extends React.Component<TooltipProps, TooltipState> {
-    constructor(props) {
+    constructor(props: TooltipProps) {
         super(props);
 
         this.state = {
@@ -65,20 +67,22 @@ export class Tooltip extends React.Component<TooltipProps, TooltipState> {
         return position.search(search) === 0;
     }
 
-    toggleTooltip(state?: boolean) {
+    toggleTooltip(state?: boolean, e?: React.MouseEvent<HTMLDivElement>) {
         if (state !== undefined) {
             this.setState({ toggle: state });
         } else {
             this.setState({ toggle: !this.state.toggle });
         }
+
+        this.props.onClick && this.props.onClick(e);
     }
 
     render() {
         return (
-            <div className={"tooltip-container" + (this.props.className ? ` ${this.props.className}` : "")}>
+            <div className={"tooltip-container" + (this.props.className ? ` ${this.props.className}` : "")} id={this.props.id}>
                 <div
                     className="icon"
-                    onClick={() => !this.props.triggerOnHover && this.toggleTooltip()}
+                    onClick={(e: React.MouseEvent<HTMLDivElement>) => !this.props.triggerOnHover && this.toggleTooltip(undefined, e)}
                     onMouseEnter={() => this.props.triggerOnHover && this.toggleTooltip(true)}
                     onMouseLeave={() => this.props.triggerOnHover && this.toggleTooltip(false)}
                 >

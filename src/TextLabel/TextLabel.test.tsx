@@ -1,28 +1,35 @@
 import * as React from "react";
-import { shallow } from "enzyme";
-import { TextLabel } from "./TextLabel";
+import { shallow, ShallowWrapper } from "enzyme";
+import { TextLabel, TextLabelProps } from "./TextLabel";
 
 describe("Component: TextLabel", () => {
+    let wrapper: ShallowWrapper<TextLabelProps>;
+
+    beforeEach(() => {
+        wrapper = shallow(<TextLabel value="textlabel" />);
+    });
 
     it("Should render", () => {
-        const wrapper = shallow(<TextLabel value="textlabel" />);
         expect(wrapper).toBeDefined();
     });
 
     it("Should render with correct value", () => {
-        const wrapper = shallow(<TextLabel value="textlabel" />);
         expect(wrapper.find(".custom-label-value").text()).toEqual("textlabel");
     });
 
-    it("Should pass custom class", () => {
-        const wrapper = shallow(<TextLabel value="textlabel" className="myTextlabel" />);
-        expect(wrapper.hasClass("myTextlabel")).toBeTruthy();
+    it("Should pass custom class and id", () => {
+        const className: string = "myTextlabelClass";
+        const id: string = "myTextlabelId";
+        wrapper.setProps({ className, id });
+        expect(wrapper.hasClass(className)).toBeTruthy();
+        expect(wrapper.find(`#${id}`).length).toBeTruthy();
     });
 
     it("Should render label", () => {
-        const wrapper = shallow(<TextLabel value="textlabel" label="label" />);
+        const label: string = "my label";
+        wrapper.setProps({ label });
         expect(wrapper.find("label").length).toBe(1);
-        expect(wrapper.find("label").text()).toEqual("label");
+        expect(wrapper.find("label").text()).toEqual(label);
     });
 
 });
