@@ -4,55 +4,86 @@ import "./slider-style.scss";
 const angleLeftIcon: JSX.Element = <svg name="angle-left" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 512"><path d="M25.1 247.5l117.8-116c4.7-4.7 12.3-4.7 17 0l7.1 7.1c4.7 4.7 4.7 12.3 0 17L64.7 256l102.2 100.4c4.7 4.7 4.7 12.3 0 17l-7.1 7.1c-4.7 4.7-12.3 4.7-17 0L25 264.5c-4.6-4.7-4.6-12.3.1-17z" /></svg>;
 const angleRightIcon: JSX.Element = <svg name="angle-right" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 512"><path d="M166.9 264.5l-117.8 116c-4.7 4.7-12.3 4.7-17 0l-7.1-7.1c-4.7-4.7-4.7-12.3 0-17L127.3 256 25.1 155.6c-4.7-4.7-4.7-12.3 0-17l7.1-7.1c4.7-4.7 12.3-4.7 17 0l117.8 116c4.6 4.7 4.6 12.3-.1 17z" /></svg>;
 
+export type SliderTheme = "primary" | "inverted" | "success" | "danger" | "warning" | "purple";
+
 export interface RangeSliderLabel {
     position: number;
     text: string;
 }
 
 export interface SliderProps {
-    value: number;
-    name: string;
-    onChange: (event: any) => void;
+    alwaysShowTooltip?: boolean;
+    className?: string;
+    disabled?: boolean;
+    error?: string;
     id?: string;
     label?: string;
-    min?: number;
-    max?: number;
-    step?: number;
-    className?: string;
     labels?: Array<RangeSliderLabel>;
-    showTicks?: boolean;
-    theme?: string;
-    tooltipTheme?: string;
-    alwaysShowTooltip?: boolean;
-    alternative?: boolean;
-    error?: string;
+    max?: number;
+    min?: number;
+    name: string;
+    onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
     reference?: React.RefObject<any>;
+    showTicks?: boolean;
+    step?: number;
+    theme?: SliderTheme;
+    tooltipTheme?: SliderTheme;
+    tooltipValue?: string;
+    value: number;
 }
 
-export const Slider: React.FunctionComponent<SliderProps> = (props: SliderProps): React.ReactElement<void> => {
-    const min: number = props.min ? props.min : 0;
-    const max: number = props.max ? props.max : 100;
+const Slider: React.FunctionComponent<SliderProps> = (props: SliderProps): React.ReactElement<void> => {
+    const [min, setMin] = React.useState<number>(props.min || 0);
+    const [max, setMax] = React.useState<number>(props.max || 100);
+    const [labelsPositions, setLabelsPositions] = React.useState<Array<string>>([]);
 
-    // Resetting if the values are exceeding the limits
-    if (props.value > max) {
-        props.onChange({ target: { value: max } });
-    } else if (props.value < min || props.value === null || props.value === undefined) {
-        props.onChange({ target: { value: min } });
-    }
+    React.useEffect(() => {
+        setMin(props.min || 0);
+        setMax(props.max || 100);
+    }, [props.min, props.max]);
+
+    React.useEffect(() => {
+        if (props.labels && props.labels.length) {
+            const positions: Array<string> = [];
+            props.labels.map((label: RangeSliderLabel) => {
+                positions.push(getLabelPosition(label.position) + "%");
+            });
+            setLabelsPositions(positions);
+        }
+    }, [props.labels]);
 
     /**
      * Converts the current value to percentage based on min and max
-     * @param {number} num value to be converted to percentage
+     * @param {number} value value to be converted to percentage
      * @returns {number} The precentage
      */
-    const getPercentage: (num: number) => number = (num: number): number => ((num - min) / (max - min)) * 100;
+    function getPercentage(value: number): number {
+        if (value < min) {
+            return 0;
+        } else if (value > max) {
+            return 100;
+        } else {
+            const offset: number = Math.abs(0 - min);
+            const result: number = Math.abs(((value - min) / (max - offset)) * 100);
+            return result;
+        }
+    }
+
+    function getLabelPosition(value: number): number {
+        if (value > max) {
+            return 100;
+        } else if (value < min) {
+            return 0;
+        }
+        return Math.abs(((value - min) / (max - min)) * 100);
+    }
 
     return (
         <div
             className={
                 "form-group custom-slider"
                 + (props.className ? ` ${props.className}` : "")
-                + (props.alternative ? " alternative" : "")
+                + (props.disabled ? " disabled" : "")
             }
         >
             {props.label && <label className="custom-label">{props.label}</label>}
@@ -67,6 +98,7 @@ export const Slider: React.FunctionComponent<SliderProps> = (props: SliderProps)
                     value={props.value}
                     onChange={props.onChange}
                     ref={props.reference}
+                    disabled={props.disabled}
                 />
                 <div className={"custom-slider-holder" + (props.theme ? ` ${props.theme}` : " primary")}>
                     <div className="custom-slider-track">
@@ -87,7 +119,7 @@ export const Slider: React.FunctionComponent<SliderProps> = (props: SliderProps)
                                     "custom-slider-preview" +
                                     (props.alwaysShowTooltip ? " always-show" : "") +
                                     (props.tooltipTheme ? ` ${props.tooltipTheme}` : " inverted")}
-                            >{props.value}
+                            >{props.tooltipValue || props.value}
                             </div>
                             <span className="custom-slider-icon-left">{angleLeftIcon}</span>
                             <span className="custom-slider-icon-right">{angleRightIcon}</span>
@@ -97,8 +129,9 @@ export const Slider: React.FunctionComponent<SliderProps> = (props: SliderProps)
                                 <div
                                     key={i}
                                     className={"custom-slider-label" + (props.showTicks ? " show-ticks" : "")}
-                                    style={{ left: getPercentage(label.position) + "%" }}
-                                >{label.text}
+                                    style={{ left: labelsPositions[i] }}
+                                >
+                                    {label.text}
                                 </div>
                             )
                         }
@@ -110,3 +143,5 @@ export const Slider: React.FunctionComponent<SliderProps> = (props: SliderProps)
 
     );
 };
+
+export { Slider };

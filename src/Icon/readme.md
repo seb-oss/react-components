@@ -19,16 +19,17 @@ This is a SVG code base component. The component name is `Icon` and the selector
 
 ## Basic use
 ```html
-<Icon src={<svg..... />} />
+<Icon src={<svg />} />
 ```
 
 ## Properties
 These are the current available properties:
 
-| Property   | Type         | Description                                                    |
-| ---------- | ------------ | ------------------------------------------------------------- |
-| src        | `any`        | A component which returns a `svg` or a svg directly.          |
-| className? | `number`     | Custom class can be passed here                               |
-| onClick?   | `() => void` | Click action                                                  |
-| title?     | `string`     | HTML element title shown on hover and wait                    |
-| size?      | `number`     | Icon size to be applied to both dimentions (width and height) |
+| Property   | Type                                                | Description                                                   |
+| ---------- | --------------------------------------------------- | ------------------------------------------------------------- |
+| className? | `string`                                            | Custom class can be passed here                               |
+| id?        | `string`                                            | Element id                                                    |
+| onClick?   | `(event: React.MouseEvent<HTMLDivElement>) => void` | Click action                                                  |
+| size?      | `number`                                            | Icon size to be applied to both dimentions (width and height) |
+| src        | `JSX.Element`                                       | A component which returns a `svg` or a svg directly.          |
+| title?     | `string`                                            | HTML element title shown on hover and wait                    |

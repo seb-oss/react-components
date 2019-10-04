@@ -1,21 +1,27 @@
 import * as React from "react";
-import { shallow, mount } from "enzyme";
-import { ImagePreview } from "./ImagePreview";
+import { shallow, mount, ShallowWrapper, ReactWrapper } from "enzyme";
+import { ImagePreview, ImagePreviewProps, ImagePreviewState } from "./ImagePreview";
 
 describe("Component: ImagePreview", () => {
+    let wrapper: ShallowWrapper<ImagePreviewProps>;
+    const props: ImagePreviewProps = { handleUploadImage: jest.fn() };
+
+    beforeEach(() => {
+        wrapper = shallow(<ImagePreview {...props} />);
+    });
 
     it("Should render", () => {
-        const wrapper = shallow(<ImagePreview handleUploadImage={(e) => console.log("it has been click ", e)} />);
         expect(wrapper).toBeDefined();
     });
 
     it("Should pass custom class", () => {
-        const wrapper = shallow(<ImagePreview handleUploadImage={(e) => console.log("it has been click ", e)} previewClassName="my-preview" />);
-        expect(wrapper.hasClass("my-preview")).toBeTruthy();
+        const className: string = "my-preview";
+        wrapper.setProps({ previewClassName: className });
+        expect(wrapper.hasClass(className)).toBeTruthy();
     });
 
-    it("should render default svg image when previewSrc is empty", () => {
-        const wrapper = shallow(<ImagePreview handleUploadImage={(e) => console.log("it has been click ", e)} previewSrc="" />);
+    it("Should render default svg image when previewSrc is empty", () => {
+        wrapper.setProps({ previewSrc: "" });
         expect(wrapper.find(".profile-image").find("svg")).toBeTruthy();
         expect(wrapper.find(".profile-image").find("img").exists()).toBeFalsy();
         wrapper.setProps({ previewSrc: "xxxxx" });
@@ -24,62 +30,48 @@ describe("Component: ImagePreview", () => {
         expect(wrapper.find(".profile-image").find("img").exists()).toBeTruthy();
     });
 
-    it("Button select image should trigger file upload on click", (doneFn) => {
-        const action = jest.fn();
-        const wrapper: any = shallow(<ImagePreview handleUploadImage={action} previewClassName="my-preview" />);
+    it("Button select image should trigger file upload on click", () => {
         wrapper.find("#fileInput").simulate("change", { target: { value: "file" } });
-        expect(action).toBeCalled();
-
-        // perform click on file
+        expect(props.handleUploadImage).toBeCalled();
+        wrapper.setProps({ previewSrc: "The source" });
+        wrapper.find(".custom-button").simulate("click", { target: { value: "file" } });
+        expect(props.handleUploadImage).toHaveBeenCalledTimes(2);
         wrapper.find("#fileInput").simulate("click", { target: { value: "file" } });
-
-        setTimeout(() => {
-            doneFn();
-        }, 1000);
-
+        wrapper.find("#fileInput").simulate("click", { target: null });
     });
 
-    it("open file button click should call the onFileInputClick function", (doneFn) => {
+    it("Should call onFileInputClick when open file button is clicked", () => {
         const fileInputClickMock = jest.spyOn(ImagePreview.prototype, "onFileInputClick");
-        const wrapper = mount(<ImagePreview handleUploadImage={(e) => console.log("it has been click ", e)} previewClassName="my-preview" />);
-
-        wrapper.find("button").simulate("click");
-        setTimeout(() => {
-            expect(fileInputClickMock).toHaveBeenCalled();
-            doneFn();
-        }, 1000);
+        const mountedWrapper: ReactWrapper<ImagePreviewProps, any, ImagePreview> = mount(<ImagePreview {...props} />);
+        mountedWrapper.find("button").simulate("click");
+        expect(fileInputClickMock).toHaveBeenCalled();
     });
 
-    it("open file button should call handleUploadImage when cropResult is provided", (doneFn) => {
-        const action = jest.fn();
-        const wrapper = mount(<ImagePreview handleUploadImage={action} previewClassName="my-preview" previewSrc="xxxxx" />);
-        wrapper.find("button").simulate("click");
-        setTimeout(() => {
-            expect(action).toHaveBeenCalled();
-            doneFn();
-        }, 1000);
+    it("Should call handleUploadImage when clicking on open file button given that cropResult is provided", () => {
+        const mountedWrapper: ReactWrapper<ImagePreviewProps, ImagePreviewState, ImagePreview> = mount(<ImagePreview {...props} />);
+        const cropResult: string = "Result is stored here";
+        mountedWrapper.setProps({ cropResult });
+        mountedWrapper.find("button").simulate("click");
+        expect(props.handleUploadImage).toHaveBeenCalled();
     });
 
-    it("componentDidUpdate should change cropResult when there is change", (doneFn) => {
-        const wrapper = mount(<ImagePreview handleUploadImage={(e) => { console.log(e); }} previewClassName="my-preview" />);
-        expect(wrapper.prop("cropResult")).toBeFalsy();
-
-        wrapper.setProps({ cropResult: "xxxxx" });
-
-        expect(wrapper.prop("cropResult")).toEqual("xxxxx");
-
-        doneFn();
+    it("The value of `cropDataResult` state should change when the prop value of `cropResult` is changed", () => {
+        const cropResult: string = "result";
+        const mountedWrapper: ReactWrapper<ImagePreviewProps, ImagePreviewState, ImagePreview> = mount(<ImagePreview {...props} />);
+        expect(mountedWrapper.state("cropDataResult")).toEqual("");
+        mountedWrapper.setProps({ cropResult });
+        expect(mountedWrapper.state("cropDataResult")).toEqual(cropResult);
     });
 
-    it("croppedData should be cleared or initialised on first mount", (doneFn) => {
-        const wrapper: any = shallow(<ImagePreview handleUploadImage={(e) => console.log("it has been click ", e)} previewSrc="xxxxx" />);
-
-        expect(wrapper.find(".profile-image").find("img").prop("src")).toEqual("xxxxx");
-        wrapper.setProps({ previewSrc: undefined });
-        wrapper.instance().componentDidMount();
-        console.log(wrapper.find(".profile-image").find("img").debug());
-        expect(wrapper.find(".profile-image").find("img").exists()).toBeFalsy();
-        expect(wrapper.find(".profile-image").find("svg").exists()).toBeTruthy();
+    it("CroppedData should be cleared or initialised on first mount", (doneFn) => {
+        const previewSrc: string = "imageSource";
+        const mountedWrapper: ReactWrapper<ImagePreviewProps, ImagePreviewState, ImagePreview> = mount(<ImagePreview {...props} previewSrc={previewSrc} />);
+        expect(mountedWrapper.find(".profile-image").find("img").prop("src")).toEqual(previewSrc);
+        mountedWrapper.unmount();
+        mountedWrapper.setProps({ previewSrc: undefined });
+        mountedWrapper.mount();
+        expect(mountedWrapper.find(".profile-image").find("img").exists()).toBeFalsy();
+        expect(mountedWrapper.find(".profile-image").find("svg").exists()).toBeTruthy();
         doneFn();
     });
 

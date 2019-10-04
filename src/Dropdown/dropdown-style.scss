@@ -9,6 +9,7 @@ $body-color: #444 !default;
 $grey-500: #adadad !default;
 $gray-100: #f8f8f8;
 $red-dark: #d81a1a;
+$white: #fff;
 
 @mixin transform($props) {
     -webkit-transform: $props;
@@ -28,7 +29,7 @@ $red-dark: #d81a1a;
 .custom-dropdown {
     margin-bottom: 8px;
     > .custom-dropdown-toggle {
-        background-color: white;
+        background-color: $white;
         height: $dropdown-toggle-height;
         min-width: $dropdown-width;
         padding: 0px;
@@ -58,6 +59,7 @@ $red-dark: #d81a1a;
                     width: $icon-size;
                     height: $icon-size;
                     fill: $blue-dark;
+                    cursor: pointer;
                 }
             }
         }
@@ -74,18 +76,18 @@ $red-dark: #d81a1a;
 
         &:hover {
             border-color: $blue;
-            background-color: white;
+            background-color: $white;
         }
 
         &:focus {
             border-color: $blue-darker;
             box-shadow: none;
-            background-color: white;
+            background-color: $white;
             &:active {
                 color: $body-color;
                 border-color: $blue-darker;
                 box-shadow: none;
-                background-color: white;
+                background-color: $white;
             }
         }
 
@@ -102,7 +104,7 @@ $red-dark: #d81a1a;
                 width: calc(#{$dropdown-toggle-height} / 1.2);
                 &:focus {
                     &:active {
-                        fill: white;
+                        fill: $white;
                     }
                 }
             }
@@ -110,7 +112,7 @@ $red-dark: #d81a1a;
             &:hover {
                 background-color: $blue !important;
                 > .right-items > .dropdown-icon-holder > svg {
-                    fill: white;
+                    fill: $white;
                 }
             }
 
@@ -124,7 +126,7 @@ $red-dark: #d81a1a;
             &.open {
                 background-color: $blue-darker !important;
                 > .right-items > .dropdown-icon-holder > svg {
-                    fill: white;
+                    fill: $white;
                 }
             }
         }
@@ -158,7 +160,7 @@ $red-dark: #d81a1a;
         > .custom-dropdown-item {
             display: flex;
             padding-left: 16px;
-            background: white;
+            background: $white;
             color: $body-color;
 
             &:focus {
@@ -181,7 +183,7 @@ $red-dark: #d81a1a;
                     user-select: none;
                     &::before {
                         border-color: $body-color;
-                        background-color: white;
+                        background-color: $white;
                     }
                     &::after {
                         background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3e%3cpath fill='%23fff' d='M6.564.75l-3.59 3.612-1.538-1.55L0 4.26 2.974 7.25 8 2.193z'/%3e%3c/svg%3e");
@@ -191,22 +193,22 @@ $red-dark: #d81a1a;
 
             &.highlighted {
                 background-color: $blue;
-                color: white;
+                color: $white;
                 .custom-control {
                     .custom-control-label {
-                        color: white;
+                        color: $white;
                     }
                 }
 
                 &.selected {
                     background-color: $blue-darker;
-                    color: white;
+                    color: $white;
                     .custom-control {
                         .custom-control-label,
                         .custom-control-input {
                             &::before {
-                                color: white;
-                                border-color: white;
+                                color: $white;
+                                border-color: $white;
                             }
                         }
                     }
@@ -214,13 +216,13 @@ $red-dark: #d81a1a;
             }
 
             &.selected {
-                background-color: white;
+                background-color: $white;
                 color: $blue-darker;
                 .custom-control {
                     .custom-control-label,
                     .custom-control-input {
                         &::before {
-                            color: white;
+                            color: $white;
                             border-color: $blue-darker;
                             background-color: $blue-darker;
                         }
@@ -247,6 +249,7 @@ $red-dark: #d81a1a;
 
             > .right-items > .dropdown-icon-holder > svg {
                 fill: $grey-500;
+                cursor: default;
             }
 
             &.more {
@@ -256,6 +259,7 @@ $red-dark: #d81a1a;
                     background-color: $gray-100;
                     > .right-items > .dropdown-icon-holder > svg {
                         fill: $grey-500;
+                        cursor: default;
                     }
                 }
             }
@@ -269,7 +273,7 @@ $red-dark: #d81a1a;
     &.disabled {
         border-color: $grey-500;
         color: $grey-500;
-        background-color: white;
+        background-color: $white;
     }
 }
 

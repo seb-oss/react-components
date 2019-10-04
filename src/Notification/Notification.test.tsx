@@ -38,13 +38,13 @@ describe("Component: Notification", () => {
         });
 
         it("Should render with defaults if style or position props passed is not supported", () => {
-            wrapper.setProps({ style: "bingo", position: "top-right" });
+            wrapper.setProps({ style: "bingo" as any, position: "top-right" });
             expect(wrapper.hasClass("style-slide-in")).toBeTruthy();
             expect(wrapper.hasClass("top-right")).toBeTruthy();
             wrapper.setProps({ style: "slide-in", position: "top-left" });
             expect(wrapper.hasClass("style-slide-in")).toBeTruthy();
             expect(wrapper.hasClass("top-left")).toBeTruthy();
-            wrapper.setProps({ position: "bingo" });
+            wrapper.setProps({ position: "bingo" as any });
             expect(wrapper.hasClass("bottom-left")).toBeTruthy();
         });
     });

@@ -32,18 +32,18 @@ These are the current available properties:
 
 | Property         | Type                      | Description                                               |
 | ---------------- | ------------------------- | -------------------------------------------------------- |
-| value            | `number`                  | Current page                                             |
-| size             | `number`                  | maximum number of pages                                  |
-| offset?          | `number`                  | Maximum number of buttons to show (default: `10`)        |
-| onChange?        | `(value: number) => void` | Change event passes the number of page to be displayed   |
-| useTextNav?      | `boolean`                 | Use text-base navigation buttons (default: `false`)      |
-| useFirstAndLast? | `boolean`                 | Use first and last navigation buttons (default: `false`) |
-| nextText?        | `string`                  | Next text value (default: `'Next'`)                      |
-| previousText?    | `string`                  | Previous text value (default: `'Previous'`)              |
+| className?       | `string`                  | Custom class can be passed here                          |
 | firstText?       | `string`                  | First text value (default: `'First'`)                    |
 | lastText?        | `string`                  | Last text value (default: `'Last'`)                      |
+| nextText?        | `string`                  | Next text value (default: `'Next'`)                      |
+| offset?          | `number`                  | Maximum number of buttons to show (default: `10`)        |
+| onChange?        | `(value: number) => void` | Change event passes the number of page to be displayed   |
+| previousText?    | `string`                  | Previous text value (default: `'Previous'`)              |
+| size             | `number`                  | maximum number of pages                                  |
 | useDotNav?       | `boolean`                 | Use dot-navigation<sup>1</sup>                           |
-| className?       | `string`                  | Custom class can be passed here                          |
+| useFirstAndLast? | `boolean`                 | Use first and last navigation buttons (default: `false`) |
+| useTextNav?      | `boolean`                 | Use text-base navigation buttons (default: `false`)      |
+| value            | `number`                  | Current page                                             |
 
 ## Footnote
 1. Dot navigation does not support `offset`, it is not meant to have big size navigation. For that, use the normal numbered navigation.

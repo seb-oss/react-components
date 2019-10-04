@@ -25,7 +25,8 @@ This React component replaces anchor tags. The component name is `InlineLink` an
 ## Properties
 These are the current available properties:
 
-| Property   | Type       | Description    |
+| Property   | Type       | Description   |
 | ---------- | ---------- | ------------- |
-| onClick?   | `()=>void` | Click handler |
 | className? | `string`   | Custom class  |
+| id?        | `string`   | Element id    |
+| onClick?   | `()=>void` | Click handler |

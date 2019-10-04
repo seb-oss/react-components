@@ -1,123 +1,151 @@
 import * as React from "react";
-import { DropDown, DropDownItem } from "../../../src/DropDown/DropDown";
-import { getParameterByName } from "../../utils/queryString";
+import { Dropdown, DropdownItem } from "../../../src/Dropdown/Dropdown";
+import { Toggle } from "../../../src/Toggle/Toggle";
 const Highlight = (require("react-highlight")).default;
-const docMD = require("../../../src/DropDown/readme.md");
+const docMD: string = require("../../../src/Dropdown/readme.md");
 
-export default class DropdownPage extends React.Component<any, any>  {
-    constructor(props: any) {
-        super(props);
-        this.state = {
-            dropDownList1: [
-                { value: "1", label: "Serbia" },
-                { value: "2", label: "Nicaragua" },
-                { value: "3", label: "Singapore" },
-                { value: "4", label: "Guinea" },
-                { value: "5", label: "Syrian Arab Republic" },
-                { value: "6", label: "Tanzania" },
-                { value: "7", label: "Anguilla" },
-            ],
-            dropDownList1Selected: null,
-            dropDownList2: [
-                { value: "1", label: "Mexico" },
-                { value: "2", label: "Guernsey" },
-                { value: "3", label: "Lithuania" },
-                { value: "4", label: "Poland" },
-                { value: "5", label: "Montenegro" },
-                { value: "6", label: "Iran" },
-                { value: "7", label: "Myanmar" },
-            ],
-            dropDownList2Selected: null,
-            dropDownList3: [
-                { value: "1", label: "Paraguay" },
-                { value: "2", label: "Dominican Republic" },
-                { value: "3", label: "Mongolia" },
-                { value: "4", label: "Montserrat" },
-                { value: "5", label: "Thailand" },
-                { value: "6", label: "Japan" },
-                { value: "7", label: "Saint Vincent and the Grenadines" },
-            ],
-            dropDownList3Selected: null,
-            dropDownList4: [
-                { value: "1", label: "Sierra Leone" },
-                { value: "2", label: "Malawi" },
-                { value: "3", label: "Marshall Islands" },
-                { value: "4", label: "Latvia" },
-                { value: "5", label: "Slovenia" },
-                { value: "6", label: "Argentina" },
-                { value: "7", label: "Solomon Islands" },
-            ],
-            dropDownList4Selected: null
-        };
+const DropdownPage: React.FunctionComponent = () => {
+    const [dropDownList1Selected, setDropdownList1Selected] = React.useState<DropdownItem>(null);
+    const [dropDownList2Selected, setDropdownList2Selected] = React.useState<Array<DropdownItem>>([]);
+    const [dropDownList3Selected, setDropdownList3Selected] = React.useState<DropdownItem>(null);
+    const [dropDownList4Selected, setDropdownList4Selected] = React.useState<DropdownItem>(null);
+    const [dropDownList5Selected, setDropdownList5Selected] = React.useState<Array<DropdownItem>>([]);
+    const [disabled, setDisabled] = React.useState<boolean>(false);
 
-        this.onChangeDropdown = this.onChangeDropdown.bind(this);
-    }
+    return (
+        <div className="route-template container">
+            <div className="info-holder">
 
-    onChangeDropdown(value: DropDownItem | Array<DropDownItem> | string, name: string) {
-        this.setState({ [name]: value });
-    }
+                <div className="info">
+                    <div className="md-file">
+                        <Highlight innerHTML={true}>{docMD}</Highlight>
+                    </div>
+                </div>
 
-    render() {
-        const mode = getParameterByName(this.props.location.search, "mode");
-        return (
-            <div className={"route-template " + ((mode === "dl" || mode === "DL") ? "brief" : "")}>
-                <div className="info-holder">
-
-                    <div className="info">
-                        <div className="md-file">
-                            <Highlight innerHTML={true}>{docMD}</Highlight>
-                        </div>
+                <div className="info">
+                    <h2>Output</h2>
+                    <p>Here is the basic one:</p>
+                    <div className="result">
+                        <Dropdown
+                            label="Single select"
+                            list={dropDownList1}
+                            selectedValue={dropDownList1Selected}
+                            onChange={(value: DropdownItem) => setDropdownList1Selected(value)}
+                            disabled={disabled}
+                        />
                     </div>
 
-                    <div className="info">
-                        <h2>Output</h2>
-                        <p>Here is the basic one:</p>
-                        <div className="result">
-                            <DropDown
-                                list={this.state.dropDownList1}
-                                selectedValue={this.state.dropDownList1Selected}
-                                onChange={(value: DropDownItem | Array<DropDownItem>) => this.onChangeDropdown(value, "dropDownList1Selected")}
-                            />
-                        </div>
+                    <p>Here is the multi select one with search:</p>
+                    <div className="result">
+                        <Dropdown
+                            label="Multi-select"
+                            name="dropDownList2"
+                            list={dropDownList2}
+                            selectedValue={dropDownList2Selected}
+                            onChange={(value: Array<DropdownItem>) => setDropdownList2Selected(value)}
+                            searchable={true}
+                            placeholder="Multi option"
+                            multi={true}
+                            disabled={disabled}
+                        />
+                    </div>
 
-                        <p>Here is the multi select one with search:</p>
-                        <div className="result">
-                            <DropDown
-                                label="Dropdown label"
-                                name="dropDownList2"
-                                list={this.state.dropDownList2}
-                                selectedValue={this.state.dropDownList2Selected}
-                                onChange={(value: DropDownItem | Array<DropDownItem>) => this.onChangeDropdown(value, "dropDownList2Selected")}
-                                searchable={true}
-                                placeholder="Multi option"
-                                multi={true}
-                            />
-                        </div>
+                    <p>Here is the more button version:</p>
+                    <div className="result">
+                        <Dropdown
+                            name="dropDownList3"
+                            list={dropDownList3}
+                            selectedValue={dropDownList3Selected}
+                            onChange={(value: DropdownItem) => setDropdownList3Selected(value)}
+                            more={true}
+                            disabled={disabled}
+                        />
+                    </div>
 
-                        <p>Here is the more button version:</p>
-                        <div className="result">
-                            <DropDown
-                                name="dropDownList3"
-                                list={this.state.dropDownList3}
-                                selectedValue={this.state.dropDownList3Selected}
-                                onChange={(item: DropDownItem) => console.log(`${item.label} - selected`)}
-                                more={true}
-                            />
-                        </div>
+                    <p>Here is the native version:</p>
+                    <div className="result">
+                        <Dropdown
+                            label="Native dropdown"
+                            name="dropDownList4"
+                            list={dropDownList4}
+                            selectedValue={dropDownList4Selected}
+                            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+                                setDropdownList4Selected({ value: e.target.value, label: dropDownList4[e.target.selectedIndex].label });
+                            }}
+                            native={true}
+                            disabled={disabled}
+                        />
+                        <Dropdown
+                            label="Native dropdown"
+                            name="dropDownList4"
+                            list={dropDownList4}
+                            selectedValue={dropDownList5Selected}
+                            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+                                if (e && e.currentTarget.selectedOptions) {
+                                    const values: Array<DropdownItem> = [];
+                                    let option: HTMLOptionElement;
+                                    for (let i = 0; i < e.currentTarget.selectedOptions.length; i++) {
+                                        option = e.currentTarget.selectedOptions[i];
+                                        values.push({ label: option.label, value: option.value });
+                                    }
+                                    setDropdownList5Selected(values);
+                                }
+                            }}
+                            multi={true}
+                            native={true}
+                            disabled={disabled}
+                        />
+                    </div>
 
-                        <p>Here is the native version:</p>
-                        <div className="result">
-                            <DropDown
-                                name="dropDownList4"
-                                list={this.state.dropDownList4}
-                                selectedValue={this.state.dropDownList4Selected}
-                                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => this.onChangeDropdown({ value: e.target.value, label: "" }, "dropDownList4Selected")}
-                                native={true}
-                            />
-                        </div>
+                    <div className="result mt-5">
+                        <Toggle
+                            name="disabled-toggle"
+                            label="Disabled all"
+                            value={disabled}
+                            onChange={(e) => setDisabled(e.target.checked)}
+                        />
                     </div>
                 </div>
             </div>
-        );
-    }
-}
+        </div>
+    );
+};
+
+const dropDownList1: Array<DropdownItem> = [
+    { value: "1", label: "Serbia" },
+    { value: "2", label: "Nicaragua" },
+    { value: "3", label: "Singapore" },
+    { value: "4", label: "Guinea" },
+    { value: "5", label: "Syrian Arab Republic" },
+    { value: "6", label: "Tanzania" },
+    { value: "7", label: "Anguilla" },
+];
+const dropDownList2: Array<DropdownItem> = [
+    { value: "1", label: "Mexico" },
+    { value: "2", label: "Guernsey" },
+    { value: "3", label: "Lithuania" },
+    { value: "4", label: "Poland" },
+    { value: "5", label: "Montenegro" },
+    { value: "6", label: "Iran" },
+    { value: "7", label: "Myanmar" },
+];
+const dropDownList3: Array<DropdownItem> = [
+    { value: "1", label: "Paraguay" },
+    { value: "2", label: "Dominican Republic" },
+    { value: "3", label: "Mongolia" },
+    { value: "4", label: "Montserrat" },
+    { value: "5", label: "Thailand" },
+    { value: "6", label: "Japan" },
+    { value: "7", label: "Saint Vincent and the Grenadines" },
+];
+const dropDownList4: Array<DropdownItem> = [
+    { value: "1", label: "Sierra Leone" },
+    { value: "2", label: "Malawi" },
+    { value: "3", label: "Marshall Islands" },
+    { value: "4", label: "Latvia" },
+    { value: "5", label: "Slovenia" },
+    { value: "6", label: "Argentina" },
+    { value: "7", label: "Solomon Islands" },
+];
+
+export default DropdownPage;

@@ -1,23 +1,31 @@
 import * as React from "react";
-import { shallow } from "enzyme";
-import { Breadcrumb } from "./Breadcrumb";
+import { shallow, ShallowWrapper } from "enzyme";
+import { Breadcrumb, BreadcrumbProps } from "./Breadcrumb";
 
 describe("Component: Breadcrumb", () => {
+    let wrapper: ShallowWrapper<BreadcrumbProps>;
     const breadcrumbList: Array<string> = ["First", "Second", "Third"];
 
+    beforeEach(() => {
+        wrapper = shallow(<Breadcrumb list={breadcrumbList} />);
+    });
+
     it("Should render", () => {
-        const wrapper = shallow(<Breadcrumb list={breadcrumbList} />);
         expect(wrapper).toBeDefined();
     });
 
-    it("Should render custom className", () => {
-        const wrapper = shallow(<Breadcrumb list={breadcrumbList} className="my-breadcrumb" />);
-        expect(wrapper.hasClass("my-breadcrumb")).toBeTruthy();
+    it("Should render custom className and id", () => {
+        const className: string = "myBreadcrumbClass";
+        const id: string = "myBreadcrubID";
+        wrapper.setProps({ className, id });
+        wrapper.find(".breadcrumb-item").first().simulate("click"); // Simulates scenario where there is no onClick
+        expect(wrapper.hasClass(className)).toBeTruthy();
+        expect(wrapper.find(`#${id}`).length).toBeGreaterThan(0);
     });
 
     it("Should fire click event when clicked", () => {
-        const onClick = jest.fn();
-        const wrapper = shallow(<Breadcrumb list={breadcrumbList} onClick={onClick} />);
+        const onClick: jest.Mock = jest.fn();
+        wrapper.setProps({ onClick });
         wrapper.find(".breadcrumb-item").first().simulate("click");
         expect(onClick).toBeCalled();
     });

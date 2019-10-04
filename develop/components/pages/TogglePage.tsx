@@ -1,44 +1,55 @@
 import * as React from "react";
 import { Toggle } from "../../../src/Toggle/Toggle";
-import { getParameterByName } from "../../utils/queryString";
 const Highlight = (require("react-highlight")).default;
-const docMD = require("../../../src/Toggle/readme.md");
+const docMD: string = require("../../../src/Toggle/readme.md");
 
-export default class TogglePage extends React.Component<any, any>  {
-    constructor(props: any) {
-        super(props);
-        this.state = {
-            toggleValue: true
-        };
-    }
+const TogglePage: React.FunctionComponent = () => {
+    const [toggleValue, setToggleValue] = React.useState<boolean>(true);
 
-    render() {
-        const mode = getParameterByName(this.props.location.search, "mode");
-        return (
-            <div className={"route-template " + ((mode === "dl" || mode === "DL") ? "brief" : "")}>
-                <div className="info-holder">
+    return (
+        <div className="route-template container">
+            <div className="info-holder">
 
-                    <div className="info">
-                        <div className="md-file">
-                            <Highlight innerHTML={true}>{docMD}</Highlight>
-                        </div>
+                <div className="info">
+                    <div className="md-file">
+                        <Highlight innerHTML={true}>{docMD}</Highlight>
+                    </div>
+                </div>
+
+                <div className="info">
+                    <h2>Output</h2>
+                    <p>Here are sample outputs</p>
+                    <div className="result">
+                        <Toggle
+                            name="myToggle"
+                            label="Toggle label"
+                            value={toggleValue}
+                            id="my-toggle"
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setToggleValue(e.target.checked)}
+                        />
                     </div>
 
-                    <div className="info">
-                        <h2>Output</h2>
-                        <p>Here are sample outputs</p>
-                        <div className="result">
-                            <Toggle
-                                name="myToggle"
-                                id="myToggleId"
-                                label="Field label"
-                                value={this.state.toggleValue}
-                                onChange={(event) => { this.setState({ toggleValue: event.target.checked }); }}
-                            />
-                        </div>
+                    <p>Disabled</p>
+                    <div className="result">
+                        <Toggle
+                            name="checked-disabled"
+                            label="Disabled - Checked"
+                            value={true}
+                            disabled={true}
+                            onChange={() => null}
+                        />
+                        <Toggle
+                            name="unchecked-disabled"
+                            label="Disabled - Unchecked"
+                            value={false}
+                            disabled={true}
+                            onChange={() => null}
+                        />
                     </div>
                 </div>
             </div>
-        );
-    }
-}
+        </div>
+    );
+};
+
+export default TogglePage;

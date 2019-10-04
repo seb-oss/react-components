@@ -2,10 +2,11 @@
 title: Checkbox
 componentid: component-checkbox
 variantid: default
-guid: 'checkbox-guid-default-component-react'
+guid: "checkbox-guid-default-component-react"
 ---
 
 ## Element name
+
 ```javascript
 Name: CheckBox Component
 Component: "CheckBox"
@@ -14,10 +15,12 @@ Import: "@sebgroup/react-components/dist/CheckBox"
 Type: Form Component
 ```
 
-## Element information 
+## Element information
+
 This React component is based on SEB Bootstrap style. Supports customization and configurations. The component name is `CheckBox` and the selector is `<CheckBox/>`.
 
 ## Basic use
+
 ```html
 <CheckBox
     name="checkbox"
@@ -28,18 +31,20 @@ This React component is based on SEB Bootstrap style. Supports customization and
 ```
 
 ## Properties
+
 These are the current available properties:
 
-| Property       | Type                   | Description                              |
-| -------------- | ---------------------- | --------------------------------------- |
-| name           | `string`               | name property                           |
-| checked        | `boolean`              | the checked value                       |
-| label          | `string`               | checkbox label                          |
-| topLabel       | `string`               | a label which shows on top of component |
-| onChange       | `(event: any) => void` | on change action                        |
-| id?            | `string`               | id property                             |
-| className?     | `string`               | custom class                            |
-| disabled?      | `boolean`              | Disabled status                         |
-| description?   | `string`               | a option description                    |
-| error?         | `string`               | error message                           |
-| reference?     | `React.RefObject<any>` | React Ref obj                           |
+| Property     | Type                                                   | Description                                                            |
+| ------------ | ------------------------------------------------------ | ---------------------------------------------------------------------- |
+| checked      | `boolean`                                              | The checked value                                                      |
+| className?   | `string`                                               | Custom class                                                           |
+| description? | `string`                                               | A option description                                                   |
+| disabled?    | `boolean`                                              | Disabled status                                                        |
+| id?          | `string`                                               | Id property                                                            |
+| inline?      | `boolean`                                              | Renders inline checkbox                                                |
+| label        | `string`                                               | Checkbox label                                                         |
+| name         | `string`                                               | Name property                                                          |
+| onChange     | `(event: React.ChangeEvent<HTMLInputElement>) => void` | On change action                                                       |
+| reference?   | `React.RefObject<HTMLInputElement>`                    | React Ref obj                                                          |
+| topLabel?    | `string`                                               | A label which shows on top of component                                |
+| condensed?   | `boolean`                                              | Condenses the checkboxes. Usefull when rendering them below each other |

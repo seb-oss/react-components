@@ -13,9 +13,12 @@ describe("Component: Tooltip ", () => {
         expect(wrapper).toBeDefined();
     });
 
-    it("Should pass custom class", () => {
-        wrapper.setProps({ className: "myTooltip" });
-        expect(wrapper.hasClass("myTooltip")).toBeTruthy();
+    it("Should pass custom class and id", () => {
+        const className: string = "myTooltipClass";
+        const id: string = "myTooltipId";
+        wrapper.setProps({ className, id });
+        expect(wrapper.hasClass(className)).toBeTruthy();
+        expect(wrapper.find(`#${id}`).length).toBeTruthy();
     });
 
     it("Should render a title and a message", () => {

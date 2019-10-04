@@ -32,25 +32,26 @@ This React component is based on SEB Bootstrap style. Supports customization and
 ## Properties
 These are the current available properties:
 
-| Property     | Type                                                        | Description                                  |
+| Property     | Type                                                        | Description                                 |
 | ------------ | ----------------------------------------------------------- | ------------------------------------------- |
-| value        | `string`                                                    | Value string                                |
-| name         | `string`                                                    | Name string                                 |
-| onChange     | `(event: React.ChangeEvent<HTMLTextAreaElement>) => void`   | On `'change'` event                         |
-| onKeyDown?   | `(event: React.KeyboardEvent<HTMLTextAreaElement>) => void` | On `'keydown'` event                        |
-| onKeyUp?     | `(event: React.KeyboardEvent<HTMLTextAreaElement>) => void` | On `'keyup'` event                          |
-| onKeyPress?  | `(event: React.KeyboardEvent<HTMLTextAreaElement>) => void` | On `'keypress'` event                       |
-| onFocus?     | `(event: React.FocusEvent<HTMLTextAreaElement>) => void`    | On `'focus'` event                          |
-| onBlur?      | `(event: React.FocusEvent<HTMLTextAreaElement>) => void`    | On `'blur'` event                           |
-| cols?        | `number`                                                    | Jumber of cols                              |
-| rows?        | `number`                                                    | Number of rows                              |
 | className?   | `string`                                                    | Custom class                                |
-| placeHolder? | `string`                                                    | Placeholder text                            |
-| label?       | `string`                                                    | The small label on top of the textbox       |
-| resizable?   | `boolean`                                                   | Disable textarea resize. (default: `true`)  |
-| error?       | `string`                                                    | Error text                                  |
+| cols?        | `number`                                                    | Jumber of cols                              |
 | disabled?    | `boolean`                                                   | Disable textarea. (default: `false`)        |
+| error?       | `string`                                                    | Error text                                  |
 | focus?       | `boolean`                                                   | Enable autofocus. (default: `false`)        |
-| readonly?    | `boolean`                                                   | Make textatrea readonly. (default: `false`) |
+| id?          | `string`                                                    | Element id                                  |
+| label?       | `string`                                                    | The small label on top of the textbox       |
 | max?         | `number`                                                    | Input max length                            |
+| name         | `string`                                                    | Name string                                 |
+| onBlur?      | `(event: React.FocusEvent<HTMLTextAreaElement>) => void`    | On `'blur'` event                           |
+| onChange     | `(event: React.ChangeEvent<HTMLTextAreaElement>) => void`   | On `'change'` event                         |
+| onFocus?     | `(event: React.FocusEvent<HTMLTextAreaElement>) => void`    | On `'focus'` event                          |
+| onKeyDown?   | `(event: React.KeyboardEvent<HTMLTextAreaElement>) => void` | On `'keydown'` event                        |
+| onKeyPress?  | `(event: React.KeyboardEvent<HTMLTextAreaElement>) => void` | On `'keypress'` event                       |
+| onKeyUp?     | `(event: React.KeyboardEvent<HTMLTextAreaElement>) => void` | On `'keyup'` event                          |
+| placeHolder? | `string`                                                    | Placeholder text                            |
+| readonly?    | `boolean`                                                   | Make textatrea readonly. (default: `false`) |
 | reference?   | `React.RefObject<HTMLTextAreaElement>`                      | React Ref obj                               |
+| resizable?   | `boolean`                                                   | Disable textarea resize. (default: `true`)  |
+| rows?        | `number`                                                    | Number of rows                              |
+| value        | `string`                                                    | Value string                                |

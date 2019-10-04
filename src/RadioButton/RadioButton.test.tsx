@@ -1,9 +1,10 @@
 import * as React from "react";
-import { shallow } from "enzyme";
-import { RadioButton } from "./RadioButton";
+import { shallow, ShallowWrapper, ReactWrapper, mount } from "enzyme";
+import { RadioButton, RadioButtonProps } from "./RadioButton";
 
 describe("Component: RadioButton", () => {
-    const props = {
+    let wrapper: ShallowWrapper<RadioButtonProps>;
+    const props: RadioButtonProps = {
         value: "wer",
         label: "label",
         onChange: jest.fn(),
@@ -11,42 +12,54 @@ describe("Component: RadioButton", () => {
         radioValue: "male"
     };
 
+    beforeEach(() => {
+        wrapper = shallow(<RadioButton {...props} />);
+    });
+
     it("Should render", () => {
-        const wrapper = shallow(<RadioButton {...props} />);
         expect(wrapper).toBeDefined();
     });
 
-    it("Should pass custom class", () => {
-        const wrapper = shallow(<RadioButton {...props} className="myRadiobutton" />);
-        expect(wrapper.hasClass("myRadiobutton")).toBeTruthy();
+    it("Should pass custom class and id", () => {
+        const className: string = "myRadiobuttonClass";
+        const id: string = "myRadiobuttonId";
+        const mountedWrapper: ReactWrapper<RadioButtonProps> = mount(<RadioButton {...props} className={className} id={id} />);
+        expect(mountedWrapper.hasClass(className)).toBeTruthy();
+        expect(mountedWrapper.find(`#${id}`).length).toBeTruthy();
     });
 
-    it("Should pass custom id and name", () => {
-        const wrapper = shallow(<RadioButton {...props} id="my-id" name="my-name" />);
-        expect(wrapper.find("#my-id")).toHaveLength(1);
-        expect(wrapper.find(".radio-input").getElement().props.name).toEqual("my-name");
+    it("Should render with random id if id is not passed", async (done: jest.DoneCallback) => {
+        expect.assertions(2);
+        const mountedWrapper: ReactWrapper<RadioButtonProps> = mount(<RadioButton {...props} label="label" />);
+        setTimeout(() => {
+            expect(mountedWrapper.find("input").getElement().props.id).toBeTruthy();
+            expect(mountedWrapper.find("label").getElement().props.htmlFor).toBeDefined();
+            done();
+        });
     });
 
     it("Should fire a change event", () => {
-        const wrapper = shallow(<RadioButton {...props} />);
         wrapper.find("input").simulate("change", { target: { value: "test-value" } });
         expect(props.onChange).toHaveBeenCalled();
     });
 
-    it("Should render and display label, description and error", () => {
-        const wrapper = shallow(<RadioButton {...props} label="label" description="desc" error="error" />);
-        expect(wrapper.find(".radio-label").length).toBe(1);
-        expect(wrapper.find(".radio-label").text()).toEqual("label");
+    it("Should render and display label and description", () => {
+        const label: string = "my label";
+        const description: string = "my description";
+        const topLabel: string = "my top label";
+        wrapper.setProps({ label, description, topLabel });
+        expect(wrapper.find(".custom-control-label").length).toBe(1);
+        expect(wrapper.find(".custom-control-label").text().indexOf(label)).not.toEqual(-1);
         expect(wrapper.find(".radio-description").length).toBe(1);
-        expect(wrapper.find(".radio-description").text()).toEqual("desc");
-        expect(wrapper.find(".alert").length).toBe(1);
-        expect(wrapper.find(".alert").text()).toEqual("error");
-        expect(wrapper.find(".input-field").hasClass("has-error")).toBeTruthy();
+        expect(wrapper.find(".radio-description").text()).toEqual(description);
+        expect(wrapper.find(".radio-toplabel").length).toBe(1);
+        expect(wrapper.find(".radio-toplabel").text()).toEqual(topLabel);
     });
 
-    it("Should render inline when inline prop is set to true", () => {
-        const wrapper = shallow(<RadioButton {...props} inline={true} />);
-        expect(wrapper.find(".input-field").hasClass("inline")).toBeTruthy();
+    it("Should render inline and condensed when inline prop is set to true", () => {
+        const mountedWrapper: ReactWrapper<RadioButtonProps> = mount(<RadioButton {...props} inline={true} condensed={true} />);
+        expect(mountedWrapper.find(".custom-radio").hasClass("inline")).toBeTruthy();
+        expect(mountedWrapper.find(".custom-radio").hasClass("condensed")).toBeTruthy();
     });
 
 });

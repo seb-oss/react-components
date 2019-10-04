@@ -1,4 +1,4 @@
-$blue-dark: #0092E1;
+$blue-dark: #0092e1;
 $white: #fff;
 $gray-8: #e6e6e6 !default;
 $gray-background: #f5f5f5;
@@ -9,6 +9,7 @@ $header-font-size: 20px;
 $sub-header-size: 14px;
 $icon-size: 20px;
 $padding-left-size: 48px;
+$alternative-padding-left-size: 30px;
 $accordion-min-height: 48px;
 
 @mixin transform($props) {
@@ -41,46 +42,50 @@ $accordion-min-height: 48px;
         border-bottom: 1px solid $gray-8;
         &:hover {
             background-color: $gray-background;
-        }    
+        }
         &:first-child {
             border-top: 1px solid $gray-8;
         }
         .header-wrapper {
             position: relative;
             display: block;
-            padding: 5px 10px 5px $padding-left-size;
             cursor: pointer;
             min-height: $accordion-min-height;
 
             &.with-sub-header {
                 min-height: 64px;
             }
-            >svg {
+            > svg {
                 position: absolute;
                 width: $icon-size;
                 height: $icon-size;
-                left: 15px;
                 fill: $blue-dark;
                 will-change: transform;
-                @include transition($transition-time);
+                @include transition((transform $transition-time, opacity $transition-time));
                 top: 14px;
+                &:last-of-type:not(:first-of-type) {
+                    opacity: 0;
+                    transform: rotate(180deg);
+                }
             }
             .accordion-header {
                 display: block;
-                font-size: $header-font-size;
                 font-weight: 500;
                 padding-top: 5px;
                 @include user-select(none);
                 line-height: 28px;
+                margin: 0;
             }
             .accordion-sub-header {
                 display: block;
-                font-size: $sub-header-size;
                 @include user-select(none);
+                margin: 0;
+                margin-bottom: 10px;
             }
         }
         .content-wrapper {
             padding: 0;
+            @include transition(all $transition-time ease);
             position: relative;
             overflow: hidden;
             .text-wrapper {
@@ -89,11 +94,11 @@ $accordion-min-height: 48px;
                 max-height: 0;
                 will-change: margin;
                 opacity: 0;
-                @include transition(all $transition-time ease);
                 .text-item {
-                    padding-bottom: 8px;
+                    &:not(:last-child) {
+                        padding-bottom: 8px;
+                    }
                     .accordion-title {
-                        padding-top: 8px;
                         font-size: $standard;
                         font-weight: 500;
                     }
@@ -104,16 +109,131 @@ $accordion-min-height: 48px;
                 }
             }
         }
-        &.active {
+        &.right {
             .header-wrapper {
-                >svg {
+                padding: 5px $padding-left-size 5px 10px;
+                > svg {
+                    right: 15px;
+                }
+            }
+        }
+        &.left {
+            .header-wrapper {
+                padding: 5px 10px 5px $padding-left-size;
+                > svg {
+                    left: 15px;
+                }
+            }
+        }
+        &.deg-90 {
+            .header-wrapper >svg:last-of-type:not(:first-of-type) {
+                @include transform(rotate(-90deg));
+            }
+        }
+        &.deg-90-counter {
+            .header-wrapper >svg:last-of-type:not(:first-of-type) {
+                @include transform(rotate(90deg));
+            }
+        }
+        &.deg-180 {
+            .header-wrapper >svg:last-of-type:not(:first-of-type) {
+                @include transform(rotate(-18deg0));
+            }
+        }
+        &.deg-180-counter {
+            .header-wrapper >svg:last-of-type:not(:first-of-type) {
+                @include transform(rotate(180deg));
+            }
+        }
+        &.active {
+            >.content-wrapper {
+                padding-bottom: 18px;
+            }
+            &.deg-90 {
+                .header-wrapper > svg:first-of-type {
+                    @include transform(rotate(90deg));
+                }
+            }
+            &.deg-90-counter {
+                .header-wrapper > svg:first-of-type {
+                    @include transform(rotate(-90deg));
+                }
+            }
+            &.deg-180 {
+                .header-wrapper > svg:first-of-type {
                     @include transform(rotate(180deg));
+                }
+            }
+            &.deg-180-counter {
+                .header-wrapper > svg:first-of-type {
+                    @include transform(rotate(-180deg));
+                }
+            }
+            .header-wrapper > svg:last-of-type:not(:first-of-type) {
+                transform: rotate(0);
+                opacity: 1;
+            }
+            &.transform {
+                .header-wrapper > svg:first-of-type:not(:last-of-type) {
+                    opacity: 0;
                 }
             }
             .content-wrapper {
                 .text-wrapper {
                     opacity: 1;
                     max-height: 10000px;
+                }
+            }
+        }
+    }
+    &.alternative-accordion {
+        >.accordion-item {
+            border-bottom: 0;
+            &:hover {
+                background-color: transparent;
+                .accordion-header {
+                    text-decoration: underline;
+                }
+            }
+            &:first-child {
+                border-top: 0;
+            }
+            >.header-wrapper {
+                min-height: auto;
+                >.accordion-header {
+                    font-size: $standard;
+                    color: $blue-dark;
+                    padding: 0;
+                }
+                > svg {
+                    top: 5px;
+                    width: $default;
+                }
+            }
+            &.right {
+                >.header-wrapper {
+                    padding: 0 $padding-left-size 0 10px;
+                    > svg {
+                        right: 15px;
+                    }
+                }
+                >.content-wrapper {
+                    >.text-wrapper {
+                        padding: 0 $alternative-padding-left-size 0 10px;
+                    }
+                }
+            }
+            &.left {
+                >.header-wrapper {
+                    padding: 0 10px 0 $alternative-padding-left-size;
+                    > svg {
+                        left: 5px;
+                    }
+                }
+                >.content-wrapper {
+                    >.text-wrapper {
+                        padding: 0 $alternative-padding-left-size;
+                    }
                 }
             }
         }

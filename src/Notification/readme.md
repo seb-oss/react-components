@@ -30,21 +30,21 @@ This React component supports customization and configurations. The component na
 ## Properties
 These are the current available properties:
 
-| Property        | Type                                    | Description                                                                                      |
-| --------------- | --------------------------------------- | ----------------------------------------------------------------------------------------------- |
-| toggle          | `boolean`                               | element toggle                                                                                  |
-| style?          | `string`                                | notification style<sup>1</sup> (default: `slide-in`)                                            |
-| position?       | `string`                                | element position<sup>2</sup> (default: `bottom-left` on `slide-in` style, `top` on `bar` style) |
-| theme?          | `string`                                | notification theme<sup>3</sup> (default: `purple`)                                              |
-| title? *        | `string`                                | notification title                                                                              |
-| message         | `string`                                | notification message                                                                            |
-| persist?        | `boolean`                               | persist notification until dismissed (default: `false`)                                         |
-| dismissable?    | `boolean`                               | enable dismiss in UI (default: `false`)                                                         |
-| dismissTimeout? | `number`                                | dismiss timeout in miliseconds if not `dismissable` and not `persistant` (default: `5000`)      |
-| actions? *      | `Array<NotificationAction>`<sup>4</sup> | display action buttons - max: 2 actions                                                         |
-| onClick?        | `() => void`                            | click handler                                                                                   |
-| onDismiss       | `() => void`                            | dismiss handler                                                                                 |
-| className?      | `string`                                | custom class                                                                                    |
+| Property        | Type                                                 | Description                                                                                     |
+| --------------- | ---------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| actions? *      | `Array<NotificationAction>`<sup>4</sup>              | Display action buttons - max: 2 actions                                                         |
+| className?      | `string`                                             | Custom class                                                                                    |
+| dismissable?    | `boolean`                                            | Enable dismiss in UI (default: `false`)                                                         |
+| dismissTimeout? | `number`                                             | Dismiss timeout in miliseconds if not `dismissable` and not `persistant` (default: `5000`)      |
+| message         | `string`                                             | Notification message                                                                            |
+| onClick?        | `(event?: React.MouseEvent<HTMLDivElement>) => void` | Click handler                                                                                   |
+| onDismiss       | `() => void`                                         | Dismiss handler                                                                                 |
+| persist?        | `boolean`                                            | Persist notification until dismissed (default: `false`)                                         |
+| position?       | `string`                                             | Element position<sup>2</sup> (default: `bottom-left` on `slide-in` style, `top` on `bar` style) |
+| style?          | `string`                                             | Notification style<sup>1</sup> (default: `slide-in`)                                            |
+| theme?          | `string`                                             | Notification theme<sup>3</sup> (default: `purple`)                                              |
+| title? *        | `string`                                             | Notification title                                                                              |
+| toggle          | `boolean`                                            | Element toggle                                                                                  |
 
 ## Footnote
 1. Styles supported: `slide-in`, `bar`

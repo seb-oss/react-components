@@ -4,18 +4,18 @@ import "./modal.scss";
 export type ModalPositionProp = "left" | "right";
 
 export interface ModalProps {
-    toggle: boolean;
-    id?: string;
-    fullscreen?: boolean;
-    position?: ModalPositionProp;
+    ariaDescribedby?: string;
+    ariaLabel?: string;
+    body?: React.ReactNode;
     className?: string;
     disableBackdropDismiss?: boolean;
-    ariaLabel?: string;
-    ariaDescribedby?: string;
-    onDismiss: () => void;
-    header?: React.ReactNode;
-    body?: React.ReactNode;
     footer?: React.ReactNode;
+    fullscreen?: boolean;
+    header?: React.ReactNode;
+    id?: string;
+    onDismiss: () => void;
+    position?: ModalPositionProp;
+    toggle: boolean;
 }
 
 export const Modal: React.FunctionComponent<ModalProps> = (props: ModalProps): React.ReactElement<void> => {

@@ -39,12 +39,24 @@
     }
 }
 
+// TODO: This is a fix for a weird behaviour in bootstrap where the aside will be misplaced
+@media only screen and (min-width: 575px) and (max-width: 767px) {
+    .modal {
+        &.modal-aside {
+            &.modal-aside-right {
+                .modal-dialog {
+                    right: inherit;
+                }
+            }
+        }
+    }
+}
+
 @media only screen and (min-width: 576px) {
     .modal {
         &:not(.modal-fullscreen):not(.modal-aside) {
             > .modal-dialog {
                 max-height: 90vh;
-                // overflow: hidden;
                 > .modal-content {
                     border: none;
                     max-height: 90vh;
