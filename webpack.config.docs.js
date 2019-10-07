@@ -40,7 +40,7 @@ module.exports = {
                 test: /\.tsx?$/, loader: "ts-loader",
                 exclude: [/\.(test)\.ts$/],
                 options: {
-                    configFile: "tsconfig.dev.json"
+                    configFile: "tsconfig.json"
                 }
             },
             { test: /(\.css|\.scss|\.sass)$/, loaders: ['style-loader', 'css-loader', 'sass-loader'] },
