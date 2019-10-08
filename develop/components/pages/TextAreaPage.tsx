@@ -24,7 +24,7 @@ const TextAreaPage: React.FunctionComponent = () => {
                         <TextArea
                             name="textArea"
                             label="Textarea label"
-                            placeHolder="Text Area PlaceHolder"
+                            placeholder="Text Area PlaceHolder"
                             value={textBoxValue}
                             cols={30}
                             rows={5}
@@ -36,7 +36,7 @@ const TextAreaPage: React.FunctionComponent = () => {
                     <div className="result">
                         <TextArea
                             name="textInput"
-                            placeHolder="Text Area PlaceHolder"
+                            placeholder="Text Area PlaceHolder"
                             error="error msg will be shown here"
                             cols={30}
                             rows={5}

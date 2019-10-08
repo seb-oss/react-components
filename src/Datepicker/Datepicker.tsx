@@ -19,7 +19,7 @@ export interface DatepickerProps {
     minDate?: Date;
     name: string;
     onChange: (value: Date) => void;
-    placeHolder?: string;
+    placeholder?: string;
     showLeadingZeros?: boolean;
     value: Date;
 }
@@ -43,7 +43,7 @@ export const Datepicker: React.FunctionComponent<DatepickerProps> = (props: Date
                         format={props.format}
                         showLeadingZeros={props.showLeadingZeros === undefined ? true : props.showLeadingZeros}
                     />
-                    {!props.value && props.placeHolder ? <div className="date-placeholder"><p>{props.placeHolder}</p></div> : ""}
+                    {!props.value && props.placeholder ? <div className="date-placeholder"><p>{props.placeholder}</p></div> : ""}
                 </div>
                 <div className="alert alert-danger">{props.error}</div>
             </div>

@@ -21,7 +21,7 @@ This React component is based on SEB Bootstrap style. Supports customization and
 ```html
 <TextArea
     name="textArea"
-    placeHolder="Text Area PlaceHolder"
+    placeholder="Text Area Placeholder"
     value={this.state.textBoxValue}
     cols={30}
     rows={5}
@@ -49,7 +49,7 @@ These are the current available properties:
 | onKeyDown?   | `(event: React.KeyboardEvent<HTMLTextAreaElement>) => void` | On `'keydown'` event                        |
 | onKeyPress?  | `(event: React.KeyboardEvent<HTMLTextAreaElement>) => void` | On `'keypress'` event                       |
 | onKeyUp?     | `(event: React.KeyboardEvent<HTMLTextAreaElement>) => void` | On `'keyup'` event                          |
-| placeHolder? | `string`                                                    | Placeholder text                            |
+| placeholder? | `string`                                                    | Placeholder text                            |
 | readonly?    | `boolean`                                                   | Make textatrea readonly. (default: `false`) |
 | reference?   | `React.RefObject<HTMLTextAreaElement>`                      | React Ref obj                               |
 | resizable?   | `boolean`                                                   | Disable textarea resize. (default: `true`)  |

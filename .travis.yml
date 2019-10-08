@@ -28,6 +28,7 @@ git:
   depth: 3
 
 after_success:
+- npm run coveralls
 - if [ "$TRAVIS_BRANCH" == "master" ];
   then npm run travis-deploy-once "npm run semantic-release";
   fi
