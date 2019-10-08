@@ -51,13 +51,15 @@
 		"build:production": "webpack --config webpack.config.build.js",
 		"clean:docs": "rimraf ./docs",
 		"clean:dist": "rimraf ./dist",
+		"clean:test": "rimraf ./coverage",
+		"clean": "npm run clean:docs && npm run clean:dist && npm run clean:test",
 		"copy": "cp package.json dist/ && cp README.md dist/",
 		"lint": "tslint -p tsconfig.json",
 		"start": "npm run build:dev",
 		"docs": "npm run clean:docs && npm run build:docs",
-		"build": "npm run clean:dist && npm run lint &&  npm run test && npm run build:production",
-		"publish": "npm run build",
-		"test": "rimraf ./coverage && jest --forceExit --detectOpenHandles",
+		"build": "npm run clean && npm run lint &&  npm run test && npm run build:production",
+		"test": "npm run clean:test && jest --forceExit --detectOpenHandles",
+		"coveralls": "cat ./coverage/lcov.info | coveralls",
 		"commit": "git-cz",
 		"travis-deploy-once": "travis-deploy-once --pro",
 		"semantic-release": "semantic-release && npm run build",
@@ -99,6 +101,7 @@
 		"case-sensitive-paths-webpack-plugin": "^2.2.0",
 		"commitizen": "^4.0.3",
 		"copy-webpack-plugin": "^5.0.4",
+		"coveralls": "^3.0.6",
 		"css-loader": "^3.2.0",
 		"cz-conventional-changelog": "^3.0.2",
 		"enzyme": "^3.10.0",
@@ -132,7 +135,8 @@
 		"typescript": "^3.6.3",
 		"webpack": "^4.41.0",
 		"webpack-cli": "^3.3.9",
-		"webpack-dev-server": "^3.8.1"
+		"webpack-dev-server": "^3.8.2",
+		"webpack-merge": "^4.2.2"
 	},
 	"config": {
 		"commitizen": {
