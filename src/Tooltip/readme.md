@@ -60,20 +60,29 @@ These are the public methods accessible via [React ref](https://reactjs.org/docs
 
 ```javascript
 const ExampleContainer: React.FunctionComponent = () => {
-    MyTooltip: Tooltip;
+    myTooltip: Tooltip;
+
+    dismissTooltip(e?: React.MouseEvent<HTMLDivElement>): void {
+        const dismissableTooltip: HTMLElement = document.getElementById("dismissable-tooltip");
+        if (event.target !== dismissableTooltip.firstChild) {
+            myTooltip.forceDismiss(e);
+        }
+    }
 
     return (
-        <div className="example-container" onClick={e => this.MyTooltip.forceDismiss(e)}>
+        <div className="example-container" onClick={dismissTooltip}>
             <Tooltip
                 message="Tooltip message"
+                id="dismissable-tooltip"
                 ref={(el: Tooltip) => {
-                    this.MyTooltip = el;
+                    this.myTooltip = el;
                 }}
             />
         </div>
     );
 };
 ```
+* Place the `onClick` event on a higher parent if necessary so the listening would cover the full window
 
 ## Footnote
 
@@ -81,7 +90,7 @@ const ExampleContainer: React.FunctionComponent = () => {
 
 ```typescript
 {
-      title: string,
+      title?: string,
       message: string
 }
 ```

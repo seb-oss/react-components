@@ -1,6 +1,8 @@
 .text-label {
     display: inline-block;
-    .custom-label-value {
+    >.custom-label-value {
+        display: flex;
+        align-items: center;
         font-weight: 500;
     }
 }

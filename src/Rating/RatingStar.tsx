@@ -1,10 +1,10 @@
 import * as React from "react";
 
 interface StarProps {
-    width: any;
-    height: any;
-    fill: any;
-    title?: any;
+    width: React.ReactText;
+    height: React.ReactText;
+    fill: string;
+    title?: string;
 }
 
 export const SVGStarHollow: React.FunctionComponent<StarProps> = (props: StarProps): React.ReactElement<void> => {

@@ -90,9 +90,9 @@
 		},
 		{
 			"filename": "readme.md",
-			"filepath": "/../src/DropDown/readme.md",
-			"shortpath": "/../src/DropDown/readme",
-			"longpath": "/../src/DropDown/readme.md",
+			"filepath": "/../src/Dropdown/readme.md",
+			"shortpath": "/../src/Dropdown/readme",
+			"longpath": "/../src/Dropdown/readme.md",
 			"type": "file",
 			"title": "Dropdown",
 			"componentid": "component-dropdown",

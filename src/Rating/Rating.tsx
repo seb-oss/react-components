@@ -9,7 +9,7 @@ export interface RatingProps {
     iconHeight?: number;
     iconWidth?: number;
     id?: string;
-    initialValue?: any;
+    initialValue?: number;
     onChange?: (value: number) => void;
     readOnly?: boolean;
     tooltipList?: Array<string>;

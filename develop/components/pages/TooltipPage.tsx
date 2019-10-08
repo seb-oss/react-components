@@ -8,8 +8,15 @@ const moneySVG: JSX.Element = <svg xmlns="http://www.w3.org/2000/svg" viewBox="0
 const TooltipPage: React.FunctionComponent = () => {
     let myTooltip: Tooltip;
 
+    function dismissTooltip(e?: React.MouseEvent<HTMLDivElement>): void {
+        const dismissableTooltip: HTMLElement = document.getElementById("dismissable-tooltip");
+        if (event.target !== dismissableTooltip.firstChild) {
+            myTooltip.forceDismiss(e);
+        }
+    }
+
     return (
-        <div className="route-template container" onClick={(e?: React.MouseEvent<HTMLDivElement>) => myTooltip.forceDismiss(e)}>
+        <div className="route-template container" onClick={dismissTooltip}>
             <div className="info-holder">
 
                 <div className="info">
@@ -26,7 +33,6 @@ const TooltipPage: React.FunctionComponent = () => {
                             message="Tooltip message could be long, therefore, controlling the position and width is important"
                             position="right"
                             width={200}
-                            ref={(el: Tooltip) => { myTooltip = el; }}
                         />
                     </div>
 
@@ -37,6 +43,7 @@ const TooltipPage: React.FunctionComponent = () => {
                             position="right"
                             width={200}
                             customSvg={moneySVG}
+                            id="dismissable-tooltip"
                             ref={(el: Tooltip) => { myTooltip = el; }}
                         />
                     </div>
