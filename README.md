@@ -3,7 +3,7 @@
 [![Build Status](https://travis-ci.com/sebgroup/react-components.svg?branch=master)](https://travis-ci.com/sebgroup/react-components)
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
-[![Coverage Status](https://coveralls.io/repos/github/sebgroup/react-components/badge.svg?branch=develop)](https://coveralls.io/github/sebgroup/react-components?branch=develop)
+[![Coverage Status](https://coveralls.io/repos/github/sebgroup/react-components/badge.svg?branch=master)](https://coveralls.io/github/sebgroup/react-components?branch=develop)
 
 This is a set of react components some of which are based on SEB's bootstrap. The plan for this project is to increase and improve components for future usage.
 
