@@ -47,7 +47,7 @@ These are the current available properties:
 | minDate?          | `Date`                  | Min date range                                                                                |
 | name              | `string`                | Input element name                                                                            |
 | onChange          | `(value: Date) => void` | On change event                                                                               |
-| placeHolder?      | `string`                | Placeholder value                                                                             |
+| placeholder?      | `string`                | Placeholder value                                                                             |
 | showLeadingZeros? | `boolean`               | Show leading zeroes for values less that 10 (e.g. show `01` instead of `1`) (default: `true`) |
 | value             | `Date`                  | Value                                                                                         |
 

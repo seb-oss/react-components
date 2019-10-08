@@ -12,15 +12,18 @@ interface TooltipState {
     toggle: boolean;
 }
 
+export type TooltipTheme = "default" | "light" | "primary" | "warning" | "success" | "danger" | "purple";
+export type TooltipPosition = "top" | "bottom" | "left" | "right" | "top-right" | "top-left" | "bottom-right" | "bottom-left" | "left-top" | "left-bottom" | "right-top" | "right-bottom";
+
 export interface TooltipProps {
     className?: string;
-    customSvg?: any;
+    customSvg?: React.ReactNode;
     id?: string;
     message?: string;
     messageGroup?: Array<TooltipMessageGroupItem>;
     onClick?: (event?: React.MouseEvent<HTMLDivElement>) => void;
-    position?: string;
-    theme?: string;
+    position?: TooltipPosition;
+    theme?: TooltipTheme;
     title?: string;
     triggerOnHover?: boolean;
     width?: number;
@@ -81,14 +84,14 @@ export class Tooltip extends React.Component<TooltipProps, TooltipState> {
         return (
             <div className={"tooltip-container" + (this.props.className ? ` ${this.props.className}` : "")} id={this.props.id}>
                 <div
-                    className="icon"
+                    className="icon tooltip-icon"
                     onClick={(e: React.MouseEvent<HTMLDivElement>) => !this.props.triggerOnHover && this.toggleTooltip(undefined, e)}
                     onMouseEnter={() => this.props.triggerOnHover && this.toggleTooltip(true)}
                     onMouseLeave={() => this.props.triggerOnHover && this.toggleTooltip(false)}
                 >
                     {this.props.customSvg ? this.props.customSvg : InfoCircleIcon}
                 </div>
-                <div className={`content ${this.props.position || "bottom"} ${this.props.theme || "default"} ${this.state.toggle ? "open" : ""}`}>
+                <div className={`content ${this.props.position || "bottom"} ${this.props.theme || "default"}${this.state.toggle ? " open" : ""}`}>
                     {this.isPositioned("bottom") && <div className="triangle" />}
 
                     {!this.props.messageGroup &&

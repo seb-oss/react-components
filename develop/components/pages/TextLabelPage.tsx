@@ -1,5 +1,7 @@
 import * as React from "react";
 import { TextLabel } from "../../../src/TextLabel/TextLabel";
+import { Tooltip } from "../../../src/Tooltip/Tooltip";
+import { TextBox } from "../../../src/TextBox/TextBox";
 const Highlight = (require("react-highlight")).default;
 const docMD: string = require("../../../src/TextLabel/readme.md");
 
@@ -20,6 +22,19 @@ const TextLabelPage: React.FunctionComponent = () => {
                     <div className="result">
                         <TextLabel
                             value="400,000 kr"
+                            label="Current savings"
+                        />
+                    </div>
+
+                    <p>An example with passing ReactNode as the value (tooltip):</p>
+                    <div className="result">
+                        <TextLabel
+                            value={
+                                <>
+                                    400,000 kr
+                                    <Tooltip className="ml-1" position="top-right" />
+                                </>
+                            }
                             label="Current savings"
                         />
                     </div>

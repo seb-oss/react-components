@@ -2,25 +2,25 @@ import * as React from "react";
 import { randomId } from "../__utils/randomId";
 import "./radio-group-style.scss";
 
-export interface RadioListModel {
+export interface RadioListModel<T = any> {
     description?: string;
     disabled?: boolean;
     group: string;
     label: string;
-    value: any;
+    value: T;
 }
 
-export interface RadioGroupProps {
+export interface RadioGroupProps<T = any> {
     className?: string;
     condensed?: boolean;
     disableAll?: boolean;
     id?: string;
     inline?: boolean;
     label?: string;
-    list: Array<RadioListModel>;
+    list: Array<RadioListModel<T>>;
     name?: string;
     onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-    value: any;
+    value: T;
 }
 
 export const RadioGroup: React.FunctionComponent<RadioGroupProps> = (props: RadioGroupProps): React.ReactElement<void> => {

@@ -10,7 +10,7 @@ export interface TextBoxGroupProps {
     focus?: boolean;
     id?: string;
     label?: string;
-    leftIcon?: any;
+    leftIcon?: React.ReactNode;
     leftText?: string;
     leftTitle?: string;
     maxLength?: number;
@@ -29,7 +29,7 @@ export interface TextBoxGroupProps {
     readOnly?: boolean;
     reference?: React.RefObject<HTMLInputElement>;
     required?: boolean;
-    rightIcon?: any;
+    rightIcon?: React.ReactNode;
     rightText?: string;
     rightTitle?: string;
     type?: string;

@@ -18,7 +18,7 @@ export interface TextAreaProps {
     onKeyDown?: (event: React.KeyboardEvent<HTMLTextAreaElement>) => void;
     onKeyPress?: (event: React.KeyboardEvent<HTMLTextAreaElement>) => void;
     onKeyUp?: (event: React.KeyboardEvent<HTMLTextAreaElement>) => void;
-    placeHolder?: string;
+    placeholder?: string;
     readonly?: boolean;
     reference?: React.RefObject<HTMLTextAreaElement>;
     resizable?: boolean;
@@ -41,7 +41,7 @@ export const TextArea: React.FunctionComponent<TextAreaProps> = (props: TextArea
                     name={props.name}
                     className={"form-control" + (props.resizable || props.resizable === undefined ? " resizable" : "")}
                     id={id}
-                    placeholder={props.placeHolder}
+                    placeholder={props.placeholder}
                     maxLength={props.max}
                     autoFocus={props.focus}
                     readOnly={props.readonly}

@@ -4,8 +4,8 @@ import "./text-label-style.scss";
 export interface TextLabelProps {
     className?: string;
     id?: string;
-    label?: string;
-    value: string | number;
+    label?: string | React.ReactNode;
+    value: string | number | React.ReactNode;
 }
 
 export const TextLabel: React.FunctionComponent<TextLabelProps> = React.memo((props: TextLabelProps): React.ReactElement<void> => {

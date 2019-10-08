@@ -70,8 +70,8 @@ describe("Component: Datepicker", () => {
     });
 
     it("Should show placeholder when passed", () => {
-        const placeHolder: string = "Some test here";
-        wrapper.setProps({ placeHolder, value: null });
+        const placeholder: string = "Some test here";
+        wrapper.setProps({ placeholder, value: null });
         expect(wrapper.find(".date-placeholder").length).toBeTruthy();
     });
 

@@ -10,7 +10,7 @@ export interface ButtonProps {
     children?: React.ReactNode;
     className?: string;
     disabled?: boolean;
-    icon?: any;
+    icon?: React.ReactNode;
     iconPosition?: ButtonIconPosition;
     id?: string;
     label: string;

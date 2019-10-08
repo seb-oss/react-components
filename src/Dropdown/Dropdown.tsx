@@ -2,8 +2,8 @@ import * as React from "react";
 import { randomId } from "../__utils/randomId";
 import "./dropdown-style.scss";
 
-export interface DropdownItem {
-    value: any;
+export interface DropdownItem<T = any> {
+    value: T;
     label: string;
 }
 
