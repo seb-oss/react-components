@@ -80,146 +80,6 @@ $btn-lg-size: 20px;
     }
 }
 
-// button,
-// input {
-//     &.btn-primary {
-//         &.btn {
-//             @include setButtonLoaderTheme($white, $white);
-//         }
-//     }
-
-//     &.btn-outline-primary {
-//         &.btn {
-//             @include setButtonLoaderTheme($blue, $white);
-//         }
-//     }
-
-//     &.btn-secondary {
-//         &.btn {
-//             @include setButtonLoaderTheme($blue, $white);
-//         }
-//     }
-
-//     &.btn-link,
-//     &.btn-anchor {
-//         &.btn {
-//             @include setButtonLoaderTheme($blue, $blue);
-//         }
-//     }
-
-//     &.btn-light {
-//         &.btn {
-//             @include setButtonLoaderTheme($blue, $black);
-//         }
-//     }
-//     &.btn-ghost-light {
-//         &.btn {
-//             @include setButtonLoaderTheme($white, $white);
-//         }
-//     }
-//     &.btn-ghost-dark {
-//         &.btn {
-//             @include setButtonLoaderTheme($black, $white);
-//         }
-//     }
-
-//     &.btn,
-//     &.input-field {
-
-//         &.btn-lg,
-//         &.btn-md,
-//         &.btn-sm,
-//         &.btn-xs,
-//         &.btn-xl {
-//             .seb-loader-wrapper {
-//                 // margin-left: 10px;
-//                 height: 100%;
-//                 width: auto;
-//                 display: inline-block;
-//                 text-align: right;
-//                 vertical-align: middle;
-//             }
-//         }
-
-//         &:not(.btn-lg),
-//         &:not(.btn-md),
-//         &:not(.btn-sm),
-//         &:not(.btn-xs),
-//         &:not(.btn-xl) {
-//             .seb-loader-wrapper {
-//                 // margin-left: 10px;
-//                 height: 100%;
-//                 width: auto;
-//                 display: inline-block;
-//                 text-align: right;
-//                 vertical-align: baseline;
-
-//                 .seb-loader {
-//                     width: 15px;
-//                     height: 15px;
-
-//                     .seb-loader-container {
-//                         >.seb-loader-rotator {
-
-//                             >.seb-loader-left,
-//                             >.seb-loader-right {
-//                                 >.seb-loader-circle {
-//                                     border-width: 3px;
-//                                 }
-//                             }
-//                         }
-//                     }
-//                 }
-//             }
-//         }
-
-//         &.btn-lg {
-//             .seb-loader-wrapper {
-//                 .seb-loader {
-//                     width: $btn-lg-size;
-//                     height: $btn-lg-size;
-//                 }
-//             }
-//         }
-
-//         &.btn-xs {
-//             .seb-loader-wrapper {
-//                 .seb-loader {
-//                     width: $btn-xs-size;
-//                     height: $btn-xs-size;
-//                 }
-//             }
-//         }
-
-//         &.btn-xl {
-//             .seb-loader-wrapper {
-//                 .seb-loader {
-//                     width: $btn-xl-size;
-//                     height: $btn-xl-size;
-//                 }
-//             }
-//         }
-
-//         &.btn-sm {
-//             .seb-loader-wrapper {
-//                 .seb-loader {
-//                     width: $btn-sm-size;
-//                     height: $btn-sm-size;
-//                 }
-//             }
-//         }
-
-//         &.btn-md {
-//             .seb-loader-wrapper {
-//                 .seb-loader {
-//                     width: $btn-md-size;
-//                     height: $loader-md-size;
-//                 }
-//             }
-//         }
-//     }
-// }
-
 .seb-loader-wrapper {
     @include displayFlex;
     @include flexCenter;
@@ -233,9 +93,11 @@ $btn-lg-size: 20px;
         z-index: 10;
     }
     &:not(.fullscreen) {
-        position: relative;
-        width: 100%;
-        height: 100%;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
     }
 
     > .seb-loader {
@@ -324,6 +186,7 @@ $btn-lg-size: 20px;
 
 button.btn {
     .seb-loader-wrapper {
+        position: relative;
         margin-left: 10px;
         width: 18px;
         height: 18px;
@@ -366,9 +229,9 @@ button.btn {
 
 .form-group.input-box-group > .input-group > .input-box-group-wrapper .input-group-text {
     > .seb-loader-wrapper {
-        width: 50%;
-        height: 50%;
         > .seb-loader {
+            width: 50%;
+            height: 50%;
             @include setSpinnerColor($blue);
             @include setSpinnerThickness(3px);
         }

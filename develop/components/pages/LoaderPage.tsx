@@ -21,18 +21,25 @@ const LoaderPage: React.FunctionComponent = () => {
 
                 <div className="info">
                     <h2>Output</h2>
+
                     <p>Here is a sample tiny example</p>
                     <div className="result">
+                        <SampleContainer height={100} text="Small" />
                         <Loader toggle={true} size="sm" />
                     </div>
+
                     <p>Here is a sample default example</p>
                     <div className="result">
+                        <SampleContainer height={150} text="Medium" />
                         <Loader toggle={true} />
                     </div>
+
                     <p>Here is a sample large example</p>
                     <div className="result">
+                        <SampleContainer height={200} text="Large" />
                         <Loader toggle={true} size="lg" />
                     </div>
+
                     <p>Here is a sample in primary button</p>
                     <div className="result">
                         <Button
@@ -44,8 +51,9 @@ const LoaderPage: React.FunctionComponent = () => {
                             <Loader toggle={true} />
                         </Button>
                     </div>
+
                     <p>Here is a sample in primary button with icon left</p>
-                    <div className="result wide">
+                    <div className="result">
                         <Button
                             label="Test Label"
                             iconPosition="left"
@@ -55,8 +63,9 @@ const LoaderPage: React.FunctionComponent = () => {
                             <Loader toggle={true} />
                         </Button>
                     </div>
+
                     <p>Here is a sample in primary button with icon right</p>
-                    <div className="result wide">
+                    <div className="result">
                         <Button
                             label="Test Label"
                             iconPosition="right"
@@ -66,8 +75,9 @@ const LoaderPage: React.FunctionComponent = () => {
                             <Loader toggle={true} />
                         </Button>
                     </div>
+
                     <p>Here is a sample in secondary with icon right</p>
-                    <div className="result wide">
+                    <div className="result">
                         <Button
                             label="Test Label"
                             iconPosition="right"
@@ -96,5 +106,24 @@ const LoaderPage: React.FunctionComponent = () => {
         </div>
     );
 };
+
+type SampleContainerProps = {
+    height: number | string;
+    width?: number | string;
+    text: string;
+};
+
+const SampleContainer: React.FC<SampleContainerProps> = (props: SampleContainerProps) =>
+    <svg
+        className="bd-placeholder-img img-thumbnail"
+        width={props.width || "100%"}
+        height={props.height}
+        xmlns="http://www.w3.org/2000/svg"
+        preserveAspectRatio="xMidYMid slice"
+        role="img"
+    >
+        <rect width="100%" height="100%" fill="#868e96" />
+        <text x="50%" y="50%" fill="#dee2e6" textAnchor="middle">{props.text}</text>
+    </svg>;
 
 export default LoaderPage;
