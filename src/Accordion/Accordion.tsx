@@ -31,6 +31,7 @@ export interface AccordionProps {
 }
 
 const Accordion: React.FunctionComponent<AccordionProps> = (props: AccordionProps) => {
+    const collapsableRef: Array<React.RefObject<HTMLDivElement>> = [];
     const [active, setActive] = React.useState<number>(null);
     const [accordionClassName, setAccordionClassName] = React.useState<string>("custom-accordion");
     const [itemClassName, setItemClassName] = React.useState<string>("custom-accordion");
@@ -40,8 +41,73 @@ const Accordion: React.FunctionComponent<AccordionProps> = (props: AccordionProp
         constructIds();
         constructClassName();
         constructItemClassName();
+        constructRefs();
     }, [props.id, props.className, props.alternative, props.iconPosition, props.iconRotation, props.customIconExpanded, props.list]);
 
+    function expandSection(ref: React.RefObject<HTMLDivElement>): void {
+        // get the height of the element's inner content, regardless of its actual size
+        const sectionHeight = ref.current.scrollHeight;
+
+        // have the element transition to the height of its inner content
+        ref.current.style.height = sectionHeight + "px";
+
+        // when the next css transition finishes (which should be the one we just triggered)
+
+        const transitionendEvent = () => {
+            // remove this event listener so it only gets triggered once
+            ref.current.removeEventListener("transitionend", transitionendEvent);
+
+            // remove "height" from the element's inline styles, so it can return to its initial value
+            ref.current.style.height = null;
+        };
+
+        ref.current.addEventListener("transitionend", transitionendEvent);
+
+        // mark the section as "currently not collapsed"
+        ref.current.setAttribute("data-collapsed", "false");
+        ref.current.setAttribute("aria-expanded", "true");
+    }
+
+    function collapseSection(ref: React.RefObject<HTMLDivElement>): void {
+        // get the height of the element's inner content, regardless of its actual size
+        console.log("the ref is ", ref);
+        const sectionHeight = ref.current.scrollHeight;
+
+        // temporarily disable all css transitions
+        const elementTransition = ref.current.style.transition;
+        ref.current.style.transition = "";
+
+        // on the next frame (as soon as the previous style change has taken effect),
+        // explicitly set the element's height to its current pixel height, so we
+        // aren't transitioning out of 'auto'
+        requestAnimationFrame(() => {
+            ref.current.style.height = sectionHeight + "px";
+            ref.current.style.transition = elementTransition;
+
+            // on the next frame (as soon as the previous style change has taken effect),
+            // have the element transition to height: 0
+            requestAnimationFrame(() => {
+                ref.current.style.height = 0 + "px";
+            });
+        });
+
+        // mark the section as "currently collapsed"
+        ref.current.setAttribute("data-collapsed", "true");
+        ref.current.setAttribute("aria-expanded", "false");
+    }
+
+    /**
+     * Constructs and initialize collapsable refs by index for each element in the list
+     */
+    function constructRefs(): void {
+        for (let i = 0; i < props.list.length; i++) {
+            collapsableRef[i] = React.createRef<HTMLDivElement>();
+            console.log("There is here ", collapsableRef[i].current);
+            if (collapsableRef[i].current) {
+                collapseSection(collapsableRef[i]);
+            }
+        }
+    }
     /**
      * Constructs the component's `id` if `id` prop is passed
      */
@@ -80,6 +146,12 @@ const Accordion: React.FunctionComponent<AccordionProps> = (props: AccordionProp
      */
     function onKeyDown(index: number, e: React.KeyboardEvent<HTMLDivElement>): void {
         if (e.key.toLowerCase() === " " || e.key.toLowerCase() === "space" || e.key.toLowerCase() === "enter") {
+            if (active === index) {
+                collapseSection(collapsableRef[index]);
+            } else {
+                expandSection(collapsableRef[index]);
+            }
+            console.log("Bat man ", collapsableRef[index]);
             toggle(index);
         }
     }
@@ -95,6 +167,7 @@ const Accordion: React.FunctionComponent<AccordionProps> = (props: AccordionProp
                         id={idList[index]}
                         onKeyDown={(e: React.KeyboardEvent<HTMLDivElement>) => onKeyDown(index, e)}
                         aria-expanded={active === index}
+                        ref={collapsableRef[index]}
                         aria-controls={`lbl-${idList[index]}`}
                         role="button"
                     >
