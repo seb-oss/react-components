@@ -47,12 +47,12 @@ button.btn {
 
     &:not(.btn-lg):not(.btn-sm) {
         min-width: $min-width-md;
-        min-height: 42px;
+        min-height: $min-height-md;
     }
 
     &.btn-sm {
         min-width: $min-width-sm;
-        min-height: 33px;
+        min-height: $min-height-sm;
 
         >.button-content {
             >.svg-holder {
@@ -64,7 +64,7 @@ button.btn {
 
     &.btn-lg {
         min-width: $min-width-lg;
-        min-height: 60px;
+        min-height: $min-height-lg;
 
         >.button-content {
             >.svg-holder {
