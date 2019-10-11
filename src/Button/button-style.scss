@@ -6,9 +6,12 @@ $icon-dimention-md: 18px;
 $icon-dimention-lg: 20px;
 $disabled-color: rgba(255, 255, 255, 0.35);
 $disabled-color-ghost: rgba(0, 0, 0, 0.35);
-$min-width-sm: 100px;
+$min-width-sm: 75px;
 $min-width-md: 120px;
 $min-width-lg: 140px;
+$min-height-sm: 33px;
+$min-height-md: 42px;
+$min-height-lg: 60px;
 
 button.btn {
     position: relative;
@@ -23,8 +26,8 @@ button.btn {
         align-items: center;
 
         >.button-label {
-            display: inline-block;
-            line-height: 1;
+            display: inline-flex;
+            align-items: center;
         }
 
         >.svg-holder {
@@ -44,11 +47,12 @@ button.btn {
 
     &:not(.btn-lg):not(.btn-sm) {
         min-width: $min-width-md;
-        height: 42px;
+        min-height: 42px;
     }
 
     &.btn-sm {
         min-width: $min-width-sm;
+        min-height: 33px;
 
         >.button-content {
             >.svg-holder {
@@ -60,6 +64,7 @@ button.btn {
 
     &.btn-lg {
         min-width: $min-width-lg;
+        min-height: 60px;
 
         >.button-content {
             >.svg-holder {
