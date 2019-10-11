@@ -64,18 +64,6 @@ const LoaderPage: React.FunctionComponent = () => {
                         </Button>
                     </div>
 
-                    <p>Here is a sample in primary button with icon right</p>
-                    <div className="result">
-                        <Button
-                            label="Test Label"
-                            iconPosition="right"
-                            icon={mysvg}
-                            onClick={() => null}
-                        >
-                            <Loader toggle={true} />
-                        </Button>
-                    </div>
-
                     <p>Here is a sample in secondary with icon right</p>
                     <div className="result">
                         <Button
