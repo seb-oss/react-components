@@ -16,6 +16,8 @@ $min-height-lg: 60px;
 button.btn {
     position: relative;
     transition: color 200ms linear, background 200ms linear;
+    padding-top: 0;
+    padding-bottom: 0;
 
     .button-content {
         position: relative;
@@ -37,7 +39,7 @@ button.btn {
             overflow: hidden;
             line-height: 0;
 
-            >svg {
+            svg {
                 width: 100%;
                 height: 100%;
                 transition: fill 200ms linear;
@@ -80,7 +82,7 @@ button.btn {
             border: 0;
             color: $blue-darker;
 
-            >.button-content>.svg-holder>svg {
+            >.button-content>.svg-holder svg {
                 fill: $blue-darker;
             }
 
@@ -89,7 +91,7 @@ button.btn {
                 color: $blue-dark;
                 text-decoration: underline;
 
-                >.button-content>.svg-holder>svg {
+                >.button-content>.svg-holder svg {
                     fill: $blue-dark;
                 }
             }
@@ -106,14 +108,14 @@ button.btn {
         }
 
         &:disabled {
-            >.button-content>.svg-holder>svg {
+            >.button-content>.svg-holder svg {
                 fill: $gray-500;
             }
         }
     }
 
     &.btn-primary {
-        >.button-content>.svg-holder>svg {
+        >.button-content>.svg-holder svg {
             fill: $white;
         }
     }
@@ -125,7 +127,7 @@ button.btn {
             color: $white;
             border-color: $white;
 
-            >.button-content>.svg-holder>svg {
+            >.button-content>.svg-holder svg {
                 fill: $white;
             }
 
@@ -134,7 +136,7 @@ button.btn {
                 color: $gray-800;
                 background-color: $white;
 
-                >.button-content>.svg-holder>svg {
+                >.button-content>.svg-holder svg {
                     fill: $gray-800;
                 }
             }
@@ -144,7 +146,7 @@ button.btn {
             border-color: $disabled-color;
             color: $disabled-color;
 
-            >.button-content>.svg-holder>svg {
+            >.button-content>.svg-holder svg {
                 fill: $disabled-color;
             }
         }
@@ -157,7 +159,7 @@ button.btn {
             color: $black;
             border-color: $black;
 
-            >.button-content>.svg-holder>svg {
+            >.button-content>.svg-holder svg {
                 fill: $black;
             }
 
@@ -166,7 +168,7 @@ button.btn {
                 color: $white;
                 background-color: $gray-800;
 
-                >.button-content>.svg-holder>svg {
+                >.button-content>.svg-holder svg {
                     fill: $white;
                 }
             }
@@ -176,7 +178,7 @@ button.btn {
             border-color: $disabled-color-ghost;
             color: $disabled-color-ghost;
 
-            >.button-content>.svg-holder>svg {
+            >.button-content>.svg-holder svg {
                 fill: $disabled-color-ghost;
             }
         }
@@ -185,19 +187,19 @@ button.btn {
     &.btn-outline-primary,
     &.btn-secondary {
         &:not(:disabled) {
-            >.button-content>.svg-holder>svg {
+            >.button-content>.svg-holder svg {
                 fill: $blue-darker;
             }
 
             &:hover {
-                >.button-content>.svg-holder>svg {
+                >.button-content>.svg-holder svg {
                     fill: $white;
                 }
             }
         }
 
         &:disabled {
-            >.button-content>.svg-holder>svg {
+            >.button-content>.svg-holder svg {
                 fill: $gray-500;
             }
         }
@@ -205,13 +207,13 @@ button.btn {
 
     &.btn-danger {
         &:not(:disabled) {
-            >.button-content>.svg-holder>svg {
+            >.button-content>.svg-holder svg {
                 fill: $white;
             }
         }
 
         &:disabled {
-            >.button-content>.svg-holder>svg {
+            >.button-content>.svg-holder svg {
                 fill: $white;
             }
         }

@@ -225,6 +225,11 @@ button.btn {
             @include setSpinnerColor($black);
         }
     }
+    &.btn-anchor {
+        .seb-loader-wrapper > .seb-loader {
+            @include setSpinnerColor($blue-dark);
+        }
+    }
 }
 
 .form-group.input-box-group > .input-group > .input-box-group-wrapper .input-group-text {
