@@ -29,9 +29,12 @@ export interface AccordionProps {
     list: Array<AccrodionListItem>;
     alternative?: boolean;
 }
-
+interface AccordionContentRendererProps extends AccrodionListItem {
+    collapsableRef: React.RefObject<HTMLDivElement>;
+}
 const Accordion: React.FunctionComponent<AccordionProps> = (props: AccordionProps) => {
-    const collapsableRef: Array<React.RefObject<HTMLDivElement>> = [];
+    const collapsableRef: Array<React.RefObject<HTMLDivElement>> = props.list.map(() => React.useRef<HTMLDivElement>(null));
+
     const [active, setActive] = React.useState<number>(null);
     const [accordionClassName, setAccordionClassName] = React.useState<string>("custom-accordion");
     const [itemClassName, setItemClassName] = React.useState<string>("custom-accordion");
@@ -70,7 +73,6 @@ const Accordion: React.FunctionComponent<AccordionProps> = (props: AccordionProp
 
     function collapseSection(ref: React.RefObject<HTMLDivElement>): void {
         // get the height of the element's inner content, regardless of its actual size
-        console.log("the ref is ", ref);
         const sectionHeight = ref.current.scrollHeight;
 
         // temporarily disable all css transitions
@@ -101,8 +103,6 @@ const Accordion: React.FunctionComponent<AccordionProps> = (props: AccordionProp
      */
     function constructRefs(): void {
         for (let i = 0; i < props.list.length; i++) {
-            collapsableRef[i] = React.createRef<HTMLDivElement>();
-            console.log("There is here ", collapsableRef[i].current);
             if (collapsableRef[i].current) {
                 collapseSection(collapsableRef[i]);
             }
@@ -151,9 +151,22 @@ const Accordion: React.FunctionComponent<AccordionProps> = (props: AccordionProp
             } else {
                 expandSection(collapsableRef[index]);
             }
-            console.log("Bat man ", collapsableRef[index]);
+            // console.log("Bat man ", collapsableRef[index]);
             toggle(index);
+            e.preventDefault();
         }
+
+    }
+
+
+    function onToggle(e: React.MouseEvent<HTMLDivElement, MouseEvent>, index: number) {
+        if (active === index) {
+            collapseSection(collapsableRef[index]);
+        } else {
+            expandSection(collapsableRef[index]);
+        }
+        // console.log("Bat man ", collapsableRef[index]);
+        toggle(index);
     }
 
     return (
@@ -163,17 +176,16 @@ const Accordion: React.FunctionComponent<AccordionProps> = (props: AccordionProp
                     <div
                         className={itemClassName + (active === index ? " active" : "")}
                         key={index}
-                        tabIndex={0}
+                        tabIndex={1}
                         id={idList[index]}
                         onKeyDown={(e: React.KeyboardEvent<HTMLDivElement>) => onKeyDown(index, e)}
                         aria-expanded={active === index}
-                        ref={collapsableRef[index]}
                         aria-controls={`lbl-${idList[index]}`}
                         role="button"
                     >
                         <div
                             className={"header-wrapper" + (item.subHeaderText ? " with-sub-header" : "")}
-                            onClick={() => setActive(active === index ? null : index)}
+                            onClick={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => onToggle(e, index)}
                         >
                             {props.customIcon || chevronDownIcon}
                             {props.customIconExpanded ? props.customIconExpanded : null}
@@ -181,7 +193,7 @@ const Accordion: React.FunctionComponent<AccordionProps> = (props: AccordionProp
                             {item.subHeaderText && <h6 className="accordion-sub-header">{item.subHeaderText}</h6>}
                         </div>
                         <div className="content-wrapper" aria-labelledby={idList[index]} id={`lbl-${idList[index]}`} role="region">
-                            {item && <AccordionContentRenderer {...item} />}
+                            {item && <AccordionContentRenderer {...item} collapsableRef={collapsableRef[index]} />}
                         </div>
                     </div>
                 );
@@ -190,16 +202,16 @@ const Accordion: React.FunctionComponent<AccordionProps> = (props: AccordionProp
     );
 };
 
-const AccordionContentRenderer: React.FunctionComponent<AccrodionListItem> = (props: AccrodionListItem) => {
+const AccordionContentRenderer: React.FunctionComponent<AccordionContentRendererProps> = (props: AccordionContentRendererProps) => {
     if (React.isValidElement(props.content)) {
         const nodeContent: React.ReactNode = props.content as React.ReactNode;
         return (
-            <div className="text-wrapper">{nodeContent}</div>
+            <div className="text-wrapper" ref={props.collapsableRef}>{nodeContent}</div>
         );
     } else if (props.content instanceof Array) {
         const arrayContent: Array<AccordionContent> = props.content as Array<AccordionContent>;
         return (
-            <div className="text-wrapper">
+            <div className="text-wrapper" ref={props.collapsableRef}>
                 {arrayContent.map((text: AccordionContent, textIndex: number) =>
                     <div className="text-item" key={textIndex}>
                         {text.title && <div className="accordion-title">{text.title}</div>}
@@ -211,7 +223,7 @@ const AccordionContentRenderer: React.FunctionComponent<AccrodionListItem> = (pr
     } else {
         const objectContent: AccordionContent = props.content as AccordionContent;
         return (
-            <div className="text-wrapper">
+            <div className="text-wrapper" ref={props.collapsableRef}>
                 <div className="text-item">
                     {objectContent.title && <div className="accordion-title">{objectContent.title}</div>}
                     {objectContent.desc && <div className="accordion-desc">{objectContent.desc}</div>}

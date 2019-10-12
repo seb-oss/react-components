@@ -91,7 +91,6 @@ $accordion-min-height: 48px;
             .text-wrapper {
                 position: relative;
                 padding: 0px $padding-left-size;
-                // max-height: 0;
                 height: auto;
                 will-change: margin;
                 opacity: 0;
@@ -182,7 +181,6 @@ $accordion-min-height: 48px;
             .content-wrapper {
                 .text-wrapper {
                     opacity: 1;
-                    // max-height: 10000px;
                 }
             }
         }
