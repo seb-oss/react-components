@@ -35,7 +35,7 @@ interface AccordionContentRendererProps extends AccrodionListItem {
 }
 
 const Accordion: React.FunctionComponent<AccordionProps> = (props: AccordionProps) => {
-    let collapsableRef: React.MutableRefObject<React.RefObject<HTMLDivElement>[]> = React.useRef(props.list.map(() => React.createRef<HTMLDivElement>()));
+    const collapsableRef: React.MutableRefObject<Array<React.RefObject<HTMLDivElement>>> = React.useRef(props.list.map(() => React.createRef<HTMLDivElement>()));
     const [active, setActive] = React.useState<number>(null);
     const [accordionClassName, setAccordionClassName] = React.useState<string>("custom-accordion");
     const [itemClassName, setItemClassName] = React.useState<string>("custom-accordion");
