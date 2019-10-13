@@ -161,7 +161,7 @@ const Accordion: React.FunctionComponent<AccordionProps> = (props: AccordionProp
     }
 
     /**
-     * 
+     *
      * @param e MouseEvent
      * @param index list index
      */
