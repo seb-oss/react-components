@@ -183,7 +183,7 @@ const Accordion: React.FunctionComponent<AccordionProps> = (props: AccordionProp
                     <div
                         className={itemClassName + (active === index ? " active" : "")}
                         key={index}
-                        tabIndex={1}
+                        tabIndex={0}
                         id={idList[index]}
                         onKeyDown={(e: React.KeyboardEvent<HTMLDivElement>) => onKeyDown(index, e)}
                         aria-expanded={active === index}
