@@ -193,13 +193,17 @@ const collapseSection = (ref: React.RefObject<HTMLDivElement>): void => {
     // explicitly set the element's height to its current pixel height, so we
     // aren't transitioning out of 'auto'
     requestAnimationFrame(() => {
-        ref.current.style.height = sectionHeight + "px";
-        ref.current.style.transition = elementTransition;
-
+        if (ref && ref.current) {
+            ref.current.style.height = sectionHeight + "px";
+            ref.current.style.transition = elementTransition;
+        }
         // on the next frame (as soon as the previous style change has taken effect),
         // have the element transition to height: 0
         requestAnimationFrame(() => {
-            ref.current.style.height = 0 + "px";
+            // this is an event and can be triggered late hence the checking below
+            if (ref && ref.current) {
+                ref.current.style.height = 0 + "px";
+            }
         });
     });
 

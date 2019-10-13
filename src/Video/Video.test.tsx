@@ -31,7 +31,6 @@ describe("Component: Video ", () => {
     it("Should render embed video when sourceType is set to `stream`", () => {
         const sourceType: VideoSourceType = "stream";
         wrapper.setProps({ sourceType });
-        console.log(wrapper.debug());
         expect(wrapper.find("iframe").length).toBe(1);
     });
 
