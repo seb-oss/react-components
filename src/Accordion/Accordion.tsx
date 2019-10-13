@@ -99,6 +99,9 @@ const Accordion: React.FunctionComponent<AccordionProps> = (props: AccordionProp
             if (active === index) {
                 collapseSection(collapsableRef.current[index]);
             } else {
+                if (active !== null) {
+                    collapseSection(collapsableRef.current[active]);
+                }
                 expandSection(collapsableRef.current[index]);
             }
 
@@ -118,6 +121,9 @@ const Accordion: React.FunctionComponent<AccordionProps> = (props: AccordionProp
         if (active === index) {
             collapseSection(collapsableRef.current[index]);
         } else {
+            if (active !== null) {
+                collapseSection(collapsableRef.current[active]);
+            }
             expandSection(collapsableRef.current[index]);
         }
 
