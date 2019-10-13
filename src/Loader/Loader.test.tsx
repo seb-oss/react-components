@@ -31,7 +31,7 @@ describe("Component: Loader", () => {
 
     it("Should hide loader when toggle is true", () => {
         wrapper.setProps({ toggle: false });
-        expect(wrapper.find(".loader-holder").length).toBe(0);
+        expect(wrapper.find(".seb-loader-wrapper").length).toBe(0);
     });
 
     describe("Should render with different sizes", () => {

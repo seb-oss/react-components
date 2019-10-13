@@ -26,9 +26,9 @@ export const Loader: React.FunctionComponent<LoaderProps> = React.memo((props: L
         setSize(`loader-${props.size || "md"}`);
     }, [props.size]);
 
-    return (
-        <div className={className} id={props.id}>
-            {props.toggle &&
+    return props.toggle ?
+        (
+            <div className={className} id={props.id}>
                 <div className={"seb-loader" + (size ? ` ${size}` : "")}>
                     <div className="seb-loader-container">
                         <div className="seb-loader-rotator">
@@ -41,7 +41,7 @@ export const Loader: React.FunctionComponent<LoaderProps> = React.memo((props: L
                         </div>
                     </div>
                 </div>
-            }
-        </div >
-    );
+            </div >
+        )
+        : null;
 });
