@@ -29,9 +29,11 @@ export interface AccordionProps {
     list: Array<AccrodionListItem>;
     alternative?: boolean;
 }
+
 interface AccordionContentRendererProps extends AccrodionListItem {
     collapsableRef: React.RefObject<HTMLDivElement>;
 }
+
 const Accordion: React.FunctionComponent<AccordionProps> = (props: AccordionProps) => {
     const collapsableRef: Array<React.RefObject<HTMLDivElement>> = props.list.map(() => React.useRef<HTMLDivElement>(null));
 
