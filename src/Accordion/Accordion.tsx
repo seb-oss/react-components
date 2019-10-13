@@ -160,6 +160,11 @@ const Accordion: React.FunctionComponent<AccordionProps> = (props: AccordionProp
 
     }
 
+    /**
+     * 
+     * @param e MouseEvent
+     * @param index list index
+     */
 
     function onToggle(e: React.MouseEvent<HTMLDivElement, MouseEvent>, index: number) {
         if (active === index) {
