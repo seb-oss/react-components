@@ -35,8 +35,7 @@ interface AccordionContentRendererProps extends AccrodionListItem {
 }
 
 const Accordion: React.FunctionComponent<AccordionProps> = (props: AccordionProps) => {
-    const collapsableRef: Array<React.RefObject<HTMLDivElement>> = props.list.map(() => React.useRef<HTMLDivElement>(null));
-
+    let collapsableRef: React.MutableRefObject<React.RefObject<HTMLDivElement>[]> = React.useRef(props.list.map(() => React.createRef<HTMLDivElement>()));
     const [active, setActive] = React.useState<number>(null);
     const [accordionClassName, setAccordionClassName] = React.useState<string>("custom-accordion");
     const [itemClassName, setItemClassName] = React.useState<string>("custom-accordion");
@@ -105,8 +104,8 @@ const Accordion: React.FunctionComponent<AccordionProps> = (props: AccordionProp
      */
     function constructRefs(): void {
         for (let i = 0; i < props.list.length; i++) {
-            if (collapsableRef[i].current) {
-                collapseSection(collapsableRef[i]);
+            if (collapsableRef.current && collapsableRef.current[i]) {
+                collapseSection(collapsableRef.current[i]);
             }
         }
     }
@@ -149,11 +148,11 @@ const Accordion: React.FunctionComponent<AccordionProps> = (props: AccordionProp
     function onKeyDown(index: number, e: React.KeyboardEvent<HTMLDivElement>): void {
         if (e.key.toLowerCase() === " " || e.key.toLowerCase() === "space" || e.key.toLowerCase() === "enter") {
             if (active === index) {
-                collapseSection(collapsableRef[index]);
+                collapseSection(collapsableRef.current[index]);
             } else {
-                expandSection(collapsableRef[index]);
+                expandSection(collapsableRef.current[index]);
             }
-            // console.log("Bat man ", collapsableRef[index]);
+
             toggle(index);
             e.preventDefault();
         }
@@ -168,11 +167,11 @@ const Accordion: React.FunctionComponent<AccordionProps> = (props: AccordionProp
 
     function onToggle(e: React.MouseEvent<HTMLDivElement, MouseEvent>, index: number) {
         if (active === index) {
-            collapseSection(collapsableRef[index]);
+            collapseSection(collapsableRef.current[index]);
         } else {
-            expandSection(collapsableRef[index]);
+            expandSection(collapsableRef.current[index]);
         }
-        // console.log("Bat man ", collapsableRef[index]);
+
         toggle(index);
     }
 
@@ -200,7 +199,7 @@ const Accordion: React.FunctionComponent<AccordionProps> = (props: AccordionProp
                             {item.subHeaderText && <h6 className="accordion-sub-header">{item.subHeaderText}</h6>}
                         </div>
                         <div className="content-wrapper" aria-labelledby={idList[index]} id={`lbl-${idList[index]}`} role="region">
-                            {item && <AccordionContentRenderer {...item} collapsableRef={collapsableRef[index]} />}
+                            {item && <AccordionContentRenderer {...item} collapsableRef={collapsableRef.current[index]} />}
                         </div>
                     </div>
                 );
