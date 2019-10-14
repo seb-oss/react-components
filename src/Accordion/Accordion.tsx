@@ -5,13 +5,8 @@ import "./accordion-style.scss";
 const chevronDownIcon: JSX.Element = <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M443.5 162.6l-7.1-7.1c-4.7-4.7-12.3-4.7-17 0L224 351 28.5 155.5c-4.7-4.7-12.3-4.7-17 0l-7.1 7.1c-4.7 4.7-4.7 12.3 0 17l211 211.1c4.7 4.7 12.3 4.7 17 0l211-211.1c4.8-4.7 4.8-12.3.1-17z" /></svg>;
 
 export type AccordionIconRotation = "deg-180" | "deg-180-counter" | "deg-90" | "deg-90-counter";
-
-export interface AccordionContent {
-    title?: string;
-    desc?: string;
-}
-
 export type AccordionContentType = AccordionContent | Array<AccordionContent> | React.ReactNode;
+export type AccordionContent = { title?: string; desc?: string; };
 
 export interface AccrodionListItem {
     header: string;
@@ -30,10 +25,6 @@ export interface AccordionProps {
     alternative?: boolean;
 }
 
-interface AccordionContentRendererProps extends AccrodionListItem {
-    collapsableRef: React.RefObject<HTMLDivElement>;
-}
-
 const Accordion: React.FunctionComponent<AccordionProps> = (props: AccordionProps) => {
     const collapsableRef: React.MutableRefObject<Array<React.RefObject<HTMLDivElement>>> = React.useRef(props.list.map(() => React.createRef<HTMLDivElement>()));
     const [active, setActive] = React.useState<number>(null);
@@ -41,16 +32,11 @@ const Accordion: React.FunctionComponent<AccordionProps> = (props: AccordionProp
     const [itemClassName, setItemClassName] = React.useState<string>("custom-accordion");
     const [idList, setIdList] = React.useState<Array<string>>([]);
 
-    React.useEffect(() => {
-        constructIds();
-        constructClassName();
-        constructItemClassName();
-        constructRefs();
-    }, [props.id, props.className, props.alternative, props.iconPosition, props.iconRotation, props.customIconExpanded, props.list]);
+    React.useEffect(() => { constructRefs(); constructIds(); }, [props.list]);
+    React.useEffect(() => constructClassName(), [props.className, props.alternative]);
+    React.useEffect(() => constructItemClassName(), [props.iconPosition, props.customIconExpanded, props.iconRotation]);
 
-    /**
-     * Constructs and initialize collapsable refs by index for each element in the list
-     */
+    /** Constructs and initialize collapsable refs by index for each element in the list */
     function constructRefs(): void {
         for (let i = 0; i < props.list.length; i++) {
             if (collapsableRef.current && collapsableRef.current[i]) {
@@ -58,18 +44,15 @@ const Accordion: React.FunctionComponent<AccordionProps> = (props: AccordionProp
             }
         }
     }
-    /**
-     * Constructs the component's `id` if `id` prop is passed
-     */
+
+    /** Constructs `id`s for accordion items */
     function constructIds(): void {
         const idListToSet: Array<string> = [];
         props.list.map(() => idListToSet.push(randomId("accordion-")));
         setIdList(idListToSet);
     }
 
-    /**
-     * Constructs the `classname` to be used in accordion wrapper
-     */
+    /** Constructs the `className` to be used in accordion wrapper */
     function constructClassName(): void {
         let cn: string = "custom-accordion";
         cn += props.className ? ` ${props.className}` : "";
@@ -77,9 +60,7 @@ const Accordion: React.FunctionComponent<AccordionProps> = (props: AccordionProp
         setAccordionClassName(cn);
     }
 
-    /**
-     * Constructs the `classname` to be used in accordion items
-     */
+    /** Constructs the `className` to be used in accordion items */
     function constructItemClassName(): void {
         let cn: string = "accordion-item";
         cn += " " + (props.iconPosition ? props.iconPosition : "left");
@@ -112,12 +93,11 @@ const Accordion: React.FunctionComponent<AccordionProps> = (props: AccordionProp
     }
 
     /**
-     *
+     * Handles accordion item click event
      * @param e MouseEvent
      * @param index list index
      */
-
-    function onToggle(e: React.MouseEvent<HTMLDivElement, MouseEvent>, index: number) {
+    function onToggle(e: React.MouseEvent<HTMLDivElement, MouseEvent>, index: number): void {
         if (active === index) {
             collapseSection(collapsableRef.current[index]);
         } else {
@@ -165,7 +145,7 @@ const Accordion: React.FunctionComponent<AccordionProps> = (props: AccordionProp
 
 const expandSection = (ref: React.RefObject<HTMLDivElement>): void => {
     // get the height of the element's inner content, regardless of its actual size
-    const sectionHeight = ref.current.scrollHeight;
+    const sectionHeight: number = ref.current.scrollHeight;
 
     // have the element transition to the height of its inner content
     ref.current.style.height = sectionHeight + "px";
@@ -189,10 +169,10 @@ const expandSection = (ref: React.RefObject<HTMLDivElement>): void => {
 
 const collapseSection = (ref: React.RefObject<HTMLDivElement>): void => {
     // get the height of the element's inner content, regardless of its actual size
-    const sectionHeight = ref.current.scrollHeight;
+    const sectionHeight: number = ref.current.scrollHeight;
 
     // temporarily disable all css transitions
-    const elementTransition = ref.current.style.transition;
+    const elementTransition: string = ref.current.style.transition;
     ref.current.style.transition = "";
 
     // on the next frame (as soon as the previous style change has taken effect),
@@ -217,6 +197,10 @@ const collapseSection = (ref: React.RefObject<HTMLDivElement>): void => {
     ref.current.setAttribute("data-collapsed", "true");
     ref.current.setAttribute("aria-expanded", "false");
 };
+
+interface AccordionContentRendererProps extends AccrodionListItem {
+    collapsableRef: React.RefObject<HTMLDivElement>;
+}
 
 const AccordionContentRenderer: React.FunctionComponent<AccordionContentRendererProps> = (props: AccordionContentRendererProps) => {
     if (React.isValidElement(props.content)) {
