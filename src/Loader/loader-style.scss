@@ -19,21 +19,33 @@ $btn-lg-size: 20px;
     display: -webkit-inline-flex;
     display: inline-flex;
 }
+
 @mixin flexCenter {
     justify-content: center;
     align-items: center;
 }
 
 @mixin setSpinnerThickness($size) {
-    div.seb-loader-container > div.seb-loader-rotator div.seb-loader-circle {
+    div.seb-loader-container>div.seb-loader-rotator div.seb-loader-circle {
         border-width: $size;
     }
 }
 
-@mixin setSpinnerColor($color, $hover: $red) {
-    div.seb-loader-container > div.seb-loader-rotator div.seb-loader-circle {
-        border-color: $color $color transparent;
-        border-right-color: transparent;
+@mixin setSpinnerColor($color) {
+    .seb-loader-container {
+        >.seb-loader-rotator {
+            >.seb-loader-left {
+                >.seb-loader-circle {
+                    border-color: $color transparent transparent $color;
+                }
+            }
+
+            >.seb-loader-right {
+                >.seb-loader-circle {
+                    border-color: $color $color transparent transparent;
+                }
+            }
+        }
     }
 }
 
@@ -44,45 +56,10 @@ $btn-lg-size: 20px;
     animation: $props;
 }
 
-@mixin setButtonLoaderTheme($color, $hoverColor) {
-    &:hover {
-        .seb-loader-wrapper {
-            .seb-loader {
-                .seb-loader-container {
-                    > .seb-loader-rotator {
-                        > .seb-loader-left,
-                        > .seb-loader-right {
-                            > .seb-loader-circle {
-                                border-color: $hoverColor $hoverColor transparent;
-                                border-right-color: transparent;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    .seb-loader-wrapper {
-        .seb-loader {
-            .seb-loader-container {
-                > .seb-loader-rotator {
-                    > .seb-loader-left,
-                    > .seb-loader-right {
-                        > .seb-loader-circle {
-                            border-color: $color $color transparent;
-                            border-right-color: transparent;
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-
 .seb-loader-wrapper {
     @include displayFlex;
     @include flexCenter;
+
     &.fullscreen {
         position: fixed;
         top: 0;
@@ -92,6 +69,7 @@ $btn-lg-size: 20px;
         background-color: $transparent-black;
         z-index: 10;
     }
+
     &:not(.fullscreen) {
         position: absolute;
         top: 0;
@@ -100,7 +78,7 @@ $btn-lg-size: 20px;
         right: 0;
     }
 
-    > .seb-loader {
+    >.seb-loader {
         position: relative;
         pointer-events: none;
         width: 100%;
@@ -109,6 +87,7 @@ $btn-lg-size: 20px;
         align-items: center;
         @include displayFlex;
         @include flexCenter;
+
         &.loader-sm {
             max-width: $loader-xs-size;
             max-height: $loader-xs-size;
@@ -132,22 +111,21 @@ $btn-lg-size: 20px;
             width: 100%;
             padding-bottom: 100%;
             @include animation(seb-loader-linspin 1568.23529647ms linear infinite);
-            > .seb-loader-rotator {
+
+            >.seb-loader-rotator {
                 position: absolute;
                 width: 100%;
                 height: 100%;
                 @include animation(seb-loader-easespin 5332ms cubic-bezier(0.4, 0, 0.2, 1) infinite both);
 
-                > .seb-loader-left,
-                > .seb-loader-right {
+                >.seb-loader-left,
+                >.seb-loader-right {
                     position: absolute;
                     top: 0;
-                    left: 0;
-                    right: 0;
                     bottom: 0;
                     overflow: hidden;
 
-                    > .seb-loader-circle {
+                    >.seb-loader-circle {
                         box-sizing: border-box;
                         position: absolute;
                         width: 200%;
@@ -159,10 +137,10 @@ $btn-lg-size: 20px;
                     }
                 }
 
-                > .seb-loader-left {
-                    right: 49%;
-
-                    > .seb-loader-circle {
+                >.seb-loader-left {
+                    right: 50%;
+                    left: 0;
+                    >.seb-loader-circle {
                         left: 0;
                         right: -100%;
                         border-right-color: transparent;
@@ -170,10 +148,11 @@ $btn-lg-size: 20px;
                     }
                 }
 
-                > .seb-loader-right {
-                    left: 49%;
+                >.seb-loader-right {
+                    left: 50%;
+                    right: 0;
 
-                    > .seb-loader-circle {
+                    >.seb-loader-circle {
                         left: -100%;
                         right: 0;
                         border-left-color: transparent;
@@ -191,51 +170,60 @@ button.btn {
         margin-left: 10px;
         width: 18px;
         height: 18px;
-        > .seb-loader {
+
+        >.seb-loader {
             @include setSpinnerThickness(2px);
         }
     }
+
     &.btn-primary,
     &.btn-danger {
-        .seb-loader-wrapper > .seb-loader {
+        .seb-loader-wrapper>.seb-loader {
             @include setSpinnerColor($white);
         }
     }
+
     &.btn-secondary,
     &.btn-outline-primary {
-        .seb-loader-wrapper > .seb-loader {
+        .seb-loader-wrapper>.seb-loader {
             @include setSpinnerColor($blue-dark);
         }
-        &:not(:disabled):hover .seb-loader-wrapper > .seb-loader {
+
+        &:not(:disabled):hover .seb-loader-wrapper>.seb-loader {
             @include setSpinnerColor($white);
         }
     }
+
     &.btn-ghost-dark {
-        .seb-loader-wrapper > .seb-loader {
+        .seb-loader-wrapper>.seb-loader {
             @include setSpinnerColor($black);
         }
-        &:not(:disabled):hover .seb-loader-wrapper > .seb-loader {
+
+        &:not(:disabled):hover .seb-loader-wrapper>.seb-loader {
             @include setSpinnerColor($white);
         }
     }
+
     &.btn-ghost-light {
-        .seb-loader-wrapper > .seb-loader {
+        .seb-loader-wrapper>.seb-loader {
             @include setSpinnerColor($white);
         }
-        &:not(:disabled):hover .seb-loader-wrapper > .seb-loader {
+
+        &:not(:disabled):hover .seb-loader-wrapper>.seb-loader {
             @include setSpinnerColor($black);
         }
     }
+
     &.btn-anchor {
-        .seb-loader-wrapper > .seb-loader {
+        .seb-loader-wrapper>.seb-loader {
             @include setSpinnerColor($blue-dark);
         }
     }
 }
 
-.form-group.input-box-group > .input-group > .input-box-group-wrapper .input-group-text {
-    > .seb-loader-wrapper {
-        > .seb-loader {
+.form-group.input-box-group>.input-group>.input-box-group-wrapper .input-group-text {
+    >.seb-loader-wrapper {
+        >.seb-loader {
             width: 50%;
             height: 50%;
             @include setSpinnerColor($blue);
