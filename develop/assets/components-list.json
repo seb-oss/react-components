@@ -154,6 +154,11 @@
     ],
     "other": [
         {
+            "name": "Table",
+            "path": "/table",
+            "filePath": "pages/TablePage"
+        },
+        {
             "name": "Dialogue",
             "path": "/dialogue",
             "filePath": "pages/DialoguePage"
