@@ -1,19 +1,79 @@
+$gray-200: #e9e9e9 !default;
+$gray-300: #dedede !default;
+$gray-400: #cecece !default;
+$gray-500: #adadad !default;
+$gray-600: #868686 !default;
+$gray-700: #494949 !default;
+$gray-800: #343434 !default;
+$gray-900: #212121 !default;
+
+$sort-icon-color: #B2B3B3;
+$sort-icon-active-color: #007AC7;
+$sort-icon-hover-color: #41B0EE;
+
+$sort-icon-width: width 10px;
+
 table {
     &.table {
         thead {
             >tr {
                 >th {
+                    .custom-control {
+                        position: relative;
+                        display: block;
+                        min-height: 1.5rem;
+                        &.custom-checkbox {
+                            input[type="checkbox"] {
+                                box-sizing: border-box;
+                                padding: 0;
+                            }
+                            .custom-control-label {
+                                position: relative;
+                                margin-bottom: 0;
+                                vertical-align: top;
+                            }
+                            .custom-control-input {
+                                position: absolute;
+                                z-index: -1;
+                                opacity: 0;
+                            }
+                        }
+                    }
+
                     .icon-holder {
-                        height: 30px;
-                        svg {
-                            display: block;
-                            width: 100%;
-                            height: 15px;
+                        height: 16px;
+                        vertical-align: middle;
+                        position: relative;
+
+                        >.angle-up,
+                        >.angle-down {
+                            position: relative;
+                            width: $sort-icon-width;
+                            height: 8px;
+
+                            svg {
+                                display: block;
+                                width: 100%;
+                                height: 100%;
+                                fill: $sort-icon-color;
+
+                                &:hover {
+                                    fill: $sort-icon-hover-color;
+                                }
+                            }
+
+                            &.active {
+                                svg {
+                                    fill: $sort-icon-active-color;
+                                }
+                            }
                         }
                     }
                 }
             }
         }
+
+        tbody {}
     }
 
 }

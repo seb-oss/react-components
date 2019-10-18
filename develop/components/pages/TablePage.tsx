@@ -6,11 +6,14 @@ const Highlight = (require("react-highlight")).default;
 const docMD = require("../../../src/StepTracker/readme.md");
 
 const TablePage: React.FunctionComponent = () => {
+    const [selectAll, setSelectAll] = React.useState<boolean>(false);
+
     const columns: Array<Column> = React.useMemo(
         () => [
             {
                 Header: "First Name",
                 accessor: "firstName",
+                canSort: false
             },
             {
                 Header: "Last Name",
@@ -35,7 +38,7 @@ const TablePage: React.FunctionComponent = () => {
         ],
         []
     );
-    const data = React.useMemo(() => makeData(20), []);
+    const data = React.useMemo(() => makeData(10), []);
     return (
         <div className="route-template container">
             <div className="info-holder">
@@ -51,7 +54,13 @@ const TablePage: React.FunctionComponent = () => {
 
                     <p>Here is an example of a horizontal step tracker:</p>
                     <div className="result wide">
-                        <Table columns={columns} data={data} sortable={true} />
+                        <Table
+                            columns={columns}
+                            data={data}
+                            sortable={true}
+                            setSelectAllValue={selectAll}
+                            onSelectAllItemsChecked={(e: React.ChangeEvent<HTMLInputElement>) => { setSelectAll(e.target.checked); }}
+                        />
                     </div>
                 </div>
 
