@@ -49,8 +49,8 @@ This component is a wrapper around [react-slick](https://www.npmjs.com/package/r
 
 1. `list` items has an exported interface named `CarouselItem`
 
-```javascript
-{
+```typescript
+interface CarouselItem {
     title?: string;
     desc?: string;
     image?: string;
