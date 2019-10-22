@@ -41,8 +41,8 @@ These are the current available properties:
 
 1. List propery has an exported interface named `TimelineListItem`
 
-```javascript
-{
+```typescript
+interface TimelineListItem {
       title: string;
       time: string;
       desc?: string;

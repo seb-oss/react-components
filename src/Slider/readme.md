@@ -62,8 +62,8 @@ These are the current available properties:
 
 1. `labels` items has an exported interface named `RangeSliderLabel`
 
-```javascript
-{
+```typescript
+interface RangeSliderLabel {
     position: number;
     text: string;
 }
