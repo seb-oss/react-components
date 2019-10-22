@@ -137,17 +137,36 @@ $disabled-thumb-border-color: #8c8c8c;
                 display: none;
                 color: $transparent;
             }
-            &:active {
+            &:focus {
+                outline: none;
                 & + .custom-slider-holder {
-                    .custom-slider-thumb {
-                        .custom-slider-preview:not(.always-show) {
-                            display: block;
+                    > .custom-slider-track {
+                        > .custom-slider-thumb {
+                            box-shadow: $box-shadow, 0px 0 0px 2px rgba($blue-dark, 0.45);
                         }
                     }
                 }
             }
-            &:focus {
-                outline: none;
+            &:hover {
+                & + .custom-slider-holder {
+                    > .custom-slider-track {
+                        > .custom-slider-thumb {
+                            @include transform(translateX(-50%) scale(1.1));
+                        }
+                    }
+                }
+            }
+            &:active {
+                & + .custom-slider-holder {
+                    > .custom-slider-track {
+                        > .custom-slider-thumb {
+                            @include transform(translateX(-50%) scale(1.05));
+                            .custom-slider-preview:not(.always-show) {
+                                display: block;
+                            }
+                        }
+                    }
+                }
             }
         }
         .custom-slider-holder {
@@ -175,16 +194,13 @@ $disabled-thumb-border-color: #8c8c8c;
                     height: 100%;
                     z-index: 2;
                     @include transition(width $transition-time ease-out);
-                    &before {
-                        border: 1px solid red;
-                    }
                 }
                 .custom-slider-slider-before {
                     left: 0px;
                     will-change: width;
                     &:before {
                         position: relative;
-                        content: '';
+                        content: "";
                         width: 27px;
                         height: 5px;
                         display: block;
@@ -199,7 +215,7 @@ $disabled-thumb-border-color: #8c8c8c;
                     will-change: width;
                     &:after {
                         position: absolute;
-                        content: '';
+                        content: "";
                         width: 26px;
                         height: 5px;
                         display: block;
@@ -215,11 +231,16 @@ $disabled-thumb-border-color: #8c8c8c;
                     background-color: $blue-dark;
                     border-radius: 4px;
                     top: -14px;
+                    transform-origin: center;
                     @include transform(translateX(-50%));
                     pointer-events: none;
                     box-shadow: $box-shadow;
                     will-change: left;
-                    @include transition(left $transition-time ease-out);
+                    @include transition((
+                        left $transition-time ease-out,
+                        transform $transition-time ease-in-out,
+                        box-shadow $transition-time ease-in
+                    ));
                     z-index: 2;
                     .custom-slider-preview {
                         pointer-events: none;
