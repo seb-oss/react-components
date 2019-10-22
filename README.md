@@ -45,8 +45,8 @@ This project uses proper `ts-linting` and our lints are based on `tslint:latest`
 1. Development: `npm start`
 2. Check for Lint-ing rules, Compile components and Create Docs folder: `npm run build`
 3. Build and create the Documentation pages only: `npm run docs`
-4. To run the unit tests, run: `npm run test`
-5. To run a unit test for a specific component you have to pass the name of the component in `comp` variable, run: `npm run test --comp=Button`
+4. To run the unit tests, run: `npm test`
+5. To run a unit test for a specific component you have to pass the name of the component in `comp` variable, run: `npm test Button`. It can also be chained with multiple specific components, e.g. `npm test Button RadioGroup`
 
 ## Usage
 
