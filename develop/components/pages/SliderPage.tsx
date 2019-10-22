@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Slider } from "../../../src/Slider/Slider";
+import { Slider, RangeSliderLabel } from "../../../src/Slider/Slider";
 import { TextBoxGroup } from "../../../src/TextBoxGroup/TextBoxGroup";
 const Highlight = (require("react-highlight")).default;
 const docMD: string = require("../../../src/Slider/readme.md");
@@ -32,9 +32,14 @@ const SliderExamples: React.FunctionComponent = () => {
     const [disabledSlider1, setDisabledSlider1] = React.useState<number>(2500);
     const [sebSlider, setSebSlider] = React.useState<number>(0);
     const [sebSliderError, setSebSliderError] = React.useState<string>("");
+    const [diverse, setDiverse] = React.useState<number>(diverseLabels[0].position);
 
     function handleSebSliderChange(event: React.ChangeEvent<HTMLInputElement>): void {
-        const value: number = Number(event.target.value);
+        let processed: string = event.target.value.indexOf("-") !== -1
+            ? "-" + event.target.value.replace(/(-)/gi, "")
+            : event.target.value;
+        processed = processed === "-" ? "-0" : processed;
+        const value: number = Number(processed);
         if (isNaN(value)) {
             setSebSliderError("Cannot be less the minimum");
             setSebSlider(0);
@@ -67,6 +72,22 @@ const SliderExamples: React.FunctionComponent = () => {
                         name="normalSlider"
                         showTicks={true}
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSlider(Number(e.target.value))}
+                    />
+                </div>
+            </div>
+
+            <div className="info">
+                <p>Slider with negative and positive values</p>
+                <div className="result">
+                    <Slider
+                        name="test-slider"
+                        value={diverse}
+                        min={diverseLabels[0].position}
+                        max={diverseLabels[diverseLabels.length - 1].position}
+                        step={5}
+                        onChange={(e) => setDiverse(Number(e.target.value))}
+                        showTicks={true}
+                        labels={diverseLabels}
                     />
                 </div>
             </div>
@@ -117,8 +138,8 @@ const SliderExamples: React.FunctionComponent = () => {
                                 name="seb-slider"
                                 type="text"
                                 rightText="kr"
-                                maxLength={4}
-                                value={Number(sebSlider)}
+                                maxLength={5}
+                                value={sebSlider}
                                 onChange={handleSebSliderChange}
                                 error={sebSliderError}
                                 showErrorMessage={false}
@@ -146,19 +167,29 @@ const SliderExamples: React.FunctionComponent = () => {
     );
 };
 
-const sliderLabels: Array<{ position: number, text: string }> = [
+const sliderLabels: Array<RangeSliderLabel> = [
     { position: 0, text: "0%" },
     { position: 25, text: "25%" },
     { position: 50, text: "50%" },
     { position: 75, text: "75%" },
     { position: 100, text: "100%" },
 ];
-const currencySliderLabels: Array<{ position: number, text: string }> = [
+const currencySliderLabels: Array<RangeSliderLabel> = [
     { position: 1000, text: "1 000 kr" },
     { position: 1500, text: "1 500 kr" },
     { position: 2000, text: "2 000 kr" },
     { position: 2500, text: "2 500 kr" },
-    { position: 3000, text: "3 000 kr" }
+    { position: 3000, text: "3 000 kr" },
+];
+
+const diverseLabels: Array<RangeSliderLabel> = [
+    { position: -30, text: "-30" },
+    { position: -20, text: "-20" },
+    { position: -10, text: "-10" },
+    { position: 0, text: "0" },
+    { position: 10, text: "10" },
+    { position: 20, text: "20" },
+    { position: 30, text: "30" },
 ];
 
 export default SliderPage;

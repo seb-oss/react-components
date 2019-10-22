@@ -22,15 +22,8 @@ This React component supports customization and configurations. The component na
 ## Basic use
 
 ```html
-<Slider
-    value={this.state.slider}
-    min={0}
-    max={100}
-    step={5}
-    labels={this.sliderLabels}
-    name="sliderName"
-    onChange={(event) => { this.setState({ slider: event.target.value }); }}
-/>
+<Slider value={this.state.slider} min={0} max={100} step={5} labels={this.sliderLabels} name="sliderName"
+onChange={(event) => { this.setState({ slider: event.target.value }); }} />
 ```
 
 ## Properties
@@ -42,7 +35,7 @@ These are the current available properties:
 | alternative?       | `boolean`                             | Use an alternative version of the slider                            |
 | alwaysShowTooltip? | `boolean`                             | Always Show tooltip (default: `false`)                              |
 | className?         | `string`                              | Custom class can be passed here                                     |
-| disabled?          | `string`                              | Disabled state                                                      |
+| disabled?          | `boolean`                             | Disabled state                                                      |
 | error?             | `string`                              | The component error message                                         |
 | id?                | `string`                              | Id property                                                         |
 | label?             | `string`                              | The component label                                                 |
@@ -82,11 +75,11 @@ HTML (tsx) would look like this
             name="seb-slider"
             type="text"
             rightText="kr"
-            maxLength={4}
-            value={Number(sebSlider)}
-            onChange={handleSebSliderChange}
-            error={sebSliderError}
-            showErrorMessage={false}
+            maxLength="{4}"
+            value="{Number(sebSlider)}"
+            onChange="{handleSebSliderChange}"
+            error="{sebSliderError}"
+            showErrorMessage="{false}"
         />
     </div>
 </div>
@@ -94,14 +87,14 @@ HTML (tsx) would look like this
     <div className="col-12">
         <Slider
             name="seb-slider"
-            value={sebSlider}
-            onChange={handleSebSliderChange}
-            showTicks={true}
-            labels={currencySliderLabels}
-            min={1000}
-            max={3000}
-            step={100}
-            error={sebSliderError}
+            value="{sebSlider}"
+            onChange="{handleSebSliderChange}"
+            showTicks="{true}"
+            labels="{currencySliderLabels}"
+            min="{1000}"
+            max="{3000}"
+            step="{100}"
+            error="{sebSliderError}"
         />
     </div>
 </div>

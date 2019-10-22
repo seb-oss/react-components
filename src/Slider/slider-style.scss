@@ -1,6 +1,10 @@
 @import "../colours";
 $transition-time: 80ms;
 $box-shadow: rgba(85, 85, 85, 0.4) 0 2px 5px;
+$disabled-selected: #adadad;
+$disabled-unselected: #cccccc;
+$disabled-thumb-bg: #9a9a9a;
+$disabled-thumb-border-color: #8c8c8c;
 
 @mixin appearance($props) {
     -webkit-appearance: $props;
@@ -171,16 +175,38 @@ $box-shadow: rgba(85, 85, 85, 0.4) 0 2px 5px;
                     height: 100%;
                     z-index: 2;
                     @include transition(width $transition-time ease-out);
+                    &before {
+                        border: 1px solid red;
+                    }
                 }
                 .custom-slider-slider-before {
                     left: 0px;
-                    background-color: $blue-dark;
                     will-change: width;
+                    &:before {
+                        position: relative;
+                        content: '';
+                        width: 27px;
+                        height: 5px;
+                        display: block;
+                        z-index: 2;
+                        left: -27px;
+                        background-color: $blue-dark;
+                    }
                 }
                 .custom-slider-slider-after {
                     right: -2px;
                     background-color: $gray-500;
                     will-change: width;
+                    &:after {
+                        position: absolute;
+                        content: '';
+                        width: 26px;
+                        height: 5px;
+                        display: block;
+                        z-index: 2;
+                        right: -26px;
+                        background-color: $gray-500;
+                    }
                 }
                 .custom-slider-thumb {
                     position: relative;
@@ -288,22 +314,25 @@ $box-shadow: rgba(85, 85, 85, 0.4) 0 2px 5px;
     &.disabled {
         > div.input-field {
             > input[type="range"] {
-                cursor: default !important;
+                cursor: default;
             }
             > div.custom-slider-holder {
                 > div.custom-slider-track {
                     > div.custom-slider-slider-before {
-                        background-color: #adadad !important;
+                        background-color: $disabled-selected;
+                        &:before {
+                            background-color: $disabled-selected;
+                        }
                     }
                     > div.custom-slider-slider-after {
-                        background-color: #cccccc !important;
+                        background-color: $disabled-unselected;
+                        &:after {
+                            background-color: $disabled-unselected;
+                        }
                     }
                     > div.custom-slider-thumb {
-                        background-color: #9a9a9a !important;
-                        border-color: #8c8c8c !important;
-                        &:after {
-                            background-color: #c5c5c5 !important;
-                        }
+                        background-color: $disabled-thumb-bg;
+                        border-color: $disabled-thumb-border-color;
                     }
                 }
             }

@@ -117,5 +117,32 @@ describe("Component: Slider", () => {
         expect(mountedWrapper.find(".custom-slider-label").at(2).text()).toBe("100%");
     });
 
+    it("Should throw a warning when min value is passed larger than max value", () => {
+        const warnSpy = spyOn(console, "warn");
+        mountedWrapper = mount(
+            <Slider
+                {...props}
+                min={50}
+                max={30}
+            />
+        );
+        expect(warnSpy).toBeCalled();
+    });
+
+    it("Should allow passing negative values", () => {
+        mountedWrapper = mount(
+            <Slider
+                {...props}
+                min={-10}
+                max={10}
+                value={-5}
+            />
+        );
+        expect(mountedWrapper.find(".custom-slider-thumb").prop("style")).toEqual({ left: "25%" });
+        expect(mountedWrapper.find(".custom-slider-slider-before").prop("style")).toEqual({ width: "25%" });
+        expect(mountedWrapper.find(".custom-slider-slider-after").prop("style")).toEqual({ width: "75%" });
+        expect(mountedWrapper.find(".custom-slider-preview").text()).toEqual("-5");
+    });
+
     afterEach(() => mountedWrapper.unmount());
 });

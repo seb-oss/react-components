@@ -35,11 +35,15 @@ export interface SliderProps {
 const Slider: React.FunctionComponent<SliderProps> = (props: SliderProps): React.ReactElement<void> => {
     const [min, setMin] = React.useState<number>(props.min || 0);
     const [max, setMax] = React.useState<number>(props.max || 100);
+    const [size, setSize] = React.useState<number>(0);
     const [labelsPositions, setLabelsPositions] = React.useState<Array<string>>([]);
 
     React.useEffect(() => {
-        setMin(props.min || 0);
-        setMax(props.max || 100);
+        const minValue: number = props.min === undefined ? 0 : props.min;
+        const maxValue: number = props.max === undefined ? 100 : props.max;
+        setMin(minValue);
+        setMax(maxValue);
+        setSize(range(minValue, maxValue));
     }, [props.min, props.max]);
 
     React.useEffect(() => {
@@ -50,7 +54,17 @@ const Slider: React.FunctionComponent<SliderProps> = (props: SliderProps): React
             });
             setLabelsPositions(positions);
         }
-    }, [props.labels]);
+    }, [props.labels, min, max]);
+
+    /** Findes the range between two numbers */
+    function range(minValue: number, maxValue: number): number {
+        if (maxValue > minValue) {
+            return maxValue - minValue;
+        } else {
+            console.warn(`The max value of the slider should be larger than the min value (Max:${max}, Min: ${min}`);
+            return minValue - maxValue;
+        }
+    }
 
     /**
      * Converts the current value to percentage based on min and max
@@ -58,21 +72,24 @@ const Slider: React.FunctionComponent<SliderProps> = (props: SliderProps): React
      * @returns {number} The precentage
      */
     function getPercentage(value: number): number {
+        let result: number;
+        const offset: number = Math.abs(0 - min);
+        let reset: number;
+        let val: number = value;
         if (value < min) {
-            return 0;
+            val = min;
         } else if (value > max) {
-            return 100;
-        } else {
-            const offset: number = Math.abs(0 - min);
-            const result: number = Math.abs(((value - min) / (max - offset)) * 100);
-            return result;
+            val = max;
         }
+        reset = min > 0 ? val - offset : val + offset;
+        result = Math.abs((reset / size) * 100);
+        return result;
     }
 
     function getLabelPosition(value: number): number {
-        if (value > max) {
+        if (value >= max) {
             return 100;
-        } else if (value < min) {
+        } else if (value <= min) {
             return 0;
         }
         return Math.abs(((value - min) / (max - min)) * 100);
@@ -124,7 +141,7 @@ const Slider: React.FunctionComponent<SliderProps> = (props: SliderProps): React
                             <span className="custom-slider-icon-left">{angleLeftIcon}</span>
                             <span className="custom-slider-icon-right">{angleRightIcon}</span>
                         </div>
-                        {(props.labels && props.labels.length) &&
+                        {(props.labels && props.labels.length) ?
                             props.labels.map((label: RangeSliderLabel, i: number) =>
                                 <div
                                     key={i}
@@ -133,7 +150,7 @@ const Slider: React.FunctionComponent<SliderProps> = (props: SliderProps): React
                                 >
                                     {label.text}
                                 </div>
-                            )
+                            ) : null
                         }
                     </div>
                 </div>
