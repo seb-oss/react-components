@@ -53,7 +53,7 @@ These are the current available properties:
 4. `actions` has an exported interface named `NotificationAction`
 
 ```typescript
-{
+interface NotificationAction {
       text: string;
       action: () => void;
 }

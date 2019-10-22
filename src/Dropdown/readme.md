@@ -79,9 +79,10 @@ We recommend moving this process to a method for reusability
 
 1. `list` items has an exported interface named `DropdownItem`
 
-```javascript
-{
-    (label = string), (value = any);
+```typescript
+interface DropdownItem<T = any> {
+    value: T;
+    label: string;
 }
 ```
 2. Dropdown change event returns either of the following depending on the type:
