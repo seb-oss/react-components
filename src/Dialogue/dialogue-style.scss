@@ -95,13 +95,6 @@ $close-button-size: 15px;
                         &.btn-secondary {
                             border: 1px solid $blue-dark;
                         }
-                        &:active,
-                        &:hover,
-                        &:focus {
-                            color: $white;
-                            box-shadow: none !important;
-                            outline: 0 !important;
-                        }
                     }
                     &:first-child {
                         padding-right: 16px;
