@@ -1,12 +1,22 @@
 import * as React from "react";
-import { Table } from "../../../src/Table/Table";
+import { Table, TableRow } from "../../../src/Table/Table";
 import makeData from "../../../src/Table/makeData";
 import { Column } from "react-table";
+import { Pagination } from "../../../src/Pagination/Pagination";
 const Highlight = (require("react-highlight")).default;
 const docMD = require("../../../src/StepTracker/readme.md");
 
 const TablePage: React.FunctionComponent = () => {
     const [selectAll, setSelectAll] = React.useState<boolean>(false);
+    const [selectedRows, setSelectedRow] = React.useState<Array<TableRow>>([]);
+    const [paginationValue, setPagination] = React.useState<number>(1);
+
+    const pageSize: number = 10;
+    const listSize: number = 30;
+
+    React.useEffect(() => {
+        console.log("There is a change ", selectedRows);
+    }, [selectedRows]);
 
     const columns: Array<Column> = React.useMemo(
         () => [
@@ -38,7 +48,7 @@ const TablePage: React.FunctionComponent = () => {
         ],
         []
     );
-    const data = React.useMemo(() => makeData(10), []);
+    const data = React.useMemo(() => makeData(listSize), []);
     return (
         <div className="route-template container">
             <div className="info-holder">
@@ -55,11 +65,23 @@ const TablePage: React.FunctionComponent = () => {
                     <p>Here is an example of a horizontal step tracker:</p>
                     <div className="result wide">
                         <Table
-                            columns={columns}
-                            data={data}
+                            tableColumns={columns}
+                            tableData={data}
                             sortable={true}
                             setSelectAllValue={selectAll}
+                            pagingSize={pageSize}
+                            pagingIndex={paginationValue}
+                            usePagination={true}
                             onSelectAllItemsChecked={(e: React.ChangeEvent<HTMLInputElement>) => { setSelectAll(e.target.checked); }}
+                            onSelectSingleItem={(rows: Array<TableRow>) => { setSelectedRow(rows); }}
+                            footer={
+                                <Pagination
+                                    value={paginationValue}
+                                    onChange={setPagination}
+                                    size={Math.ceil(listSize / listSize)}
+                                    useFirstAndLast={true}
+                                />
+                            }
                         />
                     </div>
                 </div>
