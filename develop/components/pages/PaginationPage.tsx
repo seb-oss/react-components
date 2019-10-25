@@ -26,30 +26,31 @@ const PaginationPage: React.FunctionComponent = () => {
                         <Pagination
                             value={pagination}
                             onChange={setPagination}
-                            size={20}
+                            size={55}
                             offset={5}
+                            pagingLength={6}
                         />
                     </div>
 
                     <p>With <b>first</b> and <b>last</b> enabled</p>
                     <div className="result">
-                        <Pagination
+                        {/* <Pagination
                             value={pagination2}
                             onChange={setPagination2}
                             size={20}
                             offset={5}
                             useFirstAndLast={true}
-                        />
+                        /> */}
                     </div>
 
                     <p>Here are sample outputs of DotNav: {dotnav}</p>
                     <div className="result">
-                        <Pagination
+                        {/* <Pagination
                             value={dotnav}
                             onChange={setDotnav}
                             size={8}
                             useDotNav={true}
-                        />
+                        /> */}
                     </div>
                 </div>
 

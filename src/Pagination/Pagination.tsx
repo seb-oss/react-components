@@ -13,6 +13,7 @@ export interface PaginationProps {
     lastText?: string;
     nextText?: string;
     offset?: number;
+    pagingLength?: number;
     onChange?: (value: number) => void;
     previousText?: string;
     size: number;
@@ -23,7 +24,12 @@ export interface PaginationProps {
 }
 
 export const Pagination: React.FunctionComponent<PaginationProps> = React.memo((props: PaginationProps): React.ReactElement<void> => {
-    const Initialoffset: number = props.offset ? props.offset : 10;
+    const initialoffset: number = props.offset ? props.offset : 10;
+    const intialLength: number = props.pagingLength ? props.pagingLength : 5;
+
+    // const [list, setList] = React.useState<Array<number>>(() => [...Array(props.size)]);
+
+
 
     /**
      * Generates an array of the pages that needs to be displayed
@@ -33,9 +39,43 @@ export const Pagination: React.FunctionComponent<PaginationProps> = React.memo((
      * @param {number} offset The offset to show the numbers
      * @returns {Array<number>} An array of the pages that needs to be displayed
      */
-    function getList(value: number, size: number, offset: number): Array<number> {
+    function getList(value: number, size: number, offset: number, length: number): Array<number> {
         const list: Array<number> = [];
         const range: { min: number, max: number } = { min: 0, max: 0 };
+        const pagingSize: number = Math.ceil(size / offset);
+
+        // generate the array
+        for (let i = 1; i <= pagingSize; i++) {
+            list.push(i);
+        }
+
+
+        const medianValue = Math.floor(length / 2);
+        // console.log("here nuru " + value, medianValue);
+        let start: number = 0;
+        let end: number = pagingSize;
+
+
+
+        if ((value - medianValue) > -1) {
+            if ((value + medianValue) < end) {
+                start = (value - 1) - medianValue;
+                end = value + medianValue;
+            } else {
+                start = end - length;
+            }
+        } else {
+            end = length;
+        }
+        // generate the pages
+        console.log("here nuru " + start, end);
+        console.log("here nuru ", list);
+        start = start > -1 ? start : 0;
+        return list.slice(start, end);
+
+
+
+        /*
         if (value <= (Math.ceil(offset / 2))) {
             for (let i = 1; i <= offset; i++) {
                 list.push(i);
@@ -54,14 +94,15 @@ export const Pagination: React.FunctionComponent<PaginationProps> = React.memo((
             }
         }
         return list;
+        */
     }
-
+    console.log("It shere ")
     return (
         <div className={"pagination-wrapper" + (props.className ? ` ${props.className}` : "")} id={props.id}>
             <nav className="custom-pagination">
                 {!props.useDotNav &&
                     <ul className={"pagination"}>
-                        {(props.value !== 1 && props.useFirstAndLast) &&
+                        {/* {(props.value !== 1 && props.useFirstAndLast) &&
                             <li className="page-item" onClick={() => props.onChange(1)}>
                                 <button className="page-link" title={props.firstText}>
                                     <span className="nav-action">
@@ -80,8 +121,8 @@ export const Pagination: React.FunctionComponent<PaginationProps> = React.memo((
                                     <span className="sr-only">{props.previousText || "Previous"}</span>
                                 </button>
                             </li>
-                        }
-                        {getList(props.value, props.size, Initialoffset).map((num) => {
+                        } */}
+                        {getList(props.value, props.size, initialoffset, intialLength).map((num) => {
                             return (
                                 <li
                                     className={"page-item" + (props.value === num ? " active" : "")}
@@ -100,7 +141,7 @@ export const Pagination: React.FunctionComponent<PaginationProps> = React.memo((
                         })
                         }
 
-                        {(props.value !== props.size) &&
+                        {/* {(props.value !== props.size) &&
                             <li className="page-item" onClick={() => props.onChange(props.value + 1)}>
                                 <button className="page-link" title={props.nextText}>
                                     <span className="nav-action">
@@ -120,11 +161,11 @@ export const Pagination: React.FunctionComponent<PaginationProps> = React.memo((
                                     <span className="sr-only">{props.lastText || "Last"}</span>
                                 </button>
                             </li>
-                        }
+                        } */}
 
                     </ul>
                 }
-                {props.useDotNav &&
+                {/* {props.useDotNav &&
                     <ul className={"pagination dotnav"}>
                         {getList(props.value, props.size, props.size).map((num) => {
                             return (
@@ -139,7 +180,7 @@ export const Pagination: React.FunctionComponent<PaginationProps> = React.memo((
                             );
                         })}
                     </ul>
-                }
+                } */}
             </nav>
         </div>
     );
