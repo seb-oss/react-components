@@ -37,13 +37,15 @@ const Slider: React.FunctionComponent<SliderProps> = (props: SliderProps): React
     const [max, setMax] = React.useState<number>(props.max || 100);
     const [size, setSize] = React.useState<number>(0);
     const [labelsPositions, setLabelsPositions] = React.useState<Array<string>>([]);
+    const [thumbPosition, setThumbPosition] = React.useState<number>(0);
 
     React.useEffect(() => {
-        const minValue: number = props.min === undefined ? 0 : props.min;
-        const maxValue: number = props.max === undefined ? 100 : props.max;
+        // Checking if the min or max are not numbers, null value or undefined
+        const minValue: number = typeof props.min !== "number" ? 0 : props.min;
+        const maxValue: number = typeof props.max !== "number" ? 100 : props.max;
         setMin(minValue);
         setMax(maxValue);
-        setSize(range(minValue, maxValue));
+        setSize(getSize(minValue, maxValue));
     }, [props.min, props.max]);
 
     React.useEffect(() => {
@@ -56,11 +58,18 @@ const Slider: React.FunctionComponent<SliderProps> = (props: SliderProps): React
         }
     }, [props.labels, min, max]);
 
-    /** Findes the range between two numbers */
-    function range(minValue: number, maxValue: number): number {
+    React.useEffect(() => setThumbPosition(getPercentage()), [props.value, min, max, size]);
+
+    /**
+     * Finds the size between two numbers
+     * @param {number} minValue The minimum value
+     * @param {number} maxValue The maximum value
+     * @returns {number} The size
+     */
+    function getSize(minValue: number, maxValue: number): number {
         if (maxValue > minValue) {
             return maxValue - minValue;
-        } else {
+        } else { // Will calculate the size anyway, but it will show a warning since the min is larger than the max
             console.warn(`The max value of the slider should be larger than the min value (Max:${max}, Min: ${min}`);
             return minValue - maxValue;
         }
@@ -68,24 +77,25 @@ const Slider: React.FunctionComponent<SliderProps> = (props: SliderProps): React
 
     /**
      * Converts the current value to percentage based on min and max
-     * @param {number} value value to be converted to percentage
      * @returns {number} The precentage
      */
-    function getPercentage(value: number): number {
-        let result: number;
-        const offset: number = Math.abs(0 - min);
-        let reset: number;
-        let val: number = value;
-        if (value < min) {
-            val = min;
-        } else if (value > max) {
-            val = max;
+    function getPercentage(): number {
+        if (props.value <= min) {
+            return 0;
+        } else if (props.value >= max) {
+            return 100;
+        } else {
+            const distanceFromMin: number = Math.abs(props.value - min);
+            // Calculating the percentage using this equation (distanceFromMin/size) * 100
+            return (distanceFromMin / size) * 100;
         }
-        reset = min > 0 ? val - offset : val + offset;
-        result = Math.abs((reset / size) * 100);
-        return result;
     }
 
+    /**
+     * Calculating the position of the label based on it's value
+     * @param {number} value The Slider value
+     * @returns {number} The position of the label in percentage
+     */
     function getLabelPosition(value: number): number {
         if (value >= max) {
             return 100;
@@ -118,19 +128,10 @@ const Slider: React.FunctionComponent<SliderProps> = (props: SliderProps): React
                     disabled={props.disabled}
                 />
                 <div className={"custom-slider-holder" + (props.theme ? ` ${props.theme}` : " primary")}>
-                    <div className="custom-slider-track">
-                        <div
-                            className="custom-slider-slider-before"
-                            style={{ width: getPercentage(props.value) + "%" }}
-                        />
-                        <div
-                            className="custom-slider-slider-after"
-                            style={{ width: (100 - getPercentage(props.value)) + "%" }}
-                        />
-                        <div
-                            className="custom-slider-thumb"
-                            style={{ left: getPercentage(props.value) + "%" }}
-                        >
+                    <div className={"custom-slider-track" + (size / props.step <= 30 ? " with-transitions" : "")}>
+                        <div className="custom-slider-slider-before" style={{ width: thumbPosition + "%" }} />
+                        <div className="custom-slider-slider-after" style={{ width: (100 - thumbPosition) + "%" }} />
+                        <div className="custom-slider-thumb" style={{ left: thumbPosition + "%" }}>
                             <div
                                 className={
                                     "custom-slider-preview" +
@@ -148,7 +149,7 @@ const Slider: React.FunctionComponent<SliderProps> = (props: SliderProps): React
                                     className={"custom-slider-label" + (props.showTicks ? " show-ticks" : "")}
                                     style={{ left: labelsPositions[i] }}
                                 >
-                                    {label.text}
+                                    <span>{label.text}</span>
                                 </div>
                             ) : null
                         }
@@ -157,7 +158,6 @@ const Slider: React.FunctionComponent<SliderProps> = (props: SliderProps): React
             </div>
             {props.error && <div className="alert alert-danger">{props.error}</div>}
         </div>
-
     );
 };
 

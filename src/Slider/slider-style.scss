@@ -193,7 +193,6 @@ $disabled-thumb-border-color: #8c8c8c;
                     bottom: 0;
                     height: 100%;
                     z-index: 2;
-                    @include transition(width $transition-time ease-out);
                 }
                 .custom-slider-slider-before {
                     left: 0px;
@@ -236,11 +235,7 @@ $disabled-thumb-border-color: #8c8c8c;
                     pointer-events: none;
                     box-shadow: $box-shadow;
                     will-change: left;
-                    @include transition((
-                        left $transition-time ease-out,
-                        transform $transition-time ease-in-out,
-                        box-shadow $transition-time ease-in
-                    ));
+                    @include transition((transform $transition-time ease-in-out, box-shadow $transition-time ease-in));
                     z-index: 2;
                     .custom-slider-preview {
                         pointer-events: none;
@@ -322,6 +317,20 @@ $disabled-thumb-border-color: #8c8c8c;
                             line-height: 1;
                             font-weight: bold;
                         }
+                    }
+                }
+                &.with-transitions {
+                    [class^="custom-slider-slider-"] {
+                        @include transition(width $transition-time ease-out);
+                    }
+                    .custom-slider-thumb {
+                        @include transition(
+                            (
+                                left $transition-time ease-out,
+                                transform $transition-time ease-in-out,
+                                box-shadow $transition-time ease-in
+                            )
+                        );
                     }
                 }
             }
