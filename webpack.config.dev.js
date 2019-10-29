@@ -9,7 +9,7 @@ module.exports = {
     devtool: 'source-map',
     devServer: {
         contentBase: './dist',
-        port: 3002,
+        port: 3000,
         stats: {
             modules: false,
             version: false,
