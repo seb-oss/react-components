@@ -3,14 +3,15 @@ import { shallow, ShallowWrapper, ReactWrapper, mount } from "enzyme";
 import { RadioGroup, RadioGroupProps } from "./RadioGroup";
 
 describe("Component: RadioGroup", () => {
-    const props: RadioGroupProps = {
+    const props: RadioGroupProps<string> = {
         list: [
-            { value: "option1", group: "customgroup", label: "option1" },
-            { value: "option2", group: "customgroup", label: "option2", description: "desc" },
-            { value: "option3", group: "customgroup", label: "option3", disabled: true }
+            { value: "option1", label: "option1" },
+            { value: "option2", label: "option2", description: "desc" },
+            { value: "option3", label: "option3", disabled: true }
         ],
         onChange: jest.fn(),
         value: "male",
+        name: "gender"
     };
     let wrapper: ShallowWrapper<RadioGroupProps>;
     let mountedWrapper: ReactWrapper<RadioGroupProps>;

@@ -4,17 +4,34 @@
  * @example
  * To test only the App component you
  * would run the following command
- * ```npm test --comp=App```
+ * `npm test App`
+ * Multiple components can be tested using
+ * `npm test Button RadioGroup`
  */
-const specific = process.env.npm_config_comp;
+const { argv } = process;
+const specific = argv.slice(4, argv.length); // Skipping test properties
+
+const collectCoverageFrom = [];
+const testMatch = [];
+
+if (specific.length) {
+    collectCoverageFrom.push(...extractSpecifics("src/**/%inject%.(ts|tsx|js|jsx)"));
+    testMatch.push(...extractSpecifics("**/%inject%.test.(ts|tsx|js|jsx)"))
+} else {
+    collectCoverageFrom.push("src/**/*.(ts|tsx|js|jsx)");
+    testMatch.push("**/*.test.(ts|tsx|js|jsx)");
+}
+
+collectCoverageFrom.push("!src/**/index.(ts|js)");
+
+function extractSpecifics(injectTo) {
+    return specific.map((item) => injectTo.replace("%inject%", item))
+}
 
 module.exports = {
     setupFilesAfterEnv: ["<rootDir>/setupTests.js"],
     testEnvironment: "jsdom",
-    testMatch: [
-        `**/${specific || "*"}.test.(ts|tsx|js|jsx)`,
-        `**/?(${specific || "*"}.)+(spec|test).(ts|tsx|js|jsx)`
-    ],
+    testMatch,
     modulePaths: [
         "<rootDir>/src",
         "<rootDir>/node_modules"
@@ -23,13 +40,7 @@ module.exports = {
         "NODE_ENV": "test"
     },
     verbose: true,
-    moduleFileExtensions: [
-        "ts",
-        "tsx",
-        "js",
-        "jsx",
-        "json"
-    ],
+    moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json"],
     transform: {
         "^.+\\.tsx?$": "ts-jest"
     },
@@ -43,10 +54,7 @@ module.exports = {
     },
     // some coverage and results processing options
     collectCoverage: true,
-    collectCoverageFrom: [
-        `src/**/${specific || "*"}.(ts|tsx|js|jsx)`,
-        "!src/**/index.(ts|js)"
-    ],
+    collectCoverageFrom,
     coverageDirectory: "./coverage",
     coverageReporters: ["json", "lcov", "text"]
 };

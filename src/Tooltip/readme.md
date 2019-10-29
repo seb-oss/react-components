@@ -89,7 +89,7 @@ const ExampleContainer: React.FunctionComponent = () => {
 1. `messageGroup` items has an exported interface named `TooltipMessageGroupItem`
 
 ```typescript
-{
+interface TooltipMessageGroupItem {
       title?: string,
       message: string
 }
