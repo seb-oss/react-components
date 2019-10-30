@@ -86,7 +86,6 @@ const Slider: React.FunctionComponent<SliderProps> = (props: SliderProps): React
             return 100;
         } else {
             const distanceFromMin: number = Math.abs(props.value - min);
-            // Calculating the percentage using this equation (distanceFromMin/size) * 100
             return (distanceFromMin / size) * 100;
         }
     }
@@ -103,6 +102,17 @@ const Slider: React.FunctionComponent<SliderProps> = (props: SliderProps): React
             return 0;
         }
         return Math.abs(((value - min) / (max - min)) * 100);
+    }
+
+    /**
+     * Determines whether to enable or disable CSS transitions based on the total amount of steps
+     * This is fix for a performance impact caused by rapidly updating the state when sliding
+     * @var maxNumberOfStepsToAllowTransition represents the maximum number of steps to have the
+     * transitions enabled. Transitions would be disabled when exceeding that number;
+     */
+    function shouldEnableTransition(): boolean {
+        const maxNumberOfStepsToAllowTransition: number = 30;
+        return (size / props.step) <= maxNumberOfStepsToAllowTransition;
     }
 
     return (
@@ -128,7 +138,7 @@ const Slider: React.FunctionComponent<SliderProps> = (props: SliderProps): React
                     disabled={props.disabled}
                 />
                 <div className={"custom-slider-holder" + (props.theme ? ` ${props.theme}` : " primary")}>
-                    <div className={"custom-slider-track" + (size / props.step <= 30 ? " with-transitions" : "")}>
+                    <div className={"custom-slider-track" + (shouldEnableTransition() ? " with-transitions" : "")}>
                         <div className="custom-slider-slider-before" style={{ width: thumbPosition + "%" }} />
                         <div className="custom-slider-slider-after" style={{ width: (100 - thumbPosition) + "%" }} />
                         <div className="custom-slider-thumb" style={{ left: thumbPosition + "%" }}>
