@@ -38,6 +38,7 @@ const Slider: React.FunctionComponent<SliderProps> = (props: SliderProps): React
     const [size, setSize] = React.useState<number>(0);
     const [labelsPositions, setLabelsPositions] = React.useState<Array<string>>([]);
     const [thumbPosition, setThumbPosition] = React.useState<number>(0);
+    const [activeTrackStyles, setActiveTrackStyles] = React.useState<React.CSSProperties>({});
 
     React.useEffect(() => {
         // Checking if the min or max are not numbers, null value or undefined
@@ -58,7 +59,10 @@ const Slider: React.FunctionComponent<SliderProps> = (props: SliderProps): React
         }
     }, [props.labels, min, max]);
 
-    React.useEffect(() => setThumbPosition(getPercentage()), [props.value, min, max, size]);
+    React.useEffect(() => {
+        setThumbPosition(getPercentage());
+        setActiveTrackStyles(getActiveTrackStyles());
+    }, [props.value, min, max, size]);
 
     /**
      * Finds the size between two numbers
@@ -86,8 +90,40 @@ const Slider: React.FunctionComponent<SliderProps> = (props: SliderProps): React
             return 100;
         } else {
             const distanceFromMin: number = Math.abs(props.value - min);
-            return (distanceFromMin / size) * 100;
+            return size ? (distanceFromMin / size) * 100 : 0;
         }
+    }
+
+    /**
+     * Calculates the styles needed for the active track
+     * @returns {React.CSSProperties} The active track styles object
+     */
+    function getActiveTrackStyles(): React.CSSProperties {
+        const calculatedThumbPosition: number = getPercentage();
+        let zeroPosition: number;
+        const style: React.CSSProperties = {};
+        if (min >= 0) {
+            zeroPosition = 0;
+            style.left = `${zeroPosition}%`;
+            style.width = `calc(${calculatedThumbPosition}% + 27px)`;
+        } else if (max <= 0) {
+            zeroPosition = 100;
+            style.left = `calc(${zeroPosition}% + 56px)`;
+            style.width = `calc(${100 - calculatedThumbPosition}% + 27px)`;
+            style.transform = "rotateY(180deg)";
+        } else {
+            if (props.value <= 0) {
+                zeroPosition = size ? Math.abs((min / size) * 100) : 0;
+                style.left = `calc(${zeroPosition}% + 27px)`;
+                style.width = (zeroPosition - calculatedThumbPosition) + "%";
+                style.transform = "rotateY(180deg)";
+            } else {
+                zeroPosition = size ? Math.abs(100 - ((max / size) * 100)) : 0;
+                style.left = `calc(${zeroPosition}% + 27px)`;
+                style.width = (calculatedThumbPosition - zeroPosition) + "%";
+            }
+        }
+        return style;
     }
 
     /**
@@ -109,6 +145,7 @@ const Slider: React.FunctionComponent<SliderProps> = (props: SliderProps): React
      * This is fix for a performance impact caused by rapidly updating the state when sliding
      * @var maxNumberOfStepsToAllowTransition represents the maximum number of steps to have the
      * transitions enabled. Transitions would be disabled when exceeding that number;
+     * @returns {boolean} `True` if it should transition
      */
     function shouldEnableTransition(): boolean {
         const maxNumberOfStepsToAllowTransition: number = 30;
@@ -139,8 +176,8 @@ const Slider: React.FunctionComponent<SliderProps> = (props: SliderProps): React
                 />
                 <div className={"custom-slider-holder" + (props.theme ? ` ${props.theme}` : " primary")}>
                     <div className={"custom-slider-track" + (shouldEnableTransition() ? " with-transitions" : "")}>
-                        <div className="custom-slider-slider-before" style={{ width: thumbPosition + "%" }} />
-                        <div className="custom-slider-slider-after" style={{ width: (100 - thumbPosition) + "%" }} />
+                        <div className="custom-slider-slider-before" />
+                        <div className="custom-slider-slider-after" style={activeTrackStyles} />
                         <div className="custom-slider-thumb" style={{ left: thumbPosition + "%" }}>
                             <div
                                 className={

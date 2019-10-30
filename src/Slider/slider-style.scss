@@ -57,7 +57,7 @@ $disabled-thumb-border-color: #8c8c8c;
 
 @mixin setTheme($dark, $light) {
     .custom-slider-track {
-        .custom-slider-slider-before {
+        .custom-slider-slider-after {
             background-color: $light;
         }
         .custom-slider-thumb {
@@ -137,32 +137,34 @@ $disabled-thumb-border-color: #8c8c8c;
                 display: none;
                 color: $transparent;
             }
-            &:focus {
-                outline: none;
-                & + .custom-slider-holder {
-                    > .custom-slider-track {
-                        > .custom-slider-thumb {
-                            box-shadow: $box-shadow, 0px 0 0px 2px rgba($blue-dark, 0.45);
+            &:not(:disabled) {
+                &:focus {
+                    outline: none;
+                    & + .custom-slider-holder {
+                        > .custom-slider-track {
+                            > .custom-slider-thumb {
+                                box-shadow: $box-shadow, 0px 0 0px 2px rgba($blue-dark, 0.45);
+                            }
                         }
                     }
                 }
-            }
-            &:hover {
-                & + .custom-slider-holder {
-                    > .custom-slider-track {
-                        > .custom-slider-thumb {
-                            @include transform(translateX(-50%) scale(1.1));
+                &:hover {
+                    & + .custom-slider-holder {
+                        > .custom-slider-track {
+                            > .custom-slider-thumb {
+                                @include transform(translateX(-50%) scale(1.1));
+                            }
                         }
                     }
                 }
-            }
-            &:active {
-                & + .custom-slider-holder {
-                    > .custom-slider-track {
-                        > .custom-slider-thumb {
-                            @include transform(translateX(-50%) scale(1.05));
-                            .custom-slider-preview:not(.always-show) {
-                                display: block;
+                &:active {
+                    & + .custom-slider-holder {
+                        > .custom-slider-track {
+                            > .custom-slider-thumb {
+                                @include transform(translateX(-50%) scale(1.05));
+                                .custom-slider-preview:not(.always-show) {
+                                    display: block;
+                                }
                             }
                         }
                     }
@@ -196,32 +198,15 @@ $disabled-thumb-border-color: #8c8c8c;
                 }
                 .custom-slider-slider-before {
                     left: 0px;
-                    will-change: width;
-                    &:before {
-                        position: relative;
-                        content: "";
-                        width: 27px;
-                        height: 5px;
-                        display: block;
-                        z-index: 2;
-                        left: -27px;
-                        background-color: $blue-dark;
-                    }
+                    width: calc(100% + 56px);
+                    margin: 0 -28px;
+                    background-color: $gray-500;
                 }
                 .custom-slider-slider-after {
-                    right: -2px;
-                    background-color: $gray-500;
                     will-change: width;
-                    &:after {
-                        position: absolute;
-                        content: "";
-                        width: 26px;
-                        height: 5px;
-                        display: block;
-                        z-index: 2;
-                        right: -26px;
-                        background-color: $gray-500;
-                    }
+                    transform-origin: left;
+                    margin: 0 -28px;
+                    transform: rotateY(0deg);
                 }
                 .custom-slider-thumb {
                     position: relative;
@@ -320,8 +305,8 @@ $disabled-thumb-border-color: #8c8c8c;
                     }
                 }
                 &.with-transitions {
-                    [class^="custom-slider-slider-"] {
-                        @include transition(width $transition-time ease-out);
+                    .custom-slider-slider-after {
+                        @include transition((width $transition-time ease-out, transform $transition-time linear));
                     }
                     .custom-slider-thumb {
                         @include transition(
@@ -349,15 +334,15 @@ $disabled-thumb-border-color: #8c8c8c;
             > div.custom-slider-holder {
                 > div.custom-slider-track {
                     > div.custom-slider-slider-before {
-                        background-color: $disabled-selected;
+                        background-color: $disabled-unselected;
                         &:before {
-                            background-color: $disabled-selected;
+                            background-color: $disabled-unselected;
                         }
                     }
                     > div.custom-slider-slider-after {
-                        background-color: $disabled-unselected;
+                        background-color: $disabled-selected;
                         &:after {
-                            background-color: $disabled-unselected;
+                            background-color: $disabled-selected;
                         }
                     }
                     > div.custom-slider-thumb {
