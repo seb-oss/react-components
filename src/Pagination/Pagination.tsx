@@ -24,9 +24,20 @@ export interface PaginationProps {
 }
 
 export const Pagination: React.FunctionComponent<PaginationProps> = React.memo((props: PaginationProps): React.ReactElement<void> => {
-    const initialoffset: number = props.offset ? props.offset : 10;
-    const intialLength: number = props.pagingLength ? props.pagingLength : 5;
-    const pagingSize: number = Math.ceil(props.size / initialoffset);
+
+    const [list, setList] = React.useState<Array<number>>([]);
+    const [pagingSize, setPagingSize] = React.useState<number>(0);
+
+    React.useEffect(() => {
+        const initialOffset: number = props.offset ? props.offset : 10;
+        setPagingSize(Math.ceil(props.size / initialOffset));
+    }, [props.offset, props.pagingLength, props.size]);
+
+    React.useEffect(() => {
+        const intialLength: number = props.pagingLength ? props.pagingLength : 5;
+        getList(props.value, intialLength);
+    }, [pagingSize, props.value]);
+
     /**
      * Generates an array of the pages that needs to be displayed
      * It depends on the size, offset, and the current value
@@ -35,12 +46,11 @@ export const Pagination: React.FunctionComponent<PaginationProps> = React.memo((
      * @param {number} offset The offset to show the numbers
      * @returns {Array<number>} An array of the pages that needs to be displayed
      */
-    function getList(value: number, length: number): Array<number> {
-        const list: Array<number> = [];
-
+    function getList(value: number, length: number): void {
+        const genList: Array<number> = [];
         // generate the array
         for (let i = 1; i <= pagingSize; i++) {
-            list.push(i);
+            genList.push(i);
         }
 
         // the median value is what you use to obtain the centre of the page or equilibrium
@@ -65,7 +75,8 @@ export const Pagination: React.FunctionComponent<PaginationProps> = React.memo((
 
             end = start + length;
         }
-        return list.slice(start, end);
+
+        setList(genList.slice(start, end));
     }
 
     return (
@@ -93,7 +104,7 @@ export const Pagination: React.FunctionComponent<PaginationProps> = React.memo((
                                 </button>
                             </li>
                         }
-                        {getList(props.value, intialLength).map((num) => {
+                        {list.map((num) => {
                             return (
                                 <li
                                     className={"page-item" + (props.value === num ? " active" : "")}
@@ -138,7 +149,7 @@ export const Pagination: React.FunctionComponent<PaginationProps> = React.memo((
                 }
                 {props.useDotNav &&
                     <ul className={"pagination dotnav"}>
-                        {getList(props.value, intialLength).map((num) => {
+                        {list.map((num) => {
                             return (
                                 <li
                                     className={"page-item" + (props.value === num ? " active" : "")}
