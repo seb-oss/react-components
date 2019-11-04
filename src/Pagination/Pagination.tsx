@@ -42,8 +42,8 @@ export const Pagination: React.FunctionComponent<PaginationProps> = React.memo((
      * Generates an array of the pages that needs to be displayed
      * It depends on the size, offset, and the current value
      * @param {number} value The current value. The current page.
-     * @param {number} size The size of the pagination
-     * @param {number} offset The offset to show the numbers
+     * @param {number} size The size of the pagination or length of items
+     * @param {number} offset The number of items to show per page
      * @returns {Array<number>} An array of the pages that needs to be displayed
      */
     function getList(value: number, length: number): void {
