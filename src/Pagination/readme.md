@@ -30,7 +30,7 @@ This React component is based on SEB Bootstrap style. Supports customization and
 ## Properties
 These are the current available properties:
 
-| Property         | Type                      | Description                                               |
+| Property         | Type                      | Description                                              |
 | ---------------- | ------------------------- | -------------------------------------------------------- |
 | className?       | `string`                  | Custom class can be passed here                          |
 | firstText?       | `string`                  | First text value (default: `'First'`)                    |
@@ -44,6 +44,5 @@ These are the current available properties:
 | useFirstAndLast? | `boolean`                 | Use first and last navigation buttons (default: `false`) |
 | useTextNav?      | `boolean`                 | Use text-base navigation buttons (default: `false`)      |
 | value            | `number`                  | Current page                                             |
+| pagingLength     | `number`                  | The length of the pagination or number of pages          |
 
-## Footnote
-1. Dot navigation does not support `offset`, it is not meant to have big size navigation. For that, use the normal numbered navigation.
