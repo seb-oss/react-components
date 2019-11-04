@@ -44,5 +44,5 @@ These are the current available properties:
 | useFirstAndLast? | `boolean`                 | Use first and last navigation buttons (default: `false`) |
 | useTextNav?      | `boolean`                 | Use text-base navigation buttons (default: `false`)      |
 | value            | `number`                  | Current page                                             |
-| pagingLength     | `number`                  | The length of the pagination or number of pages          |
+| pagingLength?    | `number`                  | The length of the pagination or number of pages          |
 
