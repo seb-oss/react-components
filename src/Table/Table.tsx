@@ -17,8 +17,12 @@ import {
     UsePaginationInstanceProps,
     UseRowSelectState,
     UseRowSelectInstanceProps,
-    UseRowSelectRowProps
+    UseRowSelectRowProps,
+    useExpanded,
+    UseExpandedRowProps,
+    UseGroupByRowProps
 } from "react-table";
+import { randomId } from "../__utils/randomId";
 
 const angleDown: JSX.Element = <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512"><path d="M119.5 326.9L3.5 209.1c-4.7-4.7-4.7-12.3 0-17l7.1-7.1c4.7-4.7 12.3-4.7 17 0L128 287.3l100.4-102.2c4.7-4.7 12.3-4.7 17 0l7.1 7.1c4.7 4.7 4.7 12.3 0 17L136.5 327c-4.7 4.6-12.3 4.6-17-.1z" /></svg>;
 const angleUp: JSX.Element = <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512"><path d="M136.5 185.1l116 117.8c4.7 4.7 4.7 12.3 0 17l-7.1 7.1c-4.7 4.7-12.3 4.7-17 0L128 224.7 27.6 326.9c-4.7 4.7-12.3 4.7-17 0l-7.1-7.1c-4.7-4.7-4.7-12.3 0-17l116-117.8c4.7-4.6 12.3-4.6 17 .1z" /></svg>;
@@ -40,6 +44,9 @@ interface TableProps {
     usePagination?: boolean;
     pagingSize?: number;
     pagingIndex?: number;
+
+    // expandable
+    useExpand?: boolean;
 
     footer?: React.ReactNode;
 
@@ -67,26 +74,8 @@ export const TableUI: React.FunctionComponent<TableUIProps> = React.memo((props:
             <thead>
                 {props.headerGroups.map((group: HeaderGroup, index: number) => (
                     <tr key={index} {...group.getHeaderGroupProps()}>
-                        {props.onSelectAllItemsChecked &&
-                            <th className="check-all-option-holder">
-                                <div className="custom-control custom-checkbox">
-                                    <input
-                                        type="checkbox"
-                                        className="custom-control-input"
-                                        id="chkCheckAll"
-                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                                            props.toggleRowSelectedAll(e.target.checked);
-                                            props.onSelectAllItemsChecked(e);
-                                        }}
-                                        name="chkCheckAll"
-                                        checked={props.setSelectAllValue}
-                                    />
-                                    <label className="custom-control-label" htmlFor="chkCheckAll" />
-                                </div>
-                            </th>
-                        }
                         {group.headers.map((column: ColumnInstance & UseSortByColumnProps<ColumnInstance>) => (
-                            props.sortable ?
+                            (props.sortable && column.canSort) ?
                                 <th key={column.id} {...column.getHeaderProps(column.getSortByToggleProps())}>
                                     {column.render("Header")}
                                     <div className="icon-holder">
@@ -107,27 +96,10 @@ export const TableUI: React.FunctionComponent<TableUIProps> = React.memo((props:
             </thead>
             <tbody {...props.getTableBodyProps()}>
                 {list.map(
-                    (row: Row & UseRowSelectRowProps<Row>, rowIndex: number) => {
+                    (row: Row & UseRowSelectRowProps<Row> & UseExpandedRowProps<Row> & UseGroupByRowProps<Row>, rowIndex: number) => {
                         props.prepareRow(row);
                         return (
                             <tr {...row.getRowProps()} key={rowIndex}>
-                                <td className="check-option-holder">
-                                    <div className="custom-control custom-checkbox">
-                                        <input
-                                            type="checkbox"
-                                            className="custom-control-input"
-                                            id={"row-" + row.index}
-                                            name={"row-" + row.index}
-                                            checked={row.isSelected}
-                                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                                                console.log("longer allowed ", e.target.checked);
-                                                row.toggleRowSelected(e.target.checked);
-                                                props.onToggleRowItem(e, row.original as any);
-                                            }}
-                                        />
-                                        <label className="custom-control-label" htmlFor={"row-" + row.index} />
-                                    </div>
-                                </td>
                                 {row.cells.map((cell: Cell, index: number) => {
                                     return <td key={index} {...cell.getCellProps()}>{cell.render("Cell")}</td>;
                                 })}
@@ -155,16 +127,21 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
     // Use the state and functions returned from useTable to build your UI
     const { tableData, tableColumns } = props;
     const [selectedRows, setSelectedRows] = React.useState<Array<any>>([]);
+    const [expanded, setExpanded] = React.useState<boolean>(false);
+    const [columns, setTableColumns] = React.useState<Array<Column>>([]);
+    const [data, setTableData] = React.useState<Array<TableRow>>([]);
 
-    const tableInstance = useTable(
+    const tableInstance: TableInstanceProps = useTable(
         {
-            columns: tableColumns,
-            data: tableData,
+            columns,
+            data,
             initialState: { pageIndex: props.pagingIndex },
+            state: { isExpanded: expanded, }
         },
         useSortBy,
+        useRowSelect,
+        useExpanded,
         usePagination,
-        useRowSelect
     ) as TableInstanceProps;
 
     const onToggleRowItem = (e: React.ChangeEvent<HTMLInputElement>, row: TableRow): void => {
@@ -188,10 +165,89 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
     // Effects --------------------------------------------------------------------------
     React.useEffect(() => {
         const nextPageIndex: number = props.pagingIndex === 0 ? 0 : (props.pagingIndex - 1);
-        tableInstance.gotoPage(nextPageIndex);
+        if (tableInstance) {
+            tableInstance.gotoPage(nextPageIndex);
+        }
     }, [props.pagingIndex, props.pagingSize]);
 
+    React.useEffect(() => {
+
+        // Let's make a column for selection
+        const selectionColumn: any = {
+            id: "selection",
+            // The header can use the table's getToggleAllRowsSelectedProps method
+            // to render a checkbox
+            Header: ({ getToggleAllRowsSelectedProps }) => {
+                const randomIds = randomId("checkbox-");
+                return (
+                    <div className="custom-control custom-checkbox">
+                        <input
+                            {...getToggleAllRowsSelectedProps()}
+                            type="checkbox"
+                            className="custom-control-input"
+                            id={randomIds}
+                            name="chkCheckAll"
+                        />
+                        <label className="custom-control-label" htmlFor={randomIds} />
+                    </div>
+                );
+            },
+            // The cell can use the individual row's getToggleRowSelectedProps method
+            // to the render a checkbox
+            Cell: ({ row }) => {
+                const randomIds = randomId("checkbox-");
+                return (
+                    <div className="custom-control custom-checkbox">
+                        <input
+                            {...row.getToggleRowSelectedProps()}
+                            type="checkbox"
+                            className="custom-control-input"
+                            id={randomIds}
+                            name={randomIds}
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                onToggleRowItem(e, row.original as any);
+                                row.getToggleRowSelectedProps().onChange(e);
+                            }}
+                        />
+                        <label className="custom-control-label" htmlFor={randomIds} />
+                    </div>
+                );
+            }
+        };
+
+        const collapsableColumn: any = {
+            // Build our expander column
+            Header: () => null, // No header, please
+            id: "expander", // Make sure it has an ID
+            Cell: ({ row }) => {
+                // Use the row.canExpand and row.getExpandedToggleProps prop getter
+                // to build the toggle for expanding a row
+                return row.canExpand ? (
+                    <span
+                        {...row.getExpandedToggleProps({
+                            style: {
+                                // We can even use the row.depth property
+                                // and paddingLeft to indicate the depth
+                                // of the row
+                                paddingLeft: `${row.depth * 2}rem`,
+                            },
+                        })}
+                    >
+                        {row.isExpanded ? "👇" : "👉"}
+                    </span>
+                ) : null;
+            }
+        };
+
+        const columnsObj: Array<Column> = [collapsableColumn, selectionColumn, ...props.tableColumns];
+        const dataObj: Array<TableRow> = props.tableData;
+
+        setTableColumns(columnsObj);
+        setTableData(dataObj);
+    }, [props.tableData, props.tableColumns]);
+
     return (
+        tableInstance && (tableInstance.columns.length > 0 && tableInstance.data.length > 0) &&
         <TableUI
             onToggleRowItem={onToggleRowItem}
             {...tableInstance}
