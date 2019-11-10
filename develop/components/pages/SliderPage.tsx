@@ -142,7 +142,7 @@ class SliderExamples extends React.Component<SliderPageProps, SliderPageState> {
             sliderLabels = hasLabels ? this.generateLabels(min, max) : [];
             sliderLabels && (newState.sliderLabels = sliderLabels);
         }
-        if (name === SliderPageStateNames.slider && type === "number") {
+        if (name === SliderPageStateNames.slider) {
             if (newState[name] < min) {
                 newState.withInputError = "Cannot be less the minimum";
             } else if (newState[name] > max) {
