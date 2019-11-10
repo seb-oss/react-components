@@ -94,6 +94,7 @@ $accordion-min-height: 48px;
                 height: auto;
                 will-change: margin;
                 opacity: 0;
+                @include transition((opacity 200ms linear, height 200ms linear));
                 .text-item {
                     &:not(:last-child) {
                         padding-bottom: 8px;
