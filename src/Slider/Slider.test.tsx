@@ -1,5 +1,4 @@
 import * as React from "react";
-import { shallow, ShallowWrapper, ReactWrapper, mount } from "enzyme";
 import { Slider, RangeSliderLabel, SliderProps, SliderTheme } from "./Slider";
 import { unmountComponentAtNode, render } from "react-dom";
 import { act } from "react-dom/test-utils";
@@ -141,7 +140,7 @@ describe("Component: Slider", () => {
         ];
         testCases.map((testCase: ThumbLocationTestcase) => {
             test(`Test case - (Range: ${testCase.min} - ${testCase.max}) | value: ${testCase.value} | expected thum location: ${testCase.expected}`, () => {
-                act(() => { render(<Slider {...testCase} name="mySlider" onChange={jest.fn()} />, container) });
+                act(() => { render(<Slider {...testCase} name="mySlider" onChange={jest.fn()} />, container); });
                 expect(container.querySelector(".custom-slider-thumb").getAttribute("style")).toEqual(`left: ${testCase.expected};`);
             });
         });
