@@ -25,20 +25,9 @@ export interface AccordionProps {
     alternative?: boolean;
 }
 
-interface TransitionProps {
-    height?: string;
-    transition?: string;
-    dataCollapsed?: boolean;
-    ariaExpanded?: boolean;
-}
-
 const Accordion: React.FunctionComponent<AccordionProps> = (props: AccordionProps) => {
     const collapsableRef: React.MutableRefObject<Array<React.RefObject<HTMLDivElement>>> = React.useRef(props.list.map(() => React.createRef<HTMLDivElement>()));
-    const [transitionProperties, setTransitionProperty] = React.useState<Array<TransitionProps>>(() => props.list.map((): TransitionProps => ({
-        height: "0px",
-        dataCollapsed: true,
-        ariaExpanded: false,
-    })));
+    const [heightList, setHeightList] = React.useState<Array<number>>(Array(props.list.length).fill(0));
     const [active, setActive] = React.useState<number>(null);
     const [accordionClassName, setAccordionClassName] = React.useState<string>("custom-accordion");
     const [itemClassName, setItemClassName] = React.useState<string>("custom-accordion");
@@ -72,67 +61,22 @@ const Accordion: React.FunctionComponent<AccordionProps> = (props: AccordionProp
         setItemClassName(cn);
     }
 
-    const toggle = (i: number): void => setActive(active === i ? null : i);
+    function expandOrCollapseSection(itemIndex: number): void {
+        const updatedHeightList: Array<number> = Array(props.list.length).fill(0);
+        updatedHeightList[itemIndex] = heightList[itemIndex] ? 0 : collapsableRef.current[itemIndex].current.scrollHeight;
+        setHeightList(updatedHeightList);
+    }
 
-    const expandSection = (ref: React.RefObject<HTMLDivElement>, itemIndex: number): void => {
-        // get the height of the element's inner content, regardless of its actual size
-        const sectionHeight: number = ref.current.scrollHeight;
-
-        // mark the section as "currently not collapsed"
-        // have the element transition to the height of its inner content
-        const updatedTransitionProperties: Array<TransitionProps> = transitionProperties.map((item: TransitionProps, index: number) => {
-            if (index === itemIndex) {
-                return {
-                    ...item,
-                    dataCollapsed: false,
-                    ariaExpanded: true,
-                    height: sectionHeight + "px"
-                };
+    function toggle(index: number): void {
+        if (active === index) { // Section already expanded
+            expandOrCollapseSection(index);
+        } else {
+            if (active !== null) { // Another section is already expanded
+                expandOrCollapseSection(active);
             }
-
-            // reset previous selections
-            return { ...item, height: "0px" };
-        });
-
-        setTransitionProperty(updatedTransitionProperties);
-    };
-
-    const collapseSection = (ref: React.RefObject<HTMLDivElement>, itemIndex: number): void => {
-        // mark the section as "currently collapsed"
-        // temporarily disable all css transitions
-        const updatedTransitionProperties: Array<TransitionProps> = transitionProperties.map((item: TransitionProps, index: number) => {
-            if (index === itemIndex) {
-                return {
-                    ...item,
-                    dataCollapsed: true,
-                    ariaExpanded: false,
-                    height: 0 + "px",
-                };
-            }
-            return item;
-        });
-        setTransitionProperty(updatedTransitionProperties);
-    };
-
-    /**
-     * Activates the accordion when `space` or `enter` is registered
-     * @param event: Keyboard event
-     */
-    function onKeyDown(index: number, e: React.KeyboardEvent<HTMLDivElement>): void {
-        if (e.key.toLowerCase() === " " || e.key.toLowerCase() === "space" || e.key.toLowerCase() === "enter") {
-            if (active === index) {
-                collapseSection(collapsableRef.current[index], index);
-            } else {
-                if (active !== null) {
-                    collapseSection(collapsableRef.current[active], active);
-                }
-                expandSection(collapsableRef.current[index], index);
-            }
-
-            toggle(index);
-            e.preventDefault();
+            expandOrCollapseSection(index);
         }
-
+        setActive(active === index ? null : index);
     }
 
     /**
@@ -140,17 +84,17 @@ const Accordion: React.FunctionComponent<AccordionProps> = (props: AccordionProp
      * @param e MouseEvent
      * @param index list index
      */
-    function onToggle(e: React.MouseEvent<HTMLDivElement, MouseEvent>, index: number): void {
-        if (active === index) {
-            collapseSection(collapsableRef.current[index], index);
-        } else {
-            if (active !== null) {
-                collapseSection(collapsableRef.current[active], active);
+    function onToggle(e: React.MouseEvent<HTMLDivElement> | React.KeyboardEvent<HTMLDivElement>): void {
+        const index: number = Number(e.currentTarget.getAttribute("data-id"));
+        if (e.type === "keydown") {
+            const key: string = (e as React.KeyboardEvent<HTMLDivElement>).key;
+            if ([" ", "space", "enter"].indexOf(key.toLowerCase()) !== -1) {
+                toggle(index);
+                e.preventDefault();
             }
-            expandSection(collapsableRef.current[index], index);
+        } else {
+            toggle(index);
         }
-
-        toggle(index);
     }
 
     return (
@@ -161,15 +105,17 @@ const Accordion: React.FunctionComponent<AccordionProps> = (props: AccordionProp
                         className={itemClassName + (active === index ? " active" : "")}
                         key={index}
                         tabIndex={0}
+                        data-id={index}
                         id={idList[index]}
-                        onKeyDown={(e: React.KeyboardEvent<HTMLDivElement>) => onKeyDown(index, e)}
+                        onKeyDown={onToggle}
                         aria-expanded={active === index}
                         aria-controls={`lbl-${idList[index]}`}
                         role="button"
                     >
                         <div
                             className={"header-wrapper" + (item.subHeaderText ? " with-sub-header" : "")}
-                            onClick={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => onToggle(e, index)}
+                            data-id={index}
+                            onClick={onToggle}
                         >
                             {props.customIcon || chevronDownIcon}
                             {props.customIconExpanded ? props.customIconExpanded : null}
@@ -177,7 +123,13 @@ const Accordion: React.FunctionComponent<AccordionProps> = (props: AccordionProp
                             {item.subHeaderText && <h6 className="accordion-sub-header">{item.subHeaderText}</h6>}
                         </div>
                         <div className="content-wrapper" aria-labelledby={idList[index]} id={`lbl-${idList[index]}`} role="region">
-                            {item && <AccordionContentRenderer {...item} transitionProperty={transitionProperties[index]} collapsableRef={collapsableRef.current[index]} />}
+                            {item &&
+                                <AccordionContentRenderer
+                                    {...item}
+                                    height={heightList[index]}
+                                    collapsableRef={collapsableRef.current[index]}
+                                />
+                            }
                         </div>
                     </div>
                 );
@@ -188,57 +140,38 @@ const Accordion: React.FunctionComponent<AccordionProps> = (props: AccordionProp
 
 interface AccordionContentRendererProps extends AccrodionListItem {
     collapsableRef: React.RefObject<HTMLDivElement>;
-    transitionProperty: TransitionProps;
+    height?: number;
 }
 
 const AccordionContentRenderer: React.FunctionComponent<AccordionContentRendererProps> = (props: AccordionContentRendererProps) => {
+    let content: AccordionContentType;
     if (React.isValidElement(props.content)) {
-        const nodeContent: React.ReactNode = props.content as React.ReactNode;
-        return (
-            <div
-                className="text-wrapper"
-                data-collapsed={props.transitionProperty && props.transitionProperty.dataCollapsed}
-                aria-expanded={props.transitionProperty && props.transitionProperty.ariaExpanded}
-                style={{ height: props.transitionProperty && props.transitionProperty.height }}
-                ref={props.collapsableRef}
-            >{nodeContent}
-            </div>
-        );
+        content = props.content as React.ReactNode;
     } else if (props.content instanceof Array) {
-        const arrayContent: Array<AccordionContent> = props.content as Array<AccordionContent>;
-        return (
-            <div
-                className="text-wrapper"
-                ref={props.collapsableRef}
-                data-collapsed={props.transitionProperty && props.transitionProperty.dataCollapsed}
-                aria-expanded={props.transitionProperty && props.transitionProperty.ariaExpanded}
-                style={{ height: props.transitionProperty && props.transitionProperty.height }}
-            >
-                {arrayContent.map((text: AccordionContent, textIndex: number) =>
-                    <div className="text-item" key={textIndex}>
-                        {text.title && <div className="accordion-title">{text.title}</div>}
-                        {text.desc && <div className="accordion-desc">{text.desc}</div>}
-                    </div>
-                )}
+        content = (props.content as Array<AccordionContent>).map((text: AccordionContent, textIndex: number) =>
+            <div className="text-item" key={textIndex}>
+                {text.title && <div className="accordion-title">{text.title}</div>}
+                {text.desc && <div className="accordion-desc">{text.desc}</div>}
             </div>
         );
     } else {
         const objectContent: AccordionContent = props.content as AccordionContent;
-        return (
-            <div
-                className="text-wrapper"
-                ref={props.collapsableRef}
-                data-collapsed={props.transitionProperty && props.transitionProperty.dataCollapsed}
-                aria-expanded={props.transitionProperty && props.transitionProperty.ariaExpanded}
-                style={{ height: props.transitionProperty && props.transitionProperty.height }}
-            >
-                <div className="text-item">
-                    {objectContent.title && <div className="accordion-title">{objectContent.title}</div>}
-                    {objectContent.desc && <div className="accordion-desc">{objectContent.desc}</div>}
-                </div>
-            </div>
-        );
+        content = <div className="text-item">
+            {objectContent.title && <div className="accordion-title">{objectContent.title}</div>}
+            {objectContent.desc && <div className="accordion-desc">{objectContent.desc}</div>}
+        </div>;
     }
+    return (
+        <div
+            className="text-wrapper"
+            ref={props.collapsableRef}
+            data-collapsed={!!!props.height}
+            aria-expanded={!!props.height}
+            style={{ height: props.height }}
+        >
+            {content}
+        </div>
+    );
 };
 
 export { Accordion };
