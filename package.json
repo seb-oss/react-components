@@ -124,7 +124,7 @@
 		"react-loadable": "^5.5.0",
 		"sass": "^1.22.12",
 		"sass-loader": "^8.0.0",
-		"semantic-release": "^15.13.24",
+		"semantic-release": "^15.13.30",
 		"style-loader": "^1.0.0",
 		"travis-deploy-once": "^5.0.11",
 		"ts-jest": "^24.1.0",
@@ -156,5 +156,9 @@
 	},
 	"release": {
 		"pkgRoot": "."
+	},
+	"engines": {
+		"node": ">=10.0.0",
+		"npm": ">=6.0.0"
 	}
 }
