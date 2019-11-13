@@ -1,21 +1,21 @@
 import * as React from "react";
 import { Table, TableRow } from "../../../src/Table/Table";
 import makeData from "../../../src/Table/makeData";
-import { Column } from "react-table";
+import { Column, Row } from "react-table";
 import { Pagination } from "../../../src/Pagination/Pagination";
 const Highlight = (require("react-highlight")).default;
 const docMD = require("../../../src/StepTracker/readme.md");
 
 const TablePage: React.FunctionComponent = () => {
     const [selectAll, setSelectAll] = React.useState<boolean>(false);
-    const [selectedRows, setSelectedRow] = React.useState<Array<TableRow>>([]);
+    const [selectedRows, setSelectedRow] = React.useState<Array<Row>>([]);
     const [paginationValue, setPagination] = React.useState<number>(1);
 
     const pageSize: number = 10;
     const listSize: number = 30;
 
     React.useEffect(() => {
-        console.log("There is a change ", selectedRows);
+      //  console.log("There is a change ", selectedRows);
     }, [selectedRows]);
 
     const columns: Array<Column> = React.useMemo(
@@ -72,8 +72,8 @@ const TablePage: React.FunctionComponent = () => {
                             pagingSize={pageSize}
                             pagingIndex={paginationValue}
                             usePagination={true}
-                            onSelectAllItemsChecked={(e: React.ChangeEvent<HTMLInputElement>) => { setSelectAll(e.target.checked); }}
-                            onSelectSingleItem={(rows: Array<TableRow>) => { setSelectedRow(rows); }}
+                            onItemSelected={(rows: Array<Row>) => { setSelectedRow(rows); }}
+                            onRowExpanded={(expandedRowsIndexes: Array<string>) => { console.log("the expanded ros are ", expandedRowsIndexes) }}
                             footer={
                                 <Pagination
                                     value={paginationValue}

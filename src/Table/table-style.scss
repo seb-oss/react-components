@@ -73,7 +73,17 @@ table {
             }
         }
 
-        tbody {}
+        tbody {
+            tr {
+                td {
+                    .collapsable-action {
+                        svg { 
+                            max-height: 20px;
+                        }
+                    }
+                }
+            }
+        }
     }
 
 }
