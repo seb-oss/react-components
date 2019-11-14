@@ -6,8 +6,6 @@ const TimesIcon: JSX.Element = <svg name="times" xmlns="http://www.w3.org/2000/s
 export interface DialogueProps {
     className?: string;
     desc?: string | JSX.Element | React.ReactNode;
-    disablePrimaryBtn?: boolean;
-    disableSecondaryBtn?: boolean;
     enableBackdropDismiss?: boolean;
     enableCloseButton?: boolean;
     header?: string | JSX.Element | React.ReactNode;
@@ -15,8 +13,10 @@ export interface DialogueProps {
     onDismiss?: (e?: React.MouseEvent<HTMLDivElement>) => void;
     primaryAction?: (e?: React.MouseEvent<HTMLButtonElement>) => void;
     primaryBtn?: string | JSX.Element;
+    primaryBtnDisabled?: boolean;
     secondaryAction?: (e?: React.MouseEvent<HTMLButtonElement>) => void;
     secondaryBtn?: string | JSX.Element;
+    secondaryBtnDisabled?: boolean;
     toggle: boolean;
 }
 
@@ -52,9 +52,9 @@ const Dialogue: React.FunctionComponent<DialogueProps> = (props: DialogueProps) 
                         {(props.secondaryBtn && props.secondaryAction) &&
                             <div className="dialogue-action secondary-action">
                                 <button
-                                    className="btn btn-secondary dialogue-button"
+                                    className="btn btn-outline-primary dialogue-button"
                                     onClick={props.secondaryAction}
-                                    disabled={props.disableSecondaryBtn}
+                                    disabled={props.secondaryBtnDisabled}
                                 >{props.secondaryBtn}
                                 </button>
                             </div>
@@ -64,7 +64,7 @@ const Dialogue: React.FunctionComponent<DialogueProps> = (props: DialogueProps) 
                                 <button
                                     className="btn btn-primary dialogue-button"
                                     onClick={props.primaryAction}
-                                    disabled={props.disablePrimaryBtn}
+                                    disabled={props.primaryBtnDisabled}
                                 >
                                     {props.primaryBtn}
                                 </button>
@@ -75,7 +75,7 @@ const Dialogue: React.FunctionComponent<DialogueProps> = (props: DialogueProps) 
                                 <button
                                     className="btn btn-primary dialogue-button"
                                     onClick={props.primaryAction}
-                                    disabled={props.disablePrimaryBtn}
+                                    disabled={props.primaryBtnDisabled}
                                 >
                                     Close
                                 </button>
