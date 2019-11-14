@@ -118,8 +118,8 @@ describe("Component: Dialogue", () => {
                 secondaryAction={() => true}
                 primaryBtn="next"
                 secondaryBtn="back"
-                disablePrimaryBtn
-                disableSecondaryBtn
+                primaryBtnDisabled
+                secondaryBtnDisabled
             />, container);
         });
         expect(container.querySelector(".primary-action").querySelector("button").disabled).toBeTruthy();
