@@ -68,10 +68,12 @@ const TablePage: React.FunctionComponent = () => {
                             tableColumns={columns}
                             tableData={data}
                             sortable={true}
+                            useGroupBy={true}
                             setSelectAllValue={selectAll}
                             pagingSize={pageSize}
                             pagingIndex={paginationValue}
                             usePagination={true}
+                            useRowSelection={true}
                             onItemSelected={(rows: Array<Row>) => { setSelectedRow(rows); }}
                             onRowExpanded={(expandedRowsIndexes: Array<string>) => { console.log("the expanded ros are ", expandedRowsIndexes) }}
                             footer={

@@ -7,31 +7,42 @@ $gray-700: #494949 !default;
 $gray-800: #343434 !default;
 $gray-900: #212121 !default;
 
-$sort-icon-color: #B2B3B3;
-$sort-icon-active-color: #007AC7;
+$icon-color:$gray-700;
+$icon-active-color: #007AC7;
 $sort-icon-hover-color: #41B0EE;
 
-$sort-icon-width: width 10px;
+$sort-icon-width: 10px;
 
 table {
     &.table {
         thead {
             >tr {
                 >th {
+                    .action-icon-holder {
+                        svg {
+                            width: 18px;
+                            margin-right: 5px;
+                            fill: $icon-color;
+                        }
+                    }
+
                     .custom-control {
                         position: relative;
                         display: block;
                         min-height: 1.5rem;
+
                         &.custom-checkbox {
                             input[type="checkbox"] {
                                 box-sizing: border-box;
                                 padding: 0;
                             }
+
                             .custom-control-label {
                                 position: relative;
                                 margin-bottom: 0;
                                 vertical-align: top;
                             }
+
                             .custom-control-input {
                                 position: absolute;
                                 z-index: -1;
@@ -44,6 +55,7 @@ table {
                         height: 16px;
                         vertical-align: middle;
                         position: relative;
+                        margin-left: 5px;
 
                         >.angle-up,
                         >.angle-down {
@@ -55,7 +67,7 @@ table {
                                 display: block;
                                 width: 100%;
                                 height: 100%;
-                                fill: $sort-icon-color;
+                                fill: $icon-color;
 
                                 &:hover {
                                     fill: $sort-icon-hover-color;
@@ -64,7 +76,7 @@ table {
 
                             &.active {
                                 svg {
-                                    fill: $sort-icon-active-color;
+                                    fill: $icon-active-color;
                                 }
                             }
                         }
@@ -76,8 +88,8 @@ table {
         tbody {
             tr {
                 td {
-                    .collapsable-action {
-                        svg { 
+                    .action-icon-holder {
+                        svg {
                             max-height: 20px;
                         }
                     }
