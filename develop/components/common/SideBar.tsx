@@ -4,9 +4,7 @@ import { sortBy } from "lodash";
 import { SideBarContent, SideBarItem } from "../../typings/generic.type";
 const sidebarData: SideBarContent = require("../../assets/components-list.json");
 
-const forms: Array<SideBarItem> = sortBy(sidebarData.form, "name");
-const uis: Array<SideBarItem> = sortBy(sidebarData.ui, "name");
-const others: Array<SideBarItem> = sortBy(sidebarData.other, "name");
+const components: Array<SideBarItem> = sortBy(sidebarData.components, "name");
 
 interface SideBarProps {
     toggle: boolean;
@@ -38,14 +36,14 @@ const SideBar: React.FunctionComponent<SideBarProps> = (props: SideBarProps): Re
                     <SideBarList list={sidebarData.links} currentPath={currentPath} onClick={navigate} />
                 </div>
             </div>
-            <div className="category">
+            {/* <div className="category">
                 <div className="title">Components <h5 className="badge badge-secondary">{forms.length + uis.length + others.length}</h5></div>
                 <div className="nav-holder">
                     <SideBarList title="Form" list={forms} currentPath={currentPath} onClick={navigate} />
                     <SideBarList title="UI" list={uis} currentPath={currentPath} onClick={navigate} />
                     <SideBarList title="Other" list={others} currentPath={currentPath} onClick={navigate} />
                 </div>
-            </div>
+            </div> */}
         </div>
     );
 };

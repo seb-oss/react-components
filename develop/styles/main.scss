@@ -1,62 +1,23 @@
 @import "~@sebgroup/bootstrap/scss/bootstrap";
 @import url("../../node_modules/highlight.js/styles/vs2015.css");
-@import "./shared/titleBar";
-@import "./shared/sideBar";
-@import "./shared/releases";
+@import "./shared/variable";
 div.app-container {
     position: absolute;
-    top: 0px;
-    bottom: 0px;
-    right: 0px;
-    left: 0px;
-    overflow: hidden;
-    div.route-holder {
-        @import "./shared/route-template";
-        position: absolute;
-        top: 100px;
-        left: 0;
-        right: 0px;
-        bottom: 0px;
-        overflow: auto;
-        transition: 200ms;
-        &.sidebar-opened {
-            left: 250px;
-        }
-        &.brief {
-            > div.route-template {
-                position: fixed;
-                top: 0px;
-                left: 0px;
-                right: 0px;
-                bottom: 0px;
-                background: $white;
-                z-index: 10;
-                overflow: auto;
-                min-width: inherit;
-                max-width: inherit;
-                padding: 0;
-                margin: 0;
-                .info-holder {
-                    .info {
-                        > h2,
-                        p:first-child {
-                            display: none;
-                        }
-                        > .md-file {
-                            display: none;
-                            > div {
-                                > * {
-                                    display: none;
-                                }
-                                #basic-use,
-                                #basic-use + pre {
-                                    display: inherit;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow-x: hidden;
+    background-color: $white;
+    display: grid;
+    grid-template-areas: "aside main";
+    grid-template-columns: auto 1fr;
+    @import "./components/common/common";
+}
+@import "./dark-mode";
+
+.blue-svg {
+    stroke: $blue;
 }

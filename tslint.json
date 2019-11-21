@@ -17,6 +17,7 @@
         "no-console": false,
         "prefer-for-of": false,
         "jsx-boolean-value": false,
+        "forin": false,
         "indent": [
             true,
             "spaces",

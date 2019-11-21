@@ -12,9 +12,9 @@ type RouteItem = { path: string, component: React.LazyExoticComponent<any> };
 
 /** Routes are generated dynamically based on the information provided in `assets/components-list.json` */
 const routes: Array<RouteItem> = [{ path: "/about", component: React.lazy(() => import("./common/About")) }];
-[sidebarData.form, sidebarData.ui, sidebarData.other].map((category: Array<SideBarItem>) => category.map((item: SideBarItem) => {
+sidebarData.components.map((item: SideBarItem) => {
     routes.push({ path: item.path, component: React.lazy(() => import(`./${item.filePath}`)) });
-}));
+});
 routes.push({ path: "*", component: React.lazy(() => import("./common/NotFound")) });
 
 const storedSidebarToggle: boolean = localStorage.getItem("sidebar") === null ? true : JSON.parse(localStorage.getItem("sidebar"));
@@ -36,7 +36,7 @@ const App: React.FunctionComponent<RouteComponentProps> = (props: RouteComponent
 
     return (
         <div className="app-container">
-            <TitleBar onToggleClick={toggleSidebar} history={props.history} />
+            {/* <TitleBar onToggleClick={toggleSidebar} history={props.history} /> */}
             <div className={"route-holder" + (sidebarToggle ? " sidebar-opened" : "") + (brief ? " brief" : "")}>
                 <React.Suspense fallback={<Loader toggle={true} fullscreen={true} />}>
                     <Switch>
@@ -45,7 +45,7 @@ const App: React.FunctionComponent<RouteComponentProps> = (props: RouteComponent
                     </Switch>
                 </React.Suspense>
             </div>
-            <SideBar toggle={sidebarToggle} history={props.history} />
+            {/* <SideBar toggle={sidebarToggle} history={props.history} /> */}
         </div>
     );
 };

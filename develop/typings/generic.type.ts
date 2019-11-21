@@ -12,7 +12,5 @@ export type SideBarItem = {
 };
 export type SideBarContent = {
     links: Array<SideBarItem>;
-    form: Array<SideBarItem>;
-    ui: Array<SideBarItem>;
-    other: Array<SideBarItem>;
+    components: Array<SideBarItem>;
 };

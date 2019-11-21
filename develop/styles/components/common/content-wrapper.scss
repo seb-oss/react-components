@@ -1,0 +1,8 @@
+main.content-wrapper {
+    grid-area: main;
+    padding: 20px;
+    padding-top: 50px;
+    max-height: 100vh;
+    overflow-x: hidden;
+    overflow-y: overlay;
+}

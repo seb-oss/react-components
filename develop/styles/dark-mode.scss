@@ -1,0 +1,75 @@
+$dark-font: $gray-500;
+$dark-card: #2a2c49;
+$dark-card-output: #616382;
+$dark-card-border: #47496b;
+div.app-container.dark-mode {
+    background-color: rgb(27, 33, 60);
+    color: $dark-font;
+    .blue-svg {
+        stroke: lighten($dark-font, 20%);
+    }
+    > aside.side-menu {
+        background-color: rgb(39, 45, 73);
+        color: $dark-font;
+        > .toggle {
+            > svg {
+                fill: $dark-font;
+            }
+        }
+        > .sidemenu-content {
+            > * {
+                color: $dark-font;
+            }
+            > nav.components-list {
+                > a.list-item {
+                    &:not(:hover):not(:active):not(.highlighted) {
+                        color: $dark-font;
+                    }
+                }
+            }
+            > hr {
+                border-color: $dark-font;
+            }
+            > .options {
+                > * {
+                    color: $dark-font;
+                }
+            }
+            > .sidemenu-search.input-box-group {
+                > .input-group {
+                    .input-box-group-wrapper {
+                        > input:not(:focus) {
+                            color: $dark-font;
+                        }
+                        > .input-group-append {
+                            > .input-group-text {
+                                > svg {
+                                    fill: $dark-font;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    > main.content-wrapper {
+        > .container {
+            > section.doc-page {
+                > * {
+                    color: $dark-font;
+                }
+                .card {
+                    > * {
+                        color: $dark-font;
+                    }
+                    background-color: $dark-card;
+                    border-color: $dark-card-border;
+                    > .output {
+                        background-color: $dark-card-output;
+                    }
+                }
+            }
+        }
+    }
+}

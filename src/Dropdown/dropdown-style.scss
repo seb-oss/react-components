@@ -1,15 +1,9 @@
+@import "../colours";
+$body-color: #444;
 $transition-time: 300ms;
 $icon-size: 18px;
 $dropdown-width: 100%;
 $dropdown-toggle-height: 44px;
-$blue: #41b0ee;
-$blue-dark: #0092e1;
-$blue-darker: #007ac7;
-$body-color: #444 !default;
-$grey-500: #adadad !default;
-$gray-100: #f8f8f8;
-$red-dark: #d81a1a;
-$white: #fff;
 
 @mixin transform($props) {
     -webkit-transform: $props;
@@ -33,7 +27,7 @@ $white: #fff;
         height: $dropdown-toggle-height;
         min-width: $dropdown-width;
         padding: 0px;
-        border-color: $grey-500;
+        border-color: $gray-500;
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -155,6 +149,7 @@ $white: #fff;
             padding: 0px 0px 0px 16px;
             border: none;
             outline: none;
+            width: 100%;
         }
 
         > .custom-dropdown-item {
@@ -235,20 +230,20 @@ $white: #fff;
     &.disabled {
         pointer-events: none;
         > .dropdown-label {
-            color: $grey-500;
+            color: $gray-500;
         }
 
         > .custom-dropdown-toggle {
-            border-color: $grey-500;
+            border-color: $gray-500;
             background-color: $gray-100;
             cursor: default;
 
             > .title {
-                color: $grey-500;
+                color: $gray-500;
             }
 
             > .right-items > .dropdown-icon-holder > svg {
-                fill: $grey-500;
+                fill: $gray-500;
                 cursor: default;
             }
 
@@ -258,7 +253,7 @@ $white: #fff;
                 &:hover {
                     background-color: $gray-100;
                     > .right-items > .dropdown-icon-holder > svg {
-                        fill: $grey-500;
+                        fill: $gray-500;
                         cursor: default;
                     }
                 }
@@ -267,19 +262,18 @@ $white: #fff;
     }
 }
 
-
 // Native version
 .form-control {
     &.disabled {
-        border-color: $grey-500;
-        color: $grey-500;
+        border-color: $gray-500;
+        color: $gray-500;
         background-color: $white;
     }
 }
 
 .dropdown-label {
     &.disabled {
-        color: $grey-500;
+        color: $gray-500;
     }
 }
 
@@ -313,4 +307,38 @@ input[type="search"]::-webkit-search-cancel-button,
 input[type="search"]::-webkit-search-results-button,
 input[type="search"]::-webkit-search-results-decoration {
     display: none;
+}
+
+.dark-mode {
+    .dropdown.custom-dropdown {
+        * {
+            color: $dark-font;
+        }
+        > .custom-dropdown-toggle {
+            background-color: transparent;
+            .dropdown-icon-holder {
+                svg {
+                    fill: $dark-font;
+                }
+            }
+        }
+        > .dropdown-menu {
+            > button {
+                &:not(:hover) {
+                    color: $dark-font;
+                    background-color: $dark-background;
+                }
+            }
+            input.search-input {
+                background-color: $dark-background;
+            }
+            .custom-dropdown-item {
+                background-color: $dark-background;
+            }
+        }
+    }
+    select.form-control {
+        background-color: transparent;
+        color: $dark-font;
+    }
 }

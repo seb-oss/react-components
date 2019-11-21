@@ -1,0 +1,20 @@
+.doc-page {
+    > .row {
+        &:not(:last-child) {
+            margin-bottom: 20px;
+        }
+        > [class*="col"] {
+            > .card {
+                box-shadow: $shadow;
+                padding: 20px;
+                border-radius: 10px;
+                border: 1px solid #d4d4d4;
+                > .output {
+                    padding: 40px 20px;
+                    box-shadow: inset $shadow;
+                    border: 1px solid #dedede;
+                }
+            }
+        }
+    }
+}

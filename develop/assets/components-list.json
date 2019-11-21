@@ -13,7 +13,7 @@
             "path": "https://github.com/sebgroup/react-components/releases"
         }
     ],
-    "form": [
+    "components": [
         {
             "name": "Textbox",
             "path": "/textbox",
@@ -88,9 +88,7 @@
             "name": "Image Cropper",
             "path": "/imagecropper",
             "filePath": "pages/ImageCropperPage"
-        }
-    ],
-    "ui": [
+        },
         {
             "name": "Button",
             "path": "/button",
@@ -150,9 +148,7 @@
             "name": "Notification",
             "path": "/notification",
             "filePath": "pages/NotificationPage"
-        }
-    ],
-    "other": [
+        },
         {
             "name": "Dialogue",
             "path": "/dialogue",
