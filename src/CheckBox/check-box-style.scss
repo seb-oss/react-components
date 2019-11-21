@@ -74,3 +74,11 @@ $transition-time: 200ms;
         margin: 0;
     }
 }
+
+.dark-mode {
+    .form-group.custom-checkbox {
+        * {
+            color: $dark-font;
+        }
+    }
+}

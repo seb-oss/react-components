@@ -6,8 +6,7 @@ export type ButtonSizes = "lg" | "md" | "sm";
 export type ButtonIconPosition = "right" | "left";
 export type ButtonType = "button" | "reset" | "submit";
 
-export interface ButtonProps {
-    children?: React.ReactNode;
+export type ButtonProps = React.PropsWithChildren<{
     className?: string;
     disabled?: boolean;
     icon?: React.ReactNode;
@@ -20,7 +19,7 @@ export interface ButtonProps {
     theme?: ButtonTheme;
     title?: string;
     type?: ButtonType;
-}
+}>;
 
 export const Button: React.NamedExoticComponent<ButtonProps> = React.memo((props: ButtonProps): React.ReactElement<void> => {
     const [className, setClassName] = React.useState<string>("btn");

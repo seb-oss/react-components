@@ -10,7 +10,7 @@ export interface CheckBoxProps {
     disabled?: boolean;
     id?: string;
     inline?: boolean;
-    label: string;
+    label?: string;
     name: string;
     onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
     reference?: React.RefObject<HTMLInputElement>;
