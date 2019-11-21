@@ -10,22 +10,22 @@ const mysvg: JSX.Element = <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 
 
 const ButtonPage: React.FunctionComponent = () => {
     const themeList: Array<RadioListModel<ButtonTheme>> = [
-        { group: "theme", label: "Primary", value: "primary" },
-        { group: "theme", label: "Secondary", value: "secondary" },
-        { group: "theme", label: "Alternative", value: "alternative" },
-        { group: "theme", label: "Danger", value: "danger" },
-        { group: "theme", label: "Ghost-dark", value: "ghost-dark" },
-        { group: "theme", label: "Ghost-light", value: "ghost-light" },
-        { group: "theme", label: "Anchor", value: "anchor" },
+        { label: "Primary", value: "primary" },
+        { label: "Secondary", value: "secondary" },
+        { label: "Alternative", value: "alternative" },
+        { label: "Danger", value: "danger" },
+        { label: "Ghost-dark", value: "ghost-dark" },
+        { label: "Ghost-light", value: "ghost-light" },
+        { label: "Anchor", value: "anchor" },
     ];
     const iconPositionList: Array<RadioListModel<ButtonIconPosition>> = [
-        { group: "icon-position", label: "Right", value: "right" },
-        { group: "icon-position", label: "Left", value: "left" },
+        { label: "Right", value: "right" },
+        { label: "Left", value: "left" },
     ];
     const sizeList: Array<RadioListModel<ButtonSizes>> = [
-        { group: "size", label: "Small", value: "sm" },
-        { group: "size", label: "Medium", value: "md" },
-        { group: "size", label: "Large", value: "lg" },
+        { label: "Small", value: "sm" },
+        { label: "Medium", value: "md" },
+        { label: "Large", value: "lg" },
     ];
     const [theme, setTheme] = React.useState<ButtonTheme>("primary");
     const [iconPosition, setIconPosition] = React.useState<ButtonIconPosition>("right");
@@ -76,7 +76,13 @@ const ButtonPage: React.FunctionComponent = () => {
                     <div className="row">
                         <div className="col">
                             <p>Themes</p>
-                            <RadioGroup list={themeList} value={theme} onChange={(e) => setTheme(e.currentTarget.value as ButtonTheme)} condensed />
+                            <RadioGroup
+                                name="theme"
+                                list={themeList}
+                                value={theme}
+                                onChange={(e) => setTheme(e.currentTarget.value as ButtonTheme)}
+                                condensed
+                            />
                         </div>
                         <div className="col">
                             <p>Options</p>
@@ -89,7 +95,7 @@ const ButtonPage: React.FunctionComponent = () => {
                                     list={iconPositionList}
                                     value={iconPosition}
                                     condensed
-                                    name="icon"
+                                    name="icon-position"
                                     onChange={(e) => setIconPosition(e.target.value as ButtonIconPosition)}
                                 />
                             }
@@ -100,7 +106,7 @@ const ButtonPage: React.FunctionComponent = () => {
                                     list={sizeList}
                                     value={size}
                                     condensed
-                                    name="size"
+                                    name="icon-size"
                                     onChange={(e) => setSize(e.target.value as ButtonSizes)}
                                 />
                             }

@@ -1,6 +1,10 @@
 @import "../colours";
 $transition-time: 80ms;
 $box-shadow: rgba(85, 85, 85, 0.4) 0 2px 5px;
+$disabled-selected: #adadad;
+$disabled-unselected: #cccccc;
+$disabled-thumb-bg: #9a9a9a;
+$disabled-thumb-border-color: #8c8c8c;
 
 @mixin appearance($props) {
     -webkit-appearance: $props;
@@ -53,7 +57,7 @@ $box-shadow: rgba(85, 85, 85, 0.4) 0 2px 5px;
 
 @mixin setTheme($dark, $light) {
     .custom-slider-track {
-        .custom-slider-slider-before {
+        .custom-slider-slider-after {
             background-color: $light;
         }
         .custom-slider-thumb {
@@ -133,17 +137,38 @@ $box-shadow: rgba(85, 85, 85, 0.4) 0 2px 5px;
                 display: none;
                 color: $transparent;
             }
-            &:active {
-                & + .custom-slider-holder {
-                    .custom-slider-thumb {
-                        .custom-slider-preview:not(.always-show) {
-                            display: block;
+            &:not(:disabled) {
+                &:focus {
+                    outline: none;
+                    & + .custom-slider-holder {
+                        > .custom-slider-track {
+                            > .custom-slider-thumb {
+                                box-shadow: $box-shadow, 0px 0 0px 2px rgba($blue-dark, 0.45);
+                            }
                         }
                     }
                 }
-            }
-            &:focus {
-                outline: none;
+                &:hover {
+                    & + .custom-slider-holder {
+                        > .custom-slider-track {
+                            > .custom-slider-thumb {
+                                @include transform(translateX(-50%) scale(1.1));
+                            }
+                        }
+                    }
+                }
+                &:active {
+                    & + .custom-slider-holder {
+                        > .custom-slider-track {
+                            > .custom-slider-thumb {
+                                @include transform(translateX(-50%) scale(1.05));
+                                .custom-slider-preview:not(.always-show) {
+                                    display: block;
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
         .custom-slider-holder {
@@ -170,17 +195,18 @@ $box-shadow: rgba(85, 85, 85, 0.4) 0 2px 5px;
                     bottom: 0;
                     height: 100%;
                     z-index: 2;
-                    @include transition(width $transition-time ease-out);
                 }
                 .custom-slider-slider-before {
                     left: 0px;
-                    background-color: $blue-dark;
-                    will-change: width;
+                    width: calc(100% + 56px);
+                    margin: 0 -28px;
+                    background-color: $gray-500;
                 }
                 .custom-slider-slider-after {
-                    right: -2px;
-                    background-color: $gray-500;
                     will-change: width;
+                    transform-origin: left;
+                    margin: 0 -28px;
+                    transform: rotateY(0deg);
                 }
                 .custom-slider-thumb {
                     position: relative;
@@ -189,11 +215,12 @@ $box-shadow: rgba(85, 85, 85, 0.4) 0 2px 5px;
                     background-color: $blue-dark;
                     border-radius: 4px;
                     top: -14px;
+                    transform-origin: center;
                     @include transform(translateX(-50%));
                     pointer-events: none;
                     box-shadow: $box-shadow;
                     will-change: left;
-                    @include transition(left $transition-time ease-out);
+                    @include transition((transform $transition-time ease-in-out, box-shadow $transition-time ease-in));
                     z-index: 2;
                     .custom-slider-preview {
                         pointer-events: none;
@@ -277,6 +304,20 @@ $box-shadow: rgba(85, 85, 85, 0.4) 0 2px 5px;
                         }
                     }
                 }
+                &.with-transitions {
+                    .custom-slider-slider-after {
+                        @include transition((width $transition-time ease-out, transform $transition-time linear));
+                    }
+                    .custom-slider-thumb {
+                        @include transition(
+                            (
+                                left $transition-time ease-out,
+                                transform $transition-time ease-in-out,
+                                box-shadow $transition-time ease-in
+                            )
+                        );
+                    }
+                }
             }
         }
         &.has-labels {
@@ -288,22 +329,25 @@ $box-shadow: rgba(85, 85, 85, 0.4) 0 2px 5px;
     &.disabled {
         > div.input-field {
             > input[type="range"] {
-                cursor: default !important;
+                cursor: default;
             }
             > div.custom-slider-holder {
                 > div.custom-slider-track {
                     > div.custom-slider-slider-before {
-                        background-color: #adadad !important;
+                        background-color: $disabled-unselected;
+                        &:before {
+                            background-color: $disabled-unselected;
+                        }
                     }
                     > div.custom-slider-slider-after {
-                        background-color: #cccccc !important;
+                        background-color: $disabled-selected;
+                        &:after {
+                            background-color: $disabled-selected;
+                        }
                     }
                     > div.custom-slider-thumb {
-                        background-color: #9a9a9a !important;
-                        border-color: #8c8c8c !important;
-                        &:after {
-                            background-color: #c5c5c5 !important;
-                        }
+                        background-color: $disabled-thumb-bg;
+                        border-color: $disabled-thumb-border-color;
                     }
                 }
             }

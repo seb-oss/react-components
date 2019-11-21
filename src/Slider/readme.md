@@ -42,7 +42,7 @@ These are the current available properties:
 | alternative?       | `boolean`                             | Use an alternative version of the slider                            |
 | alwaysShowTooltip? | `boolean`                             | Always Show tooltip (default: `false`)                              |
 | className?         | `string`                              | Custom class can be passed here                                     |
-| disabled?          | `string`                              | Disabled state                                                      |
+| disabled?          | `boolean`                             | Disabled state                                                      |
 | error?             | `string`                              | The component error message                                         |
 | id?                | `string`                              | Id property                                                         |
 | label?             | `string`                              | The component label                                                 |
@@ -62,8 +62,8 @@ These are the current available properties:
 
 1. `labels` items has an exported interface named `RangeSliderLabel`
 
-```javascript
-{
+```typescript
+interface RangeSliderLabel {
     position: number;
     text: string;
 }
@@ -134,5 +134,3 @@ function handleSebSliderChange(event: React.ChangeEvent<HTMLInputElement>): void
     }
 }
 ```
-
--   A Working example is show below

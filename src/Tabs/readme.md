@@ -40,7 +40,7 @@ These are the current available properties:
 ## Footnote
 1. `list` has an exported interface named `TabsListItem`
 ```typescript
-{
+interface TabsListItem {
       text: string;
       disabled?: boolean;
 }

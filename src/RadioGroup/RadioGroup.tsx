@@ -5,7 +5,6 @@ import "./radio-group-style.scss";
 export interface RadioListModel<T = any> {
     description?: string;
     disabled?: boolean;
-    group: string;
     label: string;
     value: T;
 }
@@ -18,7 +17,7 @@ export interface RadioGroupProps<T = any> {
     inline?: boolean;
     label?: string;
     list: Array<RadioListModel<T>>;
-    name?: string;
+    name: string;
     onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
     value: T;
 }
@@ -41,7 +40,7 @@ export const RadioGroup: React.FunctionComponent<RadioGroupProps> = (props: Radi
 
     function constructIds(): void {
         const idListToSet: Array<string> = [];
-        props.list.map(() => idListToSet.push(randomId("accordion-")));
+        props.list.map(() => idListToSet.push(randomId("radiogroup-")));
         setIdList(idListToSet);
     }
 
@@ -57,7 +56,7 @@ export const RadioGroup: React.FunctionComponent<RadioGroupProps> = (props: Radi
                                 className="custom-control-input"
                                 type="radio"
                                 value={item.value}
-                                name={item.group}
+                                name={props.name}
                                 id={idList[index]}
                                 checked={props.value === item.value}
                                 aria-labelledby={item.label}
