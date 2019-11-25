@@ -14,6 +14,18 @@
                     box-shadow: inset $shadow;
                     border: 1px solid #dedede;
                 }
+                .form-group.custom-checkbox {
+                    margin: 0;
+                    >.input-field {
+                        >.custom-control {
+                            justify-content: center;
+                            >.custom-control-label {
+                                width: inherit;
+                                padding-right: 0px;
+                            }
+                        }
+                    }
+                }
             }
         }
     }
