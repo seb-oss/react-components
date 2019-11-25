@@ -12,8 +12,10 @@ div.app-container {
     overflow-x: hidden;
     background-color: $white;
     display: grid;
+    display:-ms-grid;
     grid-template-areas: "aside main";
     grid-template-columns: auto 1fr;
+    -ms-grid-columns: auto 1fr;
     @import "./components/common/common";
 }
 @import "./dark-mode";
