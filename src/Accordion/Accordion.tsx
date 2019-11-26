@@ -47,7 +47,7 @@ const Accordion: React.FunctionComponent<AccordionProps> = (props: AccordionProp
      */
     function constructIds(): void {
         const idListToSet: Array<string> = [];
-        props.list.map(() => idListToSet.push(randomId("accordion-")));
+        props.list && props.list.map(() => idListToSet.push(randomId("accordion-")));
         setIdList(idListToSet);
     }
 

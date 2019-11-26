@@ -18,7 +18,7 @@ export const Breadcrumb: React.FunctionComponent<BreadcrumbProps> = React.memo((
         <div className={"custom-breadcrumb" + (props.className ? ` ${props.className}` : "")} id={props.id}>
             <nav aria-label="breadcrumb">
                 <ol className="breadcrumb">
-                    {props.list.map((item: string | React.ReactNode, i: number) =>
+                    {props.list && props.list.map((item: string | React.ReactNode, i: number) =>
                         <li
                             key={i}
                             className={"breadcrumb-item" + (i === props.list.length - 1 ? " active" : "")}
