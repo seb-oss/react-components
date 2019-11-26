@@ -2,6 +2,7 @@ aside.side-menu {
     position: relative;
     background-color: rgb(244, 249, 253);
     grid-area: aside;
+    -ms-grid-column: 1;
     box-shadow: $shadow;
     white-space: nowrap;
     width: auto;
@@ -89,6 +90,7 @@ aside.side-menu {
         transition: max-width 400ms linear, width 400ms linear, padding 200ms linear, opacity 250ms linear;
         will-change: max-width, width;
         max-height: 100vh;
+        overflow-y: auto;
         overflow-y: overlay;
         direction: rtl;
         > img {
