@@ -1,31 +1,6 @@
 import * as React from "react";
 
 import "./table-style.scss";
-
-import {
-    useTable,
-    HeaderGroup,
-    ColumnInstance,
-    Row,
-    Cell,
-    Column,
-    useSortBy,
-    UseSortByColumnProps,
-    usePagination,
-    useRowSelect,
-    TableInstance,
-    UsePaginationInstanceProps,
-    UseRowSelectState,
-    UseRowSelectInstanceProps,
-    UseRowSelectRowProps,
-    useExpanded,
-    UseExpandedRowProps,
-    UseGroupByRowProps,
-    useGroupBy,
-    UseGroupByColumnProps,
-    UseGroupByHeaderProps,
-    UseGroupByCellProps
-} from "react-table";
 import { randomId } from "../__utils/randomId";
 
 const angleDown: JSX.Element = <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512"><path d="M119.5 326.9L3.5 209.1c-4.7-4.7-4.7-12.3 0-17l7.1-7.1c4.7-4.7 12.3-4.7 17 0L128 287.3l100.4-102.2c4.7-4.7 12.3-4.7 17 0l7.1 7.1c4.7 4.7 4.7 12.3 0 17L136.5 327c-4.7 4.6-12.3 4.6-17-.1z" /></svg>;
@@ -33,14 +8,9 @@ const angleUp: JSX.Element = <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 
 const angleRightIcon: JSX.Element = <svg name="angle-right" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 512"><path d="M166.9 264.5l-117.8 116c-4.7 4.7-12.3 4.7-17 0l-7.1-7.1c-4.7-4.7-4.7-12.3 0-17L127.3 256 25.1 155.6c-4.7-4.7-4.7-12.3 0-17l7.1-7.1c4.7-4.7 12.3-4.7 17 0l117.8 116c4.6 4.7 4.6 12.3-.1 17z" /></svg>;
 const objectGroup: JSX.Element = <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M404 192h-84v-52c0-6.627-5.373-12-12-12H108c-6.627 0-12 5.373-12 12v168c0 6.627 5.373 12 12 12h84v52c0 6.627 5.373 12 12 12h200c6.627 0 12-5.373 12-12V204c0-6.627-5.373-12-12-12zm-276-32h160v128H128V160zm256 192H224v-32h84c6.627 0 12-5.373 12-12v-84h64v128zm116-224c6.627 0 12-5.373 12-12V44c0-6.627-5.373-12-12-12h-72c-6.627 0-12 5.373-12 12v20H96V44c0-6.627-5.373-12-12-12H12C5.373 32 0 37.373 0 44v72c0 6.627 5.373 12 12 12h20v256H12c-6.627 0-12 5.373-12 12v72c0 6.627 5.373 12 12 12h72c6.627 0 12-5.373 12-12v-20h320v20c0 6.627 5.373 12 12 12h72c6.627 0 12-5.373 12-12v-72c0-6.627-5.373-12-12-12h-20V128h20zm-52 256h-20c-6.627 0-12 5.373-12 12v20H96v-20c0-6.627-5.373-12-12-12H64V128h20c6.627 0 12-5.373 12-12V96h320v20c0 6.627 5.373 12 12 12h20v256zM64 64v32H32V64h32m416 0v32h-32V64h32M64 416v32H32v-32h32m416 0v32h-32v-32h32" /></svg>;
 
-export interface TableRow {
-    id: number | string;
-    [name: string]: string | number | Date;
-}
-
 interface TableProps {
-    tableColumns: Array<Column>;
-    tableData: Array<TableRow>;
+    columns: Array<Column>;
+    data: Array<object>;
     // item selection
     setSelectAllValue?: boolean;
     // sorting
@@ -48,8 +18,8 @@ interface TableProps {
 
     // pagination
     usePagination?: boolean;
-    pagingSize?: number;
-    pagingIndex?: number;
+    offsett?: number;
+    currentpage?: number;
 
     // group by
 
@@ -59,117 +29,191 @@ interface TableProps {
 
     useRowSelection?: boolean;
 
-    // expandable
-    useExpand?: boolean;
-
     footer?: React.ReactNode;
 
-    onItemSelected?: (rows: Array<Row>) => void;
+    onRowSelection?: (e: React.ChangeEvent<HTMLInputElement>, selectedRows: Array<TableRow>) => void;
     onRowExpanded?: (expandedRowsIndexes: Array<string>) => void;
 }
 
-interface TableInstanceProps extends
-    TableInstance,
-    UsePaginationInstanceProps<any>,
-    UseRowSelectInstanceProps<any>,
-    UseRowSelectState<any> {
-    selectedFlatRows: Array<Row>;
+export interface Column {
+    Header: string;
+    accessor: string;
+    canSort?: boolean;
+    canGroupBy?: boolean;
 }
 
-interface TableUIProps extends TableProps, TableInstanceProps {
+interface TableHead extends Column {
+    isGrouped?: boolean;
+    isSorted?: boolean;
+    isSortedDesc?: boolean;
+}
+
+interface Cell {
+    id: string | number;
+    accessor: string;
+    value: string | number | boolean;
+
+    isGrouped?: boolean;
+    isAggregated?: boolean;
+    isRepeatedValue?: boolean;
+}
+
+export interface TableRow {
+    rowIndex: number;
+    cells: Array<Cell>;
+    selected?: boolean;
+    subRows?: Array<TableRow>;
+}
+
+interface TableUIProps {
+    columns: Array<TableHead>;
+    rows: Array<TableRow>;
+    sortable: boolean;
+    useGroupBy: boolean;
+    useRowSelection: boolean;
+    allRowsAreSelected?: boolean;
+
+    footer: React.ReactNode;
+
+    onItemSelected?: (e: React.ChangeEvent<HTMLInputElement>, row: TableRow) => void;
+    onAllItemsSelected?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    onRowExpanded?: (expandedRowsIndexes: Array<string>) => void;
+}
+
+const CustomeRender = (type: "aggregated" | "grouped", children: React.ReactNode) => {
+    const className = type === "aggregated" ? "aggregated-class" : "grouped-class";
+    return (
+        <span className={className}>
+            {children}
+        </span>
+    );
+};
+
+function generateRandomId(seed: string): string {
+    return seed + String((Math.random() * 1000) + (new Date()).getTime());
+}
+
+function sumCols(colsLength: number, useSelection?: boolean, useGroupBy?: boolean) {
+    let sum = colsLength;
+    if (useSelection || useGroupBy) {
+        if (useSelection) {
+            sum = sum + 1;
+        }
+
+        if (useGroupBy) {
+            sum = sum + 1;
+        }
+    }
+
+    return sum;
 }
 
 export const TableUI: React.FunctionComponent<TableUIProps> = React.memo((props: TableUIProps): React.ReactElement<void> => {
-    const list: Array<Row<any>> = props.usePagination ? props.page : props.rows;
-
+    const checkAllRandomIds = generateRandomId("chk-all");
     return (
-        <table {...props.getTableProps()} className="table">
+        <table className="table">
             <thead>
-                {props.headerGroups.map((group: HeaderGroup, index: number) => (
-                    <tr key={index} {...group.getHeaderGroupProps()}>
-                        {group.headers.map((column: ColumnInstance & UseSortByColumnProps<ColumnInstance> & UseGroupByColumnProps<ColumnInstance> & UseGroupByHeaderProps<ColumnInstance>) => {
-                            console.log("The group is ", column.canGroupBy);
-                            return (
-                                (props.sortable && column.canSort) ?
-                                    <th key={column.id} {...column.getHeaderProps(column.getSortByToggleProps())}>
-                                        {column.render("Header")}
-
-                                        <div className="icon-holder">
-                                            <div className={"angle-up" + (column.isSorted && !column.isSortedDesc ? " active" : "")}>
-                                                {angleUp}
-                                            </div>
-                                            <div className={"angle-down" + (column.isSorted && column.isSortedDesc ? " active" : "")}>
-                                                {angleDown}
-                                            </div>
-                                        </div>
-
-                                    </th>
-                                    :
-                                    <th key={column.id} {...column.getHeaderProps()}>
-                                        {(props.useGroupBy && column.canGroupBy) &&
-                                            <span className="action-icon-holder">
-                                                <span  {...column.getGroupByToggleProps()}>
-                                                    {column.isGrouped ? "🛑 " : objectGroup}
-                                                </span>
-                                            </span>
-                                        }
-                                        {column.render("Header")}
-                                    </th>
-                            );
-                        })
-                        }
-                    </tr>
-                ))}
-            </thead>
-            <tbody {...props.getTableBodyProps()}>
-                {list.map(
-                    (row: Row & UseRowSelectRowProps<Row> & UseExpandedRowProps<Row> & UseGroupByRowProps<Row>, rowIndex: number) => {
-                        props.prepareRow(row);
-                        return (
-                            <tr {...row.getRowProps()} key={rowIndex}>
-                                {row.cells.map((cell: Cell & UseGroupByCellProps<Cell>, index: number) => {
-                                    console.log("The cell is ", cell);
-                                    return <td
-                                        key={index}
-                                        {...cell.getCellProps()}
-                                        style={{
-                                            background: cell.isGrouped
-                                                ? "#0aff0082"
-                                                : cell.isAggregated
-                                                    ? "#ffa50078"
-                                                    : cell.isRepeatedValue
-                                                        ? "#ff000042"
-                                                        : "white",
-                                        }}
-                                    >
-                                        {cell.isGrouped ? (
-                                            // If it's a grouped cell, add an expander and row count
-                                            <>
-                                                <span {...row.getExpandedToggleProps()}>
-                                                    {row.isExpanded ? "👇" : "👉"}
-                                                </span>{""}
-                                                {cell.render("Cell")} ({row.subRows.length})
-                                            </>
-                                        ) : cell.isAggregated ? (
-                                            // If the cell is aggregated, use the Aggregated
-                                            // renderer for cell
-                                            cell.render("Aggregated")
-                                        ) : cell.isRepeatedValue ? null : (
-                                            // For cells with repeated values, render null
-                                            // Otherwise, just render the regular cell
-                                            cell.render("Cell")
-                                        )}
-                                    </td>;
-                                })}
-                            </tr>
-                        );
+                <tr>
+                    {props.useRowSelection &&
+                        <th>
+                            <div className="custom-control custom-checkbox">
+                                <input
+                                    type="checkbox"
+                                    className="custom-control-input"
+                                    id={checkAllRandomIds}
+                                    name="chkCheckAll"
+                                    checked={props.allRowsAreSelected}
+                                    onChange={props.onAllItemsSelected}
+                                />
+                                <label className="custom-control-label" htmlFor={checkAllRandomIds} />
+                            </div>
+                        </th>
                     }
+                    {props.columns.map((header: TableHead, index: number) => (
+                        <th key={index}>
+                            {(props.useGroupBy && header.canGroupBy) &&
+                                <span className="action-icon-holder">
+                                    {header.isGrouped ? "🛑 " : objectGroup}
+                                </span>
+                            }
+
+                            {header.Header}
+
+                            {(props.sortable && header.canSort) &&
+                                <div className="icon-holder">
+                                    <div className={"angle-up" + (header.isSorted && !header.isSortedDesc ? " active" : "")}>
+                                        {angleUp}
+                                    </div>
+                                    <div className={"angle-down" + (header.isSorted && header.isSortedDesc ? " active" : "")}>
+                                        {angleDown}
+                                    </div>
+                                </div>
+                            }
+                        </th>
+                    ))
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                {props.rows.map((row: TableRow) => {
+                    const checkRandomIds = generateRandomId("chk-");
+                    return (
+                        <tr key={row.rowIndex}>
+                            {props.useRowSelection &&
+                                <td>
+                                    <div className="custom-control custom-checkbox">
+                                        <input
+                                            type="checkbox"
+                                            className="custom-control-input"
+                                            id={checkRandomIds}
+                                            checked={props.allRowsAreSelected}
+                                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => { props.onItemSelected(e, row); }}
+                                            name={`chk-row-` + row.rowIndex}
+                                        />
+                                        <label className="custom-control-label" htmlFor={checkRandomIds} />
+                                    </div>
+                                </td>
+                            }
+                            {row.cells.map((cell: Cell, cellIndex: number) => {
+                                return <td
+                                    key={cellIndex}
+                                    style={{
+                                        background: cell.isGrouped
+                                            ? "#0aff0082"
+                                            : cell.isAggregated
+                                                ? "#ffa50078"
+                                                : cell.isRepeatedValue
+                                                    ? "#ff000042"
+                                                    : "white",
+                                    }}
+                                >
+                                    {cell.isGrouped ? (
+                                        // If it's a grouped cell, add an expander and row count
+                                        <span className="grouped-cell-class">
+                                            {cell.value} ({row.subRows.length})
+                                        </span>
+                                    ) : cell.isAggregated ? (
+                                        // If the cell is aggregated, use the Aggregated
+                                        // renderer for cell
+                                        <span className="aggredated-cell-class">
+                                            {cell.value}
+                                        </span>
+                                    ) : cell.isRepeatedValue ? null : (
+                                        // For cells with repeated values, render null
+                                        // Otherwise, just render the regular cell
+                                        cell.value
+                                    )}
+                                </td>;
+                            })}
+                        </tr>
+                    );
+                }
                 )}
             </tbody>
             <tfoot>
                 {props.footer &&
                     <tr>
-                        <td colSpan={list.length}>
+                        <td colSpan={sumCols(props.columns.length, props.useRowSelection, props.useGroupBy)}>
                             {props.footer}
                         </td>
                     </tr>
@@ -182,218 +226,124 @@ export const TableUI: React.FunctionComponent<TableUIProps> = React.memo((props:
 });
 
 export const Table: React.FunctionComponent<TableProps> = React.memo((props: TableProps): React.ReactElement<void> => {
-    // Use the state and functions returned from useTable to build your UI
-    const [columns, setTableColumns] = React.useState<Array<Column>>([]);
-    const [data, setTableData] = React.useState<Array<TableRow>>([]);
+    const [tableRows, setTableRows] = React.useState<Array<TableRow>>([]);
+    const [currentTableRows, setCurrentTableRows] = React.useState<Array<TableRow>>([]);
+    const [tableColumns, setTableColumn] = React.useState<Array<TableHead>>([]);
+    const [allItemsChecked, setAllRowsChecked] = React.useState<boolean>(false);
 
-    // general functions
-    // This is a custom aggregator that
-    // takes in an array of values and
-    // returns the rounded median
-    function roundedMedian(values) {
-        let min = values[0] || "";
-        let max = values[0] || "";
+    const onItemSelected = (e: React.ChangeEvent<HTMLInputElement>, selectedRow: TableRow) => {
+        console.log("The table is ", selectedRow);
+        const updatedRows: Array<TableRow> = currentTableRows.map((row: TableRow, index) => {
+            if (selectedRow.rowIndex === index) {
+                return (
+                    { ...row, selected: e.currentTarget.checked }
+                );
+            }
+            return row;
+        });
+        console.log("The table is ", updatedRows);
+        setCurrentTableRows(updatedRows);
 
-        values.forEach((value: number) => {
-            min = Math.min(min, value);
-            max = Math.max(max, value);
+        props.onRowSelection(e, updatedRows);
+    };
+
+    const onAllItemsSelected = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const updatedRows: Array<TableRow> = tableRows.map((row: TableRow) => {
+            return (
+                { ...row, selected: e.currentTarget.checked }
+            );
         });
 
-        return Math.round((min + max) / 2);
-    }
+        setTableRows(updatedRows);
 
-    const customOptions = {};
+        props.onRowSelection(e, updatedRows);
+    };
 
-    if (props.useGroupBy) {
-        customOptions["useGroupBy"] = useGroupBy;
-    }
+    const setDefaultTableRows = () => {
+        const updatedRows: Array<TableRow> = props.data.map((row: object, index: number) => {
+            const updatedCells: Array<Cell> = Object.keys(row).filter((key: string) => {
+                return key !== "subRows";
+            }).map((accessor: string): Cell => {
+                return {
+                    id: accessor,
+                    isGrouped: false,
+                    isAggregated: false,
+                    isRepeatedValue: false,
+                    accessor,
+                    value: row[accessor]
+                };
+            });
+            return (
+                {
+                    ...row,
+                    rowIndex: index,
+                    cells: updatedCells,
+                    selected: false,
+                    subRows: [],
+                }
+            );
+        });
 
-    if (props.sortable) {
-        customOptions["useSortBy"] = useSortBy;
-    }
-    if (props.useExpand) {
-        customOptions["useExpanded"] = useExpanded;
-    }
-
-    if (props.useRowSelection) {
-        customOptions["useRowSelect"] = useRowSelect;
-    }
-
-    if (props.usePagination) {
-        customOptions["usePagination"] = usePagination;
-    }
-
-    const tableInstance: TableInstanceProps = useTable(
-        {
-            columns,
-            data,
-            initialState: { pageIndex: props.pagingIndex }
-        },
-        useGroupBy,
-        // useSortBy,
-        useExpanded,
-        useRowSelect,
-        usePagination
-    ) as TableInstanceProps;
-
-    // Effects --------------------------------------------------------------------------
-    React.useEffect(() => {
-        const nextPageIndex: number = props.pagingIndex === 0 ? 0 : (props.pagingIndex - 1);
-        if (tableInstance) {
-            tableInstance.gotoPage(nextPageIndex);
+        if (props.usePagination) {
+            const currentPageRows = updatedRows.slice(props.currentpage, props.offsett);
+            setCurrentTableRows(currentPageRows);
+        } else {
+            setCurrentTableRows(updatedRows);
         }
-    }, [props.pagingIndex, props.pagingSize]);
+        setTableRows(updatedRows);
+    };
 
-    // on row selected
-    React.useEffect(() => {
-        props.onItemSelected(tableInstance.selectedFlatRows);
-    }, [(tableInstance.state as any).selectedRowPaths]);
-
-    // on row expanded
-    React.useEffect(() => {
-        props.onRowExpanded((tableInstance.state as any).expanded);
-    }, [(tableInstance.state as any).expanded]);
+    // useEffect
 
     React.useEffect(() => {
-        console.log("The groupings are ", columns);
-        // Let's make a column for selection
-        const selectionColumn: any = {
-            id: "selection",
-            // The header can use the table's getToggleAllRowsSelectedProps method
-            // to render a checkbox
-            Header: ({ getToggleAllRowsSelectedProps }) => {
-                const randomIds = randomId("checkbox-");
-                return (
-                    <div className="custom-control custom-checkbox">
-                        <input
-                            {...getToggleAllRowsSelectedProps()}
-                            type="checkbox"
-                            className="custom-control-input"
-                            id={randomIds}
-                            name="chkCheckAll"
-                        />
-                        <label className="custom-control-label" htmlFor={randomIds} />
-                    </div>
-                );
-            },
-            // The cell can use the individual row's getToggleRowSelectedProps method
-            // to the render a checkbox
-            Cell: ({ row }) => {
-                const randomIds = randomId("checkbox-");
-                return (
-                    <div className="custom-control custom-checkbox">
-                        <input
-                            {...row.getToggleRowSelectedProps()}
-                            type="checkbox"
-                            className="custom-control-input"
-                            id={randomIds}
-                            name={randomIds}
-                        />
-                        <label className="custom-control-label" htmlFor={randomIds} />
-                    </div>
-                );
+        if (props.useRowSelection) {
+            const notAllsAreRowsSelected = tableRows.some((row: TableRow) => !row.selected);
+
+            if (notAllsAreRowsSelected) {
+                setAllRowsChecked(false);
+            } else {
+                setAllRowsChecked(true);
             }
-        };
+        }
+    }, [tableRows]);
 
-        const collapsableColumn: any = {
-            // Build our expander column
-            Header: () => null, // No header, please
-            id: "expander", // Make sure it has an ID
-            Cell: ({ row }) => {
-                // Use the row.canExpand and row.getExpandedToggleProps prop getter
-                // to build the toggle for expanding a row
-                return row.canExpand ? (
-                    <span
-                        {...row.getExpandedToggleProps({
-                            style: {
-                                // We can even use the row.depth property
-                                // and paddingLeft to indicate the depth
-                                // of the row
-                                paddingLeft: `${row.depth * 2}rem`,
-                            },
-                        })}
-                    >
-                        <span className="action-icon-holder">
-                            {row.isExpanded ? angleDown : angleRightIcon}
-                        </span>
-                    </span>
-                ) : null;
-            }
-        };
-
-        const columnsObj: Array<Column> = [collapsableColumn, selectionColumn, ...props.tableColumns];
-
-        // column for goruping
-        const groupingColumns: any = columnsObj.map((column: Column) => {
-            console.log("The colum is now ", column);
-            switch (column.accessor) {
-                case "firstName":
-                    return {
-                        ...column,
-                        // Use a two-stage aggregator here to first
-                        // count the total rows being aggregated,
-                        // then sum any of those counts if they are
-                        // aggregated further
-                        aggregate: ["sum", "count"],
-                        Aggregated: ({ cell: { value } }) => `${value} Names`,
-                    };
-                case "lastName":
-                    return {
-                        ...column,
-                        // Use a two-stage aggregator here to first
-                        // count the total rows being aggregated,
-                        // then sum any of those counts if they are
-                        // aggregated further
-                        aggregate: ["sum", "uniqueCount"],
-                        Aggregated: ({ cell: { value } }) => `${value} Unique Names`,
-                    };
-                case "visits":
-                    return {
-                        ...column,
-                        // Use a two-stage aggregator here to first
-                        // count the total rows being aggregated,
-                        // then sum any of those counts if they are
-                        // aggregated further
-                        aggregate: "sum",
-                        Aggregated: ({ cell: { value } }) => `${value} (total)`,
-                    };
-                case "progress":
-                    return {
-                        ...column,
-                        // Use a two-stage aggregator here to first
-                        // count the total rows being aggregated,
-                        // then sum any of those counts if they are
-                        // aggregated further
-                        aggregate: roundedMedian,
-                        Aggregated: ({ cell: { value } }) => `${value} (med)`,
-                    };
-
-                case "age":
-                    return {
-                        ...column,
-                        // Use a two-stage aggregator here to first
-                        // count the total rows being aggregated,
-                        // then sum any of those counts if they are
-                        // aggregated further
-                        aggregate: "average",
-                        Aggregated: ({ cell: { value } }) => `${value} (avg)`,
-                    };
-                default:
-                    return column;
-            }
+    React.useEffect(() => {
+        const updatedColumns: Array<TableHead> = props.columns.map((column: TableHead) => {
+            return {
+                ...column,
+                isGrouped: false,
+                isSorted: false,
+                isSortedDesc: false
+            };
         });
 
-        const dataObj: Array<TableRow> = props.tableData;
+        setTableColumn(updatedColumns);
+    }, [props.columns]);
 
-        setTableColumns(groupingColumns);
-        setTableData(dataObj);
-    }, [props.tableData, props.tableColumns]);
+    React.useEffect(() => {
+        setDefaultTableRows();
+    }, [props.data]);
+
+    React.useEffect(() => {
+        if (props.usePagination && tableRows.length > 0) {
+            const currentPage: Array<TableRow> = tableRows.slice(props.currentpage, props.offsett);
+            setCurrentTableRows(currentPage);
+        } else {
+            setDefaultTableRows();
+        }
+    }, [props.offsett, props.currentpage]);
 
     return (
-        tableInstance && (tableInstance.columns.length > 0 && tableInstance.data.length > 0) &&
         <TableUI
-            {...tableInstance}
-            {...props}
+            columns={tableColumns}
+            rows={currentTableRows}
+            footer={props.footer}
+            sortable={props.sortable}
+            useGroupBy={props.useGroupBy}
+            useRowSelection={props.useRowSelection}
+            allRowsAreSelected={allItemsChecked}
+            onItemSelected={onItemSelected}
+            onAllItemsSelected={onAllItemsSelected}
         />
     );
 });

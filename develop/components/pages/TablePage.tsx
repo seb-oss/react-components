@@ -1,29 +1,31 @@
 import * as React from "react";
-import { Table, TableRow } from "../../../src/Table/Table";
+import { Table, Column, TableRow } from "../../../src/Table/Table";
 import makeData from "../../../src/Table/makeData";
-import { Column, Row } from "react-table";
 import { Pagination } from "../../../src/Pagination/Pagination";
 const Highlight = (require("react-highlight")).default;
 const docMD = require("../../../src/StepTracker/readme.md");
 
 const TablePage: React.FunctionComponent = () => {
     const [selectAll, setSelectAll] = React.useState<boolean>(false);
-    const [selectedRows, setSelectedRow] = React.useState<Array<Row>>([]);
+    const [selectedRows, setSelectedRow] = React.useState<Array<{}>>([]);
     const [paginationValue, setPagination] = React.useState<number>(1);
 
     const pageSize: number = 10;
     const listSize: number = 30;
 
     React.useEffect(() => {
-      //  console.log("There is a change ", selectedRows);
+        //  console.log("There is a change ", selectedRows);
     }, [selectedRows]);
 
     const columns: Array<Column> = React.useMemo(
         () => [
             {
+                Header: "id",
+                accessor: "Id"
+            },
+            {
                 Header: "First Name",
                 accessor: "firstName",
-                canSort: false
             },
             {
                 Header: "Last Name",
@@ -48,7 +50,7 @@ const TablePage: React.FunctionComponent = () => {
         ],
         []
     );
-    const data = React.useMemo(() => makeData(listSize, 5), []);
+    const data = React.useMemo(() => makeData(listSize), []);
     return (
         <div className="route-template container">
             <div className="info-holder">
@@ -65,17 +67,17 @@ const TablePage: React.FunctionComponent = () => {
                     <p>Here is an example of a horizontal step tracker:</p>
                     <div className="result wide">
                         <Table
-                            tableColumns={columns}
-                            tableData={data}
-                            sortable={true}
+                            columns={columns}
+                            data={data}
+                            sortable={false}
                             useGroupBy={true}
                             setSelectAllValue={selectAll}
-                            pagingSize={pageSize}
-                            pagingIndex={paginationValue}
+                            offsett={pageSize}
+                            currentpage={paginationValue}
                             usePagination={true}
                             useRowSelection={true}
-                            onItemSelected={(rows: Array<Row>) => { setSelectedRow(rows); }}
-                            onRowExpanded={(expandedRowsIndexes: Array<string>) => { console.log("the expanded ros are ", expandedRowsIndexes) }}
+                            onRowSelection={(e: React.ChangeEvent<HTMLInputElement>, rows: Array<TableRow>) => { setSelectedRow(rows); }}
+                            onRowExpanded={(expandedRowsIndexes: Array<string>) => { console.log("the expanded ros are ", expandedRowsIndexes); }}
                             footer={
                                 <Pagination
                                     value={paginationValue}
