@@ -26,6 +26,7 @@ export interface PaginationProps {
 export const Pagination: React.FunctionComponent<PaginationProps> = React.memo((props: PaginationProps): React.ReactElement<void> => {
 
     const [list, setList] = React.useState<Array<number>>([]);
+    const [dotnavList, setDotnavList] = React.useState<Array<number>>([]);
     const [pagingSize, setPagingSize] = React.useState<number>(0);
 
     React.useEffect(() => {
@@ -75,7 +76,7 @@ export const Pagination: React.FunctionComponent<PaginationProps> = React.memo((
 
             end = start + length;
         }
-
+        setDotnavList(genList);
         setList(genList.slice(start, end));
     }
 
@@ -104,7 +105,7 @@ export const Pagination: React.FunctionComponent<PaginationProps> = React.memo((
                                 </button>
                             </li>
                         }
-                        {list.map((num) => {
+                        {list.map((num: number) => {
                             return (
                                 <li
                                     className={"page-item" + (props.value === num ? " active" : "")}
@@ -149,7 +150,7 @@ export const Pagination: React.FunctionComponent<PaginationProps> = React.memo((
                 }
                 {props.useDotNav &&
                     <ul className={"pagination dotnav"}>
-                        {list.map((num) => {
+                        {dotnavList.map((num: number) => {
                             return (
                                 <li
                                     className={"page-item" + (props.value === num ? " active" : "")}

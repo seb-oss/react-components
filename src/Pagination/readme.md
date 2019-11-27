@@ -36,7 +36,7 @@ These are the current available properties:
 | firstText?       | `string`                  | First text value (default: `'First'`)                    |
 | lastText?        | `string`                  | Last text value (default: `'Last'`)                      |
 | nextText?        | `string`                  | Next text value (default: `'Next'`)                      |
-| offset?          | `number`                  | Maximum number of buttons to show (default: `10`)        |
+| offset?          | `number`                  | The number of items to be displayed per page (default: `10`)        |
 | onChange?        | `(value: number) => void` | Change event passes the number of page to be displayed   |
 | previousText?    | `string`                  | Previous text value (default: `'Previous'`)              |
 | size             | `number`                  | maximum number of pages                                  |
@@ -46,3 +46,5 @@ These are the current available properties:
 | value            | `number`                  | Current page                                             |
 | pagingLength?    | `number`                  | The length of the pagination or number of pages          |
 
+## Footnote
+1. Dot navigation does not support `offset`, it is not meant to have big size navigation. For that, use the normal numbered navigation.
