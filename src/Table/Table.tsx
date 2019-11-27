@@ -40,6 +40,8 @@ export interface Column {
     accessor: string;
     canSort?: boolean;
     canGroupBy?: boolean;
+
+    blackList?: Array<string>;
 }
 
 interface TableHead extends Column {
@@ -166,9 +168,9 @@ export const TableUI: React.FunctionComponent<TableUIProps> = React.memo((props:
                                             type="checkbox"
                                             className="custom-control-input"
                                             id={checkRandomIds}
-                                            checked={props.allRowsAreSelected}
+                                            checked={row.selected}
                                             onChange={(e: React.ChangeEvent<HTMLInputElement>) => { props.onItemSelected(e, row); }}
-                                            name={`chk-row-` + row.rowIndex}
+                                            name={`chk` + row.rowIndex}
                                         />
                                         <label className="custom-control-label" htmlFor={checkRandomIds} />
                                     </div>
@@ -232,30 +234,43 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
     const [allItemsChecked, setAllRowsChecked] = React.useState<boolean>(false);
 
     const onItemSelected = (e: React.ChangeEvent<HTMLInputElement>, selectedRow: TableRow) => {
-        console.log("The table is ", selectedRow);
+        const updatedOriginalRows = tableRows.map((originalRow: TableRow) => {
+            if (originalRow.rowIndex === selectedRow.rowIndex) {
+                return { ...originalRow, selected: e.target.checked };
+            }
+
+            return originalRow;
+        });
+
         const updatedRows: Array<TableRow> = currentTableRows.map((row: TableRow, index) => {
-            if (selectedRow.rowIndex === index) {
+            if (selectedRow.rowIndex === row.rowIndex) {
                 return (
-                    { ...row, selected: e.currentTarget.checked }
+                    { ...row, selected: e.target.checked }
                 );
             }
             return row;
         });
-        console.log("The table is ", updatedRows);
-        setCurrentTableRows(updatedRows);
 
+        setCurrentTableRows(updatedRows);
+        setTableRows(updatedOriginalRows);
         props.onRowSelection(e, updatedRows);
     };
 
     const onAllItemsSelected = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const updatedRows: Array<TableRow> = tableRows.map((row: TableRow) => {
+        const updatedOriginalRows = tableRows.map((originalRow: TableRow) => {
+            return (
+                { ...originalRow, selected: e.currentTarget.checked }
+            );
+        });
+
+        const updatedRows: Array<TableRow> = currentTableRows.map((row: TableRow) => {
             return (
                 { ...row, selected: e.currentTarget.checked }
             );
         });
 
-        setTableRows(updatedRows);
-
+        setCurrentTableRows(updatedRows);
+        setTableRows(updatedOriginalRows);
         props.onRowSelection(e, updatedRows);
     };
 
@@ -285,7 +300,9 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
         });
 
         if (props.usePagination) {
-            const currentPageRows = updatedRows.slice(props.currentpage, props.offsett);
+            const start: number = (props.currentpage - 1) * props.offsett;
+            const end: number = (props.offsett * (props.currentpage));
+            const currentPageRows = updatedRows.slice(start, end);
             setCurrentTableRows(currentPageRows);
         } else {
             setCurrentTableRows(updatedRows);
@@ -297,7 +314,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
 
     React.useEffect(() => {
         if (props.useRowSelection) {
-            const notAllsAreRowsSelected = tableRows.some((row: TableRow) => !row.selected);
+            const notAllsAreRowsSelected = currentTableRows.some((row: TableRow) => !row.selected);
 
             if (notAllsAreRowsSelected) {
                 setAllRowsChecked(false);
@@ -305,7 +322,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
                 setAllRowsChecked(true);
             }
         }
-    }, [tableRows]);
+    }, [currentTableRows]);
 
     React.useEffect(() => {
         const updatedColumns: Array<TableHead> = props.columns.map((column: TableHead) => {
@@ -326,7 +343,11 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
 
     React.useEffect(() => {
         if (props.usePagination && tableRows.length > 0) {
-            const currentPage: Array<TableRow> = tableRows.slice(props.currentpage, props.offsett);
+            // pagination start from 1 hence the need fro deducting 1
+            const start: number = (props.currentpage - 1) * props.offsett;
+            const end: number = (props.offsett * (props.currentpage));
+
+            const currentPage: Array<TableRow> = tableRows.slice(start, end);
             setCurrentTableRows(currentPage);
         } else {
             setDefaultTableRows();
