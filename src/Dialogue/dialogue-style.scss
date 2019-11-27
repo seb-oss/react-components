@@ -1,14 +1,8 @@
+@import "../colours";
 $default: 16px;
-$blue-dark: #0092e1;
-$blue-darker: #007ac7;
-$blue-darkest: #05578c;
-$gray-300: #dedede;
-$gray-600: #868686;
-$white: #fff;
-$black: #000;
 $transparent: transparent;
 $backdrop-background: rgba(0, 0, 0, 0.7);
-$dialogue-background: #fff;
+$dialogue-background: $white;
 $material-box-shadow: 0 7px 28px rgba(0, 0, 0, 0.25), 0 2px 2px rgba(0, 0, 0, 0.22);
 $header-font-size: 24px;
 $transition-time: 300ms;
@@ -82,14 +76,13 @@ $close-button-size: 15px;
                     .dialogue-button {
                         min-width: 120px;
                         font-size: $default;
-                        box-shadow: none;
                         &.btn-primary {
                             background: $blue-dark;
                             &:hover {
                                 background: $blue-darker;
                             }
                             &:active {
-                                background-color: $blue-darkest !important;
+                                background-color: $blue-darker !important;
                             }
                         }
                         &.btn-secondary {
