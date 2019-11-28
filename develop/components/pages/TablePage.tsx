@@ -69,14 +69,14 @@ const TablePage: React.FunctionComponent = () => {
                         <Table
                             columns={columns}
                             data={data}
-                            sortable={false}
+                            sortable={true}
                             useGroupBy={true}
                             setSelectAllValue={selectAll}
                             offsett={pageSize}
                             currentpage={paginationValue}
                             usePagination={true}
                             useRowSelection={true}
-                            onRowSelection={(e: React.ChangeEvent<HTMLInputElement>, rows: Array<TableRow>) => { setSelectedRow(rows); }}
+                            onRowSelection={(e: React.ChangeEvent<HTMLInputElement>, rows: Array<TableRow>) => { console.log(rows); setSelectedRow(rows); }}
                             onRowExpanded={(expandedRowsIndexes: Array<string>) => { console.log("the expanded ros are ", expandedRowsIndexes); }}
                             footer={
                                 <Pagination

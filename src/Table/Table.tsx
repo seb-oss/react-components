@@ -78,6 +78,7 @@ interface TableUIProps {
     footer: React.ReactNode;
 
     onItemSelected?: (e: React.ChangeEvent<HTMLInputElement>, row: TableRow) => void;
+    onSort?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>, sortDirection: sortDirectionTypes) => void;
     onAllItemsSelected?: (e: React.ChangeEvent<HTMLInputElement>) => void;
     onRowExpanded?: (expandedRowsIndexes: Array<string>) => void;
 }
@@ -95,6 +96,11 @@ function generateRandomId(seed: string): string {
     return seed + String((Math.random() * 1000) + (new Date()).getTime());
 }
 
+export const enum sortDirectionTypes {
+    Ascending = "ASC",
+    Descending = "DESC"
+}
+
 function sumCols(colsLength: number, useSelection?: boolean, useGroupBy?: boolean) {
     let sum = colsLength;
     if (useSelection || useGroupBy) {
@@ -108,6 +114,30 @@ function sumCols(colsLength: number, useSelection?: boolean, useGroupBy?: boolea
     }
 
     return sum;
+}
+
+function sortArray(items: Array<TableRow> = [], columnName: string, sortDirection: sortDirectionTypes) {
+    const sortedItems: Array<any> = [...items].sort((firstItem: TableRow, secondItem: TableRow) => {
+        let result: number = 0;
+        if (!firstItem[columnName] || !secondItem[columnName]) { // One of the items is empy so if should be sent below
+            result = firstItem[columnName] ? -1 : secondItem[columnName] ? 1 : 0;
+        } else if (sortDirection === sortDirectionTypes.Ascending) {
+            if (typeof secondItem[columnName] === "string" && typeof firstItem[columnName] === "string") {
+                result = String(firstItem[columnName]).localeCompare(String(secondItem[columnName]), ["sw", "en"], { sensitivity: "base", ignorePunctuation: true });
+            } else {
+                result = (firstItem[columnName] - secondItem[columnName]);
+            }
+        } else {
+            if (typeof secondItem[columnName] === "string" && typeof firstItem[columnName] === "string") {
+                result = String(secondItem[columnName]).localeCompare(String(firstItem[columnName]), ["sw", "en"], { sensitivity: "base", ignorePunctuation: true });
+            } else {
+                result = (secondItem[columnName] - firstItem[columnName]);
+            }
+        }
+        return result;
+
+    });
+    return sortedItems;
 }
 
 export const TableUI: React.FunctionComponent<TableUIProps> = React.memo((props: TableUIProps): React.ReactElement<void> => {
@@ -142,7 +172,14 @@ export const TableUI: React.FunctionComponent<TableUIProps> = React.memo((props:
                             {header.Header}
 
                             {(props.sortable && header.canSort) &&
-                                <div className="icon-holder">
+                                <div
+                                    className="icon-holder"
+                                    id={header.accessor}
+                                    onClick={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+                                        props.onSort(e, header.isSortedDesc ? sortDirectionTypes.Ascending : sortDirectionTypes.Descending);
+                                    }
+                                    }
+                                >
                                     <div className={"angle-up" + (header.isSorted && !header.isSortedDesc ? " active" : "")}>
                                         {angleUp}
                                     </div>
@@ -274,6 +311,25 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
         props.onRowSelection(e, updatedRows);
     };
 
+    const onSortItems = async (event: React.MouseEvent<HTMLDivElement, MouseEvent>, sortDirection: sortDirectionTypes) => {
+        const name = event.currentTarget.id;
+        const updatedRows = await sortArray(currentTableRows, name, sortDirection);
+
+        const updatedColumns: Array<TableHead> = props.columns.map((column: TableHead) => {
+
+            if (column.accessor === name) {
+                return {
+                    ...column,
+                    isSorted: true
+                };
+            }
+            return column;
+        });
+
+        setCurrentTableRows(updatedRows);
+        setTableColumn(updatedColumns);
+    };
+
     const setDefaultTableRows = () => {
         const updatedRows: Array<TableRow> = props.data.map((row: object, index: number) => {
             const updatedCells: Array<Cell> = Object.keys(row).filter((key: string) => {
@@ -330,6 +386,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
                 ...column,
                 isGrouped: false,
                 isSorted: false,
+                canSort: props.sortable ? true : false,
                 isSortedDesc: false
             };
         });
@@ -359,6 +416,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
             columns={tableColumns}
             rows={currentTableRows}
             footer={props.footer}
+            onSort={onSortItems}
             sortable={props.sortable}
             useGroupBy={props.useGroupBy}
             useRowSelection={props.useRowSelection}
