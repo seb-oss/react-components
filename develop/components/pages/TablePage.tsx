@@ -21,7 +21,8 @@ const TablePage: React.FunctionComponent = () => {
         () => [
             {
                 Header: "id",
-                accessor: "Id"
+                accessor: "id",
+                canSort: false
             },
             {
                 Header: "First Name",
@@ -40,12 +41,12 @@ const TablePage: React.FunctionComponent = () => {
                 accessor: "visits",
             },
             {
-                Header: "Status",
-                accessor: "status",
-            },
-            {
                 Header: "Profile Progress",
                 accessor: "progress",
+            },
+            {
+                Header: "Status",
+                accessor: "status",
             },
         ],
         []
@@ -70,12 +71,12 @@ const TablePage: React.FunctionComponent = () => {
                             columns={columns}
                             data={data}
                             sortable={true}
-                            useGroupBy={true}
                             setSelectAllValue={selectAll}
                             offsett={pageSize}
                             currentpage={paginationValue}
                             usePagination={true}
                             useRowSelection={true}
+                            onSort={(rows: Array<TableRow>, columnsOrg: Array<Column>) => { console.log(columnsOrg); }}
                             onRowSelection={(e: React.ChangeEvent<HTMLInputElement>, rows: Array<TableRow>) => { console.log(rows); setSelectedRow(rows); }}
                             onRowExpanded={(expandedRowsIndexes: Array<string>) => { console.log("the expanded ros are ", expandedRowsIndexes); }}
                             footer={

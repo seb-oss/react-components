@@ -1,12 +1,10 @@
 import * as React from "react";
 
 import "./table-style.scss";
-import { randomId } from "../__utils/randomId";
 
 const angleDown: JSX.Element = <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512"><path d="M119.5 326.9L3.5 209.1c-4.7-4.7-4.7-12.3 0-17l7.1-7.1c4.7-4.7 12.3-4.7 17 0L128 287.3l100.4-102.2c4.7-4.7 12.3-4.7 17 0l7.1 7.1c4.7 4.7 4.7 12.3 0 17L136.5 327c-4.7 4.6-12.3 4.6-17-.1z" /></svg>;
 const angleUp: JSX.Element = <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512"><path d="M136.5 185.1l116 117.8c4.7 4.7 4.7 12.3 0 17l-7.1 7.1c-4.7 4.7-12.3 4.7-17 0L128 224.7 27.6 326.9c-4.7 4.7-12.3 4.7-17 0l-7.1-7.1c-4.7-4.7-4.7-12.3 0-17l116-117.8c4.7-4.6 12.3-4.6 17 .1z" /></svg>;
 const angleRightIcon: JSX.Element = <svg name="angle-right" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 512"><path d="M166.9 264.5l-117.8 116c-4.7 4.7-12.3 4.7-17 0l-7.1-7.1c-4.7-4.7-4.7-12.3 0-17L127.3 256 25.1 155.6c-4.7-4.7-4.7-12.3 0-17l7.1-7.1c4.7-4.7 12.3-4.7 17 0l117.8 116c4.6 4.7 4.6 12.3-.1 17z" /></svg>;
-const objectGroup: JSX.Element = <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M404 192h-84v-52c0-6.627-5.373-12-12-12H108c-6.627 0-12 5.373-12 12v168c0 6.627 5.373 12 12 12h84v52c0 6.627 5.373 12 12 12h200c6.627 0 12-5.373 12-12V204c0-6.627-5.373-12-12-12zm-276-32h160v128H128V160zm256 192H224v-32h84c6.627 0 12-5.373 12-12v-84h64v128zm116-224c6.627 0 12-5.373 12-12V44c0-6.627-5.373-12-12-12h-72c-6.627 0-12 5.373-12 12v20H96V44c0-6.627-5.373-12-12-12H12C5.373 32 0 37.373 0 44v72c0 6.627 5.373 12 12 12h20v256H12c-6.627 0-12 5.373-12 12v72c0 6.627 5.373 12 12 12h72c6.627 0 12-5.373 12-12v-20h320v20c0 6.627 5.373 12 12 12h72c6.627 0 12-5.373 12-12v-72c0-6.627-5.373-12-12-12h-20V128h20zm-52 256h-20c-6.627 0-12 5.373-12 12v20H96v-20c0-6.627-5.373-12-12-12H64V128h20c6.627 0 12-5.373 12-12V96h320v20c0 6.627 5.373 12 12 12h20v256zM64 64v32H32V64h32m416 0v32h-32V64h32M64 416v32H32v-32h32m416 0v32h-32v-32h32" /></svg>;
 
 interface TableProps {
     columns: Array<Column>;
@@ -21,18 +19,14 @@ interface TableProps {
     offsett?: number;
     currentpage?: number;
 
-    // group by
-
-    useGroupBy?: boolean;
-
     // enable row selection
-
     useRowSelection?: boolean;
 
     footer?: React.ReactNode;
 
     onRowSelection?: (e: React.ChangeEvent<HTMLInputElement>, selectedRows: Array<TableRow>) => void;
     onRowExpanded?: (expandedRowsIndexes: Array<string>) => void;
+    onSort?: (rows: Array<TableRow>, columns: Array<Column>) => void;
 }
 
 export interface Column {
@@ -40,7 +34,7 @@ export interface Column {
     accessor: string;
     canSort?: boolean;
     canGroupBy?: boolean;
-
+    canSearch?: boolean;
     blackList?: Array<string>;
 }
 
@@ -50,14 +44,15 @@ interface TableHead extends Column {
     isSortedDesc?: boolean;
 }
 
+interface SearchColumn {
+    accessor: string;
+    searchText: string;
+}
+
 interface Cell {
     id: string | number;
     accessor: string;
     value: string | number | boolean;
-
-    isGrouped?: boolean;
-    isAggregated?: boolean;
-    isRepeatedValue?: boolean;
 }
 
 export interface TableRow {
@@ -71,26 +66,16 @@ interface TableUIProps {
     columns: Array<TableHead>;
     rows: Array<TableRow>;
     sortable: boolean;
-    useGroupBy: boolean;
     useRowSelection: boolean;
     allRowsAreSelected?: boolean;
 
     footer: React.ReactNode;
 
     onItemSelected?: (e: React.ChangeEvent<HTMLInputElement>, row: TableRow) => void;
-    onSort?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>, sortDirection: sortDirectionTypes) => void;
+    onSort?: (accessor: string, sortDirection: sortDirectionTypes) => void;
     onAllItemsSelected?: (e: React.ChangeEvent<HTMLInputElement>) => void;
     onRowExpanded?: (expandedRowsIndexes: Array<string>) => void;
 }
-
-const CustomeRender = (type: "aggregated" | "grouped", children: React.ReactNode) => {
-    const className = type === "aggregated" ? "aggregated-class" : "grouped-class";
-    return (
-        <span className={className}>
-            {children}
-        </span>
-    );
-};
 
 function generateRandomId(seed: string): string {
     return seed + String((Math.random() * 1000) + (new Date()).getTime());
@@ -116,19 +101,17 @@ function sumCols(colsLength: number, useSelection?: boolean, useGroupBy?: boolea
     return sum;
 }
 
-function sortArray(items: Array<TableRow> = [], columnName: string, sortDirection: sortDirectionTypes) {
+function sortArray(items: Array<TableRow> = [], columnName: string, sortDirection: sortDirectionTypes): Array<TableRow> {
     const sortedItems: Array<any> = [...items].sort((firstItem: TableRow, secondItem: TableRow) => {
         let result: number = 0;
-        if (!firstItem[columnName] || !secondItem[columnName]) { // One of the items is empy so if should be sent below
-            result = firstItem[columnName] ? -1 : secondItem[columnName] ? 1 : 0;
-        } else if (sortDirection === sortDirectionTypes.Ascending) {
-            if (typeof secondItem[columnName] === "string" && typeof firstItem[columnName] === "string") {
+        if (sortDirection === sortDirectionTypes.Ascending) {
+            if (isNaN(secondItem[columnName]) && isNaN(firstItem[columnName])) {
                 result = String(firstItem[columnName]).localeCompare(String(secondItem[columnName]), ["sw", "en"], { sensitivity: "base", ignorePunctuation: true });
             } else {
                 result = (firstItem[columnName] - secondItem[columnName]);
             }
         } else {
-            if (typeof secondItem[columnName] === "string" && typeof firstItem[columnName] === "string") {
+            if (isNaN(secondItem[columnName]) && isNaN(firstItem[columnName])) {
                 result = String(secondItem[columnName]).localeCompare(String(firstItem[columnName]), ["sw", "en"], { sensitivity: "base", ignorePunctuation: true });
             } else {
                 result = (secondItem[columnName] - firstItem[columnName]);
@@ -138,6 +121,32 @@ function sortArray(items: Array<TableRow> = [], columnName: string, sortDirectio
 
     });
     return sortedItems;
+}
+
+function searchTextInArray(items: Array<TableRow>, keyword: string, searchFields: Array<Column>): Array<TableRow> {
+    return [...items].filter((row: TableRow) => {
+        if (keyword.trim().length === 0) {
+            return true;
+        }
+
+        return (
+            searchFields.some((searchColumn: Column) => {
+                let result: boolean = false;
+                const searchField: string = searchColumn.accessor;
+                const regEx = new RegExp(keyword, "gi");
+                if (row[searchField] === null || row[searchField] === undefined) {
+                    result = false;
+                } else if (typeof row[searchField] === "string") {
+                    result = row[searchField].search(regEx) > -1;
+                } else if (typeof row[searchField] === "number") {
+                    result = String(row[searchField]).search(regEx) !== -1;
+                } else {
+                    result = false;
+                }
+                return result;
+            })
+        );
+    });
 }
 
 export const TableUI: React.FunctionComponent<TableUIProps> = React.memo((props: TableUIProps): React.ReactElement<void> => {
@@ -162,12 +171,16 @@ export const TableUI: React.FunctionComponent<TableUIProps> = React.memo((props:
                         </th>
                     }
                     {props.columns.map((header: TableHead, index: number) => (
-                        <th key={index}>
-                            {(props.useGroupBy && header.canGroupBy) &&
-                                <span className="action-icon-holder">
-                                    {header.isGrouped ? "🛑 " : objectGroup}
-                                </span>
-                            }
+                        <th
+                            key={index}
+                            onClick={(e: React.MouseEvent<HTMLTableHeaderCellElement, MouseEvent>) => {
+                                if (header.canSort) {
+                                    props.onSort(header.accessor, header.isSortedDesc ? sortDirectionTypes.Ascending : sortDirectionTypes.Descending);
+                                } else {
+                                    e.preventDefault();
+                                }
+                            }}
+                        >
 
                             {header.Header}
 
@@ -176,7 +189,11 @@ export const TableUI: React.FunctionComponent<TableUIProps> = React.memo((props:
                                     className="icon-holder"
                                     id={header.accessor}
                                     onClick={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-                                        props.onSort(e, header.isSortedDesc ? sortDirectionTypes.Ascending : sortDirectionTypes.Descending);
+                                        if (header.canSort) {
+                                            props.onSort(header.accessor, header.isSortedDesc ? sortDirectionTypes.Ascending : sortDirectionTypes.Descending);
+                                        } else {
+                                            e.preventDefault();
+                                        }
                                     }
                                     }
                                 >
@@ -214,34 +231,8 @@ export const TableUI: React.FunctionComponent<TableUIProps> = React.memo((props:
                                 </td>
                             }
                             {row.cells.map((cell: Cell, cellIndex: number) => {
-                                return <td
-                                    key={cellIndex}
-                                    style={{
-                                        background: cell.isGrouped
-                                            ? "#0aff0082"
-                                            : cell.isAggregated
-                                                ? "#ffa50078"
-                                                : cell.isRepeatedValue
-                                                    ? "#ff000042"
-                                                    : "white",
-                                    }}
-                                >
-                                    {cell.isGrouped ? (
-                                        // If it's a grouped cell, add an expander and row count
-                                        <span className="grouped-cell-class">
-                                            {cell.value} ({row.subRows.length})
-                                        </span>
-                                    ) : cell.isAggregated ? (
-                                        // If the cell is aggregated, use the Aggregated
-                                        // renderer for cell
-                                        <span className="aggredated-cell-class">
-                                            {cell.value}
-                                        </span>
-                                    ) : cell.isRepeatedValue ? null : (
-                                        // For cells with repeated values, render null
-                                        // Otherwise, just render the regular cell
-                                        cell.value
-                                    )}
+                                return <td key={cellIndex}>
+                                    {cell.value}
                                 </td>;
                             })}
                         </tr>
@@ -252,7 +243,7 @@ export const TableUI: React.FunctionComponent<TableUIProps> = React.memo((props:
             <tfoot>
                 {props.footer &&
                     <tr>
-                        <td colSpan={sumCols(props.columns.length, props.useRowSelection, props.useGroupBy)}>
+                        <td colSpan={sumCols(props.columns.length, props.useRowSelection, false)}>
                             {props.footer}
                         </td>
                     </tr>
@@ -269,6 +260,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
     const [currentTableRows, setCurrentTableRows] = React.useState<Array<TableRow>>([]);
     const [tableColumns, setTableColumn] = React.useState<Array<TableHead>>([]);
     const [allItemsChecked, setAllRowsChecked] = React.useState<boolean>(false);
+    const [searchColumns, setSearchColumns] = React.useState<Array<string>>([]);
 
     const onItemSelected = (e: React.ChangeEvent<HTMLInputElement>, selectedRow: TableRow) => {
         const updatedOriginalRows = tableRows.map((originalRow: TableRow) => {
@@ -290,7 +282,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
 
         setCurrentTableRows(updatedRows);
         setTableRows(updatedOriginalRows);
-        props.onRowSelection(e, updatedRows);
+        props.onRowSelection(e, [selectedRow]);
     };
 
     const onAllItemsSelected = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -311,23 +303,23 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
         props.onRowSelection(e, updatedRows);
     };
 
-    const onSortItems = async (event: React.MouseEvent<HTMLDivElement, MouseEvent>, sortDirection: sortDirectionTypes) => {
-        const name = event.currentTarget.id;
-        const updatedRows = await sortArray(currentTableRows, name, sortDirection);
+    const onSortItems = async (accessor, sortDirection: sortDirectionTypes) => {
+        const updatedOriginalRows = await sortArray(tableRows, accessor, sortDirection);
 
-        const updatedColumns: Array<TableHead> = props.columns.map((column: TableHead) => {
-
-            if (column.accessor === name) {
+        const updatedColumns: Array<TableHead> = tableColumns.map((column: TableHead) => {
+            if (column.accessor === accessor) {
                 return {
                     ...column,
-                    isSorted: true
+                    isSorted: true,
+                    isSortedDesc: sortDirection === sortDirectionTypes.Descending ? true : false
                 };
             }
-            return column;
+            return { ...column, isSorted: false, isSortedDesc: false };
         });
 
-        setCurrentTableRows(updatedRows);
+        setTableRows(updatedOriginalRows);
         setTableColumn(updatedColumns);
+        props.onSort(updatedOriginalRows, updatedColumns);
     };
 
     const setDefaultTableRows = () => {
@@ -337,9 +329,6 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
             }).map((accessor: string): Cell => {
                 return {
                     id: accessor,
-                    isGrouped: false,
-                    isAggregated: false,
-                    isRepeatedValue: false,
                     accessor,
                     value: row[accessor]
                 };
@@ -366,6 +355,20 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
         setTableRows(updatedRows);
     };
 
+    // functions
+    const doPaginate = () => {
+        if (props.usePagination && tableRows.length > 0) {
+            // pagination start from 1 hence the need fro deducting 1
+            const start: number = (props.currentpage - 1) * props.offsett;
+            const end: number = (props.offsett * (props.currentpage));
+
+            const currentPage: Array<TableRow> = tableRows.slice(start, end);
+            setCurrentTableRows(currentPage);
+        } else {
+            setDefaultTableRows();
+        }
+    };
+
     // useEffect
 
     React.useEffect(() => {
@@ -381,17 +384,22 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
     }, [currentTableRows]);
 
     React.useEffect(() => {
+        doPaginate();
+    }, [tableRows]);
+
+    React.useEffect(() => {
         const updatedColumns: Array<TableHead> = props.columns.map((column: TableHead) => {
             return {
                 ...column,
                 isGrouped: false,
                 isSorted: false,
-                canSort: props.sortable ? true : false,
+                canSort: (column.canSort !== undefined) ? column.canSort : (props.sortable ? true : false),
                 isSortedDesc: false
             };
         });
 
         setTableColumn(updatedColumns);
+
     }, [props.columns]);
 
     React.useEffect(() => {
@@ -399,30 +407,24 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
     }, [props.data]);
 
     React.useEffect(() => {
-        if (props.usePagination && tableRows.length > 0) {
-            // pagination start from 1 hence the need fro deducting 1
-            const start: number = (props.currentpage - 1) * props.offsett;
-            const end: number = (props.offsett * (props.currentpage));
-
-            const currentPage: Array<TableRow> = tableRows.slice(start, end);
-            setCurrentTableRows(currentPage);
-        } else {
-            setDefaultTableRows();
-        }
+        doPaginate();
     }, [props.offsett, props.currentpage]);
 
     return (
-        <TableUI
-            columns={tableColumns}
-            rows={currentTableRows}
-            footer={props.footer}
-            onSort={onSortItems}
-            sortable={props.sortable}
-            useGroupBy={props.useGroupBy}
-            useRowSelection={props.useRowSelection}
-            allRowsAreSelected={allItemsChecked}
-            onItemSelected={onItemSelected}
-            onAllItemsSelected={onAllItemsSelected}
-        />
+        <div>
+            <input type="text" placeholder="xxxxxxx" value="sd" />
+            <TableUI
+                columns={tableColumns}
+                rows={currentTableRows}
+                footer={props.footer}
+                onSort={onSortItems}
+                sortable={props.sortable}
+                useRowSelection={props.useRowSelection}
+                allRowsAreSelected={allItemsChecked}
+                onItemSelected={onItemSelected}
+                onAllItemsSelected={onAllItemsSelected}
+            />
+        </div>
+
     );
 });
