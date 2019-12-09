@@ -18,6 +18,10 @@ table {
         thead {
             >tr {
                 >th {
+                    &:first-child {
+                        border-bottom: none;
+                    }
+
                     .action-icon-holder {
                         svg {
                             width: 18px;
@@ -88,6 +92,12 @@ table {
         tbody {
             tr {
                 td {
+                    &.row-selections-column {
+                        display: flex;
+                        flex-direction: row;
+                        align-items: center;
+                    }
+
                     .action-icon-holder {
                         svg {
                             max-height: 20px;

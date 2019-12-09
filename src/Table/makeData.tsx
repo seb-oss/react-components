@@ -1,3 +1,4 @@
+import * as React from "react";
 const namor = require("namor");
 
 const range = (len: number) => {
@@ -33,6 +34,7 @@ export default function makeData(...lens) {
       return {
         ...newPerson(),
         subRows: lens[depth + 1] ? makeDataLevel(depth + 1) : undefined,
+        rowContentDetail: <p className="Nice">uiwuifewufe</p>
       };
     });
   };

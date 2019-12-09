@@ -9,6 +9,7 @@ const angleRightIcon: JSX.Element = <svg name="angle-right" xmlns="http://www.w3
 interface TableProps {
     columns: Array<Column>;
     data: Array<object>;
+
     // item selection
     setSelectAllValue?: boolean;
     // sorting
@@ -19,6 +20,12 @@ interface TableProps {
     offsett?: number;
     currentpage?: number;
 
+    // search and filter
+    searchInColumns?: Array<string>;
+    searchText?: string;
+    triggerSearchOn?: "Change" | "Submit";
+    searchTriggered?: boolean;
+
     // enable row selection
     useRowSelection?: boolean;
 
@@ -27,6 +34,7 @@ interface TableProps {
     onRowSelection?: (e: React.ChangeEvent<HTMLInputElement>, selectedRows: Array<TableRow>) => void;
     onRowExpanded?: (expandedRowsIndexes: Array<string>) => void;
     onSort?: (rows: Array<TableRow>, columns: Array<Column>) => void;
+    onSearch?: (rows: Array<TableRow>) => void;
 }
 
 export interface Column {
@@ -44,11 +52,6 @@ interface TableHead extends Column {
     isSortedDesc?: boolean;
 }
 
-interface SearchColumn {
-    accessor: string;
-    searchText: string;
-}
-
 interface Cell {
     id: string | number;
     accessor: string;
@@ -59,7 +62,8 @@ export interface TableRow {
     rowIndex: number;
     cells: Array<Cell>;
     selected?: boolean;
-    subRows?: Array<TableRow>;
+    expanded?: boolean;
+    rowContentDetail?: React.ReactNode;
 }
 
 interface TableUIProps {
@@ -123,16 +127,16 @@ function sortArray(items: Array<TableRow> = [], columnName: string, sortDirectio
     return sortedItems;
 }
 
-function searchTextInArray(items: Array<TableRow>, keyword: string, searchFields: Array<Column>): Array<TableRow> {
+function searchTextInArray(items: Array<TableRow>, keyword: string, searchFields: Array<string>): Array<TableRow> {
     return [...items].filter((row: TableRow) => {
-        if (keyword.trim().length === 0) {
+        if (keyword.trim().length === 0 || searchFields.length === 0) {
             return true;
         }
 
         return (
-            searchFields.some((searchColumn: Column) => {
+            searchFields.some((searchColumn: string) => {
                 let result: boolean = false;
-                const searchField: string = searchColumn.accessor;
+                const searchField: string = searchColumn;
                 const regEx = new RegExp(keyword, "gi");
                 if (row[searchField] === null || row[searchField] === undefined) {
                     result = false;
@@ -140,8 +144,6 @@ function searchTextInArray(items: Array<TableRow>, keyword: string, searchFields
                     result = row[searchField].search(regEx) > -1;
                 } else if (typeof row[searchField] === "number") {
                     result = String(row[searchField]).search(regEx) !== -1;
-                } else {
-                    result = false;
                 }
                 return result;
             })
@@ -214,28 +216,42 @@ export const TableUI: React.FunctionComponent<TableUIProps> = React.memo((props:
                 {props.rows.map((row: TableRow) => {
                     const checkRandomIds = generateRandomId("chk-");
                     return (
-                        <tr key={row.rowIndex}>
-                            {props.useRowSelection &&
-                                <td>
-                                    <div className="custom-control custom-checkbox">
-                                        <input
-                                            type="checkbox"
-                                            className="custom-control-input"
-                                            id={checkRandomIds}
-                                            checked={row.selected}
-                                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => { props.onItemSelected(e, row); }}
-                                            name={`chk` + row.rowIndex}
-                                        />
-                                        <label className="custom-control-label" htmlFor={checkRandomIds} />
-                                    </div>
-                                </td>
+                        <React.Fragment key={row.rowIndex}>
+                            <tr key={row.rowIndex}>
+                                {props.useRowSelection &&
+                                    <td className="row-selections-column">
+                                        <div className="custom-control custom-checkbox">
+                                            <input
+                                                type="checkbox"
+                                                className="custom-control-input"
+                                                id={checkRandomIds}
+                                                checked={row.selected}
+                                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => { props.onItemSelected(e, row); }}
+                                                name={`chk` + row.rowIndex}
+                                            />
+                                            <label className="custom-control-label" htmlFor={checkRandomIds} />
+                                        </div>
+                                        {row.rowContentDetail &&
+                                            <div className="icon-holder">
+                                                {angleRightIcon}
+                                            </div>
+                                        }
+                                    </td>
+                                }
+                                {row.cells.map((cell: Cell, cellIndex: number) => {
+                                    return <td key={cellIndex}>
+                                        {cell.value}
+                                    </td>;
+                                })}
+                            </tr>
+                            {(row.rowContentDetail && row.selected) &&
+                                <tr className="row-details" key={row.rowIndex}>
+                                    <td colSpan={sumCols(props.columns.length, props.useRowSelection, false)}>
+                                        fgdg
+                                    </td>
+                                </tr>
                             }
-                            {row.cells.map((cell: Cell, cellIndex: number) => {
-                                return <td key={cellIndex}>
-                                    {cell.value}
-                                </td>;
-                            })}
-                        </tr>
+                        </React.Fragment>
                     );
                 }
                 )}
@@ -257,14 +273,19 @@ export const TableUI: React.FunctionComponent<TableUIProps> = React.memo((props:
 
 export const Table: React.FunctionComponent<TableProps> = React.memo((props: TableProps): React.ReactElement<void> => {
     const [tableRows, setTableRows] = React.useState<Array<TableRow>>([]);
+    const [tableRowsImage, setTableRowsImage] = React.useState<Array<TableRow>>([]);
     const [currentTableRows, setCurrentTableRows] = React.useState<Array<TableRow>>([]);
     const [tableColumns, setTableColumn] = React.useState<Array<TableHead>>([]);
     const [allItemsChecked, setAllRowsChecked] = React.useState<boolean>(false);
-    const [searchColumns, setSearchColumns] = React.useState<Array<string>>([]);
 
     const onItemSelected = (e: React.ChangeEvent<HTMLInputElement>, selectedRow: TableRow) => {
+        const selectedRowList: Array<TableRow> = [];
         const updatedOriginalRows = tableRows.map((originalRow: TableRow) => {
+            if (originalRow.selected) {
+                selectedRowList.push(originalRow);
+            }
             if (originalRow.rowIndex === selectedRow.rowIndex) {
+                selectedRowList.push(originalRow);
                 return { ...originalRow, selected: e.target.checked };
             }
 
@@ -282,7 +303,8 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
 
         setCurrentTableRows(updatedRows);
         setTableRows(updatedOriginalRows);
-        props.onRowSelection(e, [selectedRow]);
+        setTableRowsImage(updatedOriginalRows);
+        props.onRowSelection(e, selectedRowList);
     };
 
     const onAllItemsSelected = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -300,6 +322,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
 
         setCurrentTableRows(updatedRows);
         setTableRows(updatedOriginalRows);
+        setTableRowsImage(updatedOriginalRows);
         props.onRowSelection(e, updatedRows);
     };
 
@@ -318,6 +341,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
         });
 
         setTableRows(updatedOriginalRows);
+        setTableRowsImage(updatedOriginalRows);
         setTableColumn(updatedColumns);
         props.onSort(updatedOriginalRows, updatedColumns);
     };
@@ -325,7 +349,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
     const setDefaultTableRows = () => {
         const updatedRows: Array<TableRow> = props.data.map((row: object, index: number) => {
             const updatedCells: Array<Cell> = Object.keys(row).filter((key: string) => {
-                return key !== "subRows";
+                return key !== "rowContentDetail" && key !== "subRows";
             }).map((accessor: string): Cell => {
                 return {
                     id: accessor,
@@ -340,6 +364,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
                     cells: updatedCells,
                     selected: false,
                     subRows: [],
+                    collapsed: false
                 }
             );
         });
@@ -353,11 +378,12 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
             setCurrentTableRows(updatedRows);
         }
         setTableRows(updatedRows);
+        setTableRowsImage(updatedRows);
     };
 
     // functions
     const doPaginate = () => {
-        if (props.usePagination && tableRows.length > 0) {
+        if (props.usePagination && (tableRowsImage.length > 0)) {
             // pagination start from 1 hence the need fro deducting 1
             const start: number = (props.currentpage - 1) * props.offsett;
             const end: number = (props.offsett * (props.currentpage));
@@ -369,11 +395,16 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
         }
     };
 
+    const doSearch = () => {
+        const searchResult: Array<TableRow> = searchTextInArray(tableRowsImage, props.searchText, props.searchInColumns);
+        setTableRows(searchResult);
+        props.onSearch && props.onSearch(searchResult);
+    };
     // useEffect
 
     React.useEffect(() => {
         if (props.useRowSelection) {
-            const notAllsAreRowsSelected = currentTableRows.some((row: TableRow) => !row.selected);
+            const notAllsAreRowsSelected = tableRows.some((row: TableRow) => !row.selected);
 
             if (notAllsAreRowsSelected) {
                 setAllRowsChecked(false);
@@ -386,6 +417,18 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
     React.useEffect(() => {
         doPaginate();
     }, [tableRows]);
+
+    React.useEffect(() => {
+        if (props.triggerSearchOn === "Change") {
+            doSearch();
+        }
+    }, [props.searchInColumns, props.searchText]);
+
+    React.useEffect(() => {
+        if (props.triggerSearchOn === "Submit") {
+            doSearch();
+        }
+    }, [props.searchTriggered]);
 
     React.useEffect(() => {
         const updatedColumns: Array<TableHead> = props.columns.map((column: TableHead) => {
@@ -412,7 +455,6 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
 
     return (
         <div>
-            <input type="text" placeholder="xxxxxxx" value="sd" />
             <TableUI
                 columns={tableColumns}
                 rows={currentTableRows}
