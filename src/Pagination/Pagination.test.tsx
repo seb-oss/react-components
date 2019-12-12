@@ -92,7 +92,7 @@ describe("Component: RadioButton", () => {
             mountedWrapper.setProps({ useFirstAndLast: true, offset: 5, value: 3 }); // To cover all navigation options
             mountedWrapper.find(".page-item").first().simulate("click"); // First Button
             mountedWrapper.find(".page-item").at(1).simulate("click"); // Previous Button
-            mountedWrapper.find(".page-item").at(7).simulate("click"); // Next Button
+            mountedWrapper.find(".page-item").at(6).simulate("click"); // Next Button
             mountedWrapper.find(".page-item").last().simulate("click"); // Last Button
             mountedWrapper.find(".page-item").at(3).simulate("click"); // Number button
 
@@ -195,6 +195,9 @@ describe("Component: RadioButton", () => {
             // and the first page should be 2
 
             expect(allPageItems.at(1).text()).toContain(2);
+
+            mountedWrapper.setProps({ offset: 7 });
+            mountedWrapper.setProps({ offset: 5 });
         })
     })
 });
