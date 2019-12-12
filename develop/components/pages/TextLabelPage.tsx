@@ -32,7 +32,7 @@ const TextLabelPage: React.FunctionComponent = () => {
                             value={
                                 <>
                                     400,000 kr
-                                    <Tooltip className="ml-1" position="top-right" />
+                                    <Tooltip content="this is a tooltip" className="ml-1" position="top-right" />
                                 </>
                             }
                             label="Current savings"

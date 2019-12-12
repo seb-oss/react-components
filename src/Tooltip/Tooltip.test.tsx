@@ -1,143 +1,288 @@
 import * as React from "react";
-import { shallow, ShallowWrapper } from "enzyme";
-import { Tooltip, TooltipMessageGroupItem, TooltipProps } from "./Tooltip";
+import { Tooltip, TooltipProps, TooltipPosition, TooltipTheme, TooltipTrigger } from "./Tooltip";
+import { unmountComponentAtNode, render } from "react-dom";
+import { act } from "react-dom/test-utils";
 
-describe("Component: Tooltip ", () => {
-    let wrapper: ShallowWrapper<TooltipProps>;
+type TriggerTestCase = {
+    toggleEvent: Event;
+    untoggleEvent: Event;
+    trigger: TooltipTrigger;
+};
 
+type PositionTestCase = {
+    position: TooltipPosition;
+    mockRefBoundingClientRect: ClientRect;
+    mockTooltipBoundingClientRect: ClientRect;
+};
+
+type OverflowTestCase = PositionTestCase & {
+    relativePosition: TooltipPosition;
+};
+describe("Component: Tooltip", () => {
+    let container: HTMLDivElement = null;
     beforeEach(() => {
-        wrapper = shallow(<Tooltip />);
+        container = document.createElement("div");
+        document.body.appendChild(container);
+    });
+
+    afterEach(() => {
+        unmountComponentAtNode(container);
+        container.remove();
+        container = null;
+        document.body.innerHTML = "";
     });
 
     it("Should render", () => {
-        expect(wrapper).toBeDefined();
+        act(() => { render(<Tooltip content="tooltip message"/>, container); });
+        expect(container.querySelector(".tooltip-container")).toBeDefined();
     });
 
     it("Should pass custom class and id", () => {
         const className: string = "myTooltipClass";
         const id: string = "myTooltipId";
-        wrapper.setProps({ className, id });
-        expect(wrapper.hasClass(className)).toBeTruthy();
-        expect(wrapper.find(`#${id}`).length).toBeTruthy();
+        act(() => { render(<Tooltip content="tooltip message" id={id} className={className} />, container); });
+        expect(container.querySelector(".tooltip-container").classList.contains(className)).toBeTruthy();
+        expect(container.querySelector(".tooltip-container").id).toBe(id);
     });
 
-    it("Should render a title and a message", () => {
-        wrapper.setProps({ title: "title", message: "message" });
-        expect(wrapper.find(".message-container").find(".title").length).toBe(1);
-        expect(wrapper.find(".message-container").find(".title").text()).toEqual("title");
-        expect(wrapper.find(".message-container").find(".message").length).toBe(1);
-        expect(wrapper.find(".message-container").find(".message").text()).toEqual("message");
+    it("Should render message", () => {
+        const content: string = "my tooltip";
+        act(() => { render(<Tooltip content={content} />, container); });
+        expect(document.body.querySelectorAll(".tooltip-content").length).toBe(1);
+        expect(document.body.querySelector(".tooltip-inner").innerHTML).toEqual(content);
     });
 
-    it("Should render a list of title and messages", () => {
-        const list: Array<TooltipMessageGroupItem> = [
-            { title: "title1", message: "message1" },
-            { message: "message2" },
-        ];
-        wrapper.setProps({ messageGroup: list });
-        expect(wrapper.find(".message-container").find(".message-list-item").length).toBe(2);
-        expect(wrapper.find(".message-container").find(".message-list-item").first().find(".title").length).toBe(1);
-        expect(wrapper.find(".message-container").find(".message-list-item").first().find(".title").text()).toEqual("title1");
-        expect(wrapper.find(".message-container").find(".message-list-item").first().find(".message").length).toBe(1);
-        expect(wrapper.find(".message-container").find(".message-list-item").first().find(".message").text()).toEqual("message1");
-        expect(wrapper.find(".message-container").find(".message-list-item").at(1).find(".message").length).toBe(1);
-        expect(wrapper.find(".message-container").find(".message-list-item").at(1).find(".message").text()).toEqual("message2");
-    });
-
-    it("Should render in all allowed positions", () => {
-        // Top
-        wrapper.setProps({ position: "top" });
-        expect(wrapper.find(".content").hasClass("top"));
-        wrapper.setProps({ position: "top-right" }).update();
-        expect(wrapper.find(".content").hasClass("top-right"));
-        wrapper.setProps({ position: "top-left" }).update();
-        expect(wrapper.find(".content").hasClass("top-left"));
-        // Bottom
-        wrapper.setProps({ position: "bottom" }).update();
-        expect(wrapper.find(".content").hasClass("bottom"));
-        wrapper.setProps({ position: "bottom-right" }).update();
-        expect(wrapper.find(".content").hasClass("bottom-right"));
-        wrapper.setProps({ position: "bottom-left" }).update();
-        expect(wrapper.find(".content").hasClass("bottom-left"));
-        // Left
-        wrapper.setProps({ position: "left" }).update();
-        expect(wrapper.find(".content").hasClass("left"));
-        wrapper.setProps({ position: "left-top" }).update();
-        expect(wrapper.find(".content").hasClass("left-top"));
-        wrapper.setProps({ position: "left-bottom" }).update();
-        expect(wrapper.find(".content").hasClass("left-bottom"));
-        // Right
-        wrapper.setProps({ position: "right" }).update();
-        expect(wrapper.find(".content").hasClass("right"));
-        wrapper.setProps({ position: "right-top" }).update();
-        expect(wrapper.find(".content").hasClass("right-top"));
-        wrapper.setProps({ position: "right-bottom" }).update();
-        expect(wrapper.find(".content").hasClass("right-bottom"));
+    it("Should render node as message", () => {
+        const tooltipStr: string = "this is tooltip";
+        act(() => { render(<Tooltip content={tooltipStr} />, container); });
+        expect(document.body.querySelector(".tooltip-inner").textContent).toBe(tooltipStr);
+        const customClassName: string = "__this_is_a_node__";
+        const content: React.ReactNode = (<div className={customClassName}><h3>tooltip</h3><div>tooltip body</div></div>);
+        act(() => { render(<Tooltip content={content} />, container); });
+        expect(document.body.querySelectorAll(".tooltip-content").length).toBe(1);
+        expect(document.body.querySelectorAll(`.${customClassName}`).length).toBe(1);
     });
 
     it("Should render tooltip with one of the supported themes", () => {
-        wrapper.setProps({ theme: "danger" });
-        expect(wrapper.find(".content").hasClass("danger"));
+        const theme: TooltipTheme = "danger";
+        act(() => { render(<Tooltip content="this is tooltip" />, container); });
+        expect(document.body.querySelector(".tooltip-content").classList.contains("default")).toBeTruthy();
+        act(() => { render(<Tooltip content="this is tooltip" theme={theme} />, container); });
+        expect(document.body.querySelector(".tooltip-content").classList.contains(theme)).toBeTruthy();
     });
 
-    it("Should be toggled when tooltip icon is clicked", () => {
-        wrapper.find(".icon").simulate("click");
-        expect(wrapper.find(".content").hasClass("open")).toBeTruthy();
+    it("Should call callback on visibility change if callback is set", () => {
+        const callback: jest.Mock = jest.fn();
+        act(() => { render(<Tooltip content="this is tooltip" onVisibleChange={callback} />, container); });
+        act(() => {
+            container.querySelector(".icon").dispatchEvent(new MouseEvent("click", { bubbles: true }));
+        });
+        expect(callback).toBeCalledTimes(1);
     });
 
-    it("Should enable tooltip on hover when triggerOnHover prop is set to true", () => {
-        wrapper.setProps({ triggerOnHover: true });
-        wrapper.find(".icon").simulate("mouseEnter");
-        expect(wrapper.find(".content").hasClass("open")).toBeTruthy();
-        wrapper.find(".icon").simulate("mouseLeave");
-        expect(wrapper.find(".content").hasClass("open")).toBeFalsy();
-    });
-
-    it("Should render with passed width", () => {
-        expect(wrapper.find(".message-container").prop("style")).toEqual({ width: "120px" });
-        wrapper.setProps({ width: 300 });
-        expect(wrapper.find(".message-container").prop("style")).toEqual({ width: "300px" });
-    });
-
-    it("Should render with custom SVG", () => {
-        const testIcon: JSX.Element = <svg />;
-        wrapper.setProps({ customSvg: testIcon });
-        expect(wrapper.find(".icon").childAt(0).matchesElement(testIcon)).toBeTruthy();
-    });
-
-    it("should be able to call click event onClick when clickAction is provided ", () => {
-        const clickActionSpy = jest.fn();
-        wrapper = shallow(<Tooltip onClick={clickActionSpy} className="my-tooltip" />);
-
-        wrapper.find(".my-tooltip > .icon").simulate("click", [null, { target: { value: false } }]);
-
-        expect(clickActionSpy).toHaveBeenCalled();
-    });
-
-    describe("Test the component's public methods", () => {
-        test("Method: forceDismiss", () => {
-            const tooltipClasses = ["icon", "message", "message-container", "triangle"];
-            const instance = (wrapper.instance() as any);
-            // Dismiss tooltip
-            instance.setState({ toggle: true });
-            instance.forceDismiss();
-            expect(instance.state.toggle).toEqual(false);
-            // Dismiss Tooltip if clicked outside
-            instance.setState({ toggle: true });
-            instance.forceDismiss({ target: { className: "xyz" } });
-            expect(instance.state.toggle).toEqual(false);
-            // Do not dismiss tooltip if clicked inside
-            tooltipClasses.map((classname) => {
-                instance.setState({ toggle: true });
-                instance.forceDismiss({ target: { className: classname } });
-                expect(instance.state.toggle).not.toEqual(false);
+    describe("Should trigger tooltip based on trigger mode", () => {
+        const triggerTestCases: Array<TriggerTestCase> = [
+            { toggleEvent: new MouseEvent("click", { bubbles: true }), untoggleEvent: new MouseEvent("click", { bubbles: true }), trigger: "click" },
+            { toggleEvent: new MouseEvent("contextmenu", { bubbles: true }), untoggleEvent: new MouseEvent("contextmenu", { bubbles: true }), trigger: "rightClick" },
+            { toggleEvent: new Event("focus", { bubbles: true }), untoggleEvent: new Event("blur", { bubbles: true }), trigger: "focus" },
+            { toggleEvent: new MouseEvent("mouseover", { bubbles: true }), untoggleEvent: new Event("mouseout", { bubbles: true }), trigger: "hover" },
+        ];
+        triggerTestCases.map((testCase: TriggerTestCase) => {
+            it(`Should enable tooltip on ${testCase.trigger} when trigger mode is set to ${testCase.trigger}`, () => {
+                act(() => { render(<Tooltip content="this is tooltip" trigger={testCase.trigger} />, container); });
+                act(() => {
+                    container.querySelector(".icon").dispatchEvent(testCase.toggleEvent);
+                });
+                expect(document.body.querySelector(".tooltip-content").getAttribute("style")).toContain("block");
+                act(() => {
+                    container.querySelector(".icon").dispatchEvent(testCase.untoggleEvent);
+                });
+                expect(document.body.querySelector(".tooltip-content").getAttribute("style")).toContain("none");
             });
         });
+    });
 
-        test("Method: forceShow", () => {
-            const instance = (wrapper.instance() as any);
-            instance.forceShow();
-            expect(instance.state.toggle).toEqual(true);
+    it("Should not set auto position if disableAutoPosition is true", () => {
+        act(() => { render(<Tooltip content="tooltip" position={"asd" as any} />, container); });
+        act(() => { render(<Tooltip content="tooltip" position={"asd" as any} disableAutoPosition />, container); });
+        act(() => {
+            container.querySelector(".icon").dispatchEvent(new MouseEvent("click", { bubbles: true }));
         });
+        expect(document.body.querySelector(".tooltip-content").classList.contains("asd")).toBeTruthy();
+    });
+
+    describe("Should render in all allowed positions", () => {
+        const positionTestCases: Array<PositionTestCase> = [
+            {
+                position: "top",
+                mockRefBoundingClientRect: { top: 150, bottom: 0, right: 200, left: 200, height: 100, width: 50 },
+                mockTooltipBoundingClientRect: { top: -100, bottom: 0, right: 0, left: 0, height: 100, width: 100 },
+            },
+            {
+                position: "right",
+                mockRefBoundingClientRect: { top: 50, bottom: 500, right: 500, left: 200, height: 100, width: 50 },
+                mockTooltipBoundingClientRect: { top: -100, bottom: 0, right: 0, left: 0, height: 100, width: 100 },
+            },
+            {
+                position: "bottom",
+                mockRefBoundingClientRect: { top: 150, bottom: 500, right: 768, left: 200, height: 100, width: 50 },
+                mockTooltipBoundingClientRect: { top: 0, bottom: 0, right: 0, left: 0, height: 100, width: 100 },
+            },
+            {
+                position: "left",
+                mockRefBoundingClientRect: { top: 50, bottom: 500, right: 1024, left: 200, height: 100, width: 50 },
+                mockTooltipBoundingClientRect: { top: -100, bottom: 0, right: 0, left: 0, height: 100, width: 100 },
+            },
+            {
+                position: "top-left",
+                mockRefBoundingClientRect: { top: 200, bottom: 768, right: 200, left: 20, height: 100, width: 50 },
+                mockTooltipBoundingClientRect: { top: -100, bottom: 0, right: 0, left: 0, height: 100, width: 100 },
+            },
+            {
+                position: "top-right",
+                mockRefBoundingClientRect: { top: 200, bottom: 300, right: 300, left: 50, height: 100, width: 50 },
+                mockTooltipBoundingClientRect: { top: -100, bottom: 0, right: 0, left: 0, height: 100, width: 100 },
+            },
+            {
+                position: "bottom-left",
+                mockRefBoundingClientRect: { top: 200, bottom: 300, right: 1024, left: 200, height: 100, width: 50 },
+                mockTooltipBoundingClientRect: { top: -100, bottom: 0, right: 0, left: 0, height: 100, width: 100 },
+            },
+            {
+                position: "bottom-right",
+                mockRefBoundingClientRect: { top: 200, bottom: 300, right: 500, left: 300, height: 100, width: 50 },
+                mockTooltipBoundingClientRect: { top: -100, bottom: 0, right: 0, left: 0, height: 100, width: 100 },
+            },
+            {
+                position: "left-top",
+                mockRefBoundingClientRect: { top: 200, bottom: 500, right: 1024, left: 200, height: 100, width: 50 },
+                mockTooltipBoundingClientRect: { top: -100, bottom: 0, right: 0, left: 0, height: 100, width: 100 },
+            },
+            {
+                position: "left-bottom",
+                mockRefBoundingClientRect: { top: 50, bottom: 500, right: 1024, left: 200, height: 100, width: 50 },
+                mockTooltipBoundingClientRect: { top: -100, bottom: 0, right: 0, left: 0, height: 100, width: 100 },
+            },
+            {
+                position: "right-top",
+                mockRefBoundingClientRect: { top: 200, bottom: 0, right: 500, left: 200, height: 100, width: 50 },
+                mockTooltipBoundingClientRect: { top: -100, bottom: 0, right: 0, left: 0, height: 100, width: 100 },
+            },
+            {
+                position: "right-bottom",
+                mockRefBoundingClientRect: { top: 50, bottom: 500, right: 400, left: 200, height: 100, width: 50 },
+                mockTooltipBoundingClientRect: { top: -100, bottom: 0, right: 0, left: 0, height: 100, width: 100 },
+            },
+        ];
+        for (const testCase of positionTestCases) {
+            test(`able to render on ${testCase.position}`, () => {
+                container.style.position = "relative";
+                act(() => { render(<Tooltip content="tooltip" position={testCase.position} />, container); });
+                container.querySelector(".tooltip-reference").getBoundingClientRect = jest.fn(() => {
+                    return testCase.mockRefBoundingClientRect;
+                });
+                document.body.querySelector(".tooltip-content").getBoundingClientRect = jest.fn(() => {
+                    return testCase.mockTooltipBoundingClientRect;
+                });
+                act(() => {
+                    container.querySelector(".icon").dispatchEvent(new MouseEvent("click", { bubbles: true }));
+                });
+                expect(document.body.querySelector(".tooltip-content").classList.contains(testCase.position)).toBeTruthy();
+            });
+        }
+    });
+
+    describe("Should render tooltip relatively if overflow", () => {
+        const positionTestCases: Array<OverflowTestCase> = [
+            {
+                position: "top",
+                mockRefBoundingClientRect: { top: -100, bottom: 0, right: 200, left: 200, height: 100, width: 50 },
+                mockTooltipBoundingClientRect: { top: -100, bottom: 0, right: 0, left: 0, height: 100, width: 100 },
+                relativePosition: "bottom"
+            },
+            {
+                position: "right",
+                mockRefBoundingClientRect: { top: -100, bottom: 0, right: 768, left: 200, height: 100, width: 50 },
+                mockTooltipBoundingClientRect: { top: -100, bottom: 0, right: 0, left: 0, height: 100, width: 100 },
+                relativePosition: "bottom"
+            },
+            {
+                position: "bottom",
+                mockRefBoundingClientRect: { top: 150, bottom: 780, right: 768, left: 200, height: 100, width: 50 },
+                mockTooltipBoundingClientRect: { top: 0, bottom: 0, right: 0, left: 0, height: 100, width: 100 },
+                relativePosition: "top"
+            },
+            {
+                position: "left",
+                mockRefBoundingClientRect: { top: 50, bottom: 500, right: 200, left: 0, height: 100, width: 50 },
+                mockTooltipBoundingClientRect: { top: -100, bottom: 0, right: 0, left: 0, height: 100, width: 100 },
+                relativePosition: "right"
+            },
+            {
+                position: "top-left",
+                mockRefBoundingClientRect: { top: 200, bottom: 768, right: 200, left: -100, height: 100, width: 50 },
+                mockTooltipBoundingClientRect: { top: -100, bottom: 0, right: 0, left: 0, height: 100, width: 100 },
+                relativePosition: "right-top"
+            },
+            {
+                position: "top-right",
+                mockRefBoundingClientRect: { top: 0, bottom: 300, right: 50, left: 50, height: 100, width: 50 },
+                mockTooltipBoundingClientRect: { top: -100, bottom: 0, right: 0, left: 0, height: 100, width: 100 },
+                relativePosition: "bottom"
+            },
+            {
+                position: "bottom-left",
+                mockRefBoundingClientRect: { top: 200, bottom: 300, right: 200, left: 720, height: 100, width: 50 },
+                mockTooltipBoundingClientRect: { top: -100, bottom: 0, right: 0, left: 0, height: 100, width: 100 },
+                relativePosition: "bottom-left"
+            },
+            {
+                position: "bottom-right",
+                mockRefBoundingClientRect: { top: 200, bottom: 300, right: 1025, left: 300, height: 100, width: 50 },
+                mockTooltipBoundingClientRect: { top: -100, bottom: 0, right: 0, left: 0, height: 100, width: 100 },
+                relativePosition: "left"
+            },
+            {
+                position: "left-top",
+                mockRefBoundingClientRect: { top: 50, bottom: 500, right: 200, left: 0, height: 100, width: 50 },
+                mockTooltipBoundingClientRect: { top: -100, bottom: 0, right: 0, left: 0, height: 100, width: 100 },
+                relativePosition: "right"
+            },
+            {
+                position: "left-bottom",
+                mockRefBoundingClientRect: { top: 50, bottom: 500, right: 200, left: 0, height: 100, width: 50 },
+                mockTooltipBoundingClientRect: { top: -100, bottom: 0, right: 0, left: 0, height: 100, width: 100 },
+                relativePosition: "right"
+            },
+            {
+                position: "right-top",
+                mockRefBoundingClientRect: { top: -100, bottom: 0, right: 768, left: 200, height: 100, width: 50 },
+                mockTooltipBoundingClientRect: { top: -100, bottom: 0, right: 0, left: 0, height: 100, width: 100 },
+                relativePosition: "bottom"
+            },
+            {
+                position: "right-bottom",
+                mockRefBoundingClientRect: { top: -100, bottom: 0, right: 768, left: 200, height: 100, width: 50 },
+                mockTooltipBoundingClientRect: { top: -100, bottom: 0, right: 0, left: 0, height: 100, width: 100 },
+                relativePosition: "bottom"
+            },
+        ];
+        for (const testCase of positionTestCases) {
+            test(`able to render on ${testCase.relativePosition} when tooltip is overflow on ${testCase.position}`, () => {
+                container.style.position = "relative";
+                act(() => { render(<Tooltip content="tooltip" position={testCase.position} />, container); });
+                expect(document.body.querySelector(".tooltip-content").classList.contains(testCase.position)).toBeTruthy();
+                container.querySelector(".tooltip-reference").getBoundingClientRect = jest.fn(() => {
+                    return testCase.mockRefBoundingClientRect;
+                });
+                document.body.querySelector(".tooltip-content").getBoundingClientRect = jest.fn(() => {
+                    return testCase.mockTooltipBoundingClientRect;
+                });
+                act(() => {
+                    container.querySelector(".icon").dispatchEvent(new MouseEvent("click", { bubbles: true }));
+                });
+                expect(document.body.querySelector(".tooltip-content").classList.contains(testCase.relativePosition)).toBeTruthy();
+            });
+        }
     });
 });
