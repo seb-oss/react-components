@@ -36,7 +36,7 @@ export const Pagination: React.FunctionComponent<PaginationProps> = React.memo((
 
     React.useEffect(() => {
         const intialLength: number = props.pagingLength ? props.pagingLength : 5;
-        getList(props.value, intialLength);
+        generateList(props.value, intialLength);
     }, [pagingSize, props.value]);
 
     /**
@@ -47,7 +47,7 @@ export const Pagination: React.FunctionComponent<PaginationProps> = React.memo((
      * @param {number} offset The number of items to show per page
      * @returns {Array<number>} An array of the pages that needs to be displayed
      */
-    function getList(value: number, length: number): void {
+    function generateList(value: number, length: number): void {
         const genList: Array<number> = [];
         // generate the array
         for (let i = 1; i <= pagingSize; i++) {
@@ -55,7 +55,7 @@ export const Pagination: React.FunctionComponent<PaginationProps> = React.memo((
         }
 
         // the median value is what you use to obtain the centre of the page or equilibrium
-        const medianValue = Math.ceil(length / 2);
+        const medianValue: number = Math.ceil(length / 2);
         let start: number = 0;
         let end: number = pagingSize;
 
