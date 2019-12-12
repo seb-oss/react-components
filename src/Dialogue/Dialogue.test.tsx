@@ -1,56 +1,73 @@
 import * as React from "react";
-import { shallow, mount, ShallowWrapper, ReactWrapper } from "enzyme";
-import { Dialogue, DialogueProps } from "./Dialogue";
+import { Dialogue } from "./Dialogue";
+import { unmountComponentAtNode, render } from "react-dom";
+import { act } from "react-dom/test-utils";
 
 describe("Component: Dialogue", () => {
-    let wrapper: ShallowWrapper<DialogueProps>;
+    let container: HTMLDivElement = null;
+
     beforeEach(() => {
-        wrapper = shallow(<Dialogue toggle={false} />);
+        container = document.createElement("div");
+        document.body.appendChild(container);
+    });
+
+    afterEach(() => {
+        unmountComponentAtNode(container);
+        container.remove();
+        container = null;
     });
 
     it("Should render and be hidden until toggled", () => {
-        expect(wrapper).toBeDefined();
-        expect(wrapper.hasClass("open-dialogue")).toBeFalsy();
+        act(() => { render(<Dialogue toggle={false} />, container); });
+        expect(container).toBeDefined();
+        expect(container.querySelector(".custom-dialogue").classList.contains("open-dialogue")).toBeFalsy();
     });
 
     it("Should pass custom class and id", () => {
         const className: string = "myDialogueClass";
         const id: string = "myDialogueId";
-        wrapper.setProps({ className, id });
-        expect(wrapper.hasClass(className)).toBeTruthy();
-        expect(wrapper.find(`#${id}`).length).toBeTruthy();
+        act(() => { render(<Dialogue toggle={false} id={id} className={className} />, container); });
+        expect(container.querySelector(".custom-dialogue").classList.contains(className)).toBeTruthy();
+        expect(container.querySelector(".custom-dialogue").getAttribute("id")).toEqual(id);
     });
 
     it("Should render a close button if no action or button text is passed", () => {
-        wrapper.setProps({ toggle: true });
-        expect(wrapper.find(".dialogue-action").length).toBe(1);
-        expect(wrapper.find(".dialogue-action").find("button").text()).toEqual("Close");
+        act(() => { render(<Dialogue toggle={true} />, container); });
+        expect(container.querySelectorAll(".dialogue-action").length).toBe(1);
+        expect(container.querySelector(".dialogue-action").querySelector("button").innerHTML).toEqual("Close");
     });
 
     it("Should render a close button if only actions are passed without button text", () => {
         const primaryAction: jest.Mock = jest.fn();
-        wrapper.setProps({ toggle: true, primaryAction });
-        expect(wrapper.find(".dialogue-action").length).toBe(1);
-        expect(wrapper.find(".dialogue-action").find("button").text()).toEqual("Close");
-        wrapper.find(".primary-action").find("button").simulate("click");
-        expect(primaryAction).toBeCalled();
+        act(() => { render(<Dialogue toggle={true} primaryAction={primaryAction} />, container); });
+        expect(container.querySelector(".dialogue-action")).toBeDefined();
+        const button: HTMLButtonElement = container.querySelector(".dialogue-action").querySelector("button");
+        expect(button.innerHTML).toEqual("Close");
+        act(() => {
+            container.querySelector(".primary-action").querySelector("button").dispatchEvent(new MouseEvent("click"));
+        });
+        expect(primaryAction).not.toBeCalled();
     });
 
     it("Should fire primary and secondary actions when passed and clicked on", () => {
         const primaryAction: jest.Mock = jest.fn();
         const secondaryAction: jest.Mock = jest.fn();
-        const mountedWrapper: ReactWrapper<DialogueProps> = mount(
-            <Dialogue
+        const primaryBtn: string = "primary";
+        const secondaryBtn: string = "secondary";
+        act(() => {
+            render(<Dialogue
                 toggle={true}
                 primaryAction={primaryAction}
                 secondaryAction={secondaryAction}
-                primaryBtn="primary"
-                secondaryBtn="secondary"
-            />
-        );
-        mountedWrapper.find(".primary-action").find("button").simulate("click");
-        mountedWrapper.find(".secondary-action").find("button").simulate("click");
-        expect(mountedWrapper.find(".dialogue-action").length).toBe(2); // Rendered both actions
+                primaryBtn={primaryBtn}
+                secondaryBtn={secondaryBtn}
+            />, container);
+        });
+        act(() => {
+            container.querySelector(".primary-action").querySelector("button").dispatchEvent(new MouseEvent("click", { bubbles: true }));
+            container.querySelector(".secondary-action").querySelector("button").dispatchEvent(new MouseEvent("click", { bubbles: true }));
+        });
+        expect(container.querySelectorAll(".dialogue-action").length).toBe(2); // Rendered both actions
         expect(primaryAction).toHaveBeenCalled(); // Primary action fired
         expect(secondaryAction).toHaveBeenCalled(); // Secondary action fired
     });
@@ -58,66 +75,79 @@ describe("Component: Dialogue", () => {
     it("Should render header and description when passed", () => {
         const header: string = "header";
         const desc: string = "desc";
-        wrapper.setProps({ header, desc });
-        expect(wrapper.find(".dialogue-header").length).toBe(1);
-        expect(wrapper.find(".dialogue-header").text()).toEqual("header");
-        expect(wrapper.find(".dialogue-desc").length).toBe(1);
-        expect(wrapper.find(".dialogue-desc").text()).toEqual("desc");
+        act(() => { render(<Dialogue toggle={false} header={header} desc={desc} />, container); });
+        expect(container.querySelector(".dialogue-header")).toBeDefined();
+        expect(container.querySelector(".dialogue-header").innerHTML).toEqual("header");
+        expect(container.querySelector(".dialogue-desc")).toBeDefined();
+        expect(container.querySelector(".dialogue-desc").innerHTML).toEqual("desc");
     });
 
     it("Should toggle off the dialogue when set to false", () => {
-        wrapper.setProps({ toggle: true });
-        expect(wrapper.hasClass("open-dialogue")).toBeTruthy();
-        expect(wrapper.hasClass("close-dialogue")).toBeFalsy();
-        wrapper.setProps({ toggle: false });
-        expect(wrapper.hasClass("open-dialogue")).toBeFalsy();
-        expect(wrapper.hasClass("close-dialogue")).toBeTruthy();
+        act(() => { render(<Dialogue toggle={true} />, container); });
+        expect(container.querySelector(".custom-dialogue").classList.contains("open-dialogue")).toBeTruthy();
+        expect(container.querySelector(".custom-dialogue").classList.contains("close-dialogue")).toBeFalsy();
+        act(() => { render(<Dialogue toggle={false} />, container); });
+        expect(container.querySelector(".custom-dialogue").classList.contains("open-dialogue")).toBeFalsy();
+        expect(container.querySelector(".custom-dialogue").classList.contains("close-dialogue")).toBeTruthy();
     });
 
-    it("Should dismiss when clicked and the feature is enabled", () => {
-        const mountedWrapper: ReactWrapper<DialogueProps> = mount(
-            <Dialogue
-                toggle={true}
-                enableBackdropDismiss={true}
-                onDismiss={() => mountedWrapper.setProps({ toggle: false })}
-            />
-        );
-        expect(mountedWrapper.find(".open-dialogue").length).toBeTruthy();
-        mountedWrapper.find(".dialogue-container").simulate("click", { target: { classList: ["dialogue-container"] } });
-        expect(mountedWrapper.find(".open-dialogue").length).toBeFalsy();
+    it("Should dismiss when backdrop or close is clicked and the feature is enabled", () => {
+        const onDismiss: jest.Mock = jest.fn();
+        act(() => { render(<Dialogue toggle={true} enableBackdropDismiss enableCloseButton onDismiss={onDismiss} />, container); });
+        expect(container.querySelector(".open-dialogue")).toBeDefined();
+        act(() => {
+            container.querySelector(".dialogue-container").dispatchEvent(new MouseEvent("click", { bubbles: true }));
+        });
+        expect(onDismiss).toBeCalled();
     });
 
     it("Should render close button and dismiss dialogue when clicked", () => {
-        const mountedWrapper: ReactWrapper<DialogueProps> = mount(
-            <Dialogue
-                toggle={true}
-                enableCloseButton={true}
-                onDismiss={() => mountedWrapper.setProps({ toggle: false })}
-            />
-        );
-        expect(mountedWrapper.find(".close-button").length).toBeTruthy();
-        expect(mountedWrapper.find(".with-close")).toBeTruthy();
-        mountedWrapper.find(".close-button").simulate("click", { target: { classList: ["close-button"] } });
-        expect(mountedWrapper.find(".open-dialogue").length).toBeFalsy();
+        const onDismiss: jest.Mock = jest.fn();
+        act(() => { render(<Dialogue toggle={true} enableCloseButton onDismiss={onDismiss} />, container); });
+        expect(container.querySelector(".close-button")).toBeDefined();
+        expect(container.querySelector(".with-close")).toBeDefined();
+        act(() => { container.querySelector(".close-button").dispatchEvent(new MouseEvent("click", { bubbles: true })); });
+        expect(onDismiss).toBeCalled();
+    });
+
+    it("Should disable action buttons when disable prop is passed", () => {
+        act(() => {
+            render(<Dialogue
+                toggle={false}
+                primaryAction={() => true}
+                secondaryAction={() => true}
+                primaryBtn="next"
+                secondaryBtn="back"
+                disablePrimaryBtn
+                disableSecondaryBtn
+            />, container);
+        });
+        expect(container.querySelector(".primary-action").querySelector("button").disabled).toBeTruthy();
+        expect(container.querySelector(".secondary-action").querySelector("button").disabled).toBeTruthy();
     });
 
     describe("Dismissing the modal, should not dismiss when:", () => {
-        let onDismiss: jest.Mock;
-        let mountedWrapper: ReactWrapper<DialogueProps>;
-
-        beforeEach(() => {
-            onDismiss = jest.fn();
-            mountedWrapper = mount(<Dialogue toggle={true} onDismiss={onDismiss} />);
-        });
+        const onDismiss: jest.Mock = jest.fn();
 
         it("Neither enableBackdropDismiss nor enableCloseButton are enabled", () => {
-            mountedWrapper.find(".dialogue-container").simulate("click", { target: { classList: ["dialogue-container"] } });
+            act(() => { render(<Dialogue toggle={true} onDismiss={onDismiss} />, container); });
+            act(() => {
+                container.querySelector(".dialogue-container").dispatchEvent(new MouseEvent("click", { bubbles: true }));
+            });
             expect(onDismiss).not.toBeCalled();
         });
 
         it("enableCloseButton is enabled but the event is triggered by clicking on dialogue-container and backdrop is disabled", () => {
-            mountedWrapper.setProps({ enableBackdropDismiss: false, enableCloseButton: true });
-            mountedWrapper.find(".dialogue-container").simulate("click");
+            act(() => { render(<Dialogue toggle={true} onDismiss={onDismiss} enableCloseButton enableBackdropDismiss={false} />, container); });
+            act(() => { container.querySelector(".dialogue-container").dispatchEvent(new MouseEvent("click", { bubbles: true })); });
+            expect(onDismiss).not.toBeCalled();
+        });
+
+        it("enableBackdropDismiss is enabled but the user clicks on other than the backdrop", () => {
+            act(() => { render(<Dialogue toggle={true} onDismiss={onDismiss} />, container); });
+            act(() => {
+                container.querySelector(".dialogue").dispatchEvent(new MouseEvent("click", { bubbles: true }));
+            });
             expect(onDismiss).not.toBeCalled();
         });
     });

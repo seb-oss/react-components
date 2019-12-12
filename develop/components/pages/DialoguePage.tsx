@@ -33,8 +33,8 @@ const DialoguePage: React.FunctionComponent = () => {
                             secondaryBtn="Cancel"
                             secondaryAction={() => setDialogue(false)}
                             primaryAction={() => setDialogue(false)}
-                            enableCloseButton={true}
-                            enableBackdropDismiss={true}
+                            enableCloseButton
+                            enableBackdropDismiss
                             onDismiss={() => setDialogue(false)}
                         />
                     </div>
