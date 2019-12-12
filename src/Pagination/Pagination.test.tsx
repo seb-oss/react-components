@@ -1,9 +1,11 @@
 import * as React from "react";
-import { shallow, ShallowWrapper, mount, ReactWrapper } from "enzyme";
+import { shallow, ShallowWrapper, mount, ReactWrapper, render } from "enzyme";
 import { Pagination, PaginationProps } from "./Pagination";
+import { act } from "react-dom/test-utils";
 
 describe("Component: RadioButton", () => {
     const props: PaginationProps = { size: 20, value: 1, pagingLength: 4 };
+    let container: HTMLDivElement = null;
     let mountedWrapper: ReactWrapper<PaginationProps>;
 
     beforeEach(() => {
@@ -154,4 +156,45 @@ describe("Component: RadioButton", () => {
             expect(mountedWrapper.find(".nav-action").last().children("svg").prop("name")).toEqual("angle-left");
         });
     });
+
+    describe("test pagination list when The original size of the pagination is greater than the expected size ", () => {
+
+        it("Should display current number at the center with next and previous buttons side by side", () => {
+            /**
+             * When the size is 60, offset is 6, then original paginSize will be 10
+             * the default paging length is 5
+             * if  the value is 3
+             * the value should be in the middle regadless
+             * so pagination should display 1 to 5 with 3 as active and in the middle.
+             */
+            mountedWrapper = mount(<Pagination size={60} offset={6} value={3}></Pagination>);
+            const allPageItems: ReactWrapper = mountedWrapper.findWhere(x => x.hasClass("page-item"));
+            const activePage: ReactWrapper = allPageItems.filterWhere(x => x.hasClass('active'));
+            // note since we have sr-only classes, there will be two links here and .text concat returns the two together .
+            expect(activePage.text()).toContain(3);
+
+            expect(allPageItems.first().text()).toContain("Previous");
+            expect(allPageItems.last().text()).toContain("Next");
+
+            // and the first page should be 1
+
+            expect(allPageItems.at(1).text()).toContain(1);
+        });
+
+        it("When paging size, length and offset changes, recalculate and place the active in the middle regardless ", () => {
+            mountedWrapper = mount(<Pagination size={60} offset={10} pagingLength={5} value={4}></Pagination>);
+
+            const allPageItems: ReactWrapper = mountedWrapper.findWhere(x => x.hasClass("page-item"));
+            const activePage: ReactWrapper = allPageItems.filterWhere(x => x.hasClass('active'));
+
+            expect(activePage.text()).toContain(4);
+
+            expect(allPageItems.first().text()).toContain("Previous");
+            expect(allPageItems.last().text()).toContain("Next");
+
+            // and the first page should be 2
+
+            expect(allPageItems.at(1).text()).toContain(2);
+        })
+    })
 });
