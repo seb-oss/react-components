@@ -78,6 +78,27 @@ $tooltip-distance: 4px;
         .tooltip-inner {
             padding: 8px 10px;
             position: relative;
+            >.message-container {
+                min-width: 120px;
+                padding: 5px 10px 10px;
+                text-align: center;
+    
+                .title {
+                    font-weight: bold;
+                    margin-bottom: 5px;
+                }
+    
+                .message-list-item:not(:first-child) {
+                    margin-top: 10px;
+                }
+    
+                .message {
+                    -webkit-user-select: none;
+                    -moz-user-select: none;
+                    -ms-user-select: none;
+                    user-select: none;
+                }
+            }
         }
         &.left, &.right {
             >.tooltip-arrow {

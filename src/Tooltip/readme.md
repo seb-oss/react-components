@@ -33,19 +33,25 @@ This React component supports customization and configurations. The component na
 
 These are the current available properties:
 
-| Property        | Type                                                 | Descrition                                                                                    |
+| Property        | Type                                                 | Description                                                                                    |
 | --------------- | ---------------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| children?      | `React.ReactNode`                                             | Custom tooltip reference if children is defined                                                                                 |
 | className?      | `string`                                             | Custom class                                                                                  |
+| content?        | `string \| React.ReactNode`                          | Tooltip content                                                                                  |
 | customSvg?      | `any`                                                | A direct svg code or a component with svg                                                     |
+| disableAutoPosition?      | `boolean`                                  | Force tooltip to be at certain position                                                    |
 | id?             | `string`                                             | Element id                                                                                    |
-| message?        | `string`                                             | Description                                                                                   |
-| messageGroup?   | `Array<TooltipMessageGroupItem>`<sup>1</sup>         | Multiple titles/descriptions                                                                  |
-| onClick         | `(event?: React.MouseEvent<HTMLDivElement>) => void` | click action                                                                                  |
+| message?        | `string`                                             | **```[Deprecated]```** Description **(will be replaced by `'content'`)**                                                                                  |
+| messageGroup?   | `Array<TooltipMessageGroupItem>`<sup>1</sup>         | **```[Deprecated]```** Multiple titles/descriptions **(will be replaced by `'content'`)**                                                                  |
+| onClick         | `(event?: React.MouseEvent<HTMLDivElement>) => void` | **```[Deprecated]```** click action **(will be replaced by `'onVisibleChange'`)**                                                                                  |
+| onVisibleChange | `(event: React.MouseEvent<HTMLDivElement> \| React.FocusEvent<HTMLElement>, visible: boolean) => void` |  callback on tooltip visibility status change                                                                                  |
 | position?       | `string`                                             | Css style positions: top/bottom/left/right                                                    |
+| ref?       | `React.LegacyRef<Tooltip>`                                             | Tooltip elements created in the render method                                                  |
 | theme?          | `string`                                             | Based on SEB predefined colors. (default: `'default'`)<sup>2</sup>                            |
-| title?          | `string`                                             | Title                                                                                         |
-| triggerOnHover? | `boolean`                                            | Enables the ability to show the tooltip on hover, click will be disabled (default: `'false'`) |
-| width?          | `number`                                             | Width of the text holder                                                                      |
+| title?          | `string`                                             | **```[Deprecated]```** Title **(will be replaced by `'content'`)**                                                                                        |
+| trigger?          | `click \| hover \| focus`                          | Tooltip trigger mode (default: `'click'`)                                                                                        |
+| triggerOnHover? | `boolean`                                            | **```[Deprecated]```** Enables the ability to show the tooltip on hover, click will be disabled (default: `'false'`) **(will be replaced by `'trigger'`)** |
+| width?          | `number`                                             | **```[Deprecated]```** Width of the text holder                                                                      |
 
 ## Public Methods
 
@@ -64,7 +70,7 @@ const ExampleContainer: React.FunctionComponent = () => {
 
     dismissTooltip(e?: React.MouseEvent<HTMLDivElement>): void {
         const dismissableTooltip: HTMLElement = document.getElementById("dismissable-tooltip");
-        if (event.target !== dismissableTooltip.firstChild) {
+        if (event.target !== dismissableTooltip.firstChild.firstChild) {
             myTooltip.forceDismiss(e);
         }
     }
