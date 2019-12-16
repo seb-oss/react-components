@@ -61,7 +61,7 @@ const TooltipPage: React.FunctionComponent = () => {
     const [hasCustomReference, setHasCustomReference] = React.useState<boolean>(false);
     const [disableAutoPosition, setDisableAutoPosition] = React.useState<boolean>(false);
     const [customSvg, setCustomSvg] = React.useState<boolean>(false);
-    const [content, setContent] = React.useState<number>(2);
+    const [content, setContent] = React.useState<number>(0);
     let myTooltip: Tooltip;
 
     function dismissTooltip(e?: React.MouseEvent<HTMLDivElement>): void {
