@@ -168,8 +168,8 @@ describe("Component: RadioButton", () => {
              * so pagination should display 1 to 5 with 3 as active and in the middle.
              */
             mountedWrapper = mount(<Pagination size={60} offset={6} value={3}></Pagination>);
-            const allPageItems: ReactWrapper = mountedWrapper.findWhere(x => x.hasClass("page-item"));
-            const activePage: ReactWrapper = allPageItems.filterWhere(x => x.hasClass('active'));
+            const allPageItems: ReactWrapper = mountedWrapper.findWhere((x: ReactWrapper) => x.hasClass("page-item"));
+            const activePage: ReactWrapper = allPageItems.filterWhere((x: ReactWrapper) => x.hasClass('active'));
             // note since we have sr-only classes, there will be two links here and .text concat returns the two together .
             expect(activePage.text()).toContain(3);
 
@@ -184,8 +184,8 @@ describe("Component: RadioButton", () => {
         it("When paging size, length and offset changes, recalculate and place the active in the middle regardless ", () => {
             mountedWrapper = mount(<Pagination size={60} offset={10} pagingLength={5} value={4}></Pagination>);
 
-            const allPageItems: ReactWrapper = mountedWrapper.findWhere(x => x.hasClass("page-item"));
-            const activePage: ReactWrapper = allPageItems.filterWhere(x => x.hasClass('active'));
+            const allPageItems: ReactWrapper = mountedWrapper.findWhere((x: ReactWrapper) => x.hasClass("page-item"));
+            const activePage: ReactWrapper = allPageItems.filterWhere((x: ReactWrapper) => x.hasClass('active'));
 
             expect(activePage.text()).toContain(4);
 
@@ -195,9 +195,6 @@ describe("Component: RadioButton", () => {
             // and the first page should be 2
 
             expect(allPageItems.at(1).text()).toContain(2);
-
-            mountedWrapper.setProps({ offset: 7 });
-            mountedWrapper.setProps({ offset: 5 });
-        })
+        });
     })
 });
