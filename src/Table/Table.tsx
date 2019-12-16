@@ -32,7 +32,7 @@ interface TableProps {
     footer?: React.ReactNode;
 
     onRowSelection?: (e: React.ChangeEvent<HTMLInputElement>, selectedRows: Array<TableRow>) => void;
-    onRowExpanded?: (expandedRowsIndexes: Array<string>) => void;
+    onRowExpanded?: (e: React.MouseEvent<HTMLDivElement, MouseEvent>, expandedRowList: Array<TableRow>) => void;
     onSort?: (rows: Array<TableRow>, columns: Array<Column>) => void;
     onSearch?: (rows: Array<TableRow>) => void;
 }
@@ -78,7 +78,7 @@ interface TableUIProps {
     onItemSelected?: (e: React.ChangeEvent<HTMLInputElement>, row: TableRow) => void;
     onSort?: (accessor: string, sortDirection: sortDirectionTypes) => void;
     onAllItemsSelected?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-    onRowExpanded?: (expandedRowsIndexes: Array<string>) => void;
+    onRowExpanded?: (e: React.MouseEvent<HTMLDivElement, MouseEvent>, row: TableRow) => void;
 }
 
 function generateRandomId(seed: string): string {
@@ -217,7 +217,7 @@ export const TableUI: React.FunctionComponent<TableUIProps> = React.memo((props:
                     const checkRandomIds = generateRandomId("chk-");
                     return (
                         <React.Fragment key={row.rowIndex}>
-                            <tr key={row.rowIndex}>
+                            <tr>
                                 {props.useRowSelection &&
                                     <td className="row-selections-column">
                                         <div className="custom-control custom-checkbox">
@@ -232,7 +232,7 @@ export const TableUI: React.FunctionComponent<TableUIProps> = React.memo((props:
                                             <label className="custom-control-label" htmlFor={checkRandomIds} />
                                         </div>
                                         {row.rowContentDetail &&
-                                            <div className="icon-holder">
+                                            <div className="icon-holder" onClick={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => { props.onRowExpanded(e, row); }}>
                                                 {angleRightIcon}
                                             </div>
                                         }
@@ -244,13 +244,15 @@ export const TableUI: React.FunctionComponent<TableUIProps> = React.memo((props:
                                     </td>;
                                 })}
                             </tr>
-                            {(row.rowContentDetail && row.selected) &&
-                                <tr className="row-details" key={row.rowIndex}>
+
+                            <tr className={"row-details" + (row.expanded ? " expanded" : "")}>
+                                {(row.rowContentDetail && row.expanded) &&
                                     <td colSpan={sumCols(props.columns.length, props.useRowSelection, false)}>
                                         fgdg
                                     </td>
-                                </tr>
-                            }
+                                }
+                            </tr>
+
                         </React.Fragment>
                     );
                 }
@@ -278,14 +280,10 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
     const [tableColumns, setTableColumn] = React.useState<Array<TableHead>>([]);
     const [allItemsChecked, setAllRowsChecked] = React.useState<boolean>(false);
 
+    // events -------------------------------------------------------------------------------------
     const onItemSelected = (e: React.ChangeEvent<HTMLInputElement>, selectedRow: TableRow) => {
-        const selectedRowList: Array<TableRow> = [];
         const updatedOriginalRows = tableRows.map((originalRow: TableRow) => {
-            if (originalRow.selected) {
-                selectedRowList.push(originalRow);
-            }
             if (originalRow.rowIndex === selectedRow.rowIndex) {
-                selectedRowList.push(originalRow);
                 return { ...originalRow, selected: e.target.checked };
             }
 
@@ -300,6 +298,8 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
             }
             return row;
         });
+
+        const selectedRowList: Array<TableRow> = updatedOriginalRows.filter((item: TableRow) => item.selected);
 
         setCurrentTableRows(updatedRows);
         setTableRows(updatedOriginalRows);
@@ -346,6 +346,32 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
         props.onSort(updatedOriginalRows, updatedColumns);
     };
 
+    const rowExpanded = (e: React.MouseEvent<HTMLDivElement, MouseEvent>, row: TableRow) => {
+        const updatedOriginalRows = tableRows.map((originalRow: TableRow) => {
+            if (originalRow.rowIndex === row.rowIndex) {
+                return { ...originalRow, expanded: !originalRow.expanded };
+            }
+
+            return originalRow;
+        });
+
+        const updatedRows: Array<TableRow> = currentTableRows.map((currentRow: TableRow, index) => {
+            if (currentRow.rowIndex === row.rowIndex) {
+                return (
+                    { ...currentRow, expanded: !currentRow.expanded }
+                );
+            }
+            return currentRow;
+        });
+
+        const expandedRowList: Array<TableRow> = updatedOriginalRows.filter((item: TableRow) => item.expanded);
+
+        setCurrentTableRows(updatedRows);
+        setTableRows(updatedOriginalRows);
+        setTableRowsImage(updatedOriginalRows);
+        props.onRowExpanded(e, expandedRowList);
+    };
+    // functions -----------------------------------------------------------------------------
     const setDefaultTableRows = () => {
         const updatedRows: Array<TableRow> = props.data.map((row: object, index: number) => {
             const updatedCells: Array<Cell> = Object.keys(row).filter((key: string) => {
@@ -381,7 +407,6 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
         setTableRowsImage(updatedRows);
     };
 
-    // functions
     const doPaginate = () => {
         if (props.usePagination && (tableRowsImage.length > 0)) {
             // pagination start from 1 hence the need fro deducting 1
@@ -465,6 +490,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
                 allRowsAreSelected={allItemsChecked}
                 onItemSelected={onItemSelected}
                 onAllItemsSelected={onAllItemsSelected}
+                onRowExpanded={rowExpanded}
             />
         </div>
 

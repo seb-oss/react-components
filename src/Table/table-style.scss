@@ -91,11 +91,25 @@ table {
 
         tbody {
             tr {
+                &.row-details {
+                    height: 0;
+                    position: relative;
+                    transition: all 700ms;
+
+                    &.expanded {
+                        height: 1000px;
+                    }
+                }
+
                 td {
                     &.row-selections-column {
                         display: flex;
                         flex-direction: row;
                         align-items: center;
+
+                        >.icon-holder {
+                            cursor: pointer;
+                        }
                     }
 
                     .action-icon-holder {
