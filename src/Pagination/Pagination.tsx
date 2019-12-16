@@ -32,12 +32,12 @@ export const Pagination: React.FunctionComponent<PaginationProps> = React.memo((
     React.useEffect(() => {
         const initialOffset: number = props.offset ? props.offset : 10;
         setPagingSize(Math.ceil(props.size / initialOffset));
-    }, [props.offset, props.pagingLength, props.size]);
+    }, [props.offset, props.size]);
 
     React.useEffect(() => {
         const intialLength: number = props.pagingLength ? props.pagingLength : 5;
         generateList(props.value, intialLength);
-    }, [pagingSize, props.value]);
+    }, [pagingSize, props.pagingLength, props.value]);
 
     /**
      * Generates an array of the pages that needs to be displayed

@@ -1,11 +1,9 @@
 import * as React from "react";
-import { shallow, ShallowWrapper, mount, ReactWrapper, render } from "enzyme";
+import { mount, ReactWrapper } from "enzyme";
 import { Pagination, PaginationProps } from "./Pagination";
-import { act } from "react-dom/test-utils";
 
 describe("Component: RadioButton", () => {
     const props: PaginationProps = { size: 20, value: 1, pagingLength: 4 };
-    let container: HTMLDivElement = null;
     let mountedWrapper: ReactWrapper<PaginationProps>;
 
     beforeEach(() => {
