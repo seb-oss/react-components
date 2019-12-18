@@ -148,6 +148,7 @@ export class TooltipPositionChecker {
     /**
      * get tooltip position
      * @param position selected position
+     * @returns tooltip position and coordinates
      */
     getPosition(position: TooltipPosition): TooltipPlacementWithCoord {
         if (this.disableAutoPlacement) {
@@ -160,6 +161,7 @@ export class TooltipPositionChecker {
     /**
      * retrieve position within viewport
      * @param position selected position
+     * @returns tooltip position and coordinates
      */
     private setPositionWithinViewport(position: TooltipPosition): TooltipPlacementWithCoord {
         const selectedPlacement: TooltipPlacement = tooltipPlacements[position];
@@ -259,6 +261,7 @@ export class TooltipPositionChecker {
     /**
      * get current placement of tooltip
      * @param pos selected position
+     * @returns tooltip position and coordinates
      */
     private getPlacement(pos: TooltipPosition): TooltipPlacementWithCoord {
         return {
