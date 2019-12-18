@@ -16,12 +16,18 @@ type TooltipPlacement = {
         y: PointPositionLabel
     };
 };
+
 export type TooltipPlacements = {
     [key in TooltipPosition]: TooltipPlacement;
 };
 
 export type PositionPoints = {
     [key in TooltipPosition]: Array<PositionPoint>;
+};
+
+export type TooltipPlacementWithCoord = {
+    coord: TooltipCoord;
+    position: TooltipPosition;
 };
 
 export const tooltipPlacements: TooltipPlacements = {
@@ -125,7 +131,7 @@ export class TooltipPositionChecker {
      * add generated tooltip container
      * @param tooltipContainer tooltip container
      */
-    addTooltipContainer(tooltipContainer: HTMLDivElement) {
+    addTooltipContainer(tooltipContainer: HTMLDivElement): void {
         if (tooltipContainer) {
             this.tooltip = tooltipContainer;
         }
@@ -135,7 +141,7 @@ export class TooltipPositionChecker {
      * enable or disable auto placement for tooltip
      * @param toggle boolean
      */
-    toggleAutoPlacement(toggle: boolean) {
+    toggleAutoPlacement(toggle: boolean): void {
         this.disableAutoPlacement = toggle;
     }
 
@@ -143,11 +149,11 @@ export class TooltipPositionChecker {
      * get tooltip position
      * @param position selected position
      */
-    getPosition(position: TooltipPosition): void {
+    getPosition(position: TooltipPosition): TooltipPlacementWithCoord {
         if (this.disableAutoPlacement) {
-            this.getPlacement(position);
+            return this.getPlacement(position);
         } else {
-            this.getPositionWithinViewport(position);
+            return this.setPositionWithinViewport(position);
         }
     }
 
@@ -155,24 +161,27 @@ export class TooltipPositionChecker {
      * retrieve position within viewport
      * @param position selected position
      */
-    private getPositionWithinViewport(position: TooltipPosition): void {
+    private setPositionWithinViewport(position: TooltipPosition): TooltipPlacementWithCoord {
         const selectedPlacement: TooltipPlacement = tooltipPlacements[position];
-        if (selectedPlacement && selectedPlacement.relatedPoints.every((point) => this.isPointOverflow(point))) {
-            this.getPlacement(position);
+        if (selectedPlacement && selectedPlacement.relatedPoints.every((point: PositionPoint) => this.isPointOverflow(point))) {
+            return this.getPlacement(position);
         } else {
             const possiblePlacements: Array<TooltipPosition> = ["top", "left", "right", "bottom", "bottom-left", "bottom-right", "left-bottom", "left-top", "right-bottom", "right-top", "top-left", "top-right"];
+            let placementWithCoord: TooltipPlacementWithCoord = null;
             possiblePlacements.some((pos: TooltipPosition) => {
-                if (tooltipPlacements[pos].relatedPoints.every((point) => this.isPointOverflow(point))) {
-                    this.getPlacement(pos);
+                if (tooltipPlacements[pos].relatedPoints.every((point: PositionPoint) => this.isPointOverflow(point))) {
+                    placementWithCoord = this.getPlacement(pos);
                     return true;
                 }
             });
+            return placementWithCoord;
         }
     }
 
     /**
      * retrieve new tooltip style
      * @param position position selected
+     * @returns tooltip coordinate
      */
     private getNewStyle(position: TooltipPosition): TooltipCoord {
         const selectedPlacement: TooltipPlacement = tooltipPlacements[position];
@@ -186,6 +195,7 @@ export class TooltipPositionChecker {
      * retrieve actual tooltip position in top and left
      * @param pointX x coord
      * @param pointY y coord
+     * @returns tooltip coordinate
      */
     private getTooltipPosition(pointX: PointPositionLabel, pointY: PointPositionLabel): TooltipCoord {
         return {
@@ -197,6 +207,7 @@ export class TooltipPositionChecker {
     /**
      * get actual position of coord x or y in px
      * @param point point
+     * @returns css position string
      */
     private getPointPosition(point: PointPositionLabel): string {
         const referenceRect: ClientRect = this.reference.getBoundingClientRect();
@@ -220,6 +231,7 @@ export class TooltipPositionChecker {
     /**
      * check if point related to tooltip overflow viewport
      * @param point point related position
+     * @returns the status of whether a point is overflowing the viewport
      */
     private isPointOverflow(point: PositionPoint): boolean {
         const referenceRect: ClientRect = this.reference.getBoundingClientRect();
@@ -248,15 +260,10 @@ export class TooltipPositionChecker {
      * get current placement of tooltip
      * @param pos selected position
      */
-    private getPlacement(pos: TooltipPosition): void {
-        const newStyle = this.getNewStyle(pos);
-        if (newStyle) {
-            Object.keys(newStyle).map((key: string) => {
-                this.tooltip.style[key] = newStyle[key];
-            });
-        }
-        const classNames: Array<string> = this.tooltip.className.split(" ");
-        classNames[classNames.length - 1] = pos;
-        this.tooltip.className = classNames.join(" ");
+    private getPlacement(pos: TooltipPosition): TooltipPlacementWithCoord {
+        return {
+            coord: this.getNewStyle(pos),
+            position: pos
+        };
     }
 }

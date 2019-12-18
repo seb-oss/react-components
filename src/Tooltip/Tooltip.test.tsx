@@ -108,8 +108,7 @@ describe("Component: Tooltip", () => {
         let forceShowSpy: jest.SpyInstance;
         let forceDismissSpy: jest.SpyInstance;
         const toggleTooltip: () => void = () => {
-            const elementStyles: string = document.body.querySelector(".tooltip-content").getAttribute("style");
-            const isToggled: boolean = elementStyles ? elementStyles.indexOf("block") > -1 : false;
+            const isToggled: boolean = document.body.querySelector(".tooltip-content").classList.contains("show");
             if (isToggled) {
                 myTooltip.forceDismiss();
             } else {
@@ -146,11 +145,11 @@ describe("Component: Tooltip", () => {
                 act(() => {
                     container.querySelector(".icon").dispatchEvent(testCase.toggleEvent);
                 });
-                expect(document.body.querySelector(".tooltip-content").getAttribute("style")).toContain("block");
+                expect(document.body.querySelector(".tooltip-content").classList.contains("show")).toBeTruthy();
                 act(() => {
                     container.querySelector(".icon").dispatchEvent(testCase.untoggleEvent);
                 });
-                expect(document.body.querySelector(".tooltip-content").getAttribute("style")).toContain("none");
+                expect(document.body.querySelector(".tooltip-content").classList.contains("show")).toBeFalsy();
             });
         });
     });

@@ -23,9 +23,8 @@ This React component supports customization and configurations. The component na
 
 ```html
 <Tooltip
-    message="Tooltip message could be long, therefore, controlling the position and width is important"
+    content="Tooltip message could be long, therefore, controlling the position and width is important"
     position="right"
-    width="{200}"
 />
 ```
 
@@ -62,33 +61,6 @@ These are the public methods accessible via [React ref](https://reactjs.org/docs
 | forceDismiss | event?     | `MouseEvent`<sup>3</sup> | Forces the tooltip to dismiss once |
 | forceShow    |            |                          | Forces the tooltip to show once    |
 
-##### Example usage of forceDismiss and ref. This example shows how to allow the tooltip to be dismissed when clicked outside
-
-```javascript
-const ExampleContainer: React.FunctionComponent = () => {
-    myTooltip: Tooltip;
-
-    dismissTooltip(e?: React.MouseEvent<HTMLDivElement>): void {
-        const dismissableTooltip: HTMLElement = document.getElementById("dismissable-tooltip");
-        if (event.target !== dismissableTooltip.firstChild.firstChild) {
-            myTooltip.forceDismiss(e);
-        }
-    }
-
-    return (
-        <div className="example-container" onClick={dismissTooltip}>
-            <Tooltip
-                message="Tooltip message"
-                id="dismissable-tooltip"
-                ref={(el: Tooltip) => {
-                    this.myTooltip = el;
-                }}
-            />
-        </div>
-    );
-};
-```
-* Place the `onClick` event on a higher parent if necessary so the listening would cover the full window
 
 ## Footnote
 

@@ -18,7 +18,6 @@ $tooltip-distance: 4px;
         }
     }
 }
-
 .tooltip-container {
     position: relative;
     .tooltip-reference {
@@ -49,18 +48,31 @@ $tooltip-distance: 4px;
         position: absolute;
         text-align: center;
         z-index: 1;
-        display: none;
-        &.open {
-            display: block;
+        height: 0;
+        opacity: 0;
+        transition: height 0ms, opacity 150ms ease-in-out;
+        overflow: hidden;
+        &.show {
+            height: auto;
+            opacity: 1;
+            >.tooltip-arrow {
+                height: 13px;
+                opacity: 1;
+            }
+            >.tooltip-inner {
+                height: auto;
+                opacity: 1;
+            }
         }
-        .tooltip-arrow {
+        >.tooltip-arrow {
             position: absolute;
             display: block;
             width: 13px;
-            height: 13px;
             overflow: hidden;
             background: transparent;
             pointer-events: none;
+            height: 0;
+            opacity: 0;
             &::before {
                 position: absolute;
                 top: 0;
@@ -75,9 +87,14 @@ $tooltip-distance: 4px;
                 pointer-events: auto;
             }
         }
-        .tooltip-inner {
+        >.tooltip-inner {
             padding: 8px 10px;
             position: relative;
+            max-width: 300px;
+            max-height: 500px;
+            overflow: auto;
+            height: 0;
+            opacity: 0;
             >.message-container {
                 min-width: 120px;
                 padding: 5px 10px 10px;

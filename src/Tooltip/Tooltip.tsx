@@ -1,7 +1,6 @@
 import * as React from "react";
 import "./tooltip-style.scss";
-import { TooltipPositionChecker } from "./placement";
-import { randomId } from "../__utils/randomId";
+import { TooltipPositionChecker, TooltipPlacementWithCoord } from "./placement";
 import ReactDOM from "react-dom";
 import debounce from "lodash/debounce";
 
@@ -39,65 +38,29 @@ export interface TooltipProps {
     trigger?: TooltipTrigger;
     disableAutoPosition?: boolean;
     onVisibleChange?: (event: React.MouseEvent<HTMLDivElement> | React.FocusEvent<HTMLElement>, visible: boolean) => void;
-    children?: React.ReactNode;
 }
-
 interface TooltipState {
-    id: string;
     visible: boolean;
     tooltipContainer: HTMLDivElement;
-    tooltipPositionChecker: TooltipPositionChecker;
 }
 
 export class Tooltip extends React.Component<TooltipProps, TooltipState> {
     private containerRef: React.RefObject<HTMLDivElement> = React.createRef();
-    private tooltipRootClassName: string = "tooltip-root-container";
     constructor(props: TooltipProps) {
         super(props);
 
         this.state = {
-            id: "",
             visible: false,
-            tooltipContainer: null,
-            tooltipPositionChecker: null
+            tooltipContainer: null
         };
 
         this.forceDismiss = this.forceDismiss.bind(this);
     }
 
-    componentDidMount() {
-        const randID: string = this.constructId();
-        this.constructTooltipContentContainer(randID);
-    }
-
-    componentDidUpdate(prevProps: TooltipProps) {
-        if (prevProps.disableAutoPosition !== this.props.disableAutoPosition) {
-            if (!!this.state.tooltipPositionChecker) {
-                this.state.tooltipPositionChecker.toggleAutoPlacement(this.props.disableAutoPosition);
-            }
-            const eventListener: string = this.props.disableAutoPosition ? "remove" : "add";
-            window[`${eventListener}EventListener`]("resize", debounce(this.getWithinViewportPosition, 500));
-        }
-        if (prevProps.theme !== this.props.theme && !!this.state.tooltipContainer) {
-            const classNames: Array<string> = this.state.tooltipContainer.className.split(" ");
-            classNames[1] = this.props.theme;
-            this.state.tooltipContainer.className = classNames.join(" ");
-        }
-        if (!!this.state.tooltipContainer && (prevProps.content !== this.props.content || prevProps.message !== this.props.message || prevProps.messageGroup !== this.props.messageGroup)) {
-            this.setTooltipContent(this.state.tooltipContainer);
-        }
-
+    componentDidUpdate() {
         if (!!this.props.message || !!this.props.messageGroup || !!this.props.onClick || !!this.props.title || !!this.props.customSvg || !!this.props.triggerOnHover || !!this.props.width) {
-            console.warn(
-                "%cmessage, messageGroup, onClick, title, customSvg, triggerOnHover, and width %cattributes will be %cdeprecated soon.",
-                "font-weight: 900; font-size: 16px", "color: auto", "color:red; font-weight: 700;"
-            );
+            console.warn("message, messageGroup, onClick, title, customSvg, triggerOnHover, and width attributes will be deprecated soon.");
         }
-
-    }
-
-    componentWillUnmount() {
-        window.removeEventListener("resize", debounce(this.getWithinViewportPosition, 500));
     }
 
     /**
@@ -125,7 +88,7 @@ export class Tooltip extends React.Component<TooltipProps, TooltipState> {
     forceShow = (): void => {
         !this.state.visible && this.onTooltipToggle(null, true);
     }
-
+    // TODO: remove customSvg when attribute is removed
     render() {
         return (
             <div
@@ -135,7 +98,6 @@ export class Tooltip extends React.Component<TooltipProps, TooltipState> {
             >
                 <div
                     className="tooltip-reference"
-                    aria-describedby={this.state.id}
                     tabIndex={-1}
                     onClick={(e: React.MouseEvent<HTMLDivElement>) => ((!this.props.trigger && !this.props.triggerOnHover) || this.props.trigger === "click") && this.onTooltipToggle(e)}
                     onMouseEnter={(e: React.MouseEvent<HTMLDivElement>) => (this.props.triggerOnHover || this.props.trigger === "hover") && this.onTooltipToggle(e, true)}
@@ -145,72 +107,9 @@ export class Tooltip extends React.Component<TooltipProps, TooltipState> {
                 >
                     {this.props.children || <div className="icon">{this.props.customSvg ? this.props.customSvg : InfoCircleIcon}</div>}
                 </div>
+                <TooltipContentContainer {...this.props} show={this.state.visible} tooltipReference={() => this.containerRef.current}/>
             </div>
         );
-    }
-
-    /**
-     * construct tooltip content container and append to root tooltip container
-     * @param tooltipId unique tooltip id
-     */
-    private constructTooltipContentContainer = (tooltipId: string): void => {
-        const tooltipRootArr: HTMLCollectionOf<Element> = document.body.getElementsByClassName(this.tooltipRootClassName);
-        let tooltipRootRef: Element = tooltipRootArr && tooltipRootArr[0];
-        if (tooltipRootArr.length === 0) {
-            tooltipRootRef = document.createElement("div");
-            tooltipRootRef.className = this.tooltipRootClassName;
-            document.body.appendChild(tooltipRootRef);
-        }
-        const newTooltip: HTMLDivElement = document.createElement("div");
-        newTooltip.className = `tooltip-content ${this.props.theme || "default"} ${this.props.position}`;
-        newTooltip.id = tooltipId;
-        newTooltip.setAttribute("role", "tooltip");
-        this.setTooltipContent(newTooltip);
-        tooltipRootRef.appendChild(newTooltip);
-        this.setState({
-            tooltipContainer: newTooltip,
-            tooltipPositionChecker: new TooltipPositionChecker(this.containerRef.current, this.props.disableAutoPosition)
-        }, () => {
-            this.state.tooltipPositionChecker.addTooltipContainer(this.state.tooltipContainer);
-        });
-    }
-
-    /**
-     * construct unique tooltip id
-     */
-    private constructId = (): string => {
-        const randId: string = randomId("tooltip-");
-        this.setState({
-            id: randId
-        });
-        return randId;
-    }
-
-    /**
-     * set content of tooltip
-     * @param tooltip tooltip element
-     */
-    private setTooltipContent = (tooltip: HTMLDivElement): void => {
-        let content: string | React.ReactNode = this.props.content;
-        if (!this.props.content) {
-            if (this.props.message) {
-                content = <TooltipMessage {...this.props} />;
-            } else if (this.props.messageGroup) {
-                content = <TooltipMessageGroup {...this.props} />;
-            }
-        }
-        ReactDOM.render(<TooltipContent content={content} />, tooltip);
-    }
-
-    /**
-     * set tooltip visibility
-     * @param isVisible boolean
-     */
-    private setTooltipVisibility = (isVisible: boolean): void => {
-        this.state.tooltipContainer.style.display = isVisible ? "block" : "none";
-        if (isVisible) {
-            this.getWithinViewportPosition();
-        }
     }
 
     /**
@@ -218,37 +117,73 @@ export class Tooltip extends React.Component<TooltipProps, TooltipState> {
      * @param toggle boolean
      * @param e event triggering the changes
      */
-    private onTooltipToggle = (e?: React.MouseEvent<HTMLDivElement> | React.FocusEvent<HTMLDivElement>, toggle?: boolean) => {
+    private onTooltipToggle = (e?: React.MouseEvent<HTMLDivElement> | React.FocusEvent<HTMLDivElement>, toggle?: boolean): void => {
         const isVisible: boolean = toggle !== undefined ? toggle : !this.state.visible;
         this.setState({
             visible: isVisible
+        }, () => {
+            this.props.onVisibleChange && this.props.onVisibleChange(e, isVisible);
+            this.props.onClick && this.props.onClick(e);
         });
-        this.setTooltipVisibility(isVisible);
-        this.props.onVisibleChange && this.props.onVisibleChange(e, isVisible);
-        this.props.onClick && this.props.onClick(e);
-    }
-
-    /**
-     * get tooltip position
-     */
-    private getWithinViewportPosition = (): void => {
-        if (this.state.tooltipPositionChecker) {
-            this.state.tooltipPositionChecker.getPosition((this.props.position || "top"));
-        }
     }
 }
 
-type TooltipContent = Pick<TooltipProps, "content">;
-const TooltipContent: React.FunctionComponent<TooltipContent> = (props: TooltipContent) => {
-    return (
-        <>
-            <div className="tooltip-arrow" />
-            <div className="tooltip-inner">
-                {props.content}
+type TooltipContentContainerProps = Pick<TooltipProps, "theme" | "position" | "content" | "message" | "messageGroup" | "title" | "disableAutoPosition"> & {
+    show: boolean;
+    tooltipReference: () => HTMLDivElement;
+};
+const TooltipContentContainer: React.FunctionComponent<TooltipContentContainerProps> = (props: TooltipContentContainerProps) => {
+    const tooltipContentRef = React.useRef(null);
+    let tooltipPositionChecker: TooltipPositionChecker;
+    const [placementWithCoords, setPlacementWithCoords] = React.useState<TooltipPlacementWithCoord>(null);
+
+    React.useEffect(() => {
+        tooltipPositionChecker && tooltipPositionChecker.toggleAutoPlacement(props.disableAutoPosition);
+        const eventListener: string = props.disableAutoPosition ? "remove" : "add";
+        window[`${eventListener}EventListener`]("resize", debounce(getWithinViewportPosition, 500));
+        return function cleanup() {
+            window.removeEventListener("resize", debounce(getWithinViewportPosition, 500));
+        };
+    }, [props.disableAutoPosition]);
+
+    React.useEffect(() => {
+        tooltipPositionChecker = new TooltipPositionChecker(props.tooltipReference(), props.disableAutoPosition);
+        tooltipPositionChecker.addTooltipContainer(tooltipContentRef.current);
+    }, [props.tooltipReference]);
+
+    React.useEffect(() => {
+        if (props.show) {
+            getWithinViewportPosition();
+        }
+    }, [props.show]);
+
+    const getWithinViewportPosition = (): void => {
+        setPlacementWithCoords(tooltipPositionChecker.getPosition(props.position || "top"));
+    };
+
+    return ReactDOM.createPortal(
+        <div className="tooltip-root-container">
+            <div
+                ref={tooltipContentRef}
+                className={`tooltip-content ${props.theme || "default"} ${placementWithCoords ? placementWithCoords.position : props.position} ${props.show ? "show" : ""}`}
+                style={placementWithCoords ? placementWithCoords.coord : {}}
+            >
+                <div className="tooltip-arrow" />
+                <div className="tooltip-inner" aria-hidden={!props.show} role="tooltip">
+                    {
+                        props.content ?
+                        props.content :
+                        props.messageGroup ? // TODO: remove when attribute is removed
+                        <TooltipMessageGroup {...props} /> :
+                        <TooltipMessage {...props} />
+                    }
+                </div>
             </div>
-        </>
+        </div>,
+        document.body
     );
 };
+// TODO: remove when attribute is removed
 type TooltipMessage = Pick<TooltipProps, "title" | "message" | "width">;
 const TooltipMessage: React.FunctionComponent<TooltipMessage> = (props: TooltipMessage) => {
     return (
@@ -259,7 +194,7 @@ const TooltipMessage: React.FunctionComponent<TooltipMessage> = (props: TooltipM
     );
 };
 type TooltipMessageGroup = Pick<TooltipProps, "messageGroup" | "width">;
-const TooltipMessageGroup: React.FunctionComponent<TooltipMessage> = (props: TooltipMessageGroup) => {
+const TooltipMessageGroup: React.FunctionComponent<TooltipMessageGroup> = (props: TooltipMessageGroup) => {
     return (
         <div className="message-container" style={{ width: `${props.width || 120}px` }}>
             {props.messageGroup.map((item, index) =>
