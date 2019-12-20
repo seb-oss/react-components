@@ -7,119 +7,100 @@ $gray-700: #494949 !default;
 $gray-800: #343434 !default;
 $gray-900: #212121 !default;
 
-$icon-color:$gray-700;
-$icon-active-color: #007AC7;
-$sort-icon-hover-color: #41B0EE;
+$icon-color: $gray-700;
+$icon-active-color: #007ac7;
+$sort-icon-hover-color: #41b0ee;
 
-$sort-icon-width: 10px;
+$sort-icon-width: 15px;
 
 table {
-    &.table {
-        thead {
-            >tr {
-                >th {
-                    &:first-child {
-                        border-bottom: none;
-                    }
+  &.table {
+    thead {
+      > tr {
+        > th {
+          &:first-child {
+            border-bottom: none;
+          }
 
-                    .action-icon-holder {
-                        svg {
-                            width: 18px;
-                            margin-right: 5px;
-                            fill: $icon-color;
-                        }
-                    }
+          .custom-control {
+            position: relative;
+            display: block;
+            min-height: 1.5rem;
 
-                    .custom-control {
-                        position: relative;
-                        display: block;
-                        min-height: 1.5rem;
+            &.custom-checkbox {
+              input[type="checkbox"] {
+                box-sizing: border-box;
+                padding: 0;
+              }
 
-                        &.custom-checkbox {
-                            input[type="checkbox"] {
-                                box-sizing: border-box;
-                                padding: 0;
-                            }
+              .custom-control-label {
+                position: relative;
+                margin-bottom: 0;
+                vertical-align: top;
+              }
 
-                            .custom-control-label {
-                                position: relative;
-                                margin-bottom: 0;
-                                vertical-align: top;
-                            }
-
-                            .custom-control-input {
-                                position: absolute;
-                                z-index: -1;
-                                opacity: 0;
-                            }
-                        }
-                    }
-
-                    .icon-holder {
-                        height: 16px;
-                        vertical-align: middle;
-                        position: relative;
-                        margin-left: 5px;
-
-                        >.angle-up,
-                        >.angle-down {
-                            position: relative;
-                            width: $sort-icon-width;
-                            height: 8px;
-
-                            svg {
-                                display: block;
-                                width: 100%;
-                                height: 100%;
-                                fill: $icon-color;
-
-                                &:hover {
-                                    fill: $sort-icon-hover-color;
-                                }
-                            }
-
-                            &.active {
-                                svg {
-                                    fill: $icon-active-color;
-                                }
-                            }
-                        }
-                    }
-                }
+              .custom-control-input {
+                position: absolute;
+                z-index: -1;
+                opacity: 0;
+              }
             }
-        }
+          }
 
-        tbody {
-            tr {
-                &.row-details {
-                    height: 0;
-                    position: relative;
-                    transition: all 700ms;
+          .icon-holder {
+            height: calc(#{$sort-icon-width} * 2);
+            vertical-align: middle;
+            position: relative;
+            margin-left: 5px;
+            > .angle-up,
+            > .angle-down {
+              position: relative;
+              width: $sort-icon-width;
+              height: $sort-icon-width;
+              cursor: pointer;
+              svg {
+                display: block;
+                width: 100%;
+                height: 100%;
+                fill: $icon-color;
 
-                    &.expanded {
-                        height: 1000px;
-                    }
+                &:hover {
+                  fill: $sort-icon-hover-color;
                 }
+              }
 
-                td {
-                    &.row-selections-column {
-                        display: flex;
-                        flex-direction: row;
-                        align-items: center;
-
-                        >.icon-holder {
-                            cursor: pointer;
-                        }
-                    }
-
-                    .action-icon-holder {
-                        svg {
-                            max-height: 20px;
-                        }
-                    }
+              &.active {
+                svg {
+                  fill: $icon-active-color;
                 }
+              }
             }
+          }
         }
+      }
     }
 
+    tbody {
+      tr {
+        td {
+          white-space: nowrap;
+          &.row-selections-column {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+
+            > .icon-holder {
+              cursor: pointer;
+            }
+          }
+
+          .action-icon-holder {
+            svg {
+              max-height: 20px;
+            }
+          }
+        }
+      }
+    }
+  }
 }

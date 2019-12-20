@@ -57,7 +57,8 @@ const TablePage: React.FunctionComponent = () => {
         ],
         []
     );
-    const data = React.useMemo(() => makeData(listSize), []);
+    const data = React.useMemo(() => makeData(listSize, 5), []);
+
     return (
         <div className="route-template container">
             <div className="info-holder">

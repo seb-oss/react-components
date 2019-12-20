@@ -5,6 +5,7 @@ import "./table-style.scss";
 const angleDown: JSX.Element = <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512"><path d="M119.5 326.9L3.5 209.1c-4.7-4.7-4.7-12.3 0-17l7.1-7.1c4.7-4.7 12.3-4.7 17 0L128 287.3l100.4-102.2c4.7-4.7 12.3-4.7 17 0l7.1 7.1c4.7 4.7 4.7 12.3 0 17L136.5 327c-4.7 4.6-12.3 4.6-17-.1z" /></svg>;
 const angleUp: JSX.Element = <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512"><path d="M136.5 185.1l116 117.8c4.7 4.7 4.7 12.3 0 17l-7.1 7.1c-4.7 4.7-12.3 4.7-17 0L128 224.7 27.6 326.9c-4.7 4.7-12.3 4.7-17 0l-7.1-7.1c-4.7-4.7-4.7-12.3 0-17l116-117.8c4.7-4.6 12.3-4.6 17 .1z" /></svg>;
 const angleRightIcon: JSX.Element = <svg name="angle-right" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 512"><path d="M166.9 264.5l-117.8 116c-4.7 4.7-12.3 4.7-17 0l-7.1-7.1c-4.7-4.7-4.7-12.3 0-17L127.3 256 25.1 155.6c-4.7-4.7-4.7-12.3 0-17l7.1-7.1c4.7-4.7 12.3-4.7 17 0l117.8 116c4.6 4.7 4.6 12.3-.1 17z" /></svg>;
+const ellipsis: JSX.Element = <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path d="M192 256c0 17.7-14.3 32-32 32s-32-14.3-32-32 14.3-32 32-32 32 14.3 32 32zm88-32c-17.7 0-32 14.3-32 32s14.3 32 32 32 32-14.3 32-32-14.3-32-32-32zm-240 0c-17.7 0-32 14.3-32 32s14.3 32 32 32 32-14.3 32-32-14.3-32-32-32z" /></svg>;
 
 interface TableProps {
     columns: Array<Column>;
@@ -62,6 +63,7 @@ export interface TableRow {
     rowIndex: number;
     cells: Array<Cell>;
     selected?: boolean;
+    subRows: Array<TableRow>;
     expanded?: boolean;
     rowContentDetail?: React.ReactNode;
 }
@@ -74,8 +76,9 @@ interface TableUIProps {
     allRowsAreSelected?: boolean;
 
     footer: React.ReactNode;
+    useShowActionColumn: boolean;
 
-    onItemSelected?: (e: React.ChangeEvent<HTMLInputElement>, row: TableRow) => void;
+    onItemSelected?: (e: React.ChangeEvent<HTMLInputElement>, row: TableRow, type: "row" | "subRow", rowIndex?: number) => void;
     onSort?: (accessor: string, sortDirection: sortDirectionTypes) => void;
     onAllItemsSelected?: (e: React.ChangeEvent<HTMLInputElement>) => void;
     onRowExpanded?: (e: React.MouseEvent<HTMLDivElement, MouseEvent>, row: TableRow) => void;
@@ -90,7 +93,7 @@ export const enum sortDirectionTypes {
     Descending = "DESC"
 }
 
-function sumCols(colsLength: number, useSelection?: boolean, useGroupBy?: boolean) {
+function sumCols(colsLength: number, useSelection?: boolean, useShowActionColumn?: boolean, useGroupBy?: boolean) {
     let sum = colsLength;
     if (useSelection || useGroupBy) {
         if (useSelection) {
@@ -98,6 +101,9 @@ function sumCols(colsLength: number, useSelection?: boolean, useGroupBy?: boolea
         }
 
         if (useGroupBy) {
+            sum = sum + 1;
+        }
+        if (useShowActionColumn) {
             sum = sum + 1;
         }
     }
@@ -154,121 +160,161 @@ function searchTextInArray(items: Array<TableRow>, keyword: string, searchFields
 export const TableUI: React.FunctionComponent<TableUIProps> = React.memo((props: TableUIProps): React.ReactElement<void> => {
     const checkAllRandomIds = generateRandomId("chk-all");
     return (
-        <table className="table">
-            <thead>
-                <tr>
-                    {props.useRowSelection &&
-                        <th>
-                            <div className="custom-control custom-checkbox">
-                                <input
-                                    type="checkbox"
-                                    className="custom-control-input"
-                                    id={checkAllRandomIds}
-                                    name="chkCheckAll"
-                                    checked={props.allRowsAreSelected}
-                                    onChange={props.onAllItemsSelected}
-                                />
-                                <label className="custom-control-label" htmlFor={checkAllRandomIds} />
-                            </div>
-                        </th>
-                    }
-                    {props.columns.map((header: TableHead, index: number) => (
-                        <th
-                            key={index}
-                            onClick={(e: React.MouseEvent<HTMLTableHeaderCellElement, MouseEvent>) => {
-                                if (header.canSort) {
-                                    props.onSort(header.accessor, header.isSortedDesc ? sortDirectionTypes.Ascending : sortDirectionTypes.Descending);
-                                } else {
-                                    e.preventDefault();
-                                }
-                            }}
-                        >
-
-                            {header.Header}
-
-                            {(props.sortable && header.canSort) &&
-                                <div
-                                    className="icon-holder"
-                                    id={header.accessor}
-                                    onClick={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-                                        if (header.canSort) {
-                                            props.onSort(header.accessor, header.isSortedDesc ? sortDirectionTypes.Ascending : sortDirectionTypes.Descending);
-                                        } else {
-                                            e.preventDefault();
-                                        }
-                                    }
-                                    }
-                                >
-                                    <div className={"angle-up" + (header.isSorted && !header.isSortedDesc ? " active" : "")}>
-                                        {angleUp}
-                                    </div>
-                                    <div className={"angle-down" + (header.isSorted && header.isSortedDesc ? " active" : "")}>
-                                        {angleDown}
-                                    </div>
-                                </div>
-                            }
-                        </th>
-                    ))
-                    }
-                </tr>
-            </thead>
-            <tbody>
-                {props.rows.map((row: TableRow) => {
-                    const checkRandomIds = generateRandomId("chk-");
-                    return (
-                        <React.Fragment key={row.rowIndex}>
-                            <tr>
-                                {props.useRowSelection &&
-                                    <td className="row-selections-column">
-                                        <div className="custom-control custom-checkbox">
-                                            <input
-                                                type="checkbox"
-                                                className="custom-control-input"
-                                                id={checkRandomIds}
-                                                checked={row.selected}
-                                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => { props.onItemSelected(e, row); }}
-                                                name={`chk` + row.rowIndex}
-                                            />
-                                            <label className="custom-control-label" htmlFor={checkRandomIds} />
-                                        </div>
-                                        {row.rowContentDetail &&
-                                            <div className="icon-holder" onClick={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => { props.onRowExpanded(e, row); }}>
-                                                {angleRightIcon}
-                                            </div>
-                                        }
-                                    </td>
-                                }
-                                {row.cells.map((cell: Cell, cellIndex: number) => {
-                                    return <td key={cellIndex}>
-                                        {cell.value}
-                                    </td>;
-                                })}
-                            </tr>
-
-                            <tr className={"row-details" + (row.expanded ? " expanded" : "")}>
-                                {(row.rowContentDetail && row.expanded) &&
-                                    <td colSpan={sumCols(props.columns.length, props.useRowSelection, false)}>
-                                        fgdg
-                                    </td>
-                                }
-                            </tr>
-
-                        </React.Fragment>
-                    );
-                }
-                )}
-            </tbody>
-            <tfoot>
-                {props.footer &&
+        <div className="table-responsive">
+            <table className="table">
+                <thead>
                     <tr>
-                        <td colSpan={sumCols(props.columns.length, props.useRowSelection, false)}>
-                            {props.footer}
-                        </td>
+                        {props.useRowSelection &&
+                            <th>
+                                <div className="custom-control custom-checkbox">
+                                    <input
+                                        type="checkbox"
+                                        className="custom-control-input"
+                                        id={checkAllRandomIds}
+                                        name="chkCheckAll"
+                                        checked={props.allRowsAreSelected}
+                                        onChange={props.onAllItemsSelected}
+                                    />
+                                    <label className="custom-control-label" htmlFor={checkAllRandomIds} />
+                                </div>
+                            </th>
+                        }
+                        {props.columns.map((header: TableHead, index: number) => (
+                            <th
+                                key={index}
+                                onClick={(e: React.MouseEvent<HTMLTableHeaderCellElement, MouseEvent>) => {
+                                    if (header.canSort) {
+                                        props.onSort(header.accessor, header.isSortedDesc ? sortDirectionTypes.Ascending : sortDirectionTypes.Descending);
+                                    } else {
+                                        e.preventDefault();
+                                    }
+                                }}
+                            >
+                                {header.Header}
+                                {(props.sortable && header.canSort) &&
+                                    <div
+                                        className="icon-holder"
+                                        id={header.accessor}
+                                        onClick={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+                                            if (header.canSort) {
+                                                props.onSort(header.accessor, header.isSortedDesc ? sortDirectionTypes.Ascending : sortDirectionTypes.Descending);
+                                            } else {
+                                                e.preventDefault();
+                                            }
+                                        }
+                                        }
+                                    >
+                                        <div className={"angle-up" + (header.isSorted && !header.isSortedDesc ? " active" : "")}>
+                                            {angleUp}
+                                        </div>
+                                        <div className={"angle-down" + (header.isSorted && header.isSortedDesc ? " active" : "")}>
+                                            {angleDown}
+                                        </div>
+                                    </div>
+                                }
+                            </th>
+                        ))
+                        }
+                        {props.useShowActionColumn && <th></th>}
                     </tr>
-                }
-            </tfoot>
-        </table>
+                </thead>
+                <tbody>
+                    {props.rows.map((row: TableRow, i: number) => {
+                        const checkRowRandomIds = generateRandomId("chk-");
+                        return (
+                            <React.Fragment key={row.rowIndex}>
+                                <tr>
+                                    {props.useRowSelection &&
+                                        <td className="row-selections-column">
+                                            <div className="custom-control custom-checkbox">
+                                                <input
+                                                    type="checkbox"
+                                                    className="custom-control-input"
+                                                    id={checkRowRandomIds}
+                                                    checked={row.selected}
+                                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => { props.onItemSelected(e, row, "row"); }}
+                                                    name={`chk` + row.rowIndex}
+                                                />
+                                                <label className="custom-control-label" htmlFor={checkRowRandomIds} />
+                                            </div>
+                                            {row.subRows.length > 0 &&
+                                                <div className="icon-holder" onClick={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => { props.onRowExpanded(e, row); }}>
+                                                    {row.expanded ? angleDown : angleRightIcon}
+                                                </div>
+                                            }
+                                        </td>
+                                    }
+                                    {row.cells.map((cell: Cell, cellIndex: number) => {
+                                        return <td key={`cell-${cellIndex}`}>
+                                            {cell.value}
+                                        </td>;
+                                    })}
+                                    {props.useShowActionColumn && <td>
+                                        {ellipsis}
+                                    </td>}
+                                </tr>
 
+                                {row.subRows.map((subRow: TableRow) => {
+                                    const checkSubRowRandomIds = generateRandomId("sub-chk-");
+                                    return (
+                                        <tr
+                                            className={"row-details" + (row.expanded ? " expanded" : "")}
+                                            style={{ display: row.expanded ? 'table-row' : 'none' }}
+                                            key={`sub-row-${subRow.rowIndex}`}
+                                        >
+                                            {props.useRowSelection &&
+                                                <td className="row-selections-column">
+                                                    <div className="custom-control custom-checkbox" style={{ marginLeft: '20px' }}>
+                                                        <input
+                                                            type="checkbox"
+                                                            className="custom-control-input"
+                                                            id={checkSubRowRandomIds}
+                                                            checked={subRow.selected}
+                                                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                                                props.onItemSelected(e, subRow, "subRow", row.rowIndex);
+                                                            }}
+                                                            name={`chk` + row.rowIndex}
+                                                        />
+                                                        <label className="custom-control-label" htmlFor={checkSubRowRandomIds} />
+                                                    </div>
+                                                </td>
+                                            }
+                                            {subRow.cells.map((subRowCell: Cell, subRowCellIndex) => {
+                                                return (
+                                                    <td key={'subRowCell-' + subRowCellIndex}>
+                                                        {subRowCell.value}
+                                                    </td>
+                                                )
+                                            })}
+                                        </tr>
+                                    )
+                                })}
+                                {(row.rowContentDetail && row.expanded) &&
+                                    <tr>
+                                        <td colSpan={sumCols(props.columns.length, props.useRowSelection, true, false)}>
+                                            <div style={{ marginLeft: '20px' }}>
+                                                {row.rowContentDetail}
+                                            </div>
+
+                                        </td>
+                                    </tr>
+                                }
+                            </React.Fragment>
+                        );
+                    }
+                    )}
+                </tbody>
+                <tfoot>
+                    {props.footer &&
+                        <tr>
+                            <td colSpan={sumCols(props.columns.length, props.useRowSelection, true, false)}>
+                                {props.footer}
+                            </td>
+                        </tr>
+                    }
+                </tfoot>
+            </table>
+        </div>
     );
 
 });
@@ -281,13 +327,27 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
     const [allItemsChecked, setAllRowsChecked] = React.useState<boolean>(false);
 
     // events -------------------------------------------------------------------------------------
-    const onItemSelected = (e: React.ChangeEvent<HTMLInputElement>, selectedRow: TableRow) => {
+    const onItemSelected = (e: React.ChangeEvent<HTMLInputElement>, selectedRow: TableRow, type: "subRow" | "row", rowIndex?: number) => {
         const updatedOriginalRows = tableRows.map((originalRow: TableRow) => {
-            if (originalRow.rowIndex === selectedRow.rowIndex) {
-                return { ...originalRow, selected: e.target.checked };
+            let updatedSubrows: Array<TableRow> = originalRow.subRows;
+            if (type === "row") {
+                if (originalRow.rowIndex === selectedRow.rowIndex) {
+                    updatedSubrows = updatedSubrows.map((subRow: TableRow) => ({ ...subRow, selected: e.target.checked }));
+                    return { ...originalRow, selected: e.target.checked, subRows: updatedSubrows };
+                }
+            } else if (type === "subRow") {
+                if (originalRow.rowIndex === rowIndex) {
+                    updatedSubrows = originalRow.subRows.map((originalSubrow: TableRow) => {
+                        if (originalSubrow.rowIndex === selectedRow.rowIndex) {
+                            return { ...originalSubrow, selected: e.target.checked };
+                        }
+                        return originalSubrow;
+                    });
+                    return { ...originalRow, subRows: updatedSubrows, selected: false };
+                }
             }
 
-            return originalRow;
+            return { ...originalRow, subRows: updatedSubrows };
         });
 
         const updatedRows: Array<TableRow> = currentTableRows.map((row: TableRow, index) => {
@@ -309,14 +369,20 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
 
     const onAllItemsSelected = (e: React.ChangeEvent<HTMLInputElement>) => {
         const updatedOriginalRows = tableRows.map((originalRow: TableRow) => {
+            const updatedSubRows: Array<TableRow> = originalRow.subRows.map((subRow: TableRow) => {
+                return { ...subRow, selected: e.target.checked }
+            });
             return (
-                { ...originalRow, selected: e.currentTarget.checked }
+                { ...originalRow, selected: e.target.checked, subRows: updatedSubRows }
             );
         });
 
         const updatedRows: Array<TableRow> = currentTableRows.map((row: TableRow) => {
+            const updatedSubRows: Array<TableRow> = row.subRows.map((subRow: TableRow) => {
+                return { ...subRow, selected: e.target.checked }
+            });
             return (
-                { ...row, selected: e.currentTarget.checked }
+                { ...row, selected: e.target.checked, subRows: updatedSubRows }
             );
         });
 
@@ -372,8 +438,8 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
         props.onRowExpanded(e, expandedRowList);
     };
     // functions -----------------------------------------------------------------------------
-    const setDefaultTableRows = () => {
-        const updatedRows: Array<TableRow> = props.data.map((row: object, index: number) => {
+    function getRows(rows: Array<TableRow>) {
+        const updatedRows: Array<TableRow> = rows.map((row: TableRow, index: number) => {
             const updatedCells: Array<Cell> = Object.keys(row).filter((key: string) => {
                 return key !== "rowContentDetail" && key !== "subRows";
             }).map((accessor: string): Cell => {
@@ -383,13 +449,41 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
                     value: row[accessor]
                 };
             });
+
             return (
                 {
                     ...row,
                     rowIndex: index,
                     cells: updatedCells,
                     selected: false,
-                    subRows: [],
+                    subRows: row.subRows,
+                    collapsed: false
+                }
+            );
+        });
+
+        return updatedRows;
+    }
+
+    const setDefaultTableRows = () => {
+        const updatedRows: Array<TableRow> = props.data.map((row: TableRow, index: number) => {
+            const updatedCells: Array<Cell> = Object.keys(row).filter((key: string) => {
+                return key !== "rowContentDetail" && key !== "subRows";
+            }).map((accessor: string): Cell => {
+                return {
+                    id: accessor,
+                    accessor,
+                    value: row[accessor]
+                };
+            });
+
+            return (
+                {
+                    ...row,
+                    rowIndex: index,
+                    cells: updatedCells,
+                    selected: false,
+                    subRows: getRows(row.subRows),
                     collapsed: false
                 }
             );
@@ -491,6 +585,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
                 onItemSelected={onItemSelected}
                 onAllItemsSelected={onAllItemsSelected}
                 onRowExpanded={rowExpanded}
+                useShowActionColumn={true}
             />
         </div>
 
