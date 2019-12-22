@@ -68,22 +68,6 @@ export interface TableRow {
     rowContentDetail?: React.ReactNode;
 }
 
-interface TableUIProps {
-    columns: Array<TableHead>;
-    rows: Array<TableRow>;
-    sortable: boolean;
-    useRowSelection: boolean;
-    allRowsAreSelected?: boolean;
-
-    footer: React.ReactNode;
-    useShowActionColumn: boolean;
-
-    onItemSelected?: (e: React.ChangeEvent<HTMLInputElement>, row: TableRow, type: "row" | "subRow", rowIndex?: number) => void;
-    onSort?: (accessor: string, sortDirection: sortDirectionTypes) => void;
-    onAllItemsSelected?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-    onRowExpanded?: (e: React.MouseEvent<HTMLDivElement, MouseEvent>, row: TableRow) => void;
-}
-
 function generateRandomId(seed: string): string {
     return seed + String((Math.random() * 1000) + (new Date()).getTime());
 }
@@ -157,6 +141,48 @@ function searchTextInArray(items: Array<TableRow>, keyword: string, searchFields
     });
 }
 
+interface ActionColumnProps {
+    onPrimaryButtonClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+}
+
+const ActionColumn: React.FunctionComponent<ActionColumnProps> = (props: ActionColumnProps) => {
+    return (
+        <div className="action-column">
+            <button
+                id="btnPrimaryAction"
+                type="button"
+                className="btn btn-outline-primary btn-sm"
+                onClick={props.onPrimaryButtonClick}>Small
+            </button>
+            <div className="ellipsis-dropdown-holder">
+                <div className="icon-holder">
+                    {ellipsis}
+                </div>
+                <div className="dropdown-content">
+                    <a href="#">Link 1</a>
+                    <a href="#">Link 2</a>
+                    <a href="#">Link 3</a>
+                </div>
+            </div>
+        </div>
+    )
+}
+
+interface TableUIProps {
+    columns: Array<TableHead>;
+    rows: Array<TableRow>;
+    sortable: boolean;
+    useRowSelection: boolean;
+    allRowsAreSelected?: boolean;
+
+    footer: React.ReactNode;
+    useShowActionColumn: boolean;
+
+    onItemSelected?: (e: React.ChangeEvent<HTMLInputElement>, row: TableRow, type: "row" | "subRow", rowIndex?: number) => void;
+    onSort?: (accessor: string, sortDirection: sortDirectionTypes) => void;
+    onAllItemsSelected?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    onRowExpanded?: (e: React.MouseEvent<HTMLDivElement, MouseEvent>, row: TableRow) => void;
+}
 export const TableUI: React.FunctionComponent<TableUIProps> = React.memo((props: TableUIProps): React.ReactElement<void> => {
     const checkAllRandomIds = generateRandomId("chk-all");
     return (
@@ -249,44 +275,60 @@ export const TableUI: React.FunctionComponent<TableUIProps> = React.memo((props:
                                             {cell.value}
                                         </td>;
                                     })}
-                                    {props.useShowActionColumn && <td>
-                                        {ellipsis}
-                                    </td>}
+                                    {props.useShowActionColumn &&
+                                        <td>
+                                            <ActionColumn onPrimaryButtonClick={null} />
+                                        </td>
+                                    }
                                 </tr>
 
                                 {row.subRows.map((subRow: TableRow) => {
                                     const checkSubRowRandomIds = generateRandomId("sub-chk-");
                                     return (
-                                        <tr
-                                            className={"row-details" + (row.expanded ? " expanded" : "")}
-                                            style={{ display: row.expanded ? 'table-row' : 'none' }}
-                                            key={`sub-row-${subRow.rowIndex}`}
-                                        >
-                                            {props.useRowSelection &&
-                                                <td className="row-selections-column">
-                                                    <div className="custom-control custom-checkbox" style={{ marginLeft: '20px' }}>
-                                                        <input
-                                                            type="checkbox"
-                                                            className="custom-control-input"
-                                                            id={checkSubRowRandomIds}
-                                                            checked={subRow.selected}
-                                                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                                                                props.onItemSelected(e, subRow, "subRow", row.rowIndex);
-                                                            }}
-                                                            name={`chk` + row.rowIndex}
-                                                        />
-                                                        <label className="custom-control-label" htmlFor={checkSubRowRandomIds} />
-                                                    </div>
-                                                </td>
-                                            }
-                                            {subRow.cells.map((subRowCell: Cell, subRowCellIndex) => {
-                                                return (
-                                                    <td key={'subRowCell-' + subRowCellIndex}>
-                                                        {subRowCell.value}
+                                        <React.Fragment  key={`sub-row-${subRow.rowIndex}`}>
+                                            <tr
+                                                className={"row-details" + (row.expanded ? " expanded" : "")}
+                                                style={{ display: row.expanded ? 'table-row' : 'none' }}
+                                            >
+                                                {props.useRowSelection &&
+                                                    <td className="row-selections-column">
+                                                        <div className="custom-control custom-checkbox" style={{ marginLeft: '20px' }}>
+                                                            <input
+                                                                type="checkbox"
+                                                                className="custom-control-input"
+                                                                id={checkSubRowRandomIds}
+                                                                checked={subRow.selected}
+                                                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                                                    props.onItemSelected(e, subRow, "subRow", row.rowIndex);
+                                                                }}
+                                                                name={`chk` + row.rowIndex}
+                                                            />
+                                                            <label className="custom-control-label" htmlFor={checkSubRowRandomIds} />
+                                                        </div>
                                                     </td>
-                                                )
-                                            })}
-                                        </tr>
+                                                }
+                                                {subRow.cells.map((subRowCell: Cell, subRowCellIndex) => {
+                                                    return (
+                                                        <td key={'subRowCell-' + subRowCellIndex}>
+                                                            {subRowCell.value}
+                                                        </td>
+                                                    )
+                                                })}
+                                                {props.useShowActionColumn && <td>
+                                                    <ActionColumn onPrimaryButtonClick={null} />
+                                                </td>}
+                                            </tr>
+                                            {(subRow.rowContentDetail && subRow.expanded) &&
+                                                <tr>
+                                                    <td colSpan={sumCols(props.columns.length, props.useRowSelection, true, false)}>
+                                                        <div style={{ marginLeft: '40px' }}>
+                                                            {subRow.rowContentDetail}
+                                                        </div>
+
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </React.Fragment>
                                     )
                                 })}
                                 {(row.rowContentDetail && row.expanded) &&

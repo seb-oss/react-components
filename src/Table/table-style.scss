@@ -13,11 +13,17 @@ $sort-icon-hover-color: #41b0ee;
 
 $sort-icon-width: 15px;
 
+$white: #fff;
+
+$row-height: 40px;
+
 table {
   &.table {
     thead {
-      > tr {
-        > th {
+      >tr {
+        >th {
+          vertical-align: middle;
+
           &:first-child {
             border-bottom: none;
           }
@@ -48,16 +54,18 @@ table {
           }
 
           .icon-holder {
-            height: calc(#{$sort-icon-width} * 2);
+            height: 100%;
             vertical-align: middle;
             position: relative;
             margin-left: 5px;
-            > .angle-up,
-            > .angle-down {
+
+            >.angle-up,
+            >.angle-down {
               position: relative;
               width: $sort-icon-width;
               height: $sort-icon-width;
               cursor: pointer;
+
               svg {
                 display: block;
                 width: 100%;
@@ -84,20 +92,85 @@ table {
       tr {
         td {
           white-space: nowrap;
+          position: relative;
+          vertical-align: middle;
+
+          .icon-holder {
+            cursor: pointer;
+            height: calc(#{$row-height} - 10px);
+            width: calc(#{$row-height} - 10px);
+            display: flex;
+            align-items: center;
+
+            &:hover {
+              fill: $sort-icon-hover-color;
+            }
+
+            svg {
+              height: $sort-icon-width;
+            }
+          }
+
+          >.action-column {
+            position: relative;
+            display: flex;
+            align-items: center;
+
+            #btnPrimaryAction {
+              min-width: $sort-icon-width;
+              min-height: $sort-icon-width;
+              margin: 0px 20px;
+            }
+
+            >.ellipsis-dropdown-holder {
+              position: relative;
+              display: inline-block;
+
+              .icon-holder {
+                svg {
+                  fill: $icon-active-color;
+                  height: calc(#{$sort-icon-width} * 1.5);
+                  width: 100%;
+                }
+              }
+
+              &:hover {
+                >.dropdown-content {
+                  display: block;
+                }
+              }
+
+              >.dropdown-content {
+                display: none;
+                position: absolute;
+                background-color: $white;
+                border-radius: 4px;
+                outline: none;
+                border: 1px solid #007ac7;
+                min-width: 160px;
+                box-shadow: 0px 3px 3px 0px rgba(0, 0, 0, 0.4);
+                z-index: 1;
+                right: 0;
+
+                >a {
+                  color: inherit;
+                  padding: 12px 16px;
+                  text-decoration: none;
+                  display: block;
+
+                  &:hover {
+                    background-color: $sort-icon-hover-color;
+                    color: $white;
+                  }
+                }
+              }
+            }
+          }
+
           &.row-selections-column {
             display: flex;
             flex-direction: row;
             align-items: center;
-
-            > .icon-holder {
-              cursor: pointer;
-            }
-          }
-
-          .action-icon-holder {
-            svg {
-              max-height: 20px;
-            }
           }
         }
       }
