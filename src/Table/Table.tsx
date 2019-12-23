@@ -54,6 +54,13 @@ export const enum sortDirectionTypes {
     Descending = "DESC"
 }
 
+/**
+ * sum the total of columns or cols in a row
+ * @param colsLength the length of the columns
+ * @param useSelection add a column for selection checkboxes
+ * @param useShowActionColumn add another column for action columns
+ * @param useGroupBy add another columns for groupby
+ */
 function sumCols(colsLength: number, useSelection?: boolean, useShowActionColumn?: boolean, useGroupBy?: boolean) {
     let sum = colsLength;
     if (useSelection || useGroupBy) {
@@ -72,6 +79,12 @@ function sumCols(colsLength: number, useSelection?: boolean, useShowActionColumn
     return sum;
 }
 
+/**
+ * sort array of tabke rows
+ * @param items table rows array
+ * @param columnName the target column name
+ * @param sortDirection the sort direction
+ */
 function sortArray(items: Array<TableRow> = [], columnName: string, sortDirection: sortDirectionTypes): Array<TableRow> {
     const sortedItems: Array<any> = [...items].sort((firstItem: TableRow, secondItem: TableRow) => {
         let result: number = 0;
@@ -94,6 +107,12 @@ function sortArray(items: Array<TableRow> = [], columnName: string, sortDirectio
     return sortedItems;
 }
 
+/**
+ * search text in array of table row
+ * @param items the array of table rows
+ * @param keyword The keyword to search in the array
+ * @param searchFields the target field to search 
+ */
 function searchTextInArray(items: Array<TableRow>, keyword: string, searchFields: Array<string>): Array<TableRow> {
     return [...items].filter((row: TableRow) => {
         if (keyword.trim().length === 0 || searchFields.length === 0) {
