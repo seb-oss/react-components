@@ -447,7 +447,6 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
     const [currentTableRows, setCurrentTableRows] = React.useState<Array<TableRow>>([]);
     const [tableColumns, setTableColumn] = React.useState<Array<TableHeader>>([]);
     const [allItemsChecked, setAllRowsChecked] = React.useState<boolean>(false);
-    const [isLoading, setLoadingState] = React.useState<boolean>(false);
 
     // events -------------------------------------------------------------------------------------
 
@@ -723,11 +722,9 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
     }
 
     const doSearch = () => {
-        setLoadingState(true);
         const searchResult: Array<TableRow> = searchTextInArray(tableRowsImage, props.searchText, props.searchInColumns);
         setTableRows(searchResult);
         setCurrentTableRows(searchResult);
-        setLoadingState(false);
         props.onSearch && props.onSearch(searchResult);
     };
 
@@ -792,7 +789,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
                 useShowActionColumn={((props.actionLinks && props.actionLinks.length > 0) || !!props.primaryActionButton)}
                 actionLinks={props.actionLinks}
                 primaryActionButton={props.primaryActionButton}
-                loading={currentTableRows.length === 0}
+                loading={tableRowsImage.length === 0}
                 rowsAreCollapsable={RowsAreCollapsable()}
             />
         </div>
