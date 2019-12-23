@@ -168,6 +168,7 @@ interface TableUIProps {
     allRowsAreSelected?: boolean;
 
     loading: boolean;
+    rowsAreCollapsable?: boolean;
 
     footer: React.ReactNode;
     useShowActionColumn: boolean;
@@ -189,7 +190,7 @@ export const TableUI: React.FunctionComponent<TableUIProps> = React.memo((props:
             <table className="table">
                 <thead>
                     <tr>
-                        {props.useRowSelection &&
+                        {props.useRowSelection ?
                             <th>
                                 <div className="custom-control custom-checkbox">
                                     <input
@@ -203,6 +204,8 @@ export const TableUI: React.FunctionComponent<TableUIProps> = React.memo((props:
                                     <label className="custom-control-label" htmlFor={checkAllRandomIds} />
                                 </div>
                             </th>
+                            :
+                            props.rowsAreCollapsable && <th></th>
                         }
                         {props.columns.map((header: TableHeader, index: number) => (
                             <th key={index}>
@@ -252,7 +255,7 @@ export const TableUI: React.FunctionComponent<TableUIProps> = React.memo((props:
                         return (
                             <React.Fragment key={row.rowIndex}>
                                 <tr>
-                                    {props.useRowSelection &&
+                                    {props.useRowSelection ?
                                         <td className="row-selections-column">
                                             <div className="custom-control custom-checkbox">
                                                 <input
@@ -265,11 +268,18 @@ export const TableUI: React.FunctionComponent<TableUIProps> = React.memo((props:
                                                 />
                                                 <label className="custom-control-label" htmlFor={checkRowRandomIds} />
                                             </div>
-                                            {(row.subRows.length > 0 || row.rowContentDetail) &&
+                                            {((row.subRows.length > 0 || row.rowContentDetail) && props.rowsAreCollapsable) &&
                                                 <div className="icon-holder" onClick={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => { props.onRowExpanded(e, row); }}>
                                                     {row.expanded ? angleDown : angleRightIcon}
                                                 </div>
                                             }
+                                        </td>
+                                        :
+                                        ((row.subRows.length > 0 || row.rowContentDetail) && props.rowsAreCollapsable) &&
+                                        <td>
+                                            <div className="icon-holder" onClick={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => { props.onRowExpanded(e, row); }}>
+                                                {row.expanded ? angleDown : angleRightIcon}
+                                            </div>
                                         </td>
                                     }
                                     {row.cells.map((cell: Cell, cellIndex: number) => {
@@ -296,7 +306,7 @@ export const TableUI: React.FunctionComponent<TableUIProps> = React.memo((props:
                                                 className={"sub-row" + (row.expanded ? " expanded" : "")}
                                                 style={{ display: row.expanded ? 'table-row' : 'none' }}
                                             >
-                                                {props.useRowSelection &&
+                                                {props.useRowSelection ?
                                                     <td className="row-selections-column">
                                                         <div className="custom-control custom-checkbox" style={{ marginLeft: '20px' }}>
                                                             <input
@@ -311,11 +321,21 @@ export const TableUI: React.FunctionComponent<TableUIProps> = React.memo((props:
                                                             />
                                                             <label className="custom-control-label" htmlFor={checkSubRowRandomIds} />
                                                         </div>
-                                                        {(subRow.rowContentDetail) &&
+                                                        {(subRow.rowContentDetail && props.rowsAreCollapsable) &&
                                                             <div className="icon-holder" onClick={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => { props.onSubRowExpanded(e, subRow, row.rowIndex); }}>
                                                                 {subRow.expanded ? angleDown : angleRightIcon}
                                                             </div>
                                                         }
+                                                    </td>
+                                                    :
+                                                    (subRow.rowContentDetail && props.rowsAreCollapsable) &&
+                                                    <td>
+                                                        <div
+                                                            className="icon-holder"
+                                                            style={{ marginLeft: '20px' }}
+                                                            onClick={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => { props.onSubRowExpanded(e, subRow, row.rowIndex); }}>
+                                                            {subRow.expanded ? angleDown : angleRightIcon}
+                                                        </div>
                                                     </td>
                                                 }
                                                 {subRow.cells.map((subRowCell: Cell, subRowCellIndex) => {
@@ -333,28 +353,28 @@ export const TableUI: React.FunctionComponent<TableUIProps> = React.memo((props:
                                                     />
                                                 </td>}
                                             </tr>
-                                            {(subRow.rowContentDetail && subRow.expanded) &&
-                                                <tr>
-                                                    <td colSpan={sumCols(props.columns.length, props.useRowSelection, true, false)}>
-                                                        <div style={{ marginLeft: '40px', whiteSpace: 'initial' }}>
-                                                            {subRow.rowContentDetail}
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            }
+
+                                            <tr style={{ display: subRow.expanded ? 'table-row' : 'none' }}>
+                                                <td colSpan={sumCols(props.columns.length, props.useRowSelection, true, false)}>
+                                                    <div style={{ marginLeft: '40px', whiteSpace: 'initial' }}>
+                                                        {subRow.rowContentDetail}
+                                                    </div>
+                                                </td>
+                                            </tr>
+
                                         </React.Fragment>
                                     )
                                 })}
-                                {(row.rowContentDetail && row.expanded) &&
-                                    <tr>
-                                        <td colSpan={sumCols(props.columns.length, props.useRowSelection, true, false)}>
-                                            <div style={{ marginLeft: '20px', whiteSpace: 'initial' }}>
-                                                {row.rowContentDetail}
-                                            </div>
 
-                                        </td>
-                                    </tr>
-                                }
+                                <tr style={{ display: row.expanded ? 'table-row' : 'none' }}>
+                                    <td colSpan={sumCols(props.columns.length, props.useRowSelection, true, false)}>
+                                        <div style={{ marginLeft: '20px', whiteSpace: 'initial' }}>
+                                            {row.rowContentDetail}
+                                        </div>
+
+                                    </td>
+                                </tr>
+
                             </React.Fragment>
                         );
                     }
@@ -419,36 +439,8 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
      * @param rowIndex The index of the parent row incase of subRow
      */
     const onItemSelected = (e: React.ChangeEvent<HTMLInputElement>, selectedRow: TableRow, type: "subRow" | "row", rowIndex?: number): void => {
-        const updatedOriginalRows = tableRows.map((originalRow: TableRow) => {
-            let updatedSubrows: Array<TableRow> = originalRow.subRows;
-            if (type === "row") {
-                if (originalRow.rowIndex === selectedRow.rowIndex) {
-                    updatedSubrows = updatedSubrows.map((subRow: TableRow) => ({ ...subRow, selected: e.target.checked }));
-                    return { ...originalRow, selected: e.target.checked, subRows: updatedSubrows };
-                }
-            } else if (type === "subRow") {
-                if (originalRow.rowIndex === rowIndex) {
-                    updatedSubrows = originalRow.subRows.map((originalSubrow: TableRow) => {
-                        if (originalSubrow.rowIndex === selectedRow.rowIndex) {
-                            return { ...originalSubrow, selected: e.target.checked };
-                        }
-                        return originalSubrow;
-                    });
-                    return { ...originalRow, subRows: updatedSubrows, selected: false };
-                }
-            }
-
-            return { ...originalRow, subRows: updatedSubrows };
-        });
-
-        const updatedRows: Array<TableRow> = currentTableRows.map((row: TableRow, index) => {
-            if (selectedRow.rowIndex === row.rowIndex) {
-                return (
-                    { ...row, selected: e.target.checked }
-                );
-            }
-            return row;
-        });
+        const updatedOriginalRows = selectItems(e.target.checked, tableRows, selectedRow, rowIndex, type);
+        const updatedRows: Array<TableRow> = selectItems(e.target.checked, currentTableRows, selectedRow, rowIndex, type);
 
         const selectedRowList: Array<TableRow> = updatedOriginalRows.filter((item: TableRow) => {
             return item.selected || item.subRows.some((sub: TableRow) => sub.selected);
@@ -640,10 +632,43 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
         return updatedRows;
     }
 
+    /**
+     * Call when item is selected
+     * @param checked boolean representing checkbox value
+     * @param selectedRow The selected row 
+     * @param type The row type (i.e either a row or subRow)
+     * @param rowIndex The index of the parent row incase of subRow
+     */
+    const selectItems = (checked: boolean, rows: Array<TableRow>, selectedRow: TableRow, rowIndex: number, type: "row" | "subRow"): Array<TableRow> => {
+        const updatedRows: Array<TableRow> = rows.map((originalRow: TableRow) => {
+            let updatedSubrows: Array<TableRow> = originalRow.subRows;
+            if (type === "row") {
+                if (originalRow.rowIndex === selectedRow.rowIndex) {
+                    updatedSubrows = updatedSubrows.map((subRow: TableRow) => ({ ...subRow, selected: checked}));
+
+                    return { ...originalRow, selected: checked, subRows: updatedSubrows };
+                }
+            } else if (type === "subRow") {
+                if (originalRow.rowIndex === rowIndex) {
+                    updatedSubrows = originalRow.subRows.map((originalSubrow: TableRow) => {
+                        if (originalSubrow.rowIndex === selectedRow.rowIndex) {
+                            return { ...originalSubrow, selected: checked };
+                        }
+                        return originalSubrow;
+                    });
+                    return { ...originalRow, subRows: updatedSubrows, selected: false };
+                }
+            }
+            return originalRow;
+        });
+
+        return updatedRows;
+    }
+    
     const setDefaultTableRows = async () => {
         const updatedRows: Array<TableRow> = await getRows(props.data);
 
-        if (props.usePagination) {
+        if (props.usePagination && props.offset && props.currentpage) {
             const start: number = (props.currentpage - 1) * props.offset;
             const end: number = (props.offset * (props.currentpage));
             const currentPageRows = updatedRows.slice(start, end);
@@ -656,7 +681,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
     };
 
     const doPaginate = (): void => {
-        if (props.usePagination && (tableRowsImage.length > 0)) {
+        if (props.usePagination && props.currentpage && props.offset && (tableRowsImage.length > 0)) {
             // pagination start from 1 hence the need fro deducting 1
             const start: number = (props.currentpage - 1) * props.offset;
             const end: number = (props.offset * (props.currentpage));
@@ -667,6 +692,15 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
             setDefaultTableRows();
         }
     };
+
+    const RowsArecollapsable = (): boolean => {
+        return currentTableRows.some((row: TableRow) => {
+            return (
+                ((row.subRows && row.subRows.length > 0) || row.rowContentDetail) ||
+                (row.subRows.some((subRow: TableRow) => subRow.rowContentDetail || (row.subRows && row.subRows.length > 0)))
+            )
+        }) && !!props.onRowExpanded;
+    }
 
     const doSearch = () => {
         const searchResult: Array<TableRow> = searchTextInArray(tableRowsImage, props.searchText, props.searchInColumns);
@@ -686,10 +720,6 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
             }
         }
     }, [currentTableRows]);
-
-    React.useEffect(() => {
-     //   doPaginate();
-    }, [tableRows]);
 
     React.useEffect(() => {
         if (!!props.onSearch) {
@@ -740,6 +770,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
                 actionLinks={props.actionLinks}
                 primaryActionButton={props.primaryActionButton}
                 loading={currentTableRows.length === 0}
+                rowsAreCollapsable={RowsArecollapsable()}
             />
         </div>
 

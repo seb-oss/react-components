@@ -62,6 +62,7 @@ const TablePage: React.FunctionComponent = () => {
         []
     );
     const data = React.useMemo(() => makeData(listSize, 5), []);
+    const smallData = React.useMemo(() => makeData(5, 5), []);
     return (
         <div className="route-template container">
             <div className="info-holder">
@@ -75,7 +76,24 @@ const TablePage: React.FunctionComponent = () => {
                 <div className="info">
                     <h2>Output</h2>
 
-                    <p>Here are sample outputs</p>
+                    <p>Here are sample outputs of plain table</p>
+                    <div className="result wide">
+                        <Table
+                            columns={columns}
+                            data={smallData}
+                        />
+                    </div>
+
+                    <p>Here an example with sorting</p>
+                    <div className="result wide">
+                        <Table
+                            columns={columns}
+                            data={smallData}
+                            onSort={(rows: Array<TableRow>, sortByColumn: TableHeader) => { console.log("The sorted rows are ", rows); }}
+                        />
+                    </div>
+
+                    <p>Here an example with pagination</p>
                     <div className="result wide">
                         <Table
                             columns={columns}
@@ -83,20 +101,57 @@ const TablePage: React.FunctionComponent = () => {
                             offset={pageSize}
                             currentpage={paginationValue}
                             usePagination={true}
-                            searchInColumns={dropDownList1Selected.map((item: DropdownItem) => item.value)}
-                            searchText={textBoxValue2}
-                            triggerSearchOn="Change"
-                            primaryActionButton={primaryButton}
-                            actionLinks={actionLinks}
-                            searchTriggered={searchTriggered}
-                            onSearch={(searchResults: Array<TableRow>) => { console.log("the search is now ", searchResults); }}
-                            onSort={(rows: Array<TableRow>, sortByColumn: TableHeader) => { console.log("The sorted rows are ", rows); }}
+                            footer={
+                                <Pagination
+                                    value={paginationValue}
+                                    onChange={setPagination}
+                                    size={3}
+                                    offset={3}
+                                    useFirstAndLast={true}
+                                />
+                            }
+                        />
+                    </div>
+
+                    <p>Here is an example with expandable subrows and rowDetails</p>
+                    <div className="result wide">
+                        <Table
+                            columns={columns}
+                            data={smallData}
+                            onRowExpanded={(rows: Array<TableRow>) => { console.log("the expanded ros are ", rows); }}
+                        />
+                    </div>
+
+                    <p>Here is an example with row selection</p>
+                    <div className="result wide">
+                        <Table
+                            columns={columns}
+                            data={smallData}
+                            onRowSelection={(rows: Array<TableRow>) => { console.log("The selected rows are ", rows); }}
+                        />
+                    </div>
+
+                    <p>Here is an example with row selection and subRows</p>
+                    <div className="result wide">
+                        <Table
+                            columns={columns}
+                            data={smallData}
                             onRowSelection={(rows: Array<TableRow>) => { console.log("The selected rows are ", rows); }}
                             onRowExpanded={(rows: Array<TableRow>) => { console.log("the expanded ros are ", rows); }}
                         />
                     </div>
 
-                    <p>Here is an example of a full feature Table:</p>
+                    <p>Here is an example with actions column</p>
+                    <div className="result wide">
+                        <Table
+                            columns={columns}
+                            data={smallData}
+                            primaryActionButton={primaryButton}
+                            actionLinks={actionLinks}
+                        />
+                    </div>
+
+                    <p>Here is an example with search, filter, sorting, pagination, subRows etc.:</p>
                     <div className="result wide">
                         <div className="row">
                             <div className="col-3">
@@ -142,9 +197,14 @@ const TablePage: React.FunctionComponent = () => {
                             onRowExpanded={(rows: Array<TableRow>) => { console.log("the expanded ros are ", rows); }}
                             footer={
                                 <Pagination
+                                    // value={paginationValue}
+                                    // onChange={setPagination}
+                                    // size={listSize}
+                                    // useFirstAndLast={true}
                                     value={paginationValue}
                                     onChange={setPagination}
-                                    size={listSize}
+                                    size={3}
+                                    offset={3}
                                     useFirstAndLast={true}
                                 />
                             }
