@@ -185,7 +185,7 @@ const TablePage: React.FunctionComponent = () => {
                             offset={pageSize}
                             currentpage={paginationValue}
                             usePagination={true}
-                            searchInColumns={dropDownList1Selected.map((item: DropdownItem) => item.value)}
+                            searchInColumns={dropDownList1Selected ? dropDownList1Selected.map((item: DropdownItem) => item.value) : []}
                             searchText={textBoxValue2}
                             triggerSearchOn="Change"
                             primaryActionButton={primaryButton}
