@@ -6,7 +6,7 @@ import { Dropdown, DropdownItem } from "../../../src/Dropdown/Dropdown";
 import { TextBox } from "../../../src/TextBox/TextBox";
 import { Button } from "../../../src/Button/Button";
 const Highlight = (require("react-highlight")).default;
-const docMD = require("../../../src/StepTracker/readme.md");
+const docMD = require("../../../src/Table/readme.md");
 
 const TablePage: React.FunctionComponent = () => {
     const [paginationValue, setPagination] = React.useState<number>(1);
@@ -67,11 +67,11 @@ const TablePage: React.FunctionComponent = () => {
         <div className="route-template container">
             <div className="info-holder">
 
-                {/* <div className="info">
+                <div className="info">
                     <div className="md-file">
                         <Highlight innerHTML={true}>{docMD}</Highlight>
                     </div>
-                </div> */}
+                </div>
 
                 <div className="info">
                     <h2>Output</h2>
@@ -223,7 +223,5 @@ const dropDownList1: Array<DropdownItem> = [
     { value: "firstName", label: "First Name" },
     { value: "lastName", label: "Last Name" }
 ];
-
-const stepList: Array<string> = ["Getting Started", "Personal Information", "Account Information", "Finish"];
 
 export default TablePage;

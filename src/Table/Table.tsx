@@ -664,7 +664,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
 
         return updatedRows;
     }
-    
+
     const setDefaultTableRows = async () => {
         const updatedRows: Array<TableRow> = await getRows(props.data);
 
@@ -693,7 +693,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
         }
     };
 
-    const RowsArecollapsable = (): boolean => {
+    const RowsAreCollapsable = (): boolean => {
         return currentTableRows.some((row: TableRow) => {
             return (
                 ((row.subRows && row.subRows.length > 0) || row.rowContentDetail) ||
@@ -705,6 +705,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
     const doSearch = () => {
         const searchResult: Array<TableRow> = searchTextInArray(tableRowsImage, props.searchText, props.searchInColumns);
         setTableRows(searchResult);
+        setCurrentTableRows(searchResult);
         props.onSearch && props.onSearch(searchResult);
     };
 
@@ -770,7 +771,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
                 actionLinks={props.actionLinks}
                 primaryActionButton={props.primaryActionButton}
                 loading={currentTableRows.length === 0}
-                rowsAreCollapsable={RowsArecollapsable()}
+                rowsAreCollapsable={RowsAreCollapsable()}
             />
         </div>
 
