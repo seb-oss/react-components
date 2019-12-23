@@ -3,6 +3,7 @@ import "./tooltip-style.scss";
 import { TooltipPositionChecker, TooltipPlacementWithCoord } from "./placement";
 import ReactDOM from "react-dom";
 import debounce from "lodash/debounce";
+import { randomId } from "../__utils/randomId";
 
 const InfoCircleIcon: JSX.Element = <svg name="info-circle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M256 40c118.621 0 216 96.075 216 216 0 119.291-96.61 216-216 216-119.244 0-216-96.562-216-216 0-119.203 96.602-216 216-216m0-32C119.043 8 8 119.083 8 256c0 136.997 111.043 248 248 248s248-111.003 248-248C504 119.083 392.957 8 256 8zm-36 344h12V232h-12c-6.627 0-12-5.373-12-12v-8c0-6.627 5.373-12 12-12h48c6.627 0 12 5.373 12 12v140h12c6.627 0 12 5.373 12 12v8c0 6.627-5.373 12-12 12h-72c-6.627 0-12-5.373-12-12v-8c0-6.627 5.373-12 12-12zm36-240c-17.673 0-32 14.327-32 32s14.327 32 32 32 32-14.327 32-32-14.327-32-32-32z" /></svg>;
 
@@ -25,7 +26,7 @@ export interface TooltipProps {
     /** @deprecated use content instead */
     messageGroup?: Array<TooltipMessageGroupItem>;
     /** @deprecated use onVisibleChange instead */
-    onClick?: (event?: React.MouseEvent<HTMLDivElement> | React.FocusEvent<HTMLElement>) => void;
+    onClick?: (event?: React.MouseEvent<HTMLDivElement> | React.FocusEvent<HTMLElement> | React.TouchEvent<HTMLDivElement>) => void;
     position?: TooltipPosition;
     theme?: TooltipTheme;
     /** @deprecated use content instead */
@@ -37,26 +38,34 @@ export interface TooltipProps {
     content?: string | React.ReactNode;
     trigger?: TooltipTrigger;
     disableAutoPosition?: boolean;
-    onVisibleChange?: (event: React.MouseEvent<HTMLDivElement> | React.FocusEvent<HTMLElement>, visible: boolean) => void;
+    onVisibleChange?: (event: React.MouseEvent<HTMLDivElement> | React.FocusEvent<HTMLElement> | React.TouchEvent<HTMLDivElement>, visible: boolean) => void;
 }
 interface TooltipState {
     visible: boolean;
+    referenceId: string;
     tooltipContainer: HTMLDivElement;
 }
 
 export class Tooltip extends React.Component<TooltipProps, TooltipState> {
     private containerRef: React.RefObject<HTMLDivElement> = React.createRef();
+
     constructor(props: TooltipProps) {
         super(props);
 
         this.state = {
             visible: false,
+            referenceId: "",
             tooltipContainer: null
         };
 
         this.forceDismiss = this.forceDismiss.bind(this);
     }
 
+    componentDidMount() {
+        this.setState({
+            referenceId: randomId("tooltip-ref")
+        });
+    }
     componentDidUpdate() {
         if (!!this.props.message || !!this.props.messageGroup || !!this.props.onClick || !!this.props.title || !!this.props.customSvg || !!this.props.triggerOnHover || !!this.props.width) {
             console.warn("message, messageGroup, onClick, title, customSvg, triggerOnHover, and width attributes will be deprecated soon.");
@@ -88,6 +97,13 @@ export class Tooltip extends React.Component<TooltipProps, TooltipState> {
     forceShow = (): void => {
         !this.state.visible && this.onTooltipToggle(null, true);
     }
+
+    onTooltipContentBlur = (e: React.FocusEvent<HTMLDivElement>): void => {
+        const triggeredNode: Node = e.relatedTarget as Node || document.activeElement;
+        if (this.props.trigger !== "click" || !document.getElementById(this.state.referenceId).contains(triggeredNode)) {
+            this.onTooltipToggle(e, false);
+        }
+    }
     // TODO: remove customSvg when attribute is removed
     render() {
         return (
@@ -97,17 +113,19 @@ export class Tooltip extends React.Component<TooltipProps, TooltipState> {
                 ref={this.containerRef}
             >
                 <div
+                    id={this.state.referenceId}
                     className="tooltip-reference"
                     tabIndex={-1}
                     onClick={(e: React.MouseEvent<HTMLDivElement>) => ((!this.props.trigger && !this.props.triggerOnHover) || this.props.trigger === "click") && this.onTooltipToggle(e)}
                     onMouseEnter={(e: React.MouseEvent<HTMLDivElement>) => (this.props.triggerOnHover || this.props.trigger === "hover") && this.onTooltipToggle(e, true)}
                     onMouseLeave={(e: React.MouseEvent<HTMLDivElement>) => (this.props.triggerOnHover || this.props.trigger === "hover") && this.onTooltipToggle(e, false)}
+                    onTouchStart={(e: React.TouchEvent<HTMLDivElement>) => (this.props.triggerOnHover || this.props.trigger === "hover") && this.onTooltipToggle(e, true)}
+                    onTouchEnd={(e: React.TouchEvent<HTMLDivElement>) => (this.props.triggerOnHover || this.props.trigger === "hover") && this.onTooltipToggle(e, false)}
                     onFocus={(e: React.FocusEvent<HTMLDivElement>) => this.props.trigger === "focus" && this.onTooltipToggle(e)}
-                    onBlur={(e: React.FocusEvent<HTMLDivElement>) => this.onTooltipToggle(e, false)}
                 >
                     {this.props.children || <div className="icon">{this.props.customSvg ? this.props.customSvg : InfoCircleIcon}</div>}
                 </div>
-                <TooltipContentContainer {...this.props} show={this.state.visible} tooltipReference={() => this.containerRef.current}/>
+                <TooltipContentContainer onContentBlur={this.onTooltipContentBlur} {...this.props} show={this.state.visible} tooltipReference={() => this.containerRef.current}/>
             </div>
         );
     }
@@ -117,7 +135,7 @@ export class Tooltip extends React.Component<TooltipProps, TooltipState> {
      * @param toggle boolean
      * @param e event triggering the changes
      */
-    private onTooltipToggle = (e?: React.MouseEvent<HTMLDivElement> | React.FocusEvent<HTMLDivElement>, toggle?: boolean): void => {
+    private onTooltipToggle = (e?: React.MouseEvent<HTMLDivElement> | React.FocusEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>, toggle?: boolean): void => {
         const isVisible: boolean = toggle !== undefined ? toggle : !this.state.visible;
         this.setState({
             visible: isVisible
@@ -131,6 +149,7 @@ export class Tooltip extends React.Component<TooltipProps, TooltipState> {
 type TooltipContentContainerProps = Pick<TooltipProps, "theme" | "position" | "content" | "message" | "messageGroup" | "title" | "disableAutoPosition"> & {
     show: boolean;
     tooltipReference: () => HTMLDivElement;
+    onContentBlur: (event: React.FocusEvent<HTMLDivElement>) => void;
 };
 const TooltipContentContainer: React.FunctionComponent<TooltipContentContainerProps> = (props: TooltipContentContainerProps) => {
     const tooltipContentRef = React.useRef(null);
@@ -154,10 +173,13 @@ const TooltipContentContainer: React.FunctionComponent<TooltipContentContainerPr
     React.useEffect(() => {
         if (props.show) {
             getWithinViewportPosition();
+        } else {
+            tooltipContentRef.current.blur();
         }
     }, [props.show]);
 
     const getWithinViewportPosition = (): void => {
+        tooltipContentRef.current.focus();
         setPlacementWithCoords(tooltipPositionChecker.getPosition(props.position || "top"));
     };
 
@@ -165,7 +187,9 @@ const TooltipContentContainer: React.FunctionComponent<TooltipContentContainerPr
         <div className="tooltip-root-container">
             <div
                 ref={tooltipContentRef}
-                className={`tooltip-content ${props.theme || "default"} ${placementWithCoords ? placementWithCoords.position : props.position} ${props.show ? "show" : ""}`}
+                tabIndex={-1}
+                onBlur={props.onContentBlur}
+                className={`tooltip-content ${props.theme || "default"} ${placementWithCoords ? placementWithCoords.position : props.position}`}
                 style={placementWithCoords ? placementWithCoords.coord : {}}
             >
                 <div className="tooltip-arrow" />

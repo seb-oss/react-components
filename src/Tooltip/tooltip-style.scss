@@ -52,7 +52,7 @@ $tooltip-distance: 4px;
         opacity: 0;
         transition: height 0ms, opacity 150ms ease-in-out;
         overflow: hidden;
-        &.show {
+        &.show, &:focus {
             height: auto;
             opacity: 1;
             >.tooltip-arrow {

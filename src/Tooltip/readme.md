@@ -37,7 +37,7 @@ These are the current available properties:
 | children?      | `React.ReactNode`                                             | Custom tooltip reference if children is defined                                                                                 |
 | className?      | `string`                                             | Custom class                                                                                  |
 | content?        | `string \| React.ReactNode`                          | Tooltip content                                                                                  |
-| customSvg?      | `any`                                                | A direct svg code or a component with svg                                                     |
+| customSvg?      | `any`                                                | **```[Deprecated]```** A direct svg code or a component with svg                                                     |
 | disableAutoPosition?      | `boolean`                                  | Force tooltip to be at certain position                                                    |
 | id?             | `string`                                             | Element id                                                                                    |
 | message?        | `string`                                             | **```[Deprecated]```** Description **(will be replaced by `'content'`)**                                                                                  |
@@ -54,7 +54,7 @@ These are the current available properties:
 
 ## Public Methods
 
-These are the public methods accessible via [React ref](https://reactjs.org/docs/refs-and-the-dom.html)
+ **```[Deprecated]```** These are the public methods accessible via [React ref](https://reactjs.org/docs/refs-and-the-dom.html)
 
 | Name         | Parameters | type                     | Description                        |
 | ------------ | ---------- | ------------------------ | ---------------------------------- |

@@ -5,7 +5,9 @@ import { act } from "react-dom/test-utils";
 
 type TriggerTestCase = {
     toggleEvent: Event;
+    toggleEventElementClass: string;
     untoggleEvent: Event;
+    untoggleEventElementClass: string;
     trigger: TooltipTrigger;
 };
 
@@ -108,7 +110,7 @@ describe("Component: Tooltip", () => {
         let forceShowSpy: jest.SpyInstance;
         let forceDismissSpy: jest.SpyInstance;
         const toggleTooltip: () => void = () => {
-            const isToggled: boolean = document.body.querySelector(".tooltip-content").classList.contains("show");
+            const isToggled: boolean = document.body.querySelector(".tooltip-content:focus") !== null;
             if (isToggled) {
                 myTooltip.forceDismiss();
             } else {
@@ -135,9 +137,34 @@ describe("Component: Tooltip", () => {
 
     describe("Should trigger tooltip based on trigger mode", () => {
         const triggerTestCases: Array<TriggerTestCase> = [
-            { toggleEvent: new MouseEvent("click", { bubbles: true }), untoggleEvent: new MouseEvent("click", { bubbles: true }), trigger: "click" },
-            { toggleEvent: new Event("focus", { bubbles: true }), untoggleEvent: new Event("blur", { bubbles: true }), trigger: "focus" },
-            { toggleEvent: new MouseEvent("mouseover", { bubbles: true }), untoggleEvent: new Event("mouseout", { bubbles: true }), trigger: "hover" },
+            {
+                toggleEvent: new MouseEvent("click", { bubbles: true }),
+                toggleEventElementClass: ".icon",
+                untoggleEvent: new MouseEvent("click", { bubbles: true }),
+                untoggleEventElementClass: ".icon",
+                trigger: "click"
+            },
+            {
+                toggleEvent: new Event("focus", { bubbles: true }),
+                toggleEventElementClass: ".icon",
+                untoggleEvent: new Event("focus", { bubbles: true }),
+                untoggleEventElementClass: ".tooltip-container",
+                trigger: "focus"
+            },
+            {
+                toggleEvent: new MouseEvent("mouseover", { bubbles: true }),
+                toggleEventElementClass: ".icon",
+                untoggleEvent: new Event("mouseout", { bubbles: true }),
+                untoggleEventElementClass: ".icon",
+                trigger: "hover"
+            },
+            {
+                toggleEvent: new TouchEvent("touchstart", { bubbles: true }),
+                toggleEventElementClass: ".icon",
+                untoggleEvent: new Event("touchend", { bubbles: true }),
+                untoggleEventElementClass: ".icon",
+                trigger: "hover"
+            },
         ];
         triggerTestCases.map((testCase: TriggerTestCase) => {
             it(`Should enable tooltip on ${testCase.trigger} when trigger mode is set to ${testCase.trigger}`, () => {
@@ -145,11 +172,11 @@ describe("Component: Tooltip", () => {
                 act(() => {
                     container.querySelector(".icon").dispatchEvent(testCase.toggleEvent);
                 });
-                expect(document.body.querySelector(".tooltip-content").classList.contains("show")).toBeTruthy();
+                expect(document.body.querySelector(".tooltip-content:focus")).toBeDefined();
                 act(() => {
                     container.querySelector(".icon").dispatchEvent(testCase.untoggleEvent);
                 });
-                expect(document.body.querySelector(".tooltip-content").classList.contains("show")).toBeFalsy();
+                expect(document.body.querySelector(".tooltip-content:focus")).toBeNull();
             });
         });
     });
