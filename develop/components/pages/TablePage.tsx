@@ -76,11 +76,24 @@ const TablePage: React.FunctionComponent = () => {
                     <h2>Output</h2>
 
                     <p>Here are sample outputs</p>
-                    <div className="result">
-                        {/* <Table
+                    <div className="result wide">
+                        <Table
                             columns={columns}
                             data={data}
-                        /> */}
+                            offset={pageSize}
+                            currentpage={paginationValue}
+                            usePagination={true}
+                            searchInColumns={dropDownList1Selected.map((item: DropdownItem) => item.value)}
+                            searchText={textBoxValue2}
+                            triggerSearchOn="Change"
+                            primaryActionButton={primaryButton}
+                            actionLinks={actionLinks}
+                            searchTriggered={searchTriggered}
+                            onSearch={(searchResults: Array<TableRow>) => { console.log("the search is now ", searchResults); }}
+                            onSort={(rows: Array<TableRow>, sortByColumn: TableHeader) => { console.log("The sorted rows are ", rows); }}
+                            onRowSelection={(rows: Array<TableRow>) => { console.log("The selected rows are ", rows); }}
+                            onRowExpanded={(rows: Array<TableRow>) => { console.log("the expanded ros are ", rows); }}
+                        />
                     </div>
 
                     <p>Here is an example of a full feature Table:</p>

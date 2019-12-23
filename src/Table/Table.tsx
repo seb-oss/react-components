@@ -502,6 +502,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
      */
     const onSortItems = async (accessor: string, sortDirection: sortDirectionTypes) => {
         const updatedOriginalRows = await sortArray(tableRows, accessor, sortDirection);
+        const updatedCurrentTableRows = await sortArray(currentTableRows, accessor, sortDirection);
         let sortByColumn: TableHeader = null
 
         const updatedColumns: Array<TableHeader> = tableColumns.map((column: TableHeader) => {
@@ -517,6 +518,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
         });
 
         setTableRows(updatedOriginalRows);
+        setCurrentTableRows(updatedCurrentTableRows);
         setTableRowsImage(updatedOriginalRows);
         setTableColumn(updatedColumns);
         props.onSort(updatedOriginalRows, sortByColumn);
@@ -686,7 +688,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
     }, [currentTableRows]);
 
     React.useEffect(() => {
-        doPaginate();
+     //   doPaginate();
     }, [tableRows]);
 
     React.useEffect(() => {
