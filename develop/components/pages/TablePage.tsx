@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Table, Column, TableRow } from "../../../src/Table/Table";
+import { Table, Column, TableRow, PrimaryActionButton, ActionLinkItem, TableHeader } from "../../../src/Table/Table";
 import makeData from "../../../src/Table/makeData";
 import { Pagination } from "../../../src/Pagination/Pagination";
 import { Dropdown, DropdownItem } from "../../../src/Dropdown/Dropdown";
@@ -9,8 +9,6 @@ const Highlight = (require("react-highlight")).default;
 const docMD = require("../../../src/StepTracker/readme.md");
 
 const TablePage: React.FunctionComponent = () => {
-    const [selectAll, setSelectAll] = React.useState<boolean>(false);
-    const [selectedRows, setSelectedRow] = React.useState<Array<{}>>([]);
     const [paginationValue, setPagination] = React.useState<number>(1);
     const [dropDownList1Selected, setDropdownList1Selected] = React.useState<Array<DropdownItem>>([]);
     const [textBoxValue2, setTextBoxValue2] = React.useState<string>("");
@@ -19,46 +17,51 @@ const TablePage: React.FunctionComponent = () => {
     const pageSize: number = 10;
     const listSize: number = 30;
 
-    React.useEffect(() => {
-        //  console.log("There is a change ", selectedRows);
-    }, [selectedRows]);
+    const primaryButton: PrimaryActionButton = {
+        label: "Buy",
+        onClick: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, selectedRow: TableRow) => { console.log("Primary button has been clicked ", selectedRow); }
+    }
+
+    const actionLinks: Array<ActionLinkItem> = [
+        { label: "Add", onClick: (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>, selectedRow: TableRow) => console.log("The add link button has been clicked ", selectedRow) },
+        { label: "Edit", onClick: (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>, selectedRow: TableRow) => console.log("The edit link button has been clicked ", selectedRow) }
+    ]
 
     const columns: Array<Column> = React.useMemo(
         () => [
             {
-                Header: "id",
+                label: "id",
                 accessor: "id",
                 canSort: false
             },
             {
-                Header: "First Name",
+                label: "First Name",
                 accessor: "firstName",
             },
             {
-                Header: "Last Name",
+                label: "Last Name",
                 accessor: "lastName",
             },
             {
-                Header: "Age",
+                label: "Age",
                 accessor: "age",
             },
             {
-                Header: "Visits",
+                label: "Visits",
                 accessor: "visits",
             },
             {
-                Header: "Profile Progress",
+                label: "Profile Progress",
                 accessor: "progress",
             },
             {
-                Header: "Status",
+                label: "Status",
                 accessor: "status",
             },
         ],
         []
     );
     const data = React.useMemo(() => makeData(listSize, 5), []);
-
     return (
         <div className="route-template container">
             <div className="info-holder">
@@ -72,7 +75,15 @@ const TablePage: React.FunctionComponent = () => {
                 <div className="info">
                     <h2>Output</h2>
 
-                    <p>Here is an example of a horizontal step tracker:</p>
+                    <p>Here are sample outputs</p>
+                    <div className="result">
+                        {/* <Table
+                            columns={columns}
+                            data={data}
+                        /> */}
+                    </div>
+
+                    <p>Here is an example of a full feature Table:</p>
                     <div className="result wide">
                         <div className="row">
                             <div className="col-3">
@@ -103,20 +114,19 @@ const TablePage: React.FunctionComponent = () => {
                         <Table
                             columns={columns}
                             data={data}
-                            sortable={true}
-                            setSelectAllValue={selectAll}
-                            offsett={pageSize}
+                            offset={pageSize}
                             currentpage={paginationValue}
                             usePagination={true}
-                            useRowSelection={true}
                             searchInColumns={dropDownList1Selected.map((item: DropdownItem) => item.value)}
                             searchText={textBoxValue2}
                             triggerSearchOn="Change"
+                            primaryActionButton={primaryButton}
+                            actionLinks={actionLinks}
                             searchTriggered={searchTriggered}
-                            onSearch={(searchResult: Array<TableRow>) => { console.log("the search is now ", searchResult); }}
-                            onSort={(rows: Array<TableRow>, columnsOrg: Array<Column>) => { console.log(columnsOrg); }}
-                            onRowSelection={(e: React.ChangeEvent<HTMLInputElement>, rows: Array<TableRow>) => { console.log(rows); setSelectedRow(rows); }}
-                            onRowExpanded={(e: any, rows: Array<TableRow>) => { console.log("the expanded ros are ", rows); }}
+                            onSearch={(searchResults: Array<TableRow>) => { console.log("the search is now ", searchResults); }}
+                            onSort={(rows: Array<TableRow>, sortByColumn: TableHeader) => { console.log("The sorted rows are ", rows); }}
+                            onRowSelection={(rows: Array<TableRow>) => { console.log("The selected rows are ", rows); }}
+                            onRowExpanded={(rows: Array<TableRow>) => { console.log("the expanded ros are ", rows); }}
                             footer={
                                 <Pagination
                                     value={paginationValue}
