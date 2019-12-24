@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Table, Column, TableRow, PrimaryActionButton, ActionLinkItem, TableHeader } from "../../../src/Table/Table";
-import makeData from "../../../src/Table/makeData";
+import makeData from "../../utils/makeData";
 import { Pagination } from "../../../src/Pagination/Pagination";
 import { Dropdown, DropdownItem } from "../../../src/Dropdown/Dropdown";
 import { TextBox } from "../../../src/TextBox/TextBox";

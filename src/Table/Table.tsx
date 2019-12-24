@@ -181,6 +181,7 @@ const ActionColumn: React.FunctionComponent<ActionColumnProps> = (props: ActionC
 
 interface TableUIProps {
     columns: Array<TableHeader>;
+    className: string;
     rows: Array<TableRow>;
     sortable: boolean;
     useRowSelection: boolean;
@@ -206,7 +207,7 @@ export const TableUI: React.FunctionComponent<TableUIProps> = React.memo((props:
     const checkAllRandomIds = generateRandomId("chk-all");
     return (
         <div className={"table-responsive" + (props.loading ? " skeleton-loader skeleton-loader-table" : "")}>
-            <table className="table">
+            <table className={"table" + (props.className ? ` ${props.className}` : "")}>
                 <thead>
                     <tr>
                         {props.useRowSelection ?
@@ -417,6 +418,7 @@ export const TableUI: React.FunctionComponent<TableUIProps> = React.memo((props:
 interface TableProps {
     columns: Array<Column>;
     data: Array<Data>;
+    className?: string;
 
     // pagination
     usePagination?: boolean;
@@ -791,6 +793,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
                 primaryActionButton={props.primaryActionButton}
                 loading={tableRowsImage.length === 0}
                 rowsAreCollapsable={RowsAreCollapsable()}
+                className={props.className}
             />
         </div>
 
