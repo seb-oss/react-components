@@ -5,27 +5,28 @@ const TimesIcon: JSX.Element = <svg name="times" xmlns="http://www.w3.org/2000/s
 
 export interface DialogueProps {
     className?: string;
-    desc?: string;
+    desc?: string | JSX.Element | React.ReactNode;
+    disablePrimaryBtn?: boolean;
+    disableSecondaryBtn?: boolean;
     enableBackdropDismiss?: boolean;
     enableCloseButton?: boolean;
-    header?: string;
+    header?: string | JSX.Element | React.ReactNode;
     id?: string;
-    onDismiss?: (event: React.MouseEvent<HTMLDivElement>) => void;
-    primaryAction?: () => void;
-    primaryBtn?: string;
-    secondaryAction?: () => void;
-    secondaryBtn?: string;
+    onDismiss?: (e?: React.MouseEvent<HTMLDivElement>) => void;
+    primaryAction?: (e?: React.MouseEvent<HTMLButtonElement>) => void;
+    primaryBtn?: string | JSX.Element;
+    secondaryAction?: (e?: React.MouseEvent<HTMLButtonElement>) => void;
+    secondaryBtn?: string | JSX.Element;
     toggle: boolean;
 }
 
 const Dialogue: React.FunctionComponent<DialogueProps> = (props: DialogueProps) => {
-    function onDismiss(e: React.MouseEvent<HTMLDivElement>): void {
-        const canDismissOnBackdropClick: boolean = props.enableBackdropDismiss && e.currentTarget.classList.contains("dialogue-container");
-        const canDismissOnCloseButtonClick: boolean = props.enableCloseButton && e.currentTarget.classList.contains("close-button");
-        if (canDismissOnBackdropClick || canDismissOnCloseButtonClick) {
+    const onDismiss = React.useCallback((e: React.MouseEvent<HTMLDivElement>): void => {
+        if (props.enableBackdropDismiss && e.currentTarget.classList.contains("dialogue-container")) {
             props.onDismiss && props.onDismiss(e);
         }
-    }
+    }, []);
+
     return (
         <div
             className={
@@ -53,6 +54,7 @@ const Dialogue: React.FunctionComponent<DialogueProps> = (props: DialogueProps) 
                                 <button
                                     className="btn btn-secondary dialogue-button"
                                     onClick={props.secondaryAction}
+                                    disabled={props.disableSecondaryBtn}
                                 >{props.secondaryBtn}
                                 </button>
                             </div>
@@ -62,6 +64,7 @@ const Dialogue: React.FunctionComponent<DialogueProps> = (props: DialogueProps) 
                                 <button
                                     className="btn btn-primary dialogue-button"
                                     onClick={props.primaryAction}
+                                    disabled={props.disablePrimaryBtn}
                                 >
                                     {props.primaryBtn}
                                 </button>
@@ -71,7 +74,8 @@ const Dialogue: React.FunctionComponent<DialogueProps> = (props: DialogueProps) 
                             <div className="dialogue-action primary-action">
                                 <button
                                     className="btn btn-primary dialogue-button"
-                                    onClick={props.primaryAction && props.primaryAction}
+                                    onClick={props.primaryAction}
+                                    disabled={props.disablePrimaryBtn}
                                 >
                                     Close
                                 </button>
