@@ -17,12 +17,12 @@ export interface Column {
 
 export interface ActionLinkItem {
     label: string;
-    onClick: (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>, selectedRow: TableRow) => void
+    onClick: (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>, selectedRow: TableRow) => void;
 }
 
 export interface PrimaryActionButton {
     label: string;
-    onClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>, selectedRow: TableRow) => void
+    onClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>, selectedRow: TableRow) => void;
 }
 
 export interface TableHeader extends Column {
@@ -61,7 +61,7 @@ export const enum sortDirectionTypes {
  * @param useShowActionColumn add another column for action columns
  * @param useGroupBy add another columns for groupby
  */
-function sumCols(colsLength: number, useSelection?: boolean, useShowActionColumn?: boolean, useGroupBy?: boolean) {
+function sumCols(colsLength: number, useSelection?: boolean, useShowActionColumn?: boolean, useGroupBy?: boolean): number {
     let sum = colsLength;
     if (useSelection || useGroupBy) {
         if (useSelection) {
@@ -437,6 +437,7 @@ interface TableProps {
 
     footer?: React.ReactNode;
 
+    // events 
     onRowSelection?: (selectedRows: Array<TableRow>) => void;
     onRowExpanded?: (expandedRowList: Array<TableRow>) => void;
     onSort?: (rows: Array<TableRow>, sortByColumn: TableHeader) => void;
@@ -723,7 +724,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
         }) && !!props.onRowExpanded;
     }
 
-    const doSearch = () => {
+    const doSearch = (): void => {
         const searchResult: Array<TableRow> = searchTextInArray(tableRowsImage, props.searchText, props.searchInColumns);
         setTableRows(searchResult);
         setCurrentTableRows(searchResult);
