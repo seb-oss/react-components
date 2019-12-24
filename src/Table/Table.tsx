@@ -689,21 +689,16 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
 
     const setDefaultTableRows = async () => {
         const updatedRows: Array<TableRow> = await getRows(props.data);
-
-        if (props.usePagination && props.offset && props.currentpage) {
-            const start: number = (props.currentpage - 1) * props.offset;
-            const end: number = (props.offset * (props.currentpage));
-            const currentPageRows = updatedRows.slice(start, end);
-            setCurrentTableRows(currentPageRows);
-        } else {
-            setCurrentTableRows(updatedRows);
-        }
         setTableRows(updatedRows);
         setTableRowsImage(updatedRows);
     };
 
+    React.useEffect(() => {
+        doPaginate();
+    }, [tableRows])
+
     const doPaginate = (): void => {
-        if (props.usePagination && props.currentpage && props.offset && (tableRowsImage.length > 0)) {
+        if (props.usePagination && props.currentpage && props.offset && (tableRows.length > 0)) {
             // pagination start from 1 hence the need fro deducting 1
             const start: number = (props.currentpage - 1) * props.offset;
             const end: number = (props.offset * (props.currentpage));
@@ -711,7 +706,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
             const currentPage: Array<TableRow> = tableRows.slice(start, end);
             setCurrentTableRows(currentPage);
         } else {
-            setDefaultTableRows();
+            setCurrentTableRows(tableRows);
         }
     };
 
@@ -725,9 +720,14 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
     }
 
     const doSearch = (): void => {
-        const searchResult: Array<TableRow> = searchTextInArray(tableRowsImage, props.searchText, props.searchInColumns);
+        let searchResult: Array<TableRow> = [];
+        if (props.searchText && props.searchInColumns && props.searchInColumns.length > 0) {
+            searchResult = searchTextInArray(tableRowsImage, props.searchText, props.searchInColumns);
+        } else {
+            searchResult = [...tableRowsImage];
+        }
+
         setTableRows(searchResult);
-        setCurrentTableRows(searchResult);
         props.onSearch && props.onSearch(searchResult);
     };
 
@@ -748,11 +748,18 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
         if (!!props.onSearch) {
             if (props.triggerSearchOn === "Change") {
                 doSearch();
-            } else if (props.triggerSearchOn === "Submit") {
+            }
+        }
+    }, [props.searchInColumns, props.searchText]);
+
+    React.useEffect(() => {
+        if (!!props.onSearch) {
+            if (props.triggerSearchOn === "Submit") {
                 doSearch();
             }
         }
-    }, [props.searchInColumns, props.searchText, props.searchTriggered]);
+    }, [props.searchTriggered])
+
 
     React.useEffect(() => {
         const updatedColumns: Array<TableHeader> = props.columns.map((column: TableHeader) => {
