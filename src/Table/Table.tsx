@@ -3,11 +3,13 @@ import * as React from "react";
 import "./table-style.scss";
 
 const angleDown: JSX.Element = <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512"><path d="M119.5 326.9L3.5 209.1c-4.7-4.7-4.7-12.3 0-17l7.1-7.1c4.7-4.7 12.3-4.7 17 0L128 287.3l100.4-102.2c4.7-4.7 12.3-4.7 17 0l7.1 7.1c4.7 4.7 4.7 12.3 0 17L136.5 327c-4.7 4.6-12.3 4.6-17-.1z" /></svg>;
-const angleUp: JSX.Element = <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512"><path d="M136.5 185.1l116 117.8c4.7 4.7 4.7 12.3 0 17l-7.1 7.1c-4.7 4.7-12.3 4.7-17 0L128 224.7 27.6 326.9c-4.7 4.7-12.3 4.7-17 0l-7.1-7.1c-4.7-4.7-4.7-12.3 0-17l116-117.8c4.7-4.6 12.3-4.6 17 .1z" /></svg>;
 const angleRightIcon: JSX.Element = <svg name="angle-right" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 512"><path d="M166.9 264.5l-117.8 116c-4.7 4.7-12.3 4.7-17 0l-7.1-7.1c-4.7-4.7-4.7-12.3 0-17L127.3 256 25.1 155.6c-4.7-4.7-4.7-12.3 0-17l7.1-7.1c4.7-4.7 12.3-4.7 17 0l117.8 116c4.6 4.7 4.6 12.3-.1 17z" /></svg>;
 const ellipsis: JSX.Element = <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path d="M192 256c0 17.7-14.3 32-32 32s-32-14.3-32-32 14.3-32 32-32 32 14.3 32 32zm88-32c-17.7 0-32 14.3-32 32s14.3 32 32 32 32-14.3 32-32-14.3-32-32-32zm-240 0c-17.7 0-32 14.3-32 32s14.3 32 32 32 32-14.3 32-32-14.3-32-32-32z" /></svg>;
+const sortAsc: JSX.Element = <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 448 644'><path fill='#adadad' transform='translate(0 240)' d='M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z' /><path transform='translate(0 -100)' d='M240.971 130.524l194.343 194.343c9.373 9.373 9.373 24.569 0 33.941l-22.667 22.667c-9.357 9.357-24.522 9.375-33.901.04L224 227.495 69.255 381.516c-9.379 9.335-24.544 9.317-33.901-.04l-22.667-22.667c-9.373-9.373-9.373-24.569 0-33.941L207.03 130.525c9.372-9.373 24.568-9.373 33.941-.001z' /></svg>;
+const sortDesc: JSX.Element = <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 448 644'><path transform='translate(0 240)' d='M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z' /><path fill='#adadad' transform='translate(0 -100)' d='M240.971 130.524l194.343 194.343c9.373 9.373 9.373 24.569 0 33.941l-22.667 22.667c-9.357 9.357-24.522 9.375-33.901.04L224 227.495 69.255 381.516c-9.379 9.335-24.544 9.317-33.901-.04l-22.667-22.667c-9.373-9.373-9.373-24.569 0-33.941L207.03 130.525c9.372-9.373 24.568-9.373 33.941-.001z' /></svg>;
+const defaultSort: JSX.Element = <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 448 644'><path transform='translate(0 240)' d='M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z' /><path transform='translate(0 -100)' d='M240.971 130.524l194.343 194.343c9.373 9.373 9.373 24.569 0 33.941l-22.667 22.667c-9.357 9.357-24.522 9.375-33.901.04L224 227.495 69.255 381.516c-9.379 9.335-24.544 9.317-33.901-.04l-22.667-22.667c-9.373-9.373-9.373-24.569 0-33.941L207.03 130.525c9.372-9.373 24.568-9.373 33.941-.001z' /></svg>;
 
-export type Data = { [name: string]: any };
+export type Data = { [name: string]: any } & TableRow;
 
 export interface Column {
     label: string;
@@ -185,6 +187,7 @@ interface TableUIProps {
     rows: Array<TableRow>;
     sortable: boolean;
     useRowSelection: boolean;
+    useRowCollapse: boolean;
     allRowsAreSelected?: boolean;
 
     loading: boolean;
@@ -232,35 +235,27 @@ export const TableUI: React.FunctionComponent<TableUIProps> = React.memo((props:
                                 {header.label}
                                 {(props.sortable && header.canSort) &&
                                     <div
-                                        className="icon-holder"
+                                        className={"icon-holder" + (header.isSorted ? " active" : "")}
                                         id={header.accessor}
+                                        onClick={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+                                            if (header.canSort) {
+                                                props.onSort(header.accessor, header.isSortedDesc ? sortDirectionTypes.Ascending : sortDirectionTypes.Descending);
+                                            } else {
+                                                e.preventDefault();
+                                            }
+                                        }}
                                     >
-                                        <div
-                                            className={"angle-up" + (header.isSorted && !header.isSortedDesc ? " active" : "")}
-                                            onClick={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-                                                if (header.canSort) {
-                                                    props.onSort(header.accessor, sortDirectionTypes.Ascending);
-                                                } else {
-                                                    e.preventDefault();
-                                                }
-                                            }
-                                            }
-                                        >
-                                            {angleUp}
-                                        </div>
-                                        <div
-                                            className={"angle-down" + (header.isSorted && header.isSortedDesc ? " active" : "")}
-                                            onClick={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-                                                if (header.canSort) {
-                                                    props.onSort(header.accessor, sortDirectionTypes.Descending);
-                                                } else {
-                                                    e.preventDefault();
-                                                }
-                                            }
-                                            }
-                                        >
-                                            {angleDown}
-                                        </div>
+                                        {header.isSorted ?
+
+                                            (header.isSortedDesc ?
+                                                sortDesc
+                                                :
+
+                                                sortAsc
+                                            )
+                                            :
+                                            defaultSort
+                                        }
                                     </div>
                                 }
                             </th>
@@ -289,7 +284,9 @@ export const TableUI: React.FunctionComponent<TableUIProps> = React.memo((props:
                                                 <label className="custom-control-label" htmlFor={checkRowRandomIds} />
                                             </div>
                                             {((row.subRows.length > 0 || row.rowContentDetail) && props.rowsAreCollapsable) &&
-                                                <div className="icon-holder" onClick={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => { props.onRowExpanded(e, row); }}>
+                                                <div
+                                                    className={"icon-holder" + (row.expanded ? ' active' : '')}
+                                                    onClick={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => { props.onRowExpanded(e, row); }}>
                                                     {row.expanded ? angleDown : angleRightIcon}
                                                 </div>
                                             }
@@ -297,7 +294,9 @@ export const TableUI: React.FunctionComponent<TableUIProps> = React.memo((props:
                                         :
                                         ((row.subRows.length > 0 || row.rowContentDetail) && props.rowsAreCollapsable) &&
                                         <td>
-                                            <div className="icon-holder" onClick={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => { props.onRowExpanded(e, row); }}>
+                                            <div
+                                                className={"icon-holder" + (row.expanded ? ' active' : '')}
+                                                onClick={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => { props.onRowExpanded(e, row); }}>
                                                 {row.expanded ? angleDown : angleRightIcon}
                                             </div>
                                         </td>
@@ -342,7 +341,9 @@ export const TableUI: React.FunctionComponent<TableUIProps> = React.memo((props:
                                                             <label className="custom-control-label" htmlFor={checkSubRowRandomIds} />
                                                         </div>
                                                         {(subRow.rowContentDetail && props.rowsAreCollapsable) &&
-                                                            <div className="icon-holder" onClick={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => { props.onSubRowExpanded(e, subRow, row.rowIndex); }}>
+                                                            <div
+                                                                className={"icon-holder" + (subRow.expanded ? ' active' : '')}
+                                                                onClick={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => { props.onSubRowExpanded(e, subRow, row.rowIndex); }}>
                                                                 {subRow.expanded ? angleDown : angleRightIcon}
                                                             </div>
                                                         }
@@ -351,7 +352,7 @@ export const TableUI: React.FunctionComponent<TableUIProps> = React.memo((props:
                                                     (subRow.rowContentDetail && props.rowsAreCollapsable) &&
                                                     <td>
                                                         <div
-                                                            className="icon-holder"
+                                                            className={"icon-holder" + (subRow.expanded ? ' active' : '')}
                                                             style={{ marginLeft: '20px' }}
                                                             onClick={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => { props.onSubRowExpanded(e, subRow, row.rowIndex); }}>
                                                             {subRow.expanded ? angleDown : angleRightIcon}
@@ -375,7 +376,7 @@ export const TableUI: React.FunctionComponent<TableUIProps> = React.memo((props:
                                             </tr>
 
                                             <tr style={{ display: subRow.expanded ? 'table-row' : 'none' }}>
-                                                <td colSpan={sumCols(props.columns.length, props.useRowSelection, true, false)}>
+                                                <td colSpan={sumCols(props.columns.length, (props.useRowSelection || props.useRowCollapse), props.useShowActionColumn, false)}>
                                                     <div style={{ marginLeft: '40px', whiteSpace: 'initial' }}>
                                                         {subRow.rowContentDetail}
                                                     </div>
@@ -387,7 +388,7 @@ export const TableUI: React.FunctionComponent<TableUIProps> = React.memo((props:
                                 })}
 
                                 <tr style={{ display: row.expanded ? 'table-row' : 'none' }}>
-                                    <td colSpan={sumCols(props.columns.length, props.useRowSelection, true, false)}>
+                                    <td colSpan={sumCols(props.columns.length, (props.useRowSelection || props.useRowCollapse), props.useShowActionColumn, false)}>
                                         <div style={{ marginLeft: '20px', whiteSpace: 'initial' }}>
                                             {row.rowContentDetail}
                                         </div>
@@ -403,7 +404,7 @@ export const TableUI: React.FunctionComponent<TableUIProps> = React.memo((props:
                 <tfoot>
                     {props.footer &&
                         <tr>
-                            <td colSpan={sumCols(props.columns.length, props.useRowSelection, props.useShowActionColumn, false)}>
+                            <td colSpan={sumCols(props.columns.length, (props.useRowSelection || props.useRowCollapse), props.useShowActionColumn, false)}>
                                 {props.footer}
                             </td>
                         </tr>
@@ -627,7 +628,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
      * 
      * @param rows The table or or data to initialize rows from
      */
-    const getRows = (rows: Array<TableRow | Data>): Array<TableRow> => {
+    const getRows = (rows: Array<Data>): Array<TableRow> => {
         const updatedRows: Array<TableRow> = rows.map((row: TableRow, index: number) => {
             const updatedCells: Array<Cell> = Object.keys(row).filter((key: string) => {
                 return key !== "rowContentDetail" && key !== "subRows";
@@ -791,6 +792,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
                 onSort={onSortItems}
                 sortable={!!props.onSort}
                 useRowSelection={!!props.onRowSelection}
+                useRowCollapse={!!props.onRowExpanded}
                 allRowsAreSelected={allItemsChecked}
                 onItemSelected={onItemSelected}
                 onAllItemsSelected={onAllItemsSelected}

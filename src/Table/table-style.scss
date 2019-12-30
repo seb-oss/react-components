@@ -7,11 +7,10 @@ $gray-700: #494949 !default;
 $gray-800: #343434 !default;
 $gray-900: #212121 !default;
 
-$icon-color: $gray-700;
-$icon-active-color: #007ac7;
-$sort-icon-hover-color: #41b0ee;
+$icon-color: $gray-500;
+$icon-active-color: #0092e1;
 
-$sort-icon-width: 15px;
+$icon-size: 16px;
 
 $white: #fff;
 
@@ -20,8 +19,8 @@ $row-height: 40px;
 table {
   &.table {
     thead {
-      >tr {
-        >th {
+      > tr {
+        > th {
           vertical-align: middle;
 
           &:first-child {
@@ -58,29 +57,21 @@ table {
             vertical-align: middle;
             position: relative;
             margin-left: 5px;
+            height: $icon-size;
 
-            >.angle-up,
-            >.angle-down {
-              position: relative;
-              width: $sort-icon-width;
-              height: $sort-icon-width;
+            svg {
+              width: 100%;
+              height: 100%;
+              fill: $icon-color;
               cursor: pointer;
 
-              svg {
-                display: block;
-                width: 100%;
-                height: 100%;
-                fill: $icon-color;
-
-                &:hover {
-                  fill: $sort-icon-hover-color;
-                }
+              &:hover {
+                fill: $icon-active-color;
               }
-
-              &.active {
-                svg {
-                  fill: $icon-active-color;
-                }
+            }
+            &.active {
+              svg {
+                fill: $icon-active-color;
               }
             }
           }
@@ -97,50 +88,58 @@ table {
 
           .icon-holder {
             cursor: pointer;
-            height: calc(#{$row-height} - 10px);
-            width: calc(#{$row-height} - 10px);
+            height: $icon-size;
             display: flex;
             align-items: center;
 
             &:hover {
-              fill: $sort-icon-hover-color;
+              svg {
+                fill: $icon-active-color;
+              }
             }
 
             svg {
-              height: $sort-icon-width;
+              height: $icon-size;
+              fill: $icon-color;
+            }
+
+            &.active {
+              svg {
+                fill: $icon-active-color;
+              }
             }
           }
 
-          >.action-column {
+          > .action-column {
             position: relative;
             display: flex;
             align-items: center;
 
             button {
-              min-width: $sort-icon-width;
-              min-height: $sort-icon-width;
+              min-width: $icon-size;
+              min-height: $icon-size;
               margin: 0px 20px;
             }
 
-            >.ellipsis-dropdown-holder {
+            > .ellipsis-dropdown-holder {
               position: relative;
               display: inline-block;
 
               .icon-holder {
                 svg {
                   fill: $icon-active-color;
-                  height: calc(#{$sort-icon-width} * 1.5);
+                  height: calc(#{$icon-size} * 1.5);
                   width: 100%;
                 }
               }
 
               &:hover {
-                >.dropdown-content {
+                > .dropdown-content {
                   display: block;
                 }
               }
 
-              >.dropdown-content {
+              > .dropdown-content {
                 display: none;
                 position: absolute;
                 background-color: $white;
@@ -152,14 +151,14 @@ table {
                 z-index: 1;
                 right: 0;
 
-                >a {
+                > a {
                   color: inherit;
                   padding: 12px 16px;
                   text-decoration: none;
                   display: block;
 
                   &:hover {
-                    background-color: $sort-icon-hover-color;
+                    background-color: $icon-active-color;
                     color: $white;
                   }
                 }
