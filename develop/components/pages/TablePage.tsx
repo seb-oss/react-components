@@ -25,7 +25,7 @@ const TablePage: React.FunctionComponent = () => {
     const actionLinks: Array<ActionLinkItem> = [
         { label: "Add", onClick: (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>, selectedRow: TableRow) => console.log("The add link button has been clicked ", selectedRow) },
         { label: "Edit", onClick: (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>, selectedRow: TableRow) => console.log("The edit link button has been clicked ", selectedRow) }
-    ]
+    ];
 
     const columns: Array<Column> = React.useMemo(
         () => [

@@ -5,9 +5,9 @@ import "./table-style.scss";
 const angleDown: JSX.Element = <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512"><path d="M119.5 326.9L3.5 209.1c-4.7-4.7-4.7-12.3 0-17l7.1-7.1c4.7-4.7 12.3-4.7 17 0L128 287.3l100.4-102.2c4.7-4.7 12.3-4.7 17 0l7.1 7.1c4.7 4.7 4.7 12.3 0 17L136.5 327c-4.7 4.6-12.3 4.6-17-.1z" /></svg>;
 const angleRightIcon: JSX.Element = <svg name="angle-right" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 512"><path d="M166.9 264.5l-117.8 116c-4.7 4.7-12.3 4.7-17 0l-7.1-7.1c-4.7-4.7-4.7-12.3 0-17L127.3 256 25.1 155.6c-4.7-4.7-4.7-12.3 0-17l7.1-7.1c4.7-4.7 12.3-4.7 17 0l117.8 116c4.6 4.7 4.6 12.3-.1 17z" /></svg>;
 const ellipsis: JSX.Element = <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path d="M192 256c0 17.7-14.3 32-32 32s-32-14.3-32-32 14.3-32 32-32 32 14.3 32 32zm88-32c-17.7 0-32 14.3-32 32s14.3 32 32 32 32-14.3 32-32-14.3-32-32-32zm-240 0c-17.7 0-32 14.3-32 32s14.3 32 32 32 32-14.3 32-32-14.3-32-32-32z" /></svg>;
-const sortAsc: JSX.Element = <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 448 644'><path fill='#adadad' transform='translate(0 240)' d='M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z' /><path transform='translate(0 -100)' d='M240.971 130.524l194.343 194.343c9.373 9.373 9.373 24.569 0 33.941l-22.667 22.667c-9.357 9.357-24.522 9.375-33.901.04L224 227.495 69.255 381.516c-9.379 9.335-24.544 9.317-33.901-.04l-22.667-22.667c-9.373-9.373-9.373-24.569 0-33.941L207.03 130.525c9.372-9.373 24.568-9.373 33.941-.001z' /></svg>;
-const sortDesc: JSX.Element = <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 448 644'><path transform='translate(0 240)' d='M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z' /><path fill='#adadad' transform='translate(0 -100)' d='M240.971 130.524l194.343 194.343c9.373 9.373 9.373 24.569 0 33.941l-22.667 22.667c-9.357 9.357-24.522 9.375-33.901.04L224 227.495 69.255 381.516c-9.379 9.335-24.544 9.317-33.901-.04l-22.667-22.667c-9.373-9.373-9.373-24.569 0-33.941L207.03 130.525c9.372-9.373 24.568-9.373 33.941-.001z' /></svg>;
-const defaultSort: JSX.Element = <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 448 644'><path transform='translate(0 240)' d='M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z' /><path transform='translate(0 -100)' d='M240.971 130.524l194.343 194.343c9.373 9.373 9.373 24.569 0 33.941l-22.667 22.667c-9.357 9.357-24.522 9.375-33.901.04L224 227.495 69.255 381.516c-9.379 9.335-24.544 9.317-33.901-.04l-22.667-22.667c-9.373-9.373-9.373-24.569 0-33.941L207.03 130.525c9.372-9.373 24.568-9.373 33.941-.001z' /></svg>;
+const sortAsc: JSX.Element = <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 644"><path fill="#adadad" transform="translate(0 240)" d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z" /><path transform="translate(0 -100)" d="M240.971 130.524l194.343 194.343c9.373 9.373 9.373 24.569 0 33.941l-22.667 22.667c-9.357 9.357-24.522 9.375-33.901.04L224 227.495 69.255 381.516c-9.379 9.335-24.544 9.317-33.901-.04l-22.667-22.667c-9.373-9.373-9.373-24.569 0-33.941L207.03 130.525c9.372-9.373 24.568-9.373 33.941-.001z" /></svg>;
+const sortDesc: JSX.Element = <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 644"><path transform="translate(0 240)" d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z" /><path fill="#adadad" transform="translate(0 -100)" d="M240.971 130.524l194.343 194.343c9.373 9.373 9.373 24.569 0 33.941l-22.667 22.667c-9.357 9.357-24.522 9.375-33.901.04L224 227.495 69.255 381.516c-9.379 9.335-24.544 9.317-33.901-.04l-22.667-22.667c-9.373-9.373-9.373-24.569 0-33.941L207.03 130.525c9.372-9.373 24.568-9.373 33.941-.001z" /></svg>;
+const defaultSort: JSX.Element = <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 644"><path transform="translate(0 240)" d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z" /><path transform="translate(0 -100)" d="M240.971 130.524l194.343 194.343c9.373 9.373 9.373 24.569 0 33.941l-22.667 22.667c-9.357 9.357-24.522 9.375-33.901.04L224 227.495 69.255 381.516c-9.379 9.335-24.544 9.317-33.901-.04l-22.667-22.667c-9.373-9.373-9.373-24.569 0-33.941L207.03 130.525c9.372-9.373 24.568-9.373 33.941-.001z" /></svg>;
 
 export type Data = { [name: string]: any } & TableRow;
 
@@ -113,7 +113,7 @@ function sortArray(items: Array<TableRow> = [], columnName: string, sortDirectio
  * search text in array of table row
  * @param items the array of table rows
  * @param keyword The keyword to search in the array
- * @param searchFields the target field to search 
+ * @param searchFields the target field to search
  */
 function searchTextInArray(items: Array<TableRow>, keyword: string, searchFields: Array<string>): Array<TableRow> {
     return [...items].filter((row: TableRow) => {
@@ -154,8 +154,9 @@ const ActionColumn: React.FunctionComponent<ActionColumnProps> = (props: ActionC
                     type="button"
                     className="btn btn-outline-primary btn-sm"
                     onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-                        props.primaryActionButton.onClick(e, props.selectedRow)
-                    }}>
+                        props.primaryActionButton.onClick(e, props.selectedRow);
+                    }}
+                >
                     {props.primaryActionButton.label}
                 </button>
             }
@@ -172,14 +173,17 @@ const ActionColumn: React.FunctionComponent<ActionColumnProps> = (props: ActionC
                                 onClick={(e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
                                     e.preventDefault();
                                     link.onClick(e, props.selectedRow);
-                                }}>{link.label}</a>
+                                }}
+                            >
+                                {link.label}
+                            </a>
                         )}
                     </div>
                 </div>
-            }
+            };
         </div>
-    )
-}
+    );
+};
 
 interface TableUIProps {
     columns: Array<TableHeader>;
@@ -228,7 +232,7 @@ export const TableUI: React.FunctionComponent<TableUIProps> = React.memo((props:
                                 </div>
                             </th>
                             :
-                            props.rowsAreCollapsable && <th></th>
+                            props.rowsAreCollapsable && <th />
                         }
                         {props.columns.map((header: TableHeader, index: number) => (
                             <th key={index}>
@@ -261,7 +265,7 @@ export const TableUI: React.FunctionComponent<TableUIProps> = React.memo((props:
                             </th>
                         ))
                         }
-                        {props.useShowActionColumn && <th></th>}
+                        {props.useShowActionColumn && <th />}
                     </tr>
                 </thead>
                 <tbody>
@@ -269,7 +273,7 @@ export const TableUI: React.FunctionComponent<TableUIProps> = React.memo((props:
                         const checkRowRandomIds = generateRandomId("chk-");
                         return (
                             <React.Fragment key={row.rowIndex}>
-                                <tr>
+                                <tr className={"parent-row" + (row.expanded ? " expanded" : "")}>
                                     {props.useRowSelection ?
                                         <td className="row-selections-column">
                                             <div className="custom-control custom-checkbox">
@@ -285,8 +289,9 @@ export const TableUI: React.FunctionComponent<TableUIProps> = React.memo((props:
                                             </div>
                                             {((row.subRows.length > 0 || row.rowContentDetail) && props.rowsAreCollapsable) &&
                                                 <div
-                                                    className={"icon-holder" + (row.expanded ? ' active' : '')}
-                                                    onClick={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => { props.onRowExpanded(e, row); }}>
+                                                    className={"icon-holder" + (row.expanded ? " active" : "")}
+                                                    onClick={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => { props.onRowExpanded(e, row); }}
+                                                >
                                                     {row.expanded ? angleDown : angleRightIcon}
                                                 </div>
                                             }
@@ -295,8 +300,9 @@ export const TableUI: React.FunctionComponent<TableUIProps> = React.memo((props:
                                         ((row.subRows.length > 0 || row.rowContentDetail) && props.rowsAreCollapsable) &&
                                         <td>
                                             <div
-                                                className={"icon-holder" + (row.expanded ? ' active' : '')}
-                                                onClick={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => { props.onRowExpanded(e, row); }}>
+                                                className={"icon-holder" + (row.expanded ? " active" : "")}
+                                                onClick={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => { props.onRowExpanded(e, row); }}
+                                            >
                                                 {row.expanded ? angleDown : angleRightIcon}
                                             </div>
                                         </td>
@@ -322,12 +328,12 @@ export const TableUI: React.FunctionComponent<TableUIProps> = React.memo((props:
                                     return (
                                         <React.Fragment key={`sub-row-${subRow.rowIndex}`}>
                                             <tr
-                                                className={"sub-row" + (row.expanded ? " expanded" : "")}
-                                                style={{ display: row.expanded ? 'table-row' : 'none' }}
+                                                className={"sub-row" + (subRow.expanded ? " expanded" : "")}
+                                                style={{ display: row.expanded ? "table-row" : "none" }}
                                             >
                                                 {props.useRowSelection ?
                                                     <td className="row-selections-column">
-                                                        <div className="custom-control custom-checkbox" style={{ marginLeft: '20px' }}>
+                                                        <div className="custom-control custom-checkbox" style={{ marginLeft: "20px" }}>
                                                             <input
                                                                 type="checkbox"
                                                                 className="custom-control-input"
@@ -342,8 +348,9 @@ export const TableUI: React.FunctionComponent<TableUIProps> = React.memo((props:
                                                         </div>
                                                         {(subRow.rowContentDetail && props.rowsAreCollapsable) &&
                                                             <div
-                                                                className={"icon-holder" + (subRow.expanded ? ' active' : '')}
-                                                                onClick={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => { props.onSubRowExpanded(e, subRow, row.rowIndex); }}>
+                                                                className={"icon-holder" + (subRow.expanded ? " active" : "")}
+                                                                onClick={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => { props.onSubRowExpanded(e, subRow, row.rowIndex); }}
+                                                            >
                                                                 {subRow.expanded ? angleDown : angleRightIcon}
                                                             </div>
                                                         }
@@ -352,19 +359,20 @@ export const TableUI: React.FunctionComponent<TableUIProps> = React.memo((props:
                                                     (subRow.rowContentDetail && props.rowsAreCollapsable) &&
                                                     <td>
                                                         <div
-                                                            className={"icon-holder" + (subRow.expanded ? ' active' : '')}
-                                                            style={{ marginLeft: '20px' }}
-                                                            onClick={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => { props.onSubRowExpanded(e, subRow, row.rowIndex); }}>
+                                                            className={"icon-holder" + (subRow.expanded ? " active" : "")}
+                                                            style={{ marginLeft: "20px" }}
+                                                            onClick={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => { props.onSubRowExpanded(e, subRow, row.rowIndex); }}
+                                                        >
                                                             {subRow.expanded ? angleDown : angleRightIcon}
                                                         </div>
                                                     </td>
                                                 }
                                                 {subRow.cells.map((subRowCell: Cell, subRowCellIndex) => {
                                                     return (
-                                                        <td key={'subRowCell-' + subRowCellIndex}>
+                                                        <td key={"subRowCell-" + subRowCellIndex}>
                                                             {subRowCell.value}
                                                         </td>
-                                                    )
+                                                    );
                                                 })}
                                                 {props.useShowActionColumn && <td>
                                                     <ActionColumn
@@ -375,21 +383,21 @@ export const TableUI: React.FunctionComponent<TableUIProps> = React.memo((props:
                                                 </td>}
                                             </tr>
 
-                                            <tr style={{ display: subRow.expanded ? 'table-row' : 'none' }}>
+                                            <tr style={{ display: subRow.expanded ? "table-row" : "none" }}>
                                                 <td colSpan={sumCols(props.columns.length, (props.useRowSelection || props.useRowCollapse), props.useShowActionColumn, false)}>
-                                                    <div style={{ marginLeft: '40px', whiteSpace: 'initial' }}>
+                                                    <div style={{ marginLeft: "40px", whiteSpace: "initial" }}>
                                                         {subRow.rowContentDetail}
                                                     </div>
                                                 </td>
                                             </tr>
 
                                         </React.Fragment>
-                                    )
+                                    );
                                 })}
 
-                                <tr style={{ display: row.expanded ? 'table-row' : 'none' }}>
+                                <tr style={{ display: row.expanded ? "table-row" : "none" }}>
                                     <td colSpan={sumCols(props.columns.length, (props.useRowSelection || props.useRowCollapse), props.useShowActionColumn, false)}>
-                                        <div style={{ marginLeft: '20px', whiteSpace: 'initial' }}>
+                                        <div style={{ marginLeft: "20px", whiteSpace: "initial" }}>
                                             {row.rowContentDetail}
                                         </div>
 
@@ -438,7 +446,7 @@ interface TableProps {
 
     footer?: React.ReactNode;
 
-    // events 
+    // events
     onRowSelection?: (selectedRows: Array<TableRow>) => void;
     onRowExpanded?: (expandedRowList: Array<TableRow>) => void;
     onSort?: (rows: Array<TableRow>, sortByColumn: TableHeader) => void;
@@ -457,7 +465,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
     /**
      * Call when item is selected
      * @param e change event
-     * @param selectedRow The selected row 
+     * @param selectedRow The selected row
      * @param type The row type (i.e either a row or subRow)
      * @param rowIndex The index of the parent row incase of subRow
      */
@@ -471,7 +479,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
             return {
                 ...newRow,
                 subRows: newRow.subRows.filter((subRowItem: TableRow) => subRowItem.selected)
-            }
+            };
         });
 
         setCurrentTableRows(updatedRows);
@@ -481,14 +489,14 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
     };
 
     /**
-     * 
+     *
      * @param exchange
      * Called onAllItemsSelected
      */
     const onAllItemsSelected = (e: React.ChangeEvent<HTMLInputElement>): void => {
         const updatedOriginalRows = tableRows.map((originalRow: TableRow) => {
             const updatedSubRows: Array<TableRow> = originalRow.subRows.map((subRow: TableRow) => {
-                return { ...subRow, selected: e.target.checked }
+                return { ...subRow, selected: e.target.checked };
             });
             return (
                 { ...originalRow, selected: e.target.checked, subRows: updatedSubRows }
@@ -497,7 +505,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
 
         const updatedRows: Array<TableRow> = currentTableRows.map((row: TableRow) => {
             const updatedSubRows: Array<TableRow> = row.subRows.map((subRow: TableRow) => {
-                return { ...subRow, selected: e.target.checked }
+                return { ...subRow, selected: e.target.checked };
             });
             return (
                 { ...row, selected: e.target.checked, subRows: updatedSubRows }
@@ -512,13 +520,13 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
 
     /**
      * Sort rows in ASC or DESC order
-     * @param accessor The id of the selected column header 
+     * @param accessor The id of the selected column header
      * @param sortDirection The direction of the sort : ASC or DESC
      */
     const onSortItems = async (accessor: string, sortDirection: sortDirectionTypes) => {
         const updatedOriginalRows = await sortArray(tableRows, accessor, sortDirection);
         const updatedCurrentTableRows = await sortArray(currentTableRows, accessor, sortDirection);
-        let sortByColumn: TableHeader = null
+        let sortByColumn: TableHeader = null;
 
         const updatedColumns: Array<TableHeader> = tableColumns.map((column: TableHeader) => {
             if (column.accessor === accessor) {
@@ -526,7 +534,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
                     ...column,
                     isSorted: true,
                     isSortedDesc: sortDirection === sortDirectionTypes.Descending ? true : false
-                }
+                };
                 return sortByColumn;
             }
             return { ...column, isSorted: false, isSortedDesc: false };
@@ -577,7 +585,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
         });
 
         const expandedRowList: Array<TableRow> = updatedOriginalRows.filter((item: TableRow) => {
-            return item.expanded || item.subRows.some((sub: TableRow) => sub.expanded)
+            return item.expanded || item.subRows.some((sub: TableRow) => sub.expanded);
         });
 
         setCurrentTableRows(updatedRows);
@@ -587,7 +595,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
     };
 
     /**
-     * 
+     *
      * @param e change event
      * @param row The selected row
      */
@@ -610,12 +618,12 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
         });
 
         const expandedRowList: Array<TableRow> = updatedOriginalRows.filter((item: TableRow) => {
-            return item.expanded || item.subRows.some((sub: TableRow) => sub.expanded)
+            return item.expanded || item.subRows.some((sub: TableRow) => sub.expanded);
         }).map((newRow: TableRow) => {
             return {
                 ...newRow,
                 subRows: newRow.subRows.filter((subRowItem: TableRow) => subRowItem.expanded)
-            }
+            };
         });
 
         setCurrentTableRows(updatedRows);
@@ -625,7 +633,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
     };
     // functions -----------------------------------------------------------------------------
     /**
-     * 
+     *
      * @param rows The table or or data to initialize rows from
      */
     const getRows = (rows: Array<Data>): Array<TableRow> => {
@@ -653,12 +661,12 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
         });
 
         return updatedRows;
-    }
+    };
 
     /**
      * Call when item is selected
      * @param checked boolean representing checkbox value
-     * @param selectedRow The selected row 
+     * @param selectedRow The selected row
      * @param type The row type (i.e either a row or subRow)
      * @param rowIndex The index of the parent row incase of subRow
      */
@@ -686,7 +694,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
         });
 
         return updatedRows;
-    }
+    };
 
     const setDefaultTableRows = async () => {
         const updatedRows: Array<TableRow> = await getRows(props.data);
@@ -696,7 +704,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
 
     React.useEffect(() => {
         doPaginate();
-    }, [tableRows])
+    }, [tableRows]);
 
     const doPaginate = (): void => {
         if (props.usePagination && props.currentpage && props.offset && (tableRows.length > 0)) {
@@ -716,9 +724,9 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
             return (
                 ((row.subRows && row.subRows.length > 0) || row.rowContentDetail) ||
                 (row.subRows.some((subRow: TableRow) => subRow.rowContentDetail || (row.subRows && row.subRows.length > 0)))
-            )
+            );
         }) && !!props.onRowExpanded;
-    }
+    };
 
     const doSearch = (): void => {
         let searchResult: Array<TableRow> = [];
@@ -759,8 +767,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
                 doSearch();
             }
         }
-    }, [props.searchTriggered])
-
+    }, [props.searchTriggered]);
 
     React.useEffect(() => {
         const updatedColumns: Array<TableHeader> = props.columns.map((column: TableHeader) => {
