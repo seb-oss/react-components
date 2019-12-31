@@ -180,7 +180,7 @@ const ActionColumn: React.FunctionComponent<ActionColumnProps> = (props: ActionC
                         )}
                     </div>
                 </div>
-            };
+            }
         </div>
     );
 };
@@ -655,7 +655,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
                     cells: updatedCells,
                     selected: false,
                     expanded: false,
-                    subRows: row.subRows ? getRows(row.subRows) : undefined
+                    subRows: row.subRows ? getRows(row.subRows) : []
                 }
             );
         });
@@ -722,7 +722,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
     const RowsAreCollapsable = (): boolean => {
         return currentTableRows.some((row: TableRow) => {
             return (
-                ((row.subRows && row.subRows.length > 0) || row.rowContentDetail) ||
+                ((row.subRows.length > 0) || row.rowContentDetail) ||
                 (row.subRows.some((subRow: TableRow) => subRow.rowContentDetail || (row.subRows && row.subRows.length > 0)))
             );
         }) && !!props.onRowExpanded;

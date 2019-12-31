@@ -143,18 +143,17 @@ describe("Component: Table", () => {
             );
         });
 
-        // console.log("Gyara karka ", container.querySelectorAll("tbody > tr.parent-row").item(1).innerHTML);
-        // await act(() => {
-        //     container.querySelectorAll("tbody > tr.parent-row .icon-holder svg").item(1).dispatchEvent(new MouseEvent("click", { bubbles: true }));
-        // });
+        await act(() => {
+            container.querySelectorAll("tbody > tr.parent-row .icon-holder svg").item(1).dispatchEvent(new MouseEvent("click", { bubbles: true }));
+        });
 
-        // expect(container.querySelectorAll("tbody > tr.parent-row.expanded")).toBeTruthy();
-        // expect(container.querySelectorAll("tbody > tr.parent-row.expanded").length).toEqual(1);
+        expect(container.querySelectorAll("tbody > tr.parent-row.expanded")).toBeTruthy();
+        expect(container.querySelectorAll("tbody > tr.parent-row.expanded").length).toEqual(1);
     });
 
     it("should render with and support row selction where necessary", async () => {
         // all items select 
-        const onItemSelected: jest.Mock = jest.fn((e: React.ChangeEvent<HTMLInputElement>, row: TableRow, type: "row" | "subRow", rowIndex?: number) => { console.log("The rows are ", row); });
+        const onItemSelected: jest.Mock = jest.fn((e: React.ChangeEvent<HTMLInputElement>, row: TableRow, type: "row" | "subRow", rowIndex?: number) => { console.log("The rows are "); });
         await act(() => {
             render(
                 <Table
