@@ -1,6 +1,6 @@
 import * as React from "react";
 import { unmountComponentAtNode, render } from "react-dom";
-import { Column, Table, TableRow, TableHeader, ActionLinkItem, Data } from "./Table";
+import { Column, Table, TableRow, TableHeader, ActionLinkItem, DataItem } from "./Table";
 import makeData from "../../develop/utils/makeData";
 import { act } from "react-dom/test-utils";
 import { Pagination } from "../Pagination/Pagination";
@@ -40,8 +40,8 @@ describe("Component: Table", () => {
         },
     ];
 
-    const data: Array<Data> = makeData(30, 5);
-    const smallData: Array<Data> = makeData(5, 5);
+    const data: Array<DataItem> = makeData([30, 5]);
+    const smallData: Array<DataItem> = makeData([5, 5]);
 
     beforeEach(() => {
         container = document.createElement("div");
@@ -159,7 +159,7 @@ describe("Component: Table", () => {
                 <Table
                     columns={columns}
                     data={smallData}
-                    onRowSelection={onItemSelected}
+                    onRowSelected={onItemSelected}
                 />, container
             );
         });
@@ -246,10 +246,12 @@ describe("Component: Table", () => {
                 <Table
                     columns={columns}
                     data={smallData}
-                    searchInColumns={[]}
-                    triggerSearchOn="Change"
-                    searchText={smallData[1].firstName}
-                    onSearch={customButtonCallBack}
+                    searchProps={{
+                        searchInColumns: [],
+                        triggerSearchOn: "Change",
+                        searchText: smallData[1].firstName,
+                        onSearch: customButtonCallBack
+                    }}
                 />, container
             );
         });
@@ -262,10 +264,12 @@ describe("Component: Table", () => {
                 <Table
                     columns={columns}
                     data={smallData}
-                    searchInColumns={["firstName", "lastName"]}
-                    triggerSearchOn="Change"
-                    searchText={smallData[1].firstName}
-                    onSearch={customButtonCallBack}
+                    searchProps={{
+                        searchInColumns: ["firstName", "lastName"],
+                        triggerSearchOn: "Change",
+                        searchText: smallData[1].firstName,
+                        onSearch: customButtonCallBack
+                    }}
                 />, container
             );
         });

@@ -1,18 +1,18 @@
 import * as React from "react";
 const namor = require("namor");
 
-const range = (len: number) => {
-  const arr = [];
+function range(len: number): Array<number> {
+  const arr: Array<number> = [];
   for (let i = 0; i < len; i++) {
     arr.push(i);
   }
   return arr;
 };
 
-const newPerson = (): object => {
-  const statusChance = Math.random();
+function newPerson(): object {
+  const statusChance: number = Math.random();
   return {
-    id: namor.generate({ words: 1, numbers: 1}),
+    id: namor.generate({ words: 1, numbers: 1 }),
     firstName: namor.generate({ words: 1, numbers: 0 }),
     lastName: namor.generate({ words: 1, numbers: 0 }),
     age: Math.floor(Math.random() * 30),
@@ -27,9 +27,9 @@ const newPerson = (): object => {
   };
 };
 
-export default function makeData(...lens) {
-  const makeDataLevel = (depth = 0) => {
-    const len = lens[depth]
+export default function makeData<T>(lens: Array<number>): T {
+  const makeDataLevel: Function = (depth: number = 0): object | Function => {
+    const len: number = lens[depth]
     return range(len).map((d: number) => {
       return {
         ...newPerson(),

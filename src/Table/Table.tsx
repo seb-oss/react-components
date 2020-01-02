@@ -1,4 +1,5 @@
 import * as React from "react";
+import { randomId } from "../__utils/randomId";
 
 import "./table-style.scss";
 
@@ -9,7 +10,7 @@ const sortAsc: JSX.Element = <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 
 const sortDesc: JSX.Element = <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 644"><path transform="translate(0 240)" d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z" /><path fill="#adadad" transform="translate(0 -100)" d="M240.971 130.524l194.343 194.343c9.373 9.373 9.373 24.569 0 33.941l-22.667 22.667c-9.357 9.357-24.522 9.375-33.901.04L224 227.495 69.255 381.516c-9.379 9.335-24.544 9.317-33.901-.04l-22.667-22.667c-9.373-9.373-9.373-24.569 0-33.941L207.03 130.525c9.372-9.373 24.568-9.373 33.941-.001z" /></svg>;
 const defaultSort: JSX.Element = <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 644"><path transform="translate(0 240)" d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z" /><path transform="translate(0 -100)" d="M240.971 130.524l194.343 194.343c9.373 9.373 9.373 24.569 0 33.941l-22.667 22.667c-9.357 9.357-24.522 9.375-33.901.04L224 227.495 69.255 381.516c-9.379 9.335-24.544 9.317-33.901-.04l-22.667-22.667c-9.373-9.373-9.373-24.569 0-33.941L207.03 130.525c9.372-9.373 24.568-9.373 33.941-.001z" /></svg>;
 
-export type Data = { [name: string]: any } & TableRow;
+export type DataItem = { [name: string]: any } & TableRow;
 
 export interface Column {
     label: string;
@@ -42,13 +43,9 @@ export interface TableRow {
     rowIndex: number;
     cells: Array<Cell>;
     selected?: boolean;
-    subRows: Array<TableRow>;
+    subRows?: Array<TableRow>;
     expanded?: boolean;
     rowContentDetail?: React.ReactNode;
-}
-
-function generateRandomId(seed: string): string {
-    return seed + String((Math.random() * 1000) + (new Date()).getTime());
 }
 
 export const enum sortDirectionTypes {
@@ -145,7 +142,7 @@ interface ActionColumnProps {
 }
 
 const ActionColumn: React.FunctionComponent<ActionColumnProps> = (props: ActionColumnProps) => {
-    const btnPrimaryRandomIds = generateRandomId("btn");
+    const btnPrimaryRandomIds = randomId("btn");
     return (
         <div className="action-column">
             {props.primaryActionButton &&
@@ -210,8 +207,8 @@ interface TableUIProps {
     primaryActionButton?: PrimaryActionButton;
 }
 
-export const TableUI: React.FunctionComponent<TableUIProps> = React.memo((props: TableUIProps): React.ReactElement<void> => {
-    const checkAllRandomIds = generateRandomId("chk-all");
+const TableUI: React.FunctionComponent<TableUIProps> = React.memo((props: TableUIProps): React.ReactElement<void> => {
+    const checkAllRandomIds: string = randomId("chk-all");
     return (
         <div className={"table-responsive" + (props.loading ? " skeleton-loader skeleton-loader-table" : "")}>
             <table className={"table" + (props.className ? ` ${props.className}` : "")}>
@@ -270,7 +267,7 @@ export const TableUI: React.FunctionComponent<TableUIProps> = React.memo((props:
                 </thead>
                 <tbody>
                     {props.rows.map((row: TableRow, i: number) => {
-                        const checkRowRandomIds = generateRandomId("chk-");
+                        const checkRowRandomIds: string = randomId("chk-");
                         return (
                             <React.Fragment key={row.rowIndex}>
                                 <tr className={"parent-row" + (row.expanded ? " expanded" : "")}>
@@ -324,7 +321,7 @@ export const TableUI: React.FunctionComponent<TableUIProps> = React.memo((props:
                                 </tr>
 
                                 {row.subRows.map((subRow: TableRow) => {
-                                    const checkSubRowRandomIds = generateRandomId("sub-chk-");
+                                    const checkSubRowRandomIds: string = randomId("sub-chk-");
                                     return (
                                         <React.Fragment key={`sub-row-${subRow.rowIndex}`}>
                                             <tr
@@ -423,34 +420,27 @@ export const TableUI: React.FunctionComponent<TableUIProps> = React.memo((props:
     );
 
 });
-
-interface TableProps {
-    columns: Array<Column>;
-    data: Array<Data>;
-    className?: string;
-
-    // pagination
-    usePagination?: boolean;
-    offset?: number;
-    currentpage?: number;
-
-    // search and filter
+interface SearchProps {
+    onSearch?: (rows: Array<TableRow>) => void;
     searchInColumns?: Array<string>;
     searchText?: string;
-    triggerSearchOn?: "Change" | "Submit";
     searchTriggered?: boolean;
-
-    // actions props
+    triggerSearchOn?: "Change" | "Submit";
+}
+interface TableProps {
     actionLinks?: Array<ActionLinkItem>;
-    primaryActionButton?: PrimaryActionButton;
-
+    className?: string;
+    searchProps?: SearchProps;
+    columns: Array<Column>;
+    currentpage?: number;
+    data: Array<DataItem>;
     footer?: React.ReactNode;
-
-    // events
-    onRowSelection?: (selectedRows: Array<TableRow>) => void;
+    offset?: number;
     onRowExpanded?: (expandedRowList: Array<TableRow>) => void;
+    onRowSelected?: (selectedRows: Array<TableRow>) => void;
     onSort?: (rows: Array<TableRow>, sortByColumn: TableHeader) => void;
-    onSearch?: (rows: Array<TableRow>) => void;
+    primaryActionButton?: PrimaryActionButton;
+    usePagination?: boolean;
 }
 
 export const Table: React.FunctionComponent<TableProps> = React.memo((props: TableProps): React.ReactElement<void> => {
@@ -485,7 +475,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
         setCurrentTableRows(updatedRows);
         setTableRows(updatedOriginalRows);
         setTableRowsImage(updatedOriginalRows);
-        props.onRowSelection(selectedRowList);
+        props.onRowSelected(selectedRowList);
     };
 
     /**
@@ -515,7 +505,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
         setCurrentTableRows(updatedRows);
         setTableRows(updatedOriginalRows);
         setTableRowsImage(updatedOriginalRows);
-        props.onRowSelection(updatedOriginalRows);
+        props.onRowSelected(updatedOriginalRows);
     };
 
     /**
@@ -636,7 +626,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
      *
      * @param rows The table or or data to initialize rows from
      */
-    const getRows = (rows: Array<Data>): Array<TableRow> => {
+    const getRows = (rows: Array<DataItem>): Array<TableRow> => {
         const updatedRows: Array<TableRow> = rows.map((row: TableRow, index: number) => {
             const updatedCells: Array<Cell> = Object.keys(row).filter((key: string) => {
                 return key !== "rowContentDetail" && key !== "subRows";
@@ -702,10 +692,6 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
         setTableRowsImage(updatedRows);
     };
 
-    React.useEffect(() => {
-        doPaginate();
-    }, [tableRows]);
-
     const doPaginate = (): void => {
         if (props.usePagination && props.currentpage && props.offset && (tableRows.length > 0)) {
             // pagination start from 1 hence the need fro deducting 1
@@ -730,19 +716,24 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
 
     const doSearch = (): void => {
         let searchResult: Array<TableRow> = [];
-        if (props.searchText && props.searchInColumns && props.searchInColumns.length > 0) {
-            searchResult = searchTextInArray(tableRowsImage, props.searchText, props.searchInColumns);
+        if (props.searchProps?.searchText && props.searchProps?.searchInColumns && props.searchProps?.searchInColumns.length > 0) {
+            searchResult = searchTextInArray(tableRowsImage, props.searchProps.searchText, props.searchProps.searchInColumns);
         } else {
             searchResult = [...tableRowsImage];
         }
 
         setTableRows(searchResult);
-        props.onSearch && props.onSearch(searchResult);
+        props.searchProps?.onSearch && props.searchProps?.onSearch(searchResult);
     };
 
     // useEffects ----------------------------------------------------------
+
     React.useEffect(() => {
-        if (!!props.onRowSelection) {
+        doPaginate();
+    }, [tableRows]);
+
+    React.useEffect(() => {
+        if (!!props.onRowSelected) {
             const notAllsAreRowsSelected = tableRows.some((row: TableRow) => !row.selected);
 
             if (notAllsAreRowsSelected) {
@@ -754,20 +745,20 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
     }, [currentTableRows]);
 
     React.useEffect(() => {
-        if (!!props.onSearch) {
-            if (props.triggerSearchOn === "Change") {
+        if (!!props.searchProps?.onSearch) {
+            if (props.searchProps.triggerSearchOn === "Change") {
                 doSearch();
             }
         }
-    }, [props.searchInColumns, props.searchText]);
+    }, [props.searchProps?.searchInColumns, props.searchProps?.searchText]);
 
     React.useEffect(() => {
-        if (!!props.onSearch) {
-            if (props.triggerSearchOn === "Submit") {
+        if (!!props.searchProps?.onSearch) {
+            if (props.searchProps?.triggerSearchOn === "Submit") {
                 doSearch();
             }
         }
-    }, [props.searchTriggered]);
+    }, [props.searchProps?.searchTriggered]);
 
     React.useEffect(() => {
         const updatedColumns: Array<TableHeader> = props.columns.map((column: TableHeader) => {
@@ -798,7 +789,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
                 footer={props.footer}
                 onSort={onSortItems}
                 sortable={!!props.onSort}
-                useRowSelection={!!props.onRowSelection}
+                useRowSelection={!!props.onRowSelected}
                 useRowCollapse={!!props.onRowExpanded}
                 allRowsAreSelected={allItemsChecked}
                 onItemSelected={onItemSelected}

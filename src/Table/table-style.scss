@@ -1,18 +1,9 @@
-$gray-200: #e9e9e9 !default;
-$gray-300: #dedede !default;
-$gray-400: #cecece !default;
-$gray-500: #adadad !default;
-$gray-600: #868686 !default;
-$gray-700: #494949 !default;
-$gray-800: #343434 !default;
-$gray-900: #212121 !default;
+@import "../colours.scss";
 
 $icon-color: $gray-500;
-$icon-active-color: #0092e1;
+$icon-active-color: $blue-dark;
 
 $icon-size: 16px;
-
-$white: #fff;
 
 $row-height: 40px;
 
@@ -22,7 +13,7 @@ table {
       > tr {
         > th {
           vertical-align: middle;
-
+          white-space: nowrap;
           &:first-child {
             border-bottom: none;
           }

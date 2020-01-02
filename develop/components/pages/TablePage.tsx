@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Table, Column, TableRow, PrimaryActionButton, ActionLinkItem, TableHeader } from "../../../src/Table/Table";
+import { Table, Column, TableRow, PrimaryActionButton, ActionLinkItem, TableHeader, DataItem } from "../../../src/Table/Table";
 import makeData from "../../utils/makeData";
 import { Pagination } from "../../../src/Pagination/Pagination";
 import { Dropdown, DropdownItem } from "../../../src/Dropdown/Dropdown";
@@ -61,8 +61,8 @@ const TablePage: React.FunctionComponent = () => {
         ],
         []
     );
-    const data = React.useMemo(() => makeData(listSize, 5), []);
-    const smallData = React.useMemo(() => makeData(5, 5), []);
+    const data: Array<DataItem> = React.useMemo(() => makeData<Array<DataItem>>([listSize, 5]), []);
+    const smallData: Array<DataItem> = React.useMemo(() => makeData<Array<DataItem>>([5, 5]), []);
     return (
         <div className="route-template container">
             <div className="info-holder">
@@ -127,7 +127,7 @@ const TablePage: React.FunctionComponent = () => {
                         <Table
                             columns={columns}
                             data={smallData}
-                            onRowSelection={(rows: Array<TableRow>) => { console.log("The selected rows are ", rows); }}
+                            onRowSelected={(rows: Array<TableRow>) => { console.log("The selected rows are ", rows); }}
                         />
                     </div>
 
@@ -136,7 +136,7 @@ const TablePage: React.FunctionComponent = () => {
                         <Table
                             columns={columns}
                             data={smallData}
-                            onRowSelection={(rows: Array<TableRow>) => { console.log("The selected rows are ", rows); }}
+                            onRowSelected={(rows: Array<TableRow>) => { console.log("The selected rows are ", rows); }}
                             onRowExpanded={(rows: Array<TableRow>) => { console.log("the expanded ros are ", rows); }}
                         />
                     </div>
@@ -185,15 +185,17 @@ const TablePage: React.FunctionComponent = () => {
                             offset={pageSize}
                             currentpage={paginationValue}
                             usePagination={true}
-                            searchInColumns={dropDownList1Selected ? dropDownList1Selected.map((item: DropdownItem) => item.value) : []}
-                            searchText={textBoxValue2}
-                            triggerSearchOn="Submit"
+                            searchProps={{
+                                searchInColumns: dropDownList1Selected ? dropDownList1Selected.map((item: DropdownItem) => item.value) : [],
+                                searchText: textBoxValue2,
+                                triggerSearchOn: "Submit",
+                                searchTriggered: searchTriggered,
+                                onSearch: (searchResults: Array<TableRow>) => { console.log("the search is now ", searchResults); }
+                            }}
                             primaryActionButton={primaryButton}
                             actionLinks={actionLinks}
-                            searchTriggered={searchTriggered}
-                            onSearch={(searchResults: Array<TableRow>) => { console.log("the search is now ", searchResults); }}
                             onSort={(rows: Array<TableRow>, sortByColumn: TableHeader) => { console.log("The sorted rows are ", rows); }}
-                            onRowSelection={(rows: Array<TableRow>) => { console.log("The selected rows are ", rows); }}
+                            onRowSelected={(rows: Array<TableRow>) => { console.log("The selected rows are ", rows); }}
                             onRowExpanded={(rows: Array<TableRow>) => { console.log("the expanded ros are ", rows); }}
                             footer={
                                 <Pagination
