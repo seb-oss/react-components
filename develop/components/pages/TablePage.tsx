@@ -10,6 +10,7 @@ const docMD = require("../../../src/Table/readme.md");
 
 const TablePage: React.FunctionComponent = () => {
     const [paginationValue, setPagination] = React.useState<number>(1);
+    const [paginationValue1, setPagination1] = React.useState<number>(1);
     const [dropDownList1Selected, setDropdownList1Selected] = React.useState<Array<DropdownItem>>([]);
     const [textBoxValue2, setTextBoxValue2] = React.useState<string>("");
     const [searchTriggered, setSearchTriggered] = React.useState<boolean>(false);
@@ -183,7 +184,7 @@ const TablePage: React.FunctionComponent = () => {
                             columns={columns}
                             data={data}
                             offset={pageSize}
-                            currentpage={paginationValue}
+                            currentpage={paginationValue1}
                             usePagination={true}
                             searchProps={{
                                 searchInColumns: dropDownList1Selected ? dropDownList1Selected.map((item: DropdownItem) => item.value) : [],
@@ -203,8 +204,8 @@ const TablePage: React.FunctionComponent = () => {
                                     // onChange={setPagination}
                                     // size={listSize}
                                     // useFirstAndLast={true}
-                                    value={paginationValue}
-                                    onChange={setPagination}
+                                    value={paginationValue1}
+                                    onChange={setPagination1}
                                     size={3}
                                     offset={3}
                                     useFirstAndLast={true}
