@@ -106,8 +106,7 @@ const TablePage: React.FunctionComponent = () => {
                                 <Pagination
                                     value={paginationValue}
                                     onChange={setPagination}
-                                    size={3}
-                                    offset={3}
+                                    size={listSize}
                                     useFirstAndLast={true}
                                 />
                             }
@@ -200,14 +199,9 @@ const TablePage: React.FunctionComponent = () => {
                             onRowExpanded={(rows: Array<TableRow>) => { console.log("the expanded ros are ", rows); }}
                             footer={
                                 <Pagination
-                                    // value={paginationValue}
-                                    // onChange={setPagination}
-                                    // size={listSize}
-                                    // useFirstAndLast={true}
                                     value={paginationValue1}
                                     onChange={setPagination1}
-                                    size={3}
-                                    offset={3}
+                                    size={listSize}
                                     useFirstAndLast={true}
                                 />
                             }
