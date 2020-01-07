@@ -1,213 +1,290 @@
 import * as React from "react";
-import { shallow, mount } from "enzyme";
-import { Dropdown } from "./Dropdown";
+import { Dropdown, DropdownProps } from "./Dropdown";
+import { unmountComponentAtNode, render } from "react-dom";
+import { act } from "react-dom/test-utils";
 
 describe("Component: Dropdown", () => {
-    const basicProps = {
-        onChange: jest.fn(),
-        selectedValue: null,
-    };
-    const props = {
-        ...basicProps,
-        list: [
-            { value: "Male", label: "Male" },
-            { value: "Female", label: "Female" },
-        ]
-    };
+    let container: HTMLDivElement = null;
+    let DEFAULT_PROPS: DropdownProps = null;
+
+    beforeEach(() => {
+        container = document.createElement("div");
+        document.body.appendChild(container);
+        DEFAULT_PROPS = {
+            list: [
+                { label: "A", value: "a" },
+                { label: "B", value: "b" },
+                { label: "C", value: "c" }
+            ],
+            onChange: jest.fn(),
+            selectedValue: null
+        };
+    });
+
+    afterEach(() => {
+        unmountComponentAtNode(container);
+        container.remove();
+        container = null;
+        DEFAULT_PROPS = null;
+    });
 
     it("Should render", () => {
-        const wrapper = shallow(<Dropdown {...props} />);
-        expect(wrapper).toBeDefined();
-        wrapper.unmount();
+        act(() => {
+            render(<Dropdown {...DEFAULT_PROPS} />, container);
+        });
+
+        expect(container).toBeTruthy();
+        expect(container.querySelector(".custom-dropdown")).toBeTruthy();
+        expect(container.querySelector(".custom-dropdown-toggle").classList.contains("open")).toBeFalsy();
     });
 
-    it("Should pass custom class", () => {
-        const wrapper = mount(<Dropdown {...props} className="test-custom-class" />);
-        expect(wrapper.hasClass("test-custom-class")).toBeTruthy();
-        wrapper.unmount();
+    it("Should pass custom class and id", () => {
+        const props: DropdownProps = {
+            ...DEFAULT_PROPS,
+            className: "my-custom-class",
+            id: "my-custom-id"
+        };
+
+        act(() => {
+            render(<Dropdown {...props} />, container);
+        });
+
+        expect(container.querySelector(".custom-dropdown").classList.contains(props.className)).toBeTruthy();
+        expect(container.querySelector(".custom-dropdown").getAttribute("id")).toEqual(props.id);
     });
 
-    it("Should render label when passed", () => {
-        const wrapper = shallow(<Dropdown {...props} label="label" />);
-        expect(wrapper.find("label").length).toBe(1);
-        expect(wrapper.find("label").text()).toEqual("label");
-        wrapper.unmount();
-    });
+    it("Should render label", () => {
+        const props: DropdownProps = {
+            ...DEFAULT_PROPS,
+            label: "my-custom-label"
+        };
 
-    it("Should open menu when clicked on trigger", () => {
-        const wrapper = mount(<Dropdown {...props} label="label" />);
-        const toggleButton = wrapper.find(".custom-dropdown-toggle");
-        expect(toggleButton.length).toBe(1);
-        toggleButton.simulate("click");
-        expect(wrapper.find(".show").length).toBe(1);
-        wrapper.unmount();
-    });
-
-    it("Should display \"Empty\" if list prop is an empty array", () => {
-        const wrapper = mount(<Dropdown {...basicProps} list={[]} placeholder="myPlaceholder" />);
-        expect(wrapper.find(".title").length).toBe(1);
-        expect(wrapper.find(".title").text()).toEqual("Empty");
-        wrapper.unmount();
+        act(() => {
+            render(<Dropdown {...props} />, container);
+        });
+        const target = container.querySelector(".dropdown-label");
+        expect(target).toBeTruthy();
+        expect(target.innerHTML).toBe(props.label);
     });
 
     it("Should render placeholder", () => {
-        const wrapper = mount(<Dropdown {...props} placeholder="myPlaceholder" />);
-        expect(wrapper.find(".title").length).toBe(1);
-        expect(wrapper.find(".title").text()).toEqual("myPlaceholder");
-        wrapper.unmount();
+        const props: DropdownProps = {
+            ...DEFAULT_PROPS,
+            placeholder: "my-custom-placeholder"
+        };
+
+        act(() => {
+            render(<Dropdown {...props} />, container);
+        });
+
+        expect(container.querySelector(".title").innerHTML).toBe(props.placeholder);
     });
 
-    it("Should display item label when one item is selected instead of placeholder", () => {
-        const wrapper = mount(
-            <Dropdown
-                onChange={props.onChange}
-                list={[
-                    { value: "Male", label: "Male" },
-                    { value: "Female", label: "Female" },
-                ]}
-                selectedValue={{ value: "Male", label: "Male" }}
-                placeholder="myPlaceholder"
-            />
-        );
-        expect(wrapper.find(".title").length).toBe(1);
-        expect(wrapper.find(".title").text()).toEqual("Male");
-        wrapper.unmount();
+    it("Should open menu when clicked on trigger", () => {
+        act(() => {
+            render(<Dropdown {...DEFAULT_PROPS} />, container);
+        });
+
+        const toggle: Element = container.querySelector(".custom-dropdown-toggle");
+        expect(toggle.classList.contains("open")).toBeFalsy();
+
+        act(() => {
+            toggle.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+        });
+
+        expect(toggle.classList.contains("open")).toBeTruthy();
+        const target: Element = container.querySelector(".custom-dropdown-menu");
+        expect(target.classList.contains("show")).toBeTruthy();
     });
 
-    it("Should display item label when one item is selected even when multi is enabled", () => {
-        const wrapper = mount(
-            <Dropdown
-                onChange={props.onChange}
-                selectedValue={[{ value: "Male", label: "Male" }]}
-                list={[
-                    { value: "Male", label: "Male" },
-                    { value: "Female", label: "Female" },
-                ]}
-                placeholder="myPlaceholder"
-                multi={true}
-            />
-        );
-        expect(wrapper.find(".title").length).toBe(1);
-        expect(wrapper.find(".title").text()).toEqual("Male");
-        wrapper.unmount();
+    it("Should display \"Empty\" and be disabled if list prop is an empty array", () => {
+        const props: DropdownProps = {
+            ...DEFAULT_PROPS,
+            list: []
+        };
+
+        act(() => {
+            render(<Dropdown {...props} />, container);
+        });
+
+        const toggle: Element = container.querySelector(".custom-dropdown-toggle");
+        expect(toggle.classList.contains("disabled")).toBeTruthy();
+        expect(container.querySelector(".title").innerHTML).toBe("Empty");
     });
 
-    it("Should display \"[selectedList.length] Selected\" label if selected more than one and less that total amount of items. (multi only)", () => {
-        const wrapper = mount(
-            <Dropdown
-                onChange={props.onChange}
-                list={[
-                    { value: "Male", label: "Male" },
-                    { value: "Female", label: "Female" },
-                    { value: "Other", label: "Other" },
-                ]}
-                selectedValue={[
-                    { value: "Male", label: "Male" },
-                    { value: "Female", label: "Female" }
-                ]}
-                placeholder="myPlaceholder"
-                multi={true}
-            />
-        );
-        expect(wrapper.find(".title").length).toBe(1);
-        expect(wrapper.find(".title").text()).toEqual("2 Selected");
-        wrapper.unmount();
+    it("Should display item label when one item is selected", () => {
+        const props: DropdownProps = {
+            ...DEFAULT_PROPS,
+            selectedValue: { ...DEFAULT_PROPS.list[0] }
+        };
+
+        act(() => {
+            render(<Dropdown {...props} />, container);
+        });
+
+        expect(container.querySelector(".title").innerHTML).toBe(DEFAULT_PROPS.list[0].label);
     });
 
-    it("Should display label: All selected (list.length) when all items are selected", () => {
-        const wrapper = mount(
-            <Dropdown
-                onChange={props.onChange}
-                list={[
-                    { value: "Male", label: "Male" },
-                    { value: "Female", label: "Female" },
-                ]}
-                selectedValue={[
-                    { value: "Male", label: "Male" },
-                    { value: "Female", label: "Female" }
-                ]}
-                placeholder="myPlaceholder"
-                multi={true}
-                clearable={true}
-            />
-        );
-        expect(wrapper.find(".title").length).toBe(1);
-        expect(wrapper.find(".title").text()).toEqual("All selected (2)");
-        wrapper.unmount();
+    it("Should display correct label in multi mode for each scenario (1 selected, more than one but not all selected, all selected)", () => {
+        const props: DropdownProps = {
+            ...DEFAULT_PROPS,
+            selectedValue: [{ ...DEFAULT_PROPS.list[0] }],
+            multi: true
+        };
+
+        act(() => {
+            render(<Dropdown {...props} />, container);
+        });
+
+        const target = container.querySelector(".title");
+        expect(target.innerHTML).toBe(DEFAULT_PROPS.list[0].label);
+        const dropdownItems = container.querySelectorAll(".custom-dropdown-item");
+
+        act(() => {
+            dropdownItems.item(dropdownItems.length - 1).dispatchEvent(new MouseEvent("click", { bubbles: true }));
+        });
+
+        expect(props.onChange).toBeCalledTimes(1);
+
+        act(() => {
+            render(<Dropdown {...props} selectedValue={[{ ...DEFAULT_PROPS.list[0] }, { ...DEFAULT_PROPS.list[1] }]} />, container);
+        });
+
+        const target2 = container.querySelector(".title");
+        expect(target2.innerHTML).toBe("2 Selected");
+
+        act(() => {
+            render(<Dropdown {...props} selectedValue={[...DEFAULT_PROPS.list]} />, container);
+        });
+
+        const target3 = container.querySelector(".title");
+        expect(target3.innerHTML).toBe(`All selected (${DEFAULT_PROPS.list.length})`);
     });
 
-    it("Should enable searchable prop when set to true", () => {
-        const wrapper = mount(<Dropdown {...props} searchable={true} />);
-        expect(wrapper.find(".search-input").length).toBe(1);
-        wrapper.unmount();
+    it("Should enable search when searchable prop set to true", () => {
+        const props: DropdownProps = {
+            ...DEFAULT_PROPS,
+            searchable: true
+        };
+
+        act(() => {
+            render(<Dropdown {...props} />, container);
+        });
+        const target = container.querySelector(".search-input");
+        expect(target).toBeTruthy();
+        expect(target.getAttribute("placeholder")).toBe("Search ...");
     });
 
     it("Should enable more button when set to true", () => {
-        const wrapper = mount(<Dropdown {...props} more={true} />);
-        expect(wrapper.find(".custom-dropdown-toggle").length).toBe(1);
-        expect(wrapper.find(".more").length).toBe(1);
-        wrapper.unmount();
+        const props: DropdownProps = {
+            ...DEFAULT_PROPS,
+            more: true
+        };
+
+        act(() => {
+            render(<Dropdown {...props} />, container);
+        });
+
+        const toggle: Element = container.querySelector(".custom-dropdown-toggle");
+        expect(toggle).toBeTruthy();
+        expect(toggle.classList.contains("open")).toBeFalsy();
+
+        act(() => {
+            toggle.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+        });
+
+        expect(toggle.classList.contains("open")).toBeTruthy();
+        const menu: Element = container.querySelector(".custom-dropdown-menu");
+        expect(menu.classList.contains("show")).toBeTruthy();
+        expect(menu.classList.contains("dropdown-menu-right")).toBeTruthy();
     });
 
-    it("Should display native dropdown if native prop set true", () => {
-        const wrapper = mount(<Dropdown {...props} native={true} />);
-        expect(wrapper.find(".form-control").length).toBe(1);
-        wrapper.unmount();
+    it("Should enable search when searchable prop set to true", () => {
+        const props: DropdownProps = {
+            ...DEFAULT_PROPS,
+            native: true
+        };
+
+        act(() => {
+            render(<Dropdown {...props} />, container);
+        });
+
+        const target = container.querySelector(".form-control");
+        expect(target).toBeTruthy();
+        expect(target.classList.contains("disabled")).toBeFalsy();
+        expect(target.querySelectorAll("option").length).toBe(DEFAULT_PROPS.list.length);
     });
 
     it("Should display error is error prop set", () => {
-        const wrapper = mount(<Dropdown {...props} error={"error"} />);
-        expect(wrapper.find(".alert-danger").length).toBe(1);
-        expect(wrapper.find(".alert-danger").text()).toEqual("error");
-        wrapper.unmount();
+        const props: DropdownProps = {
+            ...DEFAULT_PROPS,
+            error: "my-custom-error"
+        };
+
+        act(() => {
+            render(<Dropdown {...props} />, container);
+        });
+
+        const target = container.querySelector(".alert-danger");
+        expect(target).toBeTruthy();
+        expect(target.innerHTML).toBe(props.error);
     });
 
     it("Should disable component when disabled set to true", () => {
-        const wrapper = shallow(<Dropdown {...props} disabled={true} />);
-        expect(wrapper.find(".disabled").length).toBe(2);
-        wrapper.unmount();
+        const props: DropdownProps = {
+            ...DEFAULT_PROPS,
+            disabled: true
+        };
+
+        act(() => {
+            render(<Dropdown {...props} />, container);
+        });
+
+        const target = container.querySelector(".custom-dropdown");
+        expect(target).toBeTruthy();
+        expect(target.classList.contains("disabled")).toBeTruthy();
+        expect(target.querySelector(".custom-dropdown-toggle").classList.contains("disabled")).toBeTruthy();
     });
 
-    it("Should display clear button when multi prop set to true and at least one item selected", () => {
-        const wrapper = mount(
-            <Dropdown
-                onChange={props.onChange}
-                list={[
-                    { value: "Male", label: "Male" },
-                    { value: "Female", label: "Female" },
-                ]}
-                selectedValue={[{ value: "Male", label: "Male" }]}
-                multi={true}
-            />
-        );
-        expect(wrapper.find(".dropdown-times-icon").length).toBe(1);
-        wrapper.unmount();
-    });
+    it("Should display clear button if at least one item is selected and clearable prop or multi prop is true", () => {
+        const props: DropdownProps = {
+            ...DEFAULT_PROPS,
+            multi: true,
+            selectedValue: [{ ...DEFAULT_PROPS.list[0] }]
+        };
 
-    it("Should display clear button when clearable prop set to true and at least one item selected", () => {
-        const wrapper = mount(
-            <Dropdown
-                onChange={props.onChange}
-                list={[
-                    { value: "Male", label: "Male" },
-                    { value: "Female", label: "Female" },
-                ]}
-                selectedValue={{ value: "Male", label: "Male" }}
-                clearable={true}
-            />
-        );
-        expect(wrapper.find(".dropdown-times-icon").length).toBe(1);
-        wrapper.unmount();
+        act(() => {
+            render(<Dropdown {...props} />, container);
+        });
+
+        const target = container.querySelector(".dropdown-times-icon");
+        expect(target).toBeTruthy();
+
+        const newProps: DropdownProps = {
+            ...DEFAULT_PROPS,
+            clearable: true,
+            selectedValue: { ...DEFAULT_PROPS.list[0] }
+        };
+
+        act(() => {
+            render(<Dropdown {...newProps} />, container);
+        });
+
+        const target2 = container.querySelector(".dropdown-times-icon");
+        expect(target2).toBeTruthy();
     });
 
     it("Should not display clear button if all items are unselected even when clearable prop set to true", () => {
-        const wrapper = mount(
-            <Dropdown
-                {...props}
-                clearable={true}
-            />
-        );
-        expect(wrapper.find(".dropdown-times-icon").length).toBe(0);
-        wrapper.unmount();
+        const props: DropdownProps = {
+            ...DEFAULT_PROPS,
+            clearable: true
+        };
+
+        act(() => {
+            render(<Dropdown {...props} />, container);
+        });
+
+        const target = container.querySelector(".dropdown-times-icon");
+        expect(target).toBeFalsy();
     });
 });
