@@ -1,5 +1,5 @@
 import * as React from "react";
-const namor = require("namor");
+import * as namor from "namor";
 
 function range(len: number): Array<number> {
   const arr: Array<number> = [];
@@ -12,9 +12,9 @@ function range(len: number): Array<number> {
 function newPerson(): object {
   const statusChance: number = Math.random();
   return {
-    id: namor.generate({ words: 1, numbers: 1 }),
-    firstName: namor.generate({ words: 1, numbers: 0 }),
-    lastName: namor.generate({ words: 1, numbers: 0 }),
+    id: namor.generate({ words: 1, saltLength: 1, saltType: "number" }),
+    firstName: namor.generate({ words: 1, saltLength: 0 }),
+    lastName: namor.generate({ words: 1, saltLength: 0 }),
     age: Math.floor(Math.random() * 30),
     visits: Math.floor(Math.random() * 100),
     progress: Math.floor(Math.random() * 100),
