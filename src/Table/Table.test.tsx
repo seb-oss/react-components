@@ -91,8 +91,7 @@ describe("Component: Table", () => {
                     <Pagination
                         value={paginationValue}
                         onChange={setPage}
-                        size={3}
-                        offset={3}
+                        size={pageSize}
                         useFirstAndLast={true}
                     />
                 }
@@ -211,6 +210,27 @@ describe("Component: Table", () => {
             );
         });
 
+        // trigger and open action column
+        expect(container.querySelector("tbody tr.parent-row > td .action-column .ellipsis-dropdown-holder .dropdown-content.active")).toBeNull();
+        expect(container.querySelector("tbody tr.parent-row > td .action-column .ellipsis-dropdown-holder .dropdown-content.active")).toBeFalsy();
+ 
+        await act(() => {
+            container.querySelectorAll("tbody tr.parent-row > td .action-column .ellipsis-dropdown-holder").item(1).dispatchEvent(new MouseEvent("click", { bubbles: true }));
+        });
+
+        expect(container.querySelector("tbody tr.parent-row > td .action-column .ellipsis-dropdown-holder .dropdown-content.active")).toBeDefined();
+        expect(container.querySelector("tbody tr.parent-row > td .action-column .ellipsis-dropdown-holder .dropdown-content.active")).toBeTruthy();
+
+        // action should be closed when you click outside the div 
+
+        await act(() => {
+            container.querySelector("tbody").dispatchEvent(new MouseEvent("mousedown", { bubbles: true }));
+        });
+
+        expect(container.querySelector("tbody tr.parent-row > td .action-column .ellipsis-dropdown-holder .dropdown-content.active")).toBeNull();
+        expect(container.querySelector("tbody tr.parent-row > td .action-column .ellipsis-dropdown-holder .dropdown-content.active")).toBeFalsy();
+ 
+
         await act(() => {
             container.querySelectorAll("tbody tr.parent-row > td .action-column a").forEach((el: Element) => el.dispatchEvent(new MouseEvent("click", { bubbles: true })));
         });
@@ -220,7 +240,6 @@ describe("Component: Table", () => {
 
         // plus one column for action field
         expect(container.querySelectorAll("thead tr th").length).toEqual(columns.length + 1);
-
     });
 
     it("should render and support filter and searching ", async () => {

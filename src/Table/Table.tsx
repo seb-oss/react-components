@@ -43,6 +43,7 @@ export interface TableRow {
     rowIndex: number;
     cells: Array<Cell>;
     selected?: boolean;
+    actionsDropdownDropped?: boolean;
     subRows?: Array<TableRow>;
     expanded?: boolean;
     rowContentDetail?: React.ReactNode;
@@ -139,6 +140,7 @@ interface ActionColumnProps {
     actionLinks?: Array<ActionLinkItem>;
     primaryActionButton?: PrimaryActionButton;
     selectedRow: TableRow;
+    onActionDropped?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
 }
 
 const ActionColumn: React.FunctionComponent<ActionColumnProps> = (props: ActionColumnProps) => {
@@ -158,11 +160,14 @@ const ActionColumn: React.FunctionComponent<ActionColumnProps> = (props: ActionC
                 </button>
             }
             {props.actionLinks && props.actionLinks.length > 0 &&
-                <div className="ellipsis-dropdown-holder">
-                    <div className="icon-holder">
+                <div
+                    className="ellipsis-dropdown-holder"
+                    onClick={props.onActionDropped}
+                >
+                    <div className="icon-holder" id={"ellipsis-" + props.selectedRow.rowIndex}>
                         {ellipsis}
                     </div>
-                    <div className="dropdown-content">
+                    <div className={"dropdown-content" + (props.selectedRow.actionsDropdownDropped ? " active" : "")} >
                         {props.actionLinks.map((link: ActionLinkItem, index: number) =>
                             <a
                                 href="#"
@@ -202,6 +207,7 @@ interface TableUIProps {
     onAllItemsSelected?: (e: React.ChangeEvent<HTMLInputElement>) => void;
     onRowExpanded?: (e: React.MouseEvent<HTMLDivElement, MouseEvent>, row: TableRow) => void;
     onSubRowExpanded?: (e: React.MouseEvent<HTMLDivElement, MouseEvent>, row: TableRow, rowIndex: number) => void;
+    onActionDropped: (event: React.MouseEvent<HTMLDivElement, MouseEvent>, row: TableRow, rowIndex?: number) => void;
 
     actionLinks?: Array<ActionLinkItem>;
     primaryActionButton?: PrimaryActionButton;
@@ -232,19 +238,22 @@ const TableUI: React.FunctionComponent<TableUIProps> = React.memo((props: TableU
                             props.rowsAreCollapsable && <th />
                         }
                         {props.columns.map((header: TableHeader, index: number) => (
-                            <th key={index}>
+                            <th
+                                key={index}
+                                className={(props.sortable && header.canSort) ? "sortable" : ""}
+                                onClick={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+                                    if (props.sortable && header.canSort) {
+                                        props.onSort(header.accessor, header.isSortedDesc ? sortDirectionTypes.Ascending : sortDirectionTypes.Descending);
+                                    } else {
+                                        e.preventDefault();
+                                    }
+                                }}
+                            >
                                 {header.label}
                                 {(props.sortable && header.canSort) &&
                                     <div
                                         className={"icon-holder" + (header.isSorted ? " active" : "")}
                                         id={header.accessor}
-                                        onClick={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-                                            if (header.canSort) {
-                                                props.onSort(header.accessor, header.isSortedDesc ? sortDirectionTypes.Ascending : sortDirectionTypes.Descending);
-                                            } else {
-                                                e.preventDefault();
-                                            }
-                                        }}
                                     >
                                         {header.isSorted ?
 
@@ -315,6 +324,9 @@ const TableUI: React.FunctionComponent<TableUIProps> = React.memo((props: TableU
                                                 actionLinks={props.actionLinks}
                                                 primaryActionButton={props.primaryActionButton}
                                                 selectedRow={row}
+                                                onActionDropped={(event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+                                                    props.onActionDropped(event, row, null);
+                                                }}
                                             />
                                         </td>
                                     }
@@ -376,6 +388,9 @@ const TableUI: React.FunctionComponent<TableUIProps> = React.memo((props: TableU
                                                         actionLinks={props.actionLinks}
                                                         primaryActionButton={props.primaryActionButton}
                                                         selectedRow={subRow}
+                                                        onActionDropped={(event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+                                                            props.onActionDropped(event, subRow, row.rowIndex);
+                                                        }}
                                                     />
                                                 </td>}
                                             </tr>
@@ -449,6 +464,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
     const [currentTableRows, setCurrentTableRows] = React.useState<Array<TableRow>>([]);
     const [tableColumns, setTableColumn] = React.useState<Array<TableHeader>>([]);
     const [allItemsChecked, setAllRowsChecked] = React.useState<boolean>(false);
+    const [hasAnOpenedAction, setAnOpenedAction] = React.useState<boolean>(false);
 
     // events -------------------------------------------------------------------------------------
 
@@ -506,6 +522,95 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
         setTableRows(updatedOriginalRows);
         setTableRowsImage(updatedOriginalRows);
         props.onRowSelected(updatedOriginalRows);
+    };
+
+    /**
+     * Close all opened actions div
+     */
+    const onClickOutside = (e: MouseEvent) => {
+        if (hasAnOpenedAction && (e.target as Element).parentElement.id.indexOf("ellipsis") < 0) {
+            const updatedOriginalRows: Array<TableRow> = tableRows.map((originalRow: TableRow) => {
+                const subRows: Array<TableRow> = originalRow.subRows.map((subRow: TableRow) => {
+                    return { ...subRow, actionsDropdownDropped: false };
+                });
+                return { ...originalRow, actionsDropdownDropped: false, subRows };
+            });
+
+            const updatedRows: Array<TableRow> = currentTableRows.map((currentRow: TableRow) => {
+                const subRows: Array<TableRow> = currentRow.subRows.map((subRow: TableRow) => {
+                    return { ...subRow, actionsDropdownDropped: false };
+                });
+                return { ...currentRow, actionsDropdownDropped: false, subRows };
+            });
+
+            setCurrentTableRows(updatedRows);
+            setTableRows(updatedOriginalRows);
+            setTableRowsImage(updatedOriginalRows);
+        }
+    };
+
+    /**
+     *
+     * @param event click event
+     * @param row The selected row
+     * @param rowIndex The index of the parent row
+     */
+    const onActionColumnDropped = (event: React.MouseEvent<HTMLDivElement, MouseEvent>, row: TableRow, rowIndex?: number) => {
+        let updatedOriginalRows: Array<TableRow> = [];
+        let updatedRows: Array<TableRow> = [];
+        if (rowIndex) {
+            updatedOriginalRows = tableRows.map((originalRow: TableRow) => {
+                if (originalRow.rowIndex === rowIndex) {
+                    const subRows: Array<TableRow> = originalRow.subRows.map((subRow: TableRow) => {
+                        if (subRow.rowIndex === row.rowIndex) {
+                            return { ...subRow, actionsDropdownDropped: !subRow.actionsDropdownDropped };
+                        }
+
+                        return { ...subRow, actionsDropdownDropped: false };
+                    });
+
+                    return { ...originalRow, subRows };
+                }
+                return { ...originalRow, actionsDropdownDropped: false };
+            });
+
+            updatedRows = currentTableRows.map((currentRow: TableRow) => {
+                if (currentRow.rowIndex === rowIndex) {
+                    const subRows: Array<TableRow> = currentRow.subRows.map((subRow: TableRow) => {
+                        if (subRow.rowIndex === row.rowIndex) {
+                            return { ...subRow, actionsDropdownDropped: !subRow.actionsDropdownDropped };
+                        }
+
+                        return { ...subRow, actionsDropdownDropped: false };
+                    });
+
+                    return { ...currentRow, subRows };
+                }
+                return { ...currentRow, actionsDropdownDropped: false };
+            });
+
+        } else {
+            updatedOriginalRows = tableRows.map((originalRow: TableRow) => {
+                if (originalRow.rowIndex === row.rowIndex) {
+                    return { ...originalRow, actionsDropdownDropped: !originalRow.actionsDropdownDropped };
+                }
+
+                return { ...originalRow, actionsDropdownDropped: false };
+            });
+
+            updatedRows = currentTableRows.map((currentRow: TableRow, index) => {
+                if (currentRow.rowIndex === row.rowIndex) {
+                    return (
+                        { ...currentRow, actionsDropdownDropped: !currentRow.actionsDropdownDropped }
+                    );
+                }
+                return { ...currentRow, actionsDropdownDropped: false };
+            });
+        }
+
+        setCurrentTableRows(updatedRows);
+        setTableRows(updatedOriginalRows);
+        setTableRowsImage(updatedOriginalRows);
     };
 
     /**
@@ -644,6 +749,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
                     rowIndex: index,
                     cells: updatedCells,
                     selected: false,
+                    actionsDropdownDropped: false,
                     expanded: false,
                     subRows: row.subRows ? getRows(row.subRows) : []
                 }
@@ -705,7 +811,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
         }
     };
 
-    const RowsAreCollapsable = (): boolean => {
+    const rowsAreCollapsable = (): boolean => {
         return currentTableRows.some((row: TableRow) => {
             return (
                 ((row.subRows.length > 0) || row.rowContentDetail) ||
@@ -728,6 +834,14 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
 
     // useEffects ----------------------------------------------------------
 
+    // Adding event listener to listen to clicks outside the component on mount, removing on unmount
+    React.useEffect(() => {
+        document.addEventListener("mousedown", onClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", onClickOutside);
+        };
+    });
+
     React.useEffect(() => {
         doPaginate();
     }, [tableRows]);
@@ -742,6 +856,11 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
                 setAllRowsChecked(true);
             }
         }
+
+        const actionColumnIsOpened: boolean = tableRows.some((row: TableRow) => {
+            return row.actionsDropdownDropped || row.subRows?.some((sub: TableRow) => sub.actionsDropdownDropped);
+        });
+        setAnOpenedAction(actionColumnIsOpened);
     }, [currentTableRows]);
 
     React.useEffect(() => {
@@ -796,11 +915,12 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
                 onAllItemsSelected={onAllItemsSelected}
                 onRowExpanded={onRowExpanded}
                 onSubRowExpanded={onSubRowExpanded}
+                onActionDropped={onActionColumnDropped}
                 useShowActionColumn={((props.actionLinks && props.actionLinks.length > 0) || !!props.primaryActionButton)}
                 actionLinks={props.actionLinks}
                 primaryActionButton={props.primaryActionButton}
                 loading={tableRowsImage.length === 0}
-                rowsAreCollapsable={RowsAreCollapsable()}
+                rowsAreCollapsable={rowsAreCollapsable()}
                 className={props.className}
             />
         </div>

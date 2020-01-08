@@ -14,6 +14,16 @@ table {
         > th {
           vertical-align: middle;
           white-space: nowrap;
+          &.sortable {
+            cursor: pointer;
+            &:hover {
+              color: $icon-active-color;
+
+              svg {
+                fill: $icon-active-color;
+              }
+            }
+          }
           &:first-child {
             border-bottom: none;
           }
@@ -117,16 +127,17 @@ table {
               display: inline-block;
 
               .icon-holder {
+                &:hover {
+                  background: $icon-active-color;
+
+                  svg {
+                    fill: $white;
+                  }
+                }
                 svg {
                   fill: $icon-active-color;
                   height: calc(#{$icon-size} * 1.5);
                   width: 100%;
-                }
-              }
-
-              &:hover {
-                > .dropdown-content {
-                  display: block;
                 }
               }
 
@@ -142,6 +153,9 @@ table {
                 z-index: 1;
                 right: 0;
 
+                &.active {
+                  display: block;
+                }
                 > a {
                   color: inherit;
                   padding: 12px 16px;
