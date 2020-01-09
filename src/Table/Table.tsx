@@ -188,29 +188,25 @@ const ActionColumn: React.FunctionComponent<ActionColumnProps> = (props: ActionC
 };
 
 interface TableUIProps {
-    columns: Array<TableHeader>;
-    className: string;
-    rows: Array<TableRow>;
-    sortable: boolean;
-    useRowSelection: boolean;
-    useRowCollapse: boolean;
-    allRowsAreSelected?: boolean;
-
-    loading: boolean;
-    rowsAreCollapsable?: boolean;
-
-    footer: React.ReactNode;
-    useShowActionColumn: boolean;
-
-    onItemSelected?: (e: React.ChangeEvent<HTMLInputElement>, row: TableRow, type: "row" | "subRow", rowIndex?: number) => void;
-    onSort?: (accessor: string, sortDirection: sortDirectionTypes) => void;
-    onAllItemsSelected?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-    onRowExpanded?: (e: React.MouseEvent<HTMLDivElement, MouseEvent>, row: TableRow) => void;
-    onSubRowExpanded?: (e: React.MouseEvent<HTMLDivElement, MouseEvent>, row: TableRow, rowIndex: number) => void;
-    onActionDropped: (event: React.MouseEvent<HTMLDivElement, MouseEvent>, row: TableRow, rowIndex?: number) => void;
-
     actionLinks?: Array<ActionLinkItem>;
+    allRowsAreSelected?: boolean;
+    className: string;
+    columns: Array<TableHeader>;
+    footer: React.ReactNode;
+    loading: boolean;
+    onActionDropped: (event: React.MouseEvent<HTMLDivElement, MouseEvent>, row: TableRow, rowIndex?: number) => void;
+    onAllItemsSelected?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    onItemSelected?: (e: React.ChangeEvent<HTMLInputElement>, row: TableRow, type: "row" | "subRow", rowIndex?: number) => void;
+    onRowExpanded?: (e: React.MouseEvent<HTMLDivElement, MouseEvent>, row: TableRow) => void;
+    onSort?: (accessor: string, sortDirection: sortDirectionTypes) => void;
+    onSubRowExpanded?: (e: React.MouseEvent<HTMLDivElement, MouseEvent>, row: TableRow, rowIndex: number) => void;
     primaryActionButton?: PrimaryActionButton;
+    rows: Array<TableRow>;
+    rowsAreCollapsable?: boolean;
+    sortable: boolean;
+    useRowCollapse: boolean;
+    useRowSelection: boolean;
+    useShowActionColumn: boolean;
 }
 
 const TableUI: React.FunctionComponent<TableUIProps> = React.memo((props: TableUIProps): React.ReactElement<void> => {
@@ -435,17 +431,21 @@ const TableUI: React.FunctionComponent<TableUIProps> = React.memo((props: TableU
     );
 
 });
-interface SearchProps {
+export interface SearchProps {
     onSearch?: (rows: Array<TableRow>) => void;
     searchInColumns?: Array<string>;
     searchText?: string;
     searchTriggered?: boolean;
     triggerSearchOn?: "Change" | "Submit";
 }
+export interface SortProps {
+    onSort?: (rows: Array<TableRow>, accessor: string, sortDirection: sortDirectionTypes) => Array<TableRow>;
+    onAfterSorting?: (rows: Array<TableRow>, sortByColumn: TableHeader) => void;
+}
+
 interface TableProps {
     actionLinks?: Array<ActionLinkItem>;
     className?: string;
-    searchProps?: SearchProps;
     columns: Array<Column>;
     currentpage?: number;
     data: Array<DataItem>;
@@ -453,18 +453,18 @@ interface TableProps {
     offset?: number;
     onRowExpanded?: (expandedRowList: Array<TableRow>) => void;
     onRowSelected?: (selectedRows: Array<TableRow>) => void;
-    onSort?: (rows: Array<TableRow>, sortByColumn: TableHeader) => void;
     primaryActionButton?: PrimaryActionButton;
-    usePagination?: boolean;
+    searchProps?: SearchProps;
+    sortProps?: SortProps;
 }
 
 export const Table: React.FunctionComponent<TableProps> = React.memo((props: TableProps): React.ReactElement<void> => {
+    const [allItemsChecked, setAllRowsChecked] = React.useState<boolean>(false);
+    const [currentTableRows, setCurrentTableRows] = React.useState<Array<TableRow>>([]);
+    const [hasAnOpenedAction, setAnOpenedAction] = React.useState<boolean>(false);
+    const [tableColumns, setTableColumn] = React.useState<Array<TableHeader>>([]);
     const [tableRows, setTableRows] = React.useState<Array<TableRow>>([]);
     const [tableRowsImage, setTableRowsImage] = React.useState<Array<TableRow>>([]);
-    const [currentTableRows, setCurrentTableRows] = React.useState<Array<TableRow>>([]);
-    const [tableColumns, setTableColumn] = React.useState<Array<TableHeader>>([]);
-    const [allItemsChecked, setAllRowsChecked] = React.useState<boolean>(false);
-    const [hasAnOpenedAction, setAnOpenedAction] = React.useState<boolean>(false);
 
     // events -------------------------------------------------------------------------------------
 
@@ -528,7 +528,8 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
      * Close all opened actions div
      */
     const onClickOutside = (e: MouseEvent) => {
-        if (hasAnOpenedAction && (e.target as Element).parentElement.id.indexOf("ellipsis") < 0) {
+        const parentElement: Element = (e.target as Element).parentElement;
+        if (hasAnOpenedAction && (parentElement.id.indexOf("ellipsis") < 0) && (parentElement.className.indexOf("dropdown-content") < 0)) {
             const updatedOriginalRows: Array<TableRow> = tableRows.map((originalRow: TableRow) => {
                 const subRows: Array<TableRow> = originalRow.subRows.map((subRow: TableRow) => {
                     return { ...subRow, actionsDropdownDropped: false };
@@ -619,10 +620,17 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
      * @param sortDirection The direction of the sort : ASC or DESC
      */
     const onSortItems = async (accessor: string, sortDirection: sortDirectionTypes) => {
-        const updatedOriginalRows = await sortArray(tableRows, accessor, sortDirection);
-        const updatedCurrentTableRows = await sortArray(currentTableRows, accessor, sortDirection);
+        let updatedOriginalRows: Array<TableRow> = [];
+        let updatedCurrentTableRows: Array<TableRow> = [];
         let sortByColumn: TableHeader = null;
 
+        if (props.sortProps?.onSort) {
+            updatedOriginalRows = await props.sortProps.onSort(tableRows, accessor, sortDirection);
+            updatedCurrentTableRows = await props.sortProps.onSort(currentTableRows, accessor, sortDirection);
+        } else {
+            updatedOriginalRows = await sortArray(tableRows, accessor, sortDirection);
+            updatedCurrentTableRows = await sortArray(currentTableRows, accessor, sortDirection);
+        }
         const updatedColumns: Array<TableHeader> = tableColumns.map((column: TableHeader) => {
             if (column.accessor === accessor) {
                 sortByColumn = {
@@ -639,7 +647,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
         setCurrentTableRows(updatedCurrentTableRows);
         setTableRowsImage(updatedOriginalRows);
         setTableColumn(updatedColumns);
-        props.onSort(updatedOriginalRows, sortByColumn);
+        props.sortProps.onAfterSorting(updatedOriginalRows, sortByColumn);
     };
 
     /**
@@ -799,7 +807,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
     };
 
     const doPaginate = (): void => {
-        if (props.usePagination && props.currentpage && props.offset && (tableRows.length > 0)) {
+        if (props.currentpage && props.offset && (tableRows.length > 0)) {
             // pagination start from 1 hence the need fro deducting 1
             const start: number = (props.currentpage - 1) * props.offset;
             const end: number = (props.offset * (props.currentpage));
@@ -884,7 +892,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
             return {
                 ...column,
                 isSorted: false,
-                canSort: (column.canSort !== undefined) ? column.canSort : (!!props.onSort ? true : false),
+                canSort: (column.canSort !== undefined) ? column.canSort : (!!props.sortProps ? true : false),
                 isSortedDesc: false
             };
         });
@@ -907,7 +915,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
                 rows={currentTableRows}
                 footer={props.footer}
                 onSort={onSortItems}
-                sortable={!!props.onSort}
+                sortable={!!props.sortProps}
                 useRowSelection={!!props.onRowSelected}
                 useRowCollapse={!!props.onRowExpanded}
                 allRowsAreSelected={allItemsChecked}

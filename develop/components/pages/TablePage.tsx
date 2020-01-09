@@ -90,7 +90,10 @@ const TablePage: React.FunctionComponent = () => {
                         <Table
                             columns={columns}
                             data={smallData}
-                            onSort={(rows: Array<TableRow>, sortByColumn: TableHeader) => { console.log("The sorted rows are ", rows); }}
+                            sortProps={{
+                                onAfterSorting: (rows: Array<TableRow>, sortByColumn: TableHeader) => { console.log("The sorted rows are ", rows); }
+                            }
+                            }
                         />
                     </div>
 
@@ -101,7 +104,6 @@ const TablePage: React.FunctionComponent = () => {
                             data={data}
                             offset={pageSize}
                             currentpage={paginationValue}
-                            usePagination={true}
                             footer={
                                 <Pagination
                                     value={paginationValue}
@@ -184,7 +186,6 @@ const TablePage: React.FunctionComponent = () => {
                             data={data}
                             offset={pageSize}
                             currentpage={paginationValue1}
-                            usePagination={true}
                             searchProps={{
                                 searchInColumns: dropDownList1Selected ? dropDownList1Selected.map((item: DropdownItem) => item.value) : [],
                                 searchText: textBoxValue2,
@@ -194,7 +195,10 @@ const TablePage: React.FunctionComponent = () => {
                             }}
                             primaryActionButton={primaryButton}
                             actionLinks={actionLinks}
-                            onSort={(rows: Array<TableRow>, sortByColumn: TableHeader) => { console.log("The sorted rows are ", rows); }}
+                            sortProps={{
+                                onAfterSorting: (rows: Array<TableRow>, sortByColumn: TableHeader) => { console.log("The sorted rows are ", rows); }
+                            }
+                            }
                             onRowSelected={(rows: Array<TableRow>) => { console.log("The selected rows are ", rows); }}
                             onRowExpanded={(rows: Array<TableRow>) => { console.log("the expanded ros are ", rows); }}
                             footer={

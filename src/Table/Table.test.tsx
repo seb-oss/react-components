@@ -1,6 +1,6 @@
 import * as React from "react";
 import { unmountComponentAtNode, render } from "react-dom";
-import { Column, Table, TableRow, TableHeader, ActionLinkItem, DataItem } from "./Table";
+import { Column, Table, TableRow, TableHeader, ActionLinkItem, DataItem, sortDirectionTypes } from "./Table";
 import makeData from "../../develop/utils/makeData";
 import { act } from "react-dom/test-utils";
 import { Pagination } from "../Pagination/Pagination";
@@ -61,11 +61,12 @@ describe("Component: Table", () => {
 
     it('Should render and be able to sort rows ', async () => {
         const event: jest.Mock = jest.fn((rows: Array<TableRow>, sortByColumn: TableHeader) => { console.log("The sorted rows are "); });
+        const onSortEvent: jest.Mock = jest.fn((rows: Array<TableRow>, accessor: string, sortingOrder: sortDirectionTypes) => rows.slice(0, 2));
         await act(() => {
             render(<Table
                 columns={columns}
                 data={smallData}
-                onSort={event}
+                sortProps={{ onAfterSorting: event }}
             />, container);
         });
         await act(async () => {
@@ -74,6 +75,20 @@ describe("Component: Table", () => {
         // note id column canSort is false
         expect(container.querySelectorAll(".icon-holder").length).toEqual(columns.length - 1);
         expect(event).toHaveBeenCalled();
+
+        // you can also use a custom onSort callback as passed by the user
+        await act(() => {
+            render(<Table
+                columns={columns}
+                data={smallData}
+                sortProps={{ onSort: onSortEvent, onAfterSorting: event }}
+            />, container);
+        });
+        await act(async () => {
+            container.querySelectorAll(".icon-holder").item(1).dispatchEvent(new MouseEvent("click", { bubbles: true }));
+        });
+        // there should just two rows now
+        expect(container.querySelectorAll("tbody > tr.parent-row").length).toEqual(2);
     });
 
     it("Should render and do pagination where necessary ", async () => {
@@ -86,7 +101,6 @@ describe("Component: Table", () => {
                 data={data}
                 offset={pageSize}
                 currentpage={paginationValue}
-                usePagination={true}
                 footer={
                     <Pagination
                         value={paginationValue}
@@ -213,7 +227,7 @@ describe("Component: Table", () => {
         // trigger and open action column
         expect(container.querySelector("tbody tr.parent-row > td .action-column .ellipsis-dropdown-holder .dropdown-content.active")).toBeNull();
         expect(container.querySelector("tbody tr.parent-row > td .action-column .ellipsis-dropdown-holder .dropdown-content.active")).toBeFalsy();
- 
+
         await act(() => {
             container.querySelectorAll("tbody tr.parent-row > td .action-column .ellipsis-dropdown-holder").item(1).dispatchEvent(new MouseEvent("click", { bubbles: true }));
         });
@@ -229,7 +243,7 @@ describe("Component: Table", () => {
 
         expect(container.querySelector("tbody tr.parent-row > td .action-column .ellipsis-dropdown-holder .dropdown-content.active")).toBeNull();
         expect(container.querySelector("tbody tr.parent-row > td .action-column .ellipsis-dropdown-holder .dropdown-content.active")).toBeFalsy();
- 
+
 
         await act(() => {
             container.querySelectorAll("tbody tr.parent-row > td .action-column a").forEach((el: Element) => el.dispatchEvent(new MouseEvent("click", { bubbles: true })));
