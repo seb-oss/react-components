@@ -38,6 +38,15 @@ describe("Component: Dropdown", () => {
         expect(container.querySelector(".custom-dropdown-toggle").classList.contains("open")).toBeFalsy();
     });
 
+    it("Should not render and warn if list is null or not an array", () => {
+        act(() => {
+            render(<Dropdown {...DEFAULT_PROPS} list={null} />, container);
+        });
+
+        expect(container).toBeTruthy();
+        expect(container.querySelector(".custom-dropdown")).toBeFalsy();
+    });
+
     it("Should pass custom class and id", () => {
         const props: DropdownProps = {
             ...DEFAULT_PROPS,
@@ -49,8 +58,19 @@ describe("Component: Dropdown", () => {
             render(<Dropdown {...props} />, container);
         });
 
-        expect(container.querySelector(".custom-dropdown").classList.contains(props.className)).toBeTruthy();
-        expect(container.querySelector(".custom-dropdown").getAttribute("id")).toEqual(props.id);
+        const target = container.querySelector(".custom-dropdown");
+        expect(target).toBeTruthy();
+        expect(target.classList.contains(props.className)).toBeTruthy();
+        expect(target.getAttribute("id")).toEqual(props.id);
+
+        act(() => {
+            render(<Dropdown {...props} native />, container);
+        });
+
+        const target2 = container.querySelector(".form-control");
+        expect(target2).toBeTruthy();
+        expect(target2.classList.contains(props.className)).toBeTruthy();
+        expect(target2.getAttribute("id")).toEqual(props.id);
     });
 
     it("Should render label", () => {
@@ -62,9 +82,18 @@ describe("Component: Dropdown", () => {
         act(() => {
             render(<Dropdown {...props} />, container);
         });
+
         const target = container.querySelector(".dropdown-label");
         expect(target).toBeTruthy();
         expect(target.innerHTML).toBe(props.label);
+
+        act(() => {
+            render(<Dropdown {...props} native />, container);
+        });
+
+        const target2 = container.querySelector(".dropdown-label");
+        expect(target2).toBeTruthy();
+        expect(target2.innerHTML).toBe(props.label);
     });
 
     it("Should render placeholder", () => {
@@ -80,7 +109,7 @@ describe("Component: Dropdown", () => {
         expect(container.querySelector(".title").innerHTML).toBe(props.placeholder);
     });
 
-    it("Should open menu when clicked on trigger", () => {
+    it("Should open menu when clicked on trigger or pressing enter", () => {
         act(() => {
             render(<Dropdown {...DEFAULT_PROPS} />, container);
         });
@@ -95,6 +124,48 @@ describe("Component: Dropdown", () => {
         expect(toggle.classList.contains("open")).toBeTruthy();
         const target: Element = container.querySelector(".custom-dropdown-menu");
         expect(target.classList.contains("show")).toBeTruthy();
+
+        act(() => {
+            toggle.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+        });
+
+        expect(toggle.classList.contains("open")).toBeFalsy();
+        expect(target.classList.contains("show")).toBeFalsy();
+
+        act(() => {
+            toggle.dispatchEvent(new KeyboardEvent("keydown", { bubbles: true, key: "enter" }));
+        });
+
+        expect(toggle.classList.contains("open")).toBeTruthy();
+        expect(target.classList.contains("show")).toBeTruthy();
+    });
+
+    it("Should close menu when clicking anywhere outside the dropdown component", () => {
+        act(() => {
+            render(<Dropdown {...DEFAULT_PROPS} label="my-label"/>, container);
+        });
+
+        const toggle: Element = container.querySelector(".custom-dropdown-toggle");
+        expect(toggle.classList.contains("open")).toBeFalsy();
+
+        act(() => {
+            toggle.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+        });
+
+        expect(toggle.classList.contains("open")).toBeTruthy();
+        const menu: Element = container.querySelector(".custom-dropdown-menu");
+        expect(menu.classList.contains("show")).toBeTruthy();
+
+        const label: Element = container.querySelector(".dropdown-label");
+        expect(label).toBeTruthy();
+        expect(label.innerHTML).toBe("my-label");
+
+        act(() => {
+            container.dispatchEvent(new Event("mousedown", { bubbles: true }));
+        });
+
+        const toggle2: Element = container.querySelector(".custom-dropdown-toggle");
+        expect(toggle2.classList.contains("open")).toBeFalsy();
     });
 
     it("Should display \"Empty\" and be disabled if list prop is an empty array", () => {
@@ -123,6 +194,12 @@ describe("Component: Dropdown", () => {
         });
 
         expect(container.querySelector(".title").innerHTML).toBe(DEFAULT_PROPS.list[0].label);
+
+        act(() => {
+            render(<Dropdown {...props} native />, container);
+        });
+
+        expect(container.querySelector("select").value).toBe(DEFAULT_PROPS.list[0].value);
     });
 
     it("Should display correct label in multi mode for each scenario (1 selected, more than one but not all selected, all selected)", () => {
@@ -228,6 +305,14 @@ describe("Component: Dropdown", () => {
         const target = container.querySelector(".alert-danger");
         expect(target).toBeTruthy();
         expect(target.innerHTML).toBe(props.error);
+
+        act(() => {
+            render(<Dropdown {...props} native />, container);
+        });
+
+        const target2 = container.querySelector(".alert-danger");
+        expect(target2).toBeTruthy();
+        expect(target2.innerHTML).toBe(props.error);
     });
 
     it("Should disable component when disabled set to true", () => {
@@ -244,6 +329,17 @@ describe("Component: Dropdown", () => {
         expect(target).toBeTruthy();
         expect(target.classList.contains("disabled")).toBeTruthy();
         expect(target.querySelector(".custom-dropdown-toggle").classList.contains("disabled")).toBeTruthy();
+
+        act(() => {
+            render(<Dropdown {...props} native label="my-label" />, container);
+        });
+
+        const target2 = container.querySelector("select");
+        expect(target2).toBeTruthy();
+        expect(target2.classList.contains("disabled")).toBeTruthy();
+        const target3 = container.querySelector(".dropdown-label");
+        expect(target3).toBeTruthy();
+        expect(target3.classList.contains("disabled")).toBeTruthy();
     });
 
     it("Should display clear button if at least one item is selected and clearable prop or multi prop is true", () => {
@@ -286,5 +382,225 @@ describe("Component: Dropdown", () => {
 
         const target = container.querySelector(".dropdown-times-icon");
         expect(target).toBeFalsy();
+    });
+
+    it("Should clear all items selected when clear button pressed", () => {
+        const props: DropdownProps = {
+            ...DEFAULT_PROPS,
+            selectedValue: { ...DEFAULT_PROPS.list[0] },
+            clearable: true
+        };
+
+        act(() => {
+            render(<Dropdown {...props} />, container);
+        });
+
+        const target = container.querySelector(".right-items > .dropdown-icon-holder");
+        expect(target).toBeTruthy();
+
+        act(() => {
+            target.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+        });
+
+        expect(props.onChange).toBeCalledTimes(1);
+        expect(props.onChange).toBeCalledWith(null);
+
+        act(() => {
+            render(<Dropdown {...props} selectedValue={null} />, container);
+        });
+
+        const target2 = container.querySelector(".right-items > .dropdown-icon-holder > .dropdown-times-icon");
+        expect(target2).toBeFalsy();
+    });
+
+    it("Should select all items when select all button pressed", () => {
+        const props: DropdownProps = {
+            ...DEFAULT_PROPS,
+            selectedValue: [{ ...DEFAULT_PROPS.list[0] }],
+            multi: true
+        };
+
+        act(() => {
+            render(<Dropdown {...props} />, container);
+        });
+
+        const target = container.querySelector("#select-all");
+        expect(target).toBeTruthy();
+
+        const selectedOptions = container.querySelectorAll(".custom-dropdown-item.selected");
+        expect(selectedOptions.length).toBe(1);
+
+        act(() => {
+            target.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+        });
+
+        expect(props.onChange).toBeCalledTimes(1);
+        expect(props.onChange).toBeCalledWith(props.list);
+
+        act(() => {
+            render(<Dropdown {...props} selectedValue={props.list} />, container);
+        });
+
+        const selectedOptions2 = container.querySelectorAll(".custom-dropdown-item.selected");
+        expect(selectedOptions2.length).toBe(4);
+    });
+
+    it("Should toggle deselect all items when select all button is pressed and all items are already selected", () => {
+        const props: DropdownProps = {
+            ...DEFAULT_PROPS,
+            selectedValue: [...DEFAULT_PROPS.list],
+            multi: true
+        };
+
+        act(() => {
+            render(<Dropdown {...props} />, container);
+        });
+
+        const target = container.querySelector("#select-all");
+        expect(target).toBeTruthy();
+
+        const selectedOptions = container.querySelectorAll(".custom-dropdown-item.selected");
+        expect(selectedOptions.length).toBe(4);
+
+        act(() => {
+            target.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+        });
+
+        expect(props.onChange).toBeCalledTimes(1);
+        expect(props.onChange).toBeCalledWith([]);
+
+        act(() => {
+            render(<Dropdown {...props} selectedValue={[]} />, container);
+        });
+
+        const selectedOptions2 = container.querySelectorAll(".custom-dropdown-item.selected");
+        expect(selectedOptions2.length).toBe(0);
+    });
+
+    it("Should only display items that fit the search term when searchable is set to true", () => {
+        const props: DropdownProps = {
+            ...DEFAULT_PROPS,
+            searchable: true
+        };
+
+        act(() => {
+            render(<Dropdown {...props} />, container);
+        });
+
+        const options = container.querySelectorAll(".custom-dropdown-item");
+        expect(options.length).toBe(3);
+
+        const searchInput: HTMLInputElement = container.querySelector(".search-input");
+        expect(searchInput.getAttribute("value")).toBe("");
+        searchInput.setAttribute("value", "a");
+
+        act(() => {
+            searchInput.dispatchEvent(new Event("change", { bubbles: true }));
+        });
+
+        expect(searchInput.value).toBe("a");
+        const options2 = container.querySelectorAll(".custom-dropdown-item");
+        expect(options2.length).toBe(1);
+    });
+
+    it("Should focus and highlight the option on mouse enter", () => {
+        const props: DropdownProps = {
+            ...DEFAULT_PROPS
+        };
+
+        act(() => {
+            render(<Dropdown {...props} />, container);
+        });
+
+        const options = container.querySelectorAll(".custom-dropdown-item");
+        expect(options.length).toBe(3);
+
+        options.forEach((option: Element) => {
+            expect(option.classList.contains("highlighted")).toBeFalsy();
+        });
+
+        act(() => {
+            options.item(0).dispatchEvent(new Event("mousemove", { bubbles: true }));
+        });
+
+        const options2 = container.querySelectorAll(".custom-dropdown-item");
+        expect(options2.item(0).classList.contains("highlighted")).toBeTruthy();
+        expect(options2.item(1).classList.contains("highlighted")).toBeFalsy();
+        expect(options2.item(2).classList.contains("highlighted")).toBeFalsy();
+
+        act(() => {
+            options.item(1).dispatchEvent(new Event("mousemove", { bubbles: true }));
+        });
+
+        const options3 = container.querySelectorAll(".custom-dropdown-item");
+        expect(options3.item(0).classList.contains("highlighted")).toBeFalsy();
+        expect(options3.item(1).classList.contains("highlighted")).toBeTruthy();
+        expect(options2.item(2).classList.contains("highlighted")).toBeFalsy();
+    });
+
+    it("Should navigate between options when keyboard up and down arrows are pressed", () => {
+        act(() => {
+            render(<Dropdown {...DEFAULT_PROPS} />, container);
+        });
+
+        const toggle: Element = container.querySelector(".custom-dropdown-toggle");
+        expect(toggle).toBeTruthy();
+        const options = container.querySelectorAll(".custom-dropdown-item");
+        expect(options.length).toBe(3);
+
+        act(() => {
+            toggle.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+        });
+
+        const menu: Element = container.querySelector(".custom-dropdown-menu");
+        expect(menu).toBeTruthy();
+        expect(menu.classList.contains("show")).toBeTruthy();
+
+        act(() => {
+            menu.dispatchEvent(new KeyboardEvent("keydown", { bubbles: true, key: "arrowdown" }));
+        });
+
+        const options2 = container.querySelectorAll(".custom-dropdown-item");
+        expect(options2.item(0).classList.contains("highlighted")).toBeTruthy();
+        expect(options2.item(1).classList.contains("highlighted")).toBeFalsy();
+        expect(options2.item(2).classList.contains("highlighted")).toBeFalsy();
+
+        act(() => {
+            menu.dispatchEvent(new KeyboardEvent("keydown", { bubbles: true, key: "arrowdown" }));
+        });
+
+        const options3 = container.querySelectorAll(".custom-dropdown-item");
+        expect(options3.item(0).classList.contains("highlighted")).toBeFalsy();
+        expect(options3.item(1).classList.contains("highlighted")).toBeTruthy();
+        expect(options3.item(2).classList.contains("highlighted")).toBeFalsy();
+
+        act(() => {
+            menu.dispatchEvent(new KeyboardEvent("keydown", { bubbles: true, key: "arrowup" }));
+        });
+
+        const options4 = container.querySelectorAll(".custom-dropdown-item");
+        expect(options4.item(0).classList.contains("highlighted")).toBeTruthy();
+        expect(options4.item(1).classList.contains("highlighted")).toBeFalsy();
+        expect(options4.item(2).classList.contains("highlighted")).toBeFalsy();
+
+        act(() => {
+            menu.dispatchEvent(new KeyboardEvent("keydown", { bubbles: true, key: "enter" }));
+        });
+
+        expect(DEFAULT_PROPS.onChange).toHaveBeenCalledTimes(1);
+        expect(DEFAULT_PROPS.onChange).toHaveBeenCalledWith(DEFAULT_PROPS.list[0]);
+        expect(menu.classList.contains("show")).toBeFalsy();
+
+        act(() => {
+            toggle.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+        });
+
+        expect(menu.classList.contains("show")).toBeTruthy();
+
+        act(() => {
+            menu.dispatchEvent(new KeyboardEvent("keydown", { bubbles: true, key: "escape" }));
+        });
+
+        expect(menu.classList.contains("show")).toBeFalsy();
     });
 });
