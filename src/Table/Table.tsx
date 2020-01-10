@@ -529,7 +529,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
      */
     const onClickOutside = (e: MouseEvent) => {
         const parentElement: Element = (e.target as Element).parentElement;
-        if (hasAnOpenedAction && (parentElement.id.indexOf("ellipsis") < 0) && (parentElement.className.indexOf("dropdown-content") < 0)) {
+        if (hasAnOpenedAction && (parentElement.id.indexOf("ellipsis") < 0) && (!parentElement.classList.contains("dropdown-content"))) {
             const updatedOriginalRows: Array<TableRow> = tableRows.map((originalRow: TableRow) => {
                 const subRows: Array<TableRow> = originalRow.subRows.map((subRow: TableRow) => {
                     return { ...subRow, actionsDropdownDropped: false };
