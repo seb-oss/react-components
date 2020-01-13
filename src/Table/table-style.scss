@@ -1,5 +1,5 @@
 @import "../colours.scss";
-
+@import "../../develop/styles/shared/mixins.scss";
 $icon-color: $gray-500;
 $icon-active-color: $blue-dark;
 
@@ -142,19 +142,23 @@ table {
               }
 
               > .dropdown-content {
-                display: none;
                 position: absolute;
                 background-color: $white;
-                border-radius: 4px;
                 outline: none;
-                border: 1px solid #007ac7;
-                min-width: 160px;
-                box-shadow: 0px 3px 3px 0px rgba(0, 0, 0, 0.4);
-                z-index: 1;
                 right: 0;
-
+                max-height: 0;
+                width: 0;
+                overflow-y: auto;
+                @include transition(max-height 200ms);
+                
                 &.active {
-                  display: block;
+                  max-height: 10000px;
+                  width: auto;
+                  border: 1px solid #007ac7;
+                  border-radius: 4px;
+                  z-index: 1;
+                  min-width: 160px;
+                  box-shadow: 0px 3px 3px 0px rgba(0, 0, 0, 0.4);
 
                   &.dropup {
                     top: auto;

@@ -140,11 +140,28 @@ interface ActionColumnProps {
     actionLinks?: Array<ActionLinkItem>;
     primaryActionButton?: PrimaryActionButton;
     selectedRow: TableRow;
+    tableRef: React.RefObject<HTMLTableElement>;
     onActionDropped?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
 }
 
 const ActionColumn: React.FunctionComponent<ActionColumnProps> = (props: ActionColumnProps) => {
     const btnPrimaryRandomIds = randomId("btn");
+    const [dropup, setDropup] = React.useState<boolean>(false);
+    const actionRef: React.RefObject<HTMLDivElement> = React.createRef<HTMLDivElement>();
+
+    function getActionColumnClasses() {
+        let className: string = "dropdown-content";
+        if (props.selectedRow?.actionsDropdownDropped) {
+            className += " active";
+        }
+
+        if (dropup) {
+            className += " dropup";
+        }
+
+        return className;
+    }
+
     return (
         <div className="action-column">
             {props.primaryActionButton &&
@@ -162,12 +179,32 @@ const ActionColumn: React.FunctionComponent<ActionColumnProps> = (props: ActionC
             {props.actionLinks && props.actionLinks.length > 0 &&
                 <div
                     className="ellipsis-dropdown-holder"
-                    onClick={props.onActionDropped}
+                    onClick={(e) => {
+                        const tableSize: DOMRect = props.tableRef?.current?.getBoundingClientRect();
+                        const actionColumnHeight: number = actionRef.current?.scrollHeight;
+                        const actionColumSize: DOMRect = actionRef.current?.getBoundingClientRect();
+
+                        if (tableSize?.height > actionColumnHeight) {
+                            const lengthOffset: number = tableSize?.bottom - actionColumSize?.bottom;
+                            if (lengthOffset < actionColumnHeight) {
+                                setDropup(true);
+                            } else {
+                                setDropup(false);
+                            }
+                        } else {
+                            setDropup(false);
+                        }
+
+                        props.onActionDropped(e);
+                    }}
                 >
                     <div className="icon-holder" id={"ellipsis-" + props.selectedRow.rowIndex}>
                         {ellipsis}
                     </div>
-                    <div className={"dropdown-content" + (props.selectedRow.actionsDropdownDropped ? " active" : "")} >
+                    <div
+                        className={getActionColumnClasses()}
+                        ref={actionRef}
+                    >
                         {props.actionLinks.map((link: ActionLinkItem, index: number) =>
                             <a
                                 href="#"
@@ -211,9 +248,10 @@ interface TableUIProps {
 
 const TableUI: React.FunctionComponent<TableUIProps> = React.memo((props: TableUIProps): React.ReactElement<void> => {
     const checkAllRandomIds: string = randomId("chk-all");
+    const tableRef: React.RefObject<HTMLTableElement> = React.createRef<HTMLTableElement>();
     return (
         <div className={"table-responsive" + (props.loading ? " skeleton-loader skeleton-loader-table" : "")}>
-            <table className={"table" + (props.className ? ` ${props.className}` : "")}>
+            <table className={"table" + (props.className ? ` ${props.className}` : "")} ref={tableRef}>
                 <thead>
                     <tr>
                         {props.useRowSelection ?
@@ -320,6 +358,7 @@ const TableUI: React.FunctionComponent<TableUIProps> = React.memo((props: TableU
                                                 actionLinks={props.actionLinks}
                                                 primaryActionButton={props.primaryActionButton}
                                                 selectedRow={row}
+                                                tableRef={tableRef}
                                                 onActionDropped={(event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
                                                     props.onActionDropped(event, row, null);
                                                 }}
@@ -384,6 +423,7 @@ const TableUI: React.FunctionComponent<TableUIProps> = React.memo((props: TableU
                                                         actionLinks={props.actionLinks}
                                                         primaryActionButton={props.primaryActionButton}
                                                         selectedRow={subRow}
+                                                        tableRef={tableRef}
                                                         onActionDropped={(event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
                                                             props.onActionDropped(event, subRow, row.rowIndex);
                                                         }}
