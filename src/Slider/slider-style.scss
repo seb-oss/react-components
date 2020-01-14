@@ -175,14 +175,14 @@ $disabled-thumb-border-color: #8c8c8c;
             position: absolute;
             top: 15px;
             pointer-events: none;
-            padding: 0 28px;
+            padding: 0 12px;
             right: 0;
             left: 0;
             height: 4px;
             .custom-slider-track {
                 position: relative;
                 width: 100%;
-                height: 5px;
+                height: 4px;
                 border-radius: 8px;
                 pointer-events: none;
                 z-index: 2;
@@ -198,23 +198,25 @@ $disabled-thumb-border-color: #8c8c8c;
                 }
                 .custom-slider-slider-before {
                     left: 0px;
-                    width: calc(100% + 56px);
-                    margin: 0 -28px;
+                    width: calc(100% + 24px);
+                    margin: 0 -12px;
                     background-color: $gray-500;
+                    border-radius: 2px;
                 }
                 .custom-slider-slider-after {
                     will-change: width;
                     transform-origin: left;
-                    margin: 0 -28px;
+                    margin: 0 -12px;
                     transform: rotateY(0deg);
+                    border-radius: 2px;
                 }
                 .custom-slider-thumb {
                     position: relative;
-                    height: 32px;
-                    width: 56px;
+                    height: 24px;
+                    width: 24px;
                     background-color: $blue-dark;
                     border-radius: 4px;
-                    top: -14px;
+                    top: -10px;
                     transform-origin: center;
                     @include transform(translateX(-50%));
                     pointer-events: none;
@@ -268,21 +270,6 @@ $disabled-thumb-border-color: #8c8c8c;
                         &.purple {
                             @include tooltip-theme($purple-darker);
                         }
-                    }
-                    [class*="custom-slider-icon-"] {
-                        position: absolute;
-                        top: 50%;
-                        transform: translateY(-50%);
-                        svg {
-                            width: 12px;
-                            fill: $white;
-                        }
-                    }
-                    .custom-slider-icon-left {
-                        left: 12px;
-                    }
-                    .custom-slider-icon-right {
-                        right: 12px;
                     }
                 }
                 .custom-slider-label {
