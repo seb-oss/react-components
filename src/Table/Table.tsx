@@ -138,10 +138,10 @@ function searchTextInArray(items: Array<TableRow>, keyword: string, searchFields
 
 interface ActionColumnProps {
     actionLinks?: Array<ActionLinkItem>;
+    onActionDropped?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
     primaryActionButton?: PrimaryActionButton;
     selectedRow: TableRow;
     tableRef: React.RefObject<HTMLTableElement>;
-    onActionDropped?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
 }
 
 const ActionColumn: React.FunctionComponent<ActionColumnProps> = (props: ActionColumnProps) => {
@@ -194,7 +194,7 @@ const ActionColumn: React.FunctionComponent<ActionColumnProps> = (props: ActionC
                         } else {
                             setDropup(false);
                         }
-
+                        e.preventDefault();
                         props.onActionDropped(e);
                     }}
                 >
