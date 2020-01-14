@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Dropdown, DropdownProps } from "./Dropdown";
 import { unmountComponentAtNode, render } from "react-dom";
-import { act } from "react-dom/test-utils";
+import { act, Simulate } from "react-dom/test-utils";
 
 describe("Component: Dropdown", () => {
     let container: HTMLDivElement = null;
@@ -535,7 +535,7 @@ describe("Component: Dropdown", () => {
         const options3 = container.querySelectorAll(".custom-dropdown-item");
         expect(options3.item(0).classList.contains("highlighted")).toBeFalsy();
         expect(options3.item(1).classList.contains("highlighted")).toBeTruthy();
-        expect(options2.item(2).classList.contains("highlighted")).toBeFalsy();
+        expect(options3.item(2).classList.contains("highlighted")).toBeFalsy();
     });
 
     it("Should navigate between options when keyboard up and down arrows are pressed", () => {
