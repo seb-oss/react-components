@@ -22,30 +22,6 @@ This React component supports customization and configurations. The component na
  <Table
     columns={columns}
     data={data}
-    offset={pageSize}
-    currentpage={paginationValue}
-    usePagination={true}
-    searchProps={{
-        searchInColumns: dropDownList1Selected ? dropDownList1Selected.map((item: DropdownItem) => item.value) : [],
-        searchText: textBoxValue2,
-        triggerSearchOn: "Submit",
-        searchTriggered: searchTriggered,
-        onSearch: (searchResults: Array<TableRow>) => { console.log("the search is now ", searchResults); }
-    }}
-    primaryActionButton={primaryButton}
-    actionLinks={actionLinks}
-    onSort={(rows: Array<TableRow>, sortByColumn: TableHeader) => { console.log("The sorted rows are ", rows); }}
-    onRowSelection={(rows: Array<TableRow>) => { console.log("The selected rows are ", rows); }}
-    onRowExpanded={(rows: Array<TableRow>) => { console.log("the expanded ros are ", rows); }}
-    footer={
-        <Pagination
-            value={paginationValue}
-            onChange={setPagination}
-            size={3}
-            offset={3}
-            useFirstAndLast={true}
-        />
-    }
 />
 ```
 

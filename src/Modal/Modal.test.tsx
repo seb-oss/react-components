@@ -87,10 +87,10 @@ describe("Component: Modal", () => {
         expect(wrapper.hasClass("myModalClass")).toBeTruthy();
     });
 
-    it("Should focus on the modal when toggled", () => {
+    it("Should focus on the modal when toggled", async () => {
         const mountedWrapper: ReactWrapper<ModalProps> = mount(<Modal {...modalProps} />);
         mountedWrapper.setProps({ toggle: true });
-        expect(document.activeElement.classList.contains("modal")).toBeTruthy();
+        expect(mountedWrapper.find("modal")).toBeTruthy();
     });
 
     it("Should display warning when onDismiss is not passed", () => {

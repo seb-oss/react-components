@@ -72,7 +72,7 @@ describe("Component: Table", () => {
         await act(async () => {
             container.querySelectorAll(".icon-holder").item(1).dispatchEvent(new MouseEvent("click", { bubbles: true }));
         });
-        // note id column canSort is false
+        // note: id column canSort is false
         expect(container.querySelectorAll(".icon-holder").length).toEqual(columns.length - 1);
         expect(event).toHaveBeenCalled();
 
@@ -111,14 +111,14 @@ describe("Component: Table", () => {
                 }
             />, container);
         });
-        await act(() => {
+        act(() => {
             container.querySelectorAll("tfoot > tr .page-item").item(1).dispatchEvent(new MouseEvent("click", { bubbles: true }))
         });
         expect(container.querySelectorAll("tfoot > tr .page-item")).toBeDefined();
         expect(setPage).toHaveBeenCalled();
     });
 
-    it("Should render and do be able to expand to sub rows and row details ", async () => {
+    it("Should render and be able to expand the subRows and row details ", async () => {
         const onRowExpanded: jest.Mock = jest.fn((rows: Array<TableRow>) => { console.log("The rows are "); });
         await act(() => {
             render(
@@ -129,11 +129,11 @@ describe("Component: Table", () => {
                 />, container
             );
         });
-        await act(() => {
+        act(() => {
             container.querySelectorAll("tbody > tr.parent-row .icon-holder svg").item(1).dispatchEvent(new MouseEvent("click", { bubbles: true }));
         });
 
-        await act(() => {
+        act(() => {
             container.querySelectorAll("tbody > tr.sub-row .icon-holder svg").item(1).dispatchEvent(new MouseEvent("click", { bubbles: true }));
         });
 
@@ -156,7 +156,7 @@ describe("Component: Table", () => {
             );
         });
 
-        await act(() => {
+        act(() => {
             container.querySelectorAll("tbody > tr.parent-row .icon-holder svg").item(1).dispatchEvent(new MouseEvent("click", { bubbles: true }));
         });
 
@@ -176,7 +176,7 @@ describe("Component: Table", () => {
                 />, container
             );
         });
-        await act(() => {
+        act(() => {
             // all items select 
             container.querySelectorAll("thead .custom-control-input").item(0).dispatchEvent(new MouseEvent("click", { bubbles: true }));
             // one item selection
@@ -225,27 +225,29 @@ describe("Component: Table", () => {
         });
 
         // trigger and open action column
-        expect(container.querySelector("tbody tr.parent-row > td .action-column .ellipsis-dropdown-holder .dropdown-content.active")).toBeNull();
-        expect(container.querySelector("tbody tr.parent-row > td .action-column .ellipsis-dropdown-holder .dropdown-content.active")).toBeFalsy();
+        const openedActionColumnString: string = "tbody tr.parent-row > td .action-column .ellipsis-dropdown-holder .dropdown-content.active";
+        expect(container.querySelector(openedActionColumnString)).toBeNull();
+        expect(container.querySelector(openedActionColumnString)).toBeFalsy();
 
-        await act(() => {
+        act(() => {
             container.querySelectorAll("tbody tr.parent-row > td .action-column .ellipsis-dropdown-holder").item(1).dispatchEvent(new MouseEvent("click", { bubbles: true }));
         });
 
-        expect(container.querySelector("tbody tr.parent-row > td .action-column .ellipsis-dropdown-holder .dropdown-content.active")).toBeDefined();
-        expect(container.querySelector("tbody tr.parent-row > td .action-column .ellipsis-dropdown-holder .dropdown-content.active")).toBeTruthy();
+
+        expect(container.querySelector(openedActionColumnString)).toBeDefined();
+        expect(container.querySelector(openedActionColumnString)).toBeTruthy();
 
         // action should be closed when you click outside the div 
 
-        await act(() => {
+        act(() => {
             container.querySelector("tbody").dispatchEvent(new MouseEvent("mousedown", { bubbles: true }));
         });
 
-        expect(container.querySelector("tbody tr.parent-row > td .action-column .ellipsis-dropdown-holder .dropdown-content.active")).toBeNull();
-        expect(container.querySelector("tbody tr.parent-row > td .action-column .ellipsis-dropdown-holder .dropdown-content.active")).toBeFalsy();
+        expect(container.querySelector(openedActionColumnString)).toBeNull();
+        expect(container.querySelector(openedActionColumnString)).toBeFalsy();
 
 
-        await act(() => {
+        act(() => {
             container.querySelectorAll("tbody tr.parent-row > td .action-column a").forEach((el: Element) => el.dispatchEvent(new MouseEvent("click", { bubbles: true })));
         });
 
