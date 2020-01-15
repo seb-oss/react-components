@@ -455,8 +455,7 @@ describe("Component: Dropdown", () => {
         const target: Element = container.querySelector("#select-all");
         expect(target).toBeTruthy();
 
-        const selectedOptions: NodeListOf<Element> = container.querySelectorAll(".custom-dropdown-item.selected");
-        expect(selectedOptions.length).toBe(1);
+        expect(container.querySelectorAll(".custom-dropdown-item.selected").length).toBe(1);
 
         act(() => {
             target.dispatchEvent(new MouseEvent("click", { bubbles: true }));
@@ -469,8 +468,7 @@ describe("Component: Dropdown", () => {
             render(<Dropdown {...props} selectedValue={props.list} />, container);
         });
 
-        const newSelectedOptions: NodeListOf<Element> = container.querySelectorAll(".custom-dropdown-item.selected");
-        expect(newSelectedOptions.length).toBe(4);
+        expect(container.querySelectorAll(".custom-dropdown-item.selected").length).toBe(4);
     });
 
     it("Should toggle deselect all items when select all button is pressed and all items are already selected", () => {
@@ -813,7 +811,7 @@ describe("Component: Dropdown", () => {
             render(<Dropdown {...props} />, container);
         });
 
-        const clearButton: Element = container.querySelector(".right-items > .dropdown-icon-holder:not(.chevron");
+        const clearButton: Element = container.querySelector(".right-items > .dropdown-icon-holder:not(.chevron)");
         expect(clearButton).toBeTruthy();
         expect(clearButton.getAttribute("onclick")).toBeFalsy();
     });
