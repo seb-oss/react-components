@@ -149,7 +149,7 @@ const ActionColumn: React.FunctionComponent<ActionColumnProps> = (props: ActionC
     const [dropup, setDropup] = React.useState<boolean>(false);
     const actionRef: React.RefObject<HTMLDivElement> = React.createRef<HTMLDivElement>();
 
-    function getActionColumnClasses() {
+    function getActionColumnClasses(): string {
         let className: string = "dropdown-content";
         if (props.selectedRow?.actionsDropdownDropped) {
             className += " active";
@@ -745,7 +745,11 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
     const onRowExpanded = (e: React.MouseEvent<HTMLDivElement, MouseEvent>, row: TableRow): void => {
         const updatedOriginalRows = tableRows.map((originalRow: TableRow) => {
             if (originalRow.rowIndex === row.rowIndex) {
-                return { ...originalRow, expanded: !originalRow.expanded };
+                return {
+                    ...originalRow,
+                    expanded: !originalRow.expanded,
+                    subRows: originalRow?.subRows.map((subRow: TableRow) => ({ ...subRow, expanded: false }))
+                };
             }
 
             return originalRow;
@@ -754,7 +758,10 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
         const updatedRows: Array<TableRow> = currentTableRows.map((currentRow: TableRow, index) => {
             if (currentRow.rowIndex === row.rowIndex) {
                 return (
-                    { ...currentRow, expanded: !currentRow.expanded }
+                    {
+                        ...currentRow, expanded: !currentRow.expanded,
+                        subRows: currentRow?.subRows.map((subRow: TableRow) => ({ ...subRow, expanded: false }))
+                    }
                 );
             }
             return currentRow;
