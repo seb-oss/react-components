@@ -61,6 +61,6 @@ These are the current available properties:
 | onSort?         | `(rows: Array<TableRow>, accessor: string, sortDirection: sortDirectionTypes) => Array<TableRow>` | A custom sorting function that can be alternatively passed by user         |
 
 ## Footnote
-1. `Column`, `TableRow`, `PrimaryActionButton`, `ActionLinkItem`, `TableHeader`, `Data` and `SearchProps` interfaces/types are all importable from the component;
+1. `Column`, `TableRow`, `PrimaryActionButton`, `ActionLinkItem`, `TableHeader`, `SortProps`, `Data` and `SearchProps` interfaces/types are all importable from the component;
 
 
