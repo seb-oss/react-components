@@ -1,5 +1,5 @@
 @import "../colours";
-$arrow-size: 9px;
+$arrow-size: 8px;
 $icon-size: 25px;
 $tooltip-distance: 4px;
 @mixin theme($background-color, $font-color) {
@@ -15,6 +15,13 @@ $tooltip-distance: 4px;
 
         &:after {
             border-color: transparent transparent $background-color $background-color;
+        }
+    }
+}
+@mixin arrow-position {
+    >.tooltip {
+        >.tooltip-arrow {
+            @content;
         }
     }
 }
@@ -39,31 +46,9 @@ $tooltip-distance: 4px;
         }
     }
 }
-.tooltip-root-container {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    .tooltip-content {
-        position: absolute;
-        text-align: center;
-        z-index: 1;
-        height: 0;
-        opacity: 0;
-        transition: height 0ms, opacity 150ms ease-in-out;
-        overflow: hidden;
-        &.show, &:focus {
-            height: auto;
-            opacity: 1;
-            >.tooltip-arrow {
-                height: 13px;
-                opacity: 1;
-            }
-            >.tooltip-inner {
-                height: auto;
-                opacity: 1;
-            }
-        }
+.overlay-container {
+    .tooltip {
+        position: relative;
         >.tooltip-arrow {
             position: absolute;
             display: block;
@@ -80,8 +65,8 @@ $tooltip-distance: 4px;
                 bottom: 0;
                 left: 0;
                 display: block;
-                width: 5px;
-                height: 5px;
+                width: 15px;
+                height: 15px;
                 margin: auto;
                 content: '';
                 pointer-events: auto;
@@ -117,85 +102,6 @@ $tooltip-distance: 4px;
                 }
             }
         }
-        &.left, &.right {
-            >.tooltip-arrow {
-                top: 50%;
-                transform: translateY(-50%);
-            }
-        }
-        &.left-bottom, &.right-bottom {
-            >.tooltip-arrow {
-                bottom: 5px;
-            }
-        }
-        &.left-top, &.right-top {
-            >.tooltip-arrow {
-                top: 5px;
-            }
-        }
-        &.top, &.bottom {
-            >.tooltip-arrow {
-                left: 50%;
-                transform: translateX(-50%);
-            }
-        }
-        &.top-left, &.bottom-left {
-            >.tooltip-arrow {
-                left: 5px;
-            }
-        }
-        &.top-right, &.bottom-right {
-            >.tooltip-arrow {
-                right: 5px;
-            }
-        }
-        &.top,
-        &.top-left,
-        &.top-right {
-            padding-bottom: $tooltip-distance;
-            >.tooltip-arrow {
-                bottom: -0.55rem;
-                &::before {
-                    transform: translateY(-6.53553391px) rotate(45deg);
-                }
-            }
-        }
-
-        &.right,
-        &.right-top,
-        &.right-bottom {
-            padding-left: $tooltip-distance;
-            >.tooltip-arrow {
-                left: -0.55rem;
-                &::before {
-                    transform: translateX(6.53553391px) rotate(45deg);
-                }
-            }
-        }
-
-        &.bottom,
-        &.bottom-left,
-        &.bottom-right {
-            padding-top: $tooltip-distance;
-            >.tooltip-arrow {
-                top: -0.55rem;
-                &::before {
-                    transform: translateY(6.53553391px) rotate(45deg);
-                }
-            }
-        }
-
-        &.left,
-        &.left-top,
-        &.left-bottom {
-            padding-right: $tooltip-distance;
-            >.tooltip-arrow {
-                right: -0.55rem;
-                &::before {
-                    transform: translateX(-6.53553391px) rotate(45deg);
-                }
-            }
-        }
         // Themes
         &.default {
             @include theme($black, $white);
@@ -223,6 +129,98 @@ $tooltip-distance: 4px;
 
         &.purple {
             @include theme($purple, $white);
+        }
+    }
+    
+    &.left, &.right {
+        @include arrow-position {
+            top: 50%;
+            transform: translateY(-50%);
+        }
+    }
+    &.left-bottom, &.right-bottom {
+        @include arrow-position {
+            bottom: 5px;
+        }
+    }
+    &.left-top, &.right-top {
+        @include arrow-position {
+            top: 5px;
+        }
+    }
+    &.top, &.bottom {
+        @include arrow-position {
+            left: 50%;
+            transform: translateX(-50%);
+        }
+    }
+    &.top-left, &.bottom-left {
+        @include arrow-position {
+            left: 5px;
+        }
+    }
+    &.top-right, &.bottom-right {
+        @include arrow-position {
+            right: 5px;
+        }
+    }
+    &.top,
+    &.top-left,
+    &.top-right {
+        padding-bottom: $tooltip-distance;
+        @include arrow-position {
+            bottom: -8px;
+            &::before {
+                transform: translateY(-6.53553391px) rotate(45deg);
+            }
+        }
+    }
+
+    &.right,
+    &.right-top,
+    &.right-bottom {
+        padding-left: $tooltip-distance;
+        @include arrow-position {
+            left: -8px;
+            &::before {
+                transform: translateX(6.53553391px) rotate(45deg);
+            }
+        }
+    }
+
+    &.bottom,
+    &.bottom-left,
+    &.bottom-right {
+        padding-top: $tooltip-distance;
+        @include arrow-position {
+            top: -8px;
+            &::before {
+                transform: translateY(6.53553391px) rotate(45deg);
+            }
+        }
+    }
+
+    &.left,
+    &.left-top,
+    &.left-bottom {
+        padding-right: $tooltip-distance;
+        @include arrow-position {
+            right: -8px;
+            &::before {
+                transform: translateX(-6.53553391px) rotate(45deg);
+            }
+        }
+    }
+    &.show, &:focus {
+        >.tooltip {
+            >.tooltip-arrow {
+                height: 13px;
+                opacity: 1;
+            }
+            >.tooltip-inner {
+                height: auto;
+                opacity: 1;
+            }
         }
     }
 }

@@ -1,9 +1,8 @@
 import * as React from "react";
 import "./tooltip-style.scss";
-import { TooltipPositionChecker, TooltipPlacementWithCoord } from "./placement";
-import ReactDOM from "react-dom";
-import debounce from "lodash/debounce";
+import { ElementPosition } from "../__utils/Overlay/placement";
 import { randomId } from "../__utils/randomId";
+import { Overlay } from "../__utils/Overlay/Overlay";
 
 const InfoCircleIcon: JSX.Element = <svg name="info-circle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M256 40c118.621 0 216 96.075 216 216 0 119.291-96.61 216-216 216-119.244 0-216-96.562-216-216 0-119.203 96.602-216 216-216m0-32C119.043 8 8 119.083 8 256c0 136.997 111.043 248 248 248s248-111.003 248-248C504 119.083 392.957 8 256 8zm-36 344h12V232h-12c-6.627 0-12-5.373-12-12v-8c0-6.627 5.373-12 12-12h48c6.627 0 12 5.373 12 12v140h12c6.627 0 12 5.373 12 12v8c0 6.627-5.373 12-12 12h-72c-6.627 0-12-5.373-12-12v-8c0-6.627 5.373-12 12-12zm36-240c-17.673 0-32 14.327-32 32s14.327 32 32 32 32-14.327 32-32-14.327-32-32-32z" /></svg>;
 
@@ -14,7 +13,7 @@ export interface TooltipMessageGroupItem {
 
 export type TooltipTrigger = "hover" | "click" | "focus";
 export type TooltipTheme = "default" | "light" | "primary" | "warning" | "success" | "danger" | "purple";
-export type TooltipPosition = "top" | "bottom" | "left" | "right" | "top-right" | "top-left" | "bottom-right" | "bottom-left" | "left-top" | "left-bottom" | "right-top" | "right-bottom";
+export type TooltipPosition = ElementPosition;
 
 export interface TooltipProps {
     className?: string;
@@ -110,10 +109,10 @@ export class Tooltip extends React.Component<TooltipProps, TooltipState> {
             <div
                 className={"tooltip-container" + (this.props.className ? ` ${this.props.className}` : "")}
                 id={this.props.id}
-                ref={this.containerRef}
             >
                 <div
                     id={this.state.referenceId}
+                    ref={this.containerRef}
                     className="tooltip-reference"
                     tabIndex={-1}
                     onClick={(e: React.MouseEvent<HTMLDivElement>) => ((!this.props.trigger && !this.props.triggerOnHover) || this.props.trigger === "click") && this.onTooltipToggle(e)}
@@ -125,7 +124,12 @@ export class Tooltip extends React.Component<TooltipProps, TooltipState> {
                 >
                     {this.props.children || <div className="icon">{this.props.customSvg ? this.props.customSvg : InfoCircleIcon}</div>}
                 </div>
-                <TooltipContentContainer onContentBlur={this.onTooltipContentBlur} {...this.props} show={this.state.visible} tooltipReference={() => this.containerRef.current}/>
+                <TooltipContentContainer
+                    {...this.props}
+                    onContentBlur={this.onTooltipContentBlur}
+                    show={this.state.visible}
+                    tooltipReference={() => this.containerRef.current}
+                />
             </div>
         );
     }
@@ -152,59 +156,30 @@ type TooltipContentContainerProps = Pick<TooltipProps, "theme" | "position" | "c
     onContentBlur: (event: React.FocusEvent<HTMLDivElement>) => void;
 };
 const TooltipContentContainer: React.FunctionComponent<TooltipContentContainerProps> = (props: TooltipContentContainerProps) => {
-    const tooltipContentRef = React.useRef(null);
-    let tooltipPositionChecker: TooltipPositionChecker;
-    const [placementWithCoords, setPlacementWithCoords] = React.useState<TooltipPlacementWithCoord>(null);
-
-    React.useEffect(() => {
-        tooltipPositionChecker && tooltipPositionChecker.toggleAutoPlacement(props.disableAutoPosition);
-        const eventListener: string = props.disableAutoPosition ? "remove" : "add";
-        window[`${eventListener}EventListener`]("resize", debounce(getWithinViewportPosition, 500));
-        return function cleanup() {
-            window.removeEventListener("resize", debounce(getWithinViewportPosition, 500));
-        };
-    }, [props.disableAutoPosition]);
-
-    React.useEffect(() => {
-        tooltipPositionChecker = new TooltipPositionChecker(props.tooltipReference(), props.disableAutoPosition);
-        tooltipPositionChecker.addTooltipContainer(tooltipContentRef.current);
-    }, [props.tooltipReference]);
-
-    React.useEffect(() => {
-        if (props.show) {
-            getWithinViewportPosition();
-        } else {
-            tooltipContentRef.current.blur();
-        }
-    }, [props.show]);
-
-    const getWithinViewportPosition = (): void => {
-        tooltipContentRef.current.focus();
-        setPlacementWithCoords(tooltipPositionChecker.getPosition(props.position || "top"));
-    };
-
-    return ReactDOM.createPortal(
-        <div className="tooltip-root-container">
+    return (
+        <Overlay
+            show={props.show}
+            onBlur={props.onContentBlur}
+            position={props.position}
+            disableAutoPosition={props.disableAutoPosition}
+            overlayReference={props.tooltipReference}
+        >
             <div
-                ref={tooltipContentRef}
-                tabIndex={-1}
-                onBlur={props.onContentBlur}
-                className={`tooltip-content ${props.theme || "default"} ${placementWithCoords ? placementWithCoords.position : props.position}`}
-                style={placementWithCoords ? placementWithCoords.coord : {}}
+                className={`tooltip ${props.theme || "default"} ${props.show ? "show" : ""}`}
+                role="tooltip"
             >
                 <div className="tooltip-arrow" />
-                <div className="tooltip-inner" aria-hidden={!props.show} role="tooltip">
+                <div className="tooltip-inner">
                     {
                         props.content ?
-                        props.content :
-                        props.messageGroup ? // TODO: remove when attribute is removed
-                        <TooltipMessageGroup {...props} /> :
-                        <TooltipMessage {...props} />
+                            props.content :
+                            props.messageGroup ? // TODO: remove when attribute is removed
+                                <TooltipMessageGroup {...props} /> :
+                                <TooltipMessage {...props} />
                     }
                 </div>
             </div>
-        </div>,
-        document.body
+        </Overlay>
     );
 };
 // TODO: remove when attribute is removed
