@@ -187,7 +187,7 @@ export class OverlayPositionChecker {
     /**
      * get actual position of coord x or y in px
      * @param point point
-     * @returns css position string
+     * @returns position
      */
     private getPointPosition(point: PointPositionLabel): number {
         const referenceRect: ClientRect = this.referenceElement.getBoundingClientRect();
