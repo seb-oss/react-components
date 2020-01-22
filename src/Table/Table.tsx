@@ -896,7 +896,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
         return () => {
             document.removeEventListener("mousedown", onClickOutside);
         };
-    });
+    }, []);
 
     React.useEffect(() => {
         doPaginate();
