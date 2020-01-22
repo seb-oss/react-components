@@ -360,9 +360,6 @@ describe("Component: Tooltip", () => {
                 act(() => {
                     container.querySelector(".icon").dispatchEvent(new MouseEvent("click", { bubbles: true }));
                 });
-                if (!document.body.querySelector(".overlay-container").classList.contains(testCase.relativePosition)) {
-                    console.log(testCase.position, document.body.querySelector(".overlay-container").className);
-                }
                 expect(document.body.querySelector(".overlay-container").classList.contains(testCase.relativePosition)).toBeTruthy();
             });
         }

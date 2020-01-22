@@ -83,13 +83,13 @@ export class OverlayPositionChecker {
     private defaultPositionsList: Array<ElementPosition> = ["top", "left", "right", "bottom", "bottom-left", "bottom-right", "left-bottom", "left-top", "right-bottom", "right-top", "top-left", "top-right"];
     private referenceElement: HTMLDivElement;
     private overlayElement: HTMLDivElement;
-    private disableAutoPlacement: boolean;
+    private disableAutoPosition: boolean;
     private currentPosition: ElementPositionCoord;
     private currentPlacementWithCoord: ElementPlacementWithCoord;
 
     constructor(refContainer: HTMLDivElement, disableAutoPlacement: boolean) {
         this.referenceElement = refContainer;
-        this.disableAutoPlacement = disableAutoPlacement;
+        this.disableAutoPosition = disableAutoPlacement;
     }
 
     /**
@@ -106,8 +106,8 @@ export class OverlayPositionChecker {
      * enable or disable auto placement for overlay
      * @param toggle boolean
      */
-    toggleAutoPlacement(toggle: boolean): void {
-        this.disableAutoPlacement = toggle;
+    disableAutoPlacement(toggle: boolean): void {
+        this.disableAutoPosition = toggle;
     }
 
     /**
@@ -116,7 +116,7 @@ export class OverlayPositionChecker {
      * @returns overlay position and coordinates
      */
     getPosition(position: ElementPosition): ElementPlacementWithCoord {
-        if (this.disableAutoPlacement) {
+        if (this.disableAutoPosition) {
             this.getOverlayPositionCoord(position);
             this.currentPlacementWithCoord = this.getPlacement(position);
         } else {
