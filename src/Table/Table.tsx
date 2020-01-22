@@ -698,7 +698,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
      * @param rowIndex The parent row index
      */
     const onSubRowExpanded = (e: React.MouseEvent<HTMLDivElement, MouseEvent>, row: TableRow, rowIndex: number): void => {
-        const updatedOriginalRows = tableRows.map((originalRow: TableRow) => {
+        const updatedOriginalRows: Array<TableRow> = tableRows.map((originalRow: TableRow) => {
             if (originalRow.rowIndex === rowIndex) {
                 const subRows: Array<TableRow> = originalRow.subRows.map((subRow: TableRow) => {
                     if (subRow.rowIndex === row.rowIndex) {
@@ -744,7 +744,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
      * @param row The selected row
      */
     const onRowExpanded = (e: React.MouseEvent<HTMLDivElement, MouseEvent>, row: TableRow): void => {
-        const updatedOriginalRows = tableRows.map((originalRow: TableRow) => {
+        const updatedOriginalRows: Array<TableRow> = tableRows.map((originalRow: TableRow) => {
             if (originalRow.rowIndex === row.rowIndex) {
                 return {
                     ...originalRow,
@@ -904,7 +904,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
 
     React.useEffect(() => {
         if (!!props.onRowSelected) {
-            const notAllsAreRowsSelected = tableRows.some((row: TableRow) => !row.selected);
+            const notAllsAreRowsSelected: boolean = tableRows.some((row: TableRow) => !row.selected);
 
             if (notAllsAreRowsSelected) {
                 setAllRowsChecked(false);
