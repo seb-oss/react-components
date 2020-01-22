@@ -146,7 +146,7 @@ interface ActionColumnProps {
 }
 
 const ActionColumn: React.FunctionComponent<ActionColumnProps> = (props: ActionColumnProps) => {
-    const btnPrimaryRandomIds = randomId("btn");
+    const btnPrimaryRandomIds: string = randomId("btn");
     const [dropup, setDropup] = React.useState<boolean>(false);
     const actionRef: React.RefObject<HTMLDivElement> = React.createRef<HTMLDivElement>();
 
@@ -896,7 +896,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
         return () => {
             document.removeEventListener("mousedown", onClickOutside);
         };
-    });
+    }, []);
 
     React.useEffect(() => {
         doPaginate();

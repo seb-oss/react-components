@@ -136,7 +136,7 @@ export const Pagination: React.FunctionComponent<PaginationProps> = React.memo((
 
                         {(props.value !== pagingSize && props.useFirstAndLast) &&
                             <li className="page-item" onClick={() => props.onChange(pagingSize)}>
-                                <button className="page-link" title="{props.lastText}">
+                                <button className="page-link" title={props.lastText}>
                                     <span className="nav-action">
                                         {props.useTextNav ? (props.lastText ? props.lastText : "Last") : angleDoubleRightIcon}
                                     </span>
