@@ -146,7 +146,7 @@ interface ActionColumnProps {
 }
 
 const ActionColumn: React.FunctionComponent<ActionColumnProps> = (props: ActionColumnProps) => {
-    const btnPrimaryRandomIds = randomId("btn");
+    const btnPrimaryRandomIds: string = randomId("btn");
     const [dropup, setDropup] = React.useState<boolean>(false);
     const actionRef: React.RefObject<HTMLDivElement> = React.createRef<HTMLDivElement>();
 
