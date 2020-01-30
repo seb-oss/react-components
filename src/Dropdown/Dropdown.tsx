@@ -322,11 +322,11 @@ const Dropdown: React.FunctionComponent<DropdownProps> = (props: DropdownProps):
     // Display the custom dropdown with native elements if prop is set to native
     if (props.native) {
         return (
-            <>
+            <div className="custom-native-dropdown">
                 {props.label && <label className={`dropdown-label ${shouldDisable ? " disabled" : ""}`}>{props.label}</label>}
                 <select
                     disabled={shouldDisable}
-                    className={`form-control${shouldDisable ? " disabled" : ""}${props.className ? ` ${props.className}` : ""}`}
+                    className={`form-control custom-native-dropdown${shouldDisable ? " disabled" : ""}${props.className ? ` ${props.className}` : ""}`}
                     name={props.name}
                     value={props.selectedValue ? (props.selectedValue as DropdownItem).value : ""}
                     onChange={props.onChange}
@@ -340,8 +340,8 @@ const Dropdown: React.FunctionComponent<DropdownProps> = (props: DropdownProps):
                         </option>
                     )}
                 </select>
-                {props.error && <div className="alert alert-danger">{props.error}</div>}
-            </>
+                {props.error && <div className="alert alert-danger custom-alert">{props.error}</div>}
+            </div>
         );
     }
 
@@ -456,7 +456,7 @@ const Dropdown: React.FunctionComponent<DropdownProps> = (props: DropdownProps):
                     }
                 </div>
             </div>
-            {props.error && <div className="alert alert-danger">{props.error}</div>}
+            {props.error && <div className="alert alert-danger custom-alert">{props.error}</div>}
         </>
     );
 };
