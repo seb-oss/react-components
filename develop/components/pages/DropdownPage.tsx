@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Dropdown, DropdownItem } from "../../../src/Dropdown/Dropdown";
 import { Toggle } from "../../../src/Toggle/Toggle";
-const Highlight = (require("react-highlight")).default;
+import Highlight from "react-highlight";
 const docMD: string = require("../../../src/Dropdown/readme.md");
 
 const DropdownPage: React.FunctionComponent = () => {
