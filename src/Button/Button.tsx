@@ -27,7 +27,10 @@ export const Button: React.NamedExoticComponent<ButtonProps> = React.memo((props
 
     function getButtonTheme(): string {
         switch (props.theme) {
-            case "anchor": return "link"; @deprecated
+            case "anchor": {
+                console.warn("WARNING: 'anchor' is deprecated and will be removed in future versions. Use 'link' instead.");
+                return "link";
+            }
             case "outline-primary": case "secondary": case "ghost-dark": case "ghost-light": case "danger": case "link": return props.theme;
             default: return "primary";
         }
