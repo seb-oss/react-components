@@ -851,7 +851,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
     }, []);
 
     const setDefaultTableRows = React.useCallback(async () => {
-        const updatedRows: Array<TableRow> = await getRows(props.data);
+        const updatedRows: Array<TableRow> = getRows(props.data);
         setTableRows(updatedRows);
         setTableRowsImage(updatedRows);
     }, [props.data]);
