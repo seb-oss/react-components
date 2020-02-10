@@ -163,7 +163,7 @@ const ActionColumn: React.FunctionComponent<ActionColumnProps> = (props: ActionC
         }
 
         return className;
-    }, [props.selectedRow]);
+    }, [props.selectedRow, dropup]);
 
     return (
         <div className="action-column">
@@ -901,10 +901,6 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
     });
 
     React.useEffect(() => {
-        doPaginate();
-    }, [tableRows]);
-
-    React.useEffect(() => {
         if (!!props.onRowSelected) {
             const notAllsAreRowsSelected: boolean = tableRows.some((row: TableRow) => !row.selected);
 
@@ -956,7 +952,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
 
     React.useEffect(() => {
         doPaginate();
-    }, [props.offset, props.currentpage]);
+    }, [props.offset, props.currentpage, tableRows]);
 
     return (
         <div>
