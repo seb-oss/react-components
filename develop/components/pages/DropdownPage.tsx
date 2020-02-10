@@ -11,7 +11,7 @@ const DropdownPage: React.FunctionComponent = () => {
     const [dropDownList4Selected, setDropdownList4Selected] = React.useState<DropdownItem>(null);
     const [dropDownList5Selected, setDropdownList5Selected] = React.useState<Array<DropdownItem>>([]);
     const [disabled, setDisabled] = React.useState<boolean>(false);
-    const [error, setError] = React.useState<string>(null);
+    const [error, setError] = React.useState<string>("");
 
     const handleToggleError = React.useCallback(() => {
         setError((currentError) => (currentError === null) ? "Example error message" : null);
