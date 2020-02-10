@@ -251,8 +251,6 @@ interface TableUIProps {
 
 const TableUI: React.FunctionComponent<TableUIProps> = React.memo((props: TableUIProps): React.ReactElement<void> => {
     const [checkAllRandomIds] = React.useState<string>(randomId("chk-all"));
-    const [checkRowRandomIds] = React.useState<string>(randomId("chk-"));
-    const [checkSubRowRandomIds] = React.useState<string>(randomId("sub-chk-"));
     const tableRef: React.RefObject<HTMLTableElement> = React.createRef<HTMLTableElement>();
     return (
         <div className={"table-responsive" + (props.loading ? " skeleton-loader skeleton-loader-table" : "")}>
@@ -315,6 +313,7 @@ const TableUI: React.FunctionComponent<TableUIProps> = React.memo((props: TableU
                 </thead>
                 <tbody>
                     {props.rows.map((row: TableRow, i: number) => {
+                        const checkRowRandomIds = randomId("chk-");
                         return (
                             <React.Fragment key={row.rowIndex}>
                                 <tr className={"parent-row" + (row.expanded ? " expanded" : "")}>
@@ -372,6 +371,7 @@ const TableUI: React.FunctionComponent<TableUIProps> = React.memo((props: TableU
                                 </tr>
 
                                 {row.subRows.map((subRow: TableRow) => {
+                                    const checkSubRowRandomIds = randomId("sub-chk-");
                                     return (
                                         <React.Fragment key={`sub-row-${subRow.rowIndex}`}>
                                             <tr
@@ -535,7 +535,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
         setTableRows(updatedOriginalRows);
         setTableRowsImage(updatedOriginalRows);
         props.onRowSelected(selectedRowList);
-    }, [tableRows, currentTableRows]);
+    }, [tableRows, currentTableRows, props.onRowSelected]);
 
     /**
      *
@@ -565,7 +565,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
         setTableRows(updatedOriginalRows);
         setTableRowsImage(updatedOriginalRows);
         props.onRowSelected(updatedOriginalRows);
-    }, [tableRows, currentTableRows]);
+    }, [tableRows, currentTableRows, props.onRowSelected]);
 
     /**
      * Close all opened actions div
@@ -668,11 +668,11 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
         let sortByColumn: TableHeader = null;
 
         if (props.sortProps?.onSort) {
-            updatedOriginalRows = await props.sortProps.onSort(tableRows, accessor, sortDirection);
-            updatedCurrentTableRows = await props.sortProps.onSort(currentTableRows, accessor, sortDirection);
+            updatedOriginalRows = props.sortProps.onSort(tableRows, accessor, sortDirection);
+            updatedCurrentTableRows = props.sortProps.onSort(currentTableRows, accessor, sortDirection);
         } else {
-            updatedOriginalRows = await sortArray(tableRows, accessor, sortDirection);
-            updatedCurrentTableRows = await sortArray(currentTableRows, accessor, sortDirection);
+            updatedOriginalRows = sortArray(tableRows, accessor, sortDirection);
+            updatedCurrentTableRows = sortArray(currentTableRows, accessor, sortDirection);
         }
         const updatedColumns: Array<TableHeader> = tableColumns.map((column: TableHeader) => {
             if (column.accessor === accessor) {
@@ -738,7 +738,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
         setTableRows(updatedOriginalRows);
         setTableRowsImage(updatedOriginalRows);
         props.onRowExpanded(expandedRowList);
-    }, [currentTableRows, tableRows]);
+    }, [currentTableRows, tableRows, props.onRowExpanded]);
 
     /**
      *
@@ -783,7 +783,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
         setTableRows(updatedOriginalRows);
         setTableRowsImage(updatedOriginalRows);
         props.onRowExpanded(expandedRowList);
-    }, [tableRows, currentTableRows]);
+    }, [tableRows, currentTableRows, props.onRowExpanded]);
     // functions -----------------------------------------------------------------------------
     /**
      *
