@@ -87,17 +87,19 @@ function sumCols(colsLength: number, useSelection?: boolean, useShowActionColumn
  * @param sortDirection the sort direction
  */
 function sortArray(items: Array<TableRow> = [], columnName: string, sortDirection: sortDirectionTypes): Array<TableRow> {
+    const languages: Readonly<Array<string>> = window.navigator?.languages || ["sw", "en"];
+
     const sortedItems: Array<any> = [...items].sort((firstItem: TableRow, secondItem: TableRow) => {
         let result: number = 0;
         if (sortDirection === sortDirectionTypes.Ascending) {
             if (isNaN(secondItem[columnName]) && isNaN(firstItem[columnName])) {
-                result = String(firstItem[columnName]).localeCompare(String(secondItem[columnName]), ["sw", "en"], { sensitivity: "base", ignorePunctuation: true });
+                result = String(firstItem[columnName]).localeCompare(String(secondItem[columnName]), languages as Array<string>, { sensitivity: "base", ignorePunctuation: true });
             } else {
                 result = (firstItem[columnName] - secondItem[columnName]);
             }
         } else {
             if (isNaN(secondItem[columnName]) && isNaN(firstItem[columnName])) {
-                result = String(secondItem[columnName]).localeCompare(String(firstItem[columnName]), ["sw", "en"], { sensitivity: "base", ignorePunctuation: true });
+                result = String(secondItem[columnName]).localeCompare(String(firstItem[columnName]), languages as Array<string>, { sensitivity: "base", ignorePunctuation: true });
             } else {
                 result = (secondItem[columnName] - firstItem[columnName]);
             }
@@ -177,7 +179,7 @@ const ActionColumn: React.FunctionComponent<ActionColumnProps> = (props: ActionC
                     {props.primaryActionButton.label}
                 </button>
             }
-            {props.actionLinks && props.actionLinks.length > 0 &&
+            {props.actionLinks && props.actionLinks.length &&
                 <div
                     className="ellipsis-dropdown-holder"
                     onClick={(e) => {
@@ -517,7 +519,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
      * @param rowIndex The index of the parent row incase of subRow
      */
     const onItemSelected = (e: React.ChangeEvent<HTMLInputElement>, selectedRow: TableRow, type: "subRow" | "row", rowIndex?: number): void => {
-        const updatedOriginalRows = selectItems(e.target.checked, tableRows, selectedRow, rowIndex, type);
+        const updatedOriginalRows: Array<TableRow> = selectItems(e.target.checked, tableRows, selectedRow, rowIndex, type);
         const updatedRows: Array<TableRow> = selectItems(e.target.checked, currentTableRows, selectedRow, rowIndex, type);
 
         const selectedRowList: Array<TableRow> = updatedOriginalRows.filter((item: TableRow) => {
@@ -541,7 +543,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
      * Called onAllItemsSelected
      */
     const onAllItemsSelected = (e: React.ChangeEvent<HTMLInputElement>): void => {
-        const updatedOriginalRows = tableRows.map((originalRow: TableRow) => {
+        const updatedOriginalRows: Array<TableRow> = tableRows.map((originalRow: TableRow) => {
             const updatedSubRows: Array<TableRow> = originalRow.subRows.map((subRow: TableRow) => {
                 return { ...subRow, selected: e.target.checked };
             });

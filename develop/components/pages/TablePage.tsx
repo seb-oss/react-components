@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Table, Column, TableRow, PrimaryActionButton, ActionLinkItem, TableHeader, DataItem } from "../../../src/Table";
-import makeData from "../../utils/makeData";
+import makeData from "../../__utils/makeData";
 import { Pagination } from "../../../src/Pagination/Pagination";
 import { Dropdown, DropdownItem } from "../../../src/Dropdown/Dropdown";
 import { TextBox } from "../../../src/TextBox/TextBox";
@@ -20,7 +20,7 @@ const TablePage: React.FunctionComponent = () => {
 
     const primaryButton: PrimaryActionButton = {
         label: "Buy",
-        onClick: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, selectedRow: TableRow) => { console.log("Primary button has been clicked ", selectedRow); }
+        onClick: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, selectedRow: TableRow) => { }
     }
 
     const actionLinks: Array<ActionLinkItem> = [
@@ -120,7 +120,7 @@ const TablePage: React.FunctionComponent = () => {
                         <Table
                             columns={columns}
                             data={smallData}
-                            onRowExpanded={(rows: Array<TableRow>) => { console.log("the expanded ros are ", rows); }}
+                            onRowExpanded={(rows: Array<TableRow>) => { }}
                         />
                     </div>
 
@@ -129,7 +129,7 @@ const TablePage: React.FunctionComponent = () => {
                         <Table
                             columns={columns}
                             data={smallData}
-                            onRowSelected={(rows: Array<TableRow>) => { console.log("The selected rows are ", rows); }}
+                            onRowSelected={(rows: Array<TableRow>) => { }}
                         />
                     </div>
 
@@ -138,8 +138,8 @@ const TablePage: React.FunctionComponent = () => {
                         <Table
                             columns={columns}
                             data={smallData}
-                            onRowSelected={(rows: Array<TableRow>) => { console.log("The selected rows are ", rows); }}
-                            onRowExpanded={(rows: Array<TableRow>) => { console.log("the expanded ros are ", rows); }}
+                            onRowSelected={(rows: Array<TableRow>) => { }}
+                            onRowExpanded={(rows: Array<TableRow>) => { }}
                         />
                     </div>
 
@@ -191,16 +191,16 @@ const TablePage: React.FunctionComponent = () => {
                                 searchText: textBoxValue2,
                                 triggerSearchOn: "Submit",
                                 searchTriggered: searchTriggered,
-                                onSearch: (searchResults: Array<TableRow>) => { console.log("the search is now ", searchResults); }
+                                onSearch: (searchResults: Array<TableRow>) => { }
                             }}
                             primaryActionButton={primaryButton}
                             actionLinks={actionLinks}
                             sortProps={{
-                                onAfterSorting: (rows: Array<TableRow>, sortByColumn: TableHeader) => { console.log("The sorted rows are ", rows); }
+                                onAfterSorting: (rows: Array<TableRow>, sortByColumn: TableHeader) => { }
                             }
                             }
-                            onRowSelected={(rows: Array<TableRow>) => { console.log("The selected rows are ", rows); }}
-                            onRowExpanded={(rows: Array<TableRow>) => { console.log("the expanded ros are ", rows); }}
+                            onRowSelected={(rows: Array<TableRow>) => { }}
+                            onRowExpanded={(rows: Array<TableRow>) => { }}
                             footer={
                                 <Pagination
                                     value={paginationValue1}

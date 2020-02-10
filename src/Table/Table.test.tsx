@@ -1,7 +1,7 @@
 import * as React from "react";
 import { unmountComponentAtNode, render } from "react-dom";
 import { Column, Table, TableRow, TableHeader, ActionLinkItem, DataItem, sortDirectionTypes } from "./Table";
-import makeData from "../../develop/utils/makeData";
+import makeData from "../../develop/__utils/makeData";
 import { act } from "react-dom/test-utils";
 import { Pagination } from "../Pagination/Pagination";
 
