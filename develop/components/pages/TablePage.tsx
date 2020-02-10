@@ -91,7 +91,7 @@ const TablePage: React.FunctionComponent = () => {
                             columns={columns}
                             data={smallData}
                             sortProps={{
-                                onAfterSorting: (rows: Array<TableRow>, sortByColumn: TableHeader) => { console.log("The sorted rows are ", rows); }
+                                onAfterSorting: (rows: Array<TableRow>, sortByColumn: TableHeader) => { }
                             }
                             }
                         />

@@ -148,11 +148,11 @@ interface ActionColumnProps {
 }
 
 const ActionColumn: React.FunctionComponent<ActionColumnProps> = (props: ActionColumnProps) => {
-    const btnPrimaryRandomIds: string = randomId("btn");
+    const [btnPrimaryRandomIds] = React.useState<string>(randomId("btn"));
     const [dropup, setDropup] = React.useState<boolean>(false);
     const actionRef: React.RefObject<HTMLDivElement> = React.createRef<HTMLDivElement>();
 
-    function getActionColumnClasses(): string {
+    const getActionColumnClasses = React.useCallback((): string => {
         let className: string = "dropdown-content";
         if (props.selectedRow?.actionsDropdownDropped) {
             className += " active";
@@ -163,7 +163,7 @@ const ActionColumn: React.FunctionComponent<ActionColumnProps> = (props: ActionC
         }
 
         return className;
-    }
+    }, [props.selectedRow]);
 
     return (
         <div className="action-column">
@@ -250,7 +250,9 @@ interface TableUIProps {
 }
 
 const TableUI: React.FunctionComponent<TableUIProps> = React.memo((props: TableUIProps): React.ReactElement<void> => {
-    const checkAllRandomIds: string = randomId("chk-all");
+    const [checkAllRandomIds] = React.useState<string>(randomId("chk-all"));
+    const [checkRowRandomIds] = React.useState<string>(randomId("chk-"));
+    const [checkSubRowRandomIds] = React.useState<string>(randomId("sub-chk-"));
     const tableRef: React.RefObject<HTMLTableElement> = React.createRef<HTMLTableElement>();
     return (
         <div className={"table-responsive" + (props.loading ? " skeleton-loader skeleton-loader-table" : "")}>
@@ -313,7 +315,6 @@ const TableUI: React.FunctionComponent<TableUIProps> = React.memo((props: TableU
                 </thead>
                 <tbody>
                     {props.rows.map((row: TableRow, i: number) => {
-                        const checkRowRandomIds: string = randomId("chk-");
                         return (
                             <React.Fragment key={row.rowIndex}>
                                 <tr className={"parent-row" + (row.expanded ? " expanded" : "")}>
@@ -371,7 +372,6 @@ const TableUI: React.FunctionComponent<TableUIProps> = React.memo((props: TableU
                                 </tr>
 
                                 {row.subRows.map((subRow: TableRow) => {
-                                    const checkSubRowRandomIds: string = randomId("sub-chk-");
                                     return (
                                         <React.Fragment key={`sub-row-${subRow.rowIndex}`}>
                                             <tr
@@ -518,7 +518,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
      * @param type The row type (i.e either a row or subRow)
      * @param rowIndex The index of the parent row incase of subRow
      */
-    const onItemSelected = (e: React.ChangeEvent<HTMLInputElement>, selectedRow: TableRow, type: "subRow" | "row", rowIndex?: number): void => {
+    const onItemSelected = React.useCallback((e: React.ChangeEvent<HTMLInputElement>, selectedRow: TableRow, type: "subRow" | "row", rowIndex?: number): void => {
         const updatedOriginalRows: Array<TableRow> = selectItems(e.target.checked, tableRows, selectedRow, rowIndex, type);
         const updatedRows: Array<TableRow> = selectItems(e.target.checked, currentTableRows, selectedRow, rowIndex, type);
 
@@ -535,14 +535,14 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
         setTableRows(updatedOriginalRows);
         setTableRowsImage(updatedOriginalRows);
         props.onRowSelected(selectedRowList);
-    };
+    }, [tableRows, currentTableRows]);
 
     /**
      *
      * @param exchange
      * Called onAllItemsSelected
      */
-    const onAllItemsSelected = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    const onAllItemsSelected = React.useCallback((e: React.ChangeEvent<HTMLInputElement>): void => {
         const updatedOriginalRows: Array<TableRow> = tableRows.map((originalRow: TableRow) => {
             const updatedSubRows: Array<TableRow> = originalRow.subRows.map((subRow: TableRow) => {
                 return { ...subRow, selected: e.target.checked };
@@ -565,12 +565,12 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
         setTableRows(updatedOriginalRows);
         setTableRowsImage(updatedOriginalRows);
         props.onRowSelected(updatedOriginalRows);
-    };
+    }, [tableRows, currentTableRows]);
 
     /**
      * Close all opened actions div
      */
-    const onClickOutside = (e: MouseEvent) => {
+    const onClickOutside = React.useCallback((e: MouseEvent) => {
         const parentElement: Element = (e.target as Element).parentElement;
         if (hasAnOpenedAction && (parentElement.id.indexOf("ellipsis") < 0) && (!parentElement.classList.contains("dropdown-content"))) {
             const updatedOriginalRows: Array<TableRow> = tableRows.map((originalRow: TableRow) => {
@@ -591,7 +591,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
             setTableRows(updatedOriginalRows);
             setTableRowsImage(updatedOriginalRows);
         }
-    };
+    }, [hasAnOpenedAction, tableRows, currentTableRows]);
 
     /**
      *
@@ -599,7 +599,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
      * @param row The selected row
      * @param rowIndex The index of the parent row
      */
-    const onActionColumnDropped = (event: React.MouseEvent<HTMLDivElement, MouseEvent>, row: TableRow, rowIndex?: number) => {
+    const onActionColumnDropped = React.useCallback((event: React.MouseEvent<HTMLDivElement, MouseEvent>, row: TableRow, rowIndex?: number) => {
         let updatedOriginalRows: Array<TableRow> = [];
         let updatedRows: Array<TableRow> = [];
         if (rowIndex) {
@@ -655,14 +655,14 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
         setCurrentTableRows(updatedRows);
         setTableRows(updatedOriginalRows);
         setTableRowsImage(updatedOriginalRows);
-    };
+    }, [tableRows, currentTableRows]);
 
     /**
      * Sort rows in ASC or DESC order
      * @param accessor The id of the selected column header
      * @param sortDirection The direction of the sort : ASC or DESC
      */
-    const onSortItems = async (accessor: string, sortDirection: sortDirectionTypes) => {
+    const onSortItems = React.useCallback(async (accessor: string, sortDirection: sortDirectionTypes) => {
         let updatedOriginalRows: Array<TableRow> = [];
         let updatedCurrentTableRows: Array<TableRow> = [];
         let sortByColumn: TableHeader = null;
@@ -691,7 +691,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
         setTableRowsImage(updatedOriginalRows);
         setTableColumn(updatedColumns);
         props.sortProps.onAfterSorting(updatedOriginalRows, sortByColumn);
-    };
+    }, [props.sortProps, tableColumns, tableRows, currentTableRows]);
 
     /**
      * Called on sub row is clicked
@@ -699,7 +699,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
      * @param row The subrow Selected row
      * @param rowIndex The parent row index
      */
-    const onSubRowExpanded = (e: React.MouseEvent<HTMLDivElement, MouseEvent>, row: TableRow, rowIndex: number): void => {
+    const onSubRowExpanded = React.useCallback((e: React.MouseEvent<HTMLDivElement, MouseEvent>, row: TableRow, rowIndex: number): void => {
         const updatedOriginalRows: Array<TableRow> = tableRows.map((originalRow: TableRow) => {
             if (originalRow.rowIndex === rowIndex) {
                 const subRows: Array<TableRow> = originalRow.subRows.map((subRow: TableRow) => {
@@ -738,14 +738,14 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
         setTableRows(updatedOriginalRows);
         setTableRowsImage(updatedOriginalRows);
         props.onRowExpanded(expandedRowList);
-    };
+    }, [currentTableRows, tableRows]);
 
     /**
      *
      * @param e change event
      * @param row The selected row
      */
-    const onRowExpanded = (e: React.MouseEvent<HTMLDivElement, MouseEvent>, row: TableRow): void => {
+    const onRowExpanded = React.useCallback((e: React.MouseEvent<HTMLDivElement, MouseEvent>, row: TableRow): void => {
         const updatedOriginalRows: Array<TableRow> = tableRows.map((originalRow: TableRow) => {
             if (originalRow.rowIndex === row.rowIndex) {
                 return {
@@ -783,13 +783,13 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
         setTableRows(updatedOriginalRows);
         setTableRowsImage(updatedOriginalRows);
         props.onRowExpanded(expandedRowList);
-    };
+    }, [tableRows, currentTableRows]);
     // functions -----------------------------------------------------------------------------
     /**
      *
      * @param rows The table or or data to initialize rows from
      */
-    const getRows = (rows: Array<DataItem>): Array<TableRow> => {
+    const getRows = React.useCallback((rows: Array<DataItem>): Array<TableRow> => {
         const updatedRows: Array<TableRow> = rows.map((row: TableRow, index: number) => {
             const updatedCells: Array<Cell> = Object.keys(row).filter((key: string) => {
                 return key !== "rowContentDetail" && key !== "subRows";
@@ -815,7 +815,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
         });
 
         return updatedRows;
-    };
+    }, []);
 
     /**
      * Call when item is selected
@@ -824,7 +824,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
      * @param type The row type (i.e either a row or subRow)
      * @param rowIndex The index of the parent row incase of subRow
      */
-    const selectItems = (checked: boolean, rows: Array<TableRow>, selectedRow: TableRow, rowIndex: number, type: RowTypes): Array<TableRow> => {
+    const selectItems = React.useCallback((checked: boolean, rows: Array<TableRow>, selectedRow: TableRow, rowIndex: number, type: RowTypes): Array<TableRow> => {
         const updatedRows: Array<TableRow> = rows.map((originalRow: TableRow) => {
             let updatedSubrows: Array<TableRow> = originalRow.subRows;
             if (type === "row") {
@@ -848,15 +848,15 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
         });
 
         return updatedRows;
-    };
+    }, []);
 
-    const setDefaultTableRows = async () => {
+    const setDefaultTableRows = React.useCallback(async () => {
         const updatedRows: Array<TableRow> = await getRows(props.data);
         setTableRows(updatedRows);
         setTableRowsImage(updatedRows);
-    };
+    }, [props.data]);
 
-    const doPaginate = (): void => {
+    const doPaginate = React.useCallback((): void => {
         if (props.currentpage && props.offset && (tableRows.length > 0)) {
             // pagination start from 1 hence the need fro deducting 1
             const start: number = (props.currentpage - 1) * props.offset;
@@ -867,18 +867,18 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
         } else {
             setCurrentTableRows(tableRows);
         }
-    };
+    }, [props.currentpage, props.offset, tableRows]);
 
-    const rowsAreCollapsable = (): boolean => {
+    const rowsAreCollapsable = React.useCallback((): boolean => {
         return currentTableRows.some((row: TableRow) => {
             return (
                 ((row.subRows.length > 0) || row.rowContentDetail) ||
                 (row.subRows.some((subRow: TableRow) => subRow.rowContentDetail || (row.subRows && row.subRows.length > 0)))
             );
         }) && !!props.onRowExpanded;
-    };
+    }, [currentTableRows]);
 
-    const doSearch = (): void => {
+    const doSearch = React.useCallback((): void => {
         let searchResult: Array<TableRow> = [];
         if (props.searchProps?.searchText && props.searchProps?.searchInColumns && props.searchProps?.searchInColumns.length > 0) {
             searchResult = searchTextInArray(tableRowsImage, props.searchProps.searchText, props.searchProps.searchInColumns);
@@ -888,7 +888,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo((props: Tab
 
         setTableRows(searchResult);
         props.searchProps?.onSearch && props.searchProps?.onSearch(searchResult);
-    };
+    }, [props.searchProps, tableRowsImage]);
 
     // useEffects ----------------------------------------------------------
 
