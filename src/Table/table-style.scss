@@ -150,7 +150,7 @@ table {
                 width: 0;
                 overflow-y: auto;
                 @include transition(max-height 200ms);
-                
+
                 &.active {
                   max-height: 10000px;
                   width: auto;
@@ -185,6 +185,32 @@ table {
             display: flex;
             flex-direction: row;
             align-items: center;
+          }
+        }
+        &.sub-row {
+          td {
+            > div {
+              &:first-child {
+                margin-left: 20px;
+              }
+            }
+          }
+        }
+        &.sub-description-row {
+          td {
+            .description {
+              margin-left: 40px;
+              white-space: initial;
+            }
+          }
+        }
+
+        &.description-row {
+          td {
+            .description {
+              margin-left: 20px;
+              white-space: initial;
+            }
           }
         }
       }

@@ -151,8 +151,9 @@ const ActionColumn: React.FunctionComponent<ActionColumnProps> = (props: ActionC
     const [btnPrimaryRandomIds] = React.useState<string>(randomId("btn"));
     const [dropup, setDropup] = React.useState<boolean>(false);
     const actionRef: React.RefObject<HTMLDivElement> = React.createRef<HTMLDivElement>();
+    const [actionColumnClass, setActionColumnClass] = React.useState<string>("");
 
-    const getActionColumnClasses = React.useCallback((): string => {
+    React.useEffect(() => {
         let className: string = "dropdown-content";
         if (props.selectedRow?.actionsDropdownDropped) {
             className += " active";
@@ -162,7 +163,7 @@ const ActionColumn: React.FunctionComponent<ActionColumnProps> = (props: ActionC
             className += " dropup";
         }
 
-        return className;
+        setActionColumnClass(className);
     }, [props.selectedRow, dropup]);
 
     return (
@@ -205,12 +206,12 @@ const ActionColumn: React.FunctionComponent<ActionColumnProps> = (props: ActionC
                         {ellipsis}
                     </div>
                     <div
-                        className={getActionColumnClasses()}
+                        className={actionColumnClass}
                         ref={actionRef}
                     >
                         {props.actionLinks.map((link: ActionLinkItem, index: number) =>
                             <a
-                                key={`${link.label.replace(" ", "-")} - ${index}}`}
+                                key={index}
                                 onClick={(e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
                                     e.preventDefault();
                                     link.onClick(e, props.selectedRow);
@@ -379,7 +380,7 @@ const TableUI: React.FunctionComponent<TableUIProps> = React.memo((props: TableU
                                             >
                                                 {props.useRowSelection ?
                                                     <td className="row-selections-column">
-                                                        <div className="custom-control custom-checkbox" style={{ marginLeft: "20px" }}>
+                                                        <div className="custom-control custom-checkbox">
                                                             <input
                                                                 type="checkbox"
                                                                 className="custom-control-input"
@@ -406,7 +407,6 @@ const TableUI: React.FunctionComponent<TableUIProps> = React.memo((props: TableU
                                                     <td>
                                                         <div
                                                             className={"icon-holder" + (subRow.expanded ? " active" : "")}
-                                                            style={{ marginLeft: "20px" }}
                                                             onClick={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => { props.onSubRowExpanded(e, subRow, row.rowIndex); }}
                                                         >
                                                             {subRow.expanded ? angleDown : angleRightIcon}
@@ -433,9 +433,9 @@ const TableUI: React.FunctionComponent<TableUIProps> = React.memo((props: TableU
                                                 </td>}
                                             </tr>
 
-                                            <tr style={{ display: subRow.expanded ? "table-row" : "none" }}>
+                                            <tr className="sub-description-row" style={{ display: subRow.expanded ? "table-row" : "none" }}>
                                                 <td colSpan={sumCols(props.columns.length, (props.useRowSelection || props.useRowCollapse), props.useShowActionColumn, false)}>
-                                                    <div style={{ marginLeft: "40px", whiteSpace: "initial" }}>
+                                                    <div className="description">
                                                         {subRow.rowContentDetail}
                                                     </div>
                                                 </td>
@@ -445,9 +445,9 @@ const TableUI: React.FunctionComponent<TableUIProps> = React.memo((props: TableU
                                     );
                                 })}
 
-                                <tr style={{ display: row.expanded ? "table-row" : "none" }}>
+                                <tr className="description-row" style={{ display: row.expanded ? "table-row" : "none" }}>
                                     <td colSpan={sumCols(props.columns.length, (props.useRowSelection || props.useRowCollapse), props.useShowActionColumn, false)}>
-                                        <div style={{ marginLeft: "20px", whiteSpace: "initial" }}>
+                                        <div className="description">
                                             {row.rowContentDetail}
                                         </div>
 
