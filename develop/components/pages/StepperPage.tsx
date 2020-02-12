@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Stepper } from "../../../src/Stepper/Stepper";
-const Highlight = (require("react-highlight")).default;
+import Highlight from "react-highlight";
 const docMD = require("../../../src/Stepper/readme.md");
 
 const StepperPage: React.FunctionComponent = () => {

@@ -1,11 +1,11 @@
 import * as React from "react";
 import { Carousel, CarouselItem } from "../../../src/Carousel/Carousel";
-const Highlight = (require("react-highlight")).default;
+import Highlight from "react-highlight";
 const docMD: string = require("../../../src/Carousel/readme.md");
 
-const firstImg: string = require("../../assets/images/cat-pet-animal-1.jpeg");
-const secondImg: string = require("../../assets/images/cat-pet-animal-2.jpg");
-const thirdImg: string = require("../../assets/images/cat-pet-animal-3.jpg");
+const firstImg: string = require("../../assets/images/cat-pet-animal-1.jpeg").default;
+const secondImg: string = require("../../assets/images/cat-pet-animal-2.jpg").default;
+const thirdImg: string = require("../../assets/images/cat-pet-animal-3.jpg").default;
 
 const CarouselPage: React.FunctionComponent = () => {
     return (

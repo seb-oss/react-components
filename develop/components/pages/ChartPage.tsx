@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Chart, ExtendedChartOptions } from "../../../src/Chart/Chart";
 import { ChartData, ChartOptions } from "chart.js";
-const Highlight = (require("react-highlight")).default;
+import Highlight from "react-highlight";
 const docMD: string = require("../../../src/Chart/readme.md");
 
 const ChartPage: React.FunctionComponent = () => {

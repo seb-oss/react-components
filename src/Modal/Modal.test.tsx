@@ -87,12 +87,6 @@ describe("Component: Modal", () => {
         expect(wrapper.hasClass("myModalClass")).toBeTruthy();
     });
 
-    it("Should focus on the modal when toggled", () => {
-        const mountedWrapper: ReactWrapper<ModalProps> = mount(<Modal {...modalProps} />);
-        mountedWrapper.setProps({ toggle: true });
-        expect(document.activeElement.classList.contains("modal")).toBeTruthy();
-    });
-
     it("Should display warning when onDismiss is not passed", () => {
         const mountedWrapper: ReactWrapper<ModalProps> = mount(<Modal toggle={false} onDismiss={null} />);
         const consoleWarn: jest.SpyInstance = jest.spyOn(console, "warn");

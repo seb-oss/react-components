@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Dialogue } from "../../../src/Dialogue/Dialogue";
 import { Button } from "../../../src/Button/Button";
-const Highlight = (require("react-highlight")).default;
+import Highlight from "react-highlight";
 const docMD: string = require("../../../src/Dialogue/readme.md");
 
 const DialoguePage: React.FunctionComponent = () => {
