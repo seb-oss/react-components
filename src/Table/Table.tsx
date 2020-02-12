@@ -173,7 +173,7 @@ const ActionColumn: React.FunctionComponent<ActionColumnProps> = (props: ActionC
                     type="button"
                     className="btn btn-outline-primary btn-sm"
                     onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-                        props.primaryActionButton.onClick(e, props.selectedRow);
+                        props.primaryActionButton?.onClick && props.primaryActionButton.onClick(e, props.selectedRow);
                     }}
                 >
                     {props.primaryActionButton.label}
@@ -182,7 +182,7 @@ const ActionColumn: React.FunctionComponent<ActionColumnProps> = (props: ActionC
             {props.actionLinks && props.actionLinks.length &&
                 <div
                     className="ellipsis-dropdown-holder"
-                    onClick={(e) => {
+                    onClick={(e: React.MouseEvent<HTMLDivElement>) => {
                         const tableSize: DOMRect = props.tableRef?.current?.getBoundingClientRect();
                         const actionColumnHeight: number = actionRef.current?.scrollHeight;
                         const actionColumSize: DOMRect = actionRef.current?.getBoundingClientRect();
@@ -325,7 +325,7 @@ const TableUI: React.FunctionComponent<TableUIProps> = React.memo((props: TableU
                                                     className="custom-control-input"
                                                     id={checkRowRandomIds}
                                                     checked={row.selected}
-                                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => { props.onItemSelected(e, row, "row"); }}
+                                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => { props.onItemSelected && props.onItemSelected(e, row, "row"); }}
                                                     name={`chk` + row.rowIndex}
                                                 />
                                                 <label className="custom-control-label" htmlFor={checkRowRandomIds} />
@@ -344,7 +344,7 @@ const TableUI: React.FunctionComponent<TableUIProps> = React.memo((props: TableU
                                         <td>
                                             <div
                                                 className={"icon-holder" + (row.expanded ? " active" : "")}
-                                                onClick={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => { props.onRowExpanded(e, row); }}
+                                                onClick={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => { props.onRowExpanded && props.onRowExpanded(e, row); }}
                                             >
                                                 {row.expanded ? angleDown : angleRightIcon}
                                             </div>
@@ -363,7 +363,7 @@ const TableUI: React.FunctionComponent<TableUIProps> = React.memo((props: TableU
                                                 selectedRow={row}
                                                 tableRef={tableRef}
                                                 onActionDropped={(event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-                                                    props.onActionDropped(event, row, null);
+                                                    props.onActionDropped && props.onActionDropped(event, row, null);
                                                 }}
                                             />
                                         </td>
@@ -428,7 +428,7 @@ const TableUI: React.FunctionComponent<TableUIProps> = React.memo((props: TableU
                                                         selectedRow={subRow}
                                                         tableRef={tableRef}
                                                         onActionDropped={(event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-                                                            props.onActionDropped(event, subRow, row.rowIndex);
+                                                            props.onActionDropped && props.onActionDropped(event, subRow, row.rowIndex);
                                                         }}
                                                     />
                                                 </td>}
