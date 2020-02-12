@@ -1,8 +1,8 @@
 import * as React from "react";
 import { Video } from "../../../src/Video/Video";
-const Highlight = (require("react-highlight")).default;
+import Highlight from "react-highlight";
 const docMD: string = require("../../../src/Video/readme.md");
-const videoSrc: string = require("../../assets/videos/sample.mp4");
+const videoSrc: string = require("../../assets/videos/sample.mp4").default;
 const vimeoSrc: string = "https://player.vimeo.com/video/259422408";
 const youtubeSrc: string = "https://www.youtube.com/embed/f19fctL72CY";
 

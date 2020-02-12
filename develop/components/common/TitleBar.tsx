@@ -1,8 +1,8 @@
 import * as React from "react";
 import { TextBoxGroup } from "../../../src/TextBoxGroup/TextBoxGroup";
 import { Icon } from "../../../src/Icon/Icon";
-const SEBLogo: string = require("../../assets/images/icons/seblogo.svg");
-const reactLogo: string = require("../../assets/images/icons/ReactLogo.png");
+const SEBLogo: string = require("../../assets/images/icons/seblogo.svg").default;
+const reactLogo: string = require("../../assets/images/icons/ReactLogo.png").default;
 const sidebarData = require("../../assets/components-list.json");
 
 interface SideBarDataItem {

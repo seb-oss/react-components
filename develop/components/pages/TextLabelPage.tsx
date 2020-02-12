@@ -2,7 +2,7 @@ import * as React from "react";
 import { TextLabel } from "../../../src/TextLabel/TextLabel";
 import { Tooltip } from "../../../src/Tooltip/Tooltip";
 import { TextBox } from "../../../src/TextBox/TextBox";
-const Highlight = (require("react-highlight")).default;
+import Highlight from "react-highlight";
 const docMD: string = require("../../../src/TextLabel/readme.md");
 
 const TextLabelPage: React.FunctionComponent = () => {

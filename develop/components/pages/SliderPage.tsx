@@ -4,7 +4,7 @@ import { TextBoxGroup } from "../../../src/TextBoxGroup/TextBoxGroup";
 import { RadioListModel, RadioGroup } from "../../../src/RadioGroup/RadioGroup";
 import { CheckBox } from "../../../src/CheckBox/CheckBox";
 import { TextBox } from "../../../src/TextBox/TextBox";
-const Highlight = (require("react-highlight")).default;
+import Highlight from "react-highlight";
 const docMD: string = require("../../../src/Slider/readme.md");
 
 const SliderPage: React.FunctionComponent = () => {

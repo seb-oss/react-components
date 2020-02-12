@@ -1,6 +1,6 @@
 import * as React from "react";
 import { TextBox } from "../../../src/TextBox/TextBox";
-const Highlight = (require("react-highlight")).default;
+import Highlight from "react-highlight";
 const docMD: string = require("../../../src/TextBox/readme.md");
 
 const TextBoxPage: React.FunctionComponent = () => {

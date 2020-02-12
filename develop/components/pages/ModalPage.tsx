@@ -3,7 +3,7 @@ import { Button } from "../../../src/Button/Button";
 import { Modal, ModalProps } from "../../../src/Modal/Modal";
 import { getParameterByName } from "../../__utils/queryString";
 import { RouteComponentProps } from "react-router";
-const Highlight = (require("react-highlight")).default;
+import Highlight from "react-highlight";
 const docMD: string = require("../../../src/Modal/readme.md");
 
 class ModalPage extends React.Component<RouteComponentProps, Partial<ModalProps>>  {

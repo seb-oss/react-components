@@ -1,6 +1,6 @@
 import * as React from "react";
 import { InlineLink } from "../../../src/InlineLink/InlineLink";
-const Highlight = (require("react-highlight")).default;
+import Highlight from "react-highlight";
 const docMD: string = require("../../../src/InlineLink/readme.md");
 
 const InlineLinkPage: React.FunctionComponent = () => {

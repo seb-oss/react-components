@@ -268,22 +268,7 @@ $white: #fff;
 }
 
 
-// Native version
-.form-control {
-    &.disabled {
-        border-color: $grey-500;
-        color: $grey-500;
-        background-color: $white;
-    }
-}
-
-.dropdown-label {
-    &.disabled {
-        color: $grey-500;
-    }
-}
-
-.alert {
+.alert.custom-alert {
     padding: 0px 2px;
     margin: 0;
     &.alert-danger {
@@ -292,6 +277,24 @@ $white: #fff;
         border: none;
         border-radius: 0px;
         width: 100%;
+    }
+}
+
+// Native version
+.custom-native-dropdown {
+    margin-bottom: 8px;
+    >.form-control {
+        &.disabled {
+            border-color: $grey-500;
+            color: $grey-500;
+            background-color: $white;
+        }
+    }
+    
+    >.dropdown-label {
+        &.disabled {
+            color: $grey-500;
+        }
     }
 }
 

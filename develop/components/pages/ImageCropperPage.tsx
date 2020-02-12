@@ -1,6 +1,6 @@
 import * as React from "react";
 import { ImageCropper, OptionProps } from "../../../src/ImageCropper";
-const Highlight = (require("react-highlight")).default;
+import Highlight from "react-highlight";
 const docMD: string = require("../../../src/ImageCropper/readme.md");
 
 const ImageCropperPage: React.FunctionComponent = () => {
