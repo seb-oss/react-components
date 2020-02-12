@@ -164,7 +164,7 @@ describe("Component: Table", () => {
         expect(container.querySelectorAll("tbody > tr.parent-row.expanded").length).toEqual(1);
     });
 
-    it("should render with and support row selction where necessary", async () => {
+    it("should render with and support row selection where necessary", async () => {
         // all items select 
         const onItemSelected: jest.Mock = jest.fn((e: React.ChangeEvent<HTMLInputElement>, row: TableRow, type: "row" | "subRow", rowIndex?: number) => { console.log("The rows are "); });
         await act(() => {
@@ -179,10 +179,12 @@ describe("Component: Table", () => {
         act(() => {
             // all items select 
             container.querySelectorAll("thead .custom-control-input").item(0).dispatchEvent(new MouseEvent("click", { bubbles: true }));
-            // one item selection
-            container.querySelectorAll("tbody .custom-control-input").item(0).dispatchEvent(new MouseEvent("click", { bubbles: true }));
+            // one parent item selection
+            container.querySelectorAll("tbody tr.parent-row .custom-control-input").item(0).dispatchEvent(new MouseEvent("click", { bubbles: true }));
+            // one subrow item selected
+            container.querySelectorAll("tbody tr.sub-row .custom-control-input").item(0).dispatchEvent(new MouseEvent("click", { bubbles: true }));
         });
-        expect(onItemSelected).toHaveBeenCalledTimes(2);
+        expect(onItemSelected).toHaveBeenCalledTimes(3);
     });
 
     it("should render and have optional footer row", async () => {
@@ -283,9 +285,10 @@ describe("Component: Table", () => {
                     data={smallData}
                     searchProps={{
                         searchInColumns: [],
-                        triggerSearchOn: "Change",
+                        triggerSearchOn: "Submit",
                         searchText: smallData[1].firstName,
-                        onSearch: customButtonCallBack
+                        onSearch: customButtonCallBack,
+                        searchTriggered: true
                     }}
                 />, container
             );
