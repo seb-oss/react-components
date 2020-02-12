@@ -21,7 +21,7 @@ const ButtonPage: React.FC = () => {
                 label: { type: "string", description: "The button's label", content: "My button" },
                 name: { type: "string", description: "The element name", content: "My-button" },
                 size: { type: "string", description: "The size of the button", content: ["lg", "md", "sm"], defaultValue: "md" },
-                theme: { type: "string", description: "The theme of the button", content: ["alternative", "anchor", "danger", "ghost-dark", "ghost-light", "primary", "secondary"], defaultValue: "primary" },
+                theme: { type: "string", description: "The theme of the button", content: ["outline-primary", "link", "danger", "ghost-dark", "ghost-light", "primary", "secondary"], defaultValue: "primary" },
                 title: { type: "string", description: "The element title attribute", content: "My button title" },
                 type: { type: "string", description: "The type of the button", content: ["button", "reset" , "submit"], defaultValue: "button" },
                 children: { type: "React.ReactNode", description: "Children to be rendered inside", content: <Loader toggle />, defaultValue: null }
