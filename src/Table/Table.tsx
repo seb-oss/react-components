@@ -210,7 +210,6 @@ const ActionColumn: React.FunctionComponent<ActionColumnProps> = (props: ActionC
                     >
                         {props.actionLinks.map((link: ActionLinkItem, index: number) =>
                             <a
-                                href="#"
                                 key={`${link.label.replace(" ", "-")} - ${index}}`}
                                 onClick={(e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
                                     e.preventDefault();
