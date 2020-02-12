@@ -76,44 +76,6 @@ button.btn {
         }
     }
 
-    &.btn-anchor {
-        &:not(:disabled) {
-            background: $transparent;
-            border: 0;
-            color: $blue-darker;
-
-            >.button-content>.svg-holder svg {
-                fill: $blue-darker;
-            }
-
-            &:hover {
-                background: $transparent;
-                color: $blue-dark;
-                text-decoration: underline;
-
-                >.button-content>.svg-holder svg {
-                    fill: $blue-dark;
-                }
-            }
-
-            &:active {
-                color: $blue-darker;
-            }
-
-            &:active,
-            &:focus {
-                background: $transparent;
-                text-decoration: underline;
-            }
-        }
-
-        &:disabled {
-            >.button-content>.svg-holder svg {
-                fill: $gray-500;
-            }
-        }
-    }
-
     &.btn-primary {
         >.button-content>.svg-holder svg {
             fill: $white;

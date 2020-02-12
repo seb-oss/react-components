@@ -11,12 +11,12 @@ const mysvg: JSX.Element = <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 
 const ButtonPage: React.FunctionComponent = () => {
     const themeList: Array<RadioListModel<ButtonTheme>> = [
         { label: "Primary", value: "primary" },
+        { label: "Primary (outlined)", value: "outline-primary" },
         { label: "Secondary", value: "secondary" },
-        { label: "Alternative", value: "alternative" },
         { label: "Danger", value: "danger" },
         { label: "Ghost-dark", value: "ghost-dark" },
         { label: "Ghost-light", value: "ghost-light" },
-        { label: "Anchor", value: "anchor" },
+        { label: "Link", value: "link" },
     ];
     const iconPositionList: Array<RadioListModel<ButtonIconPosition>> = [
         { label: "Right", value: "right" },
