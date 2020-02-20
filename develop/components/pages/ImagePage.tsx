@@ -1,8 +1,8 @@
 import * as React from "react";
 import { Image } from "../../../src/Image/Image";
-const Highlight = (require("react-highlight")).default;
+import Highlight from "react-highlight";
 const docMD: string = require("../../../src/Image/readme.md");
-const imgSrc: string = require("../../assets/images/cat-pet-animal-1.jpeg");
+const imgSrc: string = require("../../assets/images/cat-pet-animal-1.jpeg").default;
 
 const ImagePage: React.FunctionComponent = () => {
     return (

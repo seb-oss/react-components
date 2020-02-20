@@ -1,7 +1,7 @@
 import * as React from "react";
 import { ProgressBar, ProgressBarProps } from "../../../src/ProgressBar/ProgressBar";
 import { RouteComponentProps } from "react-router";
-const Highlight = (require("react-highlight")).default;
+import Highlight from "react-highlight";
 const docMD: string = require("../../../src/ProgressBar/readme.md");
 
 interface ProgressBarPageState {

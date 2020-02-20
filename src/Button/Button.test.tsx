@@ -44,11 +44,12 @@ describe("Component: Button", () => {
     describe("Should render supported themes", () => {
         const list: Array<ButtonTestItem<ButtonTheme, string>> = [
             { value: "primary", expected: "btn-primary" },
-            { value: "secondary", expected: "btn-outline-primary" },
-            { value: "alternative", expected: "btn-secondary" },
+            { value: "outline-primary", expected: "btn-outline-primary" },
+            { value: "secondary", expected: "btn-secondary" },
             { value: "ghost-dark", expected: "btn-ghost-dark" },
             { value: "ghost-light", expected: "btn-ghost-light" },
-            { value: "anchor", expected: "btn-anchor" },
+            { value: "anchor", expected: "btn-link" },
+            { value: "link", expected: "btn-link" },
             { value: "danger", expected: "btn-danger" },
             { value: "unsupported-theme" as any, expected: "btn-primary" },
         ];

@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Notification, NotificationAction } from "../../../src/Notification/Notification";
 import { Button } from "../../../src/Button/Button";
-const Highlight = (require("react-highlight")).default;
+import Highlight from "react-highlight";
 const docMD: string = require("../../../src/Notification/readme.md");
 
 const NotificationPage: React.FunctionComponent = () => {

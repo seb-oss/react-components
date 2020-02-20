@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Pagination } from "../../../src/Pagination/Pagination";
-const Highlight = (require("react-highlight")).default;
+import Highlight from "react-highlight";
 const docMD: string = require("../../../src/Pagination/readme.md");
 
 const PaginationPage: React.FunctionComponent = () => {

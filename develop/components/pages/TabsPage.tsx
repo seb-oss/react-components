@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Tabs, TabsListItem } from "../../../src/Tabs/Tabs";
-const Highlight = (require("react-highlight")).default;
+import Highlight from "react-highlight";
 const docMD = require("../../../src/Tabs/readme.md");
 
 const TabsPage: React.FunctionComponent = () => {

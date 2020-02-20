@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Timepicker, TimepickerValue, TimepickerDayperiodTypes } from "../../../src/Timepicker/Timepicker";
-const Highlight = (require("react-highlight")).default;
+import Highlight from "react-highlight";
 const docMD: string = require("../../../src/Timepicker/readme.md");
 
 const TimepickerPage: React.FunctionComponent = () => {

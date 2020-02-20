@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Rating } from "../../../src/Rating/Rating";
-const Highlight = (require("react-highlight")).default;
+import Highlight from "react-highlight";
 const docMD: string = require("../../../src/Rating/readme.md");
 
 const RatingPage: React.FunctionComponent = () => {
