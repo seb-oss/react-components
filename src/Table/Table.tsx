@@ -229,21 +229,21 @@ const ActionColumn: React.FunctionComponent<ActionColumnProps> = (props: ActionC
 
 interface RowUIProps {
     actionLinks?: Array<ActionLinkItem>;
-    row: TableRow;
-    tableRef: React.RefObject<HTMLTableElement>;
+    columns: Array<TableHeader>;
     onActionDropped: (event: React.MouseEvent<HTMLDivElement, MouseEvent>, row: TableRow, rowIndex?: number) => void;
-    onRowExpanded?: (e: React.MouseEvent<HTMLDivElement, MouseEvent>, row: TableRow) => void;
-    useShowActionColumn: boolean;
-    rowsAreCollapsable: boolean;
-    useRowSelection: boolean;
-    primaryActionButton?: PrimaryActionButton;
     onItemSelected?: (e: React.ChangeEvent<HTMLInputElement>, row: TableRow, type: RowTypes, rowIndex?: number) => void;
+    onRowExpanded?: (e: React.MouseEvent<HTMLDivElement, MouseEvent>, row: TableRow) => void;
     onSubRowExpanded?: (e: React.MouseEvent<HTMLDivElement, MouseEvent>, row: TableRow, rowIndex: number) => void;
+    parentRowIndex?: number;
+    parentRowIsExpanded?: boolean;
+    primaryActionButton?: PrimaryActionButton;
+    row: TableRow;
+    rowsAreCollapsable: boolean;
+    tableRef: React.RefObject<HTMLTableElement>;
     type: RowTypes;
     useRowCollapse: boolean;
-    columns: Array<TableHeader>;
-    parentRowIsExpanded?: boolean;
-    parentRowIndex?: number;
+    useRowSelection: boolean;
+    useShowActionColumn: boolean;
 }
 
 const RowUI: React.FunctionComponent<RowUIProps> = (props: RowUIProps) => {
