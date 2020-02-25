@@ -2,6 +2,8 @@ import * as React from "react";
 import { Tooltip, TooltipTrigger, TooltipTheme, TooltipPosition, TooltipMessageGroupItem } from "../../../src/Tooltip/Tooltip";
 import { RadioListModel, RadioGroup } from "../../../src/RadioGroup/RadioGroup";
 import { CheckBox } from "../../../src/CheckBox/CheckBox";
+import { Notification, NotificationAction } from "../../../src/Notification/Notification";
+
 const Highlight = (require("react-highlight")).default;
 const docMD: string = require("../../../src/Tooltip/readme.md");
 
@@ -43,6 +45,7 @@ const TooltipPage: React.FunctionComponent = () => {
     const [hasNodeAsContent, setHasNodeAsContent] = React.useState<boolean>(false);
     const [hasCustomReference, setHasCustomReference] = React.useState<boolean>(false);
     const [disableAutoPosition, setDisableAutoPosition] = React.useState<boolean>(false);
+    const [notifcationToggle, setNotifcationToggle] = React.useState<boolean>(false);
 
     return (
         <div className="route-template container">
@@ -64,7 +67,7 @@ const TooltipPage: React.FunctionComponent = () => {
                             theme={theme}
                             trigger={trigger}
                             disableAutoPosition={disableAutoPosition}
-                            onVisibleChange={hasCallback && (() => console.log("callback"))}
+                            onVisibleChange={hasCallback && (() => setNotifcationToggle(true))}
                         >
                             {hasCustomReference && <div>This is custom tooltip reference</div>}
                         </ Tooltip>
@@ -130,6 +133,14 @@ const TooltipPage: React.FunctionComponent = () => {
                     </div>
                 </div>
             </div>
+            <Notification
+                toggle={notifcationToggle}
+                style="slide-in"
+                dismissTimeout={3000}
+                onDismiss={() => setNotifcationToggle(false)}
+            >
+                <div>Tooltip visibility changed!</div>
+            </Notification>
         </div>
     );
 };

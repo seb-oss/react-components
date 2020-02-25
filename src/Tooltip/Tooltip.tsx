@@ -122,7 +122,7 @@ export class Tooltip extends React.Component<TooltipProps, TooltipState> {
                     onTouchEnd={(e: React.TouchEvent<HTMLDivElement>) => (this.props.triggerOnHover || this.props.trigger === "hover") && this.onTooltipToggle(e, false)}
                     onFocus={(e: React.FocusEvent<HTMLDivElement>) => this.props.trigger === "focus" && this.onTooltipToggle(e)}
                 >
-                    {this.props.children || <div className="icon">{this.props.customSvg ? this.props.customSvg : InfoCircleIcon}</div>}
+                    {this.props.children || <div className="default-content">{this.props.customSvg ? this.props.customSvg : InfoCircleIcon}</div>}
                 </div>
                 <TooltipContentContainer
                     {...this.props}
