@@ -5,7 +5,7 @@ import { RouteComponentProps, Route, Redirect } from "react-router";
 import TitleBar from "./common/TitleBar";
 import SideBar from "./common/SideBar";
 import { Loader } from "../../src/Loader/Loader";
-import { getParameterByName } from "../utils/queryString";
+import { getParameterByName } from "../__utils/queryString";
 import { SideBarContent, SideBarItem } from "typings/generic.type";
 const sidebarData: SideBarContent = require("../assets/components-list.json");
 type RouteItem = { path: string, component: React.LazyExoticComponent<any> };
