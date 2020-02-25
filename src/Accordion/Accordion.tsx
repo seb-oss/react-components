@@ -23,6 +23,7 @@ export interface AccordionProps {
     id?: string;
     list: Array<AccrodionListItem>;
     alternative?: boolean;
+    activeIndex?: number;
 }
 
 const Accordion: React.FunctionComponent<AccordionProps> = (props: AccordionProps) => {
@@ -36,6 +37,7 @@ const Accordion: React.FunctionComponent<AccordionProps> = (props: AccordionProp
     React.useEffect(() => { constructIds(); }, [props.list]);
     React.useEffect(() => constructClassName(), [props.className, props.alternative]);
     React.useEffect(() => constructItemClassName(), [props.iconPosition, props.customIconExpanded, props.iconRotation]);
+    React.useEffect(() => toggle(props.activeIndex), [props.activeIndex]);
 
     /** Constructs `id`s for accordion items */
     function constructIds(): void {
@@ -63,7 +65,7 @@ const Accordion: React.FunctionComponent<AccordionProps> = (props: AccordionProp
 
     function expandOrCollapseSection(itemIndex: number): void {
         const updatedHeightList: Array<number> = Array(props.list.length).fill(0);
-        updatedHeightList[itemIndex] = heightList[itemIndex] ? 0 : collapsableRef.current[itemIndex].current.scrollHeight;
+        updatedHeightList[itemIndex] = heightList[itemIndex] ? 0 : collapsableRef.current[itemIndex]?.current?.scrollHeight;
         setHeightList(updatedHeightList);
     }
 
