@@ -24,6 +24,11 @@ const AccordionPage: React.FunctionComponent = () => {
                         <Accordion list={accordionList} />
                     </div>
 
+                    <p>Here is a sample with active or collapsed item</p>
+                    <div className="result wide">
+                        <Accordion list={accordionList} activeIndex={1} />
+                    </div>
+
                     <p>Custom icon when expanded</p>
                     <div className="result wide">
                         <Accordion

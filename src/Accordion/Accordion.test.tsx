@@ -134,4 +134,9 @@ describe("Component: Accordion", () => {
         mountedWrapper = mount(<Accordion list={accordionList} alternative={true} />);
         expect(mountedWrapper.find(".custom-accordion").hasClass("alternative-accordion")).toBeTruthy();
     });
+
+    it("Should allow user to set a default active item", () => {
+        mountedWrapper.setProps({ activeIndex: 1 }).update();
+        expect(mountedWrapper.find(".accordion-item").at(1).hasClass("active")).toBeTruthy();
+    });
 });

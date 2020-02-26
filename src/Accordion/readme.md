@@ -30,13 +30,14 @@ This React component is based on SEB Bootstrap style. Supports customization and
 These are the current available properties:
 
 | Property            | Type                                   | Description                                                                            |
-| ------------------- | -------------------------------------- | -------------------------------------------------------------------------------------- |
+|---------------------|----------------------------------------|----------------------------------------------------------------------------------------|
 | alternative?        | `boolean`                              | Toggle alternative style of accordion                                                  |
 | className?          | `string`                               | Element class                                                                          |
+| activeIndex?        | `number`                               | index of the default active item                                                       |
 | customIcon?         | `JSX.Element`                          | Custom icon for the accordion trigger                                                  |
 | customIconExpanded? | `JSX.Element`                          | Custom icon to be used when expanded. This will add a transition between the two icons |
-| iconPosition?       | `string`                               | Accordion icon placement<sup>1</sup>                           |
-| iconTransition?     | `string`                               | Icon transition rotation degree<sup>2</sup>                                             |
+| iconPosition?       | `string`                               | Accordion icon placement<sup>1</sup>                                                   |
+| iconTransition?     | `string`                               | Icon transition rotation degree<sup>2</sup>                                            |
 | id?                 | `string`                               | Element id                                                                             |
 | list                | `Array<AccrodionListItem>`<sup>3</sup> | List of accordion items                                                                |
 
