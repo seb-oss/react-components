@@ -103,6 +103,25 @@ export class Tooltip extends React.Component<TooltipProps, TooltipState> {
             this.onTooltipToggle(e, false);
         }
     }
+
+    onHover = (e: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>, toggleOn: boolean) => {
+        (this.props.triggerOnHover || this.props.trigger === "hover") && this.onTooltipToggle(e, toggleOn);
+    }
+
+    onClickEvent = (e: React.MouseEvent<HTMLDivElement>) => {
+        ((!this.props.trigger && !this.props.triggerOnHover) || this.props.trigger === "click") && this.onTooltipToggle(e);
+    }
+
+    onMouseEnterEvent = (e: React.MouseEvent<HTMLDivElement>) => this.onHover(e, true);
+
+    onMouseLeaveEvent = (e: React.MouseEvent<HTMLDivElement>) => this.onHover(e, false);
+
+    onTouchStartEvent = (e: React.TouchEvent<HTMLDivElement>) => this.onHover(e, true);
+
+    onTouchEndEvent = (e: React.TouchEvent<HTMLDivElement>) => this.onHover(e, false);
+
+    onFocusEvent = (e: React.FocusEvent<HTMLDivElement>) => this.props.trigger === "focus" && this.onTooltipToggle(e);
+
     // TODO: remove customSvg when attribute is removed
     render() {
         return (
@@ -115,12 +134,12 @@ export class Tooltip extends React.Component<TooltipProps, TooltipState> {
                     ref={this.containerRef}
                     className="tooltip-reference"
                     tabIndex={-1}
-                    onClick={(e: React.MouseEvent<HTMLDivElement>) => ((!this.props.trigger && !this.props.triggerOnHover) || this.props.trigger === "click") && this.onTooltipToggle(e)}
-                    onMouseEnter={(e: React.MouseEvent<HTMLDivElement>) => (this.props.triggerOnHover || this.props.trigger === "hover") && this.onTooltipToggle(e, true)}
-                    onMouseLeave={(e: React.MouseEvent<HTMLDivElement>) => (this.props.triggerOnHover || this.props.trigger === "hover") && this.onTooltipToggle(e, false)}
-                    onTouchStart={(e: React.TouchEvent<HTMLDivElement>) => (this.props.triggerOnHover || this.props.trigger === "hover") && this.onTooltipToggle(e, true)}
-                    onTouchEnd={(e: React.TouchEvent<HTMLDivElement>) => (this.props.triggerOnHover || this.props.trigger === "hover") && this.onTooltipToggle(e, false)}
-                    onFocus={(e: React.FocusEvent<HTMLDivElement>) => this.props.trigger === "focus" && this.onTooltipToggle(e)}
+                    onClick={this.onClickEvent}
+                    onMouseEnter={this.onMouseEnterEvent}
+                    onMouseLeave={this.onMouseLeaveEvent}
+                    onTouchStart={this.onTouchStartEvent}
+                    onTouchEnd={this.onTouchEndEvent}
+                    onFocus={this.onFocusEvent}
                 >
                     {this.props.children || <div className="default-content">{this.props.customSvg ? this.props.customSvg : InfoCircleIcon}</div>}
                 </div>

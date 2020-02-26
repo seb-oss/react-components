@@ -48,7 +48,7 @@ const Overlay: React.FC<React.PropsWithChildren<OverlayProps>> = (props: React.P
         if (props.show && target.contains(props.overlayReference())) {
             setPlacementWithCoords(tooltipPositionChecker.getPosition(props.position || "top"));
         }
-    }, [props.show]);
+    }, [props.show, props.position]);
 
     /**
      * get position within view port
