@@ -1,7 +1,7 @@
 import * as React from "react";
 import "./button-style.scss";
 
-export type ButtonTheme = "primary" | "secondary" | "danger" | "alternative" | "ghost-dark" | "ghost-light" | "anchor";
+export type ButtonTheme = "primary" | "secondary" | "danger" | "outline-primary" | "ghost-dark" | "ghost-light" | "anchor" | "link";
 export type ButtonSizes = "lg" | "md" | "sm";
 export type ButtonIconPosition = "right" | "left";
 export type ButtonType = "button" | "reset" | "submit";
@@ -27,9 +27,11 @@ export const Button: React.NamedExoticComponent<ButtonProps> = React.memo((props
 
     function getButtonTheme(): string {
         switch (props.theme) {
-            case "secondary": return "outline-primary";
-            case "alternative": return "secondary";
-            case "primary": case "ghost-dark": case "ghost-light": case "anchor": case "danger": return props.theme;
+            case "anchor": {
+                console.warn("WARNING: 'anchor' is deprecated and will be removed in future versions. Use 'link' instead.");
+                return "link";
+            }
+            case "outline-primary": case "secondary": case "ghost-dark": case "ghost-light": case "danger": case "link": return props.theme;
             default: return "primary";
         }
     }

@@ -2,9 +2,9 @@ import * as React from "react";
 import { Tooltip, TooltipTrigger, TooltipTheme, TooltipPosition, TooltipMessageGroupItem } from "../../../src/Tooltip/Tooltip";
 import { RadioListModel, RadioGroup } from "../../../src/RadioGroup/RadioGroup";
 import { CheckBox } from "../../../src/CheckBox/CheckBox";
-import { Notification, NotificationAction } from "../../../src/Notification/Notification";
+import { Notification } from "../../../src/Notification/Notification";
+import Highlight from "react-highlight";
 
-const Highlight = (require("react-highlight")).default;
 const docMD: string = require("../../../src/Tooltip/readme.md");
 
 const TooltipPage: React.FunctionComponent = () => {

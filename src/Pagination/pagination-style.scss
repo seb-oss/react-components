@@ -1,7 +1,9 @@
 $blue: #41B0EE;
 $blue-darker: #007AC7;
 $faded-blue: #a2ddfe;
+$white: #fff;
 $transition-time: 200ms;
+
 @mixin transform($props) {
     -webkit-transform: $props;
     -moz-transform: $props;
@@ -30,24 +32,35 @@ $transition-time: 200ms;
                     height: 40px;
                     display: inline-flex;
                     align-items: center;
+
                     >.nav-num {
                         margin: 0 auto;
                     }
+
                     >.nav-action {
                         margin: 0 auto;
                         display: inline-flex;
+
                         >svg {
                             width: 16px;
                             height: 16px;
                             fill: $blue-darker;
                         }
                     }
+
+                    &:hover {
+                        svg {
+                            fill: $white;
+                        }
+                    }
                 }
             }
+
             &.dotnav {
                 .page-item {
                     width: 20px;
                     height: 25px;
+
                     .page-dot-link {
                         position: relative;
                         display: inline-block;
@@ -60,11 +73,13 @@ $transition-time: 200ms;
                         @include transition(all $transition-time);
                         margin: 0 auto;
                         will-change: transform;
+
                         &.active {
                             background-color: $blue-darker;
                             cursor: default;
                             @include transform(scale(1.3));
                         }
+
                         &:hover:not(.active) {
                             background-color: $blue;
                         }

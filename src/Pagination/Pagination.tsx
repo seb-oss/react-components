@@ -13,6 +13,7 @@ export interface PaginationProps {
     lastText?: string;
     nextText?: string;
     offset?: number;
+    pagingLength?: number;
     onChange?: (value: number) => void;
     previousText?: string;
     size: number;
@@ -23,37 +24,59 @@ export interface PaginationProps {
 }
 
 export const Pagination: React.FunctionComponent<PaginationProps> = React.memo((props: PaginationProps): React.ReactElement<void> => {
-    const Initialoffset: number = props.offset ? props.offset : 10;
+
+    const [list, setList] = React.useState<Array<number>>([]);
+    const [dotnavList, setDotnavList] = React.useState<Array<number>>([]);
+    const [pagingSize, setPagingSize] = React.useState<number>(0);
+
+    React.useEffect(() => {
+        const initialOffset: number = props.offset ? props.offset : 10;
+        setPagingSize(Math.ceil(props.size / initialOffset));
+    }, [props.offset, props.size]);
+
+    React.useEffect(() => {
+        const intialLength: number = props.pagingLength ? props.pagingLength : 5;
+        generateList(props.value, intialLength);
+    }, [pagingSize, props.pagingLength, props.value]);
 
     /**
      * Generates an array of the pages that needs to be displayed
      * It depends on the size, offset, and the current value
      * @param {number} value The current value. The current page.
-     * @param {number} size The size of the pagination
-     * @param {number} offset The offset to show the numbers
+     * @param {number} length The length of the pagination, number of pages to be displayed.
      * @returns {Array<number>} An array of the pages that needs to be displayed
      */
-    function getList(value: number, size: number, offset: number): Array<number> {
-        const list: Array<number> = [];
-        const range: { min: number, max: number } = { min: 0, max: 0 };
-        if (value <= (Math.ceil(offset / 2))) {
-            for (let i = 1; i <= offset; i++) {
-                list.push(i);
-            }
-        } else if (value >= (size + 1 - (Math.ceil(offset / 2)))) {
-            range.min = size + 1 - offset;
-            range.max = size;
-            for (let i = range.min; i <= range.max; i++) {
-                list.push(i);
-            }
-        } else {
-            range.min = value + 1 - (Math.ceil(offset / 2));
-            range.max = range.min + offset - 1;
-            for (let i = range.min; i <= range.max; i++) {
-                list.push(i);
-            }
+    function generateList(value: number, length: number): void {
+        const genList: Array<number> = [];
+        // generate the array
+        for (let i = 1; i <= pagingSize; i++) {
+            genList.push(i);
         }
-        return list;
+
+        // the median value is what you use to obtain the centre of the page or equilibrium
+        const medianValue: number = Math.ceil(length / 2);
+        let start: number = 0;
+        let end: number = pagingSize;
+
+        /**
+         * If The expected length is lessthan the size of the page, Do the
+         * conversion/calculations.
+         * 1. If the current value is less than the first centre, then its in the first page. Set start equal the size of the page - the length.
+         * 2. if the current value subtract the median or the centre value is greater than minus 1, set start to value - the medianValue.
+         * 3. the end is always start of the page plus the length regardless.
+         */
+
+        if (length < pagingSize) {
+            if ((pagingSize - value) < medianValue) {
+                start = (pagingSize - length);
+            } else if ((value - medianValue) > -1) {
+                start = (value - medianValue);
+            }
+
+            end = start + length;
+        }
+        setDotnavList(genList);
+        setList(genList.slice(start, end));
     }
 
     return (
@@ -81,7 +104,7 @@ export const Pagination: React.FunctionComponent<PaginationProps> = React.memo((
                                 </button>
                             </li>
                         }
-                        {getList(props.value, props.size, Initialoffset).map((num) => {
+                        {list.map((num: number) => {
                             return (
                                 <li
                                     className={"page-item" + (props.value === num ? " active" : "")}
@@ -100,7 +123,7 @@ export const Pagination: React.FunctionComponent<PaginationProps> = React.memo((
                         })
                         }
 
-                        {(props.value !== props.size) &&
+                        {(props.value !== pagingSize) &&
                             <li className="page-item" onClick={() => props.onChange(props.value + 1)}>
                                 <button className="page-link" title={props.nextText}>
                                     <span className="nav-action">
@@ -111,9 +134,9 @@ export const Pagination: React.FunctionComponent<PaginationProps> = React.memo((
                             </li>
                         }
 
-                        {(props.value !== props.size && props.useFirstAndLast) &&
-                            <li className="page-item" onClick={() => props.onChange(props.size)}>
-                                <button className="page-link" title="{props.lastText}">
+                        {(props.value !== pagingSize && props.useFirstAndLast) &&
+                            <li className="page-item" onClick={() => props.onChange(pagingSize)}>
+                                <button className="page-link" title={props.lastText}>
                                     <span className="nav-action">
                                         {props.useTextNav ? (props.lastText ? props.lastText : "Last") : angleDoubleRightIcon}
                                     </span>
@@ -126,7 +149,7 @@ export const Pagination: React.FunctionComponent<PaginationProps> = React.memo((
                 }
                 {props.useDotNav &&
                     <ul className={"pagination dotnav"}>
-                        {getList(props.value, props.size, props.size).map((num) => {
+                        {dotnavList.map((num: number) => {
                             return (
                                 <li
                                     className={"page-item" + (props.value === num ? " active" : "")}

@@ -1,7 +1,7 @@
 import * as React from "react";
 import { CheckBox } from "../../../src/CheckBox/CheckBox";
 import { Tabs } from "../../../src/Tabs/Tabs";
-const Highlight = (require("react-highlight")).default;
+import Highlight from "react-highlight";
 const docMD: string = require("../../../src/CheckBox/readme.md");
 
 const CheckBoxPage: React.FunctionComponent = () => {

@@ -1,6 +1,6 @@
 import * as React from "react";
 import { StepTracker } from "../../../src/StepTracker/StepTracker";
-const Highlight = (require("react-highlight")).default;
+import Highlight from "react-highlight";
 const docMD = require("../../../src/StepTracker/readme.md");
 
 const StepTrackerPage: React.FunctionComponent = () => {
