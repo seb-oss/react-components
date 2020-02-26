@@ -99,7 +99,7 @@ describe("Component: Tooltip", () => {
         const callback: jest.Mock = jest.fn();
         act(() => { render(<Tooltip content="this is tooltip" onVisibleChange={callback} />, container); });
         act(() => {
-            container.querySelector(".icon").dispatchEvent(new MouseEvent("click", { bubbles: true }));
+            container.querySelector(".default-content").dispatchEvent(new MouseEvent("click", { bubbles: true }));
         });
         expect(callback).toBeCalledTimes(1);
     });
@@ -139,30 +139,30 @@ describe("Component: Tooltip", () => {
         const triggerTestCases: Array<TriggerTestCase> = [
             {
                 toggleEvent: new MouseEvent("click", { bubbles: true }),
-                toggleEventElementClass: ".icon",
+                toggleEventElementClass: ".default-content",
                 untoggleEvent: new MouseEvent("click", { bubbles: true }),
-                untoggleEventElementClass: ".icon",
+                untoggleEventElementClass: ".default-content",
                 trigger: "click"
             },
             {
                 toggleEvent: new Event("focus", { bubbles: true }),
-                toggleEventElementClass: ".icon",
+                toggleEventElementClass: ".default-content",
                 untoggleEvent: new Event("focus", { bubbles: true }),
                 untoggleEventElementClass: ".tooltip-container",
                 trigger: "focus"
             },
             {
                 toggleEvent: new MouseEvent("mouseover", { bubbles: true }),
-                toggleEventElementClass: ".icon",
+                toggleEventElementClass: ".default-content",
                 untoggleEvent: new Event("mouseout", { bubbles: true }),
-                untoggleEventElementClass: ".icon",
+                untoggleEventElementClass: ".default-content",
                 trigger: "hover"
             },
             {
                 toggleEvent: new TouchEvent("touchstart", { bubbles: true }),
-                toggleEventElementClass: ".icon",
+                toggleEventElementClass: ".default-content",
                 untoggleEvent: new Event("touchend", { bubbles: true }),
-                untoggleEventElementClass: ".icon",
+                untoggleEventElementClass: ".default-content",
                 trigger: "hover"
             },
         ];
@@ -170,11 +170,11 @@ describe("Component: Tooltip", () => {
             it(`Should enable tooltip on ${testCase.trigger} when trigger mode is set to ${testCase.trigger}`, () => {
                 act(() => { render(<Tooltip content="this is tooltip" trigger={testCase.trigger} />, container); });
                 act(() => {
-                    container.querySelector(".icon").dispatchEvent(testCase.toggleEvent);
+                    container.querySelector(".default-content").dispatchEvent(testCase.toggleEvent);
                 });
                 expect(document.body.querySelector(".overlay-container:focus")).toBeDefined();
                 act(() => {
-                    container.querySelector(".icon").dispatchEvent(testCase.untoggleEvent);
+                    container.querySelector(".default-content").dispatchEvent(testCase.untoggleEvent);
                 });
                 expect(document.body.querySelector(".overlay-container:focus")).toBeNull();
             });
@@ -185,7 +185,7 @@ describe("Component: Tooltip", () => {
         act(() => { render(<Tooltip content="tooltip" position={"asd" as any} />, container); });
         act(() => { render(<Tooltip content="tooltip" position={"asd" as any} disableAutoPosition />, container); });
         act(() => {
-            container.querySelector(".icon").dispatchEvent(new MouseEvent("click", { bubbles: true }));
+            container.querySelector(".default-content").dispatchEvent(new MouseEvent("click", { bubbles: true }));
         });
         expect(document.body.querySelector(".overlay-container").classList.contains("asd")).toBeTruthy();
     });
@@ -264,7 +264,7 @@ describe("Component: Tooltip", () => {
                     return testCase.mockTooltipBoundingClientRect;
                 });
                 act(() => {
-                    container.querySelector(".icon").dispatchEvent(new MouseEvent("click", { bubbles: true }));
+                    container.querySelector(".default-content").dispatchEvent(new MouseEvent("click", { bubbles: true }));
                 });
                 expect(document.body.querySelector(".overlay-container").classList.contains(testCase.position)).toBeTruthy();
             });
@@ -358,7 +358,7 @@ describe("Component: Tooltip", () => {
                     return testCase.mockTooltipBoundingClientRect;
                 });
                 act(() => {
-                    container.querySelector(".icon").dispatchEvent(new MouseEvent("click", { bubbles: true }));
+                    container.querySelector(".default-content").dispatchEvent(new MouseEvent("click", { bubbles: true }));
                 });
                 expect(document.body.querySelector(".overlay-container").classList.contains(testCase.relativePosition)).toBeTruthy();
             });
