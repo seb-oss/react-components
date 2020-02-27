@@ -47,6 +47,14 @@ describe("Component: Tooltip", () => {
         expect(container.querySelector(".tooltip-container").id).toBe(id);
     });
 
+    it("Should render reference with custom svg if svg is passed", () => {
+        const content: string = "test";
+        const svg: JSX.Element = <svg>{content}</svg>;
+        act(() => { render(<Tooltip  customSvg={svg}/>, container); });
+        expect(document.body.querySelectorAll(".default-content").length).toBe(1);
+        expect(document.body.querySelector(".default-content>svg").innerHTML).toEqual(content);
+    });
+
     it("Should render content", () => {
         const content: string = "my tooltip";
         act(() => { render(<Tooltip content={content} />, container); });
@@ -54,11 +62,22 @@ describe("Component: Tooltip", () => {
         expect(document.body.querySelector(".tooltip-inner").innerHTML).toEqual(content);
     });
 
-    it("Should render message", () => {
+    it("Should render message and default message if no message is passed", () => {
         const message: string = "my tooltip";
+        act(() => { render(<Tooltip />, container); });
+        expect(document.body.querySelectorAll(".tooltip").length).toBe(1);
+        expect(document.body.querySelector(".message-container>.message").innerHTML).toEqual("Tooltip is empty. Please pass a message.");
         act(() => { render(<Tooltip message={message} />, container); });
         expect(document.body.querySelectorAll(".tooltip").length).toBe(1);
         expect(document.body.querySelector(".message-container>.message").innerHTML).toEqual(message);
+    });
+
+    it("Should render message with title", () => {
+        const message: string = "my tooltip";
+        const title: string = "title";
+        act(() => { render(<Tooltip message={message} title={title} />, container); });
+        expect(document.body.querySelectorAll(".tooltip").length).toBe(1);
+        expect(document.body.querySelector(".message-container>.title").innerHTML).toEqual(title);
     });
 
     it("Should render message group", () => {

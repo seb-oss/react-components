@@ -42,7 +42,6 @@ export interface TooltipProps {
 interface TooltipState {
     visible: boolean;
     referenceId: string;
-    tooltipContainer: HTMLDivElement;
 }
 
 export class Tooltip extends React.Component<TooltipProps, TooltipState> {
@@ -53,18 +52,12 @@ export class Tooltip extends React.Component<TooltipProps, TooltipState> {
 
         this.state = {
             visible: false,
-            referenceId: "",
-            tooltipContainer: null
+            referenceId: randomId("tooltip-ref")
         };
 
         this.forceDismiss = this.forceDismiss.bind(this);
     }
 
-    componentDidMount() {
-        this.setState({
-            referenceId: randomId("tooltip-ref")
-        });
-    }
     componentDidUpdate() {
         if (!!this.props.message || !!this.props.messageGroup || !!this.props.onClick || !!this.props.title || !!this.props.customSvg || !!this.props.triggerOnHover || !!this.props.width) {
             console.warn("message, messageGroup, onClick, title, customSvg, triggerOnHover, and width attributes will be deprecated soon.");
@@ -76,18 +69,7 @@ export class Tooltip extends React.Component<TooltipProps, TooltipState> {
      * @param {React.MouseEvent<HTMLDivElement>} e Mouse event
      */
     forceDismiss(e?: React.MouseEvent<HTMLDivElement>) {
-        if (e) {
-            switch ((e.target as HTMLElement).className) {
-                case "icon":
-                case "message":
-                case "message-container":
-                case "triangle":
-                    return;
-                default: this.onTooltipToggle(e, false);
-            }
-        } else {
-            this.onTooltipToggle(null, false);
-        }
+        console.log("forceDismiss is deprecating. Tooltip will be hidden if it lost focus");
     }
 
     /**
