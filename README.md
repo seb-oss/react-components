@@ -7,9 +7,9 @@
 
 This is a set of react components some of which are based on SEB's bootstrap. The plan for this project is to increase and improve components for future usage.
 
--       The package name: `@sebgroup/react-components`
--       The package documentation: [Documentation](https://sebgroup.github.io/react-components)
--       The package sourcecode: [Github Source Code](https://github.com/sebgroup/react-components)
+- The package name: `@sebgroup/react-components`
+- The package documentation: [Documentation](https://sebgroup.github.io/react-components)
+- The package sourcecode: [Github Source Code](https://github.com/sebgroup/react-components)
 
 ## Minimum requirements
 
