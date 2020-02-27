@@ -45,7 +45,6 @@ These are the current available properties:
 | onClick         | `(event?: React.MouseEvent<HTMLDivElement>) => void` | **```[Deprecated]```** click action **(will be replaced by `'onVisibleChange'`)**                                                                                  |
 | onVisibleChange | `(event: React.MouseEvent<HTMLDivElement> \| React.FocusEvent<HTMLElement>, visible: boolean) => void` |  callback on tooltip visibility status change                                                                                  |
 | position?       | `string`                                             | Css style positions: top/bottom/left/right                                                    |
-| ref?       | `React.LegacyRef<Tooltip>`                                             | Tooltip elements created in the render method                                                  |
 | theme?          | `string`                                             | Based on SEB predefined colors. (default: `'default'`)<sup>2</sup>                            |
 | title?          | `string`                                             | **```[Deprecated]```** Title **(will be replaced by `'content'`)**                                                                                        |
 | trigger?          | `click \| hover \| focus`                          | Tooltip trigger mode (default: `'click'`)                                                                                        |

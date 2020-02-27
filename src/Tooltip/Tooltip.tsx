@@ -19,7 +19,6 @@ export interface TooltipProps {
     className?: string;
     customSvg?: React.ReactNode;
     id?: string;
-    ref?: React.LegacyRef<Tooltip>;
     /** @deprecated use content instead */
     message?: string;
     /** @deprecated use content instead */
