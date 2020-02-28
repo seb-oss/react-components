@@ -19,7 +19,8 @@
         "noImplicitThis": false,
         "noImplicitAny": false,
         "strictNullChecks": false,
-        "esModuleInterop": true
+        "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true
     },
     "exclude": [
         "node_modules",
