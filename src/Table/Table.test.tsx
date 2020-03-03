@@ -59,17 +59,17 @@ describe("Component: Table", () => {
         expect(container).toBeDefined();
     });
 
-    it('Should render and be able to sort rows ', async () => {
-        const event: jest.Mock = jest.fn((rows: Array<TableRow>, sortByColumn: TableHeader) => { console.log("The sorted rows are "); });
+    it('Should render and be able to sort rows ', () => {
+        const event: jest.Mock = jest.fn((rows: Array<TableRow>, sortByColumn: TableHeader) => console.log("onAfterSorting called"));
         const onSortEvent: jest.Mock = jest.fn((rows: Array<TableRow>, accessor: string, sortingOrder: sortDirectionTypes) => rows.slice(0, 2));
-        await act(() => {
+        act(() => {
             render(<Table
                 columns={columns}
                 data={smallData}
                 sortProps={{ onAfterSorting: event }}
             />, container);
         });
-        await act(async () => {
+        act(() => {
             container.querySelectorAll(".icon-holder").item(1).dispatchEvent(new MouseEvent("click", { bubbles: true }));
         });
         // note: id column canSort is false
@@ -77,25 +77,25 @@ describe("Component: Table", () => {
         expect(event).toHaveBeenCalled();
 
         // you can also use a custom onSort callback as passed by the user
-        await act(() => {
+        act(() => {
             render(<Table
                 columns={columns}
                 data={smallData}
                 sortProps={{ onSort: onSortEvent, onAfterSorting: event }}
             />, container);
         });
-        await act(async () => {
+        act(() => {
             container.querySelectorAll(".icon-holder").item(1).dispatchEvent(new MouseEvent("click", { bubbles: true }));
         });
         // there should just two rows now
         expect(container.querySelectorAll("tbody > tr.parent-row").length).toEqual(2);
     });
 
-    it("Should render and do pagination where necessary ", async () => {
+    it("Should render and do pagination where necessary ", () => {
         const pageSize: number = 30;
         const paginationValue: number = 1;
-        const setPage: jest.Mock = jest.fn((n: number) => { console.log("Setting page "); });
-        await act(() => {
+        const setPage: jest.Mock = jest.fn((n: number) => console.log("setPage called"));
+        act(() => {
             render(<Table
                 columns={columns}
                 data={data}
@@ -118,9 +118,9 @@ describe("Component: Table", () => {
         expect(setPage).toHaveBeenCalled();
     });
 
-    it("Should render and be able to expand the subRows and row details ", async () => {
-        const onRowExpanded: jest.Mock = jest.fn((rows: Array<TableRow>) => { console.log("The rows are "); });
-        await act(() => {
+    it("Should render and be able to expand the subRows and row details ", () => {
+        const onRowExpanded: jest.Mock = jest.fn((rows: Array<TableRow>) => console.log("onRowExpanded called"));
+        act(() => {
             render(
                 <Table
                     columns={columns}
@@ -146,7 +146,7 @@ describe("Component: Table", () => {
         // it should be collapsable even for rowDetails
 
         const newData: Array<TableRow> = smallData.map((row: TableRow) => ({ ...row, subRows: undefined, rowContentDetail: <p>paragraph</p> }));
-        await act(() => {
+        act(() => {
             render(
                 <Table
                     columns={columns}
@@ -164,15 +164,15 @@ describe("Component: Table", () => {
         expect(container.querySelectorAll("tbody > tr.parent-row.expanded").length).toEqual(1);
     });
 
-    it("should render with and support row selection where necessary", async () => {
+    it("should render with and support row selection where necessary", () => {
         // all items select 
-        const onItemSelected: jest.Mock = jest.fn((e: React.ChangeEvent<HTMLInputElement>, row: TableRow, type: "row" | "subRow", rowIndex?: number) => { console.log("The rows are "); });
-        await act(() => {
+        const onRowSelected: jest.Mock = jest.fn((e: React.ChangeEvent<HTMLInputElement>, row: TableRow, type: "row" | "subRow", rowIndex?: number) => console.log("onRowSelected called"));
+        act(() => {
             render(
                 <Table
                     columns={columns}
                     data={smallData}
-                    onRowSelected={onItemSelected}
+                    onRowSelected={onRowSelected}
                 />, container
             );
         });
@@ -184,11 +184,11 @@ describe("Component: Table", () => {
             // one subrow item selected
             container.querySelectorAll("tbody tr.sub-row .custom-control-input").item(0).dispatchEvent(new MouseEvent("click", { bubbles: true }));
         });
-        expect(onItemSelected).toHaveBeenCalledTimes(3);
+        expect(onRowSelected).toHaveBeenCalledTimes(3);
     });
 
-    it("should render and have optional footer row", async () => {
-        await act(() => {
+    it("should render and have optional footer row", () => {
+        act(() => {
             render(
                 <Table
                     columns={columns}
@@ -198,7 +198,7 @@ describe("Component: Table", () => {
         });
         expect(container.querySelector("tfoot tr")).toBeFalsy();
 
-        await act(() => {
+        act(() => {
             render(
                 <Table
                     columns={columns}
@@ -210,13 +210,13 @@ describe("Component: Table", () => {
         expect(container.querySelector("tfoot tr")).toBeTruthy();
     });
 
-    it("should enable and handle custom actions ", async () => {
+    it("should enable and handle custom actions ", () => {
         const customButtonCallBack: jest.Mock = jest.fn((event: React.MouseEvent<HTMLAnchorElement, MouseEvent>, selectedRow: TableRow) => { });
         const actionLinks: Array<ActionLinkItem> = [
             { label: "Add", onClick: customButtonCallBack },
             { label: "Edit", onClick: customButtonCallBack }
         ];
-        await act(() => {
+        act(() => {
             render(
                 <Table
                     columns={columns}
@@ -260,12 +260,12 @@ describe("Component: Table", () => {
         expect(container.querySelectorAll("thead tr th").length).toEqual(columns.length + 1);
     });
 
-    it("should render and support filter and searching ", async () => {
+    it("should render and support filter and searching ", () => {
         let results: Array<TableRow> = smallData;
         const customButtonCallBack: jest.Mock = jest.fn((searchResults: Array<TableRow>) => { results = searchResults; });
 
         // before search
-        await act(() => {
+        act(() => {
             render(
                 <Table
                     columns={columns}
@@ -278,7 +278,7 @@ describe("Component: Table", () => {
         expect(customButtonCallBack).not.toHaveBeenCalled();
 
         // nothing should change if searchInColumns is empty
-        await act(() => {
+        act(() => {
             render(
                 <Table
                     columns={columns}
@@ -297,7 +297,7 @@ describe("Component: Table", () => {
         expect(results.length).toEqual(smallData.length);
 
         // after valid search
-        await act(() => {
+        act(() => {
             render(
                 <Table
                     columns={columns}
