@@ -1,0 +1,9 @@
+*.md
+__mocks__
+coverage
+docs
+node_modules
+dist
+package.json
+package-lock.json
+__utils

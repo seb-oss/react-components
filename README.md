@@ -15,9 +15,9 @@ This is a set of react components some of which are based on SEB's bootstrap. Th
 
 This version of components has been developed with:
 
--   React `16.10.1`
--   Typescript `3.6.3`
--   SEB Bootstrap `4.0.0`
+-   React `16.12`
+-   Typescript `3.7.5`
+-   SEB Bootstrap `5.1.0`
 
 ## Installation
 
@@ -36,17 +36,18 @@ npm install @sebgroup/bootstrap --save
 Then make sure you add the Main SEB bootstrap package in your main style.SCSS or index.ts as follows
 `@import '~@sebgroup/bootstrap/scss/bootstrap';`.
 
-For `Visual Studio Code` users, please install official [TSLint](https://marketplace.visualstudio.com/items?itemName=ms-vscode.vscode-typescript-tslint-plugin) plugin which has been published by `Microsoft` on your IDE, to enable `ts-linting` as by default you need to pass TSLint to be able to compile your code for production.
+For `Visual Studio Code` users, please install the [recommended plugins](.vscode/extensions.json)
 
 ## Development
 
-This project uses proper `ts-linting` and our lints are based on `tslint:latest` and `tslint-react`, with our changes in lint rules for a more consistent (less annoying) coding. We are using 4 different builds for this project. The `src` folder is where the actual components exist with all their necessary dependencies. and `develop` folder is where we develop and test those components. Unit tests are based on `jest` and `enzyme`.
+This project uses `prettier` for a more consistent (less annoying) coding. We are using 4 different builds for this project. The `src` folder is where the actual components exist with all their necessary dependencies. and `develop` folder is where we develop and test those components. Unit tests are based on `jest` and `enzyme`.
 
 1. Development: `npm start`
-2. Check for Lint-ing rules, Compile components and Create Docs folder: `npm run build`
+2. Check formatting rules, Compile components and Create Docs folder: `npm run build`
 3. Build and create the Documentation pages only: `npm run docs`
 4. To run the unit tests, run: `npm test`
 5. To run a unit test for a specific component you have to pass the name of the component in `comp` variable, run: `npm test Button`. It can also be chained with multiple specific components, e.g. `npm test Button RadioGroup`
+6. To commit your changes run: `npm run commit` and follow the steps
 
 ## Usage
 
@@ -55,24 +56,17 @@ For performance benefits we are not combining all the components into single Ind
 ```javascript
 import { Button } from "@sebgroup/react-components/dist/Button";
 
-class Comp extends React.Component<any, any> {
-    constructor(props) {
-        super(props);
-
-        this.onClick = this.onClick.bind(this);
-    }
-
-    onClick(e) {
+const Comp = () => {
+    const onClick = (e) => {
         console.log("Im Clicked");
     }
 
-    render() {
-        return (
-            <div>
-                <Button label="a button" onClick={this.onClick} />
-            </div>
-        );
-    }
+    return (
+        <div>
+            <Button label="a button" onClick={onClick} />
+        </div>
+    );
 }
+
 export default Comp;
 ```
