@@ -44,6 +44,7 @@
 	},
 	"dependencies": {
 		"@sebgroup/bootstrap": "^5.1.0",
+		"buffer": "^5.4.3",
 		"chart.js": "^2.9.3",
 		"chartjs-plugin-annotation": "^0.5.7",
 		"cropperjs": "^1.5.6",
