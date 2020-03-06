@@ -5,7 +5,7 @@ import { Pagination } from "../../../src/Pagination/Pagination";
 import { Dropdown, DropdownItem } from "../../../src/Dropdown/Dropdown";
 import { TextBox } from "../../../src/TextBox/TextBox";
 import { Button } from "../../../src/Button/Button";
-const Highlight = (require("react-highlight")).default;
+const Highlight = require("react-highlight").default;
 const docMD = require("../../../src/Table/readme.md");
 
 const TablePage: React.FunctionComponent = () => {
@@ -20,8 +20,8 @@ const TablePage: React.FunctionComponent = () => {
 
     const primaryButton: PrimaryActionButton = {
         label: "Buy",
-        onClick: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, selectedRow: TableRow) => { }
-    }
+        onClick: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, selectedRow: TableRow) => {}
+    };
 
     const actionLinks: Array<ActionLinkItem> = [
         { label: "Add", onClick: (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>, selectedRow: TableRow) => {} },
@@ -37,37 +37,42 @@ const TablePage: React.FunctionComponent = () => {
             },
             {
                 label: "First Name",
-                accessor: "firstName",
+                accessor: "firstName"
             },
             {
                 label: "Last Name",
-                accessor: "lastName",
+                accessor: "lastName"
             },
             {
                 label: "Age",
-                accessor: "age",
+                accessor: "age"
             },
             {
                 label: "Visits",
-                accessor: "visits",
+                accessor: "visits"
             },
             {
                 label: "Profile Progress",
-                accessor: "progress",
+                accessor: "progress"
             },
             {
                 label: "Status",
-                accessor: "status",
-            },
+                accessor: "status"
+            }
         ],
         []
     );
-    const data: Array<DataItem> = React.useMemo(() => makeData<Array<DataItem>>([listSize, 5]), []);
-    const smallData: Array<DataItem> = React.useMemo(() => makeData<Array<DataItem>>([5, 5]), []);
+    const data: Array<DataItem> = React.useMemo(
+        () => makeData<Array<DataItem>>([listSize, 5]),
+        []
+    );
+    const smallData: Array<DataItem> = React.useMemo(
+        () => makeData<Array<DataItem>>([5, 5]),
+        []
+    );
     return (
         <div className="route-template container">
             <div className="info-holder">
-
                 <div className="info">
                     <div className="md-file">
                         <Highlight innerHTML={true}>{docMD}</Highlight>
@@ -79,10 +84,7 @@ const TablePage: React.FunctionComponent = () => {
 
                     <p>Here are sample outputs of plain table</p>
                     <div className="result wide">
-                        <Table
-                            columns={columns}
-                            data={smallData}
-                        />
+                        <Table columns={columns} data={smallData} />
                     </div>
 
                     <p>Here an example with sorting</p>
@@ -91,9 +93,8 @@ const TablePage: React.FunctionComponent = () => {
                             columns={columns}
                             data={smallData}
                             sortProps={{
-                                onAfterSorting: (rows: Array<TableRow>, sortByColumn: TableHeader) => { }
-                            }
-                            }
+                                onAfterSorting: (rows: Array<TableRow>, sortByColumn: TableHeader) => {}
+                            }}
                         />
                     </div>
 
@@ -104,65 +105,35 @@ const TablePage: React.FunctionComponent = () => {
                             data={data}
                             offset={pageSize}
                             currentpage={paginationValue}
-                            footer={
-                                <Pagination
-                                    value={paginationValue}
-                                    onChange={setPagination}
-                                    size={listSize}
-                                    useFirstAndLast={true}
-                                />
-                            }
+                            footer={<Pagination value={paginationValue} onChange={setPagination} size={listSize} useFirstAndLast={true} />}
                         />
                     </div>
 
                     <p>Here is an example with expandable subrows and rowDetails</p>
                     <div className="result wide">
-                        <Table
-                            columns={columns}
-                            data={smallData}
-                            onRowExpanded={(rows: Array<TableRow>) => { }}
-                        />
+                        <Table columns={columns} data={smallData} onRowExpanded={(rows: Array<TableRow>) => {}} />
                     </div>
 
                     <p>Here is an example with row selection</p>
                     <div className="result wide">
-                        <Table
-                            columns={columns}
-                            data={smallData}
-                            onRowSelected={(rows: Array<TableRow>) => { }}
-                        />
+                        <Table columns={columns} data={smallData} onRowSelected={(rows: Array<TableRow>) => {}} />
                     </div>
 
                     <p>Here is an example with row selection and subRows</p>
                     <div className="result wide">
-                        <Table
-                            columns={columns}
-                            data={smallData}
-                            onRowSelected={(rows: Array<TableRow>) => { }}
-                            onRowExpanded={(rows: Array<TableRow>) => { }}
-                        />
+                        <Table columns={columns} data={smallData} onRowSelected={(rows: Array<TableRow>) => {}} onRowExpanded={(rows: Array<TableRow>) => {}} />
                     </div>
 
                     <p>Here is an example with actions column</p>
                     <div className="result wide">
-                        <Table
-                            columns={columns}
-                            data={smallData}
-                            primaryActionButton={primaryButton}
-                            actionLinks={actionLinks}
-                        />
+                        <Table columns={columns} data={smallData} primaryActionButton={primaryButton} actionLinks={actionLinks} />
                     </div>
 
                     <p>Here is an example with search, filter, sorting, pagination, subRows etc.:</p>
                     <div className="result wide">
                         <div className="row">
                             <div className="col-3">
-                                <Dropdown
-                                    list={dropDownList1}
-                                    selectedValue={dropDownList1Selected}
-                                    onChange={(value: Array<DropdownItem>) => setDropdownList1Selected(value)}
-                                    multi={true}
-                                />
+                                <Dropdown list={dropDownList1} selectedValue={dropDownList1Selected} onChange={(value: Array<DropdownItem>) => setDropdownList1Selected(value)} multi={true} />
                             </div>
                             <div className="col-3">
                                 <TextBox
@@ -173,12 +144,7 @@ const TablePage: React.FunctionComponent = () => {
                                 />
                             </div>
                             <div className="col-3">
-                                <Button
-                                    title="Search"
-                                    label="search"
-                                    onClick={() => setSearchTriggered(!searchTriggered)}
-
-                                />
+                                <Button title="Search" label="search" onClick={() => setSearchTriggered(!searchTriggered)} />
                             </div>
                         </div>
                         <Table
@@ -191,30 +157,20 @@ const TablePage: React.FunctionComponent = () => {
                                 searchText: textBoxValue2,
                                 triggerSearchOn: "Submit",
                                 searchTriggered: searchTriggered,
-                                onSearch: (searchResults: Array<TableRow>) => { }
+                                onSearch: (searchResults: Array<TableRow>) => {}
                             }}
                             primaryActionButton={primaryButton}
                             actionLinks={actionLinks}
                             sortProps={{
-                                onAfterSorting: (rows: Array<TableRow>, sortByColumn: TableHeader) => { }
-                            }
-                            }
-                            onRowSelected={(rows: Array<TableRow>) => { }}
-                            onRowExpanded={(rows: Array<TableRow>) => { }}
-                            footer={
-                                <Pagination
-                                    value={paginationValue1}
-                                    onChange={setPagination1}
-                                    size={listSize}
-                                    useFirstAndLast={true}
-                                />
-                            }
+                                onAfterSorting: (rows: Array<TableRow>, sortByColumn: TableHeader) => {}
+                            }}
+                            onRowSelected={(rows: Array<TableRow>) => {}}
+                            onRowExpanded={(rows: Array<TableRow>) => {}}
+                            footer={<Pagination value={paginationValue1} onChange={setPagination1} size={listSize} useFirstAndLast={true} />}
                         />
                     </div>
                 </div>
-
             </div>
-
         </div>
     );
 };
