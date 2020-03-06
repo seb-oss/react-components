@@ -16,28 +16,28 @@ describe("Component: Table", () => {
         },
         {
             label: "First Name",
-            accessor: "firstName",
+            accessor: "firstName"
         },
         {
             label: "Last Name",
-            accessor: "lastName",
+            accessor: "lastName"
         },
         {
             label: "Age",
-            accessor: "age",
+            accessor: "age"
         },
         {
             label: "Visits",
-            accessor: "visits",
+            accessor: "visits"
         },
         {
             label: "Profile Progress",
-            accessor: "progress",
+            accessor: "progress"
         },
         {
             label: "Status",
-            accessor: "status",
-        },
+            accessor: "status"
+        }
     ];
 
     const data: Array<DataItem> = makeData([30, 5]);
@@ -55,22 +55,23 @@ describe("Component: Table", () => {
     });
 
     it("Should render simple table", () => {
-        act(() => { render(<Table columns={columns} data={smallData} />, container); });
+        act(() => {
+            render(<Table columns={columns} data={smallData} />, container);
+        });
         expect(container).toBeDefined();
     });
 
-    it('Should render and be able to sort rows ', () => {
+    it("Should render and be able to sort rows ", () => {
         const event: jest.Mock = jest.fn((rows: Array<TableRow>, sortByColumn: TableHeader) => console.log("onAfterSorting called"));
         const onSortEvent: jest.Mock = jest.fn((rows: Array<TableRow>, accessor: string, sortingOrder: sortDirectionTypes) => rows.slice(0, 2));
         act(() => {
-            render(<Table
-                columns={columns}
-                data={smallData}
-                sortProps={{ onAfterSorting: event }}
-            />, container);
+            render(<Table columns={columns} data={smallData} sortProps={{ onAfterSorting: event }} />, container);
         });
         act(() => {
-            container.querySelectorAll(".icon-holder").item(1).dispatchEvent(new MouseEvent("click", { bubbles: true }));
+            container
+                .querySelectorAll(".icon-holder")
+                .item(1)
+                .dispatchEvent(new MouseEvent("click", { bubbles: true }));
         });
         // note: id column canSort is false
         expect(container.querySelectorAll(".icon-holder").length).toEqual(columns.length - 1);
@@ -78,16 +79,22 @@ describe("Component: Table", () => {
 
         // you can also use a custom onSort callback as passed by the user
         act(() => {
-            render(<Table
-                columns={columns}
-                data={smallData}
-                sortProps={{ onSort: onSortEvent, onAfterSorting: event }}
-            />, container);
+            render(<Table columns={columns} data={smallData} sortProps={{ onSort: onSortEvent, onAfterSorting: event }} />, container);
         });
         act(() => {
-            container.querySelectorAll(".icon-holder").item(1).dispatchEvent(new MouseEvent("click", { bubbles: true }));
+            container
+                .querySelectorAll(".icon-holder")
+                .item(1)
+                .dispatchEvent(new MouseEvent("click", { bubbles: true }));
         });
         // there should just two rows now
+        expect(container.querySelectorAll("tbody > tr.parent-row").length).toEqual(2);
+
+        // it also support a server sorting, just sort and update your data and columns
+        act(() => {
+            render(<Table columns={columns} data={smallData} sortProps={{ onSort: onSortEvent, onAfterSorting: event, useServerSorting: true }} />, container);
+        });
+
         expect(container.querySelectorAll("tbody > tr.parent-row").length).toEqual(2);
     });
 
@@ -96,23 +103,22 @@ describe("Component: Table", () => {
         const paginationValue: number = 1;
         const setPage: jest.Mock = jest.fn((n: number) => console.log("setPage called"));
         act(() => {
-            render(<Table
-                columns={columns}
-                data={data}
-                offset={pageSize}
-                currentpage={paginationValue}
-                footer={
-                    <Pagination
-                        value={paginationValue}
-                        onChange={setPage}
-                        size={pageSize}
-                        useFirstAndLast={true}
-                    />
-                }
-            />, container);
+            render(
+                <Table
+                    columns={columns}
+                    data={data}
+                    offset={pageSize}
+                    currentpage={paginationValue}
+                    footer={<Pagination value={paginationValue} onChange={setPage} size={pageSize} useFirstAndLast={true} />}
+                />,
+                container
+            );
         });
         act(() => {
-            container.querySelectorAll("tfoot > tr .page-item").item(1).dispatchEvent(new MouseEvent("click", { bubbles: true }))
+            container
+                .querySelectorAll("tfoot > tr .page-item")
+                .item(1)
+                .dispatchEvent(new MouseEvent("click", { bubbles: true }));
         });
         expect(container.querySelectorAll("tfoot > tr .page-item")).toBeDefined();
         expect(setPage).toHaveBeenCalled();
@@ -121,20 +127,20 @@ describe("Component: Table", () => {
     it("Should render and be able to expand the subRows and row details ", () => {
         const onRowExpanded: jest.Mock = jest.fn((rows: Array<TableRow>) => console.log("onRowExpanded called"));
         act(() => {
-            render(
-                <Table
-                    columns={columns}
-                    data={smallData}
-                    onRowExpanded={onRowExpanded}
-                />, container
-            );
+            render(<Table columns={columns} data={smallData} onRowExpanded={onRowExpanded} />, container);
         });
         act(() => {
-            container.querySelectorAll("tbody > tr.parent-row .icon-holder svg").item(1).dispatchEvent(new MouseEvent("click", { bubbles: true }));
+            container
+                .querySelectorAll("tbody > tr.parent-row .icon-holder svg")
+                .item(1)
+                .dispatchEvent(new MouseEvent("click", { bubbles: true }));
         });
 
         act(() => {
-            container.querySelectorAll("tbody > tr.sub-row .icon-holder svg").item(1).dispatchEvent(new MouseEvent("click", { bubbles: true }));
+            container
+                .querySelectorAll("tbody > tr.sub-row .icon-holder svg")
+                .item(1)
+                .dispatchEvent(new MouseEvent("click", { bubbles: true }));
         });
 
         expect(container.querySelectorAll("tbody > tr.parent-row.expanded")).toBeTruthy();
@@ -147,17 +153,14 @@ describe("Component: Table", () => {
 
         const newData: Array<TableRow> = smallData.map((row: TableRow) => ({ ...row, subRows: undefined, rowContentDetail: <p>paragraph</p> }));
         act(() => {
-            render(
-                <Table
-                    columns={columns}
-                    data={newData}
-                    onRowExpanded={onRowExpanded}
-                />, container
-            );
+            render(<Table columns={columns} data={newData} onRowExpanded={onRowExpanded} />, container);
         });
 
         act(() => {
-            container.querySelectorAll("tbody > tr.parent-row .icon-holder svg").item(1).dispatchEvent(new MouseEvent("click", { bubbles: true }));
+            container
+                .querySelectorAll("tbody > tr.parent-row .icon-holder svg")
+                .item(1)
+                .dispatchEvent(new MouseEvent("click", { bubbles: true }));
         });
 
         expect(container.querySelectorAll("tbody > tr.parent-row.expanded")).toBeTruthy();
@@ -165,65 +168,51 @@ describe("Component: Table", () => {
     });
 
     it("should render with and support row selection where necessary", () => {
-        // all items select 
+        // all items select
         const onRowSelected: jest.Mock = jest.fn((e: React.ChangeEvent<HTMLInputElement>, row: TableRow, type: "row" | "subRow", rowIndex?: number) => console.log("onRowSelected called"));
         act(() => {
-            render(
-                <Table
-                    columns={columns}
-                    data={smallData}
-                    onRowSelected={onRowSelected}
-                />, container
-            );
+            render(<Table columns={columns} data={smallData} onRowSelected={onRowSelected} />, container);
         });
         act(() => {
-            // all items select 
-            container.querySelectorAll("thead .custom-control-input").item(0).dispatchEvent(new MouseEvent("click", { bubbles: true }));
+            // all items select
+            container
+                .querySelectorAll("thead .custom-control-input")
+                .item(0)
+                .dispatchEvent(new MouseEvent("click", { bubbles: true }));
             // one parent item selection
-            container.querySelectorAll("tbody tr.parent-row .custom-control-input").item(0).dispatchEvent(new MouseEvent("click", { bubbles: true }));
+            container
+                .querySelectorAll("tbody tr.parent-row .custom-control-input")
+                .item(0)
+                .dispatchEvent(new MouseEvent("click", { bubbles: true }));
             // one subrow item selected
-            container.querySelectorAll("tbody tr.sub-row .custom-control-input").item(0).dispatchEvent(new MouseEvent("click", { bubbles: true }));
+            container
+                .querySelectorAll("tbody tr.sub-row .custom-control-input")
+                .item(0)
+                .dispatchEvent(new MouseEvent("click", { bubbles: true }));
         });
         expect(onRowSelected).toHaveBeenCalledTimes(3);
     });
 
     it("should render and have optional footer row", () => {
         act(() => {
-            render(
-                <Table
-                    columns={columns}
-                    data={smallData}
-                />, container
-            );
+            render(<Table columns={columns} data={smallData} />, container);
         });
         expect(container.querySelector("tfoot tr")).toBeFalsy();
 
         act(() => {
-            render(
-                <Table
-                    columns={columns}
-                    data={smallData}
-                    footer={<p>This is a paragraph. </p>}
-                />, container
-            );
+            render(<Table columns={columns} data={smallData} footer={<p>This is a paragraph. </p>} />, container);
         });
         expect(container.querySelector("tfoot tr")).toBeTruthy();
     });
 
     it("should enable and handle custom actions ", () => {
-        const customButtonCallBack: jest.Mock = jest.fn((event: React.MouseEvent<HTMLAnchorElement, MouseEvent>, selectedRow: TableRow) => { });
+        const customButtonCallBack: jest.Mock = jest.fn((event: React.MouseEvent<HTMLAnchorElement, MouseEvent>, selectedRow: TableRow) => {});
         const actionLinks: Array<ActionLinkItem> = [
             { label: "Add", onClick: customButtonCallBack },
             { label: "Edit", onClick: customButtonCallBack }
         ];
         act(() => {
-            render(
-                <Table
-                    columns={columns}
-                    data={smallData}
-                    actionLinks={actionLinks}
-                />, container
-            );
+            render(<Table columns={columns} data={smallData} actionLinks={actionLinks} />, container);
         });
 
         // trigger and open action column
@@ -232,14 +221,23 @@ describe("Component: Table", () => {
         expect(container.querySelector(openedActionColumnString)).toBeFalsy();
 
         act(() => {
-            container.querySelectorAll("tbody tr.parent-row > td .action-column .ellipsis-dropdown-holder").item(1).dispatchEvent(new MouseEvent("click", { bubbles: true }));
+            container
+                .querySelectorAll("tbody tr.parent-row > td .action-column .ellipsis-dropdown-holder")
+                .item(1)
+                .dispatchEvent(new MouseEvent("click", { bubbles: true }));
         });
-
 
         expect(container.querySelector(openedActionColumnString)).toBeDefined();
         expect(container.querySelector(openedActionColumnString)).toBeTruthy();
 
-        // action should be closed when you click outside the div 
+        act(() => {
+            container
+                .querySelectorAll("tbody tr.parent-row > td .action-column .ellipsis-dropdown-holder")
+                .item(columns.length - 1)
+                .dispatchEvent(new MouseEvent("click", { bubbles: true }));
+        });
+
+        // action should be closed when you click outside the div
 
         act(() => {
             container.querySelector("tbody").dispatchEvent(new MouseEvent("mousedown", { bubbles: true }));
@@ -247,7 +245,6 @@ describe("Component: Table", () => {
 
         expect(container.querySelector(openedActionColumnString)).toBeNull();
         expect(container.querySelector(openedActionColumnString)).toBeFalsy();
-
 
         act(() => {
             container.querySelectorAll("tbody tr.parent-row > td .action-column a").forEach((el: Element) => el.dispatchEvent(new MouseEvent("click", { bubbles: true })));
@@ -262,16 +259,13 @@ describe("Component: Table", () => {
 
     it("should render and support filter and searching ", () => {
         let results: Array<TableRow> = smallData;
-        const customButtonCallBack: jest.Mock = jest.fn((searchResults: Array<TableRow>) => { results = searchResults; });
+        const customButtonCallBack: jest.Mock = jest.fn((searchResults: Array<TableRow>) => {
+            results = searchResults;
+        });
 
         // before search
         act(() => {
-            render(
-                <Table
-                    columns={columns}
-                    data={smallData}
-                />, container
-            );
+            render(<Table columns={columns} data={smallData} />, container);
         });
 
         expect(results.length).toEqual(smallData.length);
@@ -290,7 +284,8 @@ describe("Component: Table", () => {
                         onSearch: customButtonCallBack,
                         searchTriggered: true
                     }}
-                />, container
+                />,
+                container
             );
         });
 
@@ -308,12 +303,12 @@ describe("Component: Table", () => {
                         searchText: smallData[1].firstName,
                         onSearch: customButtonCallBack
                     }}
-                />, container
+                />,
+                container
             );
         });
 
         expect(results.length).toEqual(1);
         expect(customButtonCallBack).toHaveBeenCalled();
     });
-
 });
