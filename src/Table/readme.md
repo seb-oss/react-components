@@ -59,6 +59,7 @@ These are the current available properties:
 |-----------------|---------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------|
 | onAfterSorting? | `(rows: Array<TableRow>, sortByColumn: TableHeader) => void`                                      | The onsort event, triggered when you click sort. This props enable sorting |
 | onSort?         | `(rows: Array<TableRow>, accessor: string, sortDirection: sortDirectionTypes) => Array<TableRow>` | A custom sorting function that can be alternatively passed by user         |
+| useServerSorting | `boolean` | when this is enable, the front end sorting is disable, sorting will take place on the backend and the data should be updated |
 
 ### FilterProps properties
 

@@ -242,7 +242,7 @@ const ActionColumn: React.FunctionComponent<ActionColumnProps> = (props: ActionC
                     {props.primaryActionButton.label}
                 </button>
             )}
-            {props.actionLinks && props.actionLinks.length && (
+            {props.actionLinks && props.actionLinks?.length && (
                 <div
                     className="ellipsis-dropdown-holder"
                     onClick={(e: React.MouseEvent<HTMLDivElement>) => {
@@ -485,7 +485,7 @@ const TableUI: React.FunctionComponent<TableUIProps> = React.memo(
                             ) : (
                                 props.rowsAreCollapsable && <th />
                             )}
-                            {props.columns.map((header: TableHeader, index: number) => (
+                            {props.columns?.map((header: TableHeader, index: number) => (
                                 <th
                                     key={index}
                                     className={props.sortable && header.canSort ? "sortable" : ""}
@@ -516,7 +516,7 @@ const TableUI: React.FunctionComponent<TableUIProps> = React.memo(
                             filterProps={props.filterProps}
                             useRowSelection={props.useRowSelection}
                         />
-                        {props.rows.map((row: TableRow, i: number) => {
+                        {props.rows?.map((row: TableRow, i: number) => {
                             return (
                                 <React.Fragment key={row.rowIndex}>
                                     <RowUI
@@ -534,7 +534,7 @@ const TableUI: React.FunctionComponent<TableUIProps> = React.memo(
                                         useRowCollapse={props.useRowCollapse}
                                         columns={props.columns}
                                     />
-                                    {row.subRows.map((subRow: TableRow) => {
+                                    {row.subRows?.map((subRow: TableRow) => {
                                         return (
                                             <React.Fragment key={`sub-row-${subRow.rowIndex}`}>
                                                 <RowUI
@@ -560,7 +560,7 @@ const TableUI: React.FunctionComponent<TableUIProps> = React.memo(
                                     })}
 
                                     <tr className="description-row" style={{ display: row.expanded ? "table-row" : "none" }}>
-                                        <td colSpan={sumCols(props.columns.length, props.useRowSelection || props.useRowCollapse, props.useShowActionColumn, false)}>
+                                        <td colSpan={sumCols(props.columns?.length, props.useRowSelection || props.useRowCollapse, props.useShowActionColumn, false)}>
                                             <div className="description">{row.rowContentDetail}</div>
                                         </td>
                                     </tr>
@@ -571,7 +571,7 @@ const TableUI: React.FunctionComponent<TableUIProps> = React.memo(
                     <tfoot>
                         {props.footer && (
                             <tr>
-                                <td colSpan={sumCols(props.columns.length, props.useRowSelection || props.useRowCollapse, props.useShowActionColumn, false)}>{props.footer}</td>
+                                <td colSpan={sumCols(props.columns?.length, props.useRowSelection || props.useRowCollapse, props.useShowActionColumn, false)}>{props.footer}</td>
                             </tr>
                         )}
                     </tfoot>
@@ -591,6 +591,7 @@ export interface SearchProps {
 export interface SortProps {
     onAfterSorting?: (rows: Array<TableRow>, sortByColumn: TableHeader) => void;
     onSort?: (rows: Array<TableRow>, accessor: string, sortDirection: sortDirectionTypes) => Array<TableRow>;
+    useServerSorting?: boolean;
 }
 export interface FilterItem {
     accessor: string;
@@ -788,35 +789,39 @@ export const Table: React.FunctionComponent<TableProps> = React.memo(
          * @param sortDirection The direction of the sort : ASC or DESC
          */
         const onSortItems = React.useCallback(
-            async (accessor: string, sortDirection: sortDirectionTypes) => {
+            (accessor: string, sortDirection: sortDirectionTypes) => {
                 let updatedOriginalRows: Array<TableRow> = [];
                 let updatedCurrentTableRows: Array<TableRow> = [];
                 let sortByColumn: TableHeader = null;
 
-                if (props.sortProps?.onSort) {
-                    updatedOriginalRows = props.sortProps.onSort(tableRows, accessor, sortDirection);
-                    updatedCurrentTableRows = props.sortProps.onSort(currentTableRows, accessor, sortDirection);
+                if (props.sortProps?.onSort && props.sortProps?.useServerSorting) {
+                    props.sortProps?.onSort(tableRows, accessor, sortDirection);
                 } else {
-                    updatedOriginalRows = sortArray(tableRows, accessor, sortDirection);
-                    updatedCurrentTableRows = sortArray(currentTableRows, accessor, sortDirection);
-                }
-                const updatedColumns: Array<TableHeader> = tableColumns.map((column: TableHeader) => {
-                    if (column?.accessor === accessor) {
-                        sortByColumn = {
-                            ...column,
-                            isSorted: true,
-                            isSortedDesc: sortDirection === sortDirectionTypes.Descending ? true : false
-                        };
-                        return sortByColumn;
+                    if (props.sortProps?.onSort) {
+                        updatedOriginalRows = props.sortProps.onSort(tableRows, accessor, sortDirection);
+                        updatedCurrentTableRows = props.sortProps.onSort(currentTableRows, accessor, sortDirection);
+                    } else {
+                        updatedOriginalRows = sortArray(tableRows, accessor, sortDirection);
+                        updatedCurrentTableRows = sortArray(currentTableRows, accessor, sortDirection);
                     }
-                    return { ...column, isSorted: false, isSortedDesc: false };
-                });
+                    const updatedColumns: Array<TableHeader> = tableColumns.map((column: TableHeader) => {
+                        if (column?.accessor === accessor) {
+                            sortByColumn = {
+                                ...column,
+                                isSorted: true,
+                                isSortedDesc: sortDirection === sortDirectionTypes.Descending ? true : false
+                            };
+                            return sortByColumn;
+                        }
+                        return { ...column, isSorted: false, isSortedDesc: false };
+                    });
 
-                setTableRows(updatedOriginalRows);
-                setCurrentTableRows(updatedCurrentTableRows);
-                setTableRowsImage(updatedOriginalRows);
-                setTableColumn(updatedColumns);
-                props.sortProps.onAfterSorting(updatedOriginalRows, sortByColumn);
+                    setTableRows(updatedOriginalRows);
+                    setCurrentTableRows(updatedCurrentTableRows);
+                    setTableRowsImage(updatedOriginalRows);
+                    setTableColumn(updatedColumns);
+                    props.sortProps?.onAfterSorting(updatedOriginalRows, sortByColumn);
+                }
             },
             [props.sortProps, tableColumns, tableRows, currentTableRows]
         );
@@ -928,7 +933,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo(
             const updatedRows: Array<TableRow> = rows.map((row: TableRow, index: number) => {
                 const updatedCells: Array<Cell> = Object.keys(row)
                     .filter((key: string) => {
-                        return key !== "rowContentDetail" && key !== "subRows";
+                        return ["rowContentDetail", "subRows", "cells", "expanded", "actionsDropdownDropped", "selected", "rowIndex"].indexOf(key) < 0;
                     })
                     .map(
                         (accessor: string): Cell => {
@@ -944,9 +949,9 @@ export const Table: React.FunctionComponent<TableProps> = React.memo(
                     ...row,
                     rowIndex: index,
                     cells: updatedCells,
-                    selected: false,
-                    actionsDropdownDropped: false,
-                    expanded: false,
+                    selected: row.selected || false,
+                    actionsDropdownDropped: row.actionsDropdownDropped || false,
+                    expanded: row.expanded || false,
                     subRows: row.subRows ? getRows(row.subRows) : []
                 };
             });
@@ -987,7 +992,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo(
             return updatedRows;
         }, []);
 
-        const setDefaultTableRows = React.useCallback(async () => {
+        const setDefaultTableRows = React.useCallback(() => {
             const updatedRows: Array<TableRow> = getRows(props.data);
             setTableRows(updatedRows);
             setTableRowsImage(updatedRows);

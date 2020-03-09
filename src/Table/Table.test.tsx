@@ -97,6 +97,13 @@ describe("Component: Table", () => {
         });
         // there should just two rows now
         expect(container.querySelectorAll("tbody > tr.parent-row").length).toEqual(2);
+
+        // it also support a server sorting, just sort and update your data and columns
+        act(() => {
+            render(<Table columns={columns} data={smallData} sortProps={{ onSort: onSortEvent, onAfterSorting: event, useServerSorting: true }} />, container);
+        });
+
+        expect(container.querySelectorAll("tbody > tr.parent-row").length).toEqual(2);
     });
 
     it("Should render and do pagination where necessary ", () => {
