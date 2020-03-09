@@ -55,7 +55,7 @@ const TablePage: React.FunctionComponent = () => {
 
     React.useEffect(() => {
         const updatedFilter: Array<string> = statusDropdownSelected?.map((item: DropdownItem) => item.value);
-        const updatedFilterItems: Array<FilterItem> = filters.map((filterItem: FilterItem) => {
+        const updatedFilterItems: Array<FilterItem> = filters?.map((filterItem: FilterItem) => {
             if (filterItem.accessor === "status") {
                 return { ...filterItem, filters: updatedFilter };
             }
@@ -65,8 +65,8 @@ const TablePage: React.FunctionComponent = () => {
     }, [statusDropdownSelected]);
 
     React.useEffect(() => {
-        const updatedFilter: Array<string> = ageDropdownSelected.map((item: DropdownItem) => item.value);
-        const updatedFilterItems: Array<FilterItem> = filters.map((filterItem: FilterItem) => {
+        const updatedFilter: Array<string> = ageDropdownSelected?.map((item: DropdownItem) => item.value);
+        const updatedFilterItems: Array<FilterItem> = filters?.map((filterItem: FilterItem) => {
             if (filterItem.accessor === "age") {
                 return { ...filterItem, filters: updatedFilter };
             }
