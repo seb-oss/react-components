@@ -182,9 +182,7 @@ function filterArray(items: Array<TableRow>, columns: Array<TableHeader>): Array
 function searchTextInArray(items: Array<TableRow>, keyword: string, searchFields: Array<string>): Array<TableRow> {
     return [...items].filter((row: TableRow) => {
         const searchText: string = String(keyword);
-        if (searchText?.trim().length === 0 || searchFields.length === 0) {
-            return true;
-        }
+
         return searchFields.some((searchColumn: string) => {
             let result: boolean = false;
             const searchField: string = searchColumn;
@@ -1025,7 +1023,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo(
 
         const doSearch = React.useCallback((): void => {
             let searchResult: Array<TableRow> = [];
-            if (props.searchProps?.searchText && props.searchProps?.searchInColumns && props.searchProps?.searchInColumns.length > 0) {
+            if (props.searchProps?.searchText && props.searchProps?.searchInColumns && props.searchProps?.searchInColumns?.length) {
                 searchResult = searchTextInArray(tableRowsImage, props.searchProps.searchText, props.searchProps.searchInColumns);
             } else {
                 searchResult = [...tableRowsImage];
@@ -1120,6 +1118,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo(
         }, [props.columns]);
 
         React.useEffect(() => {
+            console.log("It happens here ");
             setDefaultTableRows();
         }, [props.data]);
 

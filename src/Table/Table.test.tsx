@@ -335,7 +335,7 @@ describe("Component: Table", () => {
         expect(results.length).toEqual(smallData.length);
         expect(customButtonCallBack).not.toHaveBeenCalled();
 
-        // nothing should change if searchInColumns is empty
+        // nothing should change if searchInColumns is empty or search text is empty
         act(() => {
             render(
                 <Table
@@ -345,6 +345,25 @@ describe("Component: Table", () => {
                         searchInColumns: [],
                         triggerSearchOn: "Submit",
                         searchText: smallData[1].firstName,
+                        onSearch: customButtonCallBack,
+                        searchTriggered: true
+                    }}
+                />,
+                container
+            );
+        });
+
+        expect(results.length).toEqual(smallData.length);
+
+        act(() => {
+            render(
+                <Table
+                    columns={columns}
+                    data={smallData}
+                    searchProps={{
+                        searchInColumns: ["firstName"],
+                        triggerSearchOn: "Submit",
+                        searchText: null,
                         onSearch: customButtonCallBack,
                         searchTriggered: true
                     }}
