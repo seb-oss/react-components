@@ -67,6 +67,14 @@ describe("Component: Table", () => {
         act(() => {
             render(<Table columns={columns} data={smallData} sortProps={{ onAfterSorting: event }} />, container);
         });
+
+        // sort number type column(age)
+        act(() => {
+            container
+                .querySelectorAll(".icon-holder")
+                .item(3)
+                .dispatchEvent(new MouseEvent("click", { bubbles: true }));
+        });
         // sort ascending
         act(() => {
             container
@@ -81,9 +89,10 @@ describe("Component: Table", () => {
                 .item(1)
                 .dispatchEvent(new MouseEvent("click", { bubbles: true }));
         });
+
         // note: id column canSort is false
         expect(container.querySelectorAll(".icon-holder").length).toEqual(columns.length - 1);
-        expect(event).toHaveBeenCalledTimes(2);
+        expect(event).toHaveBeenCalledTimes(3);
 
         // you can also use a custom onSort callback as passed by the user
         act(() => {
