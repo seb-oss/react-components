@@ -1118,7 +1118,6 @@ export const Table: React.FunctionComponent<TableProps> = React.memo(
         }, [props.columns]);
 
         React.useEffect(() => {
-            console.log("It happens here ");
             setDefaultTableRows();
         }, [props.data]);
 

@@ -415,5 +415,24 @@ describe("Component: Table", () => {
             );
         });
         expect(customButtonCallBack).toHaveBeenCalledTimes(3);
+
+        // nothing should be returned when search field is not found or undefined
+        act(() => {
+            render(
+                <Table
+                    columns={columns}
+                    data={smallData}
+                    searchProps={{
+                        searchInColumns: ["undefined"],
+                        triggerSearchOn: "Submit",
+                        searchText: smallData[1].firstName,
+                        onSearch: customButtonCallBack,
+                        searchTriggered: true
+                    }}
+                />,
+                container
+            );
+        });
+        expect(results.length).toEqual(0);
     });
 });
