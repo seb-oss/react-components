@@ -1,6 +1,6 @@
 import * as React from "react";
 import { unmountComponentAtNode, render } from "react-dom";
-import { Column, Table, TableRow, TableHeader, ActionLinkItem, DataItem, sortDirectionTypes, FilterItem } from "./Table";
+import { Column, Table, TableRow, TableHeader, ActionLinkItem, DataItem, sortDirectionTypes, FilterItem, PrimaryActionButton } from "./Table";
 import makeData from "../../develop/__utils/makeData";
 import { act } from "react-dom/test-utils";
 import { Pagination } from "../Pagination/Pagination";
@@ -239,13 +239,13 @@ describe("Component: Table", () => {
         });
 
         // trigger and open action column
-        const openedActionColumnString: string = "tbody tr.parent-row > td .action-column .ellipsis-dropdown-holder .dropdown-content.active";
+        const openedActionColumnString: string = "tbody tr.parent-row td .action-column .ellipsis-dropdown-holder .dropdown-content.active";
         expect(container.querySelector(openedActionColumnString)).toBeNull();
         expect(container.querySelector(openedActionColumnString)).toBeFalsy();
 
         act(() => {
             container
-                .querySelectorAll("tbody tr.parent-row > td .action-column .ellipsis-dropdown-holder")
+                .querySelectorAll("tbody tr.parent-row td .action-column .ellipsis-dropdown-holder")
                 .item(1)
                 .dispatchEvent(new MouseEvent("click", { bubbles: true }));
         });
@@ -263,7 +263,7 @@ describe("Component: Table", () => {
         expect(container.querySelector(openedActionColumnString)).toBeFalsy();
 
         act(() => {
-            container.querySelectorAll("tbody tr.parent-row > td .action-column a").forEach((el: Element) => el.dispatchEvent(new MouseEvent("click", { bubbles: true })));
+            container.querySelectorAll("tbody tr.parent-row td .action-column a").forEach((el: Element) => el.dispatchEvent(new MouseEvent("click", { bubbles: true })));
         });
 
         // it should be called the length of the data twice
@@ -271,6 +271,23 @@ describe("Component: Table", () => {
 
         // plus one column for action field
         expect(container.querySelectorAll("thead tr th").length).toEqual(columns.length + 1);
+    });
+
+    it("should render and enable custom button", () => {
+        const primaryActionButton: PrimaryActionButton = {
+            label: "Buy",
+            onClick: jest.fn((e: React.MouseEvent<HTMLButtonElement>) => {})
+        };
+
+        act(() => {
+            render(<Table columns={columns} data={smallData} primaryActionButton={primaryActionButton} />, container);
+        });
+
+        act(() => {
+            container.querySelector("tbody tr.parent-row td .action-column button").dispatchEvent(new MouseEvent("click", { bubbles: true }));
+        });
+
+        expect(primaryActionButton.onClick).toHaveBeenCalled();
     });
 
     it("should render and support filtering ", () => {
