@@ -1144,7 +1144,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo(
                     useShowActionColumn={(props.actionLinks && props.actionLinks.length > 0) || !!props.primaryActionButton}
                     actionLinks={props.actionLinks}
                     primaryActionButton={props.primaryActionButton}
-                    loading={tableRowsImage.length === 0}
+                    loading={!props.data}
                     rowsAreCollapsable={rowsAreCollapsable()}
                     className={props.className}
                     showFilterRow={showFilterRow()}
