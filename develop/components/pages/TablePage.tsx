@@ -8,6 +8,16 @@ import { Button } from "../../../src/Button/Button";
 const Highlight = require("react-highlight").default;
 const docMD = require("../../../src/Table/readme.md");
 
+interface TableDataProps {
+    id: string;
+    firstName: string;
+    lastName: string;
+    age: number;
+    visits: number;
+    progress: number;
+    status: string;
+}
+
 const TablePage: React.FunctionComponent = () => {
     const [paginationValue, setPagination] = React.useState<number>(1);
     const [paginationValue1, setPagination1] = React.useState<number>(1);
@@ -113,20 +123,20 @@ const TablePage: React.FunctionComponent = () => {
         filterItems: filters
     };
 
-    const data: Array<DataItem> = React.useMemo(
-        () => makeData<Array<DataItem>>([listSize, 5]),
+    const data: Array<DataItem<TableDataProps>> = React.useMemo(
+        () => makeData<Array<DataItem<TableDataProps>>>([listSize, 5]),
         []
     );
 
-    const smallData: Array<DataItem> = React.useMemo(
-        () => makeData<Array<DataItem>>([5, 5]),
+    const smallData: Array<DataItem<TableDataProps>> = React.useMemo(
+        () => makeData<Array<DataItem<TableDataProps>>>([5, 5]),
         []
     );
 
     const statusDropDownList: Array<DropdownItem> = React.useMemo(
         () =>
             smallData
-                .map((data: DataItem) => ({ value: data.status, label: data.status }))
+                .map((data: DataItem<TableDataProps>) => ({ value: data.status, label: data.status }))
                 .filter((item: DropdownItem, index: number, self: Array<DropdownItem>) => {
                     const selfIndex: number = self.findIndex((filter: DropdownItem) => filter.value === item.value);
                     return selfIndex === index;
@@ -138,7 +148,7 @@ const TablePage: React.FunctionComponent = () => {
     const ageDropDownList: Array<DropdownItem> = React.useMemo(
         () =>
             smallData
-                .map((data: DataItem) => ({ value: data.age, label: String(data.age) }))
+                .map((data: DataItem<TableDataProps>) => ({ value: data.age, label: String(data.age) }))
                 .filter((item: DropdownItem, index: number, self: Array<DropdownItem>) => {
                     const selfIndex: number = self.findIndex((filter: DropdownItem) => filter.value === item.value);
                     return selfIndex === index;

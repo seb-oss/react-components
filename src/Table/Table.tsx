@@ -62,7 +62,7 @@ const timesIcon: JSX.Element = (
     </svg>
 );
 
-export type DataItem = { [name: string]: any } & TableRow;
+export type DataItem<T> = T & TableRow;
 type RowTypes = "row" | "subRow";
 
 export interface Column {
@@ -606,7 +606,7 @@ interface TableProps {
     className?: string;
     columns: Array<Column>;
     currentpage?: number;
-    data: Array<DataItem>;
+    data: Array<DataItem<any>>;
     filterProps?: FilterProps;
     footer?: React.ReactNode;
     offset?: number;
@@ -927,7 +927,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo(
          *
          * @param rows The table or or data to initialize rows from
          */
-        const getRows = React.useCallback((rows: Array<DataItem>): Array<TableRow> => {
+        const getRows = React.useCallback((rows: Array<DataItem<any>>): Array<TableRow> => {
             const updatedRows: Array<TableRow> = rows.map((row: TableRow, index: number) => {
                 const updatedCells: Array<Cell> = Object.keys(row)
                     .filter((key: string) => {

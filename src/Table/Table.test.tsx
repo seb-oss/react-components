@@ -40,8 +40,8 @@ describe("Component: Table", () => {
         }
     ];
 
-    const data: Array<DataItem> = makeData([30, 5]);
-    const smallData: Array<DataItem> = makeData([5, 5]);
+    const data: Array<DataItem<any>> = makeData([30, 5]);
+    const smallData: Array<DataItem<any>> = makeData([5, 5]);
 
     beforeEach(() => {
         container = document.createElement("div");
@@ -308,7 +308,7 @@ describe("Component: Table", () => {
             console.log(filterItem);
         });
 
-        const filterValues: Array<string> = smallData.map((data: DataItem) => data.status);
+        const filterValues: Array<string> = smallData.map((data: DataItem<any>) => data.status);
 
         act(() => {
             render(
