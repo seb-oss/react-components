@@ -62,7 +62,7 @@ const timesIcon: JSX.Element = (
     </svg>
 );
 
-export type DataItem<T> = T & TableRow;
+export type DataItem<T = any> = T & TableRow;
 type RowTypes = "row" | "subRow";
 
 export interface Column {
