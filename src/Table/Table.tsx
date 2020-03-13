@@ -62,7 +62,7 @@ const timesIcon: JSX.Element = (
     </svg>
 );
 
-export type DataItem<T> = T & TableRow;
+export type DataItem<T = any> = T & TableRow;
 type RowTypes = "row" | "subRow";
 
 export interface Column {
@@ -186,7 +186,7 @@ function searchTextInArray(items: Array<TableRow>, keyword: string, searchFields
         return searchFields.some((searchColumn: string) => {
             let result: boolean = false;
             const searchField: string = searchColumn;
-            const regEx = new RegExp(searchText, "gi");
+            const regEx: RegExp = new RegExp(searchText, "gi");
             if (row[searchField] === null || row[searchField] === undefined) {
                 result = false;
             } else if (typeof row[searchField] === "string") {
