@@ -66,7 +66,7 @@ export type DataItem<T> = T & TableRow;
 type RowTypes = "row" | "subRow";
 
 export interface Column {
-    label: string;
+    label: string | React.ReactNode;
     accessor: string;
     canSort?: boolean;
 }
