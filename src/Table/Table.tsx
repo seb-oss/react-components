@@ -240,7 +240,7 @@ const ActionColumn: React.FunctionComponent<ActionColumnProps> = (props: ActionC
                     {props.primaryActionButton.label}
                 </button>
             )}
-            {props.actionLinks && props.actionLinks?.length && (
+            {props.actionLinks && props.actionLinks?.length ? (
                 <div
                     className="ellipsis-dropdown-holder"
                     onClick={(e: React.MouseEvent<HTMLDivElement>) => {
@@ -279,7 +279,7 @@ const ActionColumn: React.FunctionComponent<ActionColumnProps> = (props: ActionC
                         ))}
                     </div>
                 </div>
-            )}
+            ) : null}
         </div>
     );
 };
