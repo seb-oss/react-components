@@ -262,7 +262,7 @@ const ActionColumn: React.FunctionComponent<ActionColumnProps> = (props: ActionC
                         props.onActionDropped(e);
                     }}
                 >
-                    <div className="icon-holder" id={"ellipsis-" + props.selectedRow.rowIndex}>
+                    <div className="icon-holder" id={"ellipsis-" + props.selectedRow.rowIndex} role="link">
                         {ellipsis}
                     </div>
                     <div className={actionColumnClass} ref={actionRef}>
@@ -334,6 +334,7 @@ const RowUI: React.FunctionComponent<RowUIProps> = (props: RowUIProps) => {
                         {(props.row.subRows.length > 0 || props.row.rowContentDetail) && props.rowsAreCollapsable && (
                             <div
                                 className={"icon-holder" + (props.row.expanded ? " active" : "")}
+                                role="link"
                                 onClick={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
                                     if (props.type === "row") {
                                         props.onRowExpanded(e, props.row);
@@ -352,6 +353,7 @@ const RowUI: React.FunctionComponent<RowUIProps> = (props: RowUIProps) => {
                         <td>
                             <div
                                 className={"icon-holder" + (props.row.expanded ? " active" : "")}
+                                role="link"
                                 onClick={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
                                     if (props.type === "row") {
                                         props.onRowExpanded && props.onRowExpanded(e, props.row);
@@ -415,6 +417,7 @@ const FilterRowUI: React.FunctionComponent<FilterRowProps> = (props: FilterRowPr
                                         {filter}
                                         <div
                                             className="icon-holder"
+                                            role="link"
                                             onClick={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
                                                 props.filterProps?.onRemoveFilter({ accessor: column?.accessor, value: filter });
                                             }}
@@ -497,7 +500,7 @@ const TableUI: React.FunctionComponent<TableUIProps> = React.memo(
                                 >
                                     {header.label}
                                     {props.sortable && header.canSort && (
-                                        <div className={"icon-holder" + (header.isSorted ? " active" : "")} id={header.accessor}>
+                                        <div role="link" className={"icon-holder" + (header.isSorted ? " active" : "")} id={header.accessor}>
                                             {header.isSorted ? (header.isSortedDesc ? sortDesc : sortAsc) : defaultSort}
                                         </div>
                                     )}
