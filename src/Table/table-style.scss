@@ -24,10 +24,6 @@ table {
                         cursor: pointer;
                         &:hover {
                             color: $icon-active-color;
-
-                            svg {
-                                fill: $icon-active-color;
-                            }
                         }
                     }
                     &:first-child {
@@ -66,19 +62,26 @@ table {
                         margin-left: 5px;
                         height: $icon-size;
 
-                        svg {
+                        > svg {
                             width: 100%;
                             height: 100%;
                             fill: $icon-color;
                             cursor: pointer;
+                        }
 
-                            &:hover {
-                                fill: $icon-active-color;
+                        &.asc {
+                            > svg {
+                                > path:first-child {
+                                    fill: $icon-active-color;
+                                }
                             }
                         }
-                        &.active {
-                            svg {
-                                fill: $icon-active-color;
+
+                        &.desc {
+                            > svg {
+                                > path:last-child {
+                                    fill: $icon-active-color;
+                                }
                             }
                         }
                     }
@@ -100,7 +103,7 @@ table {
                             flex-wrap: wrap;
                             > .filter-item {
                                 height: $chip-height;
-                                background-color: #e6e6e6;
+                                background-color: $grey-8;
                                 border-radius: 4px;
                                 padding: 4px;
                                 margin: 4px;
@@ -117,9 +120,9 @@ table {
                                     margin-left: 12px;
 
                                     svg {
-                                        fill: black;
+                                        fill: $black;
                                         &:hover {
-                                            fill: red;
+                                            fill: $red;
                                         }
                                     }
                                 }
@@ -193,7 +196,7 @@ table {
                                 &.active {
                                     max-height: 10000px;
                                     width: auto;
-                                    border: 1px solid #007ac7;
+                                    border: 1px solid $blue-darker;
                                     border-radius: 4px;
                                     z-index: 1;
                                     min-width: 160px;
