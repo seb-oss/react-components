@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Slider, RangeSliderLabel, SliderTheme, SliderProps } from "../../../src/Slider/Slider";
+import { Slider, RangeSliderLabel, SliderTheme, SliderProps, SliderAppearance } from "../../../src/Slider/Slider";
 import { TextBoxGroup } from "../../../src/TextBoxGroup/TextBoxGroup";
 import { RadioListModel, RadioGroup } from "../../../src/RadioGroup/RadioGroup";
 import { CheckBox } from "../../../src/CheckBox/CheckBox";
@@ -14,7 +14,6 @@ const SliderPage: React.FunctionComponent = () => {
                 <SliderDocs />
                 <SliderExamples />
             </div>
-
         </div>
     );
 };
@@ -35,6 +34,7 @@ interface SliderPageState {
     slider: number;
     theme: SliderTheme;
     tooltipTheme: SliderTheme;
+    appearance: SliderAppearance;
     disabled: boolean;
     hasError: boolean;
     hasLabels: boolean;
@@ -55,6 +55,7 @@ const SliderPageStateNames: { [K in keyof SliderPageState]: keyof SliderPageStat
     slider: "slider",
     theme: "theme",
     tooltipTheme: "tooltipTheme",
+    appearance: "appearance",
     disabled: "disabled",
     hasError: "hasError",
     hasLabels: "hasLabels",
@@ -68,7 +69,7 @@ const SliderPageStateNames: { [K in keyof SliderPageState]: keyof SliderPageStat
     maxInputError: "maxInputError",
     step: "step",
     stepInputError: "stepInputError",
-    sliderLabels: "sliderLabels",
+    sliderLabels: "sliderLabels"
 };
 
 class SliderExamples extends React.Component<SliderPageProps, SliderPageState> {
@@ -78,13 +79,19 @@ class SliderExamples extends React.Component<SliderPageProps, SliderPageState> {
         { label: "Primary", value: "primary" },
         { label: "Purple", value: "purple" },
         { label: "Success", value: "success" },
-        { label: "Warning", value: "warning" },
+        { label: "Warning", value: "warning" }
+    ];
+
+    appearanceList: Array<RadioListModel<SliderAppearance>> = [
+        { label: "Normal (Default)", value: "normal" },
+        { label: "Smaller", value: "smaller" }
     ];
 
     constructor(props: SliderPageProps) {
         super(props);
 
         this.state = {
+            appearance: "normal",
             slider: 25,
             theme: "primary",
             tooltipTheme: "inverted",
@@ -101,7 +108,7 @@ class SliderExamples extends React.Component<SliderPageProps, SliderPageState> {
             maxInputError: "",
             step: 1,
             stepInputError: "",
-            sliderLabels: [],
+            sliderLabels: []
         };
 
         this.onFormChange = this.onFormChange.bind(this);
@@ -117,7 +124,7 @@ class SliderExamples extends React.Component<SliderPageProps, SliderPageState> {
         const list: Array<RangeSliderLabel> = [
             { text: String(min), position: min },
             { text: String(middle), position: middle },
-            { text: String(max), position: max },
+            { text: String(max), position: max }
         ];
         if ((min !== 0 && min < 0 && max > 0) || (max !== 0 && max > 0 && min < 0)) {
             list[1].position !== 0 && list.push({ text: "0", position: 0 });
@@ -132,12 +139,19 @@ class SliderExamples extends React.Component<SliderPageProps, SliderPageState> {
         const min: number = name === SliderPageStateNames.min ? Number(value) || 0 : this.state.min;
         const max: number = name === SliderPageStateNames.max ? Number(value) || 100 : this.state.max;
         switch (type) {
-            case "checkbox": newState[name] = checked; break;
-            case "range": newState[name] = Number(value) || 0; break;
-            case "number": newState[name] = Number(value) || value; break;
-            default: newState[name] = value;
+            case "checkbox":
+                newState[name] = checked;
+                break;
+            case "range":
+                newState[name] = Number(value) || 0;
+                break;
+            case "number":
+                newState[name] = Number(value) || value;
+                break;
+            default:
+                newState[name] = value;
         }
-        if (([SliderPageStateNames.min, SliderPageStateNames.max, SliderPageStateNames.hasLabels]).indexOf(name as any) !== -1) {
+        if ([SliderPageStateNames.min, SliderPageStateNames.max, SliderPageStateNames.hasLabels].indexOf(name as any) !== -1) {
             const hasLabels = name === SliderPageStateNames.hasLabels ? value : this.state.hasLabels;
             sliderLabels = hasLabels ? this.generateLabels(min, max) : [];
             sliderLabels && (newState.sliderLabels = sliderLabels);
@@ -160,9 +174,11 @@ class SliderExamples extends React.Component<SliderPageProps, SliderPageState> {
                 <div className="info">
                     <h2>Output</h2>
                     <div className="result">
-                        {this.state.withInput &&
+                        {this.state.withInput && (
                             <div className="row">
-                                <div className="col"><label className="mt-2">Select a value</label></div>
+                                <div className="col">
+                                    <label className="mt-2">Select a value</label>
+                                </div>
                                 <div className="col">
                                     <TextBoxGroup
                                         name={SliderPageStateNames.slider}
@@ -177,7 +193,7 @@ class SliderExamples extends React.Component<SliderPageProps, SliderPageState> {
                                     />
                                 </div>
                             </div>
-                        }
+                        )}
                         <div className="row">
                             <div className="col">
                                 <Slider
@@ -192,70 +208,38 @@ class SliderExamples extends React.Component<SliderPageProps, SliderPageState> {
                                     error={this.state.withInputError || (this.state.hasError ? "Error message" : null)}
                                     disabled={this.state.disabled}
                                     tooltipTheme={this.state.tooltipTheme}
+                                    appearance={this.state.appearance}
                                     onChange={this.onFormChange}
                                     alwaysShowTooltip={this.state.alwaysShowTooltip}
                                 />
                             </div>
                         </div>
-
                     </div>
 
                     <p>Options</p>
                     <div className="row">
                         <div className="col">
-                            <TextBox
-                                name={SliderPageStateNames.min}
-                                label="Min"
-                                type="number"
-                                value={this.state.min}
-                                onChange={this.onFormChange}
-                                error={this.state.minInputError}
-                                pattern="\d+"
-                            />
+                            <TextBox name={SliderPageStateNames.min} label="Min" type="number" value={this.state.min} onChange={this.onFormChange} error={this.state.minInputError} pattern="\d+" />
                         </div>
                         <div className="col">
-                            <TextBox
-                                name={SliderPageStateNames.max}
-                                label="Max"
-                                type="number"
-                                value={this.state.max}
-                                onChange={this.onFormChange}
-                                error={this.state.maxInputError}
-                                pattern="\d+"
-                            />
+                            <TextBox name={SliderPageStateNames.max} label="Max" type="number" value={this.state.max} onChange={this.onFormChange} error={this.state.maxInputError} pattern="\d+" />
                         </div>
                         <div className="col">
-                            <TextBox
-                                name={SliderPageStateNames.step}
-                                label="Step"
-                                type="number"
-                                value={this.state.step}
-                                onChange={this.onFormChange}
-                                error={this.state.stepInputError}
-                                pattern="\d+"
-                            />
+                            <TextBox name={SliderPageStateNames.step} label="Step" type="number" value={this.state.step} onChange={this.onFormChange} error={this.state.stepInputError} pattern="\d+" />
                         </div>
                     </div>
                     <div className="row">
                         <div className="col">
                             <p>Themes</p>
-                            <RadioGroup
-                                name={SliderPageStateNames.theme}
-                                list={this.themeList}
-                                value={this.state.theme}
-                                onChange={this.onFormChange}
-                                condensed
-                            />
+                            <RadioGroup name={SliderPageStateNames.theme} list={this.themeList} value={this.state.theme} onChange={this.onFormChange} condensed />
                         </div>
                         <div className="col">
                             <p>Tooltip Themes</p>
-                            <RadioGroup
-                                name={SliderPageStateNames.tooltipTheme}
-                                list={this.themeList}
-                                value={this.state.tooltipTheme}
-                                onChange={this.onFormChange}
-                                condensed
-                            />
+                            <RadioGroup name={SliderPageStateNames.tooltipTheme} list={this.themeList} value={this.state.tooltipTheme} onChange={this.onFormChange} condensed />
+                        </div>
+                        <div className="col">
+                            <p>Appearance</p>
+                            <RadioGroup name={SliderPageStateNames.appearance} list={this.appearanceList} value={this.state.appearance} onChange={this.onFormChange} condensed />
                         </div>
                         <div className="col">
                             <p>Options</p>
