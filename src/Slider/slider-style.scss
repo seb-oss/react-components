@@ -5,6 +5,8 @@ $disabled-selected: #adadad;
 $disabled-unselected: #cccccc;
 $disabled-thumb-bg: #9a9a9a;
 $disabled-thumb-border-color: #8c8c8c;
+$slider-width-normal: 56px;
+$slider-width-smaller: 24px;
 
 @mixin appearance($props) {
     -webkit-appearance: $props;
@@ -43,9 +45,9 @@ $disabled-thumb-border-color: #8c8c8c;
     height: 5px;
 }
 
-@mixin thumb-styles {
+@mixin thumb-styles-normal {
     @include appearance(none);
-    width: 56px;
+    width: $slider-width-normal;
     height: 32px;
     background: $transparent;
     border-radius: 4px;
@@ -53,6 +55,17 @@ $disabled-thumb-border-color: #8c8c8c;
     outline: 0;
     box-shadow: 0;
     transform: translateY(-14px);
+
+    &:not(:disabled) {
+        cursor: pointer;
+    }
+}
+
+@mixin thumb-styles-smaller {
+    @include appearance(none);
+    @include thumb-styles-normal();
+    width: $slider-width-smaller;
+    border-radius: 2px;
 }
 
 @mixin setTheme($dark, $light) {
@@ -93,23 +106,14 @@ $disabled-thumb-border-color: #8c8c8c;
             margin-bottom: 7px;
             // Thumb
             &::-webkit-slider-thumb {
-                @include thumb-styles();
-                &:not(:disabled) {
-                    cursor: pointer;
-                }
+                @include thumb-styles-normal();
             }
             &::-moz-range-thumb {
-                @include thumb-styles();
+                @include thumb-styles-normal();
                 transform: none;
-                &:not(:disabled) {
-                    cursor: pointer;
-                }
             }
             &::-ms-thumb {
-                @include thumb-styles();
-                &:not(:disabled) {
-                    cursor: pointer;
-                }
+                @include thumb-styles-normal();
             }
             // Track
             &::-webkit-slider-runnable-track {
@@ -198,7 +202,7 @@ $disabled-thumb-border-color: #8c8c8c;
                 }
                 .custom-slider-slider-before {
                     left: 0px;
-                    width: calc(100% + 56px);
+                    width: calc(100% + #{$slider-width-normal});
                     margin: 0 -28px;
                     background-color: $gray-500;
                 }
@@ -211,7 +215,7 @@ $disabled-thumb-border-color: #8c8c8c;
                 .custom-slider-thumb {
                     position: relative;
                     height: 32px;
-                    width: 56px;
+                    width: $slider-width-normal;
                     background-color: $blue-dark;
                     border-radius: 4px;
                     top: -14px;
@@ -309,13 +313,7 @@ $disabled-thumb-border-color: #8c8c8c;
                         @include transition((width $transition-time ease-out, transform $transition-time linear));
                     }
                     .custom-slider-thumb {
-                        @include transition(
-                            (
-                                left $transition-time ease-out,
-                                transform $transition-time ease-in-out,
-                                box-shadow $transition-time ease-in
-                            )
-                        );
+                        @include transition((left $transition-time ease-out, transform $transition-time ease-in-out, box-shadow $transition-time ease-in));
                     }
                 }
             }
@@ -323,6 +321,41 @@ $disabled-thumb-border-color: #8c8c8c;
         &.has-labels {
             input[type="range"] {
                 margin-bottom: 30px;
+            }
+        }
+
+        &.smaller {
+            input[type="range"] {
+                // Thumb
+                &::-webkit-slider-thumb {
+                    @include thumb-styles-smaller();
+                }
+                &::-moz-range-thumb {
+                    @include thumb-styles-smaller();
+                    transform: none;
+                }
+                &::-ms-thumb {
+                    @include thumb-styles-smaller();
+                }
+            }
+
+            .custom-slider-holder {
+                padding: 0 12px;
+                .custom-slider-track {
+                    height: 4px;
+                    .custom-slider-slider-before {
+                        width: calc(100% + #{$slider-width-smaller});
+                        margin: 0 -12px;
+                    }
+                    .custom-slider-slider-after {
+                        margin: 0 -12px;
+                    }
+                    .custom-slider-thumb {
+                        width: $slider-width-smaller;
+                        height: 24px;
+                        top: -10px;
+                    }
+                }
             }
         }
     }
