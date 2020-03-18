@@ -957,7 +957,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo(
                 };
             });
 
-            return updatedRows;
+            return updatedRows || [];
         }, []);
 
         /**
