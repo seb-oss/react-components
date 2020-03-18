@@ -40,7 +40,7 @@
 		"commit": "git-cz",
 		"travis-deploy-once": "travis-deploy-once --pro",
 		"semantic-release": "semantic-release && npm run build",
-		"package-lock-sanitizer": "package-lock-sanitizer"
+		"sanitize": "package-lock-sanitizer && git add package-lock.json"
 	},
 	"dependencies": {
 		"@sebgroup/bootstrap": "^5.1.0",
@@ -121,7 +121,7 @@
 	},
 	"husky": {
 		"hooks": {
-			"pre-commit": "npm run format:staged"
+			"pre-commit": "npm run sanitize && npm run format:staged"
 		}
 	},
 	"release": {
