@@ -669,14 +669,14 @@ export const Table: React.FunctionComponent<TableProps> = React.memo(
          */
         const onAllItemsSelected = React.useCallback(
             (e: React.ChangeEvent<HTMLInputElement>): void => {
-                const updatedOriginalRows: Array<TableRow> = tableRows.map((originalRow: TableRow) => {
+                const updatedOriginalRows: Array<TableRow> = tableRows?.map((originalRow: TableRow) => {
                     const updatedSubRows: Array<TableRow> = originalRow.subRows.map((subRow: TableRow) => {
                         return { ...subRow, selected: e.target.checked };
                     });
                     return { ...originalRow, selected: e.target.checked, subRows: updatedSubRows };
                 });
 
-                const updatedRows: Array<TableRow> = currentTableRows.map((row: TableRow) => {
+                const updatedRows: Array<TableRow> = currentTableRows?.map((row: TableRow) => {
                     const updatedSubRows: Array<TableRow> = row.subRows.map((subRow: TableRow) => {
                         return { ...subRow, selected: e.target.checked };
                     });
@@ -698,14 +698,14 @@ export const Table: React.FunctionComponent<TableProps> = React.memo(
             (e: MouseEvent) => {
                 const parentElement: Element = (e.target as Element).parentElement;
                 if (hasAnOpenedAction && parentElement.id.indexOf("ellipsis") < 0 && !parentElement.classList.contains("dropdown-content")) {
-                    const updatedOriginalRows: Array<TableRow> = tableRows.map((originalRow: TableRow) => {
+                    const updatedOriginalRows: Array<TableRow> = tableRows?.map((originalRow: TableRow) => {
                         const subRows: Array<TableRow> = originalRow.subRows.map((subRow: TableRow) => {
                             return { ...subRow, actionsDropdownDropped: false };
                         });
                         return { ...originalRow, actionsDropdownDropped: false, subRows };
                     });
 
-                    const updatedRows: Array<TableRow> = currentTableRows.map((currentRow: TableRow) => {
+                    const updatedRows: Array<TableRow> = currentTableRows?.map((currentRow: TableRow) => {
                         const subRows: Array<TableRow> = currentRow.subRows.map((subRow: TableRow) => {
                             return { ...subRow, actionsDropdownDropped: false };
                         });
@@ -731,7 +731,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo(
                 let updatedOriginalRows: Array<TableRow> = [];
                 let updatedRows: Array<TableRow> = [];
                 if (rowIndex) {
-                    updatedOriginalRows = tableRows.map((originalRow: TableRow) => {
+                    updatedOriginalRows = tableRows?.map((originalRow: TableRow) => {
                         if (originalRow.rowIndex === rowIndex) {
                             const subRows: Array<TableRow> = originalRow.subRows.map((subRow: TableRow) => {
                                 if (subRow.rowIndex === row.rowIndex) {
@@ -746,7 +746,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo(
                         return { ...originalRow, actionsDropdownDropped: false };
                     });
 
-                    updatedRows = currentTableRows.map((currentRow: TableRow) => {
+                    updatedRows = currentTableRows?.map((currentRow: TableRow) => {
                         if (currentRow.rowIndex === rowIndex) {
                             const subRows: Array<TableRow> = currentRow.subRows.map((subRow: TableRow) => {
                                 if (subRow.rowIndex === row.rowIndex) {
@@ -761,7 +761,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo(
                         return { ...currentRow, actionsDropdownDropped: false };
                     });
                 } else {
-                    updatedOriginalRows = tableRows.map((originalRow: TableRow) => {
+                    updatedOriginalRows = tableRows?.map((originalRow: TableRow) => {
                         if (originalRow.rowIndex === row.rowIndex) {
                             return { ...originalRow, actionsDropdownDropped: !originalRow.actionsDropdownDropped };
                         }
@@ -769,7 +769,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo(
                         return { ...originalRow, actionsDropdownDropped: false };
                     });
 
-                    updatedRows = currentTableRows.map((currentRow: TableRow, index) => {
+                    updatedRows = currentTableRows?.map((currentRow: TableRow, index) => {
                         if (currentRow.rowIndex === row.rowIndex) {
                             return { ...currentRow, actionsDropdownDropped: !currentRow.actionsDropdownDropped };
                         }
@@ -835,7 +835,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo(
          */
         const onSubRowExpanded = React.useCallback(
             (e: React.MouseEvent<HTMLDivElement, MouseEvent>, row: TableRow, rowIndex: number): void => {
-                const updatedOriginalRows: Array<TableRow> = tableRows.map((originalRow: TableRow) => {
+                const updatedOriginalRows: Array<TableRow> = tableRows?.map((originalRow: TableRow) => {
                     if (originalRow.rowIndex === rowIndex) {
                         const subRows: Array<TableRow> = originalRow.subRows.map((subRow: TableRow) => {
                             if (subRow.rowIndex === row.rowIndex) {
@@ -850,7 +850,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo(
                     return originalRow;
                 });
 
-                const updatedRows: Array<TableRow> = currentTableRows.map((currentRow: TableRow) => {
+                const updatedRows: Array<TableRow> = currentTableRows?.map((currentRow: TableRow) => {
                     if (currentRow.rowIndex === rowIndex) {
                         const subRows: Array<TableRow> = currentRow.subRows.map((subRow: TableRow) => {
                             if (subRow.rowIndex === row.rowIndex) {
@@ -884,7 +884,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo(
          */
         const onRowExpanded = React.useCallback(
             (e: React.MouseEvent<HTMLDivElement, MouseEvent>, row: TableRow): void => {
-                const updatedOriginalRows: Array<TableRow> = tableRows.map((originalRow: TableRow) => {
+                const updatedOriginalRows: Array<TableRow> = tableRows?.map((originalRow: TableRow) => {
                     if (originalRow.rowIndex === row.rowIndex) {
                         return {
                             ...originalRow,
@@ -896,7 +896,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo(
                     return originalRow;
                 });
 
-                const updatedRows: Array<TableRow> = currentTableRows.map((currentRow: TableRow, index) => {
+                const updatedRows: Array<TableRow> = currentTableRows?.map((currentRow: TableRow, index) => {
                     if (currentRow.rowIndex === row.rowIndex) {
                         return {
                             ...currentRow,
@@ -931,7 +931,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo(
          * @param rows The table or or data to initialize rows from
          */
         const getRows = React.useCallback((rows: Array<DataItem<any>>): Array<TableRow> => {
-            const updatedRows: Array<TableRow> = rows.map((row: TableRow, index: number) => {
+            const updatedRows: Array<TableRow> = rows?.map((row: TableRow, index: number) => {
                 const updatedCells: Array<Cell> = Object.keys(row)
                     .filter((key: string) => {
                         return ["rowContentDetail", "subRows", "cells", "expanded", "actionsDropdownDropped", "selected", "rowIndex"].indexOf(key) < 0;
@@ -1000,12 +1000,12 @@ export const Table: React.FunctionComponent<TableProps> = React.memo(
         }, [props.data]);
 
         const doPaginate = React.useCallback((): void => {
-            if (props.currentpage && props.offset && tableRows.length > 0) {
+            if (props.currentpage && props.offset && tableRows?.length > 0) {
                 // pagination start from 1 hence the need fro deducting 1
                 const start: number = (props.currentpage - 1) * props.offset;
                 const end: number = props.offset * props.currentpage;
 
-                const currentPage: Array<TableRow> = tableRows.slice(start, end);
+                const currentPage: Array<TableRow> = tableRows?.slice(start, end);
                 setCurrentTableRows(currentPage);
             } else {
                 setCurrentTableRows(tableRows);
@@ -1014,7 +1014,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo(
 
         const rowsAreCollapsable = React.useCallback((): boolean => {
             return (
-                currentTableRows.some((row: TableRow) => {
+                currentTableRows?.some((row: TableRow) => {
                     return row.subRows.length > 0 || row.rowContentDetail || row.subRows.some((subRow: TableRow) => subRow.rowContentDetail || (row.subRows && row.subRows.length > 0));
                 }) && !!props.onRowExpanded
             );
@@ -1061,7 +1061,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo(
 
         React.useEffect(() => {
             if (!!props.onRowSelected) {
-                const notAllsAreRowsSelected: boolean = tableRows.some((row: TableRow) => !row.selected);
+                const notAllsAreRowsSelected: boolean = tableRows?.some((row: TableRow) => !row.selected);
 
                 if (notAllsAreRowsSelected) {
                     setAllRowsChecked(false);
@@ -1070,7 +1070,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo(
                 }
             }
 
-            const actionColumnIsOpened: boolean = tableRows.some((row: TableRow) => {
+            const actionColumnIsOpened: boolean = tableRows?.some((row: TableRow) => {
                 return row.actionsDropdownDropped || row.subRows?.some((sub: TableRow) => sub.actionsDropdownDropped);
             });
             setAnOpenedAction(actionColumnIsOpened);
