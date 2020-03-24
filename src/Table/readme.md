@@ -59,8 +59,24 @@ These are the current available properties:
 |-----------------|---------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------|
 | onAfterSorting? | `(rows: Array<TableRow>, sortByColumn: TableHeader) => void`                                      | The onsort event, triggered when you click sort. This props enable sorting |
 | onSort?         | `(rows: Array<TableRow>, accessor: string, sortDirection: sortDirectionTypes) => Array<TableRow>` | A custom sorting function that can be alternatively passed by user         |
+| useServerSorting | `boolean` | when this is enable, the front end sorting is disable, sorting will take place on the backend and the data should be updated |
+
+### FilterProps properties
+
+| Property        | Type  | Description |
+|-----------------|-------|----------------------------------------------------------------------------|
+| filterItems | `Array<FilterItem>` | Array of the filter items, onsists of multiple columns|
+| onAfterFilter | `(rows: Array<TableRow>) => void;` |A callback that returns filtered table rows |
+| onRemoveFilter | `(item: { accessor: string; value: string }) => void` | A callBack that returns the filter item to be deleted |
+
+### FilterItem properties
+| Property        | Type  | Description |
+|-----------------|-------|----------------------------------------------------------------------------|
+| accessor | `string` | The name of the column or accessor |
+| filters | `Array<string>` | The array of the filter values |
+
 
 ## Footnote
-1. `Column`, `TableRow`, `PrimaryActionButton`, `ActionLinkItem`, `TableHeader`, `SortProps`, `Data` and `SearchProps` interfaces/types are all importable from the component;
+1. `Column`, `TableRow`, `PrimaryActionButton`, `ActionLinkItem`, `TableHeader`, `SortProps`, `Data`, `FilterItem`, `FilterProps` and `SearchProps` interfaces/types are all importable from the component;
 
 
