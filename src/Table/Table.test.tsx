@@ -192,28 +192,54 @@ describe("Component: Table", () => {
 
     it("should render with and support row selection where necessary", () => {
         // all items select
-        const onRowSelected: jest.Mock = jest.fn((e: React.ChangeEvent<HTMLInputElement>, row: TableRow, type: "row" | "subRow", rowIndex?: number) => console.log("onRowSelected called"));
+        let results: Array<TableRow> = [];
+        const onRowSelected: jest.Mock = jest.fn((rows: Array<TableRow>) => {
+            results = rows;
+        });
+
         act(() => {
             render(<Table columns={columns} data={smallData} onRowSelected={onRowSelected} />, container);
         });
+
         act(() => {
             // all items select
             container
                 .querySelectorAll("thead .custom-control-input")
                 .item(0)
                 .dispatchEvent(new MouseEvent("click", { bubbles: true }));
+        });
+
+        expect(results.length).toEqual(smallData.length);
+
+        act(() => {
+            // all items select
+            container
+                .querySelectorAll("thead .custom-control-input")
+                .item(0)
+                .dispatchEvent(new MouseEvent("click", { bubbles: true }));
+        });
+
+        expect(results.length).toEqual(0);
+
+        act(() => {
             // one parent item selection
             container
                 .querySelectorAll("tbody tr.parent-row .custom-control-input")
                 .item(0)
                 .dispatchEvent(new MouseEvent("click", { bubbles: true }));
+        });
+
+        expect(results.length).toEqual(1);
+
+        act(() => {
             // one subrow item selected
             container
                 .querySelectorAll("tbody tr.sub-row .custom-control-input")
                 .item(0)
                 .dispatchEvent(new MouseEvent("click", { bubbles: true }));
         });
-        expect(onRowSelected).toHaveBeenCalledTimes(3);
+
+        expect(onRowSelected).toHaveBeenCalledTimes(4);
     });
 
     it("should render and have optional footer row", () => {

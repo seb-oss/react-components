@@ -660,7 +660,12 @@ export const Table: React.FunctionComponent<TableProps> = React.memo(
                 setCurrentTableRows(updatedRows);
                 setTableRows(updatedOriginalRows);
                 setTableRowsImage(updatedOriginalRows);
-                props.onRowSelected(updatedOriginalRows);
+
+                if (e.target.checked) {
+                    props.onRowSelected(updatedOriginalRows);
+                } else {
+                    props.onRowSelected([]);
+                }
             },
             [tableRows, currentTableRows, props.onRowSelected]
         );
