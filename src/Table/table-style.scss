@@ -6,11 +6,72 @@ $chip-height: 32px;
 $icon-size: 16px;
 $row-height: 40px;
 
+$input-body-color: #444 !default;
+$transition-time: 200ms;
+
 @mixin transition($props) {
     -webkit-transition: $props;
     -moz-transition: $props;
     -o-transition: $props;
     transition: $props;
+}
+
+@mixin setInputGroupStyles() {
+    .form-group.input-box-group {
+        position: relative;
+        margin-bottom: 0rem;
+        > .input-group {
+            position: relative;
+            > .input-box-group-wrapper {
+                color: $input-body-color;
+                @include transition(border $transition-time / 2);
+                position: relative;
+                width: 100%;
+                height: auto;
+                border: 1px solid $gray-500;
+                border-radius: 4px;
+                overflow: hidden;
+                display: flex;
+                align-items: center;
+                &:hover {
+                    border-color: $blue;
+                    background-color: $white;
+                }
+                &:focus-within {
+                    border-color: $blue-darker;
+                    box-shadow: none;
+                    background-color: $white;
+                    &:active {
+                        border-color: $blue-darker;
+                        box-shadow: none;
+                        background-color: $white;
+                    }
+                }
+                > input.form-control {
+                    display: inline-flex;
+                    z-index: 1;
+                    border: none;
+                    border-radius: 0;
+                    height: auto;
+                    min-height: 10px;
+                    padding: 5px 7px;
+                    &:focus {
+                        box-shadow: none;
+                    }
+                    &::-webkit-inner-spin-button,
+                    &::-webkit-textfield-decoration-container {
+                        -webkit-appearance: none;
+                        -moz-appearance: none;
+                        appearance: none;
+                    }
+                    &:nth-child(2):not(:last-child),
+                    &:first-child:not(:last-child) {
+                        padding-right: 0;
+                    }
+                }
+            }
+        }
+    }
 }
 
 table {
@@ -96,6 +157,8 @@ table {
                     position: relative;
                     vertical-align: middle;
                     max-width: 300px;
+
+                    @include setInputGroupStyles();
 
                     &.filter-column {
                         > .filter-item-holder {
@@ -198,7 +261,7 @@ table {
                                     width: auto;
                                     border: 1px solid $blue-darker;
                                     border-radius: 4px;
-                                    z-index: 1;
+                                    z-index: 2;
                                     min-width: 160px;
                                     box-shadow: 0px 3px 3px 0px rgba(0, 0, 0, 0.4);
 

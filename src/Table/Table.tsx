@@ -38,6 +38,7 @@ const timesIcon: JSX.Element = (
 
 export type DataItem<T = any> = T & TableRow;
 type RowTypes = "row" | "subRow";
+export type EditMode = "save" | "cancel" | "edit";
 
 export interface Column {
     label: string | React.ReactNode;
@@ -75,6 +76,7 @@ export interface TableRow {
     subRows?: Array<TableRow>;
     expanded?: boolean;
     rowContentDetail?: React.ReactNode;
+    isEditMode?: boolean;
 }
 
 export const enum sortDirectionTypes {
@@ -173,6 +175,25 @@ function searchTextInArray(items: Array<TableRow>, keyword: string, searchFields
     });
 }
 
+interface TextboxGroupProps {
+    type: string;
+    onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+    name: string;
+    value: string | number;
+}
+
+const TextboxGroup: React.FunctionComponent<TextboxGroupProps> = (props: TextboxGroupProps) => {
+    return (
+        <div className="form-group input-box-group">
+            <div className="input-group">
+                <div className="input-box-group-wrapper">
+                    <input id={props.name} name={props.name} type={props.type} value={String(props.value)} onChange={props.onChange} className="form-control" />
+                </div>
+            </div>
+        </div>
+    );
+};
+
 interface ActionColumnProps {
     actionLinks?: Array<ActionLinkItem>;
     onActionDropped?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
@@ -265,6 +286,7 @@ interface RowUIProps {
     onItemSelected?: (e: React.ChangeEvent<HTMLInputElement>, row: TableRow, type: RowTypes, rowIndex?: number) => void;
     onRowExpanded?: (e: React.MouseEvent<HTMLDivElement, MouseEvent>, row: TableRow) => void;
     onSubRowExpanded?: (e: React.MouseEvent<HTMLDivElement, MouseEvent>, row: TableRow, rowIndex: number) => void;
+    onChange?: (e: React.ChangeEvent<HTMLInputElement>, row: TableRow) => void;
     parentRowIndex?: number;
     parentRowIsExpanded?: boolean;
     primaryActionButton?: PrimaryActionButton;
@@ -342,7 +364,22 @@ const RowUI: React.FunctionComponent<RowUIProps> = (props: RowUIProps) => {
                     )
                 )}
                 {props.row.cells.map((cell: Cell, cellIndex: number) => {
-                    return <td key={`${props.type}-${cellIndex}`}>{cell.value}</td>;
+                    return (
+                        <td key={`${props.type}-${cellIndex}`}>
+                            {props.row?.isEditMode ? (
+                                <TextboxGroup
+                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                        props.onChange(e, props.row);
+                                    }}
+                                    name={cell.id?.toString()}
+                                    type={"text"}
+                                    value={String(cell.value)}
+                                />
+                            ) : (
+                                cell.value
+                            )}
+                        </td>
+                    );
                 })}
                 {props.useShowActionColumn && (
                     <td>
@@ -422,6 +459,7 @@ interface TableUIProps {
     onRowExpanded?: (e: React.MouseEvent<HTMLDivElement, MouseEvent>, row: TableRow) => void;
     onSort?: (accessor: string, sortDirection: sortDirectionTypes) => void;
     onSubRowExpanded?: (e: React.MouseEvent<HTMLDivElement, MouseEvent>, row: TableRow, rowIndex: number) => void;
+    onChange?: (e: React.ChangeEvent<HTMLInputElement>, row: TableRow) => void;
     primaryActionButton?: PrimaryActionButton;
     rows: Array<TableRow>;
     rowsAreCollapsable?: boolean;
@@ -508,6 +546,7 @@ const TableUI: React.FunctionComponent<TableUIProps> = React.memo(
                                         useRowSelection={props.useRowSelection}
                                         useRowCollapse={props.useRowCollapse}
                                         columns={props.columns}
+                                        onChange={props.onChange}
                                     />
                                     {row.subRows?.map((subRow: TableRow) => {
                                         return (
@@ -529,6 +568,7 @@ const TableUI: React.FunctionComponent<TableUIProps> = React.memo(
                                                     columns={props.columns}
                                                     parentRowIsExpanded={row.expanded}
                                                     parentRowIndex={row.rowIndex}
+                                                    onChange={props.onChange}
                                                 />
                                             </React.Fragment>
                                         );
@@ -578,6 +618,11 @@ export interface FilterProps {
     onRemoveFilter: (item: { accessor: string; value: string }) => void;
 }
 
+export interface EditProps {
+    mode: EditMode;
+    onAfterEdit: (rows: Array<TableRow>) => void;
+}
+
 interface TableProps {
     actionLinks?: Array<ActionLinkItem>;
     className?: string;
@@ -592,6 +637,7 @@ interface TableProps {
     primaryActionButton?: PrimaryActionButton;
     searchProps?: SearchProps;
     sortProps?: SortProps;
+    editProps?: EditProps;
 }
 
 export const Table: React.FunctionComponent<TableProps> = React.memo(
@@ -602,6 +648,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo(
         const [tableColumns, setTableColumn] = React.useState<Array<TableHeader>>([]);
         const [tableRows, setTableRows] = React.useState<Array<TableRow>>([]);
         const [tableRowsImage, setTableRowsImage] = React.useState<Array<TableRow>>([]);
+        const [tableEditRows, setTableEditRows] = React.useState<Array<TableRow>>([]);
 
         // events -------------------------------------------------------------------------------------
 
@@ -904,6 +951,31 @@ export const Table: React.FunctionComponent<TableProps> = React.memo(
             },
             [tableRows, currentTableRows, props.onRowExpanded]
         );
+
+        const onTextChange = React.useCallback(
+            (e: React.ChangeEvent<HTMLInputElement>, row: TableRow): void => {
+                const updatedRows: Array<TableRow> = tableEditRows?.map((updatedRow: TableRow) => {
+                    if (updatedRow.rowIndex === row.rowIndex) {
+                        return {
+                            ...updatedRow,
+                            [e.target.name]: e.target.value,
+                            cells: updatedRow.cells?.map((cell: Cell) => {
+                                if (cell.accessor === e.target.name) {
+                                    return { ...cell, value: e.target.value };
+                                }
+                                return cell;
+                            })
+                        };
+                    }
+
+                    return updatedRow;
+                });
+
+                setTableEditRows(updatedRows);
+            },
+            [tableEditRows]
+        );
+
         // functions -----------------------------------------------------------------------------
         /**
          *
@@ -932,7 +1004,8 @@ export const Table: React.FunctionComponent<TableProps> = React.memo(
                     selected: row.selected || false,
                     actionsDropdownDropped: row.actionsDropdownDropped || false,
                     expanded: row.expanded || false,
-                    subRows: row.subRows ? getRows(row.subRows) : []
+                    subRows: row.subRows ? getRows(row.subRows) : [],
+                    isEditMode: row.isEditMode || false
                 };
             });
 
@@ -974,22 +1047,25 @@ export const Table: React.FunctionComponent<TableProps> = React.memo(
 
         const setDefaultTableRows = React.useCallback(() => {
             const updatedRows: Array<TableRow> = getRows(props.data);
+            const editTableRows: Array<TableRow> = updatedRows?.filter((row: TableRow) => row.selected);
             setTableRows(updatedRows);
+            setTableEditRows(editTableRows);
             setTableRowsImage(updatedRows);
         }, [props.data]);
 
         const doPaginate = React.useCallback((): void => {
-            if (props.currentpage && props.offset && tableRows?.length > 0) {
+            const chosenRows: Array<TableRow> = tableEditRows?.length ? tableEditRows : tableRows;
+            if (props.currentpage && props.offset && chosenRows?.length > 0) {
                 // pagination start from 1 hence the need fro deducting 1
                 const start: number = (props.currentpage - 1) * props.offset;
                 const end: number = props.offset * props.currentpage;
 
-                const currentPage: Array<TableRow> = tableRows?.slice(start, end);
+                const currentPage: Array<TableRow> = chosenRows?.slice(start, end);
                 setCurrentTableRows(currentPage);
             } else {
-                setCurrentTableRows(tableRows);
+                setCurrentTableRows(chosenRows);
             }
-        }, [props.currentpage, props.offset, tableRows]);
+        }, [props.currentpage, props.offset, tableRows, tableEditRows]);
 
         const rowsAreCollapsable = React.useCallback((): boolean => {
             return (
@@ -1037,6 +1113,30 @@ export const Table: React.FunctionComponent<TableProps> = React.memo(
                 }
             }
         }, [tableColumns]);
+
+        React.useEffect(() => {
+            let updateRows: Array<TableRow> = [];
+            switch (props?.editProps?.mode) {
+                case "edit":
+                    updateRows = tableRows.map((row: TableRow) => ({ ...row, isEditMode: row.selected }));
+                    if (updateRows?.length) {
+                        setTableEditRows(updateRows);
+                    }
+                    break;
+                case "save":
+                    updateRows = tableEditRows.map((row: TableRow) => ({ ...row, isEditMode: false, selected: false }));
+                    setTableRows(updateRows);
+                    setTableEditRows([]);
+                    props?.editProps?.onAfterEdit(updateRows);
+                    break;
+                default:
+                    updateRows = tableRows.map((row: TableRow) => ({ ...row, isEditMode: false, selected: false }));
+                    setTableRows(updateRows);
+                    setTableEditRows([]);
+                    props?.editProps?.onAfterEdit(updateRows);
+                    break;
+            }
+        }, [props.editProps?.mode]);
 
         React.useEffect(() => {
             if (!!props.onRowSelected) {
@@ -1105,7 +1205,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo(
 
         React.useEffect(() => {
             doPaginate();
-        }, [props.offset, props.currentpage, tableRows]);
+        }, [props.offset, props.currentpage, tableRows, tableEditRows]);
 
         return (
             <div>
@@ -1131,6 +1231,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo(
                     className={props.className}
                     showFilterRow={showFilterRow()}
                     filterProps={props.filterProps}
+                    onChange={onTextChange}
                 />
             </div>
         );
