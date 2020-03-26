@@ -35,5 +35,5 @@ after_success:
 
 
 branches:
-  except:
-  - /^v\d+\.\d+\.\d+$/
+  only:
+  - master
