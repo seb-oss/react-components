@@ -1,0 +1,26 @@
+name: Build Check
+
+on:
+  pull_request:
+    branches: 
+      - master
+      - develop
+
+jobs:
+  build_check:
+    runs-on: [ubuntu-latest]
+    strategy:
+      matrix:
+        node: [ '10', '8' ]
+    steps:
+      - uses: actions/checkout@v2.0.0
+      - name: Setup node
+        uses: actions/setup-node@v1.1.0
+        with:
+          node-version: ${{ matrix.node }}
+      - name: installing dependencies
+        run: npm install
+      - name: running unit tests
+        run: npm test
+      - name: building
+        run: npm run build:production
