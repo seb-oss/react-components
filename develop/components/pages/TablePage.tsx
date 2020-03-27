@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Table, Column, TableRow, PrimaryActionButton, ActionLinkItem, TableHeader, DataItem, FilterItem, FilterProps } from "../../../src/Table";
+import { Table, Column, TableRow, Cell, PrimaryActionButton, ActionLinkItem, TableHeader, DataItem, FilterItem, FilterProps } from "../../../src/Table";
 import makeData from "../../__utils/makeData";
 import { Pagination } from "../../../src/Pagination/Pagination";
 import { Dropdown, DropdownItem } from "../../../src/Dropdown/Dropdown";

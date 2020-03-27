@@ -1,9 +1,11 @@
 import * as React from "react";
 import { unmountComponentAtNode, render } from "react-dom";
-import { Column, Table, TableRow, TableHeader, ActionLinkItem, DataItem, sortDirectionTypes, FilterItem, PrimaryActionButton } from "./Table";
+import { Column, Table, TableRow, TableHeader, ActionLinkItem, DataItem, sortDirectionTypes, FilterItem, PrimaryActionButton, Cell } from "./Table";
 import makeData from "../../develop/__utils/makeData";
 import { act } from "react-dom/test-utils";
 import { Pagination } from "../Pagination/Pagination";
+
+type PrimaryActionButtonTestCase = { statement: string } & PrimaryActionButton;
 
 describe("Component: Table", () => {
     let container: HTMLDivElement = null;
@@ -59,6 +61,19 @@ describe("Component: Table", () => {
             render(<Table columns={columns} data={smallData} />, container);
         });
         expect(container).toBeDefined();
+    });
+
+    it("Should render simple table with custom cell", () => {
+        const customColumn: Column = {
+            label: "First Name",
+            accessor: "firstName",
+            cellTemplate: (row: TableRow, cell: Cell) => <div className="custom-cell">{cell.value}</div>
+        };
+        const newColumns: Array<Column> = [customColumn, ...columns];
+        act(() => {
+            render(<Table columns={newColumns} data={smallData} />, container);
+        });
+        expect(container.querySelectorAll(".custom-cell").length).toBeGreaterThan(0);
     });
 
     it("Should render and be able to sort rows ", () => {
@@ -273,21 +288,38 @@ describe("Component: Table", () => {
         expect(container.querySelectorAll("thead tr th").length).toEqual(columns.length + 1);
     });
 
-    it("should render and enable custom button", () => {
-        const primaryActionButton: PrimaryActionButton = {
-            label: "Buy",
-            onClick: jest.fn((e: React.MouseEvent<HTMLButtonElement>) => {})
-        };
+    describe("Should render and enable custom button", () => {
+        const buttonTestCases: Array<PrimaryActionButtonTestCase> = [
+            {
+                statement: "Should show button with string",
+                label: "Buy",
+                onClick: jest.fn()
+            },
+            {
+                statement: "Should render node in button",
+                label: <i>icon</i>,
+                onClick: jest.fn()
+            }
+        ];
 
-        act(() => {
-            render(<Table columns={columns} data={smallData} primaryActionButton={primaryActionButton} />, container);
+        buttonTestCases.map((primaryActionButton: PrimaryActionButtonTestCase) => {
+            it(primaryActionButton.statement, () => {
+                const { label } = primaryActionButton;
+                const buttonQuery: string = "tbody tr.parent-row td .action-column button";
+                act(() => {
+                    render(<Table columns={columns} data={smallData} primaryActionButton={primaryActionButton} />, container);
+                });
+                act(() => {
+                    container.querySelector(buttonQuery).dispatchEvent(new MouseEvent("click", { bubbles: true }));
+                });
+                if (typeof label === "string") {
+                    expect(container.querySelector(buttonQuery).innerHTML).toBe(label);
+                } else {
+                    expect(container.querySelector(buttonQuery).firstElementChild.innerHTML).toBe((label as React.ReactElement).props.children);
+                }
+                expect(primaryActionButton.onClick).toHaveBeenCalled();
+            });
         });
-
-        act(() => {
-            container.querySelector("tbody tr.parent-row td .action-column button").dispatchEvent(new MouseEvent("click", { bubbles: true }));
-        });
-
-        expect(primaryActionButton.onClick).toHaveBeenCalled();
     });
 
     it("should render and support filtering ", () => {

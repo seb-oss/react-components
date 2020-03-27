@@ -43,6 +43,7 @@ export interface Column {
     label: string | React.ReactNode;
     accessor: string;
     canSort?: boolean;
+    cellTemplate?: (row: TableRow, cell: Cell) => React.ReactNode;
 }
 
 export interface ActionLinkItem {
@@ -51,7 +52,7 @@ export interface ActionLinkItem {
 }
 
 export interface PrimaryActionButton {
-    label: string;
+    label: string | React.ReactNode;
     onClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>, selectedRow: TableRow) => void;
 }
 
@@ -61,10 +62,11 @@ export interface TableHeader extends Column {
     filters?: Array<string>;
 }
 
-interface Cell {
+export interface Cell {
     id: string | number;
     accessor: string;
     value: string | number | boolean;
+    cellTemplate?: (row: TableRow, cell: Cell) => React.ReactNode;
 }
 
 export interface TableRow {
@@ -342,7 +344,7 @@ const RowUI: React.FunctionComponent<RowUIProps> = (props: RowUIProps) => {
                     )
                 )}
                 {props.row.cells.map((cell: Cell, cellIndex: number) => {
-                    return <td key={`${props.type}-${cellIndex}`}>{cell.value}</td>;
+                    return <td key={`${props.type}-${cellIndex}`}>{cell.cellTemplate ? cell.cellTemplate(props.row, cell) : cell.value}</td>;
                 })}
                 {props.useShowActionColumn && (
                     <td>
@@ -912,10 +914,12 @@ export const Table: React.FunctionComponent<TableProps> = React.memo(
                     })
                     .map(
                         (accessor: string): Cell => {
+                            const cellTemplate: (row: TableRow, cell: Cell) => React.ReactNode = props?.columns?.find((column: Column) => column.accessor === accessor)?.cellTemplate;
                             return {
                                 id: accessor,
                                 accessor,
-                                value: row[accessor]
+                                value: row[accessor],
+                                cellTemplate
                             };
                         }
                     );
