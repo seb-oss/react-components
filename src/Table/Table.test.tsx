@@ -1,9 +1,10 @@
 import * as React from "react";
 import { unmountComponentAtNode, render } from "react-dom";
-import { Column, Table, TableRow, TableHeader, ActionLinkItem, DataItem, sortDirectionTypes, FilterItem, PrimaryActionButton } from "./Table";
+import { Column, Table, TableRow, TableHeader, ActionLinkItem, DataItem, sortDirectionTypes, FilterItem, PrimaryActionButton, EditMode, TableProps, EditProps } from "./Table";
 import makeData from "../../develop/__utils/makeData";
 import { act } from "react-dom/test-utils";
 import { Pagination } from "../Pagination/Pagination";
+import { mount, ReactWrapper } from "enzyme";
 
 describe("Component: Table", () => {
     let container: HTMLDivElement = null;
@@ -240,6 +241,96 @@ describe("Component: Table", () => {
         });
 
         expect(onRowSelected).toHaveBeenCalledTimes(4);
+    });
+
+    describe("should handle inline textbox edit ", () => {
+        let results: Array<TableRow> = [];
+        let textContainer: HTMLDivElement = null;
+
+        const onAfterEdit: jest.Mock = jest.fn((rows: Array<TableRow>) => {
+            results = rows;
+        });
+        const onRowSelected: jest.Mock = jest.fn((rows: Array<TableRow>) => {});
+
+        const editProps: EditProps = {
+            onAfterEdit,
+            mode: null
+        };
+
+        const selector: string = "tbody tr.parent-row td .form-group.input-box-group";
+
+        const updatedSelectedRows: Array<TableRow> = smallData?.slice(0, 2).map((row: TableRow) => ({ ...row, selected: true }));
+
+        beforeEach(() => {
+            textContainer = document.createElement("div");
+            document.body.appendChild(container);
+        });
+
+        afterEach(() => {
+            unmountComponentAtNode(textContainer);
+            textContainer.remove();
+            textContainer = null;
+        });
+
+        it("should render and handle edit and save  ", () => {
+            act(() => {
+                render(<Table columns={columns} data={updatedSelectedRows} onRowSelected={onRowSelected} editProps={editProps} />, textContainer);
+            });
+
+            expect(textContainer.querySelectorAll(selector).length).toEqual(0);
+
+            act(() => {
+                render(<Table columns={columns} data={updatedSelectedRows} onRowSelected={onRowSelected} />, textContainer);
+            });
+
+            act(() => {
+                render(<Table columns={columns} data={updatedSelectedRows} onRowSelected={onRowSelected} editProps={{ ...editProps, mode: "edit" }} />, textContainer);
+            });
+
+            expect(textContainer.querySelectorAll(selector).length).toBeGreaterThan(0);
+
+            act(() => {
+                render(<Table columns={columns} data={updatedSelectedRows} onRowSelected={onRowSelected} editProps={{ ...editProps, mode: "save" }} />, textContainer);
+            });
+
+            expect(textContainer.querySelectorAll(selector).length).toEqual(0);
+            expect(editProps.onAfterEdit).toHaveBeenCalledTimes(1);
+            expect(results.length).toEqual(updatedSelectedRows.length);
+        });
+
+        it("should render and handle edit and cancel ", () => {
+            // now repeat the process, for cancel
+            results = [];
+            act(() => {
+                render(
+                    <Table columns={columns} data={updatedSelectedRows} onRowSelected={onRowSelected} editProps={{ ...editProps, blackListedAccessors: ["firstName", "lastName"] }} />,
+                    textContainer
+                );
+            });
+
+            expect(textContainer.querySelectorAll(selector).length).toEqual(0);
+
+            // blaclist some columns
+
+            act(() => {
+                render(
+                    <Table columns={columns} data={updatedSelectedRows} onRowSelected={onRowSelected} editProps={{ ...editProps, mode: "edit", blackListedAccessors: ["firstName", "lastName"] }} />,
+                    textContainer
+                );
+            });
+
+            expect(textContainer.querySelectorAll(selector).length).toBeGreaterThan(0);
+
+            // id column is ommited by default, + firstName and lastName , 3
+            expect(textContainer.querySelectorAll(selector).length).toEqual((columns.length - 3) * updatedSelectedRows.length);
+
+            act(() => {
+                render(<Table columns={columns} data={updatedSelectedRows} onRowSelected={onRowSelected} editProps={{ ...editProps, mode: "cancel" }} />, textContainer);
+            });
+
+            expect(textContainer.querySelectorAll(selector).length).toEqual(0);
+            expect(results.length).toEqual(0);
+        });
     });
 
     it("should render and have optional footer row", () => {

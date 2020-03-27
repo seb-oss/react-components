@@ -629,7 +629,7 @@ export interface EditProps {
     blackListedAccessors?: Array<string>;
 }
 
-interface TableProps {
+export interface TableProps {
     actionLinks?: Array<ActionLinkItem>;
     className?: string;
     columns: Array<Column>;
@@ -1173,7 +1173,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo(
                     setTableEditRows([]);
                     break;
             }
-        }, [props.editProps?.mode]);
+        }, [props.editProps]);
 
         React.useEffect(() => {
             if (!!props.onRowSelected) {
