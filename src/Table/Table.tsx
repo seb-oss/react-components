@@ -964,7 +964,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo(
                     if (rowIndex > -1 && updatedRow.rowIndex === rowIndex) {
                         return {
                             ...updatedRow,
-                            subRows: updatedRow.subRows.map((subRow) => {
+                            subRows: updatedRow.subRows.map((subRow: TableRow) => {
                                 if (subRow.rowIndex === row.rowIndex) {
                                     return {
                                         ...subRow,
