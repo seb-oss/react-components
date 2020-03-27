@@ -66,6 +66,7 @@ interface Cell {
     id: string | number;
     accessor: string;
     value: string | number | boolean;
+    canEdit?: boolean;
 }
 
 export interface TableRow {
@@ -366,7 +367,7 @@ const RowUI: React.FunctionComponent<RowUIProps> = (props: RowUIProps) => {
                 {props.row.cells.map((cell: Cell, cellIndex: number) => {
                     return (
                         <td key={`${props.type}-${cellIndex}`}>
-                            {props.row?.isEditMode ? (
+                            {props.row?.isEditMode && cell.canEdit ? (
                                 <TextboxGroup
                                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                                         props.onChange(e, props.row);
@@ -459,7 +460,7 @@ interface TableUIProps {
     onRowExpanded?: (e: React.MouseEvent<HTMLDivElement, MouseEvent>, row: TableRow) => void;
     onSort?: (accessor: string, sortDirection: sortDirectionTypes) => void;
     onSubRowExpanded?: (e: React.MouseEvent<HTMLDivElement, MouseEvent>, row: TableRow, rowIndex: number) => void;
-    onChange?: (e: React.ChangeEvent<HTMLInputElement>, row: TableRow) => void;
+    onChange?: (e: React.ChangeEvent<HTMLInputElement>, row: TableRow, rowIndex?: number) => void;
     primaryActionButton?: PrimaryActionButton;
     rows: Array<TableRow>;
     rowsAreCollapsable?: boolean;
@@ -546,7 +547,9 @@ const TableUI: React.FunctionComponent<TableUIProps> = React.memo(
                                         useRowSelection={props.useRowSelection}
                                         useRowCollapse={props.useRowCollapse}
                                         columns={props.columns}
-                                        onChange={props.onChange}
+                                        onChange={(e: React.ChangeEvent<HTMLInputElement>, updatedRow: TableRow) => {
+                                            props.onChange(e, updatedRow);
+                                        }}
                                     />
                                     {row.subRows?.map((subRow: TableRow) => {
                                         return (
@@ -568,7 +571,9 @@ const TableUI: React.FunctionComponent<TableUIProps> = React.memo(
                                                     columns={props.columns}
                                                     parentRowIsExpanded={row.expanded}
                                                     parentRowIndex={row.rowIndex}
-                                                    onChange={props.onChange}
+                                                    onChange={(e: React.ChangeEvent<HTMLInputElement>, updatedSubRow: TableRow) => {
+                                                        props.onChange(e, updatedSubRow, row.rowIndex);
+                                                    }}
                                                 />
                                             </React.Fragment>
                                         );
@@ -621,6 +626,7 @@ export interface FilterProps {
 export interface EditProps {
     mode: EditMode;
     onAfterEdit: (rows: Array<TableRow>) => void;
+    blackListedAccessors?: Array<string>;
 }
 
 interface TableProps {
@@ -922,7 +928,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo(
                     return originalRow;
                 });
 
-                const updatedRows: Array<TableRow> = currentTableRows?.map((currentRow: TableRow, index) => {
+                const updatedRows: Array<TableRow> = currentTableRows?.map((currentRow: TableRow) => {
                     if (currentRow.rowIndex === row.rowIndex) {
                         return {
                             ...currentRow,
@@ -953,9 +959,29 @@ export const Table: React.FunctionComponent<TableProps> = React.memo(
         );
 
         const onTextChange = React.useCallback(
-            (e: React.ChangeEvent<HTMLInputElement>, row: TableRow): void => {
+            (e: React.ChangeEvent<HTMLInputElement>, row: TableRow, rowIndex?: number): void => {
                 const updatedRows: Array<TableRow> = tableEditRows?.map((updatedRow: TableRow) => {
-                    if (updatedRow.rowIndex === row.rowIndex) {
+                    if (rowIndex > -1 && updatedRow.rowIndex === rowIndex) {
+                        return {
+                            ...updatedRow,
+                            subRows: updatedRow.subRows.map((subRow) => {
+                                if (subRow.rowIndex === row.rowIndex) {
+                                    return {
+                                        ...subRow,
+                                        [e.target.name]: e.target.value,
+                                        cells: subRow.cells?.map((cell: Cell) => {
+                                            if (cell.accessor === e.target.name) {
+                                                return { ...cell, value: e.target.value };
+                                            }
+                                            return cell;
+                                        })
+                                    };
+                                }
+
+                                return subRow;
+                            })
+                        };
+                    } else if (updatedRow.rowIndex === row.rowIndex) {
                         return {
                             ...updatedRow,
                             [e.target.name]: e.target.value,
@@ -982,6 +1008,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo(
          * @param rows The table or or data to initialize rows from
          */
         const getRows = React.useCallback((rows: Array<DataItem<any>>): Array<TableRow> => {
+            const isBlackListed: (a: string) => boolean = (accessor: string): boolean => ["id", ...(props.editProps?.blackListedAccessors || [])].indexOf(accessor) > -1;
             const updatedRows: Array<TableRow> = rows?.map((row: TableRow, index: number) => {
                 const updatedCells: Array<Cell> = Object.keys(row)
                     .filter((key: string) => {
@@ -992,7 +1019,8 @@ export const Table: React.FunctionComponent<TableProps> = React.memo(
                             return {
                                 id: accessor,
                                 accessor,
-                                value: row[accessor]
+                                value: row[accessor],
+                                canEdit: !isBlackListed(accessor)
                             };
                         }
                     );
@@ -1118,22 +1146,31 @@ export const Table: React.FunctionComponent<TableProps> = React.memo(
             let updateRows: Array<TableRow> = [];
             switch (props?.editProps?.mode) {
                 case "edit":
-                    updateRows = tableRows.map((row: TableRow) => ({ ...row, isEditMode: row.selected }));
+                    updateRows = tableRows.map((row: TableRow) => ({ ...row, isEditMode: row.selected, subRows: row.subRows?.map((sub: TableRow) => ({ ...sub, isEditMode: sub.selected })) }));
                     if (updateRows?.length) {
                         setTableEditRows(updateRows);
                     }
                     break;
                 case "save":
-                    updateRows = tableEditRows.map((row: TableRow) => ({ ...row, isEditMode: false, selected: false }));
+                    updateRows = tableEditRows.map((row: TableRow) => ({
+                        ...row,
+                        isEditMode: false,
+                        selected: false,
+                        subRows: row.subRows?.map((sub: TableRow) => ({ ...sub, isEditMode: false, selected: false }))
+                    }));
                     setTableRows(updateRows);
                     setTableEditRows([]);
                     props?.editProps?.onAfterEdit(updateRows);
                     break;
-                default:
-                    updateRows = tableRows.map((row: TableRow) => ({ ...row, isEditMode: false, selected: false }));
+                case "cancel":
+                    updateRows = tableEditRows.map((row: TableRow) => ({
+                        ...row,
+                        isEditMode: false,
+                        selected: false,
+                        subRows: row.subRows?.map((sub: TableRow) => ({ ...sub, isEditMode: false, selected: false }))
+                    }));
                     setTableRows(updateRows);
                     setTableEditRows([]);
-                    props?.editProps?.onAfterEdit(updateRows);
                     break;
             }
         }, [props.editProps?.mode]);
