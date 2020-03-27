@@ -4,7 +4,6 @@ import { Column, Table, TableRow, TableHeader, ActionLinkItem, DataItem, sortDir
 import makeData from "../../develop/__utils/makeData";
 import { act } from "react-dom/test-utils";
 import { Pagination } from "../Pagination/Pagination";
-import { mount, ReactWrapper } from "enzyme";
 
 describe("Component: Table", () => {
     let container: HTMLDivElement = null;
