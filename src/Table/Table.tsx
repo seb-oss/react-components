@@ -52,7 +52,7 @@ export interface ActionLinkItem {
 }
 
 export interface PrimaryActionButton {
-    label: string | React.ReactNode;
+    label: React.ReactNode;
     onClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>, selectedRow: TableRow) => void;
 }
 
