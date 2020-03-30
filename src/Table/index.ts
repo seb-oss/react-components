@@ -1,4 +1,3 @@
-
 (window as any).global = window;
 /**
  * buffer was removed from node recent version and moved into a seperate dependency.
@@ -8,3 +7,4 @@
 window.Buffer = window.Buffer || require("buffer").Buffer;
 
 export * from "./Table";
+export * from "./CustomRowTemplate";

@@ -5,6 +5,7 @@ import { Pagination } from "../../../src/Pagination/Pagination";
 import { Dropdown, DropdownItem } from "../../../src/Dropdown/Dropdown";
 import { TextBox } from "../../../src/TextBox/TextBox";
 import { Button } from "../../../src/Button/Button";
+import { CustomRowTemplate } from "../../../src/Table/CustomRowTemplate";
 const Highlight = require("react-highlight").default;
 const docMD = require("../../../src/Table/readme.md");
 
@@ -172,6 +173,34 @@ const TablePage: React.FunctionComponent = () => {
                     <p>Here are sample outputs of plain table</p>
                     <div className="result wide">
                         <Table columns={columns} data={smallData} />
+                    </div>
+
+                    <p>Here are sample outputs of plain table</p>
+                    <div className="result wide">
+                        <Table columns={columns} data={smallData}>
+                            {(row: TableRow<TableDataProps>, table, ref) => {
+                                console.log(row);
+                                return (
+                                    <CustomRowTemplate<TableDataProps>
+                                        row={row}
+                                        type="row"
+                                        tableRef={ref}
+                                        onActionDropped={table.onActionDropped}
+                                        onRowExpanded={table.onRowExpanded}
+                                        useShowActionColumn={table.useShowActionColumn}
+                                        rowsAreCollapsable={table.rowsAreCollapsable}
+                                        onItemSelected={table.onItemSelected}
+                                        primaryActionButton={table.primaryActionButton}
+                                        actionLinks={table.actionLinks}
+                                        useRowSelection={table.useRowSelection}
+                                        useRowCollapse={table.useRowCollapse}
+                                        columns={table.columns}
+                                        firstName={<div style={{ color: row.rowIndex % 2 === 0 ? "green" : "red" }}>{row.firstName}</div>}
+                                        age={<div style={{ color: row.rowIndex % 2 === 0 ? "purple" : "blue" }}>{row.age}</div>}
+                                    />
+                                );
+                            }}
+                        </Table>
                     </div>
 
                     <p>Here an example with sorting</p>

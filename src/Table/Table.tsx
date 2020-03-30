@@ -67,7 +67,7 @@ interface Cell {
     value: string | number | boolean;
 }
 
-export interface TableRow {
+export type TableRow<T = any> = Partial<T> & {
     rowIndex: number;
     cells: Array<Cell>;
     selected?: boolean;
@@ -75,7 +75,7 @@ export interface TableRow {
     subRows?: Array<TableRow>;
     expanded?: boolean;
     rowContentDetail?: React.ReactNode;
-}
+};
 
 export const enum sortDirectionTypes {
     Ascending = "ASC",
@@ -258,7 +258,7 @@ const ActionColumn: React.FunctionComponent<ActionColumnProps> = (props: ActionC
     );
 };
 
-interface RowUIProps {
+export interface RowUIProps {
     actionLinks?: Array<ActionLinkItem>;
     columns: Array<TableHeader>;
     onActionDropped: (event: React.MouseEvent<HTMLDivElement, MouseEvent>, row: TableRow, rowIndex?: number) => void;
@@ -431,6 +431,7 @@ interface TableUIProps {
     useShowActionColumn: boolean;
     showFilterRow?: boolean;
     filterProps: FilterProps;
+    children?: (row: TableRow, tableProps: TableUIProps, tableRef: React.RefObject<HTMLTableElement>) => React.ReactNode;
 }
 
 const TableUI: React.FunctionComponent<TableUIProps> = React.memo(
@@ -494,21 +495,25 @@ const TableUI: React.FunctionComponent<TableUIProps> = React.memo(
                         {props.rows?.map((row: TableRow, i: number) => {
                             return (
                                 <React.Fragment key={row.rowIndex}>
-                                    <RowUI
-                                        row={row}
-                                        type="row"
-                                        tableRef={tableRef}
-                                        onActionDropped={props.onActionDropped}
-                                        onRowExpanded={props.onRowExpanded}
-                                        useShowActionColumn={props.useShowActionColumn}
-                                        rowsAreCollapsable={props.rowsAreCollapsable}
-                                        onItemSelected={props.onItemSelected}
-                                        primaryActionButton={props.primaryActionButton}
-                                        actionLinks={props.actionLinks}
-                                        useRowSelection={props.useRowSelection}
-                                        useRowCollapse={props.useRowCollapse}
-                                        columns={props.columns}
-                                    />
+                                    {props.children ? (
+                                        props.children(row, props, tableRef)
+                                    ) : (
+                                        <RowUI
+                                            row={row}
+                                            type="row"
+                                            tableRef={tableRef}
+                                            onActionDropped={props.onActionDropped}
+                                            onRowExpanded={props.onRowExpanded}
+                                            useShowActionColumn={props.useShowActionColumn}
+                                            rowsAreCollapsable={props.rowsAreCollapsable}
+                                            onItemSelected={props.onItemSelected}
+                                            primaryActionButton={props.primaryActionButton}
+                                            actionLinks={props.actionLinks}
+                                            useRowSelection={props.useRowSelection}
+                                            useRowCollapse={props.useRowCollapse}
+                                            columns={props.columns}
+                                        />
+                                    )}
                                     {row.subRows?.map((subRow: TableRow) => {
                                         return (
                                             <React.Fragment key={`sub-row-${subRow.rowIndex}`}>
@@ -592,6 +597,7 @@ interface TableProps {
     primaryActionButton?: PrimaryActionButton;
     searchProps?: SearchProps;
     sortProps?: SortProps;
+    children?: (row: TableRow, tableProps: TableUIProps, tableRef: React.RefObject<HTMLTableElement>) => React.ReactNode;
 }
 
 export const Table: React.FunctionComponent<TableProps> = React.memo(
@@ -1131,6 +1137,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo(
                     className={props.className}
                     showFilterRow={showFilterRow()}
                     filterProps={props.filterProps}
+                    children={props.children}
                 />
             </div>
         );
