@@ -350,11 +350,15 @@ describe("Component: Table", () => {
             { label: "Add", onClick: customButtonCallBack },
             { label: "Edit", onClick: customButtonCallBack }
         ];
+
+        // for the sake of subrow, collapse data
+        const newData: Array<TableRow> = smallData.slice(0, 2).map((data: TableRow) => ({ ...data, expanded: true }));
+
         act(() => {
-            render(<Table columns={columns} data={smallData} actionLinks={actionLinks} />, container);
+            render(<Table columns={columns} data={newData} actionLinks={actionLinks} />, container);
         });
 
-        // trigger and open action column
+        // trigger and open row action column
         const openedActionColumnString: string = "tbody tr.parent-row td .action-column .ellipsis-dropdown-holder .dropdown-content.active";
         expect(container.querySelector(openedActionColumnString)).toBeNull();
         expect(container.querySelector(openedActionColumnString)).toBeFalsy();
@@ -369,6 +373,18 @@ describe("Component: Table", () => {
         expect(container.querySelector(openedActionColumnString)).toBeDefined();
         expect(container.querySelector(openedActionColumnString)).toBeTruthy();
 
+        // trigger and click subRow actions
+        const openedSubRowActionColumnString: string = "tbody tr.sub-row td .action-column .ellipsis-dropdown-holder .dropdown-content.active";
+        expect(container.querySelector(openedSubRowActionColumnString)).toBeNull();
+        expect(container.querySelector(openedSubRowActionColumnString)).toBeFalsy();
+
+        act(() => {
+            container.querySelectorAll("tbody tr.sub-row td .action-column a").forEach((el: Element) => el.dispatchEvent(new MouseEvent("click", { bubbles: true })));
+        });
+
+        expect(container.querySelector(openedSubRowActionColumnString)).toBeDefined();
+        expect(container.querySelector(openedSubRowActionColumnString)).toBeTruthy();
+
         // action should be closed when you click outside the div
 
         act(() => {
@@ -377,13 +393,11 @@ describe("Component: Table", () => {
 
         expect(container.querySelector(openedActionColumnString)).toBeNull();
         expect(container.querySelector(openedActionColumnString)).toBeFalsy();
+        expect(container.querySelector(openedSubRowActionColumnString)).toBeNull();
+        expect(container.querySelector(openedSubRowActionColumnString)).toBeFalsy();
 
-        act(() => {
-            container.querySelectorAll("tbody tr.parent-row td .action-column a").forEach((el: Element) => el.dispatchEvent(new MouseEvent("click", { bubbles: true })));
-        });
-
-        // it should be called the length of the data twice
-        expect(customButtonCallBack).toHaveBeenCalledTimes(2 * smallData.length);
+        // it should be called the length of the data twice for each row and subrow, i.e 4 times
+        expect(customButtonCallBack).toHaveBeenCalledTimes(4 * smallData.length);
 
         // plus one column for action field
         expect(container.querySelectorAll("thead tr th").length).toEqual(columns.length + 1);
