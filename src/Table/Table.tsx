@@ -1173,7 +1173,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo(
                     setTableEditRows([]);
                     break;
             }
-        }, [props.editProps.mode]);
+        }, [props.editProps?.mode]);
 
         React.useEffect(() => {
             if (!!props.onRowSelected) {
