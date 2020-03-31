@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Table, Column, TableRow, PrimaryActionButton, ActionLinkItem, TableHeader, DataItem, FilterItem, FilterProps } from "../../../src/Table";
+import { Table, Column, TableRow, PrimaryActionButton, ActionLinkItem, TableHeader, DataItem, FilterItem, FilterProps, EditProps, EditMode } from "../../../src/Table";
 import makeData from "../../__utils/makeData";
 import { Pagination } from "../../../src/Pagination/Pagination";
 import { Dropdown, DropdownItem } from "../../../src/Dropdown/Dropdown";
@@ -26,16 +26,19 @@ const TablePage: React.FunctionComponent = () => {
     const [ageDropdownSelected, setAgeDropdownSelected] = React.useState<Array<DropdownItem>>([]);
     const [textBoxValue2, setTextBoxValue2] = React.useState<string>("");
     const [searchTriggered, setSearchTriggered] = React.useState<boolean>(false);
+    const [editMode, setEditMode] = React.useState<EditMode>(null);
     const columns: Array<Column> = React.useMemo(
         () => [
             {
                 label: "id",
                 accessor: "id",
-                canSort: false
+                canSort: false,
+                canEdit: false
             },
             {
                 label: "First Name",
-                accessor: "firstName"
+                accessor: "firstName",
+                canEdit: false
             },
             {
                 label: "Last Name",
@@ -123,6 +126,13 @@ const TablePage: React.FunctionComponent = () => {
         filterItems: filters
     };
 
+    const editProps: EditProps = {
+        onAfterEdit: (rows: Array<TableRow>) => {
+            setEditMode(null);
+        },
+        mode: editMode
+    };
+
     const data: Array<DataItem<TableDataProps>> = React.useMemo(
         () => makeData<Array<DataItem<TableDataProps>>>([listSize, 5]),
         []
@@ -204,6 +214,17 @@ const TablePage: React.FunctionComponent = () => {
                     <p>Here is an example with row selection</p>
                     <div className="result wide">
                         <Table columns={columns} data={smallData} onRowSelected={(rows: Array<TableRow>) => {}} />
+                    </div>
+
+                    <p>Here is an example with inline edit</p>
+                    <div className="result wide">
+                        <div className="row">
+                            <div className="col text-right">
+                                <Button title="Cancel" label="Cancel" disabled={!editMode} onClick={() => setEditMode("cancel")} className="mr-2" />
+                                <Button title="Update" label={editMode === "edit" ? "Save" : "Edit"} onClick={() => setEditMode(editMode === "edit" ? "save" : "edit")} />
+                            </div>
+                        </div>
+                        <Table columns={columns} data={smallData} onRowSelected={(rows: Array<TableRow>) => {}} onRowExpanded={(rows: Array<TableRow>) => {}} editProps={editProps} />
                     </div>
 
                     <p>Here is an example with row selection and subRows</p>
