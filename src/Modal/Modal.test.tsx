@@ -66,7 +66,7 @@ describe("Component: Modal", () => {
             toggle: true,
             header: <h1>Header</h1>,
             body: <p>Body</p>,
-            footer: <p>Footer</p>
+            footer: <p>Footer</p>,
         });
         expect(wrapper.find(".modal-header").text()).toEqual("Header");
         expect(wrapper.find(".modal-body").text()).toEqual("Body");

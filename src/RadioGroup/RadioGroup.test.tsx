@@ -7,11 +7,11 @@ describe("Component: RadioGroup", () => {
         list: [
             { value: "option1", label: "option1" },
             { value: "option2", label: "option2", description: "desc" },
-            { value: "option3", label: "option3", disabled: true }
+            { value: "option3", label: "option3", disabled: true },
         ],
         onChange: jest.fn(),
         value: "male",
-        name: "gender"
+        name: "gender",
     };
     let wrapper: ShallowWrapper<RadioGroupProps>;
     let mountedWrapper: ReactWrapper<RadioGroupProps>;
@@ -33,7 +33,10 @@ describe("Component: RadioGroup", () => {
     });
 
     it("Should fire change event when radio group value changes", () => {
-        wrapper.find("input").last().simulate("change", { target: { value: "test-value" } });
+        wrapper
+            .find("input")
+            .last()
+            .simulate("change", { target: { value: "test-value" } });
         expect(props.onChange).toHaveBeenCalled();
     });
 
@@ -62,5 +65,4 @@ describe("Component: RadioGroup", () => {
         expect(wrapper.find(".custom-control").at(1).find(".custom-control-input").prop("disabled")).toBeTruthy();
         expect(wrapper.find(".custom-control").at(2).find(".custom-control-input").prop("disabled")).toBeTruthy();
     });
-
 });

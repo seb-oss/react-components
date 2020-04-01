@@ -17,7 +17,7 @@ export class Timer extends React.Component<TimerProps, TimerState> {
         super(props);
 
         this.state = {
-            timer: "00:00"
+            timer: "00:00",
         };
     }
 
@@ -48,11 +48,11 @@ export class Timer extends React.Component<TimerProps, TimerState> {
     convertMStoTime(value: number): string {
         const date: Date = new Date(value);
         return (
-            ((date.getUTCHours() > 0) ? (date.getUTCHours() + ":") : "")
-            + (date.getUTCMinutes() < 10 ? "0" + date.getUTCMinutes() : date.getUTCMinutes()))
-            + ":"
-            + (date.getUTCSeconds() < 10 ? "0" + date.getUTCSeconds() : date.getUTCSeconds()
-            );
+            (date.getUTCHours() > 0 ? date.getUTCHours() + ":" : "") +
+            (date.getUTCMinutes() < 10 ? "0" + date.getUTCMinutes() : date.getUTCMinutes()) +
+            ":" +
+            (date.getUTCSeconds() < 10 ? "0" + date.getUTCSeconds() : date.getUTCSeconds())
+        );
     }
 
     componentDidMount() {

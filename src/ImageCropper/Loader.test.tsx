@@ -3,7 +3,6 @@ import { shallow } from "enzyme";
 import { Loader } from "./Loader";
 
 describe("Component: CropperLoader", () => {
-
     it("Should render", () => {
         const wrapper = shallow(<Loader toggle={true} />);
         expect(wrapper).toBeDefined();
@@ -24,5 +23,4 @@ describe("Component: CropperLoader", () => {
         wrapper.setProps({ toggle: false });
         expect(wrapper.find(".loader-holder").length).toBe(0);
     });
-
 });

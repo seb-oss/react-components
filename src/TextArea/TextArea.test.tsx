@@ -6,7 +6,7 @@ describe("Component: TextArea", () => {
     const props: TextAreaProps = {
         name: "myTextarea",
         value: "wer",
-        onChange: jest.fn()
+        onChange: jest.fn(),
     };
     let wrapper: ShallowWrapper<TextAreaProps>;
 
@@ -63,7 +63,7 @@ describe("Component: TextArea", () => {
             onKeyUp: jest.fn(),
             onKeyPress: jest.fn(),
             onFocus: jest.fn(),
-            onBlur: jest.fn()
+            onBlur: jest.fn(),
         };
         const mountedWrapper: ReactWrapper<TextAreaProps> = mount(<TextArea {...props} {...eventListeners} />);
         const testCases: Array<[keyof WindowEventMap, keyof TextAreaProps]> = [
@@ -83,5 +83,4 @@ describe("Component: TextArea", () => {
             });
         });
     });
-
 });

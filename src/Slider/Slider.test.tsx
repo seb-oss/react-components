@@ -8,9 +8,12 @@ describe("Component: Slider", () => {
     const props: SliderProps = {
         value: 90,
         onChange: jest.fn(),
-        name: "slider"
+        name: "slider",
     };
-    const labels: Array<RangeSliderLabel> = [{ position: 0, text: "empty" }, { position: 100, text: "full" }];
+    const labels: Array<RangeSliderLabel> = [
+        { position: 0, text: "empty" },
+        { position: 100, text: "full" },
+    ];
 
     beforeEach(() => {
         container = document.createElement("div");
@@ -24,65 +27,87 @@ describe("Component: Slider", () => {
     });
 
     it("Should render", () => {
-        act(() => { render(<Slider {...props} />, container); });
+        act(() => {
+            render(<Slider {...props} />, container);
+        });
         expect(container).toBeDefined();
     });
 
     it("Should pass custom class and id", () => {
         const className: string = "mySliderClass";
         const id: string = "mySliderId";
-        act(() => { render(<Slider {...props} className={className} id={id} />, container); });
+        act(() => {
+            render(<Slider {...props} className={className} id={id} />, container);
+        });
         expect(container.querySelector(`.${className}`)).not.toBeNull();
         expect(container.querySelector(`#${id}`)).not.toBeNull();
     });
 
     it("Should render label", () => {
         const label: string = "Slider label";
-        act(() => { render(<Slider {...props} label={label} />, container); });
+        act(() => {
+            render(<Slider {...props} label={label} />, container);
+        });
         expect(container.querySelector(".custom-label")).not.toBeNull();
         expect(container.querySelector(".custom-label").textContent).toEqual(label);
     });
 
     it("Should render error message", () => {
         const error: string = "Some error";
-        act(() => { render(<Slider {...props} error={error} />, container); });
+        act(() => {
+            render(<Slider {...props} error={error} />, container);
+        });
         expect(container.querySelector(".alert")).not.toBeNull();
         expect(container.querySelector(".alert").textContent).toEqual(error);
     });
 
     it("Should render with default min and max if not passed", () => {
-        act(() => { render(<Slider {...props} />, container); });
+        act(() => {
+            render(<Slider {...props} />, container);
+        });
         expect(container.querySelector("input").getAttribute("min")).toEqual("0");
         expect(container.querySelector("input").getAttribute("max")).toEqual("100");
-        act(() => { render(<Slider {...props} min={20} max={60} />, container); });
+        act(() => {
+            render(<Slider {...props} min={20} max={60} />, container);
+        });
         expect(container.querySelector("input").getAttribute("min")).toEqual("20");
         expect(container.querySelector("input").getAttribute("max")).toEqual("60");
     });
 
     it("Should render labels when passed", () => {
-        act(() => { render(<Slider {...props} labels={labels} />, container); });
+        act(() => {
+            render(<Slider {...props} labels={labels} />, container);
+        });
         expect(container.querySelector(".custom-slider-label")).not.toBeNull();
     });
 
     it("Should always show tooltip when alwaysShowTooltip is set to true", () => {
-        act(() => { render(<Slider {...props} alwaysShowTooltip />, container); });
+        act(() => {
+            render(<Slider {...props} alwaysShowTooltip />, container);
+        });
         expect(container.querySelector(".custom-slider-preview").classList.contains("always-show")).toBeTruthy();
     });
 
     it("Should show ticks when showTicks is set to true", () => {
-        act(() => { render(<Slider {...props} labels={labels} showTicks />, container); });
+        act(() => {
+            render(<Slider {...props} labels={labels} showTicks />, container);
+        });
         expect(container.querySelector(".custom-slider-label").classList.contains("show-ticks")).toBeTruthy();
     });
 
     it("Should be able to pick a different theme", () => {
         const theme: SliderTheme = "danger";
-        act(() => { render(<Slider {...props} theme={theme} tooltipTheme={theme} />, container); });
+        act(() => {
+            render(<Slider {...props} theme={theme} tooltipTheme={theme} />, container);
+        });
         expect(container.querySelector(".custom-slider-holder").classList.contains(theme)).toBeTruthy(); // theme
         expect(container.querySelector(".custom-slider-preview").classList.contains(theme)).toBeTruthy(); // tooltipTheme
     });
 
     it("Should be disabled when disabled prop is set to true", () => {
-        act(() => { render(<Slider {...props} disabled />, container); });
+        act(() => {
+            render(<Slider {...props} disabled />, container);
+        });
         expect(container.querySelector(".custom-slider").classList.contains("disabled")).toBeTruthy();
         expect(container.querySelector("input").disabled).toBeTruthy();
     });
@@ -92,9 +117,14 @@ describe("Component: Slider", () => {
             { position: -12, text: "lower than minimum" },
             { position: 112, text: "higher than maximum" },
         ];
-        act(() => { render(<Slider {...props} labels={testLabels} />, container); });
+        act(() => {
+            render(<Slider {...props} labels={testLabels} />, container);
+        });
         const firstLabelStyle: string = container.querySelectorAll(".custom-slider-label").item(0).getAttribute("style");
-        const secondLabelStyle: string = container.querySelectorAll(".custom-slider-label").item(testLabels.length - 1).getAttribute("style");
+        const secondLabelStyle: string = container
+            .querySelectorAll(".custom-slider-label")
+            .item(testLabels.length - 1)
+            .getAttribute("style");
         expect(firstLabelStyle).toEqual("left: 0%;");
         expect(secondLabelStyle).toEqual("left: 100%;");
     });
@@ -105,7 +135,9 @@ describe("Component: Slider", () => {
             { position: 50, text: "50%" },
             { position: 100, text: "100%" },
         ];
-        act(() => { render(<Slider {...props} labels={testLabels} />, container); });
+        act(() => {
+            render(<Slider {...props} labels={testLabels} />, container);
+        });
         expect(container.querySelectorAll(".custom-slider-label")).toHaveLength(3);
         expect(container.querySelectorAll(".custom-slider-label").item(0).getAttribute("style")).toEqual("left: 0%;");
         expect(container.querySelectorAll(".custom-slider-label").item(0).textContent).toEqual("0%");
@@ -117,12 +149,16 @@ describe("Component: Slider", () => {
 
     it("Should throw a warning when min value is passed larger than max value", () => {
         const warnSpy = spyOn(console, "warn");
-        act(() => { render(<Slider {...props} min={50} max={30} />, container); });
+        act(() => {
+            render(<Slider {...props} min={50} max={30} />, container);
+        });
         expect(warnSpy).toBeCalled();
     });
 
     it("Should enable transitions only when the steps less than 30 to increase preceptual performance", () => {
-        act(() => { render(<Slider {...props} min={0} max={100} step={20} />, container); });
+        act(() => {
+            render(<Slider {...props} min={0} max={100} step={20} />, container);
+        });
         expect(container.querySelector(".custom-slider-track").classList.contains("with-transitions")).toBeTruthy();
     });
 
@@ -140,7 +176,9 @@ describe("Component: Slider", () => {
         ];
         testCases.map((testCase: ThumbLocationTestcase) => {
             test(`Test case - (Range: ${testCase.min} - ${testCase.max}) | value: ${testCase.value} | expected thum location: ${testCase.expected}`, () => {
-                act(() => { render(<Slider {...testCase} name="mySlider" onChange={jest.fn()} />, container); });
+                act(() => {
+                    render(<Slider {...testCase} name="mySlider" onChange={jest.fn()} />, container);
+                });
                 expect(container.querySelector(".custom-slider-thumb").getAttribute("style")).toEqual(`left: ${testCase.expected};`);
             });
         });

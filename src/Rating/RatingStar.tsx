@@ -38,9 +38,9 @@ export const SVGStarHollow: React.FunctionComponent<StarProps> = (props: StarPro
                 <g id="Icons-main-navigation/Star-unselected/Darkblue">
                     <g id="Icon" transform="translate(2.000000, 2.000000)">
                         <mask id="mask-unselected" fill="white">
-                            <use xlinkHref="#path-1-unselected"/>
+                            <use xlinkHref="#path-1-unselected" />
                         </mask>
-                        <use id="Combined-Shape" className="star-fill" fill={props.fill} xlinkHref="#path-1-unselected"/>
+                        <use id="Combined-Shape" className="star-fill" fill={props.fill} xlinkHref="#path-1-unselected" />
                     </g>
                 </g>
             </g>
@@ -50,15 +50,7 @@ export const SVGStarHollow: React.FunctionComponent<StarProps> = (props: StarPro
 
 export const SVGStar: React.FunctionComponent<StarProps> = (props: StarProps): React.ReactElement<void> => {
     return (
-        <svg
-            className="custom-svg-star"
-            width={props.width}
-            height={props.height}
-            viewBox="0 0 24 24"
-            version="1.1"
-            xmlns="http://www.w3.org/2000/svg"
-            xmlnsXlink="http://www.w3.org/1999/xlink"
-        >
+        <svg className="custom-svg-star" width={props.width} height={props.height} viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">
             {props.title && <title>{props.title}</title>}
             <desc>Created with Sketch.</desc>
             <defs>
@@ -78,9 +70,9 @@ export const SVGStar: React.FunctionComponent<StarProps> = (props: StarProps): R
                 <g id="Icons-main-navigation/Star-selected/Darkblue">
                     <g id="Icon" transform="translate(2.000000, 2.000000)">
                         <mask id="mask-selected" fill="white">
-                            <use xlinkHref="#path-selected-1"/>
+                            <use xlinkHref="#path-selected-1" />
                         </mask>
-                        <use id="Combined-Shape" className="star-fill" fill={props.fill} xlinkHref="#path-selected-1"/>
+                        <use id="Combined-Shape" className="star-fill" fill={props.fill} xlinkHref="#path-selected-1" />
                     </g>
                 </g>
             </g>

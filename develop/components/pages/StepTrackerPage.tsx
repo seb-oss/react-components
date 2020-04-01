@@ -9,7 +9,6 @@ const StepTrackerPage: React.FunctionComponent = () => {
     return (
         <div className="route-template container">
             <div className="info-holder">
-
                 <div className="info">
                     <div className="md-file">
                         <Highlight innerHTML={true}>{docMD}</Highlight>
@@ -21,26 +20,15 @@ const StepTrackerPage: React.FunctionComponent = () => {
 
                     <p>Here is an example of a horizontal step tracker:</p>
                     <div className="result wide">
-                        <StepTracker
-                            step={stepTracker}
-                            list={stepList}
-                            onClick={(index: number) => setStepTracker(index)}
-                        />
+                        <StepTracker step={stepTracker} list={stepList} onClick={(index: number) => setStepTracker(index)} />
                     </div>
 
                     <p>Here is an example of a vertical step tracker:</p>
                     <div className="result">
-                        <StepTracker
-                            step={stepTracker}
-                            list={stepList}
-                            orientation="vertical"
-                            onClick={(index: number) => setStepTracker(index)}
-                        />
+                        <StepTracker step={stepTracker} list={stepList} orientation="vertical" onClick={(index: number) => setStepTracker(index)} />
                     </div>
                 </div>
-
             </div>
-
         </div>
     );
 };

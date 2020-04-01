@@ -35,7 +35,7 @@ export const TextBox: React.FunctionComponent<TextBoxProps> = (props: TextBoxPro
     const [showErrorMessage, setShowErrorMessage] = React.useState<boolean>(true);
 
     React.useEffect(() => {
-        setId(props.id ? props.id : (props.label ? randomId("tbg-") : null));
+        setId(props.id ? props.id : props.label ? randomId("tbg-") : null);
     }, [props.id, props.label]);
 
     React.useEffect(() => {
@@ -54,7 +54,11 @@ export const TextBox: React.FunctionComponent<TextBoxProps> = (props: TextBoxPro
     return (
         <div className={"form-group input-box" + (props.className ? ` ${props.className}` : "")}>
             <div className={"input-field" + (props.success ? " success" : props.error ? " has-error" : "")}>
-                {props.label && <label className="custom-label" htmlFor={id}>{props.label}</label>}
+                {props.label && (
+                    <label className="custom-label" htmlFor={id}>
+                        {props.label}
+                    </label>
+                )}
                 <input
                     id={id}
                     name={props.name}
