@@ -8,11 +8,11 @@ describe("Component: Slider", () => {
     const props: SliderProps = {
         value: 90,
         onChange: jest.fn(),
-        name: "slider"
+        name: "slider",
     };
     const labels: Array<RangeSliderLabel> = [
         { position: 0, text: "empty" },
-        { position: 100, text: "full" }
+        { position: 100, text: "full" },
     ];
 
     beforeEach(() => {
@@ -115,15 +115,12 @@ describe("Component: Slider", () => {
     it("Should render labels out of bounds at the edges of the slider", () => {
         const testLabels: Array<RangeSliderLabel> = [
             { position: -12, text: "lower than minimum" },
-            { position: 112, text: "higher than maximum" }
+            { position: 112, text: "higher than maximum" },
         ];
         act(() => {
             render(<Slider {...props} labels={testLabels} />, container);
         });
-        const firstLabelStyle: string = container
-            .querySelectorAll(".custom-slider-label")
-            .item(0)
-            .getAttribute("style");
+        const firstLabelStyle: string = container.querySelectorAll(".custom-slider-label").item(0).getAttribute("style");
         const secondLabelStyle: string = container
             .querySelectorAll(".custom-slider-label")
             .item(testLabels.length - 1)
@@ -136,32 +133,17 @@ describe("Component: Slider", () => {
         const testLabels: Array<RangeSliderLabel> = [
             { position: 0, text: "0%" },
             { position: 50, text: "50%" },
-            { position: 100, text: "100%" }
+            { position: 100, text: "100%" },
         ];
         act(() => {
             render(<Slider {...props} labels={testLabels} />, container);
         });
         expect(container.querySelectorAll(".custom-slider-label")).toHaveLength(3);
-        expect(
-            container
-                .querySelectorAll(".custom-slider-label")
-                .item(0)
-                .getAttribute("style")
-        ).toEqual("left: 0%;");
+        expect(container.querySelectorAll(".custom-slider-label").item(0).getAttribute("style")).toEqual("left: 0%;");
         expect(container.querySelectorAll(".custom-slider-label").item(0).textContent).toEqual("0%");
-        expect(
-            container
-                .querySelectorAll(".custom-slider-label")
-                .item(1)
-                .getAttribute("style")
-        ).toEqual("left: 50%;");
+        expect(container.querySelectorAll(".custom-slider-label").item(1).getAttribute("style")).toEqual("left: 50%;");
         expect(container.querySelectorAll(".custom-slider-label").item(1).textContent).toEqual("50%");
-        expect(
-            container
-                .querySelectorAll(".custom-slider-label")
-                .item(2)
-                .getAttribute("style")
-        ).toEqual("left: 100%;");
+        expect(container.querySelectorAll(".custom-slider-label").item(2).getAttribute("style")).toEqual("left: 100%;");
         expect(container.querySelectorAll(".custom-slider-label").item(2).textContent).toEqual("100%");
     });
 
@@ -190,7 +172,7 @@ describe("Component: Slider", () => {
             { min: -50, max: 50, value: -10, expected: "40%" },
             { min: -50, max: 50, value: 10, expected: "60%" },
             { min: -50, max: 0, value: -10, expected: "80%" },
-            { min: -50, max: -10, value: -15, expected: "87.5%" }
+            { min: -50, max: -10, value: -15, expected: "87.5%" },
         ];
         testCases.map((testCase: ThumbLocationTestcase) => {
             test(`Test case - (Range: ${testCase.min} - ${testCase.max}) | value: ${testCase.value} | expected thum location: ${testCase.expected}`, () => {

@@ -12,7 +12,7 @@ describe("Component: ImageCropper", () => {
             responsive: true,
             ready: () => {
                 console.log("On ready");
-            }
+            },
         },
         className: "",
         alwaysAlignedCropper: false,
@@ -41,7 +41,7 @@ describe("Component: ImageCropper", () => {
         reset: false,
         cropBoxData: null,
         canvasData: null,
-        showCustomButton: false
+        showCustomButton: false,
     };
 
     function timeout(ms) {

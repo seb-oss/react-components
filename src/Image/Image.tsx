@@ -26,7 +26,7 @@ export const Image: React.FunctionComponent<ImageProps> = React.memo(
                         style={{
                             backgroundImage: "url(" + props.src + ")",
                             width: props.width,
-                            height: props.height
+                            height: props.height,
                         }}
                         onClick={props.onClick}
                         aria-label={props.ariaLabel}
@@ -42,7 +42,7 @@ export const Image: React.FunctionComponent<ImageProps> = React.memo(
                         alt={props.alt ? props.alt : ""}
                         style={{
                             width: props.width,
-                            height: props.height
+                            height: props.height,
                         }}
                         onClick={props.onClick}
                         onLoad={props.onLoad}

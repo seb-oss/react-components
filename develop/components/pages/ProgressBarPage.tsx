@@ -15,7 +15,7 @@ class ProgressBarPage extends React.Component<RouteComponentProps, ProgressBarPa
         super(props);
 
         this.state = {
-            progress: 1
+            progress: 1,
         };
     }
 

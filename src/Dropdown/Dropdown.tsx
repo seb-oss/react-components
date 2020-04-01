@@ -159,7 +159,7 @@ const Dropdown: React.FunctionComponent<DropdownProps> = (props: DropdownProps):
         .map((e: UniqueDropdownItem) => {
             return {
                 ...e,
-                className: `dropdown-item custom-dropdown-item${props.multi ? " multi" : ""}${e.selected ? " selected" : ""}`
+                className: `dropdown-item custom-dropdown-item${props.multi ? " multi" : ""}${e.selected ? " selected" : ""}`,
             };
         })
         .filter((e: UniqueDropdownItem) => e.dropdownItem.label.toLowerCase().includes(searchText.toLowerCase())); // filtering based on current search term
@@ -174,10 +174,10 @@ const Dropdown: React.FunctionComponent<DropdownProps> = (props: DropdownProps):
             id: "select-all",
             dropdownItem: {
                 value: "select-all",
-                label: "Select All"
+                label: "Select All",
             },
             selected: allSelected,
-            className: `dropdown-item select-all custom-dropdown-item multi${allSelected ? " selected" : ""}`
+            className: `dropdown-item select-all custom-dropdown-item multi${allSelected ? " selected" : ""}`,
         });
     }
 

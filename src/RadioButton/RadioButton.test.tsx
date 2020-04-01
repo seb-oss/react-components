@@ -9,7 +9,7 @@ describe("Component: RadioButton", () => {
         label: "label",
         onChange: jest.fn(),
         name: "Gender",
-        radioValue: "male"
+        radioValue: "male",
     };
 
     beforeEach(() => {
@@ -49,12 +49,7 @@ describe("Component: RadioButton", () => {
         const topLabel: string = "my top label";
         wrapper.setProps({ label, description, topLabel });
         expect(wrapper.find(".custom-control-label").length).toBe(1);
-        expect(
-            wrapper
-                .find(".custom-control-label")
-                .text()
-                .indexOf(label)
-        ).not.toEqual(-1);
+        expect(wrapper.find(".custom-control-label").text().indexOf(label)).not.toEqual(-1);
         expect(wrapper.find(".radio-description").length).toBe(1);
         expect(wrapper.find(".radio-description").text()).toEqual(description);
         expect(wrapper.find(".radio-toplabel").length).toBe(1);

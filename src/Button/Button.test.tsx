@@ -10,7 +10,7 @@ describe("Component: Button", () => {
 
     const props: ButtonProps = {
         label: "label",
-        onClick: jest.fn()
+        onClick: jest.fn(),
     };
 
     beforeEach(() => {
@@ -20,13 +20,7 @@ describe("Component: Button", () => {
 
     it("Should render", () => expect(wrapper).toBeDefined());
 
-    it("Should render label correctly", () =>
-        expect(
-            wrapper
-                .find(".button-content")
-                .children(".button-label")
-                .text()
-        ).toEqual("label"));
+    it("Should render label correctly", () => expect(wrapper.find(".button-content").children(".button-label").text()).toEqual("label"));
 
     it("Should fire onClick callback when clicked", () => {
         const onClick: jest.Mock = jest.fn();
@@ -57,7 +51,7 @@ describe("Component: Button", () => {
             { value: "anchor", expected: "btn-link" },
             { value: "link", expected: "btn-link" },
             { value: "danger", expected: "btn-danger" },
-            { value: "unsupported-theme" as any, expected: "btn-primary" }
+            { value: "unsupported-theme" as any, expected: "btn-primary" },
         ];
         list.map((item: ButtonTestItem<ButtonTheme, string>) => {
             it(`Theme: ${item.value} - Expected to render (btn-${item.expected})`, () => {
@@ -71,7 +65,7 @@ describe("Component: Button", () => {
         const list: Array<ButtonTestItem<ButtonSizes, string>> = [
             { value: "lg", expected: "btn-lg" },
             { value: "md", expected: "btn-md" },
-            { value: "sm", expected: "btn-sm" }
+            { value: "sm", expected: "btn-sm" },
         ];
         list.map((item: ButtonTestItem<ButtonSizes, string>) => {
             it(`Size: ${item.value} - Expected to render (btn-${item.expected})`, () => {

@@ -98,7 +98,7 @@ describe("Component: Notification", () => {
             const actions: Array<NotificationAction> = [
                 { text: "action1", action: jest.fn() },
                 { text: "action2", action: jest.fn() },
-                { text: "action3", action: jest.fn() }
+                { text: "action3", action: jest.fn() },
             ];
             wrapper.setProps({ actions: actions });
             expect(wrapper.find(".actions-wrapper").length).toBe(0);
@@ -118,7 +118,7 @@ describe("Component: Notification", () => {
         it("Should render two actions with equal width", () => {
             const actions: Array<NotificationAction> = [
                 { text: "action1", action: jest.fn() },
-                { text: "action2", action: jest.fn() }
+                { text: "action2", action: jest.fn() },
             ];
             wrapper.setProps({ actions: actions });
             expect(wrapper.find(".actions-wrapper").length).not.toBe(0);
@@ -128,33 +128,13 @@ describe("Component: Notification", () => {
         it("Should render actions with correct label and action callback should be called when clicked", () => {
             const actions: Array<NotificationAction> = [
                 { text: "action1", action: jest.fn() },
-                { text: "action2", action: jest.fn() }
+                { text: "action2", action: jest.fn() },
             ];
             wrapper.setProps({ actions: actions });
-            expect(
-                wrapper
-                    .find(".action-wrapper")
-                    .first()
-                    .find("button")
-                    .text()
-            ).toEqual(actions[0].text);
-            expect(
-                wrapper
-                    .find(".action-wrapper")
-                    .at(1)
-                    .find("button")
-                    .text()
-            ).toEqual(actions[1].text);
-            wrapper
-                .find(".action-wrapper")
-                .first()
-                .find("button")
-                .simulate("click");
-            wrapper
-                .find(".action-wrapper")
-                .at(1)
-                .find("button")
-                .simulate("click");
+            expect(wrapper.find(".action-wrapper").first().find("button").text()).toEqual(actions[0].text);
+            expect(wrapper.find(".action-wrapper").at(1).find("button").text()).toEqual(actions[1].text);
+            wrapper.find(".action-wrapper").first().find("button").simulate("click");
+            wrapper.find(".action-wrapper").at(1).find("button").simulate("click");
             expect(actions[0].action).toBeCalled();
             expect(actions[1].action).toBeCalled();
         });

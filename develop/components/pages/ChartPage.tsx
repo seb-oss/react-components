@@ -15,9 +15,9 @@ const ChartPage: React.FunctionComponent = () => {
             {
                 label: "My First dataset",
                 data: [65, 59, 80, 81, 56, 55, 40],
-                backgroundColor: "rgba(255,99,132,0.5)"
-            }
-        ]
+                backgroundColor: "rgba(255,99,132,0.5)",
+            },
+        ],
     };
 
     const pieData: ChartData = {
@@ -25,15 +25,15 @@ const ChartPage: React.FunctionComponent = () => {
             {
                 data: [randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor()],
                 backgroundColor: ["#ff6384", "#36a2eb", "#cc65fe", "#ffce56"],
-                label: "Pie Dataset 1"
-            }
+                label: "Pie Dataset 1",
+            },
         ],
-        labels: ["value 1", "value 2", "value 3", "value 4"]
+        labels: ["value 1", "value 2", "value 3", "value 4"],
     };
 
     const options: ChartOptions = {
         responsive: true,
-        maintainAspectRatio: false
+        maintainAspectRatio: false,
     };
 
     const optionsAnnotation: ExtendedChartOptions = {
@@ -56,11 +56,11 @@ const ChartPage: React.FunctionComponent = () => {
                         backgroundColor: "#406980",
                         position: "top",
                         content: "Annotaion",
-                        enabled: true
-                    }
-                }
-            ]
-        }
+                        enabled: true,
+                    },
+                },
+            ],
+        },
     };
 
     return (

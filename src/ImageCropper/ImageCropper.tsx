@@ -45,7 +45,7 @@ const optionProps = [
     "crop",
     "cropend",
     "cropmove",
-    "cropstart"
+    "cropstart",
 ];
 
 export interface OptionProps {
@@ -162,7 +162,7 @@ export class ImageCropper extends React.Component<ImageCropperProps, ImageCroppe
             toggle: props.toggle || false,
             src: props.previewSrc,
             cropBoxData: props.cropBoxData && this.props.cropBoxData,
-            cropResult: props.previewSrc ? this.props.previewSrc : ""
+            cropResult: props.previewSrc ? this.props.previewSrc : "",
         };
     }
 
@@ -200,17 +200,14 @@ export class ImageCropper extends React.Component<ImageCropperProps, ImageCroppe
             .reduce((prevOptions, propKey: keyof OptionProps) => ({ ...prevOptions, [propKey]: this.props.cropperConfigs[propKey] }), {});
         const OptionalEvents = {
             cropend: this.alignCropBox.bind(this),
-            cropmove: this.alignCropBox.bind(this)
+            cropmove: this.alignCropBox.bind(this),
         };
         const updatedOptions = this.state.alignCropper ? { ...options, ...OptionalEvents } : options;
         const cropper = Cropper ? Cropper : require("cropperjs");
         this.cropper = new cropper(this.image, updatedOptions);
 
         if (this.props.previewSrc) {
-            this.cropper
-                .reset()
-                .clear()
-                .replace(this.props.previewSrc);
+            this.cropper.reset().clear().replace(this.props.previewSrc);
         }
     }
 
@@ -309,10 +306,7 @@ export class ImageCropper extends React.Component<ImageCropperProps, ImageCroppe
     }
 
     onResfreshCropper(image: string, callBack: () => void) {
-        this.cropper
-            .reset()
-            .clear()
-            .replace(image);
+        this.cropper.reset().clear().replace(image);
 
         return callBack();
     }
@@ -397,10 +391,7 @@ export class ImageCropper extends React.Component<ImageCropperProps, ImageCroppe
     componentDidUpdate(prevProps: ImageCropperProps, prevState: ImageCropperState) {
         if (prevProps.previewSrc !== this.props.previewSrc) {
             this.setState({ cropResult: this.props.previewSrc.trim() });
-            this.cropper
-                .reset()
-                .clear()
-                .replace(this.props.previewSrc);
+            this.cropper.reset().clear().replace(this.props.previewSrc);
         }
         if (prevProps.alwaysAlignedCropper !== this.props.alwaysAlignedCropper) {
             this.setState({ alignCropper: this.props.alwaysAlignedCropper });

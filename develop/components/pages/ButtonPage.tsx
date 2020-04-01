@@ -20,16 +20,16 @@ const ButtonPage: React.FunctionComponent = () => {
         { label: "Danger", value: "danger" },
         { label: "Ghost-dark", value: "ghost-dark" },
         { label: "Ghost-light", value: "ghost-light" },
-        { label: "Link", value: "link" }
+        { label: "Link", value: "link" },
     ];
     const iconPositionList: Array<RadioListModel<ButtonIconPosition>> = [
         { label: "Right", value: "right" },
-        { label: "Left", value: "left" }
+        { label: "Left", value: "left" },
     ];
     const sizeList: Array<RadioListModel<ButtonSizes>> = [
         { label: "Small", value: "sm" },
         { label: "Medium", value: "md" },
-        { label: "Large", value: "lg" }
+        { label: "Large", value: "lg" },
     ];
     const [theme, setTheme] = React.useState<ButtonTheme>("primary");
     const [iconPosition, setIconPosition] = React.useState<ButtonIconPosition>("right");

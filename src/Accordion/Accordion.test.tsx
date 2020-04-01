@@ -13,10 +13,10 @@ describe("Component: Accordion", () => {
             header: "Item 2",
             content: [
                 { title: "title", desc: "desc" },
-                { title: "title", desc: "desc" }
-            ]
+                { title: "title", desc: "desc" },
+            ],
         },
-        { header: "Item 3", content: [{ desc: "desc" }, { desc: "desc" }] }
+        { header: "Item 3", content: [{ desc: "desc" }, { desc: "desc" }] },
     ];
 
     beforeEach(() => {
@@ -44,74 +44,25 @@ describe("Component: Accordion", () => {
     });
 
     it("Should toggle accordion when clicked, and toggled off when another item is clicked", () => {
-        mountedWrapper
-            .find(".accordion-item")
-            .first()
-            .find(".header-wrapper")
-            .simulate("click");
-        expect(
-            mountedWrapper
-                .find(".accordion-item")
-                .first()
-                .hasClass("active")
-        ).toBeTruthy();
-        mountedWrapper
-            .find(".accordion-item")
-            .at(1)
-            .find(".header-wrapper")
-            .simulate("click");
-        expect(
-            mountedWrapper
-                .find(".accordion-item")
-                .first()
-                .hasClass("active")
-        ).toBeFalsy();
-        expect(
-            mountedWrapper
-                .find(".accordion-item")
-                .at(1)
-                .hasClass("active")
-        ).toBeTruthy();
+        mountedWrapper.find(".accordion-item").first().find(".header-wrapper").simulate("click");
+        expect(mountedWrapper.find(".accordion-item").first().hasClass("active")).toBeTruthy();
+        mountedWrapper.find(".accordion-item").at(1).find(".header-wrapper").simulate("click");
+        expect(mountedWrapper.find(".accordion-item").first().hasClass("active")).toBeFalsy();
+        expect(mountedWrapper.find(".accordion-item").at(1).hasClass("active")).toBeTruthy();
     });
 
     it("Should untoggle accordion when clicked again", () => {
-        mountedWrapper
-            .find(".accordion-item")
-            .first()
-            .find(".header-wrapper")
-            .simulate("click");
-        mountedWrapper
-            .find(".accordion-item")
-            .first()
-            .find(".header-wrapper")
-            .simulate("click");
+        mountedWrapper.find(".accordion-item").first().find(".header-wrapper").simulate("click");
+        mountedWrapper.find(".accordion-item").first().find(".header-wrapper").simulate("click");
         expect(mountedWrapper.find(".active").length).toBe(0);
     });
 
     it("Should untoggle accordion item when clicked on another accordion item", () => {
-        mountedWrapper
-            .find(".accordion-item")
-            .first()
-            .find(".header-wrapper")
-            .simulate("click");
-        mountedWrapper
-            .find(".accordion-item")
-            .at(1)
-            .find(".header-wrapper")
-            .simulate("click");
+        mountedWrapper.find(".accordion-item").first().find(".header-wrapper").simulate("click");
+        mountedWrapper.find(".accordion-item").at(1).find(".header-wrapper").simulate("click");
 
-        expect(
-            mountedWrapper
-                .find(".accordion-item")
-                .first()
-                .hasClass("active")
-        ).toBeFalsy();
-        expect(
-            mountedWrapper
-                .find(".accordion-item")
-                .at(1)
-                .hasClass("active")
-        ).toBeTruthy();
+        expect(mountedWrapper.find(".accordion-item").first().hasClass("active")).toBeFalsy();
+        expect(mountedWrapper.find(".accordion-item").at(1).hasClass("active")).toBeTruthy();
         expect(mountedWrapper.find(".active").length).toBe(1);
     });
 
@@ -151,7 +102,7 @@ describe("Component: Accordion", () => {
             { key: " ", registeredAt: 1, expectedValue: true },
             { key: "space", registeredAt: 1, expectedValue: true },
             { key: "enter", registeredAt: 1, expectedValue: true },
-            { key: "backspace", registeredAt: 1, expectedValue: false } // Should not do anything
+            { key: "backspace", registeredAt: 1, expectedValue: false }, // Should not do anything
         ];
 
         beforeEach(() => {
@@ -160,40 +111,16 @@ describe("Component: Accordion", () => {
 
         testList.map((item: keyboardTestUnit) => {
             it(`Testing key [${item.key}]`, () => {
-                mountedWrapper
-                    .find(".accordion-item")
-                    .at(1)
-                    .simulate("keydown", { key: item.key });
-                expect(
-                    mountedWrapper
-                        .find(".accordion-item")
-                        .at(1)
-                        .hasClass("active")
-                );
+                mountedWrapper.find(".accordion-item").at(1).simulate("keydown", { key: item.key });
+                expect(mountedWrapper.find(".accordion-item").at(1).hasClass("active"));
             });
         });
 
         it("Should be toggled off with keyboard events", () => {
-            mountedWrapper
-                .find(".accordion-item")
-                .first()
-                .simulate("keydown", { key: "space" });
-            expect(
-                mountedWrapper
-                    .find(".accordion-item")
-                    .first()
-                    .hasClass("active")
-            ).toBeTruthy();
-            mountedWrapper
-                .find(".accordion-item")
-                .first()
-                .simulate("keydown", { key: "space" });
-            expect(
-                mountedWrapper
-                    .find(".accordion-item")
-                    .first()
-                    .hasClass("active")
-            ).toBeFalsy();
+            mountedWrapper.find(".accordion-item").first().simulate("keydown", { key: "space" });
+            expect(mountedWrapper.find(".accordion-item").first().hasClass("active")).toBeTruthy();
+            mountedWrapper.find(".accordion-item").first().simulate("keydown", { key: "space" });
+            expect(mountedWrapper.find(".accordion-item").first().hasClass("active")).toBeFalsy();
         });
     });
 
@@ -205,7 +132,7 @@ describe("Component: Accordion", () => {
                 <>
                     <p id="test-node">test content</p>
                 </>
-            )
+            ),
         });
         mountedWrapper.setProps({ list });
         expect(mountedWrapper.find("#test-node").length).toBeTruthy();
@@ -223,11 +150,6 @@ describe("Component: Accordion", () => {
 
     it("Should allow user to set a default active item", () => {
         mountedWrapper.setProps({ activeIndex: 1 }).update();
-        expect(
-            mountedWrapper
-                .find(".accordion-item")
-                .at(1)
-                .hasClass("active")
-        ).toBeTruthy();
+        expect(mountedWrapper.find(".accordion-item").at(1).hasClass("active")).toBeTruthy();
     });
 });
