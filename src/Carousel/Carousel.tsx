@@ -34,7 +34,7 @@ export const Carousel: React.FunctionComponent<CarouselProps> = (props: Carousel
         slidesToScroll: 1,
         autoplay: props.autoPlay ? true : false,
         autoplaySpeed: props.autoPlaySpeed ? props.autoPlaySpeed : 3000,
-        afterChange: props.afterChange
+        afterChange: props.afterChange,
     };
 
     return (
@@ -42,16 +42,9 @@ export const Carousel: React.FunctionComponent<CarouselProps> = (props: Carousel
             {props.list &&
                 props.list.map((item, index) => {
                     return (
-                        <div
-                            key={index}
-                            className={"custom-carousel" + (props.className ? ` ${props.className}` : "")}
-                            id={props.id}
-                        >
-                            <div
-                                className="carousel-slide"
-                                style={{ height: props.height || 300 }}
-                            >
-                                {item.image &&
+                        <div key={index} className={"custom-carousel" + (props.className ? ` ${props.className}` : "")} id={props.id}>
+                            <div className="carousel-slide" style={{ height: props.height || 300 }}>
+                                {item.image && (
                                     <div
                                         className="carousel-img"
                                         style={{
@@ -59,15 +52,13 @@ export const Carousel: React.FunctionComponent<CarouselProps> = (props: Carousel
                                             backgroundImage: "url(" + item.image + ")",
                                         }}
                                     />
-                                }
+                                )}
                                 {item.title && <div className="title">{item.title}</div>}
                                 {item.desc && <div className="desc"> {item.desc} </div>}
-
                             </div>
                         </div>
                     );
-                })
-            }
+                })}
         </Slider>
     );
 };

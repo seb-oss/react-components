@@ -63,25 +63,25 @@ const Tabs: React.FunctionComponent<TabsProps> = (props: TabsProps) => {
     return (
         <div className={"custom-tabs" + (props.className ? ` ${props.className}` : "")} id={props.id}>
             <ul className="nav nav-tabs" role="tablist" aria-label="tabs">
-                {props.list && props.list.map((item: TabsListItem, index: number) =>
-                    <li
-                        key={index}
-                        className={"nav-item" + (index === props.activeTab ? " active" : "") + (item.disabled ? " disabled" : "")}
-                    >
-                        <a
-                            className={"nav-link" + (index === props.activeTab ? " active" : "") + (item.disabled ? " disabled" : "")}
-                            onClick={(e: React.MouseEvent<HTMLAnchorElement>) => onClick(e, index)}
-                            onKeyDown={(e: React.KeyboardEvent<HTMLAnchorElement>) => onKeyDown(e, index)}
-                            role="tab"
-                            aria-selected={index === props.activeTab}
-                            aria-controls={`link-${item.text}`}
-                            ref={(refElement: HTMLAnchorElement) => { elementRefAnchors[index] = refElement; }}
-                            tabIndex={0}
-                        >
-                            {item.text}
-                        </a>
-                    </li>
-                )}
+                {props.list &&
+                    props.list.map((item: TabsListItem, index: number) => (
+                        <li key={index} className={"nav-item" + (index === props.activeTab ? " active" : "") + (item.disabled ? " disabled" : "")}>
+                            <a
+                                className={"nav-link" + (index === props.activeTab ? " active" : "") + (item.disabled ? " disabled" : "")}
+                                onClick={(e: React.MouseEvent<HTMLAnchorElement>) => onClick(e, index)}
+                                onKeyDown={(e: React.KeyboardEvent<HTMLAnchorElement>) => onKeyDown(e, index)}
+                                role="tab"
+                                aria-selected={index === props.activeTab}
+                                aria-controls={`link-${item.text}`}
+                                ref={(refElement: HTMLAnchorElement) => {
+                                    elementRefAnchors[index] = refElement;
+                                }}
+                                tabIndex={0}
+                            >
+                                {item.text}
+                            </a>
+                        </li>
+                    ))}
             </ul>
         </div>
     );

@@ -5,7 +5,7 @@ import { Pagination } from "../../../src/Pagination/Pagination";
 import { Dropdown, DropdownItem } from "../../../src/Dropdown/Dropdown";
 import { TextBox } from "../../../src/TextBox/TextBox";
 import { Button } from "../../../src/Button/Button";
-const Highlight = require("react-highlight").default;
+import Highlight from "react-highlight";
 const docMD = require("../../../src/Table/readme.md");
 
 interface TableDataProps {
@@ -33,33 +33,33 @@ const TablePage: React.FunctionComponent = () => {
                 label: "id",
                 accessor: "id",
                 canSort: false,
-                canEdit: false
+                canEdit: false,
             },
             {
                 label: "First Name",
                 accessor: "firstName",
-                canEdit: false
+                canEdit: false,
             },
             {
                 label: "Last Name",
-                accessor: "lastName"
+                accessor: "lastName",
             },
             {
                 label: "Age",
-                accessor: "age"
+                accessor: "age",
             },
             {
                 label: "Visits",
-                accessor: "visits"
+                accessor: "visits",
             },
             {
                 label: "Profile Progress",
-                accessor: "progress"
+                accessor: "progress",
             },
             {
                 label: "Status",
-                accessor: "status"
-            }
+                accessor: "status",
+            },
         ],
         []
     );
@@ -94,12 +94,12 @@ const TablePage: React.FunctionComponent = () => {
 
     const primaryButton: PrimaryActionButton = {
         label: "Buy",
-        onClick: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, selectedRow: TableRow) => {}
+        onClick: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, selectedRow: TableRow) => {},
     };
 
     const actionLinks: Array<ActionLinkItem> = [
         { label: "Add", onClick: (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>, selectedRow: TableRow) => {} },
-        { label: "Edit", onClick: (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>, selectedRow: TableRow) => {} }
+        { label: "Edit", onClick: (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>, selectedRow: TableRow) => {} },
     ];
 
     const filterProps: FilterProps = {
@@ -123,14 +123,14 @@ const TablePage: React.FunctionComponent = () => {
             }
             setFilters(updatedFilters);
         },
-        filterItems: filters
+        filterItems: filters,
     };
 
     const editProps: EditProps = {
         onAfterEdit: (rows: Array<TableRow>) => {
             setEditMode(null);
         },
-        mode: editMode
+        mode: editMode,
     };
 
     const data: Array<DataItem<TableDataProps>> = React.useMemo(
@@ -190,7 +190,7 @@ const TablePage: React.FunctionComponent = () => {
                             columns={columns}
                             data={smallData}
                             sortProps={{
-                                onAfterSorting: (rows: Array<TableRow>, sortByColumn: TableHeader) => {}
+                                onAfterSorting: (rows: Array<TableRow>, sortByColumn: TableHeader) => {},
                             }}
                         />
                     </div>
@@ -279,12 +279,12 @@ const TablePage: React.FunctionComponent = () => {
                                 searchText: textBoxValue2,
                                 triggerSearchOn: "Submit",
                                 searchTriggered: searchTriggered,
-                                onSearch: (searchResults: Array<TableRow>) => {}
+                                onSearch: (searchResults: Array<TableRow>) => {},
                             }}
                             primaryActionButton={primaryButton}
                             actionLinks={actionLinks}
                             sortProps={{
-                                onAfterSorting: (rows: Array<TableRow>, sortByColumn: TableHeader) => {}
+                                onAfterSorting: (rows: Array<TableRow>, sortByColumn: TableHeader) => {},
                             }}
                             onRowSelected={(rows: Array<TableRow>) => {}}
                             onRowExpanded={(rows: Array<TableRow>) => {}}
@@ -300,7 +300,7 @@ const TablePage: React.FunctionComponent = () => {
 const dropDownList1: Array<DropdownItem> = [
     { value: "id", label: "Id" },
     { value: "firstName", label: "First Name" },
-    { value: "lastName", label: "Last Name" }
+    { value: "lastName", label: "Last Name" },
 ];
 
 export default TablePage;

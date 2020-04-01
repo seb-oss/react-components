@@ -9,7 +9,6 @@ const TextLabelPage: React.FunctionComponent = () => {
     return (
         <div className="route-template container">
             <div className="info-holder">
-
                 <div className="info">
                     <div className="md-file">
                         <Highlight innerHTML={true}>{docMD}</Highlight>
@@ -20,10 +19,7 @@ const TextLabelPage: React.FunctionComponent = () => {
                     <h2>Output</h2>
                     <p>Here is the basic bootstrap one:</p>
                     <div className="result">
-                        <TextLabel
-                            value="400,000 kr"
-                            label="Current savings"
-                        />
+                        <TextLabel value="400,000 kr" label="Current savings" />
                     </div>
 
                     <p>An example with passing ReactNode as the value (tooltip):</p>
@@ -38,11 +34,8 @@ const TextLabelPage: React.FunctionComponent = () => {
                             label="Current savings"
                         />
                     </div>
-
                 </div>
-
             </div>
-
         </div>
     );
 };

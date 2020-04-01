@@ -18,7 +18,6 @@ const NotificationPage: React.FunctionComponent = () => {
     return (
         <div className="route-template container">
             <div className="info-holder">
-
                 <div className="info">
                     <div className="md-file">
                         <Highlight innerHTML={true}>{docMD}</Highlight>
@@ -33,14 +32,13 @@ const NotificationPage: React.FunctionComponent = () => {
                             toggle={notification1Toggle}
                             title="Notification Title"
                             message={description}
-                            onClick={() => { console.log("Notification clicked"); }}
+                            onClick={() => {
+                                console.log("Notification clicked");
+                            }}
                             dismissable={true}
                             onDismiss={() => setNotification1Toggle(false)}
                         />
-                        <Button
-                            label="Toggle"
-                            onClick={() => setNotification1Toggle(!notification1Toggle)}
-                        />
+                        <Button label="Toggle" onClick={() => setNotification1Toggle(!notification1Toggle)} />
                     </div>
                     <p>Notification with actions</p>
                     <div className="result">
@@ -60,7 +58,9 @@ const NotificationPage: React.FunctionComponent = () => {
                     <div className="result">
                         <Notification
                             toggle={notification3Toggle}
-                            onClick={() => { console.log("Notification clicked"); }}
+                            onClick={() => {
+                                console.log("Notification clicked");
+                            }}
                             dismissable={true}
                             onDismiss={() => setNotification3Toggle(false)}
                             style="bar"
@@ -68,7 +68,7 @@ const NotificationPage: React.FunctionComponent = () => {
                             theme="danger"
                         >
                             <div className="notification-message">
-                                {description &&
+                                {description && (
                                     <button
                                         className="btn btn-sm btn-secondary text-light px-1 py-0"
                                         onClick={(e: React.MouseEvent) => {
@@ -78,18 +78,13 @@ const NotificationPage: React.FunctionComponent = () => {
                                     >
                                         Click here
                                     </button>
-                                }
+                                )}
                             </div>
                         </Notification>
-                        <Button
-                            label="Bar"
-                            onClick={() => setNotification3Toggle(!notification3Toggle)}
-                        />
+                        <Button label="Bar" onClick={() => setNotification3Toggle(!notification3Toggle)} />
                     </div>
                 </div>
-
             </div>
-
         </div>
     );
 };

@@ -82,7 +82,7 @@ export interface TableRow {
 
 export const enum sortDirectionTypes {
     Ascending = "ASC",
-    Descending = "DESC"
+    Descending = "DESC",
 }
 
 /**
@@ -677,7 +677,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo(
                     .map((newRow: TableRow) => {
                         return {
                             ...newRow,
-                            subRows: newRow.subRows.filter((subRowItem: TableRow) => subRowItem.selected)
+                            subRows: newRow.subRows.filter((subRowItem: TableRow) => subRowItem.selected),
                         };
                     });
 
@@ -842,7 +842,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo(
                             sortByColumn = {
                                 ...column,
                                 isSorted: true,
-                                isSortedDesc: sortDirection === sortDirectionTypes.Descending ? true : false
+                                isSortedDesc: sortDirection === sortDirectionTypes.Descending ? true : false,
                             };
                             return sortByColumn;
                         }
@@ -921,7 +921,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo(
                         return {
                             ...originalRow,
                             expanded: !originalRow.expanded,
-                            subRows: originalRow?.subRows.map((subRow: TableRow) => ({ ...subRow, expanded: false }))
+                            subRows: originalRow?.subRows.map((subRow: TableRow) => ({ ...subRow, expanded: false })),
                         };
                     }
 
@@ -933,7 +933,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo(
                         return {
                             ...currentRow,
                             expanded: !currentRow.expanded,
-                            subRows: currentRow?.subRows.map((subRow: TableRow) => ({ ...subRow, expanded: false }))
+                            subRows: currentRow?.subRows.map((subRow: TableRow) => ({ ...subRow, expanded: false })),
                         };
                     }
                     return currentRow;
@@ -946,7 +946,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo(
                     .map((newRow: TableRow) => {
                         return {
                             ...newRow,
-                            subRows: newRow.subRows.filter((subRowItem: TableRow) => subRowItem.expanded)
+                            subRows: newRow.subRows.filter((subRowItem: TableRow) => subRowItem.expanded),
                         };
                     });
 
@@ -974,12 +974,12 @@ export const Table: React.FunctionComponent<TableProps> = React.memo(
                                                 return { ...cell, value: e.target.value };
                                             }
                                             return cell;
-                                        })
+                                        }),
                                     };
                                 }
 
                                 return subRow;
-                            })
+                            }),
                         };
                     } else if (updatedRow.rowIndex === row.rowIndex) {
                         return {
@@ -990,7 +990,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo(
                                     return { ...cell, value: e.target.value };
                                 }
                                 return cell;
-                            })
+                            }),
                         };
                     }
 
@@ -1020,7 +1020,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo(
                                 id: accessor,
                                 accessor,
                                 value: row[accessor],
-                                canEdit: !isBlackListed(accessor)
+                                canEdit: !isBlackListed(accessor),
                             };
                         }
                     );
@@ -1033,7 +1033,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo(
                     actionsDropdownDropped: row.actionsDropdownDropped || false,
                     expanded: row.expanded || false,
                     subRows: row.subRows ? getRows(row.subRows) : [],
-                    isEditMode: row.isEditMode || false
+                    isEditMode: row.isEditMode || false,
                 };
             });
 
@@ -1156,7 +1156,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo(
                         ...row,
                         isEditMode: false,
                         selected: false,
-                        subRows: row.subRows?.map((sub: TableRow) => ({ ...sub, isEditMode: false, selected: false }))
+                        subRows: row.subRows?.map((sub: TableRow) => ({ ...sub, isEditMode: false, selected: false })),
                     }));
                     setTableRows(updateRows);
                     setTableEditRows([]);
@@ -1167,7 +1167,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo(
                         ...row,
                         isEditMode: false,
                         selected: false,
-                        subRows: row.subRows?.map((sub: TableRow) => ({ ...sub, isEditMode: false, selected: false }))
+                        subRows: row.subRows?.map((sub: TableRow) => ({ ...sub, isEditMode: false, selected: false })),
                     }));
                     setTableRows(updateRows);
                     setTableEditRows([]);
@@ -1229,7 +1229,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo(
                     isSorted: false,
                     canSort: column.canSort !== undefined ? column.canSort : !!props.sortProps ? true : false,
                     isSortedDesc: false,
-                    filters: column.filters || []
+                    filters: column.filters || [],
                 };
             });
 

@@ -6,7 +6,7 @@ describe("Component: Timeline", () => {
     const timelineList: Array<TimelineListItem> = [
         { title: "title1", time: "time1" },
         { title: "title2", time: "time2" },
-        { title: "title3", time: "time3" }
+        { title: "title3", time: "time3" },
     ];
     let wrapper: ShallowWrapper<TimelineProps>;
 
@@ -80,5 +80,4 @@ describe("Component: Timeline", () => {
         expect(horizontalWrapper.find(".title-wrapper").at(4).find(".desc").length).toBe(1);
         expect(horizontalWrapper.find(".title-wrapper").at(4).find(".desc").text()).toEqual("desc5");
     });
-
 });

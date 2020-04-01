@@ -15,7 +15,6 @@ const CheckBoxPage: React.FunctionComponent = () => {
     return (
         <div className="route-template container">
             <div className="info-holder">
-
                 <div className="info">
                     <div className="md-file">
                         <Highlight innerHTML={true}>{docMD}</Highlight>
@@ -26,15 +25,7 @@ const CheckBoxPage: React.FunctionComponent = () => {
                     <h2>Output</h2>
                     <p>Here are few checkboxes with different configurations:</p>
                     <div className={"result" + (tabValue === 2 ? " wide" : "")}>
-                        <Tabs
-                            list={[
-                                { text: "Normal" },
-                                { text: "Condensed" },
-                                { text: "Inline" }
-                            ]}
-                            activeTab={tabValue}
-                            onClick={setTabValue}
-                        />
+                        <Tabs list={[{ text: "Normal" }, { text: "Condensed" }, { text: "Inline" }]} activeTab={tabValue} onClick={setTabValue} />
                         <CheckBox
                             name="checkbox1"
                             label="Checkbox 1"
@@ -63,9 +54,7 @@ const CheckBoxPage: React.FunctionComponent = () => {
                         />
                     </div>
                 </div>
-
             </div>
-
         </div>
     );
 };
