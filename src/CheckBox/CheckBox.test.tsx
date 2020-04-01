@@ -61,5 +61,4 @@ describe("Component: CheckBox", () => {
         wrapper.setProps({ disabled: true });
         expect(wrapper.find("input").props().disabled).toBeTruthy();
     });
-
 });

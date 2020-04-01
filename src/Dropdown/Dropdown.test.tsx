@@ -141,7 +141,7 @@ describe("Component: Dropdown", () => {
 
     it("Should close menu when clicking anywhere outside the dropdown component", () => {
         act(() => {
-            render(<Dropdown {...DEFAULT_PROPS} label="my-label"/>, container);
+            render(<Dropdown {...DEFAULT_PROPS} label="my-label" />, container);
         });
 
         const toggle: Element = container.querySelector(".custom-dropdown-toggle");
@@ -166,7 +166,7 @@ describe("Component: Dropdown", () => {
         expect(toggle.classList.contains("open")).toBeFalsy();
     });
 
-    it("Should display \"Empty\" and be disabled if list prop is an empty array", () => {
+    it('Should display "Empty" and be disabled if list prop is an empty array', () => {
         const props: DropdownProps = {
             ...DEFAULT_PROPS,
             list: []

@@ -1,12 +1,11 @@
 import * as React from "react";
 import { Button } from "../../../src/Button/Button";
 import { Modal, ModalProps } from "../../../src/Modal/Modal";
-import { getParameterByName } from "../../__utils/queryString";
 import { RouteComponentProps } from "react-router";
 import Highlight from "react-highlight";
 const docMD: string = require("../../../src/Modal/readme.md");
 
-class ModalPage extends React.Component<RouteComponentProps, Partial<ModalProps>>  {
+class ModalPage extends React.Component<RouteComponentProps, Partial<ModalProps>> {
     initialState: Partial<ModalProps> = {
         toggle: false,
         fullscreen: false,
@@ -32,7 +31,6 @@ class ModalPage extends React.Component<RouteComponentProps, Partial<ModalProps>
         return (
             <div className="route-template container">
                 <div className="info-holder">
-
                     <div className="info">
                         <div className="md-file">
                             <Highlight innerHTML={true}>{docMD}</Highlight>
@@ -44,31 +42,36 @@ class ModalPage extends React.Component<RouteComponentProps, Partial<ModalProps>
                         <p>Here are sample outputs</p>
                         <div className="result">
                             <p>Modal</p>
-                            <Button
-                                label="Trigger Modal"
-                                onClick={this.toggleModal}
-                            />
+                            <Button label="Trigger Modal" onClick={this.toggleModal} />
                             <p>Modal without backdrop dismiss</p>
                             <Button
                                 label="No backdrop dismiss"
-                                onClick={(e) => { this.toggleModal(e, { disableBackdropDismiss: true }); }}
+                                onClick={(e) => {
+                                    this.toggleModal(e, { disableBackdropDismiss: true });
+                                }}
                             />
                             <p>Aside Modal</p>
                             <div className="d-flex">
                                 <Button
                                     className="mr-5"
                                     label="Open aside left"
-                                    onClick={(e) => { this.toggleModal(e, { position: "left" }); }}
+                                    onClick={(e) => {
+                                        this.toggleModal(e, { position: "left" });
+                                    }}
                                 />
                                 <Button
                                     label="Open aside right"
-                                    onClick={(e) => { this.toggleModal(e, { position: "right" }); }}
+                                    onClick={(e) => {
+                                        this.toggleModal(e, { position: "right" });
+                                    }}
                                 />
                             </div>
                             <p>Fullscreen modal</p>
                             <Button
                                 label="Open fullscreen modal"
-                                onClick={(e) => { this.toggleModal(e, { fullscreen: true }); }}
+                                onClick={(e) => {
+                                    this.toggleModal(e, { fullscreen: true });
+                                }}
                             />
                             <Modal
                                 toggle={this.state.toggle}
@@ -84,9 +87,7 @@ class ModalPage extends React.Component<RouteComponentProps, Partial<ModalProps>
                             />
                         </div>
                     </div>
-
                 </div>
-
             </div>
         );
     }

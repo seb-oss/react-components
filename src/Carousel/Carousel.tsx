@@ -42,32 +42,23 @@ export const Carousel: React.FunctionComponent<CarouselProps> = (props: Carousel
             {props.list &&
                 props.list.map((item, index) => {
                     return (
-                        <div
-                            key={index}
-                            className={"custom-carousel" + (props.className ? ` ${props.className}` : "")}
-                            id={props.id}
-                        >
-                            <div
-                                className="carousel-slide"
-                                style={{ height: props.height || 300 }}
-                            >
-                                {item.image &&
+                        <div key={index} className={"custom-carousel" + (props.className ? ` ${props.className}` : "")} id={props.id}>
+                            <div className="carousel-slide" style={{ height: props.height || 300 }}>
+                                {item.image && (
                                     <div
                                         className="carousel-img"
                                         style={{
                                             backgroundSize: props.backgroundPlacement || "cover",
-                                            backgroundImage: "url(" + item.image + ")",
+                                            backgroundImage: "url(" + item.image + ")"
                                         }}
                                     />
-                                }
+                                )}
                                 {item.title && <div className="title">{item.title}</div>}
                                 {item.desc && <div className="desc"> {item.desc} </div>}
-
                             </div>
                         </div>
                     );
-                })
-            }
+                })}
         </Slider>
     );
 };

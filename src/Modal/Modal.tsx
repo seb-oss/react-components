@@ -42,20 +42,12 @@ export const Modal: React.FunctionComponent<ModalProps> = (props: ModalProps): R
 
     let classNames: string = "modal";
     classNames += props.toggle ? " show" : " fade";
-    classNames += !!props.position ? (" modal-aside modal-aside-" + (props.position === "left" ? "left" : "right")) : "";
+    classNames += !!props.position ? " modal-aside modal-aside-" + (props.position === "left" ? "left" : "right") : "";
     classNames += props.fullscreen ? " modal-fullscreen" : "";
     classNames += props.className ? " " + props.className : "";
 
     return (
-        <div
-            role="dialog"
-            tabIndex={-1}
-            className={classNames}
-            id={props.id}
-            ref={focusWhenToggled}
-            aria-label={props.ariaLabel}
-            aria-describedby={props.ariaDescribedby}
-        >
+        <div role="dialog" tabIndex={-1} className={classNames} id={props.id} ref={focusWhenToggled} aria-label={props.ariaLabel} aria-describedby={props.ariaDescribedby}>
             <div className="modal-backdrop" onClick={onDismiss} />
             <div role="document" className="modal-dialog" tabIndex={-1}>
                 <div className="modal-content">

@@ -10,15 +10,17 @@ export interface LoaderProps {
 export const Loader: React.FunctionComponent<LoaderProps> = (props: LoaderProps): React.ReactElement<void> => {
     const fullscreen: boolean = props.fullscreen === undefined ? true : props.fullscreen;
     let loaderWrapper: string = "loader-cropper ";
-    if (fullscreen) { loaderWrapper += "fullscreen "; }
+    if (fullscreen) {
+        loaderWrapper += "fullscreen ";
+    }
 
     return (
         <div className={loaderWrapper + (props.className ? props.className : "")}>
-            {props.toggle &&
+            {props.toggle && (
                 <div className="loader-holder">
                     <div className="loader" />
                 </div>
-            }
+            )}
         </div>
     );
 };

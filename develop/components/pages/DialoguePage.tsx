@@ -10,7 +10,6 @@ const DialoguePage: React.FunctionComponent = () => {
     return (
         <div className="route-template container">
             <div className="info-holder">
-
                 <div className="info">
                     <div className="md-file">
                         <Highlight innerHTML={true}>{docMD}</Highlight>
@@ -21,10 +20,7 @@ const DialoguePage: React.FunctionComponent = () => {
                     <h2>Output</h2>
                     <p>Here are sample outputs</p>
                     <div className="result">
-                        <Button
-                            label="Trigger dialogue"
-                            onClick={() => setDialogue(true)}
-                        />
+                        <Button label="Trigger dialogue" onClick={() => setDialogue(true)} />
                         <Dialogue
                             header="Are you sure?"
                             desc="Lorem ipsum dolor sit amet, ius quis veniam ad, mea id nemore probatus sensibus. Sed  lorem everti menandri cu, habeo."
@@ -39,9 +35,7 @@ const DialoguePage: React.FunctionComponent = () => {
                         />
                     </div>
                 </div>
-
             </div>
-
         </div>
     );
 };

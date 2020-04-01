@@ -37,18 +37,36 @@ describe("Component: Timeline", () => {
         // Vertical
         const verticalClick = jest.fn();
         const verticalWrapper = shallow(<Timeline list={timelineList} />);
-        verticalWrapper.find(".title-wrapper").first().simulate("click");
+        verticalWrapper
+            .find(".title-wrapper")
+            .first()
+            .simulate("click");
         verticalWrapper.setProps({ onClick: verticalClick });
-        verticalWrapper.find(".title-wrapper").first().simulate("click");
+        verticalWrapper
+            .find(".title-wrapper")
+            .first()
+            .simulate("click");
         expect(verticalClick).toBeCalled();
         // Horizontal
         const horizontalClick = jest.fn();
         const horizontalWrapper = shallow(<Timeline list={timelineList} direction="horizontal" />);
-        horizontalWrapper.find(".title-wrapper").first().simulate("click");
-        horizontalWrapper.find(".title-wrapper").at(1).simulate("click");
+        horizontalWrapper
+            .find(".title-wrapper")
+            .first()
+            .simulate("click");
+        horizontalWrapper
+            .find(".title-wrapper")
+            .at(1)
+            .simulate("click");
         horizontalWrapper.setProps({ onClick: horizontalClick });
-        horizontalWrapper.find(".title-wrapper").first().simulate("click");
-        horizontalWrapper.find(".title-wrapper").at(1).simulate("click");
+        horizontalWrapper
+            .find(".title-wrapper")
+            .first()
+            .simulate("click");
+        horizontalWrapper
+            .find(".title-wrapper")
+            .at(1)
+            .simulate("click");
         expect(horizontalClick).toHaveBeenCalledTimes(2);
     });
 
@@ -58,27 +76,94 @@ describe("Component: Timeline", () => {
             { title: "title2", time: "time2" },
             { title: "title3", time: "time3" },
             { title: "title4", time: "time4", desc: "desc4" },
-            { title: "title5", time: "time5", desc: "desc5" },
+            { title: "title5", time: "time5", desc: "desc5" }
         ];
 
         // Vertical
         const verticalWrapper = shallow(<Timeline list={timelineList} />);
-        expect(verticalWrapper.find(".title-wrapper").at(2).find(".title").text()).toEqual("title3");
-        expect(verticalWrapper.find(".title-wrapper").at(2).find(".time").text()).toEqual("time3");
+        expect(
+            verticalWrapper
+                .find(".title-wrapper")
+                .at(2)
+                .find(".title")
+                .text()
+        ).toEqual("title3");
+        expect(
+            verticalWrapper
+                .find(".title-wrapper")
+                .at(2)
+                .find(".time")
+                .text()
+        ).toEqual("time3");
         verticalWrapper.setProps({ list: newTimelineList });
-        expect(verticalWrapper.find(".title-wrapper").at(3).find(".desc").length).toBe(1);
-        expect(verticalWrapper.find(".title-wrapper").at(3).find(".desc").text()).toEqual("desc4");
-        expect(verticalWrapper.find(".title-wrapper").at(4).find(".desc").length).toBe(1);
-        expect(verticalWrapper.find(".title-wrapper").at(4).find(".desc").text()).toEqual("desc5");
+        expect(
+            verticalWrapper
+                .find(".title-wrapper")
+                .at(3)
+                .find(".desc").length
+        ).toBe(1);
+        expect(
+            verticalWrapper
+                .find(".title-wrapper")
+                .at(3)
+                .find(".desc")
+                .text()
+        ).toEqual("desc4");
+        expect(
+            verticalWrapper
+                .find(".title-wrapper")
+                .at(4)
+                .find(".desc").length
+        ).toBe(1);
+        expect(
+            verticalWrapper
+                .find(".title-wrapper")
+                .at(4)
+                .find(".desc")
+                .text()
+        ).toEqual("desc5");
         // Horizontal
         const horizontalWrapper = shallow(<Timeline list={timelineList} direction="horizontal" />);
-        expect(horizontalWrapper.find(".title-wrapper").at(2).find(".title").text()).toEqual("title3");
-        expect(horizontalWrapper.find(".title-wrapper").at(2).find(".time").text()).toEqual("time3");
+        expect(
+            horizontalWrapper
+                .find(".title-wrapper")
+                .at(2)
+                .find(".title")
+                .text()
+        ).toEqual("title3");
+        expect(
+            horizontalWrapper
+                .find(".title-wrapper")
+                .at(2)
+                .find(".time")
+                .text()
+        ).toEqual("time3");
         horizontalWrapper.setProps({ list: newTimelineList }).update();
-        expect(horizontalWrapper.find(".title-wrapper").at(1).find(".desc").length).toBe(1);
-        expect(horizontalWrapper.find(".title-wrapper").at(1).find(".desc").text()).toEqual("desc4");
-        expect(horizontalWrapper.find(".title-wrapper").at(4).find(".desc").length).toBe(1);
-        expect(horizontalWrapper.find(".title-wrapper").at(4).find(".desc").text()).toEqual("desc5");
+        expect(
+            horizontalWrapper
+                .find(".title-wrapper")
+                .at(1)
+                .find(".desc").length
+        ).toBe(1);
+        expect(
+            horizontalWrapper
+                .find(".title-wrapper")
+                .at(1)
+                .find(".desc")
+                .text()
+        ).toEqual("desc4");
+        expect(
+            horizontalWrapper
+                .find(".title-wrapper")
+                .at(4)
+                .find(".desc").length
+        ).toBe(1);
+        expect(
+            horizontalWrapper
+                .find(".title-wrapper")
+                .at(4)
+                .find(".desc")
+                .text()
+        ).toEqual("desc5");
     });
-
 });

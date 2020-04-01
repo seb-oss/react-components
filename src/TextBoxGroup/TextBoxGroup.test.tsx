@@ -119,7 +119,7 @@ describe("Component: TextBoxGroup", () => {
             { type: "number" },
             { disabled: true },
             { readOnly: true },
-            { placeholder: "my placeholder" },
+            { placeholder: "my placeholder" }
         ];
         optionals.map((optional: Pick<TextBoxGroupProps, keyof TextBoxGroupProps>) => {
             const key: string = Object.keys(optional)[0];
@@ -134,7 +134,13 @@ describe("Component: TextBoxGroup", () => {
     describe("Test left append", () => {
         it("Should render text and title", () => {
             wrapper.setProps({ leftText: "leftText", leftTitle: "leftTitle" });
-            expect(wrapper.find(".input-box-group-wrapper").children().at(0).hasClass("input-group-prepend")).toBeTruthy();
+            expect(
+                wrapper
+                    .find(".input-box-group-wrapper")
+                    .children()
+                    .at(0)
+                    .hasClass("input-group-prepend")
+            ).toBeTruthy();
             expect(wrapper.find(".input-group-text").length).toBe(1);
             expect(wrapper.find(".input-group-text").prop("title")).toEqual("leftTitle");
             expect(wrapper.find(".input-group-text").text()).toEqual("leftText");
@@ -145,7 +151,12 @@ describe("Component: TextBoxGroup", () => {
             const testIcon: JSX.Element = <svg />;
             wrapper.setProps({ leftIcon: testIcon, onLeftClick });
             expect(wrapper.find(".input-group-prepend").hasClass("clickable")).toBeTruthy();
-            expect(wrapper.find(".input-group-text").childAt(0).matchesElement(testIcon)).toBeTruthy();
+            expect(
+                wrapper
+                    .find(".input-group-text")
+                    .childAt(0)
+                    .matchesElement(testIcon)
+            ).toBeTruthy();
             wrapper.find(".input-group-prepend").simulate("click");
             expect(onLeftClick).toBeCalled();
         });
@@ -154,7 +165,13 @@ describe("Component: TextBoxGroup", () => {
     describe("Test right append", () => {
         it("Should render text and title", () => {
             wrapper.setProps({ rightText: "rightText", rightTitle: "rightTitle" });
-            expect(wrapper.find(".input-box-group-wrapper").children().at(1).hasClass("input-group-append")).toBeTruthy();
+            expect(
+                wrapper
+                    .find(".input-box-group-wrapper")
+                    .children()
+                    .at(1)
+                    .hasClass("input-group-append")
+            ).toBeTruthy();
             expect(wrapper.find(".input-group-text").length).toBe(1);
             expect(wrapper.find(".input-group-text").prop("title")).toEqual("rightTitle");
             expect(wrapper.find(".input-group-text").text()).toEqual("rightText");
@@ -165,7 +182,12 @@ describe("Component: TextBoxGroup", () => {
             const testIcon: JSX.Element = <svg />;
             wrapper.setProps({ rightIcon: testIcon, onRightClick });
             expect(wrapper.find(".input-group-append").hasClass("clickable")).toBeTruthy();
-            expect(wrapper.find(".input-group-text").childAt(0).matchesElement(testIcon)).toBeTruthy();
+            expect(
+                wrapper
+                    .find(".input-group-text")
+                    .childAt(0)
+                    .matchesElement(testIcon)
+            ).toBeTruthy();
             wrapper.find(".input-group-append").simulate("click");
             expect(onRightClick).toBeCalled();
         });

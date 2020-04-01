@@ -43,5 +43,4 @@ describe("Component: Loader", () => {
             });
         });
     });
-
 });

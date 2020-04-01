@@ -1,4 +1,3 @@
-
 (window as any).global = window;
 /**
  * buffer was removed from node recent version and moved into a seperate dependency.

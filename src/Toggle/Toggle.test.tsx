@@ -36,8 +36,12 @@ describe("Component: Toggle ", () => {
     it("Should fire change event when changed", () => {
         wrapper.find("input").simulate("change", { target: { value: false } });
         wrapper.find("input").simulate("focus", {
-            preventDefault: () => { console.log("Its preventing the default"); },
-            stopPropagation: () => { console.log("We are stopping propagation "); }
+            preventDefault: () => {
+                console.log("Its preventing the default");
+            },
+            stopPropagation: () => {
+                console.log("We are stopping propagation ");
+            }
         });
         expect(props.onChange).toBeCalled();
     });

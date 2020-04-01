@@ -5,7 +5,7 @@ import { Pagination } from "../../../src/Pagination/Pagination";
 import { Dropdown, DropdownItem } from "../../../src/Dropdown/Dropdown";
 import { TextBox } from "../../../src/TextBox/TextBox";
 import { Button } from "../../../src/Button/Button";
-const Highlight = require("react-highlight").default;
+import Highlight from "react-highlight";
 const docMD = require("../../../src/Table/readme.md");
 
 interface TableDataProps {

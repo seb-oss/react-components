@@ -7,7 +7,6 @@ const TimerPage: React.FunctionComponent = () => {
     return (
         <div className="route-template container">
             <div className="info-holder">
-
                 <div className="info">
                     <div className="md-file">
                         <Highlight innerHTML={true}>{docMD}</Highlight>
@@ -20,11 +19,12 @@ const TimerPage: React.FunctionComponent = () => {
                     <div className="result">
                         <Timer
                             duration={900000}
-                            callback={() => { console.log("TIMER ENDED callback"); }}
+                            callback={() => {
+                                console.log("TIMER ENDED callback");
+                            }}
                         />
                     </div>
                 </div>
-
             </div>
         </div>
     );
