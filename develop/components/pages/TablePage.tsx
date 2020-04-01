@@ -173,7 +173,8 @@ const TablePage: React.FunctionComponent = () => {
         onAfterEdit: (rows: Array<TableRow>) => {
             setEditMode(null);
         },
-        mode: editMode
+        mode: editMode,
+        blackListedAccessors: ["firstName"]
     };
 
     const data: Array<DataItem<TableDataProps>> = React.useMemo(
