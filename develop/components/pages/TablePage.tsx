@@ -24,21 +24,52 @@ const TablePage: React.FunctionComponent = () => {
     const [dropDownList1Selected, setDropdownList1Selected] = React.useState<Array<DropdownItem>>([]);
     const [statusDropdownSelected, setStatusDropdownSelected] = React.useState<Array<DropdownItem>>([]);
     const [ageDropdownSelected, setAgeDropdownSelected] = React.useState<Array<DropdownItem>>([]);
+    const [blackListDropdownSelected, setBlacklisteDropdownSelected] = React.useState<Array<DropdownItem>>([]);
     const [textBoxValue2, setTextBoxValue2] = React.useState<string>("");
     const [searchTriggered, setSearchTriggered] = React.useState<boolean>(false);
     const [editMode, setEditMode] = React.useState<EditMode>(null);
+    const [editableColumns, setEditableColumns] = React.useState<Array<TableHeader>>([
+        {
+            label: "id",
+            accessor: "id",
+            canSort: false
+        },
+        {
+            label: "First Name",
+            accessor: "firstName"
+        },
+        {
+            label: "Last Name",
+            accessor: "lastName"
+        },
+        {
+            label: "Age",
+            accessor: "age"
+        },
+        {
+            label: "Visits",
+            accessor: "visits"
+        },
+        {
+            label: "Profile Progress",
+            accessor: "progress"
+        },
+        {
+            label: "Status",
+            accessor: "status"
+        }
+    ]);
+
     const columns: Array<Column> = React.useMemo(
         () => [
             {
                 label: "id",
                 accessor: "id",
-                canSort: false,
-                canEdit: false
+                canSort: false
             },
             {
                 label: "First Name",
-                accessor: "firstName",
-                canEdit: false
+                accessor: "firstName"
             },
             {
                 label: "Last Name",
@@ -63,8 +94,20 @@ const TablePage: React.FunctionComponent = () => {
         ],
         []
     );
-
     const [filters, setFilters] = React.useState<Array<FilterItem>>(columns.map((column: Column) => ({ accessor: column.accessor, filters: [] })));
+
+    React.useEffect(() => {
+        const isBlackListed: (c: string) => boolean = (accessor: string) => blackListDropdownSelected?.some((item: DropdownItem) => item.value === accessor);
+        const updateColumns: Array<TableHeader> = editableColumns?.map((column: Column) => {
+            if (isBlackListed(column?.accessor)) {
+                return { ...column, isHidden: true };
+            }
+
+            return { ...column, isHidden: false };
+        });
+
+        setEditableColumns(updateColumns);
+    }, [blackListDropdownSelected]);
 
     React.useEffect(() => {
         const updatedFilter: Array<string> = statusDropdownSelected?.map((item: DropdownItem) => item.value);
@@ -167,6 +210,8 @@ const TablePage: React.FunctionComponent = () => {
         []
     );
 
+    const columnsDropDownList: Array<DropdownItem> = React.useMemo(() => columns.map((column: Column) => ({ value: column.accessor, label: column.label as string })).sort(), []);
+
     return (
         <div className="route-template container">
             <div className="info-holder">
@@ -193,6 +238,21 @@ const TablePage: React.FunctionComponent = () => {
                                 onAfterSorting: (rows: Array<TableRow>, sortByColumn: TableHeader) => {}
                             }}
                         />
+                    </div>
+
+                    <p>Here are sample outputs with hidden columns</p>
+                    <div className="result wide">
+                        <div className="row">
+                            <div className="col-3">
+                                <Dropdown
+                                    list={columnsDropDownList}
+                                    selectedValue={blackListDropdownSelected}
+                                    onChange={(value: Array<DropdownItem>) => setBlacklisteDropdownSelected(value)}
+                                    multi={true}
+                                />
+                            </div>
+                        </div>
+                        <Table columns={editableColumns} data={smallData} />
                     </div>
 
                     <p>Here an example with pagination</p>

@@ -44,6 +44,7 @@ export interface Column {
     label: string | React.ReactNode;
     accessor: string;
     canSort?: boolean;
+    isHidden?: boolean;
 }
 
 export interface ActionLinkItem {
@@ -67,6 +68,7 @@ interface Cell {
     accessor: string;
     value: string | number | boolean;
     canEdit?: boolean;
+    hidden?: boolean;
 }
 
 export interface TableRow {
@@ -365,7 +367,7 @@ const RowUI: React.FunctionComponent<RowUIProps> = (props: RowUIProps) => {
                     )
                 )}
                 {props.row.cells.map((cell: Cell, cellIndex: number) => {
-                    return (
+                    return !cell.hidden ? (
                         <td key={`${props.type}-${cellIndex}`}>
                             {props.row?.isEditMode && cell.canEdit ? (
                                 <TextboxGroup
@@ -380,7 +382,7 @@ const RowUI: React.FunctionComponent<RowUIProps> = (props: RowUIProps) => {
                                 cell.value
                             )}
                         </td>
-                    );
+                    ) : null;
                 })}
                 {props.useShowActionColumn && (
                     <td>
@@ -499,26 +501,28 @@ const TableUI: React.FunctionComponent<TableUIProps> = React.memo(
                             ) : (
                                 props.rowsAreCollapsable && <th />
                             )}
-                            {props.columns?.map((header: TableHeader, index: number) => (
-                                <th
-                                    key={index}
-                                    className={props.sortable && header.canSort ? "sortable" : ""}
-                                    onClick={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-                                        if (props.sortable && header.canSort) {
-                                            props.onSort(header?.accessor, header.isSortedDesc ? sortDirectionTypes.Ascending : sortDirectionTypes.Descending);
-                                        } else {
-                                            e.preventDefault();
-                                        }
-                                    }}
-                                >
-                                    {header.label}
-                                    {props.sortable && header.canSort && (
-                                        <div role="link" className={"icon-holder" + (header.isSorted ? (header.isSortedDesc ? " desc" : " asc") : "")} id={header.accessor}>
-                                            {defaultSort}
-                                        </div>
-                                    )}
-                                </th>
-                            ))}
+                            {props.columns?.map((header: TableHeader, index: number) => {
+                                return !header.isHidden ? (
+                                    <th
+                                        key={index}
+                                        className={props.sortable && header.canSort ? "sortable" : ""}
+                                        onClick={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+                                            if (props.sortable && header.canSort) {
+                                                props.onSort(header?.accessor, header.isSortedDesc ? sortDirectionTypes.Ascending : sortDirectionTypes.Descending);
+                                            } else {
+                                                e.preventDefault();
+                                            }
+                                        }}
+                                    >
+                                        {header.label}
+                                        {props.sortable && header.canSort && (
+                                            <div role="link" className={"icon-holder" + (header.isSorted ? (header.isSortedDesc ? " desc" : " asc") : "")} id={header.accessor}>
+                                                {defaultSort}
+                                            </div>
+                                        )}
+                                    </th>
+                                ) : null;
+                            })}
                             {props.useShowActionColumn && <th />}
                         </tr>
                     </thead>
@@ -1007,38 +1011,43 @@ export const Table: React.FunctionComponent<TableProps> = React.memo(
          *
          * @param rows The table or or data to initialize rows from
          */
-        const getRows = React.useCallback((rows: Array<DataItem<any>>): Array<TableRow> => {
-            const isBlackListed: (a: string) => boolean = (accessor: string): boolean => ["id", ...(props.editProps?.blackListedAccessors || [])].indexOf(accessor) > -1;
-            const updatedRows: Array<TableRow> = rows?.map((row: TableRow, index: number) => {
-                const updatedCells: Array<Cell> = Object.keys(row)
-                    .filter((key: string) => {
-                        return ["rowContentDetail", "subRows", "cells", "expanded", "actionsDropdownDropped", "selected", "rowIndex"].indexOf(key) < 0;
-                    })
-                    .map(
-                        (accessor: string): Cell => {
-                            return {
-                                id: accessor,
-                                accessor,
-                                value: row[accessor],
-                                canEdit: !isBlackListed(accessor)
-                            };
-                        }
-                    );
+        const getRows = React.useCallback(
+            (rows: Array<DataItem<any>>): Array<TableRow> => {
+                const isBlackListed: (a: string) => boolean = (accessor: string): boolean => ["id", ...(props.editProps?.blackListedAccessors || [])].indexOf(accessor) > -1;
+                const isBlackListedForDisplay: (a: string) => boolean = (accessor: string): boolean => props.columns?.some((column: Column) => column.accessor === accessor && column?.isHidden);
+                const updatedRows: Array<TableRow> = rows?.map((row: TableRow, index: number) => {
+                    const updatedCells: Array<Cell> = Object.keys(row)
+                        .filter((key: string) => {
+                            return ["rowContentDetail", "subRows", "cells", "expanded", "actionsDropdownDropped", "selected", "rowIndex"].indexOf(key) < 0;
+                        })
+                        .map(
+                            (accessor: string): Cell => {
+                                return {
+                                    id: accessor,
+                                    accessor,
+                                    value: row[accessor],
+                                    canEdit: !isBlackListed(accessor),
+                                    hidden: isBlackListedForDisplay(accessor)
+                                };
+                            }
+                        );
 
-                return {
-                    ...row,
-                    rowIndex: index,
-                    cells: updatedCells,
-                    selected: row.selected || false,
-                    actionsDropdownDropped: row.actionsDropdownDropped || false,
-                    expanded: row.expanded || false,
-                    subRows: row.subRows ? getRows(row.subRows) : [],
-                    isEditMode: row.isEditMode || false
-                };
-            });
+                    return {
+                        ...row,
+                        rowIndex: index,
+                        cells: updatedCells,
+                        selected: row.selected || false,
+                        actionsDropdownDropped: row.actionsDropdownDropped || false,
+                        expanded: row.expanded || false,
+                        subRows: row.subRows ? getRows(row.subRows) : [],
+                        isEditMode: row.isEditMode || false
+                    };
+                });
 
-            return updatedRows || [];
-        }, []);
+                return updatedRows || [];
+            },
+            [props.columns]
+        );
 
         /**
          * Call when item is selected
@@ -1079,7 +1088,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo(
             setTableRows(updatedRows);
             setTableEditRows(editTableRows);
             setTableRowsImage(updatedRows);
-        }, [props.data]);
+        }, [props.data, props.columns]);
 
         const doPaginate = React.useCallback((): void => {
             const chosenRows: Array<TableRow> = tableEditRows?.length ? tableEditRows : tableRows;
@@ -1238,7 +1247,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo(
 
         React.useEffect(() => {
             setDefaultTableRows();
-        }, [props.data]);
+        }, [props.data, props.columns]);
 
         React.useEffect(() => {
             doPaginate();
