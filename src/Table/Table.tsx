@@ -1016,21 +1016,17 @@ export const Table: React.FunctionComponent<TableProps> = React.memo(
                 const isBlackListedForEdit: (a: string) => boolean = (accessor: string): boolean => ["id", ...(props.editProps?.blackListedAccessors || [])].indexOf(accessor) > -1;
                 const isHiddenColumn: (a: string) => boolean = (accessor: string): boolean => props.columns?.some((column: Column) => column.accessor === accessor && column?.isHidden);
                 const updatedRows: Array<TableRow> = rows?.map((row: TableRow, index: number) => {
-                    const updatedCells: Array<Cell> = Object.keys(row)
-                        .filter((key: string) => {
-                            return ["rowContentDetail", "subRows", "cells", "expanded", "actionsDropdownDropped", "selected", "rowIndex"].indexOf(key) < 0;
-                        })
-                        .map(
-                            (accessor: string): Cell => {
-                                return {
-                                    id: accessor,
-                                    accessor,
-                                    value: row[accessor],
-                                    canEdit: !isBlackListedForEdit(accessor),
-                                    hidden: isHiddenColumn(accessor),
-                                };
-                            }
-                        );
+                    const updatedCells: Array<Cell> = props.columns?.map(
+                        (column: Column): Cell => {
+                            return {
+                                id: column.accessor,
+                                accessor: column?.accessor,
+                                value: row[column?.accessor],
+                                canEdit: !isBlackListedForEdit(column?.accessor),
+                                hidden: isHiddenColumn(column?.accessor),
+                            };
+                        }
+                    );
 
                     return {
                         ...row,
