@@ -1013,8 +1013,8 @@ export const Table: React.FunctionComponent<TableProps> = React.memo(
          */
         const getRows = React.useCallback(
             (rows: Array<DataItem<any>>): Array<TableRow> => {
-                const isBlackListed: (a: string) => boolean = (accessor: string): boolean => ["id", ...(props.editProps?.blackListedAccessors || [])].indexOf(accessor) > -1;
-                const isBlackListedForDisplay: (a: string) => boolean = (accessor: string): boolean => props.columns?.some((column: Column) => column.accessor === accessor && column?.isHidden);
+                const isBlackListedForEdit: (a: string) => boolean = (accessor: string): boolean => ["id", ...(props.editProps?.blackListedAccessors || [])].indexOf(accessor) > -1;
+                const isHiddenColumn: (a: string) => boolean = (accessor: string): boolean => props.columns?.some((column: Column) => column.accessor === accessor && column?.isHidden);
                 const updatedRows: Array<TableRow> = rows?.map((row: TableRow, index: number) => {
                     const updatedCells: Array<Cell> = Object.keys(row)
                         .filter((key: string) => {
@@ -1026,8 +1026,8 @@ export const Table: React.FunctionComponent<TableProps> = React.memo(
                                     id: accessor,
                                     accessor,
                                     value: row[accessor],
-                                    canEdit: !isBlackListed(accessor),
-                                    hidden: isBlackListedForDisplay(accessor),
+                                    canEdit: !isBlackListedForEdit(accessor),
+                                    hidden: isHiddenColumn(accessor),
                                 };
                             }
                         );
