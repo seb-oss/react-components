@@ -76,6 +76,18 @@ $close-button-size: 15px;
                     .dialogue-button {
                         min-width: 120px;
                         font-size: $default;
+                        &.btn-primary {
+                            background: $blue-dark;
+                            &:hover {
+                                background: $blue-darker;
+                            }
+                            &:active {
+                                background-color: $blue-darker !important;
+                            }
+                        }
+                        &.btn-secondary {
+                            border: 1px solid $blue-dark;
+                        }
                     }
                     &:first-child {
                         padding-right: 16px;
