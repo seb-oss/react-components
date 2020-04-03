@@ -61,6 +61,26 @@ describe("Component: Table", () => {
         expect(container).toBeDefined();
     });
 
+    it("Should render and alloow blacklisting or hiding columns ", () => {
+        act(() => {
+            render(<Table columns={columns} data={smallData} />, container);
+        });
+        expect(container.querySelectorAll("thead > tr > th").length).toEqual(columns.length);
+
+        const editableColumns: Array<Column> = columns?.map((column: Column, index: number) => {
+            if (index === 1) {
+                return { ...column, isHidden: true };
+            }
+            return column;
+        });
+
+        act(() => {
+            render(<Table columns={editableColumns} data={smallData} />, container);
+        });
+
+        expect(container.querySelectorAll("thead > tr > th").length).toEqual(columns.length - 1);
+    });
+
     it("Should render and be able to sort rows ", () => {
         const event: jest.Mock = jest.fn((rows: Array<TableRow>, sortByColumn: TableHeader) => console.log("onAfterSorting called"));
         const onSortEvent: jest.Mock = jest.fn((rows: Array<TableRow>, accessor: string, sortingOrder: sortDirectionTypes) => rows.slice(0, 2));
