@@ -55,7 +55,7 @@ export class Tooltip extends React.Component<TooltipProps, TooltipState> {
 
         this.state = {
             visible: false,
-            referenceId: randomId("tooltip-ref")
+            referenceId: randomId("tooltip-ref"),
         };
 
         this.forceDismiss = this.forceDismiss.bind(this);
@@ -139,7 +139,7 @@ export class Tooltip extends React.Component<TooltipProps, TooltipState> {
         const isVisible: boolean = toggle !== undefined ? toggle : !this.state.visible;
         this.setState(
             {
-                visible: isVisible
+                visible: isVisible,
             },
             () => {
                 this.props.onVisibleChange && this.props.onVisibleChange(e, isVisible);

@@ -7,11 +7,11 @@ describe("Component: RadioGroup", () => {
         list: [
             { value: "option1", label: "option1" },
             { value: "option2", label: "option2", description: "desc" },
-            { value: "option3", label: "option3", disabled: true }
+            { value: "option3", label: "option3", disabled: true },
         ],
         onChange: jest.fn(),
         value: "male",
-        name: "gender"
+        name: "gender",
     };
     let wrapper: ShallowWrapper<RadioGroupProps>;
     let mountedWrapper: ReactWrapper<RadioGroupProps>;
@@ -47,28 +47,9 @@ describe("Component: RadioGroup", () => {
         expect(wrapper.find(".radio-group-label").length).toBe(1);
         expect(wrapper.find(".radio-group-label").text()).toEqual(label);
         // Item label and description
-        expect(
-            wrapper
-                .find(".custom-control")
-                .first()
-                .find(".custom-control-label")
-                .first()
-                .text()
-        ).toEqual(props.list[0].label);
-        expect(
-            wrapper
-                .find(".custom-control")
-                .at(1)
-                .find(".radio-description").length
-        ).toBe(1);
-        expect(
-            wrapper
-                .find(".custom-control")
-                .at(1)
-                .find(".radio-description")
-                .first()
-                .text()
-        ).toEqual(props.list[1].description);
+        expect(wrapper.find(".custom-control").first().find(".custom-control-label").first().text()).toEqual(props.list[0].label);
+        expect(wrapper.find(".custom-control").at(1).find(".radio-description").length).toBe(1);
+        expect(wrapper.find(".custom-control").at(1).find(".radio-description").first().text()).toEqual(props.list[1].description);
     });
 
     it("Should render group items in inline mode", () => {
@@ -78,34 +59,10 @@ describe("Component: RadioGroup", () => {
     });
 
     it("Should render disabled inputs when disabled is passed in item or in disableAll prop", () => {
-        expect(
-            wrapper
-                .find(".custom-control")
-                .at(2)
-                .find(".custom-control-input")
-                .prop("disabled")
-        ).toBeTruthy();
+        expect(wrapper.find(".custom-control").at(2).find(".custom-control-input").prop("disabled")).toBeTruthy();
         wrapper.setProps({ disableAll: true });
-        expect(
-            wrapper
-                .find(".custom-control")
-                .at(0)
-                .find(".custom-control-input")
-                .prop("disabled")
-        ).toBeTruthy();
-        expect(
-            wrapper
-                .find(".custom-control")
-                .at(1)
-                .find(".custom-control-input")
-                .prop("disabled")
-        ).toBeTruthy();
-        expect(
-            wrapper
-                .find(".custom-control")
-                .at(2)
-                .find(".custom-control-input")
-                .prop("disabled")
-        ).toBeTruthy();
+        expect(wrapper.find(".custom-control").at(0).find(".custom-control-input").prop("disabled")).toBeTruthy();
+        expect(wrapper.find(".custom-control").at(1).find(".custom-control-input").prop("disabled")).toBeTruthy();
+        expect(wrapper.find(".custom-control").at(2).find(".custom-control-input").prop("disabled")).toBeTruthy();
     });
 });

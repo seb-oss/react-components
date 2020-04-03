@@ -40,7 +40,7 @@ const RadioGroupPage: React.FunctionComponent = () => {
 const radioList: Array<RadioListModel> = [
     { value: "first", label: "Radio 1" },
     { value: "second", label: "Radio 2", description: "Some description" },
-    { value: "third", label: "Radio 3", description: "Disabled", disabled: true }
+    { value: "third", label: "Radio 3", description: "Disabled", disabled: true },
 ];
 
 export default RadioGroupPage;

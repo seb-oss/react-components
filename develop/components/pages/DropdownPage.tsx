@@ -123,7 +123,7 @@ const dropDownList1: Array<DropdownItem> = [
     { value: "4", label: "Guinea" },
     { value: "5", label: "Syrian Arab Republic" },
     { value: "6", label: "Tanzania" },
-    { value: "7", label: "Anguilla" }
+    { value: "7", label: "Anguilla" },
 ];
 const dropDownList2: Array<DropdownItem> = [
     { value: "1", label: "Mexico" },
@@ -132,7 +132,7 @@ const dropDownList2: Array<DropdownItem> = [
     { value: "4", label: "Poland" },
     { value: "5", label: "Montenegro" },
     { value: "6", label: "Iran" },
-    { value: "7", label: "Myanmar" }
+    { value: "7", label: "Myanmar" },
 ];
 const dropDownList3: Array<DropdownItem> = [
     { value: "1", label: "Paraguay" },
@@ -141,7 +141,7 @@ const dropDownList3: Array<DropdownItem> = [
     { value: "4", label: "Montserrat" },
     { value: "5", label: "Thailand" },
     { value: "6", label: "Japan" },
-    { value: "7", label: "Saint Vincent and the Grenadines" }
+    { value: "7", label: "Saint Vincent and the Grenadines" },
 ];
 const dropDownList4: Array<DropdownItem> = [
     { value: "1", label: "Sierra Leone" },
@@ -150,7 +150,7 @@ const dropDownList4: Array<DropdownItem> = [
     { value: "4", label: "Latvia" },
     { value: "5", label: "Slovenia" },
     { value: "6", label: "Argentina" },
-    { value: "7", label: "Solomon Islands" }
+    { value: "7", label: "Solomon Islands" },
 ];
 
 export default DropdownPage;

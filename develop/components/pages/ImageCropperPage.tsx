@@ -33,7 +33,7 @@ const cropperConfigs: OptionProps = {
     responsive: true,
     zoomable: false,
     aspectRatio: 1 / 1,
-    rotatable: false
+    rotatable: false,
 };
 
 export default ImageCropperPage;

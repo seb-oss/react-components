@@ -32,32 +32,32 @@ const TablePage: React.FunctionComponent = () => {
         {
             label: "id",
             accessor: "id",
-            canSort: false
+            canSort: false,
         },
         {
             label: "First Name",
-            accessor: "firstName"
+            accessor: "firstName",
         },
         {
             label: "Last Name",
-            accessor: "lastName"
+            accessor: "lastName",
         },
         {
             label: "Age",
-            accessor: "age"
+            accessor: "age",
         },
         {
             label: "Visits",
-            accessor: "visits"
+            accessor: "visits",
         },
         {
             label: "Profile Progress",
-            accessor: "progress"
+            accessor: "progress",
         },
         {
             label: "Status",
-            accessor: "status"
-        }
+            accessor: "status",
+        },
     ]);
 
     const columns: Array<Column> = React.useMemo(
@@ -65,32 +65,32 @@ const TablePage: React.FunctionComponent = () => {
             {
                 label: "id",
                 accessor: "id",
-                canSort: false
+                canSort: false,
             },
             {
                 label: "First Name",
-                accessor: "firstName"
+                accessor: "firstName",
             },
             {
                 label: "Last Name",
-                accessor: "lastName"
+                accessor: "lastName",
             },
             {
                 label: "Age",
-                accessor: "age"
+                accessor: "age",
             },
             {
                 label: "Visits",
-                accessor: "visits"
+                accessor: "visits",
             },
             {
                 label: "Profile Progress",
-                accessor: "progress"
+                accessor: "progress",
             },
             {
                 label: "Status",
-                accessor: "status"
-            }
+                accessor: "status",
+            },
         ],
         []
     );
@@ -137,12 +137,12 @@ const TablePage: React.FunctionComponent = () => {
 
     const primaryButton: PrimaryActionButton = {
         label: "Buy",
-        onClick: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, selectedRow: TableRow) => {}
+        onClick: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, selectedRow: TableRow) => {},
     };
 
     const actionLinks: Array<ActionLinkItem> = [
         { label: "Add", onClick: (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>, selectedRow: TableRow) => {} },
-        { label: "Edit", onClick: (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>, selectedRow: TableRow) => {} }
+        { label: "Edit", onClick: (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>, selectedRow: TableRow) => {} },
     ];
 
     const filterProps: FilterProps = {
@@ -166,7 +166,7 @@ const TablePage: React.FunctionComponent = () => {
             }
             setFilters(updatedFilters);
         },
-        filterItems: filters
+        filterItems: filters,
     };
 
     const editProps: EditProps = {
@@ -174,7 +174,7 @@ const TablePage: React.FunctionComponent = () => {
             setEditMode(null);
         },
         mode: editMode,
-        blackListedAccessors: ["firstName"]
+        blackListedAccessors: ["firstName"],
     };
 
     const data: Array<DataItem<TableDataProps>> = React.useMemo(
@@ -236,7 +236,7 @@ const TablePage: React.FunctionComponent = () => {
                             columns={columns}
                             data={smallData}
                             sortProps={{
-                                onAfterSorting: (rows: Array<TableRow>, sortByColumn: TableHeader) => {}
+                                onAfterSorting: (rows: Array<TableRow>, sortByColumn: TableHeader) => {},
                             }}
                         />
                     </div>
@@ -340,12 +340,12 @@ const TablePage: React.FunctionComponent = () => {
                                 searchText: textBoxValue2,
                                 triggerSearchOn: "Submit",
                                 searchTriggered: searchTriggered,
-                                onSearch: (searchResults: Array<TableRow>) => {}
+                                onSearch: (searchResults: Array<TableRow>) => {},
                             }}
                             primaryActionButton={primaryButton}
                             actionLinks={actionLinks}
                             sortProps={{
-                                onAfterSorting: (rows: Array<TableRow>, sortByColumn: TableHeader) => {}
+                                onAfterSorting: (rows: Array<TableRow>, sortByColumn: TableHeader) => {},
                             }}
                             onRowSelected={(rows: Array<TableRow>) => {}}
                             onRowExpanded={(rows: Array<TableRow>) => {}}
@@ -361,7 +361,7 @@ const TablePage: React.FunctionComponent = () => {
 const dropDownList1: Array<DropdownItem> = [
     { value: "id", label: "Id" },
     { value: "firstName", label: "First Name" },
-    { value: "lastName", label: "Last Name" }
+    { value: "lastName", label: "Last Name" },
 ];
 
 export default TablePage;

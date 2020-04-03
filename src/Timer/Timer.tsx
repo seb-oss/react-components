@@ -17,7 +17,7 @@ export class Timer extends React.Component<TimerProps, TimerState> {
         super(props);
 
         this.state = {
-            timer: "00:00"
+            timer: "00:00",
         };
     }
 

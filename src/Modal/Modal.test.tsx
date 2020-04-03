@@ -66,7 +66,7 @@ describe("Component: Modal", () => {
             toggle: true,
             header: <h1>Header</h1>,
             body: <p>Body</p>,
-            footer: <p>Footer</p>
+            footer: <p>Footer</p>,
         });
         expect(wrapper.find(".modal-header").text()).toEqual("Header");
         expect(wrapper.find(".modal-body").text()).toEqual("Body");
@@ -103,29 +103,9 @@ describe("Component: Modal", () => {
     it("Should pass accessibility attributes", () => {
         const accessibilityAttributes: ModalProps = { ...modalProps, ariaLabel: "MyLabel", ariaDescribedby: "MyDescription" };
         const mountedWrapper: ReactWrapper<ModalProps> = mount(<Modal {...accessibilityAttributes} />);
-        expect(
-            mountedWrapper
-                .find(".modal")
-                .getDOMNode()
-                .hasAttribute("aria-label")
-        ).toBeTruthy();
-        expect(
-            mountedWrapper
-                .find(".modal")
-                .getDOMNode()
-                .getAttribute("aria-label")
-        ).toEqual(accessibilityAttributes.ariaLabel);
-        expect(
-            mountedWrapper
-                .find(".modal")
-                .getDOMNode()
-                .hasAttribute("aria-describedby")
-        ).toBeTruthy();
-        expect(
-            mountedWrapper
-                .find(".modal")
-                .getDOMNode()
-                .getAttribute("aria-describedby")
-        ).toEqual(accessibilityAttributes.ariaDescribedby);
+        expect(mountedWrapper.find(".modal").getDOMNode().hasAttribute("aria-label")).toBeTruthy();
+        expect(mountedWrapper.find(".modal").getDOMNode().getAttribute("aria-label")).toEqual(accessibilityAttributes.ariaLabel);
+        expect(mountedWrapper.find(".modal").getDOMNode().hasAttribute("aria-describedby")).toBeTruthy();
+        expect(mountedWrapper.find(".modal").getDOMNode().getAttribute("aria-describedby")).toEqual(accessibilityAttributes.ariaDescribedby);
     });
 });

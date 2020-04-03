@@ -11,9 +11,9 @@ describe("Component: Chart", () => {
             {
                 label: "My First dataset",
                 data: [65, 59, 80, 81, 56, 55, 40],
-                backgroundColor: "rgba(255,99,132,0.5)"
-            }
-        ]
+                backgroundColor: "rgba(255,99,132,0.5)",
+            },
+        ],
     };
 
     const pieData: any = {
@@ -21,10 +21,10 @@ describe("Component: Chart", () => {
             {
                 data: [randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor()],
                 backgroundColor: ["#ff6384", "#36a2eb", "#cc65fe", "#ffce56"],
-                label: "Pie Dataset 1"
-            }
+                label: "Pie Dataset 1",
+            },
         ],
-        labels: ["value 1", "value 2", "value 3", "value 4"]
+        labels: ["value 1", "value 2", "value 3", "value 4"],
     };
 
     it("Should render", () => {
@@ -67,11 +67,6 @@ describe("Component: Chart", () => {
 
     it("Should render an error message if an unknown chart type is passed", () => {
         const wrapper = shallow(<Chart chartType={"bingo" as any} data={barData} />);
-        expect(
-            wrapper
-                .children()
-                .first()
-                .text()
-        ).toEqual("Unknown chart type");
+        expect(wrapper.children().first().text()).toEqual("Unknown chart type");
     });
 });

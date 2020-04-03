@@ -52,10 +52,7 @@ describe("Component: Dialogue", () => {
         const button: HTMLButtonElement = container.querySelector(".dialogue-action").querySelector("button");
         expect(button.innerHTML).toEqual("Close");
         act(() => {
-            container
-                .querySelector(".primary-action")
-                .querySelector("button")
-                .dispatchEvent(new MouseEvent("click"));
+            container.querySelector(".primary-action").querySelector("button").dispatchEvent(new MouseEvent("click"));
         });
         expect(primaryAction).not.toBeCalled();
     });

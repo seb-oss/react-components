@@ -6,7 +6,7 @@ describe("Component: Carousel", () => {
     const carouselList: Array<CarouselItem> = [
         { title: "title", desc: "desc", image: "imagepath" },
         { title: "title", desc: "desc", image: "imagepath" },
-        { title: "title", desc: "desc", image: "imagepath" }
+        { title: "title", desc: "desc", image: "imagepath" },
     ];
     let wrapper: ShallowWrapper<CarouselProps>;
 

@@ -8,7 +8,7 @@ describe("Component: Stepper", () => {
         onIncrease: jest.fn(),
         onDecrease: jest.fn(),
         min: 1,
-        max: 6
+        max: 6,
     };
 
     it("Should render", () => {

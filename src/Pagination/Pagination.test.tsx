@@ -40,62 +40,22 @@ describe("Component: RadioButton", () => {
         beforeEach(() => mountedWrapper.setProps({ useFirstAndLast: true, value: 4 }));
 
         it("Should render with default svg and sr-only", () => {
-            expect(
-                mountedWrapper
-                    .find(".nav-action")
-                    .first()
-                    .children("svg").length
-            ).toBe(1);
-            expect(
-                mountedWrapper
-                    .find(".nav-action+.sr-only")
-                    .first()
-                    .text()
-            ).toEqual("First");
-            expect(
-                mountedWrapper
-                    .find(".nav-action")
-                    .last()
-                    .children("svg").length
-            ).toBe(1);
-            expect(
-                mountedWrapper
-                    .find(".nav-action+.sr-only")
-                    .last()
-                    .text()
-            ).toEqual("Last");
+            expect(mountedWrapper.find(".nav-action").first().children("svg").length).toBe(1);
+            expect(mountedWrapper.find(".nav-action+.sr-only").first().text()).toEqual("First");
+            expect(mountedWrapper.find(".nav-action").last().children("svg").length).toBe(1);
+            expect(mountedWrapper.find(".nav-action+.sr-only").last().text()).toEqual("Last");
         });
 
         it("Should render with default text if not passed while `useTextNav` is enabled", () => {
             mountedWrapper.setProps({ useTextNav: true });
-            expect(
-                mountedWrapper
-                    .find(".nav-action")
-                    .first()
-                    .text()
-            ).toEqual("First");
-            expect(
-                mountedWrapper
-                    .find(".nav-action")
-                    .last()
-                    .text()
-            ).toEqual("Last");
+            expect(mountedWrapper.find(".nav-action").first().text()).toEqual("First");
+            expect(mountedWrapper.find(".nav-action").last().text()).toEqual("Last");
         });
 
         it("Should render with passed text while `useTextNav` is enabled", () => {
             mountedWrapper.setProps({ useTextNav: true, firstText: "firstItem", lastText: "lastItem" });
-            expect(
-                mountedWrapper
-                    .find(".nav-action")
-                    .first()
-                    .text()
-            ).toEqual("firstItem");
-            expect(
-                mountedWrapper
-                    .find(".nav-action")
-                    .last()
-                    .text()
-            ).toEqual("lastItem");
+            expect(mountedWrapper.find(".nav-action").first().text()).toEqual("firstItem");
+            expect(mountedWrapper.find(".nav-action").last().text()).toEqual("lastItem");
         });
     });
 
@@ -103,58 +63,18 @@ describe("Component: RadioButton", () => {
         beforeEach(() => mountedWrapper.setProps({ useTextNav: true, value: 4 }));
 
         it("Should render default texts if not passed", () => {
-            expect(
-                mountedWrapper
-                    .find(".nav-action")
-                    .first()
-                    .text()
-            ).toEqual("Previous");
-            expect(
-                mountedWrapper
-                    .find(".nav-action+.sr-only")
-                    .first()
-                    .text()
-            ).toEqual("Previous");
-            expect(
-                mountedWrapper
-                    .find(".nav-action")
-                    .last()
-                    .text()
-            ).toEqual("Next");
-            expect(
-                mountedWrapper
-                    .find(".nav-action+.sr-only")
-                    .last()
-                    .text()
-            ).toEqual("Next");
+            expect(mountedWrapper.find(".nav-action").first().text()).toEqual("Previous");
+            expect(mountedWrapper.find(".nav-action+.sr-only").first().text()).toEqual("Previous");
+            expect(mountedWrapper.find(".nav-action").last().text()).toEqual("Next");
+            expect(mountedWrapper.find(".nav-action+.sr-only").last().text()).toEqual("Next");
         });
 
         it("Should render passed text", () => {
             mountedWrapper.setProps({ previousText: "previousItem", nextText: "nextItem" });
-            expect(
-                mountedWrapper
-                    .find(".nav-action")
-                    .first()
-                    .text()
-            ).toEqual("previousItem");
-            expect(
-                mountedWrapper
-                    .find(".nav-action+.sr-only")
-                    .first()
-                    .text()
-            ).toEqual("previousItem");
-            expect(
-                mountedWrapper
-                    .find(".nav-action")
-                    .last()
-                    .text()
-            ).toEqual("nextItem");
-            expect(
-                mountedWrapper
-                    .find(".nav-action+.sr-only")
-                    .last()
-                    .text()
-            ).toEqual("nextItem");
+            expect(mountedWrapper.find(".nav-action").first().text()).toEqual("previousItem");
+            expect(mountedWrapper.find(".nav-action+.sr-only").first().text()).toEqual("previousItem");
+            expect(mountedWrapper.find(".nav-action").last().text()).toEqual("nextItem");
+            expect(mountedWrapper.find(".nav-action+.sr-only").last().text()).toEqual("nextItem");
         });
     });
 
@@ -168,36 +88,18 @@ describe("Component: RadioButton", () => {
 
         test("Number pagination", () => {
             mountedWrapper.setProps({ useFirstAndLast: true, offset: 5, value: 3 }); // To cover all navigation options
-            mountedWrapper
-                .find(".page-item")
-                .first()
-                .simulate("click"); // First Button
-            mountedWrapper
-                .find(".page-item")
-                .at(1)
-                .simulate("click"); // Previous Button
-            mountedWrapper
-                .find(".page-item")
-                .at(6)
-                .simulate("click"); // Next Button
-            mountedWrapper
-                .find(".page-item")
-                .last()
-                .simulate("click"); // Last Button
-            mountedWrapper
-                .find(".page-item")
-                .at(3)
-                .simulate("click"); // Number button
+            mountedWrapper.find(".page-item").first().simulate("click"); // First Button
+            mountedWrapper.find(".page-item").at(1).simulate("click"); // Previous Button
+            mountedWrapper.find(".page-item").at(6).simulate("click"); // Next Button
+            mountedWrapper.find(".page-item").last().simulate("click"); // Last Button
+            mountedWrapper.find(".page-item").at(3).simulate("click"); // Number button
 
             expect(onChange).toHaveBeenCalledTimes(5);
         });
 
         test("Dotnav pagination", () => {
             mountedWrapper.setProps({ useDotNav: true });
-            mountedWrapper
-                .find(".page-item")
-                .last()
-                .simulate("click"); // Navigate to any dot
+            mountedWrapper.find(".page-item").last().simulate("click"); // Navigate to any dot
             expect(onChange).toHaveBeenCalled();
         });
     });
@@ -215,47 +117,14 @@ describe("Component: RadioButton", () => {
             // 2 Navigations + 5 numbers (size /  offset)
             expect(mountedWrapper.find(".page-item").length).toBe(7);
             // First item is 1 and it is active
-            expect(
-                mountedWrapper
-                    .find(".page-item")
-                    .first()
-                    .find(".nav-num")
-                    .text()
-            ).toEqual("1");
-            expect(
-                mountedWrapper
-                    .find(".page-item")
-                    .first()
-                    .hasClass("active")
-            ).toBeTruthy();
+            expect(mountedWrapper.find(".page-item").first().find(".nav-num").text()).toEqual("1");
+            expect(mountedWrapper.find(".page-item").first().hasClass("active")).toBeTruthy();
             // Next button is rendered with `angle-right` svg
-            expect(
-                mountedWrapper
-                    .find(".nav-action")
-                    .first()
-                    .children("svg").length
-            ).toBe(1);
-            expect(
-                mountedWrapper
-                    .find(".nav-action")
-                    .first()
-                    .children("svg")
-                    .prop("name")
-            ).toEqual("angle-right");
+            expect(mountedWrapper.find(".nav-action").first().children("svg").length).toBe(1);
+            expect(mountedWrapper.find(".nav-action").first().children("svg").prop("name")).toEqual("angle-right");
             // Last button is rendered with `angle-double-right` svg
-            expect(
-                mountedWrapper
-                    .find(".nav-action")
-                    .last()
-                    .children("svg").length
-            ).toBe(1);
-            expect(
-                mountedWrapper
-                    .find(".nav-action")
-                    .last()
-                    .children("svg")
-                    .prop("name")
-            ).toEqual("angle-double-right");
+            expect(mountedWrapper.find(".nav-action").last().children("svg").length).toBe(1);
+            expect(mountedWrapper.find(".nav-action").last().children("svg").prop("name")).toEqual("angle-double-right");
         });
 
         it("Should render First and Previous when current page is not 1", () => {
@@ -275,47 +144,14 @@ describe("Component: RadioButton", () => {
             // 2 Navigations + 5 numbers (offset)
             expect(mountedWrapper.find(".page-item").length).toBe(7);
             // Last item is 10 and it is active
-            expect(
-                mountedWrapper
-                    .find(".page-item")
-                    .last()
-                    .find(".nav-num")
-                    .text()
-            ).toEqual("5");
-            expect(
-                mountedWrapper
-                    .find(".page-item")
-                    .last()
-                    .hasClass("active")
-            ).toBeTruthy();
+            expect(mountedWrapper.find(".page-item").last().find(".nav-num").text()).toEqual("5");
+            expect(mountedWrapper.find(".page-item").last().hasClass("active")).toBeTruthy();
             // First button is rendered with `angle-double-left` svg
-            expect(
-                mountedWrapper
-                    .find(".nav-action")
-                    .first()
-                    .children("svg").length
-            ).toBe(1);
-            expect(
-                mountedWrapper
-                    .find(".nav-action")
-                    .first()
-                    .children("svg")
-                    .prop("name")
-            ).toEqual("angle-double-left");
+            expect(mountedWrapper.find(".nav-action").first().children("svg").length).toBe(1);
+            expect(mountedWrapper.find(".nav-action").first().children("svg").prop("name")).toEqual("angle-double-left");
             // Previous button is rendered with `angle-left` svg
-            expect(
-                mountedWrapper
-                    .find(".nav-action")
-                    .last()
-                    .children("svg").length
-            ).toBe(1);
-            expect(
-                mountedWrapper
-                    .find(".nav-action")
-                    .last()
-                    .children("svg")
-                    .prop("name")
-            ).toEqual("angle-left");
+            expect(mountedWrapper.find(".nav-action").last().children("svg").length).toBe(1);
+            expect(mountedWrapper.find(".nav-action").last().children("svg").prop("name")).toEqual("angle-left");
         });
     });
 

@@ -11,7 +11,7 @@ const TooltipPage: React.FunctionComponent = () => {
     const triggerList: Array<RadioListModel<TooltipTrigger>> = [
         { label: "Click", value: "click" },
         { label: "Hover", value: "hover" },
-        { label: "Focus", value: "focus" }
+        { label: "Focus", value: "focus" },
     ];
     const themeList: Array<RadioListModel<TooltipTheme>> = [
         { label: "Primary", value: "primary" },
@@ -20,7 +20,7 @@ const TooltipPage: React.FunctionComponent = () => {
         { label: "Light", value: "light" },
         { label: "Purple", value: "purple" },
         { label: "Success", value: "success" },
-        { label: "Warning", value: "warning" }
+        { label: "Warning", value: "warning" },
     ];
     const positionList: Array<RadioListModel<TooltipPosition>> = [
         { label: "Top", value: "top" },
@@ -34,7 +34,7 @@ const TooltipPage: React.FunctionComponent = () => {
         { label: "Bottom Right", value: "bottom-right" },
         { label: "Left", value: "left" },
         { label: "Left Top", value: "left-top" },
-        { label: "Left Bottom", value: "left-bottom" }
+        { label: "Left Bottom", value: "left-bottom" },
     ];
     const defaultTooltipContent: string = "Tooltip content could be long, therefore, controlling the position and width is important";
     const nodeTooltipContent: React.ReactNode = (

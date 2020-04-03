@@ -10,12 +10,8 @@ const moreIcon: JSX.Element = (
     </svg>
 );
 
-const minDate: Date = moment()
-    .subtract(30, "years")
-    .toDate();
-const maxDate: Date = moment()
-    .add(8, "years")
-    .toDate();
+const minDate: Date = moment().subtract(30, "years").toDate();
+const maxDate: Date = moment().add(8, "years").toDate();
 
 const DatepickerPage: React.FunctionComponent = () => {
     const [datepicker, setDatepicker] = React.useState<Date>(new Date());

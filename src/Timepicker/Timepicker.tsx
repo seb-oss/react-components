@@ -20,18 +20,18 @@ export interface TimepickerValue {
 
 export const enum TimepickerDayperiodTypes {
     AM = "AM",
-    PM = "PM"
+    PM = "PM",
 }
 
 const enum TimerStepperTypes {
     Increment = "INCREMENT",
-    Decrement = "DECREMENT"
+    Decrement = "DECREMENT",
 }
 
 const enum TimerStepperContext {
     Hours = "HOURS",
     Minutes = "MINUTES",
-    Dayperiod = "DAYPERIOD"
+    Dayperiod = "DAYPERIOD",
 }
 
 export interface TimepickerProps {

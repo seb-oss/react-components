@@ -5,7 +5,7 @@ import { Timer } from "./Timer";
 describe("Component: Timer", () => {
     const props = {
         duration: 1000,
-        callback: jest.fn()
+        callback: jest.fn(),
     };
 
     it("Should render", () => {
@@ -81,7 +81,7 @@ describe("Component: Timer", () => {
     test("Timer Should not update its value when component re-renders unless receives updates", (done) => {
         const newProps = {
             duration: 3000,
-            callback: jest.fn()
+            callback: jest.fn(),
         };
         const wrapper = shallow(<Timer {...newProps} />);
         const instance: any = wrapper.instance();
@@ -105,7 +105,7 @@ describe("Component: Timer", () => {
     it("check null/undefined duration", () => {
         const newProps = {
             duration: null,
-            callback: jest.fn()
+            callback: jest.fn(),
         };
         const wrapper = shallow(<Timer {...newProps} />);
         const instance: any = wrapper.instance();

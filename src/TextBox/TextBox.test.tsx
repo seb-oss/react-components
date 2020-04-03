@@ -6,7 +6,7 @@ describe("Component: TextBox", () => {
     const props: TextBoxProps = {
         name: "MyTextBox",
         value: "",
-        onChange: jest.fn()
+        onChange: jest.fn(),
     };
     let wrapper: ShallowWrapper<TextBoxProps>;
     let mountedWrapper: ReactWrapper<TextBoxProps>;
@@ -46,7 +46,7 @@ describe("Component: TextBox", () => {
             { type: "number" },
             { disabled: true },
             { readOnly: true },
-            { placeholder: "my placeholder" }
+            { placeholder: "my placeholder" },
         ];
         optionals.map((optional: Pick<TextBoxProps, keyof TextBoxProps>) => {
             const key: string = Object.keys(optional)[0];
@@ -97,7 +97,7 @@ describe("Component: TextBox", () => {
             onKeyUp: jest.fn(),
             onKeyPress: jest.fn(),
             onFocus: jest.fn(),
-            onBlur: jest.fn()
+            onBlur: jest.fn(),
         };
         mountedWrapper = mount(<TextBox {...props} {...eventListeners} />);
         mountedWrapper.find(".form-control").simulate("keyDown", { key: "a", keyCode: 65 });

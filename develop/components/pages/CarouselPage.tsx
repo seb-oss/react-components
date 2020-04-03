@@ -40,18 +40,18 @@ const carouselList: Array<CarouselItem> = [
     {
         title: "Ipsum consequat nisl",
         desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-        image: firstImg
+        image: firstImg,
     },
     {
         title: "Interdum velit euismod",
         desc: "Lectus quam id leo in",
-        image: secondImg
+        image: secondImg,
     },
     {
         title: "Risus in hendrerit",
         desc: "Augue eget arcu dictum varius",
-        image: thirdImg
-    }
+        image: thirdImg,
+    },
 ];
 
 export default CarouselPage;

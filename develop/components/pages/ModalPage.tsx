@@ -10,7 +10,7 @@ class ModalPage extends React.Component<RouteComponentProps, Partial<ModalProps>
         toggle: false,
         fullscreen: false,
         position: null,
-        disableBackdropDismiss: false
+        disableBackdropDismiss: false,
     };
 
     constructor(props: any) {
