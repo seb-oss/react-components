@@ -1,11 +1,5 @@
-$black: #000;
-$white: #fff;
-$gray-600: #868686;
-$red-dark: #D81A1A;
-$yellow-dark: #FFB400;
-$green-darker: #379D00;
-$blue-darker: #007AC7;
-$purple-dark: #4F2C99;
+@import "../../node_modules/@sebgroup/bootstrap/scss/variables";
+
 $small: 12px;
 @mixin transform($props) {
     -webkit-transform: $props;
@@ -136,7 +130,7 @@ $small: 12px;
                     box-shadow: 0 0 0 0 rgba(0, 0, 0, 0), 1px 2px 11px rgba(0, 0, 0, 0.5);
                     top: 1px;
                     left: 1px;
-                    &+.dismiss-btn {
+                    & + .dismiss-btn {
                         top: 9px;
                         right: 7px;
                     }

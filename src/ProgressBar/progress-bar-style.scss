@@ -1,5 +1,5 @@
-$gray-300: #dedede !default;
-$green : #60cd18;
+@import "../../node_modules/@sebgroup/bootstrap/scss/variables";
+
 $transition-time: 100ms;
 
 @mixin transition($props) {
@@ -30,7 +30,7 @@ $transition-time: 100ms;
         width: 100%;
         color: black;
         will-change: color;
-        @include transition(color $transition-time*2);
+        @include transition(color $transition-time * 2);
         &.white {
             color: white;
         }

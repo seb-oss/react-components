@@ -1,8 +1,5 @@
-$white: #fff;
-$black: #000;
-$blue: #41B0EE;
-$blue-dark: #0092E1;
-$blue-darker: #007AC7;
+@import "../../node_modules/@sebgroup/bootstrap/scss/variables";
+
 @mixin transition($props) {
     -webkit-transition: $props;
     -moz-transition: $props;
@@ -12,7 +9,7 @@ $blue-darker: #007AC7;
 
 .custom-timepicker {
     display: inline-block;
-    >[class*=timepicker-] {
+    > [class*="timepicker-"] {
         display: inline-block;
         position: relative;
         text-align: center;
@@ -39,7 +36,7 @@ $blue-darker: #007AC7;
             -moz-appearance: textfield;
             appearance: none;
         }
-        >[class*=triangle-] {
+        > [class*="triangle-"] {
             cursor: pointer;
             border: 1px solid $white;
             position: relative;

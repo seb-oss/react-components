@@ -1,15 +1,9 @@
+@import "../../node_modules/@sebgroup/bootstrap/scss/variables";
+
 $transition-time: 300ms;
 $icon-size: 18px;
 $dropdown-width: 100%;
 $dropdown-toggle-height: 44px;
-$blue: #41b0ee;
-$blue-dark: #0092e1;
-$blue-darker: #007ac7;
-$body-color: #444 !default;
-$grey-500: #adadad !default;
-$gray-100: #f8f8f8;
-$red-dark: #d81a1a;
-$white: #fff;
 
 @mixin transform($props) {
     -webkit-transform: $props;
@@ -33,7 +27,7 @@ $white: #fff;
         height: $dropdown-toggle-height;
         min-width: $dropdown-width;
         padding: 0px;
-        border-color: $grey-500;
+        border-color: $gray-500;
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -235,20 +229,20 @@ $white: #fff;
     &.disabled {
         pointer-events: none;
         > .dropdown-label {
-            color: $grey-500;
+            color: $gray-500;
         }
 
         > .custom-dropdown-toggle {
-            border-color: $grey-500;
+            border-color: $gray-500;
             background-color: $gray-100;
             cursor: default;
 
             > .title {
-                color: $grey-500;
+                color: $gray-500;
             }
 
             > .right-items > .dropdown-icon-holder > svg {
-                fill: $grey-500;
+                fill: $gray-500;
                 cursor: default;
             }
 
@@ -258,7 +252,7 @@ $white: #fff;
                 &:hover {
                     background-color: $gray-100;
                     > .right-items > .dropdown-icon-holder > svg {
-                        fill: $grey-500;
+                        fill: $gray-500;
                         cursor: default;
                     }
                 }
@@ -266,7 +260,6 @@ $white: #fff;
         }
     }
 }
-
 
 .alert.custom-alert {
     padding: 0px 2px;
@@ -283,17 +276,17 @@ $white: #fff;
 // Native version
 .custom-native-dropdown {
     margin-bottom: 8px;
-    >.form-control {
+    > .form-control {
         &.disabled {
-            border-color: $grey-500;
-            color: $grey-500;
+            border-color: $gray-500;
+            color: $gray-500;
             background-color: $white;
         }
     }
-    
-    >.dropdown-label {
+
+    > .dropdown-label {
         &.disabled {
-            color: $grey-500;
+            color: $gray-500;
         }
     }
 }

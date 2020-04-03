@@ -1,6 +1,6 @@
-@import "../colours";
+@import "../../node_modules/@sebgroup/bootstrap/scss/variables";
+
 $transition-time: 200ms;
-$transparent: transparent;
 $stepper-font-size: 24px;
 
 @mixin no-user-select {
@@ -26,7 +26,7 @@ $stepper-font-size: 24px;
         padding: 0;
         &:not(.disabled) {
             background-color: $white;
-            border: 1px solid $grey-6;
+            border: 1px solid $gray-600;
             .stepper-decrement,
             .stepper-increment {
                 &:not(.disabled) {
@@ -50,13 +50,13 @@ $stepper-font-size: 24px;
             }
         }
         &.disabled {
-            background-color: $grey-8;
-            border: 1px solid $grey-7;
-            [class^=stepper-] {
-                color: $grey-7;
+            background-color: $gray-800;
+            border: 1px solid $gray-700;
+            [class^="stepper-"] {
+                color: $gray-700;
             }
         }
-        [class^=stepper-] {
+        [class^="stepper-"] {
             display: inline-flex;
             align-items: center;
             justify-content: center;
@@ -81,7 +81,7 @@ $stepper-font-size: 24px;
             &:focus {
                 border-color: $blue;
             }
-            >span {
+            > span {
                 padding-bottom: 5px;
             }
         }
@@ -100,14 +100,14 @@ $stepper-font-size: 24px;
     }
     .alert {
         padding: 5px;
-        background: $transparent;
+        background: transparent;
         &.alert-danger {
-            border-color: #F03529;
-            color: #F03529;
+            border-color: #f03529;
+            color: #f03529;
         }
         &.alert-warning {
-            border-color: #F8A000;
-            color: #F8A000;
+            border-color: #f8a000;
+            color: #f8a000;
         }
     }
 }

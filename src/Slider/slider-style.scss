@@ -1,7 +1,8 @@
-@import "../colours";
+@import "../../node_modules/@sebgroup/bootstrap/scss/variables";
+
 $transition-time: 80ms;
 $box-shadow: rgba(85, 85, 85, 0.4) 0 2px 5px;
-$disabled-selected: #adadad;
+$disabled-selected: $gray-500;
 $disabled-unselected: #cccccc;
 $disabled-thumb-bg: #9a9a9a;
 $disabled-thumb-border-color: #8c8c8c;
@@ -35,8 +36,8 @@ $disabled-thumb-border-color: #8c8c8c;
 
 @mixin track-styles {
     @include appearance(none);
-    background: $transparent;
-    color: $transparent;
+    background: transparent;
+    color: transparent;
     border: 0;
     outline: 0;
     box-shadow: 0;
@@ -47,7 +48,7 @@ $disabled-thumb-border-color: #8c8c8c;
     @include appearance(none);
     width: 56px;
     height: 32px;
-    background: $transparent;
+    background: transparent;
     border-radius: 4px;
     border: 0;
     outline: 0;
@@ -86,7 +87,7 @@ $disabled-thumb-border-color: #8c8c8c;
             display: inline-block;
             width: 100%;
             @include appearance(none);
-            background: $transparent;
+            background: transparent;
             cursor: pointer;
             height: 15px;
             margin-top: 10px;
@@ -125,17 +126,17 @@ $disabled-thumb-border-color: #8c8c8c;
                 display: none;
             } // IE Specific
             &::-ms-fill {
-                background-color: $transparent;
+                background-color: transparent;
             }
             &::-ms-fill-lower {
-                background-color: $transparent;
+                background-color: transparent;
                 border: 0;
             }
             &::-ms-ticks,
             &::-ms-ticks-after,
             &::-ms-ticks-after {
                 display: none;
-                color: $transparent;
+                color: transparent;
             }
             &:not(:disabled) {
                 &:focus {
@@ -309,13 +310,7 @@ $disabled-thumb-border-color: #8c8c8c;
                         @include transition((width $transition-time ease-out, transform $transition-time linear));
                     }
                     .custom-slider-thumb {
-                        @include transition(
-                            (
-                                left $transition-time ease-out,
-                                transform $transition-time ease-in-out,
-                                box-shadow $transition-time ease-in
-                            )
-                        );
+                        @include transition((left $transition-time ease-out, transform $transition-time ease-in-out, box-shadow $transition-time ease-in));
                     }
                 }
             }

@@ -1,6 +1,5 @@
-$blue-dark: #0092e1;
-$white: #fff;
-$gray-8: #e6e6e6 !default;
+@import "../../node_modules/@sebgroup/bootstrap/scss/variables";
+
 $gray-background: #f5f5f5;
 $transition-time: 300ms;
 $default: 14px;
@@ -39,12 +38,12 @@ $accordion-min-height: 48px;
     background-color: $white;
     .accordion-item {
         position: relative;
-        border-bottom: 1px solid $gray-8;
+        border-bottom: 1px solid $gray-800;
         &:hover {
             background-color: $gray-background;
         }
         &:first-child {
-            border-top: 1px solid $gray-8;
+            border-top: 1px solid $gray-800;
         }
         .header-wrapper {
             position: relative;
@@ -127,27 +126,27 @@ $accordion-min-height: 48px;
             }
         }
         &.deg-90 {
-            .header-wrapper >svg:last-of-type:not(:first-of-type) {
+            .header-wrapper > svg:last-of-type:not(:first-of-type) {
                 @include transform(rotate(-90deg));
             }
         }
         &.deg-90-counter {
-            .header-wrapper >svg:last-of-type:not(:first-of-type) {
+            .header-wrapper > svg:last-of-type:not(:first-of-type) {
                 @include transform(rotate(90deg));
             }
         }
         &.deg-180 {
-            .header-wrapper >svg:last-of-type:not(:first-of-type) {
+            .header-wrapper > svg:last-of-type:not(:first-of-type) {
                 @include transform(rotate(-18deg0));
             }
         }
         &.deg-180-counter {
-            .header-wrapper >svg:last-of-type:not(:first-of-type) {
+            .header-wrapper > svg:last-of-type:not(:first-of-type) {
                 @include transform(rotate(180deg));
             }
         }
         &.active {
-            >.content-wrapper {
+            > .content-wrapper {
                 padding-bottom: 18px;
             }
             &.deg-90 {
@@ -187,7 +186,7 @@ $accordion-min-height: 48px;
         }
     }
     &.alternative-accordion {
-        >.accordion-item {
+        > .accordion-item {
             border-bottom: 0;
             &:hover {
                 background-color: transparent;
@@ -198,9 +197,9 @@ $accordion-min-height: 48px;
             &:first-child {
                 border-top: 0;
             }
-            >.header-wrapper {
+            > .header-wrapper {
                 min-height: auto;
-                >.accordion-header {
+                > .accordion-header {
                     font-size: $standard;
                     color: $blue-dark;
                     padding: 0;
@@ -211,27 +210,27 @@ $accordion-min-height: 48px;
                 }
             }
             &.right {
-                >.header-wrapper {
+                > .header-wrapper {
                     padding: 0 $padding-left-size 0 10px;
                     > svg {
                         right: 15px;
                     }
                 }
-                >.content-wrapper {
-                    >.text-wrapper {
+                > .content-wrapper {
+                    > .text-wrapper {
                         padding: 0 $alternative-padding-left-size 0 10px;
                     }
                 }
             }
             &.left {
-                >.header-wrapper {
+                > .header-wrapper {
                     padding: 0 10px 0 $alternative-padding-left-size;
                     > svg {
                         left: 5px;
                     }
                 }
-                >.content-wrapper {
-                    >.text-wrapper {
+                > .content-wrapper {
+                    > .text-wrapper {
                         padding: 0 $alternative-padding-left-size;
                     }
                 }

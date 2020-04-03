@@ -1,6 +1,6 @@
 //colors
-@import "../colours";
-$body-color: #444 !default;
+@import "../../node_modules/@sebgroup/bootstrap/scss/variables";
+
 $transition-time: 200ms;
 
 @mixin transition($props) {
@@ -76,7 +76,7 @@ $transition-time: 200ms;
                     }
                 }
             }
-            >.input-group-prepend + input.form-control {
+            > .input-group-prepend + input.form-control {
                 padding-left: 0;
             }
             > input.form-control {

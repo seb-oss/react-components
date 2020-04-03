@@ -1,6 +1,4 @@
-@import "../colours";
-$default: 16px;
-$transparent: transparent;
+@import "../../node_modules/@sebgroup/bootstrap/scss/variables";
 $backdrop-background: rgba(0, 0, 0, 0.7);
 $dialogue-background: $white;
 $material-box-shadow: 0 7px 28px rgba(0, 0, 0, 0.25), 0 2px 2px rgba(0, 0, 0, 0.22);
@@ -75,19 +73,7 @@ $close-button-size: 15px;
                     display: inline-block;
                     .dialogue-button {
                         min-width: 120px;
-                        font-size: $default;
-                        &.btn-primary {
-                            background: $blue-dark;
-                            &:hover {
-                                background: $blue-darker;
-                            }
-                            &:active {
-                                background-color: $blue-darker !important;
-                            }
-                        }
-                        &.btn-secondary {
-                            border: 1px solid $blue-dark;
-                        }
+                        font-size: $font-size-sm;
                     }
                     &:first-child {
                         padding-right: 16px;

@@ -1,3 +1,5 @@
+@import "../../node_modules/@sebgroup/bootstrap/scss/variables";
+
 @mixin dark-transparent-to-bottom {
     background: -moz-linear-gradient(top, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.4) 70%, rgba(0, 0, 0, 0) 100%);
     background: -webkit-linear-gradient(top, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.4) 70%, rgba(0, 0, 0, 0) 100%);
@@ -12,10 +14,9 @@
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00000000', endColorstr='#cc000000', GradientType=0);
 }
 
-$dark-transparent: rgba(0,0,0,0.6);
+$dark-transparent: rgba(0, 0, 0, 0.6);
 $default: 14px;
-$white: #fff;
-$black: #000;
+
 .slick-slider {
     .slick-list {
         .slick-track {
@@ -23,7 +24,7 @@ $black: #000;
                 .custom-carousel {
                     .carousel-slide {
                         position: relative;
-                        >.carousel-img {
+                        > .carousel-img {
                             position: absolute;
                             top: 0;
                             left: 0;
@@ -37,7 +38,7 @@ $black: #000;
                             background-color: $dark-transparent;
                             position: relative;
                         }
-                        >.title {
+                        > .title {
                             @include dark-transparent-to-bottom;
                             position: absolute;
                             padding: 20px;
@@ -48,7 +49,7 @@ $black: #000;
                             color: $white;
                             border: none;
                         }
-                        >.desc {
+                        > .desc {
                             @include dark-transparent-to-top;
                             color: $white;
                             width: 100%;

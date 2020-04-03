@@ -1,8 +1,4 @@
-$red: #f03529;
-$gray-500: #adadad !default;;
-$blue: #41b0ee;
-$blue-darker: #007AC7;
-$body-color: #444 !default;
+@import "../../node_modules/@sebgroup/bootstrap/scss/variables";
 
 @mixin transition($props) {
     -webkit-transition: $props;

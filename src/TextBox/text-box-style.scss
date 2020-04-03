@@ -1,5 +1,5 @@
-@import "../colours";
-$body-color: #444 !default;
+@import "../../node_modules/@sebgroup/bootstrap/scss/variables";
+
 $transition-time: 200ms;
 
 @mixin transition($props) {
@@ -12,23 +12,23 @@ $transition-time: 200ms;
 .form-group.input-box {
     > .input-field {
         > input.form-control {
-            @import "../colours";
+            @import "../../node_modules/@sebgroup/bootstrap/scss/variables";
             color: $body-color;
             border: 1px solid $gray-500;
             @include transition(border $transition-time / 2);
             &:not(:disabled) {
                 &:hover {
                     border-color: $blue;
-                    background-color: white;
+                    background-color: $white;
                 }
                 &:focus {
                     border-color: $blue-darker;
                     box-shadow: none;
-                    background-color: white;
+                    background-color: $white;
                     &:active {
                         border-color: $blue-darker;
                         box-shadow: none;
-                        background-color: white;
+                        background-color: $white;
                     }
                 }
             }

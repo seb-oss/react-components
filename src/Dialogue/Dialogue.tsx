@@ -41,7 +41,7 @@ const Dialogue: React.FunctionComponent<DialogueProps> = (props: DialogueProps) 
                     <div className="dialogue-footer">
                         {props.secondaryBtn && props.secondaryAction && (
                             <div className="dialogue-action secondary-action">
-                                <button className="btn btn-secondary dialogue-button" onClick={props.secondaryAction} disabled={props.disableSecondaryBtn}>
+                                <button className="btn btn-outline-primary dialogue-button" onClick={props.secondaryAction} disabled={props.disableSecondaryBtn}>
                                     {props.secondaryBtn}
                                 </button>
                             </div>

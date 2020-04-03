@@ -1,11 +1,4 @@
-$blue: #41b0ee;
-$blue-darker: #007ac7;
-$gray-100: #f8f8f8;
-$gray-500: #adadad;
-$red: #FF0000;
-$body-color: #444;
-$white: #ffffff;
-$gray-800: #343434;
+@import "../../node_modules/@sebgroup/bootstrap/scss/variables";
 
 @mixin transition($props) {
     -webkit-transition: $props;
@@ -61,7 +54,7 @@ $gray-800: #343434;
                         border-bottom-right-radius: 3px;
                         width: 40px;
 
-                        >svg {
+                        > svg {
                             fill: $blue;
                             width: 16px;
                             height: 16px;
@@ -72,7 +65,7 @@ $gray-800: #343434;
                         &:active {
                             background-color: $blue;
 
-                            >svg {
+                            > svg {
                                 fill: $white;
                             }
                         }
@@ -99,7 +92,7 @@ $gray-800: #343434;
                         .react-date-picker__button {
                             background-color: $gray-100;
 
-                            >svg {
+                            > svg {
                                 fill: $gray-500;
                             }
                         }
@@ -124,7 +117,7 @@ $gray-800: #343434;
                 top: 100%;
             }
 
-            >.date-placeholder {
+            > .date-placeholder {
                 position: absolute;
                 left: 2px;
                 top: 2px;
@@ -137,7 +130,7 @@ $gray-800: #343434;
                 overflow: hidden;
                 pointer-events: none;
 
-                >p {
+                > p {
                     margin: 0;
                     white-space: nowrap;
                     text-overflow: ellipsis;
@@ -145,8 +138,8 @@ $gray-800: #343434;
                 }
             }
 
-            >.react-date-picker--open {
-                &+.date-placeholder {
+            > .react-date-picker--open {
+                & + .date-placeholder {
                     display: none;
                 }
             }
