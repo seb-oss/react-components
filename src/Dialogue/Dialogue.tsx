@@ -10,8 +10,6 @@ const TimesIcon: JSX.Element = (
 export interface DialogueProps {
     className?: string;
     desc?: string | JSX.Element | React.ReactNode;
-    disablePrimaryBtn?: boolean;
-    disableSecondaryBtn?: boolean;
     enableBackdropDismiss?: boolean;
     enableCloseButton?: boolean;
     header?: string | JSX.Element | React.ReactNode;
@@ -19,8 +17,10 @@ export interface DialogueProps {
     onDismiss?: (e?: React.MouseEvent<HTMLDivElement>) => void;
     primaryAction?: (e?: React.MouseEvent<HTMLButtonElement>) => void;
     primaryBtn?: string | JSX.Element;
+    primaryBtnDisabled?: boolean;
     secondaryAction?: (e?: React.MouseEvent<HTMLButtonElement>) => void;
     secondaryBtn?: string | JSX.Element;
+    secondaryBtnDisabled?: boolean;
     toggle: boolean;
 }
 
