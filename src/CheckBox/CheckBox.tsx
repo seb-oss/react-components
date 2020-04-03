@@ -36,7 +36,11 @@ const CheckBox: React.FunctionComponent<CheckBoxProps> = (props: CheckBoxProps):
     return (
         <div className={formClass}>
             <div className="input-field">
-                {props.topLabel && <label htmlFor={id} className="checkbox-toplabel">{props.topLabel}</label>}
+                {props.topLabel && (
+                    <label htmlFor={id} className="checkbox-toplabel">
+                        {props.topLabel}
+                    </label>
+                )}
 
                 <div className="custom-control">
                     <input

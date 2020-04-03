@@ -49,27 +49,28 @@ export const RadioGroup: React.FunctionComponent<RadioGroupProps> = (props: Radi
             <div className="input-field">
                 {props.label && <label className="radio-group-label">{props.label}</label>}
 
-                {props.list && props.list.map((item: RadioListModel, index: number) => {
-                    return (
-                        <div key={index} className="custom-control">
-                            <input
-                                className="custom-control-input"
-                                type="radio"
-                                value={item.value}
-                                name={props.name}
-                                id={idList[index]}
-                                checked={props.value === item.value}
-                                aria-labelledby={item.label}
-                                disabled={props.disableAll || item.disabled}
-                                onChange={props.onChange}
-                            />
-                            <label className="custom-control-label" htmlFor={idList[index]}>
-                                {item.label}
-                                {item.description && <span className="radio-description">{item.description}</span>}
-                            </label>
-                        </div>
-                    );
-                })}
+                {props.list &&
+                    props.list.map((item: RadioListModel, index: number) => {
+                        return (
+                            <div key={index} className="custom-control">
+                                <input
+                                    className="custom-control-input"
+                                    type="radio"
+                                    value={item.value}
+                                    name={props.name}
+                                    id={idList[index]}
+                                    checked={props.value === item.value}
+                                    aria-labelledby={item.label}
+                                    disabled={props.disableAll || item.disabled}
+                                    onChange={props.onChange}
+                                />
+                                <label className="custom-control-label" htmlFor={idList[index]}>
+                                    {item.label}
+                                    {item.description && <span className="radio-description">{item.description}</span>}
+                                </label>
+                            </div>
+                        );
+                    })}
             </div>
         </div>
     );

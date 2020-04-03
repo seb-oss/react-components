@@ -85,7 +85,11 @@ describe("Component: Notification", () => {
     });
 
     it("Should render child element when passed", () => {
-        const newWrapper: ShallowWrapper<NotificationProps> = shallow(<Notification toggle={true} onDismiss={jest.fn()}><div className="testing">test</div></Notification>);
+        const newWrapper: ShallowWrapper<NotificationProps> = shallow(
+            <Notification toggle={true} onDismiss={jest.fn()}>
+                <div className="testing">test</div>
+            </Notification>
+        );
         expect(newWrapper.find(".testing").length).not.toBe(0);
     });
 
@@ -127,10 +131,30 @@ describe("Component: Notification", () => {
                 { text: "action2", action: jest.fn() }
             ];
             wrapper.setProps({ actions: actions });
-            expect(wrapper.find(".action-wrapper").first().find("button").text()).toEqual(actions[0].text);
-            expect(wrapper.find(".action-wrapper").at(1).find("button").text()).toEqual(actions[1].text);
-            wrapper.find(".action-wrapper").first().find("button").simulate("click");
-            wrapper.find(".action-wrapper").at(1).find("button").simulate("click");
+            expect(
+                wrapper
+                    .find(".action-wrapper")
+                    .first()
+                    .find("button")
+                    .text()
+            ).toEqual(actions[0].text);
+            expect(
+                wrapper
+                    .find(".action-wrapper")
+                    .at(1)
+                    .find("button")
+                    .text()
+            ).toEqual(actions[1].text);
+            wrapper
+                .find(".action-wrapper")
+                .first()
+                .find("button")
+                .simulate("click");
+            wrapper
+                .find(".action-wrapper")
+                .at(1)
+                .find("button")
+                .simulate("click");
             expect(actions[0].action).toBeCalled();
             expect(actions[1].action).toBeCalled();
         });

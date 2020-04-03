@@ -8,9 +8,7 @@ const NotFound: React.FunctionComponent = (): React.ReactElement<void> => {
                 <div className="header">404</div>
                 <div className="desc">Page not found!</div>
                 <div className="link">
-                    <NavLink to="/">
-                        Return Home
-                    </NavLink>
+                    <NavLink to="/">Return Home</NavLink>
                 </div>
             </div>
         </div>

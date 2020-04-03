@@ -34,8 +34,10 @@ export const Rating: React.FunctionComponent<RatingProps> = (props: RatingProps)
     function getColors(): Array<string> {
         if (props.colors && props.colors.length) {
             switch (props.colors.length) {
-                case 2: return props.colors;
-                default: return initialColors;
+                case 2:
+                    return props.colors;
+                default:
+                    return initialColors;
             }
         }
         return props.disabled ? disabledColors : initialColors;
@@ -50,15 +52,13 @@ export const Rating: React.FunctionComponent<RatingProps> = (props: RatingProps)
             <ReactRating
                 className={props.disabled ? "disabled" : ""}
                 initialRating={props.initialValue}
-                emptySymbol={!props.useHollow
-                    ? <SVGStar fill={getColors()[0]} width={width} height={height} />
-                    : <SVGStarHollow fill={getColors()[0]} width={width} height={height} />
-                }
+                emptySymbol={!props.useHollow ? <SVGStar fill={getColors()[0]} width={width} height={height} /> : <SVGStarHollow fill={getColors()[0]} width={width} height={height} />}
                 fullSymbol={
-                    (props.tooltipList && props.tooltipList.length)
-                        ? props.tooltipList.map((title: string, index: number): React.ReactElement<void> =>
-                            <SVGStar key={index} fill={getColors()[1]} title={title} width={width} height={height} />)
-                        : <SVGStar fill={getColors()[1]} width={width} height={height} />
+                    props.tooltipList && props.tooltipList.length ? (
+                        props.tooltipList.map((title: string, index: number): React.ReactElement<void> => <SVGStar key={index} fill={getColors()[1]} title={title} width={width} height={height} />)
+                    ) : (
+                        <SVGStar fill={getColors()[1]} width={width} height={height} />
+                    )
                 }
                 fractions={1}
                 onChange={onChange}

@@ -7,7 +7,6 @@ const InlineLinkPage: React.FunctionComponent = () => {
     return (
         <div className="route-template container">
             <div className="info-holder">
-
                 <div className="info">
                     <div className="md-file">
                         <Highlight innerHTML={true}>{docMD}</Highlight>
@@ -18,12 +17,12 @@ const InlineLinkPage: React.FunctionComponent = () => {
                     <h2>Output</h2>
                     <p>Here is a sample output</p>
                     <div className="result wide">
-                        <div><InlineLink onClick={() => alert("Redirect or do some other action")}>Lorem ipsum</InlineLink> dolor sit amet, consectetur adipiscing elit.</div>
+                        <div>
+                            <InlineLink onClick={() => alert("Redirect or do some other action")}>Lorem ipsum</InlineLink> dolor sit amet, consectetur adipiscing elit.
+                        </div>
                     </div>
                 </div>
-
             </div>
-
         </div>
     );
 };

@@ -2,7 +2,7 @@ import * as React from "react";
 import { shallow, ShallowWrapper, ReactWrapper, mount } from "enzyme";
 import { Button, ButtonProps, ButtonTheme, ButtonSizes } from "./Button";
 
-type ButtonTestItem<T, K> = { value: T, expected: K };
+type ButtonTestItem<T, K> = { value: T; expected: K };
 
 describe("Component: Button", () => {
     let wrapper: ShallowWrapper<ButtonProps>;
@@ -20,7 +20,13 @@ describe("Component: Button", () => {
 
     it("Should render", () => expect(wrapper).toBeDefined());
 
-    it("Should render label correctly", () => expect(wrapper.find(".button-content").children(".button-label").text()).toEqual("label"));
+    it("Should render label correctly", () =>
+        expect(
+            wrapper
+                .find(".button-content")
+                .children(".button-label")
+                .text()
+        ).toEqual("label"));
 
     it("Should fire onClick callback when clicked", () => {
         const onClick: jest.Mock = jest.fn();
@@ -51,7 +57,7 @@ describe("Component: Button", () => {
             { value: "anchor", expected: "btn-link" },
             { value: "link", expected: "btn-link" },
             { value: "danger", expected: "btn-danger" },
-            { value: "unsupported-theme" as any, expected: "btn-primary" },
+            { value: "unsupported-theme" as any, expected: "btn-primary" }
         ];
         list.map((item: ButtonTestItem<ButtonTheme, string>) => {
             it(`Theme: ${item.value} - Expected to render (btn-${item.expected})`, () => {
@@ -65,7 +71,7 @@ describe("Component: Button", () => {
         const list: Array<ButtonTestItem<ButtonSizes, string>> = [
             { value: "lg", expected: "btn-lg" },
             { value: "md", expected: "btn-md" },
-            { value: "sm", expected: "btn-sm" },
+            { value: "sm", expected: "btn-sm" }
         ];
         list.map((item: ButtonTestItem<ButtonSizes, string>) => {
             it(`Size: ${item.value} - Expected to render (btn-${item.expected})`, () => {
@@ -102,7 +108,11 @@ describe("Component: Button", () => {
 
     it("Should render children in replacement for icons", () => {
         const svgId: string = "my-test-svg";
-        wrapper = shallow(<Button {...props} iconPosition="left"><svg id={svgId} /></Button>);
+        wrapper = shallow(
+            <Button {...props} iconPosition="left">
+                <svg id={svgId} />
+            </Button>
+        );
         expect(wrapper.find(`#${svgId}`).length).toBeDefined();
     });
 

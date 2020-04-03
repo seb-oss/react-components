@@ -1,6 +1,6 @@
 import * as React from "react";
 import { unmountComponentAtNode, render } from "react-dom";
-import { Column, Table, TableRow, TableHeader, ActionLinkItem, DataItem, sortDirectionTypes, FilterItem, PrimaryActionButton } from "./Table";
+import { Column, Table, TableRow, TableHeader, ActionLinkItem, DataItem, sortDirectionTypes, FilterItem, PrimaryActionButton, EditMode, TableProps, EditProps } from "./Table";
 import makeData from "../../develop/__utils/makeData";
 import { act } from "react-dom/test-utils";
 import { Pagination } from "../Pagination/Pagination";
@@ -59,6 +59,26 @@ describe("Component: Table", () => {
             render(<Table columns={columns} data={smallData} />, container);
         });
         expect(container).toBeDefined();
+    });
+
+    it("Should render and alloow blacklisting or hiding columns ", () => {
+        act(() => {
+            render(<Table columns={columns} data={smallData} />, container);
+        });
+        expect(container.querySelectorAll("thead > tr > th").length).toEqual(columns.length);
+
+        const editableColumns: Array<Column> = columns?.map((column: Column, index: number) => {
+            if (index === 1) {
+                return { ...column, isHidden: true };
+            }
+            return column;
+        });
+
+        act(() => {
+            render(<Table columns={editableColumns} data={smallData} />, container);
+        });
+
+        expect(container.querySelectorAll("thead > tr > th").length).toEqual(columns.length - 1);
     });
 
     it("Should render and be able to sort rows ", () => {
@@ -242,6 +262,96 @@ describe("Component: Table", () => {
         expect(onRowSelected).toHaveBeenCalledTimes(4);
     });
 
+    describe("should handle inline textbox edit ", () => {
+        let results: Array<TableRow> = [];
+        let textContainer: HTMLDivElement = null;
+
+        const onAfterEdit: jest.Mock = jest.fn((rows: Array<TableRow>) => {
+            results = rows;
+        });
+        const onRowSelected: jest.Mock = jest.fn((rows: Array<TableRow>) => {});
+
+        const editProps: EditProps = {
+            onAfterEdit,
+            mode: null
+        };
+
+        const selector: string = "tbody tr.parent-row td .form-group.input-box-group";
+
+        const updatedSelectedRows: Array<TableRow> = smallData?.slice(0, 2).map((row: TableRow) => ({ ...row, selected: true }));
+
+        beforeEach(() => {
+            textContainer = document.createElement("div");
+            document.body.appendChild(container);
+        });
+
+        afterEach(() => {
+            unmountComponentAtNode(textContainer);
+            textContainer.remove();
+            textContainer = null;
+        });
+
+        it("should render and handle edit and save  ", () => {
+            act(() => {
+                render(<Table columns={columns} data={updatedSelectedRows} onRowSelected={onRowSelected} editProps={editProps} />, textContainer);
+            });
+
+            expect(textContainer.querySelectorAll(selector).length).toEqual(0);
+
+            act(() => {
+                render(<Table columns={columns} data={updatedSelectedRows} onRowSelected={onRowSelected} />, textContainer);
+            });
+
+            act(() => {
+                render(<Table columns={columns} data={updatedSelectedRows} onRowSelected={onRowSelected} editProps={{ ...editProps, mode: "edit" }} />, textContainer);
+            });
+
+            expect(textContainer.querySelectorAll(selector).length).toBeGreaterThan(0);
+
+            act(() => {
+                render(<Table columns={columns} data={updatedSelectedRows} onRowSelected={onRowSelected} editProps={{ ...editProps, mode: "save" }} />, textContainer);
+            });
+
+            expect(textContainer.querySelectorAll(selector).length).toEqual(0);
+            expect(editProps.onAfterEdit).toHaveBeenCalledTimes(1);
+            expect(results.length).toEqual(updatedSelectedRows.length);
+        });
+
+        it("should render and handle edit and cancel ", () => {
+            // now repeat the process, for cancel
+            results = [];
+            act(() => {
+                render(
+                    <Table columns={columns} data={updatedSelectedRows} onRowSelected={onRowSelected} editProps={{ ...editProps, blackListedAccessors: ["firstName", "lastName"] }} />,
+                    textContainer
+                );
+            });
+
+            expect(textContainer.querySelectorAll(selector).length).toEqual(0);
+
+            // blaclist some columns
+
+            act(() => {
+                render(
+                    <Table columns={columns} data={updatedSelectedRows} onRowSelected={onRowSelected} editProps={{ ...editProps, mode: "edit", blackListedAccessors: ["firstName", "lastName"] }} />,
+                    textContainer
+                );
+            });
+
+            expect(textContainer.querySelectorAll(selector).length).toBeGreaterThan(0);
+
+            // id column is ommited by default, + firstName and lastName , 3
+            expect(textContainer.querySelectorAll(selector).length).toEqual((columns.length - 3) * updatedSelectedRows.length);
+
+            act(() => {
+                render(<Table columns={columns} data={updatedSelectedRows} onRowSelected={onRowSelected} editProps={{ ...editProps, mode: "cancel" }} />, textContainer);
+            });
+
+            expect(textContainer.querySelectorAll(selector).length).toEqual(0);
+            expect(results.length).toEqual(0);
+        });
+    });
+
     it("should render and have optional footer row", () => {
         act(() => {
             render(<Table columns={columns} data={smallData} />, container);
@@ -260,11 +370,15 @@ describe("Component: Table", () => {
             { label: "Add", onClick: customButtonCallBack },
             { label: "Edit", onClick: customButtonCallBack }
         ];
+
+        // for the sake of subrow, collapse data
+        const newData: Array<TableRow> = smallData.slice(0, 2).map((data: TableRow) => ({ ...data, expanded: true }));
+
         act(() => {
-            render(<Table columns={columns} data={smallData} actionLinks={actionLinks} />, container);
+            render(<Table columns={columns} data={newData} actionLinks={actionLinks} />, container);
         });
 
-        // trigger and open action column
+        // trigger and open row action column
         const openedActionColumnString: string = "tbody tr.parent-row td .action-column .ellipsis-dropdown-holder .dropdown-content.active";
         expect(container.querySelector(openedActionColumnString)).toBeNull();
         expect(container.querySelector(openedActionColumnString)).toBeFalsy();
@@ -279,6 +393,18 @@ describe("Component: Table", () => {
         expect(container.querySelector(openedActionColumnString)).toBeDefined();
         expect(container.querySelector(openedActionColumnString)).toBeTruthy();
 
+        // trigger and click subRow actions
+        const openedSubRowActionColumnString: string = "tbody tr.sub-row td .action-column .ellipsis-dropdown-holder .dropdown-content.active";
+        expect(container.querySelector(openedSubRowActionColumnString)).toBeNull();
+        expect(container.querySelector(openedSubRowActionColumnString)).toBeFalsy();
+
+        act(() => {
+            container.querySelectorAll("tbody tr.sub-row td .action-column a").forEach((el: Element) => el.dispatchEvent(new MouseEvent("click", { bubbles: true })));
+        });
+
+        expect(container.querySelector(openedSubRowActionColumnString)).toBeDefined();
+        expect(container.querySelector(openedSubRowActionColumnString)).toBeTruthy();
+
         // action should be closed when you click outside the div
 
         act(() => {
@@ -287,13 +413,11 @@ describe("Component: Table", () => {
 
         expect(container.querySelector(openedActionColumnString)).toBeNull();
         expect(container.querySelector(openedActionColumnString)).toBeFalsy();
+        expect(container.querySelector(openedSubRowActionColumnString)).toBeNull();
+        expect(container.querySelector(openedSubRowActionColumnString)).toBeFalsy();
 
-        act(() => {
-            container.querySelectorAll("tbody tr.parent-row td .action-column a").forEach((el: Element) => el.dispatchEvent(new MouseEvent("click", { bubbles: true })));
-        });
-
-        // it should be called the length of the data twice
-        expect(customButtonCallBack).toHaveBeenCalledTimes(2 * smallData.length);
+        // it should be called the length of the data twice for each row and subrow, i.e 4 times
+        expect(customButtonCallBack).toHaveBeenCalledTimes(4 * smallData.length);
 
         // plus one column for action field
         expect(container.querySelectorAll("thead tr th").length).toEqual(columns.length + 1);

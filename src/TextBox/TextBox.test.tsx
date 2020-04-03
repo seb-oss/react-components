@@ -6,7 +6,7 @@ describe("Component: TextBox", () => {
     const props: TextBoxProps = {
         name: "MyTextBox",
         value: "",
-        onChange: jest.fn(),
+        onChange: jest.fn()
     };
     let wrapper: ShallowWrapper<TextBoxProps>;
     let mountedWrapper: ReactWrapper<TextBoxProps>;
@@ -46,7 +46,7 @@ describe("Component: TextBox", () => {
             { type: "number" },
             { disabled: true },
             { readOnly: true },
-            { placeholder: "my placeholder" },
+            { placeholder: "my placeholder" }
         ];
         optionals.map((optional: Pick<TextBoxProps, keyof TextBoxProps>) => {
             const key: string = Object.keys(optional)[0];

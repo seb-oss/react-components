@@ -23,11 +23,25 @@ describe("Component: ProgressBar", () => {
 
     it("Should render progress value in text with correct value in percen format", () => {
         wrapper.setProps({ value: 20, showProgress: true });
-        expect(wrapper.find(".custom-progress-bar").first().hasClass("show-progress")).toBeTruthy();
+        expect(
+            wrapper
+                .find(".custom-progress-bar")
+                .first()
+                .hasClass("show-progress")
+        ).toBeTruthy();
         expect(wrapper.find(".custom-progress-text").length).toBe(1);
-        expect(wrapper.find(".custom-progress-text").first().text()).toEqual("20%");
+        expect(
+            wrapper
+                .find(".custom-progress-text")
+                .first()
+                .text()
+        ).toEqual("20%");
         wrapper.setProps({ value: 60 });
-        expect(wrapper.find(".custom-progress-text").first().hasClass("white")).toBeTruthy();
+        expect(
+            wrapper
+                .find(".custom-progress-text")
+                .first()
+                .hasClass("white")
+        ).toBeTruthy();
     });
-
 });

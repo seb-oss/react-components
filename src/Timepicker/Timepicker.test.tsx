@@ -3,7 +3,6 @@ import { shallow, mount } from "enzyme";
 import { Timepicker, TimepickerDayperiodTypes, TimepickerValue } from "./Timepicker";
 
 describe("Component: Timepicker", () => {
-
     const props = {
         value: { hours: 6, minutes: 30, dayperiod: TimepickerDayperiodTypes.AM },
         onChange: jest.fn(),
@@ -26,16 +25,40 @@ describe("Component: Timepicker", () => {
     it("Should fire change event", () => {
         const wrapper = mount(<Timepicker {...props} />);
         // Hours
-        wrapper.find(".timepicker-hours").find(".triangle-before").simulate("click");
-        wrapper.find(".timepicker-hours").find(".triangle-after").simulate("click");
-        wrapper.find(".timepicker-hours").find(".timepicker-input").simulate("change", 3);
+        wrapper
+            .find(".timepicker-hours")
+            .find(".triangle-before")
+            .simulate("click");
+        wrapper
+            .find(".timepicker-hours")
+            .find(".triangle-after")
+            .simulate("click");
+        wrapper
+            .find(".timepicker-hours")
+            .find(".timepicker-input")
+            .simulate("change", 3);
         // Minutes
-        wrapper.find(".timepicker-minutes").find(".triangle-before").simulate("click");
-        wrapper.find(".timepicker-minutes").find(".triangle-after").simulate("click");
-        wrapper.find(".timepicker-minutes").find(".timepicker-input").simulate("change", 10);
+        wrapper
+            .find(".timepicker-minutes")
+            .find(".triangle-before")
+            .simulate("click");
+        wrapper
+            .find(".timepicker-minutes")
+            .find(".triangle-after")
+            .simulate("click");
+        wrapper
+            .find(".timepicker-minutes")
+            .find(".timepicker-input")
+            .simulate("change", 10);
         // Dayperiod
-        wrapper.find(".timepicker-dayperiod").find(".triangle-before").simulate("click");
-        wrapper.find(".timepicker-dayperiod").find(".triangle-after").simulate("click");
+        wrapper
+            .find(".timepicker-dayperiod")
+            .find(".triangle-before")
+            .simulate("click");
+        wrapper
+            .find(".timepicker-dayperiod")
+            .find(".triangle-after")
+            .simulate("click");
         expect(props.onChange).toHaveBeenCalledTimes(8);
         wrapper.unmount();
     });
@@ -43,12 +66,32 @@ describe("Component: Timepicker", () => {
     it("Should should always show the value in double digits", () => {
         let testValue: TimepickerValue = { hours: 1, minutes: 0, dayperiod: TimepickerDayperiodTypes.AM };
         const wrapper = mount(<Timepicker name="test" onChange={jest.fn()} value={testValue} />);
-        expect(wrapper.find(".timepicker-hours").find("input").prop("value")).toEqual("01");
-        expect(wrapper.find(".timepicker-minutes").find("input").prop("value")).toEqual("00");
+        expect(
+            wrapper
+                .find(".timepicker-hours")
+                .find("input")
+                .prop("value")
+        ).toEqual("01");
+        expect(
+            wrapper
+                .find(".timepicker-minutes")
+                .find("input")
+                .prop("value")
+        ).toEqual("00");
         testValue = { ...testValue, hours: 10, minutes: 20 };
         wrapper.setProps({ value: testValue }).update();
-        expect(wrapper.find(".timepicker-hours").find("input").prop("value")).toEqual("10");
-        expect(wrapper.find(".timepicker-minutes").find("input").prop("value")).toEqual("20");
+        expect(
+            wrapper
+                .find(".timepicker-hours")
+                .find("input")
+                .prop("value")
+        ).toEqual("10");
+        expect(
+            wrapper
+                .find(".timepicker-minutes")
+                .find("input")
+                .prop("value")
+        ).toEqual("20");
     });
 
     test("Test handleClick method", () => {
@@ -123,5 +166,4 @@ describe("Component: Timepicker", () => {
         result = instance.handleChange("MINUTES", -5, props.value);
         expect(result.minutes).toEqual(0);
     });
-
 });

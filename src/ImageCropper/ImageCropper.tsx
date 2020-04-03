@@ -4,12 +4,7 @@ import { Loader } from "./Loader";
 import Cropper from "cropperjs";
 import "./image-cropper-style.scss";
 
-const unchangeableProps = [
-    "dragMode",
-    "aspectRatio",
-    "data",
-    "crop"
-];
+const unchangeableProps = ["dragMode", "aspectRatio", "data", "crop"];
 
 const optionProps = [
     "aspectRatio",
@@ -50,7 +45,7 @@ const optionProps = [
     "crop",
     "cropend",
     "cropmove",
-    "cropstart",
+    "cropstart"
 ];
 
 export interface OptionProps {
@@ -180,20 +175,20 @@ export class ImageCropper extends React.Component<ImageCropperProps, ImageCroppe
         if (e.target && e.target.cropper) {
             const cropper: any = e.target.cropper;
             const cropBoxData: any = cropper.getCropBoxData();
-            const canvasData: any & { naturalWidth: number; naturalHeight: number; } = { ...cropper.getCanvasData() };
+            const canvasData: any & { naturalWidth: number; naturalHeight: number } = { ...cropper.getCanvasData() };
             if (cropBoxData.left < canvasData.left) {
                 const newCropBoxData = { ...this.state.cropBoxData, left: canvasData.left + 1 };
                 this.setState({ cropBoxData: newCropBoxData });
-            } else if ((cropBoxData.left + cropBoxData.width) > (canvasData.left + canvasData.width)) {
-                const newCropBoxData = { ...this.state.cropBoxData, left: (canvasData.left + canvasData.width - cropBoxData.width - 1) };
+            } else if (cropBoxData.left + cropBoxData.width > canvasData.left + canvasData.width) {
+                const newCropBoxData = { ...this.state.cropBoxData, left: canvasData.left + canvasData.width - cropBoxData.width - 1 };
                 this.setState({ cropBoxData: newCropBoxData });
             }
-            if ((cropBoxData.top + cropBoxData.height) > (canvasData.top + canvasData.height)) {
-                const offset = (cropBoxData.top + cropBoxData.height) - (canvasData.top + canvasData.height);
-                const newCropBoxData = { ...this.state.cropBoxData, top: (cropBoxData.top - offset), left: cropBoxData.left };
+            if (cropBoxData.top + cropBoxData.height > canvasData.top + canvasData.height) {
+                const offset = cropBoxData.top + cropBoxData.height - (canvasData.top + canvasData.height);
+                const newCropBoxData = { ...this.state.cropBoxData, top: cropBoxData.top - offset, left: cropBoxData.left };
                 this.setState({ cropBoxData: newCropBoxData });
             } else if (canvasData.top > cropBoxData.top) {
-                const newCropBoxData = { ...this.state.cropBoxData, top: (canvasData.top), left: cropBoxData.left };
+                const newCropBoxData = { ...this.state.cropBoxData, top: canvasData.top, left: cropBoxData.left };
                 this.setState({ cropBoxData: newCropBoxData });
             }
         }
@@ -202,9 +197,7 @@ export class ImageCropper extends React.Component<ImageCropperProps, ImageCroppe
     componentDidMount() {
         const options: OptionProps = Object.keys(this.props.cropperConfigs || {})
             .filter((propKey) => optionProps.indexOf(propKey) !== -1)
-            .reduce((prevOptions, propKey: keyof OptionProps) =>
-                ({ ...prevOptions, [propKey]: this.props.cropperConfigs[propKey] })
-                , {});
+            .reduce((prevOptions, propKey: keyof OptionProps) => ({ ...prevOptions, [propKey]: this.props.cropperConfigs[propKey] }), {});
         const OptionalEvents = {
             cropend: this.alignCropBox.bind(this),
             cropmove: this.alignCropBox.bind(this)
@@ -214,9 +207,11 @@ export class ImageCropper extends React.Component<ImageCropperProps, ImageCroppe
         this.cropper = new cropper(this.image, updatedOptions);
 
         if (this.props.previewSrc) {
-            this.cropper.reset().clear().replace(this.props.previewSrc);
+            this.cropper
+                .reset()
+                .clear()
+                .replace(this.props.previewSrc);
         }
-
     }
 
     handleUploadImage(e: any, cropResult?: string) {
@@ -244,14 +239,12 @@ export class ImageCropper extends React.Component<ImageCropperProps, ImageCroppe
                             });
                         }, 100);
                     });
-
                 };
                 reader.readAsDataURL(file);
             } else {
                 throw new Error("You could only upload images.");
             }
         }
-
     }
 
     stopProp(e: React.MouseEvent<HTMLDivElement>) {
@@ -307,7 +300,6 @@ export class ImageCropper extends React.Component<ImageCropperProps, ImageCroppe
     }
 
     crop(image: string, callBack: () => void) {
-
         if (this.props.onCrop) {
             this.props.onCrop(image);
         }
@@ -317,7 +309,10 @@ export class ImageCropper extends React.Component<ImageCropperProps, ImageCroppe
     }
 
     onResfreshCropper(image: string, callBack: () => void) {
-        this.cropper.reset().clear().replace(image);
+        this.cropper
+            .reset()
+            .clear()
+            .replace(image);
 
         return callBack();
     }
@@ -402,7 +397,10 @@ export class ImageCropper extends React.Component<ImageCropperProps, ImageCroppe
     componentDidUpdate(prevProps: ImageCropperProps, prevState: ImageCropperState) {
         if (prevProps.previewSrc !== this.props.previewSrc) {
             this.setState({ cropResult: this.props.previewSrc.trim() });
-            this.cropper.reset().clear().replace(this.props.previewSrc);
+            this.cropper
+                .reset()
+                .clear()
+                .replace(this.props.previewSrc);
         }
         if (prevProps.alwaysAlignedCropper !== this.props.alwaysAlignedCropper) {
             this.setState({ alignCropper: this.props.alwaysAlignedCropper });
@@ -481,27 +479,30 @@ export class ImageCropper extends React.Component<ImageCropperProps, ImageCroppe
                 <div className={"custom-cropper-dialogue" + (this.state.toggle ? " open-cropper-dialogue" : " close-cropper-dialogue")} id={this.props.id}>
                     <div className="cropper-dialogue-container">
                         <div className={"cropper-dialogue " + (this.props.imageCropperClassName ? this.props.imageCropperClassName : "")} onClick={this.stopProp}>
-
                             <div className="custom-react-cropper">
                                 <Loader className="inner-loader" toggle={!this.state.isImageLoaded} fullscreen={false} />
                                 <img
                                     crossOrigin={this.props.crossOrigin}
-                                    ref={(img) => { this.image = img; }}
+                                    ref={(img) => {
+                                        this.image = img;
+                                    }}
                                     src={this.state.src || "data:image/jpeg;base64,PHN2ZyKPC9zdmc+"}
                                     alt={this.props.alt}
                                     style={{ opacity: 0, width: "100%" }}
                                     id="image"
-                                    onLoad={(e) => { this.setState({ isImageLoaded: true }); }}
+                                    onLoad={(e) => {
+                                        this.setState({ isImageLoaded: true });
+                                    }}
                                 />
                             </div>
 
                             <div className="cropper-dialogue-footer control-container d-flex flex-row">
                                 <div className="btn-delete">
-                                    {(this.props.onCustomButtonClick && this.props.showCustomButton) &&
+                                    {this.props.onCustomButtonClick && this.props.showCustomButton && (
                                         <button type="button" className="btn btn-default custom-button" onClick={this.props.onCustomButtonClick}>
                                             <span>{this.props.customButtonText || "Delete"}</span>
                                         </button>
-                                    }
+                                    )}
                                 </div>
                                 <div className="right-controls">
                                     <button type="button" id="cancelBtn" className="btn btn-outline-secondary custom-button" onClick={this.dismissCropper}>
@@ -511,7 +512,6 @@ export class ImageCropper extends React.Component<ImageCropperProps, ImageCroppe
                                         <span>{this.props.cropButtonText || "Crop"}</span>
                                     </button>
                                 </div>
-
                             </div>
                         </div>
                         {<Loader toggle={this.state.isLoading} />}

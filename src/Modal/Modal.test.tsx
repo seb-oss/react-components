@@ -103,9 +103,29 @@ describe("Component: Modal", () => {
     it("Should pass accessibility attributes", () => {
         const accessibilityAttributes: ModalProps = { ...modalProps, ariaLabel: "MyLabel", ariaDescribedby: "MyDescription" };
         const mountedWrapper: ReactWrapper<ModalProps> = mount(<Modal {...accessibilityAttributes} />);
-        expect(mountedWrapper.find(".modal").getDOMNode().hasAttribute("aria-label")).toBeTruthy();
-        expect(mountedWrapper.find(".modal").getDOMNode().getAttribute("aria-label")).toEqual(accessibilityAttributes.ariaLabel);
-        expect(mountedWrapper.find(".modal").getDOMNode().hasAttribute("aria-describedby")).toBeTruthy();
-        expect(mountedWrapper.find(".modal").getDOMNode().getAttribute("aria-describedby")).toEqual(accessibilityAttributes.ariaDescribedby);
+        expect(
+            mountedWrapper
+                .find(".modal")
+                .getDOMNode()
+                .hasAttribute("aria-label")
+        ).toBeTruthy();
+        expect(
+            mountedWrapper
+                .find(".modal")
+                .getDOMNode()
+                .getAttribute("aria-label")
+        ).toEqual(accessibilityAttributes.ariaLabel);
+        expect(
+            mountedWrapper
+                .find(".modal")
+                .getDOMNode()
+                .hasAttribute("aria-describedby")
+        ).toBeTruthy();
+        expect(
+            mountedWrapper
+                .find(".modal")
+                .getDOMNode()
+                .getAttribute("aria-describedby")
+        ).toEqual(accessibilityAttributes.ariaDescribedby);
     });
 });

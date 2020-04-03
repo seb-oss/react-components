@@ -18,15 +18,10 @@ const ImageCropperPage: React.FunctionComponent = () => {
                     <h2>Output</h2>
                     <p>Here is sample output</p>
                     <div className="result">
-                        <ImageCropper
-                            cropperConfigs={cropperConfigs}
-                            onCrop={(croppedData: any) => setCropResult(croppedData)}
-                        />
+                        <ImageCropper cropperConfigs={cropperConfigs} onCrop={(croppedData: any) => setCropResult(croppedData)} />
                     </div>
                 </div>
-
             </div>
-
         </div>
     );
 };
@@ -37,8 +32,8 @@ const cropperConfigs: OptionProps = {
     guides: false,
     responsive: true,
     zoomable: false,
-    aspectRatio: (1 / 1),
-    rotatable: false,
+    aspectRatio: 1 / 1,
+    rotatable: false
 };
 
 export default ImageCropperPage;

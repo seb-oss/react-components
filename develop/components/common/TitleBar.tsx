@@ -1,8 +1,8 @@
 import * as React from "react";
 import { TextBoxGroup } from "../../../src/TextBoxGroup/TextBoxGroup";
 import { Icon } from "../../../src/Icon/Icon";
-const SEBLogo: string = require("../../assets/images/icons/seblogo.svg").default;
-const reactLogo: string = require("../../assets/images/icons/ReactLogo.png").default;
+const SEBLogo: string = require("../../assets/images/icons/seblogo.svg");
+const reactLogo: string = require("../../assets/images/icons/ReactLogo.png");
 const sidebarData = require("../../assets/components-list.json");
 
 interface SideBarDataItem {
@@ -129,7 +129,7 @@ export default class TitleBar extends React.Component<TitleBarProps, TitleBarSta
         if (e.ctrlKey && e.shiftKey && (e.key.toLowerCase() === "f" || e.keyCode === 6)) {
             this.searchRef.current.focus();
         }
-    }
+    };
 
     onKeyUpListener: EventListener = (e: KeyboardEvent) => {
         if (document.activeElement === this.searchRef.current) {
@@ -146,12 +146,12 @@ export default class TitleBar extends React.Component<TitleBarProps, TitleBarSta
             }
             if (e.key.toLowerCase() === "arrowdown" || e.keyCode === 40) {
                 e.preventDefault();
-                if (this.state.highlighted < (this.state.searchList.length - 1)) {
+                if (this.state.highlighted < this.state.searchList.length - 1) {
                     this.setState({ highlighted: this.state.highlighted + 1 });
                 }
             }
         }
-    }
+    };
 
     componentDidMount() {
         this.setState({ componentsList: [].concat(...[sidebarData.form, sidebarData.ui, sidebarData.other]) });
@@ -180,29 +180,36 @@ export default class TitleBar extends React.Component<TitleBarProps, TitleBarSta
                             value={this.state.searchTerm}
                             className="text-input"
                             onChange={this.searchTermChange}
-                            onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => (e.key.toLowerCase() === "escape") && e.preventDefault()}
+                            onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => e.key.toLowerCase() === "escape" && e.preventDefault()}
                             reference={this.searchRef}
-                            rightIcon={<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M508.5 481.6l-129-129c-2.3-2.3-5.3-3.5-8.5-3.5h-10.3C395 312 416 262.5 416 208 416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c54.5 0 104-21 141.1-55.2V371c0 3.2 1.3 6.2 3.5 8.5l129 129c4.7 4.7 12.3 4.7 17 0l9.9-9.9c4.7-4.7 4.7-12.3 0-17zM208 384c-97.3 0-176-78.7-176-176S110.7 32 208 32s176 78.7 176 176-78.7 176-176 176z" /></svg>}
+                            rightIcon={
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                                    <path d="M508.5 481.6l-129-129c-2.3-2.3-5.3-3.5-8.5-3.5h-10.3C395 312 416 262.5 416 208 416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c54.5 0 104-21 141.1-55.2V371c0 3.2 1.3 6.2 3.5 8.5l129 129c4.7 4.7 12.3 4.7 17 0l9.9-9.9c4.7-4.7 4.7-12.3 0-17zM208 384c-97.3 0-176-78.7-176-176S110.7 32 208 32s176 78.7 176 176-78.7 176-176 176z" />
+                                </svg>
+                            }
                         />
                         <div className="search-result">
-                            {this.state.searchList && this.state.searchList.length > 0 &&
+                            {this.state.searchList && this.state.searchList.length > 0 && (
                                 <div className="search-list">
-                                    {this.state.searchList.map((item, index) =>
+                                    {this.state.searchList.map((item, index) => (
                                         <div
                                             key={index}
                                             onMouseEnter={() => this.setState({ highlighted: index })}
                                             className={"search-item" + (this.state.highlighted === index ? " highlighted" : "")}
-                                            onClick={() => { this.searchItemClicked(item.path); }}
-                                        >{item.name}
+                                            onClick={() => {
+                                                this.searchItemClicked(item.path);
+                                            }}
+                                        >
+                                            {item.name}
                                         </div>
-                                    )}
+                                    ))}
                                 </div>
-                            }
-                            {(this.state.searchList && !this.state.searchList.length && this.state.searchTerm && this.state.searchInFocus) &&
+                            )}
+                            {this.state.searchList && !this.state.searchList.length && this.state.searchTerm && this.state.searchInFocus && (
                                 <div className="search-list">
                                     <div className="search-item no-match">No match</div>
                                 </div>
-                            }
+                            )}
                         </div>
                     </div>
                     <div className="logo">
@@ -214,7 +221,11 @@ export default class TitleBar extends React.Component<TitleBarProps, TitleBarSta
                         <Icon
                             className="bars"
                             onClick={this.props.onToggleClick && this.props.onToggleClick}
-                            src={<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M442 114H6a6 6 0 0 0-6-6V84a6 6 0 0 0 6-6h436a6 6 0 0 0 6 6v24a6 6 0 0 0-6 6zm0 160H6a6 6 0 0 0-6-6v-24a6 6 0 0 0 6-6h436a6 6 0 0 0 6 6v24a6 6 0 0 0-6 6zm0 160H6a6 6 0 0 0-6-6v-24a6 6 0 0 0 6-6h436a6 6 0 0 0 6 6v24a6 6 0 0 0-6 6z" /></svg>}
+                            src={
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                                    <path d="M442 114H6a6 6 0 0 0-6-6V84a6 6 0 0 0 6-6h436a6 6 0 0 0 6 6v24a6 6 0 0 0-6 6zm0 160H6a6 6 0 0 0-6-6v-24a6 6 0 0 0 6-6h436a6 6 0 0 0 6 6v24a6 6 0 0 0-6 6zm0 160H6a6 6 0 0 0-6-6v-24a6 6 0 0 0 6-6h436a6 6 0 0 0 6 6v24a6 6 0 0 0-6 6z" />
+                                </svg>
+                            }
                         />
                     </div>
                     <div className="sidebar-title">@sebgroup/react-components</div>

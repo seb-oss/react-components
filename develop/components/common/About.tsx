@@ -8,7 +8,7 @@ const About: React.FunctionComponent = () => {
             <div className="md-file">
                 <Highlight innerHTML={true}>{docMD}</Highlight>
             </div>
-        </div >
+        </div>
     );
 };
 

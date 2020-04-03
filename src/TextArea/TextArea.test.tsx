@@ -71,7 +71,7 @@ describe("Component: TextArea", () => {
             ["keyup", "onKeyUp"],
             ["keypress", "onKeyPress"],
             ["focus", "onFocus"],
-            ["blur", "onBlur"],
+            ["blur", "onBlur"]
         ];
         testCases.map((testCase: [keyof WindowEventMap, keyof TextAreaProps]) => {
             const [type, action] = testCase;
@@ -83,5 +83,4 @@ describe("Component: TextArea", () => {
             });
         });
     });
-
 });

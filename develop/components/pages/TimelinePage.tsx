@@ -7,7 +7,6 @@ const TimelinePage: React.FunctionComponent = () => {
     return (
         <div className="route-template container">
             <div className="info-holder">
-
                 <div className="info">
                     <div className="md-file">
                         <Highlight innerHTML={true}>{docMD}</Highlight>
@@ -21,21 +20,18 @@ const TimelinePage: React.FunctionComponent = () => {
                     <div className="result wide">
                         <Timeline
                             list={list}
-                            onClick={(i: number) => { alert(`Item ${i} clicked`); }}
+                            onClick={(i: number) => {
+                                alert(`Item ${i} clicked`);
+                            }}
                         />
                     </div>
 
                     <p>Here is a sample of a horizontal timeline</p>
                     <div className="result wide">
-                        <Timeline
-                            list={list}
-                            direction="horizontal"
-                        />
+                        <Timeline list={list} direction="horizontal" />
                     </div>
                 </div>
-
             </div>
-
         </div>
     );
 };
@@ -55,7 +51,7 @@ const list: Array<TimelineListItem> = [
         title: "At the begining",
         time: "2008 - 2012",
         desc: "Fermentum dui faucibus in ornare quam viverra orci. Vitae tempus quam pellentesque nec. Praesent tristique magna sit amet purus gravida."
-    },
+    }
 ];
 
 export default TimelinePage;

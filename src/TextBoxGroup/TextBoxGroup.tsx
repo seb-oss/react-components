@@ -43,7 +43,7 @@ export const TextBoxGroup: React.FunctionComponent<TextBoxGroupProps> = (props: 
     const [showErrorMessage, setShowErrorMessage] = React.useState<boolean>(true);
 
     React.useEffect(() => {
-        setId(props.id ? props.id : (props.label ? randomId("tbg-") : null));
+        setId(props.id ? props.id : props.label ? randomId("tbg-") : null);
     }, [props.id, props.label]);
 
     React.useEffect(() => {
@@ -61,19 +61,23 @@ export const TextBoxGroup: React.FunctionComponent<TextBoxGroupProps> = (props: 
 
     return (
         <div className={"form-group input-box-group" + (props.className ? ` ${props.className}` : "")}>
-            {props.label && <label className="custom-label" htmlFor={id}>{props.label}</label>}
-            <div className={"input-group" + (props.success ? " success" : props.error ? " has-error" : "") + (props.disabled ? " disabled" : "")} >
+            {props.label && (
+                <label className="custom-label" htmlFor={id}>
+                    {props.label}
+                </label>
+            )}
+            <div className={"input-group" + (props.success ? " success" : props.error ? " has-error" : "") + (props.disabled ? " disabled" : "")}>
                 <div className="input-box-group-wrapper">
-                    {(props.leftIcon || props.leftText) &&
+                    {(props.leftIcon || props.leftText) && (
                         <div className={"input-group-prepend" + (props.onLeftClick ? " clickable" : "")} role={props.onLeftClick ? "button" : ""} onClick={props.onLeftClick}>
-                            {props.leftText && <span className="input-group-text" title={props.leftTitle}>{props.leftText}</span>}
-                            {(props.leftIcon && !props.leftText) &&
-                                <span className="input-group-text">
-                                    {props.leftIcon}
+                            {props.leftText && (
+                                <span className="input-group-text" title={props.leftTitle}>
+                                    {props.leftText}
                                 </span>
-                            }
+                            )}
+                            {props.leftIcon && !props.leftText && <span className="input-group-text">{props.leftIcon}</span>}
                         </div>
-                    }
+                    )}
                     <input
                         id={id}
                         name={props.name}
@@ -97,16 +101,16 @@ export const TextBoxGroup: React.FunctionComponent<TextBoxGroupProps> = (props: 
                         onBlur={props.onBlur}
                         ref={props.reference}
                     />
-                    {(props.rightIcon || props.rightText) &&
+                    {(props.rightIcon || props.rightText) && (
                         <div className={"input-group-append" + (props.onRightClick ? " clickable" : "")} onClick={props.onRightClick} role={props.onRightClick ? "button" : ""}>
-                            {props.rightText && <span className="input-group-text" title={props.rightTitle}>{props.rightText}</span>}
-                            {(props.rightIcon && !props.rightText) &&
-                                <span className="input-group-text">
-                                    {props.rightIcon}
+                            {props.rightText && (
+                                <span className="input-group-text" title={props.rightTitle}>
+                                    {props.rightText}
                                 </span>
-                            }
+                            )}
+                            {props.rightIcon && !props.rightText && <span className="input-group-text">{props.rightIcon}</span>}
                         </div>
-                    }
+                    )}
                 </div>
                 {showErrorMessage && <div className="alert alert-danger">{props.error}</div>}
             </div>

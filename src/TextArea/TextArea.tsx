@@ -30,13 +30,17 @@ export const TextArea: React.FunctionComponent<TextAreaProps> = (props: TextArea
     const [id, setId] = React.useState<string>();
 
     React.useEffect(() => {
-        setId(props.id ? props.id : (props.label ? randomId("textarea-") : null));
+        setId(props.id ? props.id : props.label ? randomId("textarea-") : null);
     }, [props.id, props.label]);
 
     return (
         <div className={"form-group text-area" + (props.className ? ` ${props.className}` : "")}>
             <div className={"input-field" + (props.error ? " has-error" : "")}>
-                {props.label && <label className="custom-label" htmlFor={id}>{props.label}</label>}
+                {props.label && (
+                    <label className="custom-label" htmlFor={id}>
+                        {props.label}
+                    </label>
+                )}
                 <textarea
                     name={props.name}
                     className={"form-control" + (props.resizable || props.resizable === undefined ? " resizable" : "")}

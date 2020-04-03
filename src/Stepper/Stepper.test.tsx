@@ -66,5 +66,4 @@ describe("Component: Stepper", () => {
         expect(wrapper.find(".alert-danger").length).toBe(0);
         expect(wrapper.find(".alert-warning").length).toBe(1);
     });
-
 });
