@@ -1,0 +1,13 @@
+name: Greetings
+
+on: [pull_request, issues]
+
+jobs:
+  greeting:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/first-interaction@v1
+      with:
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+        issue-message: 'Thank you for submitting your first issue. We will look into it as soon as we can. If you want to address this issue yourself, please read our [contributing guide](https://github.com/sebgroup/react-components/blob/develop/CONTRIBUTING.md) and submit a pull request.'
+        pr-message: '### :tada: Thank you for taking the time to contribute to our components library :tada:\nYour contribution is much appreciated. Please be reminded that code review might take a while so please bare with us. In the meantime, please make sure you run through the following:\n- [ ] Read our [contributing guide](https://github.com/sebgroup/react-components/blob/develop/CONTRIBUTING.md)\n- [ ] Submitted an issue describing the feature or bug with screenshots if possible\n- [ ] [Referencing the issue](https://help.github.com/en/github/managing-your-work-on-github/closing-issues-using-keywords) on this pull request so it can be automatically closed when the pull request is merged'

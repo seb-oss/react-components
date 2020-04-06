@@ -1,5 +1,5 @@
 import * as React from "react";
-const Highlight = (require("react-highlight")).default;
+import Highlight from "react-highlight";
 const docMD: string = require("../../../README.md");
 
 const About: React.FunctionComponent = () => {
@@ -8,7 +8,7 @@ const About: React.FunctionComponent = () => {
             <div className="md-file">
                 <Highlight innerHTML={true}>{docMD}</Highlight>
             </div>
-        </div >
+        </div>
     );
 };
 

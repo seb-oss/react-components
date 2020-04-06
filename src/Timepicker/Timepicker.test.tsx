@@ -3,11 +3,10 @@ import { shallow, mount } from "enzyme";
 import { Timepicker, TimepickerDayperiodTypes, TimepickerValue } from "./Timepicker";
 
 describe("Component: Timepicker", () => {
-
     const props = {
         value: { hours: 6, minutes: 30, dayperiod: TimepickerDayperiodTypes.AM },
         onChange: jest.fn(),
-        name: "myTimepicker"
+        name: "myTimepicker",
     };
 
     it("Should render", () => {
@@ -123,5 +122,4 @@ describe("Component: Timepicker", () => {
         result = instance.handleChange("MINUTES", -5, props.value);
         expect(result.minutes).toEqual(0);
     });
-
 });

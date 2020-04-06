@@ -1,6 +1,6 @@
 import * as React from "react";
 import { TextArea } from "../../../src/TextArea/TextArea";
-const Highlight = (require("react-highlight")).default;
+import Highlight from "react-highlight";
 const docMD: string = require("../../../src/TextArea/readme.md");
 
 const TextAreaPage: React.FunctionComponent = () => {
@@ -10,7 +10,6 @@ const TextAreaPage: React.FunctionComponent = () => {
     return (
         <div className="route-template container">
             <div className="info-holder">
-
                 <div className="info">
                     <div className="md-file">
                         <Highlight innerHTML={true}>{docMD}</Highlight>
@@ -45,9 +44,7 @@ const TextAreaPage: React.FunctionComponent = () => {
                         />
                     </div>
                 </div>
-
             </div>
-
         </div>
     );
 };

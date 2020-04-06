@@ -31,5 +31,4 @@ describe("Component: TextLabel", () => {
         expect(wrapper.find("label").length).toBe(1);
         expect(wrapper.find("label").text()).toEqual(label);
     });
-
 });

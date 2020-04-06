@@ -11,23 +11,23 @@ export interface LoaderProps {
 
 export type LoaderSize = "lg" | "md" | "sm";
 
-export const Loader: React.FunctionComponent<LoaderProps> = React.memo((props: LoaderProps): React.ReactElement<void> => {
-    const [size, setSize] = React.useState<string>("");
-    const [className, setClassName] = React.useState<string>("seb-loader-wrapper");
+export const Loader: React.FunctionComponent<LoaderProps> = React.memo(
+    (props: LoaderProps): React.ReactElement<void> => {
+        const [size, setSize] = React.useState<string>("");
+        const [className, setClassName] = React.useState<string>("seb-loader-wrapper");
 
-    React.useEffect(() => {
-        let classNameToSet: string = "seb-loader-wrapper";
-        classNameToSet += props.fullscreen !== undefined ? (props.fullscreen ? " fullscreen" : "") : "";
-        classNameToSet += props.className ? ` ${props.className}` : "";
-        setClassName(classNameToSet);
-    }, [props.className, props.fullscreen]);
+        React.useEffect(() => {
+            let classNameToSet: string = "seb-loader-wrapper";
+            classNameToSet += props.fullscreen !== undefined ? (props.fullscreen ? " fullscreen" : "") : "";
+            classNameToSet += props.className ? ` ${props.className}` : "";
+            setClassName(classNameToSet);
+        }, [props.className, props.fullscreen]);
 
-    React.useEffect(() => {
-        setSize(`loader-${props.size || "md"}`);
-    }, [props.size]);
+        React.useEffect(() => {
+            setSize(`loader-${props.size || "md"}`);
+        }, [props.size]);
 
-    return props.toggle ?
-        (
+        return props.toggle ? (
             <div className={className} id={props.id}>
                 <div className={"seb-loader" + (size ? ` ${size}` : "")}>
                     <div className="seb-loader-container">
@@ -41,7 +41,7 @@ export const Loader: React.FunctionComponent<LoaderProps> = React.memo((props: L
                         </div>
                     </div>
                 </div>
-            </div >
-        )
-        : null;
-});
+            </div>
+        ) : null;
+    }
+);

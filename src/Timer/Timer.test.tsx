@@ -5,7 +5,7 @@ import { Timer } from "./Timer";
 describe("Component: Timer", () => {
     const props = {
         duration: 1000,
-        callback: jest.fn()
+        callback: jest.fn(),
     };
 
     it("Should render", () => {
@@ -19,7 +19,6 @@ describe("Component: Timer", () => {
         const wrapper = shallow(<Timer {...props} className={className} id={id} />);
         expect(wrapper.hasClass(className)).toBeTruthy();
         expect(wrapper.find(`#${id}`).length).toBeTruthy();
-
     });
 
     it("check callback method", (done) => {
@@ -53,7 +52,9 @@ describe("Component: Timer", () => {
     test("Test Timer clearInterval method", () => {
         const wrapper = shallow(<Timer {...props} />);
         const instance: any = wrapper.instance();
-        instance.innerInterval = setInterval(() => { console.log("interval started"); }, 1000);
+        instance.innerInterval = setInterval(() => {
+            console.log("interval started");
+        }, 1000);
         instance.clearInterval();
         expect(instance.innerInterval).toEqual(null);
     });
@@ -80,7 +81,7 @@ describe("Component: Timer", () => {
     test("Timer Should not update its value when component re-renders unless receives updates", (done) => {
         const newProps = {
             duration: 3000,
-            callback: jest.fn()
+            callback: jest.fn(),
         };
         const wrapper = shallow(<Timer {...newProps} />);
         const instance: any = wrapper.instance();
@@ -104,7 +105,7 @@ describe("Component: Timer", () => {
     it("check null/undefined duration", () => {
         const newProps = {
             duration: null,
-            callback: jest.fn()
+            callback: jest.fn(),
         };
         const wrapper = shallow(<Timer {...newProps} />);
         const instance: any = wrapper.instance();
@@ -118,5 +119,4 @@ describe("Component: Timer", () => {
         wrapper.setProps(newProps);
         expect(instance.innerInterval).not.toBe(undefined);
     });
-
 });

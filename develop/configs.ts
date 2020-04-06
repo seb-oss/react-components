@@ -24,7 +24,7 @@ const configs = {
     context: DEFAULT,
     lang: LANG_EN,
     activateSW: false,
-    verNo: 0.1
+    verNo: 0.1,
 };
 
 export default configs;

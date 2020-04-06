@@ -3,20 +3,24 @@ import { Button, ButtonTheme, ButtonIconPosition, ButtonSizes } from "../../../s
 import { Loader } from "../../../src/Loader/Loader";
 import { RadioGroup, RadioListModel } from "../../../src/RadioGroup/RadioGroup";
 import { CheckBox } from "../../../src/CheckBox/CheckBox";
-const Highlight = (require("react-highlight")).default;
+import Highlight from "react-highlight";
 const docMD: string = require("../../../src/Button/readme.md");
 
-const mysvg: JSX.Element = <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M12.8 371.2L.2 485.3c-1.7 15.3 11.2 28.2 26.5 26.5l114.2-12.7 352.4-352.4c25-25 25-65.5 0-90.5l-37.5-37.5c-25-25-65.5-25-90.5 0L12.8 371.2zm113.3 97.4L33 478.9l10.3-93.1 271.9-271.9 82.7 82.7-271.8 272zm344.5-344.5L420.7 174 338 91.3l49.9-49.9c12.5-12.5 32.7-12.5 45.3 0l37.5 37.5c12.4 12.4 12.4 32.7-.1 45.2z" /></svg>;
+const mysvg: JSX.Element = (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+        <path d="M12.8 371.2L.2 485.3c-1.7 15.3 11.2 28.2 26.5 26.5l114.2-12.7 352.4-352.4c25-25 25-65.5 0-90.5l-37.5-37.5c-25-25-65.5-25-90.5 0L12.8 371.2zm113.3 97.4L33 478.9l10.3-93.1 271.9-271.9 82.7 82.7-271.8 272zm344.5-344.5L420.7 174 338 91.3l49.9-49.9c12.5-12.5 32.7-12.5 45.3 0l37.5 37.5c12.4 12.4 12.4 32.7-.1 45.2z" />
+    </svg>
+);
 
 const ButtonPage: React.FunctionComponent = () => {
     const themeList: Array<RadioListModel<ButtonTheme>> = [
         { label: "Primary", value: "primary" },
+        { label: "Primary (outlined)", value: "outline-primary" },
         { label: "Secondary", value: "secondary" },
-        { label: "Alternative", value: "alternative" },
         { label: "Danger", value: "danger" },
         { label: "Ghost-dark", value: "ghost-dark" },
         { label: "Ghost-light", value: "ghost-light" },
-        { label: "Anchor", value: "anchor" },
+        { label: "Link", value: "link" },
     ];
     const iconPositionList: Array<RadioListModel<ButtonIconPosition>> = [
         { label: "Right", value: "right" },
@@ -48,7 +52,6 @@ const ButtonPage: React.FunctionComponent = () => {
     return (
         <div className="route-template container">
             <div className="info-holder">
-
                 <div className="info">
                     <div className="md-file">
                         <Highlight innerHTML={true}>{docMD}</Highlight>
@@ -76,20 +79,14 @@ const ButtonPage: React.FunctionComponent = () => {
                     <div className="row">
                         <div className="col">
                             <p>Themes</p>
-                            <RadioGroup
-                                name="theme"
-                                list={themeList}
-                                value={theme}
-                                onChange={(e) => setTheme(e.currentTarget.value as ButtonTheme)}
-                                condensed
-                            />
+                            <RadioGroup name="theme" list={themeList} value={theme} onChange={(e) => setTheme(e.currentTarget.value as ButtonTheme)} condensed />
                         </div>
                         <div className="col">
                             <p>Options</p>
                             <CheckBox label="Disabled" name="disabled" checked={disabled} onChange={(e) => setDisabled(e.target.checked)} condensed />
                             <CheckBox label="Loader" name="loader" checked={hasLoader} onChange={(e) => setHasLoader(e.target.checked)} condensed />
                             <CheckBox label="Icon" name="icon" checked={hasIcon} onChange={iconCheckboxChanged} condensed />
-                            {hasIcon &&
+                            {hasIcon && (
                                 <RadioGroup
                                     className="pl-4"
                                     list={iconPositionList}
@@ -98,18 +95,9 @@ const ButtonPage: React.FunctionComponent = () => {
                                     name="icon-position"
                                     onChange={(e) => setIconPosition(e.target.value as ButtonIconPosition)}
                                 />
-                            }
+                            )}
                             <CheckBox label="Size" name="size" checked={hasSize} onChange={sizeCheckboxChanged} condensed />
-                            {hasSize &&
-                                <RadioGroup
-                                    className="pl-4"
-                                    list={sizeList}
-                                    value={size}
-                                    condensed
-                                    name="icon-size"
-                                    onChange={(e) => setSize(e.target.value as ButtonSizes)}
-                                />
-                            }
+                            {hasSize && <RadioGroup className="pl-4" list={sizeList} value={size} condensed name="icon-size" onChange={(e) => setSize(e.target.value as ButtonSizes)} />}
                         </div>
                     </div>
                 </div>

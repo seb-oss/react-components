@@ -2,7 +2,7 @@ import * as React from "react";
 import { shallow, ShallowWrapper, ReactWrapper, mount } from "enzyme";
 import { Button, ButtonProps, ButtonTheme, ButtonSizes } from "./Button";
 
-type ButtonTestItem<T, K> = { value: T, expected: K };
+type ButtonTestItem<T, K> = { value: T; expected: K };
 
 describe("Component: Button", () => {
     let wrapper: ShallowWrapper<ButtonProps>;
@@ -10,7 +10,7 @@ describe("Component: Button", () => {
 
     const props: ButtonProps = {
         label: "label",
-        onClick: jest.fn()
+        onClick: jest.fn(),
     };
 
     beforeEach(() => {
@@ -44,11 +44,12 @@ describe("Component: Button", () => {
     describe("Should render supported themes", () => {
         const list: Array<ButtonTestItem<ButtonTheme, string>> = [
             { value: "primary", expected: "btn-primary" },
-            { value: "secondary", expected: "btn-outline-primary" },
-            { value: "alternative", expected: "btn-secondary" },
+            { value: "outline-primary", expected: "btn-outline-primary" },
+            { value: "secondary", expected: "btn-secondary" },
             { value: "ghost-dark", expected: "btn-ghost-dark" },
             { value: "ghost-light", expected: "btn-ghost-light" },
-            { value: "anchor", expected: "btn-anchor" },
+            { value: "anchor", expected: "btn-link" },
+            { value: "link", expected: "btn-link" },
             { value: "danger", expected: "btn-danger" },
             { value: "unsupported-theme" as any, expected: "btn-primary" },
         ];
@@ -101,7 +102,11 @@ describe("Component: Button", () => {
 
     it("Should render children in replacement for icons", () => {
         const svgId: string = "my-test-svg";
-        wrapper = shallow(<Button {...props} iconPosition="left"><svg id={svgId} /></Button>);
+        wrapper = shallow(
+            <Button {...props} iconPosition="left">
+                <svg id={svgId} />
+            </Button>
+        );
         expect(wrapper.find(`#${svgId}`).length).toBeDefined();
     });
 

@@ -18,7 +18,8 @@
         "noImplicitReturns": false,
         "noImplicitThis": false,
         "noImplicitAny": false,
-        "strictNullChecks": false
+        "strictNullChecks": false,
+        "allowSyntheticDefaultImports": true
     },
     "exclude": [
         "**/*.test.tsx"

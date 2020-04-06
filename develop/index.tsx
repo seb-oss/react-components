@@ -9,5 +9,6 @@ import "./styles/main.scss";
 render(
     <HashRouter>
         <App />
-    </HashRouter>, document.getElementById("app") as HTMLElement
+    </HashRouter>,
+    document.getElementById("app") as HTMLElement
 );

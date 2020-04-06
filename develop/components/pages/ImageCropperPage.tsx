@@ -1,6 +1,6 @@
 import * as React from "react";
 import { ImageCropper, OptionProps } from "../../../src/ImageCropper";
-const Highlight = (require("react-highlight")).default;
+import Highlight from "react-highlight";
 const docMD: string = require("../../../src/ImageCropper/readme.md");
 
 const ImageCropperPage: React.FunctionComponent = () => {
@@ -18,15 +18,10 @@ const ImageCropperPage: React.FunctionComponent = () => {
                     <h2>Output</h2>
                     <p>Here is sample output</p>
                     <div className="result">
-                        <ImageCropper
-                            cropperConfigs={cropperConfigs}
-                            onCrop={(croppedData: any) => setCropResult(croppedData)}
-                        />
+                        <ImageCropper cropperConfigs={cropperConfigs} onCrop={(croppedData: any) => setCropResult(croppedData)} />
                     </div>
                 </div>
-
             </div>
-
         </div>
     );
 };
@@ -37,7 +32,7 @@ const cropperConfigs: OptionProps = {
     guides: false,
     responsive: true,
     zoomable: false,
-    aspectRatio: (1 / 1),
+    aspectRatio: 1 / 1,
     rotatable: false,
 };
 

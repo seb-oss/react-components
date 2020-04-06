@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Dropdown, DropdownItem } from "../../../src/Dropdown/Dropdown";
 import { Toggle } from "../../../src/Toggle/Toggle";
-const Highlight = (require("react-highlight")).default;
+import Highlight from "react-highlight";
 const docMD: string = require("../../../src/Dropdown/readme.md");
 
 const DropdownPage: React.FunctionComponent = () => {
@@ -11,11 +11,15 @@ const DropdownPage: React.FunctionComponent = () => {
     const [dropDownList4Selected, setDropdownList4Selected] = React.useState<DropdownItem>(null);
     const [dropDownList5Selected, setDropdownList5Selected] = React.useState<Array<DropdownItem>>([]);
     const [disabled, setDisabled] = React.useState<boolean>(false);
+    const [error, setError] = React.useState<string>("");
+
+    const handleToggleError = React.useCallback(() => {
+        setError((currentError) => (currentError === null ? "Example error message" : null));
+    }, [setError]);
 
     return (
         <div className="route-template container">
             <div className="info-holder">
-
                 <div className="info">
                     <div className="md-file">
                         <Highlight innerHTML={true}>{docMD}</Highlight>
@@ -32,6 +36,7 @@ const DropdownPage: React.FunctionComponent = () => {
                             selectedValue={dropDownList1Selected}
                             onChange={(value: DropdownItem) => setDropdownList1Selected(value)}
                             disabled={disabled}
+                            error={error}
                         />
                     </div>
 
@@ -47,6 +52,7 @@ const DropdownPage: React.FunctionComponent = () => {
                             placeholder="Multi option"
                             multi={true}
                             disabled={disabled}
+                            error={error}
                         />
                     </div>
 
@@ -59,6 +65,7 @@ const DropdownPage: React.FunctionComponent = () => {
                             onChange={(value: DropdownItem) => setDropdownList3Selected(value)}
                             more={true}
                             disabled={disabled}
+                            error={error}
                         />
                     </div>
 
@@ -74,6 +81,7 @@ const DropdownPage: React.FunctionComponent = () => {
                             }}
                             native={true}
                             disabled={disabled}
+                            error={error}
                         />
                         <Dropdown
                             label="Native dropdown"
@@ -94,16 +102,13 @@ const DropdownPage: React.FunctionComponent = () => {
                             multi={true}
                             native={true}
                             disabled={disabled}
+                            error={error}
                         />
                     </div>
 
                     <div className="result mt-5">
-                        <Toggle
-                            name="disabled-toggle"
-                            label="Disabled all"
-                            value={disabled}
-                            onChange={(e) => setDisabled(e.target.checked)}
-                        />
+                        <Toggle name="disabled-toggle" label="Disabled all" value={disabled} onChange={(e) => setDisabled(e.target.checked)} />
+                        <Toggle name="show-error-toggle" label="Show error messages" value={!!error} onChange={handleToggleError} />
                     </div>
                 </div>
             </div>

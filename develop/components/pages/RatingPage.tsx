@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Rating } from "../../../src/Rating/Rating";
-const Highlight = (require("react-highlight")).default;
+import Highlight from "react-highlight";
 const docMD: string = require("../../../src/Rating/readme.md");
 
 const RatingPage: React.FunctionComponent = () => {
@@ -9,7 +9,6 @@ const RatingPage: React.FunctionComponent = () => {
     return (
         <div className="route-template container">
             <div className="info-holder">
-
                 <div className="info">
                     <div className="md-file">
                         <Highlight innerHTML={true}>{docMD}</Highlight>
@@ -20,25 +19,15 @@ const RatingPage: React.FunctionComponent = () => {
                     <h2>Output</h2>
                     <p>Here are sample outputs, selected value: {rating}</p>
                     <div className="result">
-                        <Rating
-                            initialValue={rating}
-                            onChange={(value: number) => setRating(value)}
-                            tooltipList={["Very Poor", "Poor", "Average", "Very Good", "Excellent"]}
-                        />
+                        <Rating initialValue={rating} onChange={(value: number) => setRating(value)} tooltipList={["Very Poor", "Poor", "Average", "Very Good", "Excellent"]} />
                     </div>
 
                     <p>Disabled</p>
                     <div className="result">
-                        <Rating
-                            initialValue={rating}
-                            onChange={(value: number) => setRating(value)}
-                            disabled={true}
-                        />
+                        <Rating initialValue={rating} onChange={(value: number) => setRating(value)} disabled={true} />
                     </div>
                 </div>
-
             </div>
-
         </div>
     );
 };

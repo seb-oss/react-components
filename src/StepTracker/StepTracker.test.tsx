@@ -5,7 +5,7 @@ import { StepTracker, StepTrackerProps } from "./StepTracker";
 describe("Component: StepTracker", () => {
     const props: StepTrackerProps = {
         step: 1,
-        list: ["first", "second", "third", "fourth"]
+        list: ["first", "second", "third", "fourth"],
     };
     let wrapper: ShallowWrapper<StepTrackerProps>;
 
@@ -56,5 +56,4 @@ describe("Component: StepTracker", () => {
         wrapper.setProps({ orientation: "vertical" });
         expect(wrapper.find(".step").first().hasClass("numbered"));
     });
-
 });

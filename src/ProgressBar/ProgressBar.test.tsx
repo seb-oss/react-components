@@ -29,5 +29,4 @@ describe("Component: ProgressBar", () => {
         wrapper.setProps({ value: 60 });
         expect(wrapper.find(".custom-progress-text").first().hasClass("white")).toBeTruthy();
     });
-
 });

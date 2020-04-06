@@ -6,7 +6,7 @@ describe("Component: Carousel", () => {
     const carouselList: Array<CarouselItem> = [
         { title: "title", desc: "desc", image: "imagepath" },
         { title: "title", desc: "desc", image: "imagepath" },
-        { title: "title", desc: "desc", image: "imagepath" }
+        { title: "title", desc: "desc", image: "imagepath" },
     ];
     let wrapper: ShallowWrapper<CarouselProps>;
 
@@ -42,15 +42,7 @@ describe("Component: Carousel", () => {
     it("Should override the default values of autoplay and autoplayspeed", async (done) => {
         expect.assertions(3);
         const onChange: jest.Mock = jest.fn();
-        const mountedWrapper: ReactWrapper<CarouselProps> = mount(
-            <Carousel
-                list={carouselList}
-                afterChange={onChange}
-                autoPlay={true}
-                autoPlaySpeed={500}
-                infinite={true}
-            />
-        );
+        const mountedWrapper: ReactWrapper<CarouselProps> = mount(<Carousel list={carouselList} afterChange={onChange} autoPlay={true} autoPlaySpeed={500} infinite={true} />);
         expect(mountedWrapper.prop("autoPlay")).toEqual(true);
         expect(mountedWrapper.prop("autoPlaySpeed")).toEqual(500);
         await setTimeout(() => {

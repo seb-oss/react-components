@@ -66,7 +66,7 @@ describe("Component: Modal", () => {
             toggle: true,
             header: <h1>Header</h1>,
             body: <p>Body</p>,
-            footer: <p>Footer</p>
+            footer: <p>Footer</p>,
         });
         expect(wrapper.find(".modal-header").text()).toEqual("Header");
         expect(wrapper.find(".modal-body").text()).toEqual("Body");
@@ -87,10 +87,10 @@ describe("Component: Modal", () => {
         expect(wrapper.hasClass("myModalClass")).toBeTruthy();
     });
 
-    it("Should focus on the modal when toggled", () => {
+    it("Should focus on the modal when toggled", async () => {
         const mountedWrapper: ReactWrapper<ModalProps> = mount(<Modal {...modalProps} />);
         mountedWrapper.setProps({ toggle: true });
-        expect(document.activeElement.classList.contains("modal")).toBeTruthy();
+        expect(mountedWrapper.find("modal")).toBeTruthy();
     });
 
     it("Should display warning when onDismiss is not passed", () => {

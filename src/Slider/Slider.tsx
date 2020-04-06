@@ -2,8 +2,16 @@ import * as React from "react";
 import { SlideUpDown } from "../__utils/animations";
 import "./slider-style.scss";
 
-const angleLeftIcon: JSX.Element = <svg name="angle-left" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 512"><path d="M25.1 247.5l117.8-116c4.7-4.7 12.3-4.7 17 0l7.1 7.1c4.7 4.7 4.7 12.3 0 17L64.7 256l102.2 100.4c4.7 4.7 4.7 12.3 0 17l-7.1 7.1c-4.7 4.7-12.3 4.7-17 0L25 264.5c-4.6-4.7-4.6-12.3.1-17z" /></svg>;
-const angleRightIcon: JSX.Element = <svg name="angle-right" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 512"><path d="M166.9 264.5l-117.8 116c-4.7 4.7-12.3 4.7-17 0l-7.1-7.1c-4.7-4.7-4.7-12.3 0-17L127.3 256 25.1 155.6c-4.7-4.7-4.7-12.3 0-17l7.1-7.1c4.7-4.7 12.3-4.7 17 0l117.8 116c4.6 4.7 4.6 12.3-.1 17z" /></svg>;
+const angleLeftIcon: JSX.Element = (
+    <svg name="angle-left" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 512">
+        <path d="M25.1 247.5l117.8-116c4.7-4.7 12.3-4.7 17 0l7.1 7.1c4.7 4.7 4.7 12.3 0 17L64.7 256l102.2 100.4c4.7 4.7 4.7 12.3 0 17l-7.1 7.1c-4.7 4.7-12.3 4.7-17 0L25 264.5c-4.6-4.7-4.6-12.3.1-17z" />
+    </svg>
+);
+const angleRightIcon: JSX.Element = (
+    <svg name="angle-right" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 512">
+        <path d="M166.9 264.5l-117.8 116c-4.7 4.7-12.3 4.7-17 0l-7.1-7.1c-4.7-4.7-4.7-12.3 0-17L127.3 256 25.1 155.6c-4.7-4.7-4.7-12.3 0-17l7.1-7.1c4.7-4.7 12.3-4.7 17 0l117.8 116c4.6 4.7 4.6 12.3-.1 17z" />
+    </svg>
+);
 
 export type SliderTheme = "primary" | "inverted" | "success" | "danger" | "warning" | "purple";
 
@@ -74,7 +82,8 @@ const Slider: React.FunctionComponent<SliderProps> = (props: SliderProps): React
     function getSize(minValue: number, maxValue: number): number {
         if (maxValue > minValue) {
             return maxValue - minValue;
-        } else { // Will calculate the size anyway, but it will show a warning since the min is larger than the max
+        } else {
+            // Will calculate the size anyway, but it will show a warning since the min is larger than the max
             console.warn(`The max value of the slider should be larger than the min value (Max:${max}, Min: ${min}`);
             return minValue - maxValue;
         }
@@ -116,12 +125,12 @@ const Slider: React.FunctionComponent<SliderProps> = (props: SliderProps): React
             if (props.value <= 0) {
                 zeroPosition = size ? Math.abs((min / size) * 100) : 0;
                 style.left = `calc(${zeroPosition}% + 27px)`;
-                style.width = (zeroPosition - calculatedThumbPosition) + "%";
+                style.width = zeroPosition - calculatedThumbPosition + "%";
                 style.transform = "rotateY(180deg)";
             } else {
-                zeroPosition = size ? Math.abs(100 - ((max / size) * 100)) : 0;
+                zeroPosition = size ? Math.abs(100 - (max / size) * 100) : 0;
                 style.left = `calc(${zeroPosition}% + 27px)`;
-                style.width = (calculatedThumbPosition - zeroPosition) + "%";
+                style.width = calculatedThumbPosition - zeroPosition + "%";
             }
         }
         return style;
@@ -150,17 +159,11 @@ const Slider: React.FunctionComponent<SliderProps> = (props: SliderProps): React
      */
     function shouldEnableTransition(): boolean {
         const maxNumberOfStepsToAllowTransition: number = 30;
-        return (size / props.step) <= maxNumberOfStepsToAllowTransition;
+        return size / props.step <= maxNumberOfStepsToAllowTransition;
     }
 
     return (
-        <div
-            className={
-                "form-group custom-slider"
-                + (props.className ? ` ${props.className}` : "")
-                + (props.disabled ? " disabled" : "")
-            }
-        >
+        <div className={"form-group custom-slider" + (props.className ? ` ${props.className}` : "") + (props.disabled ? " disabled" : "")}>
             {props.label && <label className="custom-label">{props.label}</label>}
             <div className={"input-field" + (props.labels && props.labels.length ? " has-labels" : "")}>
                 <input
@@ -180,27 +183,19 @@ const Slider: React.FunctionComponent<SliderProps> = (props: SliderProps): React
                         <div className="custom-slider-slider-before" />
                         <div className="custom-slider-slider-after" style={activeTrackStyles} />
                         <div className="custom-slider-thumb" style={{ left: thumbPosition + "%" }}>
-                            <div
-                                className={
-                                    "custom-slider-preview" +
-                                    (props.alwaysShowTooltip ? " always-show" : "") +
-                                    (props.tooltipTheme ? ` ${props.tooltipTheme}` : " inverted")}
-                            >{props.tooltipValue || props.value}
+                            <div className={"custom-slider-preview" + (props.alwaysShowTooltip ? " always-show" : "") + (props.tooltipTheme ? ` ${props.tooltipTheme}` : " inverted")}>
+                                {props.tooltipValue || props.value}
                             </div>
                             <span className="custom-slider-icon-left">{angleLeftIcon}</span>
                             <span className="custom-slider-icon-right">{angleRightIcon}</span>
                         </div>
-                        {(props.labels && props.labels.length) ?
-                            props.labels.map((label: RangeSliderLabel, i: number) =>
-                                <div
-                                    key={i}
-                                    className={"custom-slider-label" + (props.showTicks ? " show-ticks" : "")}
-                                    style={{ left: labelsPositions[i] }}
-                                >
-                                    <span>{label.text}</span>
-                                </div>
-                            ) : null
-                        }
+                        {props.labels && props.labels.length
+                            ? props.labels.map((label: RangeSliderLabel, i: number) => (
+                                  <div key={i} className={"custom-slider-label" + (props.showTicks ? " show-ticks" : "")} style={{ left: labelsPositions[i] }}>
+                                      <span>{label.text}</span>
+                                  </div>
+                              ))
+                            : null}
                     </div>
                 </div>
             </div>
