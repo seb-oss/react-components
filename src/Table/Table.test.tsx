@@ -54,15 +54,15 @@ describe("Component: Table", () => {
         container = null;
     });
 
-    it("Should render simple table", () => {
-        act(() => {
+    it("Should render simple table", async () => {
+        await act(async () => {
             render(<Table columns={columns} data={smallData} />, container);
         });
         expect(container).toBeDefined();
     });
 
-    it("Should render and alloow blacklisting or hiding columns ", () => {
-        act(() => {
+    it("Should render and alloow blacklisting or hiding columns ", async () => {
+        await act(async () => {
             render(<Table columns={columns} data={smallData} />, container);
         });
         expect(container.querySelectorAll("thead > tr > th").length).toEqual(columns.length);
@@ -74,42 +74,42 @@ describe("Component: Table", () => {
             return column;
         });
 
-        act(() => {
+        await act(async () => {
             render(<Table columns={editableColumns} data={smallData} />, container);
         });
 
         expect(container.querySelectorAll("thead > tr > th").length).toEqual(columns.length - 1);
     });
 
-    it("Should render and be able to sort rows ", () => {
+    it("Should render and be able to sort rows ", async () => {
         const event: jest.Mock = jest.fn((rows: Array<TableRow>, sortByColumn: TableHeader) => console.log("onAfterSorting called"));
         const onSortEvent: jest.Mock = jest.fn((rows: Array<TableRow>, accessor: string, sortingOrder: sortDirectionTypes) => rows.slice(0, 2));
-        act(() => {
+        await act(async () => {
             render(<Table columns={columns} data={smallData} sortProps={{ onAfterSorting: event }} />, container);
         });
 
         // sort number type column(age) ascending and descending
-        act(() => {
+        await act(async () => {
             container
                 .querySelectorAll(".icon-holder")
                 .item(3)
                 .dispatchEvent(new MouseEvent("click", { bubbles: true }));
         });
-        act(() => {
+        await act(async () => {
             container
                 .querySelectorAll(".icon-holder")
                 .item(3)
                 .dispatchEvent(new MouseEvent("click", { bubbles: true }));
         });
         // sort ascending
-        act(() => {
+        await act(async () => {
             container
                 .querySelectorAll(".icon-holder")
                 .item(1)
                 .dispatchEvent(new MouseEvent("click", { bubbles: true }));
         });
         // sort descending
-        act(() => {
+        await act(async () => {
             container
                 .querySelectorAll(".icon-holder")
                 .item(1)
@@ -121,10 +121,10 @@ describe("Component: Table", () => {
         expect(event).toHaveBeenCalledTimes(4);
 
         // you can also use a custom onSort callback as passed by the user
-        act(() => {
+        await act(async () => {
             render(<Table columns={columns} data={smallData} sortProps={{ onSort: onSortEvent, onAfterSorting: event }} />, container);
         });
-        act(() => {
+        await act(async () => {
             container
                 .querySelectorAll(".icon-holder")
                 .item(1)
@@ -134,18 +134,18 @@ describe("Component: Table", () => {
         expect(container.querySelectorAll("tbody > tr.parent-row").length).toEqual(2);
 
         // it also support a server sorting, just sort and update your data and columns
-        act(() => {
+        await act(async () => {
             render(<Table columns={columns} data={smallData} sortProps={{ onSort: onSortEvent, onAfterSorting: event, useServerSorting: true }} />, container);
         });
 
         expect(container.querySelectorAll("tbody > tr.parent-row").length).toEqual(2);
     });
 
-    it("Should render and do pagination where necessary ", () => {
+    it("Should render and do pagination where necessary ", async () => {
         const pageSize: number = 30;
         const paginationValue: number = 1;
         const setPage: jest.Mock = jest.fn((n: number) => console.log("setPage called"));
-        act(() => {
+        await act(async () => {
             render(
                 <Table
                     columns={columns}
@@ -157,7 +157,7 @@ describe("Component: Table", () => {
                 container
             );
         });
-        act(() => {
+        await act(async () => {
             container
                 .querySelectorAll("tfoot > tr .page-item")
                 .item(1)
@@ -167,19 +167,19 @@ describe("Component: Table", () => {
         expect(setPage).toHaveBeenCalled();
     });
 
-    it("Should render and be able to expand the subRows and row details ", () => {
+    it("Should render and be able to expand the subRows and row details ", async () => {
         const onRowExpanded: jest.Mock = jest.fn((rows: Array<TableRow>) => console.log("onRowExpanded called"));
-        act(() => {
+        await act(async () => {
             render(<Table columns={columns} data={smallData} onRowExpanded={onRowExpanded} />, container);
         });
-        act(() => {
+        await act(async () => {
             container
                 .querySelectorAll("tbody > tr.parent-row .icon-holder svg")
                 .item(1)
                 .dispatchEvent(new MouseEvent("click", { bubbles: true }));
         });
 
-        act(() => {
+        await act(async () => {
             container
                 .querySelectorAll("tbody > tr.sub-row .icon-holder svg")
                 .item(1)
@@ -195,11 +195,11 @@ describe("Component: Table", () => {
         // it should be collapsable even for rowDetails
 
         const newData: Array<TableRow> = smallData.map((row: TableRow) => ({ ...row, subRows: undefined, rowContentDetail: <p>paragraph</p> }));
-        act(() => {
+        await act(async () => {
             render(<Table columns={columns} data={newData} onRowExpanded={onRowExpanded} />, container);
         });
 
-        act(() => {
+        await act(async () => {
             container
                 .querySelectorAll("tbody > tr.parent-row .icon-holder svg")
                 .item(1)
@@ -210,18 +210,18 @@ describe("Component: Table", () => {
         expect(container.querySelectorAll("tbody > tr.parent-row.expanded").length).toEqual(1);
     });
 
-    it("should render with and support row selection where necessary", () => {
+    it("should render with and support row selection where necessary", async () => {
         // all items select
         let results: Array<TableRow> = [];
         const onRowSelected: jest.Mock = jest.fn((rows: Array<TableRow>) => {
             results = rows;
         });
 
-        act(() => {
+        await act(async () => {
             render(<Table columns={columns} data={smallData} onRowSelected={onRowSelected} />, container);
         });
 
-        act(() => {
+        await act(async () => {
             // all items select
             container
                 .querySelectorAll("thead .custom-control-input")
@@ -231,7 +231,7 @@ describe("Component: Table", () => {
 
         expect(results.length).toEqual(smallData.length);
 
-        act(() => {
+        await act(async () => {
             // all items select
             container
                 .querySelectorAll("thead .custom-control-input")
@@ -241,7 +241,7 @@ describe("Component: Table", () => {
 
         expect(results.length).toEqual(0);
 
-        act(() => {
+        await act(async () => {
             // one parent item selection
             container
                 .querySelectorAll("tbody tr.parent-row .custom-control-input")
@@ -251,7 +251,7 @@ describe("Component: Table", () => {
 
         expect(results.length).toEqual(1);
 
-        act(() => {
+        await act(async () => {
             // one subrow item selected
             container
                 .querySelectorAll("tbody tr.sub-row .custom-control-input")
@@ -262,7 +262,7 @@ describe("Component: Table", () => {
         expect(onRowSelected).toHaveBeenCalledTimes(4);
     });
 
-    describe("should handle inline textbox edit ", () => {
+    describe("should handle inline textbox edit ", async () => {
         let results: Array<TableRow> = [];
         let textContainer: HTMLDivElement = null;
 
@@ -291,24 +291,24 @@ describe("Component: Table", () => {
             textContainer = null;
         });
 
-        it("should render and handle edit and save  ", () => {
-            act(() => {
+        it("should render and handle edit and save  ", async () => {
+            await act(async () => {
                 render(<Table columns={columns} data={updatedSelectedRows} onRowSelected={onRowSelected} editProps={editProps} />, textContainer);
             });
 
             expect(textContainer.querySelectorAll(selector).length).toEqual(0);
 
-            act(() => {
+            await act(async () => {
                 render(<Table columns={columns} data={updatedSelectedRows} onRowSelected={onRowSelected} />, textContainer);
             });
 
-            act(() => {
+            await act(async () => {
                 render(<Table columns={columns} data={updatedSelectedRows} onRowSelected={onRowSelected} editProps={{ ...editProps, mode: "edit" }} />, textContainer);
             });
 
             expect(textContainer.querySelectorAll(selector).length).toBeGreaterThan(0);
 
-            act(() => {
+            await act(async () => {
                 render(<Table columns={columns} data={updatedSelectedRows} onRowSelected={onRowSelected} editProps={{ ...editProps, mode: "save" }} />, textContainer);
             });
 
@@ -317,10 +317,10 @@ describe("Component: Table", () => {
             expect(results.length).toEqual(updatedSelectedRows.length);
         });
 
-        it("should render and handle edit and cancel ", () => {
+        it("should render and handle edit and cancel ", async () => {
             // now repeat the process, for cancel
             results = [];
-            act(() => {
+            await act(async () => {
                 render(
                     <Table columns={columns} data={updatedSelectedRows} onRowSelected={onRowSelected} editProps={{ ...editProps, blackListedAccessors: ["firstName", "lastName"] }} />,
                     textContainer
@@ -331,7 +331,7 @@ describe("Component: Table", () => {
 
             // blaclist some columns
 
-            act(() => {
+            await act(async () => {
                 render(
                     <Table columns={columns} data={updatedSelectedRows} onRowSelected={onRowSelected} editProps={{ ...editProps, mode: "edit", blackListedAccessors: ["firstName", "lastName"] }} />,
                     textContainer
@@ -343,7 +343,7 @@ describe("Component: Table", () => {
             // id column is ommited by default, + firstName and lastName , 3
             expect(textContainer.querySelectorAll(selector).length).toEqual((columns.length - 3) * updatedSelectedRows.length);
 
-            act(() => {
+            await act(async () => {
                 render(<Table columns={columns} data={updatedSelectedRows} onRowSelected={onRowSelected} editProps={{ ...editProps, mode: "cancel" }} />, textContainer);
             });
 
@@ -352,13 +352,13 @@ describe("Component: Table", () => {
         });
     });
 
-    it("should render and have optional footer row", () => {
-        act(() => {
+    it("should render and have optional footer row", async () => {
+        await act(async () => {
             render(<Table columns={columns} data={smallData} />, container);
         });
         expect(container.querySelector("tfoot tr")).toBeFalsy();
 
-        act(() => {
+        await act(async () => {
             render(<Table columns={columns} data={smallData} footer={<p>This is a paragraph. </p>} />, container);
         });
         expect(container.querySelector("tfoot tr")).toBeTruthy();
@@ -386,8 +386,8 @@ describe("Component: Table", () => {
             actionContainer = null;
         });
 
-        it("For parent row ", () => {
-            act(() => {
+        it("For parent row ", async () => {
+            await act(async () => {
                 render(<Table columns={columns} data={newData} actionLinks={actionLinks} />, actionContainer);
             });
 
@@ -396,7 +396,7 @@ describe("Component: Table", () => {
             expect(actionContainer.querySelector(openedActionColumnString)).toBeNull();
             expect(actionContainer.querySelector(openedActionColumnString)).toBeFalsy();
 
-            act(() => {
+            await act(async () => {
                 actionContainer
                     .querySelectorAll("tbody tr.parent-row td .action-column .ellipsis-dropdown-holder")
                     .item(1)
@@ -406,7 +406,7 @@ describe("Component: Table", () => {
             expect(actionContainer.querySelector(openedActionColumnString)).toBeDefined();
             expect(actionContainer.querySelector(openedActionColumnString)).toBeTruthy();
 
-            act(() => {
+            await act(async () => {
                 actionContainer.querySelectorAll("tbody tr.parent-row td .action-column a").forEach((el: Element) => el.dispatchEvent(new MouseEvent("click", { bubbles: true })));
             });
 
@@ -414,7 +414,7 @@ describe("Component: Table", () => {
             expect(customButtonCallBack).toHaveBeenCalledTimes(actionLinks.length);
 
             // action should be closed when you click outside the div
-            act(() => {
+            await act(async () => {
                 actionContainer.querySelector("tbody").dispatchEvent(new MouseEvent("mousedown", { bubbles: true }));
             });
 
@@ -425,8 +425,8 @@ describe("Component: Table", () => {
             expect(actionContainer.querySelectorAll("thead tr th").length).toEqual(columns.length + 1);
         });
 
-        it("for subrow ", () => {
-            act(() => {
+        it("for subrow ", async () => {
+            await act(async () => {
                 render(<Table columns={columns} data={newData} actionLinks={actionLinks} />, actionContainer);
             });
 
@@ -435,7 +435,7 @@ describe("Component: Table", () => {
             expect(actionContainer.querySelector(openedActionColumnString)).toBeNull();
             expect(actionContainer.querySelector(openedActionColumnString)).toBeFalsy();
 
-            act(() => {
+            await act(async () => {
                 actionContainer
                     .querySelectorAll("tbody tr.sub-row td .action-column .ellipsis-dropdown-holder")
                     .item(9)
@@ -445,7 +445,7 @@ describe("Component: Table", () => {
             expect(actionContainer.querySelector(openedActionColumnString)).toBeDefined();
             expect(actionContainer.querySelector(openedActionColumnString)).toBeTruthy();
 
-            act(() => {
+            await act(async () => {
                 actionContainer
                     .querySelectorAll("tbody tr.sub-row td .action-column .ellipsis-dropdown-holder a")
                     .forEach((el: Element) => el.dispatchEvent(new MouseEvent("click", { bubbles: true })));
@@ -456,7 +456,7 @@ describe("Component: Table", () => {
 
             // action should be closed when you click outside the div
 
-            act(() => {
+            await act(async () => {
                 actionContainer.querySelector("tbody").dispatchEvent(new MouseEvent("mousedown", { bubbles: true }));
             });
 
@@ -468,28 +468,28 @@ describe("Component: Table", () => {
         });
     });
 
-    it("should render and enable custom button", () => {
+    it("should render and enable custom button", async () => {
         const primaryActionButton: PrimaryActionButton = {
             label: "Buy",
             onClick: jest.fn((e: React.MouseEvent<HTMLButtonElement>) => {}),
         };
 
-        act(() => {
+        await act(async () => {
             render(<Table columns={columns} data={smallData} primaryActionButton={primaryActionButton} />, container);
         });
 
-        act(() => {
+        await act(async () => {
             container.querySelector("tbody tr.parent-row td .action-column button").dispatchEvent(new MouseEvent("click", { bubbles: true }));
         });
 
         expect(primaryActionButton.onClick).toHaveBeenCalled();
     });
 
-    it("should render and support filtering ", () => {
+    it("should render and support filtering ", async () => {
         let results: Array<TableRow> = smallData;
 
         // before filter
-        act(() => {
+        await act(async () => {
             render(<Table columns={columns} data={smallData} />, container);
         });
         expect(results.length).toEqual(smallData.length);
@@ -505,7 +505,7 @@ describe("Component: Table", () => {
 
         const filterValues: Array<string> = smallData.map((data: DataItem<any>) => data.status);
 
-        act(() => {
+        await act(async () => {
             render(
                 <Table
                     columns={columns}
@@ -532,21 +532,21 @@ describe("Component: Table", () => {
 
         // mock on
 
-        act(() => {
+        await act(async () => {
             container.querySelector("tbody .filter-item-holder .filter-item .icon-holder").dispatchEvent(new MouseEvent("click", { bubbles: true }));
         });
 
         expect(onRemoveFilter).toBeCalled();
     });
 
-    it("should render and support searching ", () => {
+    it("should render and support searching ", async () => {
         let results: Array<TableRow> = smallData;
         const customButtonCallBack: jest.Mock = jest.fn((searchResults: Array<TableRow>) => {
             results = searchResults;
         });
 
         // before search
-        act(() => {
+        await act(async () => {
             render(<Table columns={columns} data={smallData} />, container);
         });
 
@@ -554,7 +554,7 @@ describe("Component: Table", () => {
         expect(customButtonCallBack).not.toHaveBeenCalled();
 
         // nothing should change if searchInColumns is empty or search text is empty
-        act(() => {
+        await act(async () => {
             render(
                 <Table
                     columns={columns}
@@ -573,7 +573,7 @@ describe("Component: Table", () => {
 
         expect(results.length).toEqual(smallData.length);
 
-        act(() => {
+        await act(async () => {
             render(
                 <Table
                     columns={columns}
@@ -593,7 +593,7 @@ describe("Component: Table", () => {
         expect(results.length).toEqual(smallData.length);
 
         // after valid search
-        act(() => {
+        await act(async () => {
             render(
                 <Table
                     columns={columns}
@@ -611,7 +611,7 @@ describe("Component: Table", () => {
 
         expect(results.length).toEqual(1);
         // after valid search with number field
-        act(() => {
+        await act(async () => {
             render(
                 <Table
                     columns={columns}
@@ -629,7 +629,7 @@ describe("Component: Table", () => {
         expect(customButtonCallBack).toHaveBeenCalledTimes(3);
 
         // nothing should be returned when search field is not found or undefined
-        act(() => {
+        await act(async () => {
             render(
                 <Table
                     columns={columns}

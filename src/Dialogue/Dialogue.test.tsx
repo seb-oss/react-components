@@ -132,7 +132,7 @@ describe("Component: Dialogue", () => {
 
     it("Should disable action buttons when disable prop is passed", () => {
         act(() => {
-            render(<Dialogue toggle={false} primaryAction={() => true} secondaryAction={() => true} primaryBtn="next" secondaryBtn="back" disablePrimaryBtn disableSecondaryBtn />, container);
+            render(<Dialogue toggle={false} primaryAction={() => true} secondaryAction={() => true} primaryBtn="next" secondaryBtn="back" primaryBtnDisabled secondaryBtnDisabled />, container);
         });
         expect(container.querySelector(".primary-action").querySelector("button").disabled).toBeTruthy();
         expect(container.querySelector(".secondary-action").querySelector("button").disabled).toBeTruthy();

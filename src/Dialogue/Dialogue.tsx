@@ -10,8 +10,6 @@ const TimesIcon: JSX.Element = (
 export interface DialogueProps {
     className?: string;
     desc?: string | JSX.Element | React.ReactNode;
-    disablePrimaryBtn?: boolean;
-    disableSecondaryBtn?: boolean;
     enableBackdropDismiss?: boolean;
     enableCloseButton?: boolean;
     header?: string | JSX.Element | React.ReactNode;
@@ -19,8 +17,10 @@ export interface DialogueProps {
     onDismiss?: (e?: React.MouseEvent<HTMLDivElement>) => void;
     primaryAction?: (e?: React.MouseEvent<HTMLButtonElement>) => void;
     primaryBtn?: string | JSX.Element;
+    primaryBtnDisabled?: boolean;
     secondaryAction?: (e?: React.MouseEvent<HTMLButtonElement>) => void;
     secondaryBtn?: string | JSX.Element;
+    secondaryBtnDisabled?: boolean;
     toggle: boolean;
 }
 
@@ -41,21 +41,21 @@ const Dialogue: React.FunctionComponent<DialogueProps> = (props: DialogueProps) 
                     <div className="dialogue-footer">
                         {props.secondaryBtn && props.secondaryAction && (
                             <div className="dialogue-action secondary-action">
-                                <button className="btn btn-secondary dialogue-button" onClick={props.secondaryAction} disabled={props.disableSecondaryBtn}>
+                                <button className="btn btn-secondary dialogue-button" onClick={props.secondaryAction} disabled={props.secondaryBtnDisabled}>
                                     {props.secondaryBtn}
                                 </button>
                             </div>
                         )}
                         {props.primaryBtn && props.primaryAction && (
                             <div className="dialogue-action primary-action">
-                                <button className="btn btn-primary dialogue-button" onClick={props.primaryAction} disabled={props.disablePrimaryBtn}>
+                                <button className="btn btn-primary dialogue-button" onClick={props.primaryAction} disabled={props.primaryBtnDisabled}>
                                     {props.primaryBtn}
                                 </button>
                             </div>
                         )}
                         {!props.primaryBtn && !props.secondaryBtn && (
                             <div className="dialogue-action primary-action">
-                                <button className="btn btn-primary dialogue-button" onClick={props.primaryAction} disabled={props.disablePrimaryBtn}>
+                                <button className="btn btn-primary dialogue-button" onClick={props.primaryAction} disabled={props.primaryBtnDisabled}>
                                     Close
                                 </button>
                             </div>
