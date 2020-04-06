@@ -134,8 +134,6 @@
 		"npm": ">=6.0.0"
 	},
 	"browserslist": [
-		"last 2 version",
-		"not dead",
-		"iOS >= 9"
+		"cover 99.5%"
 	]
 }

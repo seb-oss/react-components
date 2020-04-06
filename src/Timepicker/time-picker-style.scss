@@ -22,10 +22,8 @@
                 -moz-appearance: none;
                 appearance: none;
             }
-            /* autoprefixer: off */
+            appearance: none;
             -moz-appearance: textfield;
-            /* autoprefixer: on */
-            appearance: textfield;
         }
         > [class*="triangle-"] {
             cursor: pointer;

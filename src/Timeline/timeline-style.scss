@@ -29,7 +29,7 @@ $triangle-background: $gray-100 0%, $gray-100 1%, $gray-100 53%, $hidden 53%, $h
                 height: 100%;
                 margin-left: -3px;
                 background: $blue;
-                background: linear-gradient(top, $hidden 0%, $blue 8%, $blue 92%, $hidden 100%);
+                background: linear-gradient(to bottom, $hidden 0%, $blue 8%, $blue 92%, $hidden 100%);
             }
             .item-holder {
                 padding: 15px 0;
@@ -257,7 +257,7 @@ $triangle-background: $gray-100 0%, $gray-100 1%, $gray-100 53%, $hidden 53%, $h
                         height: 6px;
                         margin-left: -3px;
                         background: $blue;
-                        background: linear-gradient(left, $hidden 0%, $blue 8%, $blue 92%, $hidden 100%);
+                        background: linear-gradient(to right, $hidden 0%, $blue 8%, $blue 92%, $hidden 100%);
                     }
                     .indicator-holder {
                         position: relative;
