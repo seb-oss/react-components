@@ -5,21 +5,6 @@ $icon-size: 18px;
 $dropdown-width: 100%;
 $dropdown-toggle-height: 44px;
 
-@mixin transform($props) {
-    -webkit-transform: $props;
-    -moz-transform: $props;
-    -o-transform: $props;
-    -ms-transform: $props;
-    transform: $props;
-}
-
-@mixin transition($props) {
-    -webkit-transition: $props;
-    -moz-transition: $props;
-    -o-transition: $props;
-    transition: $props;
-}
-
 .custom-dropdown {
     margin-bottom: 8px;
     > .custom-dropdown-toggle {
@@ -49,7 +34,7 @@ $dropdown-toggle-height: 44px;
 
                 > svg {
                     will-change: transform;
-                    @include transition($transition-time);
+                    transition: $transition-time;
                     width: $icon-size;
                     height: $icon-size;
                     fill: $blue-dark;
@@ -62,7 +47,7 @@ $dropdown-toggle-height: 44px;
             > .right-items > .dropdown-icon-holder {
                 &.chevron {
                     > svg {
-                        @include transform(rotate(180deg));
+                        transform: rotate(180deg);
                     }
                 }
             }
@@ -93,9 +78,11 @@ $dropdown-toggle-height: 44px;
             padding: 0px;
             border-color: transparent;
             margin: 0px 0px 0px auto;
+            transition: background-color $transition-time/2;
             > .right-items > .dropdown-icon-holder > svg {
                 height: calc(#{$dropdown-toggle-height} / 1.2);
                 width: calc(#{$dropdown-toggle-height} / 1.2);
+                transition: fill $transition-time/2;
                 &:focus {
                     &:active {
                         fill: $white;
@@ -103,8 +90,8 @@ $dropdown-toggle-height: 44px;
                 }
             }
 
-            &:hover {
-                background-color: $blue !important;
+            &:hover:not(.open) {
+                background-color: $blue;
                 > .right-items > .dropdown-icon-holder > svg {
                     fill: $white;
                 }
@@ -113,12 +100,12 @@ $dropdown-toggle-height: 44px;
             &:focus {
                 border-color: $blue-darker;
                 &:active {
-                    background-color: $blue-darker !important;
+                    background-color: $blue-darker;
                 }
             }
 
             &.open {
-                background-color: $blue-darker !important;
+                background-color: $blue-darker;
                 > .right-items > .dropdown-icon-holder > svg {
                     fill: $white;
                 }

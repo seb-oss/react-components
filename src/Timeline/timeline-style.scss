@@ -12,14 +12,6 @@ $triangle-background: $gray-100 0%, $gray-100 1%, $gray-100 53%, $hidden 53%, $h
     background: linear-gradient($props);
 }
 
-@mixin transform($props) {
-    -webkit-transform: $props;
-    -moz-transform: $props;
-    -o-transform: $props;
-    -ms-transform: $props;
-    transform: $props;
-}
-
 .custom-timeline {
     width: 100%;
     .timeline {
@@ -37,7 +29,7 @@ $triangle-background: $gray-100 0%, $gray-100 1%, $gray-100 53%, $hidden 53%, $h
                 height: 100%;
                 margin-left: -3px;
                 background: $blue;
-                @include linear-gradient((top, $hidden 0%, $blue 8%, $blue 92%, $hidden 100%));
+                background: linear-gradient(top, $hidden 0%, $blue 8%, $blue 92%, $hidden 100%);
             }
             .item-holder {
                 padding: 15px 0;
@@ -108,10 +100,10 @@ $triangle-background: $gray-100 0%, $gray-100 1%, $gray-100 53%, $hidden 53%, $h
                             position: absolute;
                             width: 20px;
                             height: 20px;
-                            @include linear-gradient((-45deg, $triangle-background));
+                            background: linear-gradient(-45deg, $triangle-background);
                             top: 9px;
                             right: -10px;
-                            @include transform(rotate(-45deg));
+                            transform: rotate(-45deg);
                             box-shadow: 1px 2px 4px -2px rgba(0, 0, 0, 0.3);
                             border-right: 1px solid $gray-300;
                             border-bottom: 1px solid $gray-300;
@@ -134,10 +126,10 @@ $triangle-background: $gray-100 0%, $gray-100 1%, $gray-100 53%, $hidden 53%, $h
                             position: absolute;
                             width: 20px;
                             height: 20px;
-                            @include linear-gradient((-45deg, $triangle-background));
+                            background: linear-gradient(-45deg, $triangle-background);
                             top: 9px;
                             left: -11px;
-                            @include transform(rotate(135deg));
+                            transform: rotate(135deg);
                             box-shadow: 2px 1px 4px -2px rgba(0, 0, 0, 0.3);
                             border-right: 1px solid $gray-300;
                             border-bottom: 1px solid $gray-300;
@@ -212,10 +204,10 @@ $triangle-background: $gray-100 0%, $gray-100 1%, $gray-100 53%, $hidden 53%, $h
                             position: absolute;
                             width: 20px;
                             height: 20px;
-                            @include linear-gradient((-225deg, $triangle-background));
+                            background: linear-gradient(-225deg, $triangle-background);
                             bottom: -11px;
                             left: 50%;
-                            @include transform(translateX(-50%) rotate(225deg));
+                            transform: translateX(-50%) rotate(225deg);
                             box-shadow: -2px -1px 2px -1px rgba(0, 0, 0, 0.25);
                             border-left: 1px solid $gray-300;
                             border-top: 1px solid $gray-300;
@@ -230,10 +222,10 @@ $triangle-background: $gray-100 0%, $gray-100 1%, $gray-100 53%, $hidden 53%, $h
                             position: absolute;
                             width: 20px;
                             height: 20px;
-                            @include linear-gradient((-225deg, $triangle-background));
+                            background: linear-gradient(-225deg, $triangle-background);
                             top: -10px;
                             left: 50%;
-                            @include transform(translateX(-50%) rotate(45deg));
+                            transform: translateX(-50%) rotate(45deg);
                             box-shadow: -1px -2px 2px -1px rgba(0, 0, 0, 0.25);
                             border-left: 1px solid $gray-300;
                             border-top: 1px solid $gray-300;
@@ -265,7 +257,7 @@ $triangle-background: $gray-100 0%, $gray-100 1%, $gray-100 53%, $hidden 53%, $h
                         height: 6px;
                         margin-left: -3px;
                         background: $blue;
-                        @include linear-gradient((left, $hidden 0%, $blue 8%, $blue 92%, $hidden 100%));
+                        background: linear-gradient(left, $hidden 0%, $blue 8%, $blue 92%, $hidden 100%);
                     }
                     .indicator-holder {
                         position: relative;

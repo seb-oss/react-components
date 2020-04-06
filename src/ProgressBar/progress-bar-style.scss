@@ -2,13 +2,6 @@
 
 $transition-time: 100ms;
 
-@mixin transition($props) {
-    -webkit-transition: $props;
-    -moz-transition: $props;
-    -o-transition: $props;
-    transition: $props;
-}
-
 .custom-progress {
     width: 100%;
     display: block;
@@ -30,7 +23,7 @@ $transition-time: 100ms;
         width: 100%;
         color: black;
         will-change: color;
-        @include transition(color $transition-time * 2);
+        transition: color $transition-time * 2;
         &.white {
             color: white;
         }

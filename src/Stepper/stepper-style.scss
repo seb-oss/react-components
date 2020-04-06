@@ -3,20 +3,6 @@
 $transition-time: 200ms;
 $stepper-font-size: 24px;
 
-@mixin no-user-select {
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-}
-
-@mixin transition($props) {
-    -webkit-transition: $props;
-    -moz-transition: $props;
-    -o-transition: $props;
-    transition: $props;
-}
-
 .form-group.custom-stepper {
     display: inline-block;
     .stepper-container {
@@ -50,10 +36,10 @@ $stepper-font-size: 24px;
             }
         }
         &.disabled {
-            background-color: $gray-800;
-            border: 1px solid $gray-700;
+            background-color: $gray-100;
+            border: 1px solid $gray-400;
             [class^="stepper-"] {
-                color: $gray-700;
+                color: $gray-500;
             }
         }
         [class^="stepper-"] {
@@ -62,13 +48,13 @@ $stepper-font-size: 24px;
             justify-content: center;
             height: 100%;
             vertical-align: top;
-            @include no-user-select;
+            user-select: none;
         }
         .stepper-decrement,
         .stepper-increment {
             padding: 0 10px;
             will-change: background-color, color;
-            @include transition((background-color $transition-time, color $transition-time));
+            transition: background-color $transition-time, color $transition-time;
             padding-bottom: 3px;
             font-size: 38px;
             font-weight: 100;

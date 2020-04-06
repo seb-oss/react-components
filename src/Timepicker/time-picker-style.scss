@@ -1,12 +1,5 @@
 @import "../../node_modules/@sebgroup/bootstrap/scss/variables";
 
-@mixin transition($props) {
-    -webkit-transition: $props;
-    -moz-transition: $props;
-    -o-transition: $props;
-    transition: $props;
-}
-
 .custom-timepicker {
     display: inline-block;
     > [class*="timepicker-"] {
@@ -17,9 +10,6 @@
         .timepicker-input {
             width: 40px;
             display: inline-block;
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            appearance: none;
             box-shadow: none;
             border: 1px solid $white;
             text-align: center;
@@ -32,21 +22,22 @@
                 -moz-appearance: none;
                 appearance: none;
             }
-            -webkit-appearance: none;
+            /* autoprefixer: off */
             -moz-appearance: textfield;
-            appearance: none;
+            /* autoprefixer: on */
+            appearance: textfield;
         }
         > [class*="triangle-"] {
             cursor: pointer;
             border: 1px solid $white;
             position: relative;
-            @include transition((background-color 200ms, border 200ms));
+            transition: background-color 200ms, border 200ms;
             svg {
                 fill: $blue;
                 position: relative;
                 width: 30px;
                 height: 30px;
-                @include transition(color 200ms);
+                transition: color 200ms;
                 &:hover {
                     color: $blue-darker;
                 }

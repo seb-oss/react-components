@@ -11,28 +11,6 @@ $padding-left-size: 48px;
 $alternative-padding-left-size: 30px;
 $accordion-min-height: 48px;
 
-@mixin transform($props) {
-    -webkit-transform: $props;
-    -moz-transform: $props;
-    -o-transform: $props;
-    -ms-transform: $props;
-    transform: $props;
-}
-
-@mixin transition($props) {
-    -webkit-transition: $props;
-    -moz-transition: $props;
-    -o-transition: $props;
-    transition: $props;
-}
-
-@mixin user-select($prop) {
-    -webkit-user-select: $prop;
-    -moz-user-select: $prop;
-    -ms-user-select: $prop;
-    user-select: $prop;
-}
-
 .custom-accordion {
     position: relative;
     background-color: $white;
@@ -60,7 +38,7 @@ $accordion-min-height: 48px;
                 height: $icon-size;
                 fill: $blue-dark;
                 will-change: transform;
-                @include transition((transform $transition-time, opacity $transition-time));
+                transition: transform $transition-time, opacity $transition-time;
                 top: 14px;
                 &:last-of-type:not(:first-of-type) {
                     opacity: 0;
@@ -71,20 +49,20 @@ $accordion-min-height: 48px;
                 display: block;
                 font-weight: 500;
                 padding-top: 5px;
-                @include user-select(none);
+                user-select: none;
                 line-height: 28px;
                 margin: 0;
             }
             .accordion-sub-header {
                 display: block;
-                @include user-select(none);
+                user-select: none;
                 margin: 0;
                 margin-bottom: 10px;
             }
         }
         .content-wrapper {
             padding: 0;
-            @include transition(all $transition-time ease);
+            transition: all $transition-time ease;
             position: relative;
             overflow: hidden;
             .text-wrapper {
@@ -93,7 +71,7 @@ $accordion-min-height: 48px;
                 height: auto;
                 will-change: margin;
                 opacity: 0;
-                @include transition((opacity 200ms linear, height 200ms linear));
+                transition: opacity 200ms linear, height 200ms linear;
                 .text-item {
                     &:not(:last-child) {
                         padding-bottom: 8px;
@@ -127,22 +105,22 @@ $accordion-min-height: 48px;
         }
         &.deg-90 {
             .header-wrapper > svg:last-of-type:not(:first-of-type) {
-                @include transform(rotate(-90deg));
+                transform: rotate(-90deg);
             }
         }
         &.deg-90-counter {
             .header-wrapper > svg:last-of-type:not(:first-of-type) {
-                @include transform(rotate(90deg));
+                transform: rotate(90deg);
             }
         }
         &.deg-180 {
             .header-wrapper > svg:last-of-type:not(:first-of-type) {
-                @include transform(rotate(-18deg0));
+                transform: rotate(-18deg0);
             }
         }
         &.deg-180-counter {
             .header-wrapper > svg:last-of-type:not(:first-of-type) {
-                @include transform(rotate(180deg));
+                transform: rotate(180deg);
             }
         }
         &.active {
@@ -151,22 +129,22 @@ $accordion-min-height: 48px;
             }
             &.deg-90 {
                 .header-wrapper > svg:first-of-type {
-                    @include transform(rotate(90deg));
+                    transform: rotate(90deg);
                 }
             }
             &.deg-90-counter {
                 .header-wrapper > svg:first-of-type {
-                    @include transform(rotate(-90deg));
+                    transform: rotate(-90deg);
                 }
             }
             &.deg-180 {
                 .header-wrapper > svg:first-of-type {
-                    @include transform(rotate(180deg));
+                    transform: rotate(180deg);
                 }
             }
             &.deg-180-counter {
                 .header-wrapper > svg:first-of-type {
-                    @include transform(rotate(-180deg));
+                    transform: rotate(-180deg);
                 }
             }
             .header-wrapper > svg:last-of-type:not(:first-of-type) {

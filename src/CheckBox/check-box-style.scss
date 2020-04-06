@@ -4,12 +4,6 @@ $checkbox-size: 16px;
 $checkbox-padding-left: 40px;
 $transition-time: 200ms;
 
-@mixin transition($props) {
-    -webkit-transition: $props;
-    -moz-transition: $props;
-    -o-transition: $props;
-    transition: $props;
-}
 .form-group.custom-checkbox {
     > .input-field {
         > .custom-control {

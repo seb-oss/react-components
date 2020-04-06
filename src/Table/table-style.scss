@@ -7,13 +7,6 @@ $icon-size: 16px;
 $row-height: 40px;
 $transition-time: 200ms;
 
-@mixin transition($props) {
-    -webkit-transition: $props;
-    -moz-transition: $props;
-    -o-transition: $props;
-    transition: $props;
-}
-
 @mixin setInputGroupStyles() {
     .form-group.input-box-group {
         position: relative;
@@ -21,7 +14,7 @@ $transition-time: 200ms;
         > .input-group {
             position: relative;
             > .input-box-group-wrapper {
-                @include transition(border $transition-time / 2);
+                transition: border $transition-time / 2;
                 position: relative;
                 width: 100%;
                 height: auto;
@@ -251,7 +244,7 @@ table {
                                 max-height: 0;
                                 width: 0;
                                 overflow-y: auto;
-                                @include transition(max-height 200ms);
+                                transition: max-height 200ms;
 
                                 &.active {
                                     max-height: 10000px;

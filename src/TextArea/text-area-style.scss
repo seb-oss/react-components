@@ -1,35 +1,29 @@
 @import "../../node_modules/@sebgroup/bootstrap/scss/variables";
 
-@mixin transition($props) {
-    -webkit-transition: $props;
-    -moz-transition: $props;
-    -o-transition: $props;
-    transition: $props;
-}
-
 $transition-time: 200ms;
+
 .form-group.text-area {
     > .input-field {
         > textarea.form-control {
             color: $body-color;
             border-color: $gray-500;
-            @include transition(border $transition-time / 2);
+            transition: border $transition-time / 2;
             &:not(.resizable) {
                 resize: none;
             }
             &:not(:disabled) {
                 &:hover {
                     border-color: $blue;
-                    background-color: white;
+                    background-color: $white;
                 }
                 &:focus {
                     border-color: $blue-darker;
                     box-shadow: none;
-                    background-color: white;
+                    background-color: $white;
                     &:active {
                         border-color: $blue-darker;
                         box-shadow: none;
-                        background-color: white;
+                        background-color: $white;
                     }
                 }
             }
@@ -44,7 +38,7 @@ $transition-time: 200ms;
             border-radius: 0px;
             overflow: hidden;
             width: 100%;
-            @include transition((opacity $transition-time, padding $transition-time, max-height $transition-time * 2));
+            transition: opacity $transition-time, padding $transition-time, max-height $transition-time * 2;
             &.alert-danger {
                 color: $red;
             }

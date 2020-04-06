@@ -8,20 +8,6 @@ $material-box-shadow: 0 7px 28px rgba(0, 0, 0, 0.25), 0 2px 2px rgba(0, 0, 0, 0.
 $header-font-size: 24px;
 $transition-time: 300ms;
 
-@mixin transition($props) {
-    -webkit-transition: $props;
-    -moz-transition: $props;
-    -o-transition: $props;
-    transition: $props;
-}
-
-@mixin animation($props) {
-    -webkit-animation: $props;
-    -moz-animation: $props;
-    -o-animation: $props;
-    animation: $props;
-}
-
 .custom-cropper-dialogue {
     .cropper-dialogue-container {
         display: block;
@@ -50,7 +36,7 @@ $transition-time: 300ms;
             right: 0;
             margin: auto;
             transform: translateY(-50%);
-            @include transition($transition-time);
+            transition: $transition-time;
             box-shadow: $material-box-shadow;
             height: 480px;
             .custom-react-cropper {
@@ -165,7 +151,7 @@ $transition-time: 300ms;
     .custom-cropper-dialogue {
         &.open-cropper-dialogue {
             .cropper-dialogue-container {
-                @include animation(container-fade-in $transition-time forwards);
+                animation: container-fade-in $transition-time forwards;
                 .cropper-dialogue {
                     top: 50%;
                     opacity: 1;
@@ -174,7 +160,7 @@ $transition-time: 300ms;
         }
         &.close-cropper-dialogue {
             .cropper-dialogue-container {
-                @include animation(container-fade-out $transition-time forwards);
+                animation: container-fade-out $transition-time forwards;
             }
         }
     }
@@ -185,7 +171,7 @@ $transition-time: 300ms;
     .custom-cropper-dialogue {
         &.open-cropper-dialogue {
             .cropper-dialogue-container {
-                @include animation(container-fade-in $transition-time forwards);
+                animation: container-fade-in $transition-time forwards;
                 .cropper-dialogue {
                     transform: translateY(0);
                     opacity: 1;
@@ -194,7 +180,7 @@ $transition-time: 300ms;
         }
         &.close-cropper-dialogue {
             .cropper-dialogue-container {
-                @include animation(container-fade-out $transition-time * 2 forwards);
+                animation: container-fade-out $transition-time * 2 forwards;
             }
         }
         .cropper-dialogue-container {

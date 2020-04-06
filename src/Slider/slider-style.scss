@@ -7,12 +7,6 @@ $disabled-unselected: #cccccc;
 $disabled-thumb-bg: #9a9a9a;
 $disabled-thumb-border-color: #8c8c8c;
 
-@mixin appearance($props) {
-    -webkit-appearance: $props;
-    -moz-appearance: $props;
-    appearance: $props;
-}
-
 @mixin transition($props) {
     -webkit-transition: $props;
     -moz-transition: $props;
@@ -35,7 +29,7 @@ $disabled-thumb-border-color: #8c8c8c;
 }
 
 @mixin track-styles {
-    @include appearance(none);
+    appearance: none;
     background: transparent;
     color: transparent;
     border: 0;
@@ -45,7 +39,7 @@ $disabled-thumb-border-color: #8c8c8c;
 }
 
 @mixin thumb-styles {
-    @include appearance(none);
+    appearance: none;
     width: 56px;
     height: 32px;
     background: transparent;
@@ -86,7 +80,7 @@ $disabled-thumb-border-color: #8c8c8c;
             position: relative;
             display: inline-block;
             width: 100%;
-            @include appearance(none);
+            appearance: none;
             background: transparent;
             cursor: pointer;
             height: 15px;
@@ -235,7 +229,7 @@ $disabled-thumb-border-color: #8c8c8c;
                         text-align: center;
                         color: $white;
                         border-radius: 5px;
-                        @include user-select(none);
+                        user-select: none;
                         @include transform(translateX(-49%));
                         left: 50%;
                         &:after {
@@ -307,10 +301,10 @@ $disabled-thumb-border-color: #8c8c8c;
                 }
                 &.with-transitions {
                     .custom-slider-slider-after {
-                        @include transition((width $transition-time ease-out, transform $transition-time linear));
+                        /** @include transition((width $transition-time ease-out, transform $transition-time linear)); */
                     }
                     .custom-slider-thumb {
-                        @include transition((left $transition-time ease-out, transform $transition-time ease-in-out, box-shadow $transition-time ease-in));
+                        /** @include transition((left $transition-time ease-out, transform $transition-time ease-in-out, box-shadow $transition-time ease-in)); */
                     }
                 }
             }
