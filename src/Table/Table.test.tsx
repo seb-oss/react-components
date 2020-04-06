@@ -61,6 +61,26 @@ describe("Component: Table", () => {
         expect(container).toBeDefined();
     });
 
+    it("Should render and alloow blacklisting or hiding columns ", () => {
+        act(() => {
+            render(<Table columns={columns} data={smallData} />, container);
+        });
+        expect(container.querySelectorAll("thead > tr > th").length).toEqual(columns.length);
+
+        const editableColumns: Array<Column> = columns?.map((column: Column, index: number) => {
+            if (index === 1) {
+                return { ...column, isHidden: true };
+            }
+            return column;
+        });
+
+        act(() => {
+            render(<Table columns={editableColumns} data={smallData} />, container);
+        });
+
+        expect(container.querySelectorAll("thead > tr > th").length).toEqual(columns.length - 1);
+    });
+
     it("Should render and be able to sort rows ", () => {
         const event: jest.Mock = jest.fn((rows: Array<TableRow>, sortByColumn: TableHeader) => console.log("onAfterSorting called"));
         const onSortEvent: jest.Mock = jest.fn((rows: Array<TableRow>, accessor: string, sortingOrder: sortDirectionTypes) => rows.slice(0, 2));
@@ -262,7 +282,7 @@ describe("Component: Table", () => {
 
         beforeEach(() => {
             textContainer = document.createElement("div");
-            document.body.appendChild(container);
+            document.body.appendChild(textContainer);
         });
 
         afterEach(() => {
@@ -344,7 +364,9 @@ describe("Component: Table", () => {
         expect(container.querySelector("tfoot tr")).toBeTruthy();
     });
 
-    it("should enable and handle custom actions ", () => {
+    describe("should enable and handle custom actions : ", () => {
+        let actionContainer: HTMLDivElement = null;
+
         const customButtonCallBack: jest.Mock = jest.fn((event: React.MouseEvent<HTMLAnchorElement, MouseEvent>, selectedRow: TableRow) => {});
         const actionLinks: Array<ActionLinkItem> = [
             { label: "Add", onClick: customButtonCallBack },
@@ -353,54 +375,97 @@ describe("Component: Table", () => {
 
         // for the sake of subrow, collapse data
         const newData: Array<TableRow> = smallData.slice(0, 2).map((data: TableRow) => ({ ...data, expanded: true }));
-
-        act(() => {
-            render(<Table columns={columns} data={newData} actionLinks={actionLinks} />, container);
+        beforeEach(() => {
+            actionContainer = document.createElement("div");
+            document.body.appendChild(actionContainer);
         });
 
-        // trigger and open row action column
-        const openedActionColumnString: string = "tbody tr.parent-row td .action-column .ellipsis-dropdown-holder .dropdown-content.active";
-        expect(container.querySelector(openedActionColumnString)).toBeNull();
-        expect(container.querySelector(openedActionColumnString)).toBeFalsy();
-
-        act(() => {
-            container
-                .querySelectorAll("tbody tr.parent-row td .action-column .ellipsis-dropdown-holder")
-                .item(1)
-                .dispatchEvent(new MouseEvent("click", { bubbles: true }));
+        afterEach(() => {
+            unmountComponentAtNode(actionContainer);
+            actionContainer.remove();
+            actionContainer = null;
         });
 
-        expect(container.querySelector(openedActionColumnString)).toBeDefined();
-        expect(container.querySelector(openedActionColumnString)).toBeTruthy();
+        it("For parent row ", () => {
+            act(() => {
+                render(<Table columns={columns} data={newData} actionLinks={actionLinks} />, actionContainer);
+            });
 
-        // trigger and click subRow actions
-        const openedSubRowActionColumnString: string = "tbody tr.sub-row td .action-column .ellipsis-dropdown-holder .dropdown-content.active";
-        expect(container.querySelector(openedSubRowActionColumnString)).toBeNull();
-        expect(container.querySelector(openedSubRowActionColumnString)).toBeFalsy();
+            // trigger and open row action column
+            const openedActionColumnString: string = "tbody tr.parent-row td .action-column .ellipsis-dropdown-holder .dropdown-content.active";
+            expect(actionContainer.querySelector(openedActionColumnString)).toBeNull();
+            expect(actionContainer.querySelector(openedActionColumnString)).toBeFalsy();
 
-        act(() => {
-            container.querySelectorAll("tbody tr.sub-row td .action-column a").forEach((el: Element) => el.dispatchEvent(new MouseEvent("click", { bubbles: true })));
+            act(() => {
+                actionContainer
+                    .querySelectorAll("tbody tr.parent-row td .action-column .ellipsis-dropdown-holder")
+                    .item(1)
+                    .dispatchEvent(new MouseEvent("click", { bubbles: true }));
+            });
+
+            expect(actionContainer.querySelector(openedActionColumnString)).toBeDefined();
+            expect(actionContainer.querySelector(openedActionColumnString)).toBeTruthy();
+
+            act(() => {
+                actionContainer.querySelectorAll("tbody tr.parent-row td .action-column a").forEach((el: Element) => el.dispatchEvent(new MouseEvent("click", { bubbles: true })));
+            });
+
+            // It should be triggered times the length of the actionLinks
+            expect(customButtonCallBack).toHaveBeenCalledTimes(actionLinks.length);
+
+            // action should be closed when you click outside the div
+            act(() => {
+                actionContainer.querySelector("tbody").dispatchEvent(new MouseEvent("mousedown", { bubbles: true }));
+            });
+
+            expect(actionContainer.querySelector(openedActionColumnString)).toBeNull();
+            expect(actionContainer.querySelector(openedActionColumnString)).toBeFalsy();
+
+            // plus one column for action field
+            expect(actionContainer.querySelectorAll("thead tr th").length).toEqual(columns.length + 1);
         });
 
-        expect(container.querySelector(openedSubRowActionColumnString)).toBeDefined();
-        expect(container.querySelector(openedSubRowActionColumnString)).toBeTruthy();
+        it("for subrow ", () => {
+            act(() => {
+                render(<Table columns={columns} data={newData} actionLinks={actionLinks} />, actionContainer);
+            });
 
-        // action should be closed when you click outside the div
+            // trigger and open sub row action column
+            const openedActionColumnString: string = "tbody tr.sub-row td .action-column .ellipsis-dropdown-holder .dropdown-content.active";
+            expect(actionContainer.querySelector(openedActionColumnString)).toBeNull();
+            expect(actionContainer.querySelector(openedActionColumnString)).toBeFalsy();
 
-        act(() => {
-            container.querySelector("tbody").dispatchEvent(new MouseEvent("mousedown", { bubbles: true }));
+            act(() => {
+                actionContainer
+                    .querySelectorAll("tbody tr.sub-row td .action-column .ellipsis-dropdown-holder")
+                    .item(9)
+                    .dispatchEvent(new MouseEvent("click", { bubbles: true }));
+            });
+
+            expect(actionContainer.querySelector(openedActionColumnString)).toBeDefined();
+            expect(actionContainer.querySelector(openedActionColumnString)).toBeTruthy();
+
+            act(() => {
+                actionContainer
+                    .querySelectorAll("tbody tr.sub-row td .action-column .ellipsis-dropdown-holder a")
+                    .forEach((el: Element) => el.dispatchEvent(new MouseEvent("click", { bubbles: true })));
+            });
+
+            // There are two actions on in the custom actions, add and edit. so it should be called twice, times the parent two
+            expect(customButtonCallBack).toHaveBeenCalledTimes(actionLinks.length * 2);
+
+            // action should be closed when you click outside the div
+
+            act(() => {
+                actionContainer.querySelector("tbody").dispatchEvent(new MouseEvent("mousedown", { bubbles: true }));
+            });
+
+            expect(actionContainer.querySelector(openedActionColumnString)).toBeNull();
+            expect(actionContainer.querySelector(openedActionColumnString)).toBeFalsy();
+
+            // plus one column for action field
+            expect(actionContainer.querySelectorAll("thead tr th").length).toEqual(columns.length + 1);
         });
-
-        expect(container.querySelector(openedActionColumnString)).toBeNull();
-        expect(container.querySelector(openedActionColumnString)).toBeFalsy();
-        expect(container.querySelector(openedSubRowActionColumnString)).toBeNull();
-        expect(container.querySelector(openedSubRowActionColumnString)).toBeFalsy();
-
-        // it should be called the length of the data twice for each row and subrow, i.e 4 times
-        expect(customButtonCallBack).toHaveBeenCalledTimes(4 * smallData.length);
-
-        // plus one column for action field
-        expect(container.querySelectorAll("thead tr th").length).toEqual(columns.length + 1);
     });
 
     it("should render and enable custom button", () => {
