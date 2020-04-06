@@ -263,19 +263,21 @@ const ActionColumn: React.FunctionComponent<ActionColumnProps> = (props: ActionC
                     <div className="icon-holder" id={"ellipsis-" + props.selectedRow.rowIndex} role="link">
                         {ellipsis}
                     </div>
-                    <div className={actionColumnClass} ref={actionRef}>
-                        {props.actionLinks.map((link: ActionLinkItem, index: number) => (
-                            <a
-                                key={index}
-                                onClick={(e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
-                                    e.preventDefault();
-                                    link.onClick(e, props.selectedRow);
-                                }}
-                            >
-                                {link.label}
-                            </a>
-                        ))}
-                    </div>
+                    {props.selectedRow.actionsDropdownDropped ? (
+                        <div className={actionColumnClass} ref={actionRef}>
+                            {props.actionLinks.map((link: ActionLinkItem, index: number) => (
+                                <a
+                                    key={index}
+                                    onClick={(e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+                                        e.preventDefault();
+                                        link.onClick(e, props.selectedRow);
+                                    }}
+                                >
+                                    {link.label}
+                                </a>
+                            ))}
+                        </div>
+                    ) : null}
                 </div>
             ) : null}
         </div>
