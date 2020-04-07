@@ -51,7 +51,7 @@
 		"moment": "^2.24.0",
 		"react": "^16.12.0",
 		"react-chartjs-2": "^2.9.0",
-		"react-date-picker": "^7.10.0",
+		"react-date-picker": "^8.0.1",
 		"react-dom": "^16.12.0",
 		"react-rating": "^2.0.4",
 		"react-router": "^5.1.2",
