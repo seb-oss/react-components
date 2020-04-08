@@ -5,12 +5,7 @@
         "module": "esnext",
         "moduleResolution": "node",
         "target": "es5",
-        "lib": [
-            "es2015",
-            "es6",
-            "es7",
-            "dom"
-        ],
+        "lib": ["es2015", "es6", "es7", "dom"],
         "jsx": "react",
         "declaration": true,
         "sourceMap": true,
@@ -22,16 +17,6 @@
         "esModuleInterop": true,
         "allowSyntheticDefaultImports": true
     },
-    "exclude": [
-        "node_modules",
-        "webpack",
-        "dist",
-        "develop",
-        "coverage",
-        "**/*.test.tsx",
-        "src/__utils"
-    ],
-    "types": [
-        "typePatches"
-    ]
+    "exclude": ["node_modules", "webpack", "dist", "develop", "coverage", "**/*.test.tsx", "src/__utils"],
+    "types": ["typePatches"]
 }

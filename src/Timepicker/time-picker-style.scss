@@ -1,18 +1,8 @@
-$white: #fff;
-$black: #000;
-$blue: #41B0EE;
-$blue-dark: #0092E1;
-$blue-darker: #007AC7;
-@mixin transition($props) {
-    -webkit-transition: $props;
-    -moz-transition: $props;
-    -o-transition: $props;
-    transition: $props;
-}
+@import "../../node_modules/@sebgroup/bootstrap/scss/variables";
 
 .custom-timepicker {
     display: inline-block;
-    >[class*=timepicker-] {
+    > [class*="timepicker-"] {
         display: inline-block;
         position: relative;
         text-align: center;
@@ -20,9 +10,6 @@ $blue-darker: #007AC7;
         .timepicker-input {
             width: 40px;
             display: inline-block;
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            appearance: none;
             box-shadow: none;
             border: 1px solid $white;
             text-align: center;
@@ -35,21 +22,20 @@ $blue-darker: #007AC7;
                 -moz-appearance: none;
                 appearance: none;
             }
-            -webkit-appearance: none;
-            -moz-appearance: textfield;
             appearance: none;
+            -moz-appearance: textfield;
         }
-        >[class*=triangle-] {
+        > [class*="triangle-"] {
             cursor: pointer;
             border: 1px solid $white;
             position: relative;
-            @include transition((background-color 200ms, border 200ms));
+            transition: background-color 200ms, border 200ms;
             svg {
                 fill: $blue;
                 position: relative;
                 width: 30px;
                 height: 30px;
-                @include transition(color 200ms);
+                transition: color 200ms;
                 &:hover {
                     color: $blue-darker;
                 }

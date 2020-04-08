@@ -1,6 +1,6 @@
 import * as React from "react";
 import "./stepper-style.scss";
-import { randomId } from "../__utils/randomId";
+import { randomId } from "@sebgroup/frontend-tools/dist/randomId";
 
 export interface StepperProps {
     className?: string;

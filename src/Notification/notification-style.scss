@@ -1,33 +1,6 @@
-$black: #000;
-$white: #fff;
-$gray-600: #868686;
-$red-dark: #D81A1A;
-$yellow-dark: #FFB400;
-$green-darker: #379D00;
-$blue-darker: #007AC7;
-$purple-dark: #4F2C99;
+@import "../../node_modules/@sebgroup/bootstrap/scss/variables";
+
 $small: 12px;
-@mixin transform($props) {
-    -webkit-transform: $props;
-    -moz-transform: $props;
-    -o-transform: $props;
-    -ms-transform: $props;
-    transform: $props;
-}
-
-@mixin transition($props) {
-    -webkit-transition: $props;
-    -moz-transition: $props;
-    -o-transition: $props;
-    transition: $props;
-}
-
-@mixin user-select($prop) {
-    -webkit-user-select: $prop;
-    -moz-user-select: $prop;
-    -ms-user-select: $prop;
-    user-select: $prop;
-}
 
 @mixin apply-theme($bg-color, $close-hover) {
     .content-wrapper {
@@ -65,7 +38,7 @@ $small: 12px;
     z-index: 9999;
     opacity: 0;
     will-change: transform, opacity;
-    @include transition((transform 600ms cubic-bezier(0.65, -0.15, 0.47, 1.16), opacity 800ms ease-in-out));
+    transition: transform 600ms cubic-bezier(0.65, -0.15, 0.47, 1.16), opacity 800ms ease-in-out;
     .content-wrapper {
         min-height: 30px;
         position: relative;
@@ -78,13 +51,13 @@ $small: 12px;
         .notification-title {
             font-weight: 500;
             padding-right: 10px;
-            @include user-select(none);
+            user-select: none;
             display: inline-block;
         }
         .notification-message {
             font-size: $small;
             padding-right: 18px;
-            @include user-select(none);
+            user-select: none;
         }
     }
     .dismiss-btn {
@@ -104,39 +77,39 @@ $small: 12px;
     &.style-slide-in {
         width: 300px;
         &.bottom-left {
-            @include transform(translateX(-350px));
+            transform: translateX(-350px);
             left: 20px;
             bottom: 15px;
         }
         &.bottom-right {
-            @include transform(translateX(350px));
+            transform: translateX(350px);
             right: 20px;
             bottom: 15px;
         }
         &.top-left {
-            @include transform(translateX(-350px));
+            transform: translateX(-350px);
             left: 20px;
             top: 15px;
         }
         &.top-right {
-            @include transform(translateX(350px));
+            transform: translateX(350px);
             right: 20px;
             top: 15px;
         }
         &.open {
-            @include transform(translateX(0));
+            transform: translateX(0);
             opacity: 1;
         }
         .content-wrapper {
             border-radius: 4px;
             will-change: box-shadow, top, left;
-            @include transition((box-shadow 80ms linear, top 100ms ease, left 100ms ease, background-color 200ms ease));
+            transition: box-shadow 80ms linear, top 100ms ease, left 100ms ease, background-color 200ms ease;
             &.clickable {
                 &:active {
                     box-shadow: 0 0 0 0 rgba(0, 0, 0, 0), 1px 2px 11px rgba(0, 0, 0, 0.5);
                     top: 1px;
                     left: 1px;
-                    &+.dismiss-btn {
+                    & + .dismiss-btn {
                         top: 9px;
                         right: 7px;
                     }
@@ -152,7 +125,7 @@ $small: 12px;
                         border: 1px solid $white;
                         border-radius: 3px;
                         will-change: background-color, color;
-                        @include transition((background-color 200ms, color 200ms));
+                        transition: background-color 200ms, color 200ms;
                         color: $white;
                         &:hover {
                             background-color: $white;
@@ -183,14 +156,14 @@ $small: 12px;
         right: 0;
         &.top {
             top: 0;
-            @include transform(translateY(-150%));
+            transform: translateY(-150%);
         }
         &.bottom {
             bottom: 0;
-            @include transform(translateY(150%));
+            transform: translateY(150%);
         }
         &.open {
-            @include transform(translateY(0));
+            transform: translateY(0);
             opacity: 1;
         }
     }
@@ -249,18 +222,18 @@ $small: 12px;
             }
             &.bottom-left,
             &.bottom-right {
-                @include transform(translate(-50%, 150%));
+                transform: translate(-50%, 150%);
                 bottom: 15px;
                 top: auto;
             }
             &.top-right,
             &.top-left {
-                @include transform(translate(-50%, -150%));
+                transform: translate(-50%, -150%);
                 bottom: auto;
                 top: 15px;
             }
             &.open {
-                @include transform(translate(-50%, 0));
+                transform: translate(-50%, 0);
                 opacity: 1;
             }
         }

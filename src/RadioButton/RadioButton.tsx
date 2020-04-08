@@ -1,5 +1,5 @@
 import * as React from "react";
-import { randomId } from "../__utils/randomId";
+import { randomId } from "@sebgroup/frontend-tools/dist/randomId";
 import "./radio-button-style.scss";
 
 export interface RadioButtonProps<T = any> {
