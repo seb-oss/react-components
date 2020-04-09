@@ -114,7 +114,7 @@ export class Tooltip extends React.Component<TooltipProps, TooltipState> {
                 <div
                     id={this.state.referenceId}
                     ref={this.containerRef}
-                    className="tooltip-reference"
+                    className={`tooltip-reference${this.props.trigger === "click" ? " cursor" : ""}`}
                     tabIndex={-1}
                     onClick={this.onClickEvent}
                     onMouseEnter={this.onMouseEnterEvent}
