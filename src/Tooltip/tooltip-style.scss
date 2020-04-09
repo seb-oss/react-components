@@ -221,6 +221,7 @@ $tooltip-distance: 4px;
     }
     &.show,
     &:focus {
+        opacity: 1;
         > .tooltip {
             > .tooltip-arrow {
                 height: 13px;
