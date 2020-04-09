@@ -82,7 +82,7 @@ describe("Component: Table", () => {
     });
 
     it("Should render and be able to sort rows ", async () => {
-        const event: jest.Mock = jest.fn((rows: Array<TableRow>, sortByColumn: TableHeader) => console.log("onAfterSorting called"));
+        const event: jest.Mock = jest.fn((rows: Array<TableRow>, sortByColumn: TableHeader) => true);
         const onSortEvent: jest.Mock = jest.fn((rows: Array<TableRow>, accessor: string, sortingOrder: sortDirectionTypes) => rows.slice(0, 2));
         await act(async () => {
             render(<Table columns={columns} data={smallData} sortProps={{ onAfterSorting: event }} />, container);
@@ -144,7 +144,7 @@ describe("Component: Table", () => {
     it("Should render and do pagination where necessary ", async () => {
         const pageSize: number = 30;
         const paginationValue: number = 1;
-        const setPage: jest.Mock = jest.fn((n: number) => console.log("setPage called"));
+        const setPage: jest.Mock = jest.fn((n: number) => true);
         await act(async () => {
             render(
                 <Table
@@ -168,7 +168,7 @@ describe("Component: Table", () => {
     });
 
     it("Should render and be able to expand the subRows and row details ", async () => {
-        const onRowExpanded: jest.Mock = jest.fn((rows: Array<TableRow>) => console.log("onRowExpanded called"));
+        const onRowExpanded: jest.Mock = jest.fn((rows: Array<TableRow>) => true);
         await act(async () => {
             render(<Table columns={columns} data={smallData} onRowExpanded={onRowExpanded} />, container);
         });
@@ -262,7 +262,7 @@ describe("Component: Table", () => {
         expect(onRowSelected).toHaveBeenCalledTimes(4);
     });
 
-    describe("should handle inline textbox edit ", async () => {
+    describe("should handle inline textbox edit ", () => {
         let results: Array<TableRow> = [];
         let textContainer: HTMLDivElement = null;
 
@@ -499,9 +499,7 @@ describe("Component: Table", () => {
             results = rows;
         });
 
-        const onRemoveFilter: jest.Mock = jest.fn((filterItem: FilterItem) => {
-            console.log(filterItem);
-        });
+        const onRemoveFilter: jest.Mock = jest.fn((filterItem: FilterItem) => true);
 
         const filterValues: Array<string> = smallData.map((data: DataItem<any>) => data.status);
 
