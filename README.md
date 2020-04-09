@@ -11,14 +11,15 @@ This is a set of react components some of which are based on SEB's bootstrap. Th
 - The package name: `@sebgroup/react-components`
 - The package documentation: [Documentation](https://sebgroup.github.io/react-components)
 - The package sourcecode: [Github Source Code](https://github.com/sebgroup/react-components)
+- NPM package: [@sebgroup/react-components](https://www.npmjs.com/package/@sebgroup/react-components)
 
 ## Minimum requirements
 
 This version of components has been developed with:
 
--   React `16.12`
--   Typescript `3.7.5`
--   SEB Bootstrap `5.1.0`
+-   React `^16.12`
+-   Typescript `^3.7`
+-   SEB Bootstrap `^5.1`
 
 ## Installation
 
@@ -47,7 +48,7 @@ This project uses `prettier` for a more consistent (less annoying) coding. We ar
 2. Check formatting rules, Compile components and Create Docs folder: `npm run build`
 3. Build and create the Documentation pages only: `npm run docs`
 4. To run the unit tests, run: `npm test`
-5. To run a unit test for a specific component you have to pass the name of the component in `comp` variable, run: `npm test Button`. It can also be chained with multiple specific components, e.g. `npm test Button RadioGroup`
+5. To run a unit test for a specific component you have to pass the name of the component, example: `npm test Button`. It can also be chained with multiple specific components, e.g. `npm test Button RadioGroup`
 6. To commit your changes run: `npm run commit` and follow the steps
 
 ## Usage

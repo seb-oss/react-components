@@ -1,5 +1,4 @@
 const path = require("path");
-const webpack = require("webpack");
 const components = require("./src/index");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
@@ -54,8 +53,10 @@ switch (buildType) {
                     excludeAssets: /\.(woff2?|ttf|eot|map)$/,
                 },
             },
+            output: {
+                path: path.resolve(__dirname, "dist"),
+            },
             plugins: [
-                new webpack.DefinePlugin({ "process.env.NODE_ENV": JSON.stringify("development") }),
                 new HtmlWebpackPlugin({
                     template: "./develop/index.dev.html",
                     filename: "./index.html",
@@ -68,8 +69,10 @@ switch (buildType) {
         buildConfig = {
             ...buildConfig,
             mode: "production",
+            output: {
+                path: path.resolve(__dirname, "docs"),
+            },
             plugins: [
-                new webpack.DefinePlugin({ "process.env.NODE_ENV": "production" }),
                 new HtmlWebpackPlugin({
                     template: "./develop/index.html",
                     filename: "./index.html",
@@ -104,7 +107,7 @@ switch (buildType) {
                     root: "ReactDOM",
                 },
             },
-            plugins: [new webpack.DefinePlugin({ "process.env.NODE_ENV": "production" }), new CopyWebpackPlugin(components.indexes), new CaseSensitivePathsPlugin()],
+            plugins: [new CopyWebpackPlugin(components.indexes), new CaseSensitivePathsPlugin()],
         };
         buildConfig.module.rules.push(
             { test: /\.(jpe?g|png|gif)$/i, loader: "file-loader?name=assets/images/[name].[ext]" },
@@ -120,8 +123,8 @@ if (buildType !== "prod") {
         context: __dirname,
         entry: { app: ["babel-polyfill", "./develop/index.tsx"] },
         output: {
+            ...buildConfig.output,
             filename: "[name].js",
-            path: path.resolve(__dirname, "docs"),
             chunkFilename: "js/[name].bundle.js",
             publicPath: "",
         },
