@@ -82,7 +82,7 @@ describe("Component: Table", () => {
     });
 
     it("Should render and be able to sort rows ", async () => {
-        const event: jest.Mock = jest.fn((rows: Array<TableRow>, sortByColumn: TableHeader) => true);
+        const event: jest.Mock = jest.fn();
         const onSortEvent: jest.Mock = jest.fn((rows: Array<TableRow>, accessor: string, sortingOrder: sortDirectionTypes) => rows.slice(0, 2));
         await act(async () => {
             render(<Table columns={columns} data={smallData} sortProps={{ onAfterSorting: event }} />, container);
@@ -144,7 +144,7 @@ describe("Component: Table", () => {
     it("Should render and do pagination where necessary ", async () => {
         const pageSize: number = 30;
         const paginationValue: number = 1;
-        const setPage: jest.Mock = jest.fn((n: number) => true);
+        const setPage: jest.Mock = jest.fn();
         await act(async () => {
             render(
                 <Table
@@ -168,7 +168,7 @@ describe("Component: Table", () => {
     });
 
     it("Should render and be able to expand the subRows and row details ", async () => {
-        const onRowExpanded: jest.Mock = jest.fn((rows: Array<TableRow>) => true);
+        const onRowExpanded: jest.Mock = jest.fn();
         await act(async () => {
             render(<Table columns={columns} data={smallData} onRowExpanded={onRowExpanded} />, container);
         });
@@ -499,7 +499,7 @@ describe("Component: Table", () => {
             results = rows;
         });
 
-        const onRemoveFilter: jest.Mock = jest.fn((filterItem: FilterItem) => true);
+        const onRemoveFilter: jest.Mock = jest.fn();
 
         const filterValues: Array<string> = smallData.map((data: DataItem<any>) => data.status);
 
