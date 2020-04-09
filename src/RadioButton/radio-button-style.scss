@@ -1,15 +1,10 @@
-@import "../colours";
-$default: 16px;
+@import "../../node_modules/@sebgroup/bootstrap/scss/variables";
+
 $transition-time: 200ms;
 $form-element-height: 44px;
 $radio-size: 16px;
 $radio-padding-left: 40px;
-@mixin transition($props) {
-    -webkit-transition: $props;
-    -moz-transition: $props;
-    -o-transition: $props;
-    transition: $props;
-}
+
 .form-group.custom-radio {
     > .input-field {
         .custom-control {

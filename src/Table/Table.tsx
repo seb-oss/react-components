@@ -1,5 +1,12 @@
 import * as React from "react";
-import { randomId } from "../__utils/randomId";
+import { randomId } from "@sebgroup/frontend-tools/dist/randomId";
+import { Buffer } from "buffer";
+
+/**
+ * buffer was removed from node recent version and moved into a seperate dependency.
+ * The line below simply checks when one exist use it, otherwise use the new dependency.
+ */
+global.Buffer = global.Buffer || Buffer;
 
 import "./table-style.scss";
 
@@ -652,7 +659,7 @@ export interface TableProps {
     editProps?: EditProps;
 }
 
-export const Table: React.FunctionComponent<TableProps> = React.memo(
+const Table: React.FunctionComponent<TableProps> = React.memo(
     (props: TableProps): React.ReactElement<void> => {
         const [allItemsChecked, setAllRowsChecked] = React.useState<boolean>(false);
         const [currentTableRows, setCurrentTableRows] = React.useState<Array<TableRow>>([]);
@@ -1281,3 +1288,5 @@ export const Table: React.FunctionComponent<TableProps> = React.memo(
         );
     }
 );
+
+export { Table };

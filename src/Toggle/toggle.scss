@@ -1,4 +1,5 @@
-@import "../colours";
+@import "../../node_modules/@sebgroup/bootstrap/scss/variables";
+
 .form-group.custom-toggle {
     > .custom-control.custom-slide-toggle {
         display: inline-block;
