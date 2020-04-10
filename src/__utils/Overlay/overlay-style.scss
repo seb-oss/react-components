@@ -7,7 +7,7 @@
     height: 0;
     opacity: 0;
     transition: height 0ms, opacity 150ms ease-in-out;
-    &:focus {
+    &.show {
         height: auto;
         opacity: 1;
     }
