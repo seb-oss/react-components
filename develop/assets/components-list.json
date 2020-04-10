@@ -40,6 +40,11 @@
             "filePath": "pages/CheckBoxPage"
         },
         {
+            "name": "Chip",
+            "path": "/chip",
+            "filePath": "pages/ChipPage"
+        },
+        {
             "name": "Dropdown",
             "path": "/dropdown",
             "filePath": "pages/DropdownPage"
