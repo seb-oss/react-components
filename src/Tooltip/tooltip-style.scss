@@ -225,8 +225,7 @@ $tooltip-distance: 4px;
             }
         }
     }
-    &.show,
-    &:focus {
+    &.show {
         > .tooltip {
             > .tooltip-arrow {
                 height: 13px;

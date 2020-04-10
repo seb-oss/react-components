@@ -9,12 +9,19 @@ export interface OverlayProps {
     onBlur: (event: React.FocusEvent<HTMLDivElement>) => void;
     show: boolean;
     position?: ElementPosition;
+    ref?: React.RefObject<HTMLDivElement>;
 }
 
-const Overlay: React.FC<React.PropsWithChildren<OverlayProps>> = (props: React.PropsWithChildren<OverlayProps>) => {
+const Overlay: React.FunctionComponent<React.PropsWithChildren<OverlayProps>> = React.forwardRef((props: React.PropsWithChildren<OverlayProps>, ref: React.RefObject<HTMLDivElement>) => {
     const overlayContentRef: React.MutableRefObject<HTMLDivElement> = React.useRef(null);
     const [placementWithCoords, setPlacementWithCoords] = React.useState<ElementPlacementWithCoord>(null);
     const [overlayPositionChecker, setOverlayPositionChecker] = React.useState<OverlayPositionChecker>(null);
+
+    React.useImperativeHandle(ref, () => ({
+        ...ref?.current,
+        focus: () => overlayContentRef.current.focus(),
+        blur: () => overlayContentRef.current.blur()
+    }));
 
     React.useEffect(() => {
         overlayPositionChecker && overlayPositionChecker.disableAutoPlacement(props.disableAutoPosition);
@@ -48,7 +55,7 @@ const Overlay: React.FC<React.PropsWithChildren<OverlayProps>> = (props: React.P
         if (props.show && target.contains(props.overlayReference())) {
             const referenceDomRect: DOMRect = props.overlayReference().getBoundingClientRect();
             if (referenceDomRect.bottom < 0 || referenceDomRect.right < 0 || referenceDomRect.left > window.innerWidth || referenceDomRect.top > window.innerHeight) {
-                overlayContentRef.current.blur();
+                overlayContentRef?.current?.blur();
             }
             setPlacementWithCoords(overlayPositionChecker.getPosition(props.position || "top"));
         }
@@ -65,7 +72,7 @@ const Overlay: React.FC<React.PropsWithChildren<OverlayProps>> = (props: React.P
 
     return ReactDOM.createPortal(
         <div
-            className={`overlay-container ${placementWithCoords ? placementWithCoords.position : (props.position || "top")}`}
+            className={`overlay-container${props.show ? " show" : ""} ${placementWithCoords ? placementWithCoords.position : (props.position || "top")}`}
             ref={overlayContentRef}
             tabIndex={-1}
             onBlur={props.show ? props.onBlur : null}
@@ -76,6 +83,6 @@ const Overlay: React.FC<React.PropsWithChildren<OverlayProps>> = (props: React.P
         </div>,
         document.body
     );
-};
+});
 
 export { Overlay };
