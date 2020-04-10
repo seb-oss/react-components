@@ -40,11 +40,6 @@
             "filePath": "pages/CheckBoxPage"
         },
         {
-            "name": "Chip",
-            "path": "/chip",
-            "filePath": "pages/ChipPage"
-        },
-        {
             "name": "Dropdown",
             "path": "/dropdown",
             "filePath": "pages/DropdownPage"
@@ -100,6 +95,11 @@
             "name": "Button",
             "path": "/button",
             "filePath": "pages/ButtonPage"
+        },
+        {
+            "name": "Chip",
+            "path": "/chip",
+            "filePath": "pages/ChipPage"
         },
         {
             "name": "Tooltip",

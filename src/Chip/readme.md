@@ -12,13 +12,13 @@ Name: Datepicker Component
 Component: "Chip"
 Selector: "<Chip/>"
 Import: "@sebgroup/react-components/dist/Chip"
-Type: Form Component
+Type: UI Component
 ```
 
 ## Basic use
 
 ```html
-<Chip onClick="{clickHandler}">
+<Chip onClose="{closeHandler}">
     Say Something
 </Chip>
 ```
