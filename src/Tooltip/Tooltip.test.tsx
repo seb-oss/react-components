@@ -160,7 +160,7 @@ describe("Component: Tooltip", () => {
         let forceShowSpy: jest.SpyInstance;
         let forceDismissSpy: jest.SpyInstance;
         const toggleTooltip: () => void = () => {
-            const isToggled: boolean = document.body.querySelector(".overlay-container:focus") !== null;
+            const isToggled: boolean = document.body.querySelector(".overlay-container.show") !== null;
             if (isToggled) {
                 myTooltip.forceDismiss();
             } else {
@@ -205,8 +205,8 @@ describe("Component: Tooltip", () => {
             {
                 toggleEvent: new Event("focus", { bubbles: true }),
                 toggleEventElementClass: ".default-content",
-                untoggleEvent: new Event("focus", { bubbles: true }),
-                untoggleEventElementClass: ".tooltip-container",
+                untoggleEvent: new Event("blur", { bubbles: true }),
+                untoggleEventElementClass: ".overlay-container",
                 trigger: "focus",
             },
             {
@@ -232,11 +232,11 @@ describe("Component: Tooltip", () => {
                 act(() => {
                     container.querySelector(".default-content").dispatchEvent(testCase.toggleEvent);
                 });
-                expect(document.body.querySelector(".overlay-container:focus")).toBeDefined();
+                expect(document.body.querySelector(".overlay-container.show")).toBeDefined();
                 act(() => {
-                    container.querySelector(".default-content").dispatchEvent(testCase.untoggleEvent);
+                    document.body.querySelector(testCase.untoggleEventElementClass).dispatchEvent(testCase.untoggleEvent);
                 });
-                expect(document.body.querySelector(".overlay-container:focus")).toBeNull();
+                expect(document.body.querySelector(".overlay-container.show")).toBeNull();
             });
         });
     });
@@ -431,5 +431,20 @@ describe("Component: Tooltip", () => {
                 expect(document.body.querySelector(".overlay-container").classList.contains(testCase.relativePosition)).toBeTruthy();
             });
         }
+    });
+
+    it("Should retain tooltip if user click on tooltip reference on focus mode", () => {
+        let tooltip: Tooltip;
+        act(() => {
+            render(<Tooltip ref={(e: Tooltip) => (tooltip = e)} content="this is tooltip" trigger="focus" />, container);
+        });
+        act(() => {
+            container.querySelector(".default-content").dispatchEvent(new Event("focus", { bubbles: true }));
+        });
+        expect(document.body.querySelector(".overlay-container.show")).toBeDefined();
+        act(() => {
+            tooltip.onTooltipContentBlur({ relatedTarget: container.querySelector(".default-content") } as any);
+        });
+        expect(document.body.querySelector(".overlay-container.show")).toBeDefined();
     });
 });
