@@ -1,13 +1,5 @@
 import * as React from "react";
 import { randomId } from "@sebgroup/frontend-tools/dist/randomId";
-import { Buffer } from "buffer";
-
-/**
- * buffer was removed from node recent version and moved into a seperate dependency.
- * The line below simply checks when one exist use it, otherwise use the new dependency.
- */
-global.Buffer = global.Buffer || Buffer;
-
 import "./table-style.scss";
 
 const angleDown: JSX.Element = (
