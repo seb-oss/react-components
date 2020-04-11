@@ -1,0 +1,28 @@
+name: Deploy to Github Pages
+
+on:
+    push:
+        branches: [master]
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+
+        steps:
+            - uses: actions/checkout@v2
+
+            - name: Setup Node.js environment
+              uses: actions/setup-node@v1.4.1
+
+            - name: Installing dependencies
+              run: npm install
+
+            - name: Generating docs
+              run: npm run docs
+
+            - name: GitHub Pages
+              uses: crazy-max/ghaction-github-pages@v1.4.0
+              with:
+                  build_dir: docs
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { randomId } from "../__utils/randomId";
+import { randomId } from "@sebgroup/frontend-tools/dist/randomId";
 import "./toggle.scss";
 
 export interface ToggleProps {
@@ -36,7 +36,9 @@ export const Toggle: React.FunctionComponent<ToggleProps> = (props: ToggleProps)
                     tabIndex={0}
                     role="switch"
                 />
-                <label className="custom-control-label" htmlFor={id}>{props.label}</label>
+                <label className="custom-control-label" htmlFor={id}>
+                    {props.label}
+                </label>
             </div>
         </div>
     );

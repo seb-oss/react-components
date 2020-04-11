@@ -1,5 +1,5 @@
 import * as React from "react";
-import { randomId } from "../__utils/randomId";
+import { randomId } from "@sebgroup/frontend-tools/dist/randomId";
 import "./dropdown-style.scss";
 
 export interface DropdownItem<T = any> {
@@ -38,9 +38,21 @@ export interface DropdownProps {
     selectedValue: DropdownItem | Array<DropdownItem>;
 }
 
-const chevronDownIcon: JSX.Element = <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M443.5 162.6l-7.1-7.1c-4.7-4.7-12.3-4.7-17 0L224 351 28.5 155.5c-4.7-4.7-12.3-4.7-17 0l-7.1 7.1c-4.7 4.7-4.7 12.3 0 17l211 211.1c4.7 4.7 12.3 4.7 17 0l211-211.1c4.8-4.7 4.8-12.3.1-17z" /></svg>;
-const timesIcon: JSX.Element = <svg className="dropdown-times-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path d="M217.5 256l137.2-137.2c4.7-4.7 4.7-12.3 0-17l-8.5-8.5c-4.7-4.7-12.3-4.7-17 0L192 230.5 54.8 93.4c-4.7-4.7-12.3-4.7-17 0l-8.5 8.5c-4.7 4.7-4.7 12.3 0 17L166.5 256 29.4 393.2c-4.7 4.7-4.7 12.3 0 17l8.5 8.5c4.7 4.7 12.3 4.7 17 0L192 281.5l137.2 137.2c4.7 4.7 12.3 4.7 17 0l8.5-8.5c4.7-4.7 4.7-12.3 0-17L217.5 256z" /></svg>;
-const moreIcon: JSX.Element = <svg className="dropdown-more-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path d="M192 256c0 17.7-14.3 32-32 32s-32-14.3-32-32 14.3-32 32-32 32 14.3 32 32zm88-32c-17.7 0-32 14.3-32 32s14.3 32 32 32 32-14.3 32-32-14.3-32-32-32zm-240 0c-17.7 0-32 14.3-32 32s14.3 32 32 32 32-14.3 32-32-14.3-32-32-32z" /></svg>;
+const chevronDownIcon: JSX.Element = (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+        <path d="M443.5 162.6l-7.1-7.1c-4.7-4.7-12.3-4.7-17 0L224 351 28.5 155.5c-4.7-4.7-12.3-4.7-17 0l-7.1 7.1c-4.7 4.7-4.7 12.3 0 17l211 211.1c4.7 4.7 12.3 4.7 17 0l211-211.1c4.8-4.7 4.8-12.3.1-17z" />
+    </svg>
+);
+const timesIcon: JSX.Element = (
+    <svg className="dropdown-times-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512">
+        <path d="M217.5 256l137.2-137.2c4.7-4.7 4.7-12.3 0-17l-8.5-8.5c-4.7-4.7-12.3-4.7-17 0L192 230.5 54.8 93.4c-4.7-4.7-12.3-4.7-17 0l-8.5 8.5c-4.7 4.7-4.7 12.3 0 17L166.5 256 29.4 393.2c-4.7 4.7-4.7 12.3 0 17l8.5 8.5c4.7 4.7 12.3 4.7 17 0L192 281.5l137.2 137.2c4.7 4.7 12.3 4.7 17 0l8.5-8.5c4.7-4.7 4.7-12.3 0-17L217.5 256z" />
+    </svg>
+);
+const moreIcon: JSX.Element = (
+    <svg className="dropdown-more-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
+        <path d="M192 256c0 17.7-14.3 32-32 32s-32-14.3-32-32 14.3-32 32-32 32 14.3 32 32zm88-32c-17.7 0-32 14.3-32 32s14.3 32 32 32 32-14.3 32-32-14.3-32-32-32zm-240 0c-17.7 0-32 14.3-32 32s14.3 32 32 32 32-14.3 32-32-14.3-32-32-32z" />
+    </svg>
+);
 
 const Dropdown: React.FunctionComponent<DropdownProps> = (props: DropdownProps): React.ReactElement<void> => {
     // COMPONENT INTERNAL STATE INIT ================================
@@ -65,7 +77,7 @@ const Dropdown: React.FunctionComponent<DropdownProps> = (props: DropdownProps):
     });
 
     const handleClickOutside = (event): void => {
-        if ((dropdownToggleRef.current && !dropdownToggleRef.current.contains(event.target)) && (dropdownMenuRef.current && !dropdownMenuRef.current.contains(event.target))) {
+        if (dropdownToggleRef.current && !dropdownToggleRef.current.contains(event.target) && dropdownMenuRef.current && !dropdownMenuRef.current.contains(event.target)) {
             setOpen(false);
         }
     };
@@ -125,7 +137,7 @@ const Dropdown: React.FunctionComponent<DropdownProps> = (props: DropdownProps):
 
     /** array of dropdown item elements with a unique id, the original dropdownItem and calculated selected property */
     const uniqueList: Array<UniqueDropdownItem> = props.list
-        .filter((e: DropdownItem) => (e && e.hasOwnProperty("value") && e.hasOwnProperty("label")))
+        .filter((e: DropdownItem) => e && e.hasOwnProperty("value") && e.hasOwnProperty("label"))
         .map((e: DropdownItem, i: number) => {
             const uniqueListId: string = `${e.value}-${i}`;
             let selected: boolean = false;
@@ -143,37 +155,35 @@ const Dropdown: React.FunctionComponent<DropdownProps> = (props: DropdownProps):
         });
 
     /** Array of dropdown item elements which should be displayed in the current render cycle */
-    const displayList: Array<DisplayDropdownItem> = uniqueList.map((e: UniqueDropdownItem) => {
-        return {
-            ...e,
-            className: `dropdown-item custom-dropdown-item${props.multi ? " multi" : ""}${e.selected ? " selected" : ""}`,
-        };
-    }).filter((e: UniqueDropdownItem) => e.dropdownItem.label.toLowerCase().includes(searchText.toLowerCase())); // filtering based on current search term
+    const displayList: Array<DisplayDropdownItem> = uniqueList
+        .map((e: UniqueDropdownItem) => {
+            return {
+                ...e,
+                className: `dropdown-item custom-dropdown-item${props.multi ? " multi" : ""}${e.selected ? " selected" : ""}`,
+            };
+        })
+        .filter((e: UniqueDropdownItem) => e.dropdownItem.label.toLowerCase().includes(searchText.toLowerCase())); // filtering based on current search term
 
     // creating a list of only the currently selected items and a boolean which determines if all items are selected
-    const selectedList: Array<DropdownItem> = uniqueList
-        .filter((e: UniqueDropdownItem) => e.selected)
-        .map((e: UniqueDropdownItem) => e.dropdownItem);
+    const selectedList: Array<DropdownItem> = uniqueList.filter((e: UniqueDropdownItem) => e.selected).map((e: UniqueDropdownItem) => e.dropdownItem);
     const allSelected: boolean = selectedList.length === uniqueList.length;
 
     // adding the select all row on top of the list for multi select option
     if (props.multi && searchText.length === 0) {
-        displayList.unshift(
-            {
-                id: "select-all",
-                dropdownItem: {
-                    value: "select-all",
-                    label: "Select All",
-                },
-                selected: allSelected,
-                className: `dropdown-item select-all custom-dropdown-item multi${(allSelected) ? " selected" : ""}`,
-            }
-        );
+        displayList.unshift({
+            id: "select-all",
+            dropdownItem: {
+                value: "select-all",
+                label: "Select All",
+            },
+            selected: allSelected,
+            className: `dropdown-item select-all custom-dropdown-item multi${allSelected ? " selected" : ""}`,
+        });
     }
 
     // MISC ================================
     // show the component as disabled is disabled prop is true OR the list is empty
-    const shouldDisable: boolean = (props.disabled || !uniqueList.length);
+    const shouldDisable: boolean = props.disabled || !uniqueList.length;
     /** list of refs for each element in the displayList array */
     const listRefs: Array<React.RefObject<HTMLButtonElement>> = displayList.map(() => React.createRef<HTMLButtonElement>());
 
@@ -183,13 +193,16 @@ const Dropdown: React.FunctionComponent<DropdownProps> = (props: DropdownProps):
         const key: string = event.key.toLowerCase();
 
         switch (key) {
-            case "tab": open && setOpen(false); break;
+            case "tab":
+                open && setOpen(false);
+                break;
             case " ":
             case "enter":
                 event.preventDefault();
                 !open && setOpen(true);
                 break;
-            default: break;
+            default:
+                break;
         }
     };
 
@@ -202,7 +215,9 @@ const Dropdown: React.FunctionComponent<DropdownProps> = (props: DropdownProps):
         if (open) {
             switch (key) {
                 case "tab":
-                case "escape": setOpen(false); break;
+                case "escape":
+                    setOpen(false);
+                    break;
                 case "enter":
                     event.preventDefault();
                     if (currentFocused !== -1) {
@@ -215,10 +230,10 @@ const Dropdown: React.FunctionComponent<DropdownProps> = (props: DropdownProps):
                     break;
                 case "arrowdown":
                     event.preventDefault();
-                    if (currentFocused < (displayList.length - 1)) {
+                    if (currentFocused < displayList.length - 1) {
                         setCurrentFocused(currentFocused + 1);
                     }
-                    if (currentFocused === (displayList.length - 1)) {
+                    if (currentFocused === displayList.length - 1) {
                         setCurrentFocused(-1);
                     }
                     break;
@@ -270,7 +285,7 @@ const Dropdown: React.FunctionComponent<DropdownProps> = (props: DropdownProps):
             props.onChange(newItem);
             setOpen(false);
         } else {
-            const currentList: Array<DropdownItem> = (props.selectedValue as Array<DropdownItem>) ? props.selectedValue as Array<DropdownItem> : [];
+            const currentList: Array<DropdownItem> = (props.selectedValue as Array<DropdownItem>) ? (props.selectedValue as Array<DropdownItem>) : [];
             const index: number = currentList.findIndex((e: DropdownItem) => e.value === item.value);
             if (index === -1) {
                 const newItem: DropdownItem = { ...item };
@@ -316,7 +331,7 @@ const Dropdown: React.FunctionComponent<DropdownProps> = (props: DropdownProps):
             return (props.selectedValue as DropdownItem).label;
         }
 
-        return (props.placeholder && props.placeholder.length) ? props.placeholder : "Select ...";
+        return props.placeholder && props.placeholder.length ? props.placeholder : "Select ...";
     };
 
     // Display the custom dropdown with native elements if prop is set to native
@@ -334,11 +349,11 @@ const Dropdown: React.FunctionComponent<DropdownProps> = (props: DropdownProps):
                     placeholder={props.placeholder || null}
                     multiple={!!props.multi}
                 >
-                    {props.list.map((item: DropdownItem) =>
-                        <option key={item.value} value={item.value} >
+                    {props.list.map((item: DropdownItem) => (
+                        <option key={item.value} value={item.value}>
                             {item.label}
                         </option>
-                    )}
+                    ))}
                 </select>
                 {props.error && <div className="alert alert-danger custom-alert">{props.error}</div>}
             </div>
@@ -347,10 +362,7 @@ const Dropdown: React.FunctionComponent<DropdownProps> = (props: DropdownProps):
 
     return (
         <>
-            <div
-                className={`dropdown custom-dropdown${shouldDisable ? " disabled" : ""}${props.className ? " " + props.className : ""}`}
-                id={props.id}
-            >
+            <div className={`dropdown custom-dropdown${shouldDisable ? " disabled" : ""}${props.className ? " " + props.className : ""}`} id={props.id}>
                 {props.label && <label className="dropdown-label">{props.label}</label>}
 
                 <div
@@ -364,21 +376,24 @@ const Dropdown: React.FunctionComponent<DropdownProps> = (props: DropdownProps):
                     tabIndex={shouldDisable ? -1 : 0}
                     onClick={shouldDisable ? null : handleClickToggle}
                 >
-                    {!props.more ?
+                    {!props.more ? (
                         <>
-                            <div className="title">
-                                {getTitleLabel()}
-                            </div>
+                            <div className="title">{getTitleLabel()}</div>
 
                             <div className="right-items">
-                                {((props.clearable || props.multi) && selectedList.length > 0) ?
-                                    <div className="dropdown-icon-holder" onClick={shouldDisable ? null : handleClickClear}>{timesIcon}</div>
-                                    : null}
+                                {(props.clearable || props.multi) && selectedList.length > 0 ? (
+                                    <div className="dropdown-icon-holder" onClick={shouldDisable ? null : handleClickClear}>
+                                        {timesIcon}
+                                    </div>
+                                ) : null}
                                 <div className="dropdown-icon-holder chevron">{chevronDownIcon}</div>
                             </div>
-                        </> :
-                        <div className="right-items"><div className="dropdown-icon-holder">{moreIcon}</div></div>
-                    }
+                        </>
+                    ) : (
+                        <div className="right-items">
+                            <div className="dropdown-icon-holder">{moreIcon}</div>
+                        </div>
+                    )}
                 </div>
 
                 <div
@@ -388,7 +403,7 @@ const Dropdown: React.FunctionComponent<DropdownProps> = (props: DropdownProps):
                     ref={dropdownMenuRef}
                     className={`dropdown-menu custom-dropdown-menu${open ? " show" : ""}${props.more ? " dropdown-menu-right" : ""}`}
                 >
-                    {props.searchable &&
+                    {props.searchable && (
                         <>
                             <input
                                 ref={searchRef}
@@ -401,7 +416,7 @@ const Dropdown: React.FunctionComponent<DropdownProps> = (props: DropdownProps):
                             />
                             <div className="dropdown-divider blue" />
                         </>
-                    }
+                    )}
 
                     {displayList.map((item: DisplayDropdownItem, index: number) => {
                         return (
@@ -409,7 +424,7 @@ const Dropdown: React.FunctionComponent<DropdownProps> = (props: DropdownProps):
                                 <button
                                     tabIndex={0}
                                     ref={listRefs[index]}
-                                    className={`${item.className}${(currentFocused === index) ? " highlighted" : ""}`}
+                                    className={`${item.className}${currentFocused === index ? " highlighted" : ""}`}
                                     onMouseMove={() => {
                                         if (currentFocused !== index) {
                                             setCurrentFocused(index);
@@ -430,30 +445,33 @@ const Dropdown: React.FunctionComponent<DropdownProps> = (props: DropdownProps):
                                         }
                                     }}
                                 >
-                                    {props.multi ?
+                                    {props.multi ? (
                                         <div tabIndex={-1} className="custom-control">
-                                            <input
-                                                tabIndex={-1}
-                                                type="checkbox"
-                                                className="custom-control-input"
-                                                id={item.id}
-                                                name={item.id}
-                                                defaultChecked={item.selected}
-                                            />
-                                            {item.dropdownItem.label && <label tabIndex={-1} className="custom-control-label" htmlFor={item.id}>{item.dropdownItem.label}</label>}
+                                            <input tabIndex={-1} type="checkbox" className="custom-control-input" id={item.id} name={item.id} defaultChecked={item.selected} />
+                                            {item.dropdownItem.label && (
+                                                <label tabIndex={-1} className="custom-control-label" htmlFor={item.id}>
+                                                    {item.dropdownItem.label}
+                                                </label>
+                                            )}
                                         </div>
-                                        : item.dropdownItem.label && <div tabIndex={-1} className="label">{item.dropdownItem.label}</div>}
+                                    ) : (
+                                        item.dropdownItem.label && (
+                                            <div tabIndex={-1} className="label">
+                                                {item.dropdownItem.label}
+                                            </div>
+                                        )
+                                    )}
                                 </button>
-                                {(props.multi && searchText.length === 0 && index === 0) && <div className="dropdown-divider" />}
+                                {props.multi && searchText.length === 0 && index === 0 && <div className="dropdown-divider" />}
                             </React.Fragment>
                         );
                     })}
 
-                    {displayList.length === 0 &&
+                    {displayList.length === 0 && (
                         <a className={`dropdown-item custom-dropdown-item disabled`}>
                             <div className="label">No results</div>
                         </a>
-                    }
+                    )}
                 </div>
             </div>
             {props.error && <div className="alert alert-danger custom-alert">{props.error}</div>}

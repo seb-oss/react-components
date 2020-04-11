@@ -1,5 +1,5 @@
 import * as React from "react";
-import { randomId } from "../__utils/randomId";
+import { randomId } from "@sebgroup/frontend-tools/dist/randomId";
 import "./check-box-style.scss";
 
 export interface CheckBoxProps {
@@ -36,7 +36,11 @@ const CheckBox: React.FunctionComponent<CheckBoxProps> = (props: CheckBoxProps):
     return (
         <div className={formClass}>
             <div className="input-field">
-                {props.topLabel && <label htmlFor={id} className="checkbox-toplabel">{props.topLabel}</label>}
+                {props.topLabel && (
+                    <label htmlFor={id} className="checkbox-toplabel">
+                        {props.topLabel}
+                    </label>
+                )}
 
                 <div className="custom-control">
                     <input

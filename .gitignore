@@ -5,8 +5,10 @@ npm-debug.log
 # JetBrains
 .idea/
 
-# VS Code
-.vscode/
+# VS Code - everything but the prettier config files
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
 
 # Windows
 Thumbs.db
@@ -20,3 +22,4 @@ dist
 tmp
 build
 coverage
+docs

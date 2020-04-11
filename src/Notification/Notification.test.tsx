@@ -85,7 +85,11 @@ describe("Component: Notification", () => {
     });
 
     it("Should render child element when passed", () => {
-        const newWrapper: ShallowWrapper<NotificationProps> = shallow(<Notification toggle={true} onDismiss={jest.fn()}><div className="testing">test</div></Notification>);
+        const newWrapper: ShallowWrapper<NotificationProps> = shallow(
+            <Notification toggle={true} onDismiss={jest.fn()}>
+                <div className="testing">test</div>
+            </Notification>
+        );
         expect(newWrapper.find(".testing").length).not.toBe(0);
     });
 
@@ -94,7 +98,7 @@ describe("Component: Notification", () => {
             const actions: Array<NotificationAction> = [
                 { text: "action1", action: jest.fn() },
                 { text: "action2", action: jest.fn() },
-                { text: "action3", action: jest.fn() }
+                { text: "action3", action: jest.fn() },
             ];
             wrapper.setProps({ actions: actions });
             expect(wrapper.find(".actions-wrapper").length).toBe(0);
@@ -114,7 +118,7 @@ describe("Component: Notification", () => {
         it("Should render two actions with equal width", () => {
             const actions: Array<NotificationAction> = [
                 { text: "action1", action: jest.fn() },
-                { text: "action2", action: jest.fn() }
+                { text: "action2", action: jest.fn() },
             ];
             wrapper.setProps({ actions: actions });
             expect(wrapper.find(".actions-wrapper").length).not.toBe(0);
@@ -124,7 +128,7 @@ describe("Component: Notification", () => {
         it("Should render actions with correct label and action callback should be called when clicked", () => {
             const actions: Array<NotificationAction> = [
                 { text: "action1", action: jest.fn() },
-                { text: "action2", action: jest.fn() }
+                { text: "action2", action: jest.fn() },
             ];
             wrapper.setProps({ actions: actions });
             expect(wrapper.find(".action-wrapper").first().find("button").text()).toEqual(actions[0].text);

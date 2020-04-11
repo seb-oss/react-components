@@ -1,39 +1,38 @@
 dist: trusty
 sudo: false
 addons:
-  chrome: stable
+    chrome: stable
 language: node_js
 node_js: lts/*
 
 install:
-- npm ci
+    - npm ci
 cache:
-  directories:
-  - $HOME/.npm
+    directories:
+        - $HOME/.npm
 
 script:
-- npm run build
-- export APPLITOOLS_BATCH_ID=`echo ${TRAVIS_PULL_REQUEST_SHA:=$TRAVIS_COMMIT}`
+    - npm run build
+    - export APPLITOOLS_BATCH_ID=`echo ${TRAVIS_PULL_REQUEST_SHA:=$TRAVIS_COMMIT}`
 
 deploy:
-  - provider: pages
-    skip-cleanup: true
-    github-token: $GITHUB_TOKEN
-    keep-history: true
-    local-dir: dist
-    on:
-      branch: master
+    - provider: pages
+      skip-cleanup: true
+      github-token: $GITHUB_TOKEN
+      keep-history: true
+      local-dir: dist
+      on:
+          branch: master
 
 git:
-  depth: 3
+    depth: 3
 
 after_success:
-- npm run coveralls
-- if [ "$TRAVIS_BRANCH" == "master" ];
-  then npm run travis-deploy-once "npm run semantic-release";
-  fi
-
+    - npm run coveralls
+    - if [ "$TRAVIS_BRANCH" == "master" ];
+      then npm run travis-deploy-once "npm run semantic-release";
+      fi
 
 branches:
-  except:
-  - /^v\d+\.\d+\.\d+$/
+    only:
+        - master

@@ -156,7 +156,6 @@ describe("Component: RadioButton", () => {
     });
 
     describe("test pagination list when The original size of the pagination is greater than the expected size ", () => {
-
         it("Should display current number at the center with next and previous buttons side by side", () => {
             /**
              * When the size is 60, offset is 6, then original paginSize will be 10
@@ -167,7 +166,7 @@ describe("Component: RadioButton", () => {
              */
             mountedWrapper = mount(<Pagination size={60} offset={6} value={3}></Pagination>);
             const allPageItems: ReactWrapper = mountedWrapper.findWhere((x: ReactWrapper) => x.hasClass("page-item"));
-            const activePage: ReactWrapper = allPageItems.filterWhere((x: ReactWrapper) => x.hasClass('active'));
+            const activePage: ReactWrapper = allPageItems.filterWhere((x: ReactWrapper) => x.hasClass("active"));
             // note since we have sr-only classes, there will be two links here and .text concat returns the two together .
             expect(activePage.text()).toContain(3);
 
@@ -183,7 +182,7 @@ describe("Component: RadioButton", () => {
             mountedWrapper = mount(<Pagination size={60} offset={10} pagingLength={5} value={4}></Pagination>);
 
             const allPageItems: ReactWrapper = mountedWrapper.findWhere((x: ReactWrapper) => x.hasClass("page-item"));
-            const activePage: ReactWrapper = allPageItems.filterWhere((x: ReactWrapper) => x.hasClass('active'));
+            const activePage: ReactWrapper = allPageItems.filterWhere((x: ReactWrapper) => x.hasClass("active"));
 
             expect(activePage.text()).toContain(4);
 
@@ -194,5 +193,5 @@ describe("Component: RadioButton", () => {
 
             expect(allPageItems.at(1).text()).toContain(2);
         });
-    })
+    });
 });

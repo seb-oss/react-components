@@ -1,18 +1,4 @@
-$blue: #41b0ee;
-$blue-darker: #007ac7;
-$gray-100: #f8f8f8;
-$gray-500: #adadad;
-$red: #FF0000;
-$body-color: #444;
-$white: #ffffff;
-$gray-800: #343434;
-
-@mixin transition($props) {
-    -webkit-transition: $props;
-    -moz-transition: $props;
-    -o-transition: $props;
-    transition: $props;
-}
+@import "../../node_modules/@sebgroup/bootstrap/scss/variables";
 
 .form-group.date-picker {
     .input-field {
@@ -32,7 +18,7 @@ $gray-800: #343434;
                     color: $body-color;
                     border-radius: 4px;
                     border-color: $gray-500;
-                    @include transition(border-color 400ms);
+                    transition: border-color 400ms;
 
                     &:hover {
                         border-color: $blue;
@@ -61,7 +47,7 @@ $gray-800: #343434;
                         border-bottom-right-radius: 3px;
                         width: 40px;
 
-                        >svg {
+                        > svg {
                             fill: $blue;
                             width: 16px;
                             height: 16px;
@@ -72,7 +58,7 @@ $gray-800: #343434;
                         &:active {
                             background-color: $blue;
 
-                            >svg {
+                            > svg {
                                 fill: $white;
                             }
                         }
@@ -99,7 +85,7 @@ $gray-800: #343434;
                         .react-date-picker__button {
                             background-color: $gray-100;
 
-                            >svg {
+                            > svg {
                                 fill: $gray-500;
                             }
                         }
@@ -124,7 +110,7 @@ $gray-800: #343434;
                 top: 100%;
             }
 
-            >.date-placeholder {
+            > .date-placeholder {
                 position: absolute;
                 left: 2px;
                 top: 2px;
@@ -137,7 +123,7 @@ $gray-800: #343434;
                 overflow: hidden;
                 pointer-events: none;
 
-                >p {
+                > p {
                     margin: 0;
                     white-space: nowrap;
                     text-overflow: ellipsis;
@@ -145,8 +131,8 @@ $gray-800: #343434;
                 }
             }
 
-            >.react-date-picker--open {
-                &+.date-placeholder {
+            > .react-date-picker--open {
+                & + .date-placeholder {
                     display: none;
                 }
             }
@@ -171,7 +157,7 @@ $gray-800: #343434;
             opacity: 0;
             margin: 0;
             padding: 0;
-            @include transition((opacity 200ms, margin 200ms));
+            transition: opacity 200ms, margin 200ms;
 
             &.alert-danger {
                 color: $red;

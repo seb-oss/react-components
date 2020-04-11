@@ -1,15 +1,9 @@
-@import "../colours";
+@import "../../node_modules/@sebgroup/bootstrap/scss/variables";
 $form-element-height: 44px;
 $checkbox-size: 16px;
 $checkbox-padding-left: 40px;
 $transition-time: 200ms;
 
-@mixin transition($props) {
-    -webkit-transition: $props;
-    -moz-transition: $props;
-    -o-transition: $props;
-    transition: $props;
-}
 .form-group.custom-checkbox {
     > .input-field {
         > .custom-control {
@@ -72,13 +66,5 @@ $transition-time: 200ms;
     }
     &.condensed {
         margin: 0;
-    }
-}
-
-.dark-mode {
-    .form-group.custom-checkbox {
-        * {
-            color: $dark-font;
-        }
     }
 }

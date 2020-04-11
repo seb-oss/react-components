@@ -7,7 +7,7 @@ describe("Component: CheckBox", () => {
         name: "myCheckbox",
         label: "myLabel",
         checked: false,
-        onChange: jest.fn()
+        onChange: jest.fn(),
     };
     let wrapper: ShallowWrapper<CheckBoxProps>;
 
@@ -61,5 +61,4 @@ describe("Component: CheckBox", () => {
         wrapper.setProps({ disabled: true });
         expect(wrapper.find("input").props().disabled).toBeTruthy();
     });
-
 });

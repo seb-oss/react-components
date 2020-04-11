@@ -9,7 +9,7 @@ describe("Component: RadioButton", () => {
         label: "label",
         onChange: jest.fn(),
         name: "Gender",
-        radioValue: "male"
+        radioValue: "male",
     };
 
     beforeEach(() => {
@@ -61,5 +61,4 @@ describe("Component: RadioButton", () => {
         expect(mountedWrapper.find(".custom-radio").hasClass("inline")).toBeTruthy();
         expect(mountedWrapper.find(".custom-radio").hasClass("condensed")).toBeTruthy();
     });
-
 });
