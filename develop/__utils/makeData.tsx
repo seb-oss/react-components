@@ -1,5 +1,6 @@
-import * as React from "react";
-import * as namor from "namor";
+import React from "react";
+import { loremIpsum } from "lorem-ipsum";
+import { randomId } from "@sebgroup/frontend-tools/dist/randomId";
 
 function range(len: number): Array<number> {
   const arr: Array<number> = [];
@@ -12,9 +13,9 @@ function range(len: number): Array<number> {
 function newPerson(): object {
   const statusChance: number = Math.random();
   return {
-    id: namor.generate({ words: 1, saltLength: 1, saltType: "number" }),
-    firstName: namor.generate({ words: 1, saltLength: 0 }),
-    lastName: namor.generate({ words: 1, saltLength: 0 }),
+    id: parseInt(randomId("").substr(8, 4), 10),
+    firstName: loremIpsum({ units: "words", count: 1 }),
+    lastName: loremIpsum({ units: "words", count: 1 }),
     age: Math.floor(Math.random() * 30),
     visits: Math.floor(Math.random() * 100),
     progress: Math.floor(Math.random() * 100),
@@ -35,7 +36,7 @@ export default function makeData<T>(lens: Array<number>): T {
         ...newPerson(),
         subRows: lens[depth + 1] ? makeDataLevel(depth + 1) : undefined,
         rowContentDetail: <p className="details">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+          {loremIpsum({ units: "sentences", count: 2 })}
         </p>
       }
     })
