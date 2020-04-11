@@ -85,7 +85,7 @@ export class Tooltip extends React.Component<TooltipProps, TooltipState> {
 
     onTooltipContentBlur = (e: React.FocusEvent<HTMLDivElement>): void => {
         const triggeredNode: Node = (e.relatedTarget as Node) || document.activeElement;
-        const isWithinTriggerNode: boolean = document.getElementById(this.state.referenceId).contains(triggeredNode);
+        const isWithinTriggerNode: boolean = this.containerRef.current.contains(triggeredNode);
         if (this.state.visible && !isWithinTriggerNode) {
             this.onTooltipToggle(e, false);
         } else if (this.props.trigger === "focus" && isWithinTriggerNode) {
