@@ -51,14 +51,13 @@ export const SideMenu: React.FC<SideMenuProps> = (props: SideMenuProps) => {
                 setSearch("");
                 break;
             case "enter":
-                if (highlighted !== -1) {
-                    (listRef.current.children.item(highlighted) as HTMLAnchorElement).click();
-                    setHighlighted(-1);
-                    setSearch("");
-                } else {
-                    (listRef.current.children.item(0) as HTMLAnchorElement).click();
-                    setHighlighted(-1);
-                    setSearch("");
+                const currentElements: HTMLCollectionOf<HTMLAnchorElement> = listRef.current.children as any;
+                if (currentElements.length) {
+                    if (highlighted !== -1) {
+                        currentElements.item(highlighted).click();
+                        setHighlighted(-1);
+                        setSearch("");
+                    }
                 }
                 break;
             case "arrowdown":

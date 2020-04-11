@@ -18,6 +18,7 @@
         "prefer-for-of": false,
         "jsx-boolean-value": false,
         "forin": false,
+        "semicolon": true,
         "indent": [
             true,
             "spaces",

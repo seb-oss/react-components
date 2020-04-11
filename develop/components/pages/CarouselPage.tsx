@@ -24,7 +24,6 @@ const CarouselPage: React.FunctionComponent = () => {
                     <div className="result wide">
                         <Carousel
                             list={carouselList}
-                            afterChange={() => { console.log("changed"); }}
                             autoPlay={true}
                             infinite={true}
                         />

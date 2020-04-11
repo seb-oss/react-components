@@ -20,6 +20,7 @@ const AccordionPage: React.FC = () => {
                 id: { type: "string", description: "The element id", content: null },
                 list: { type: "Array<AccordionListItem>", description: "The list of accordion items to be displayed", defaultValue: accordionList },
                 alternative: { type: "boolean", description: "An alternative version of the accordion", content: [false, true] },
+                activeIndex: { type: "number", description: "Default active tab", defaultValue: null },
             }}
         />
     );
