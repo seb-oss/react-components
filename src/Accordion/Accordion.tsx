@@ -31,8 +31,8 @@ export interface AccordionProps {
 }
 
 const Accordion: React.FunctionComponent<AccordionProps> = (props: AccordionProps) => {
-    const collapsableRef: React.MutableRefObject<Array<React.RefObject<HTMLDivElement>>> = React.useRef(props.list.map(() => React.createRef<HTMLDivElement>()));
-    const [heightList, setHeightList] = React.useState<Array<number>>(Array(props.list.length).fill(0));
+    const collapsableRef: React.MutableRefObject<Array<React.RefObject<HTMLDivElement>>> = React.useRef(props.list?.map(() => React.createRef<HTMLDivElement>()) || []);
+    const [heightList, setHeightList] = React.useState<Array<number>>(Array(props.list?.length).fill(0) || []);
     const [active, setActive] = React.useState<number>(null);
     const [accordionClassName, setAccordionClassName] = React.useState<string>("custom-accordion");
     const [itemClassName, setItemClassName] = React.useState<string>("custom-accordion");
@@ -48,7 +48,7 @@ const Accordion: React.FunctionComponent<AccordionProps> = (props: AccordionProp
     /** Constructs `id`s for accordion items */
     function constructIds(): void {
         const idListToSet: Array<string> = [];
-        props.list.map(() => idListToSet.push(randomId("accordion-")));
+        props.list?.map(() => idListToSet.push(randomId("accordion-")));
         setIdList(idListToSet);
     }
 
@@ -70,8 +70,8 @@ const Accordion: React.FunctionComponent<AccordionProps> = (props: AccordionProp
     }
 
     function expandOrCollapseSection(itemIndex: number): void {
-        const updatedHeightList: Array<number> = Array(props.list.length).fill(0);
-        updatedHeightList[itemIndex] = heightList[itemIndex] ? 0 : collapsableRef.current[itemIndex]?.current?.scrollHeight;
+        const updatedHeightList: Array<number> = Array(props.list?.length).fill(0) || [];
+        updatedHeightList[itemIndex] = heightList[itemIndex] ? 0 : collapsableRef?.current[itemIndex]?.current?.scrollHeight;
         setHeightList(updatedHeightList);
     }
 
@@ -109,32 +109,31 @@ const Accordion: React.FunctionComponent<AccordionProps> = (props: AccordionProp
 
     return (
         <div className={accordionClassName} id={props.id}>
-            {props.list &&
-                props.list.map((item: AccrodionListItem, index: number) => {
-                    return (
-                        <div
-                            className={itemClassName + (active === index ? " active" : "")}
-                            key={index}
-                            tabIndex={0}
-                            data-id={index}
-                            id={idList[index]}
-                            onKeyDown={onToggle}
-                            aria-expanded={active === index}
-                            aria-controls={`lbl-${idList[index]}`}
-                            role="button"
-                        >
-                            <div className={"header-wrapper" + (item.subHeaderText ? " with-sub-header" : "")} data-id={index} onClick={onToggle}>
-                                {props.customIcon || chevronDownIcon}
-                                {props.customIconExpanded ? props.customIconExpanded : null}
-                                <h4 className={"accordion-header"}>{item.header}</h4>
-                                {item.subHeaderText && <h6 className="accordion-sub-header">{item.subHeaderText}</h6>}
-                            </div>
-                            <div className="content-wrapper" aria-labelledby={idList[index]} id={`lbl-${idList[index]}`} role="region">
-                                {item && <AccordionContentRenderer {...item} height={heightList[index]} collapsableRef={collapsableRef.current[index]} />}
-                            </div>
+            {props.list?.map((item: AccrodionListItem, index: number) => {
+                return (
+                    <div
+                        className={itemClassName + (active === index ? " active" : "")}
+                        key={index}
+                        tabIndex={0}
+                        data-id={index}
+                        id={idList[index]}
+                        onKeyDown={onToggle}
+                        aria-expanded={active === index}
+                        aria-controls={`lbl-${idList[index]}`}
+                        role="button"
+                    >
+                        <div className={"header-wrapper" + (item.subHeaderText ? " with-sub-header" : "")} data-id={index} onClick={onToggle}>
+                            {props.customIcon || chevronDownIcon}
+                            {props.customIconExpanded ? props.customIconExpanded : null}
+                            <h4 className={"accordion-header"}>{item.header}</h4>
+                            {item.subHeaderText && <h6 className="accordion-sub-header">{item.subHeaderText}</h6>}
                         </div>
-                    );
-                })}
+                        <div className="content-wrapper" aria-labelledby={idList[index]} id={`lbl-${idList[index]}`} role="region">
+                            {item && <AccordionContentRenderer {...item} height={heightList[index]} collapsableRef={collapsableRef?.current[index]} />}
+                        </div>
+                    </div>
+                );
+            })}
         </div>
     );
 };
