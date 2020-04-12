@@ -1,0 +1,46 @@
+name: Deployment
+
+on:
+  push:
+    branches: 
+      - master
+
+jobs:
+  publish:
+
+    runs-on: [ubuntu-latest]
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Setup node
+      uses: actions/setup-node@v1
+      with:
+        node-version: '13.x'
+
+    - name: installing dependencies
+      run: npm ci
+
+    - name: building
+      run: npm run build
+    
+    - name: preparing to publish
+      run: npm config set //registry.npmjs.org/:_authToken=$NPM_TOKEN
+      env:
+        CI: true
+        NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+    - name: semantic release
+      run: npm run semantic-release
+      env:
+        CI: true
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        
+    - name: publish coverage
+      uses: coverallsapp/github-action@v1.0.1
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+      env:
+        COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_TOKEN }}
