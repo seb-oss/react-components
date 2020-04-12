@@ -9,15 +9,10 @@ on:
 jobs:
   build_check:
     runs-on: [ubuntu-latest]
-    strategy:
-      matrix:
-        node: [ '13', '10', '8' ]
     steps:
-      - uses: actions/checkout@v2.0.0
+      - uses: actions/checkout@v2
       - name: Setup node
-        uses: actions/setup-node@v1.1.0
-        with:
-          node-version: ${{ matrix.node }}
+        uses: actions/setup-node@v1
       - name: installing dependencies
         run: npm install
       - name: running unit tests
