@@ -1,4 +1,5 @@
 *.md
+*.yml
 __mocks__
 coverage
 docs
