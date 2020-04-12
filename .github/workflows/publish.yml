@@ -1,4 +1,4 @@
-name: CI
+name: Deployment
 
 on:
   push:
@@ -11,12 +11,12 @@ jobs:
     runs-on: [ubuntu-latest]
 
     steps:
-    - uses: actions/checkout@v2.0.0
+    - uses: actions/checkout@v2
 
     - name: Setup node
-      uses: actions/setup-node@v1.1.0
+      uses: actions/setup-node@v1
       with:
-        node-version: '10.x'
+        node-version: '13.x'
 
     - name: installing dependencies
       run: npm ci
@@ -39,7 +39,7 @@ jobs:
         NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         
     - name: publish coverage
-      uses: coverallsapp/github-action@v1.0.1
+      uses: coverallsapp/github-action@v1
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
       env:
