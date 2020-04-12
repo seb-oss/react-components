@@ -1,24 +1,24 @@
 name: Github Pages
 
 on:
-    push:
-        branches: [master]
+  push:
+    branches: [ master ]
 
 jobs:
-    build:
-        runs-on: ubuntu-latest
+  build:
+    runs-on: ubuntu-latest
 
-        steps:
-            - uses: actions/checkout@v2
+    steps:
+    - uses: actions/checkout@v2
 
     - name: Setup Node.js environment
       uses: actions/setup-node@v1
 
-            - name: Installing dependencies
-              run: npm install
+    - name: Installing dependencies
+      run: npm install
 
-            - name: Generating docs
-              run: npm run docs
+    - name: Generating docs
+      run: npm run docs
 
     - name: GitHub Pages
       uses: crazy-max/ghaction-github-pages@v1
