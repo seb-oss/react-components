@@ -39,7 +39,7 @@ jobs:
         NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         
     - name: publish coverage
-      uses: coverallsapp/github-action@v1
+      uses: coverallsapp/github-action@v1.0.1
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
       env:
