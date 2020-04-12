@@ -1,4 +1,4 @@
-name: Deploy to Github Pages
+name: Github Pages
 
 on:
   push:
@@ -12,7 +12,7 @@ jobs:
     - uses: actions/checkout@v2
 
     - name: Setup Node.js environment
-      uses: actions/setup-node@v1.4.1
+      uses: actions/setup-node@v1
 
     - name: Installing dependencies
       run: npm install
@@ -21,7 +21,7 @@ jobs:
       run: npm run docs
 
     - name: GitHub Pages
-      uses: crazy-max/ghaction-github-pages@v1.4.0
+      uses: crazy-max/ghaction-github-pages@v1
       with:
         build_dir: docs
       env:
