@@ -37,7 +37,7 @@ export const Image: React.FunctionComponent<ImageProps> = React.memo(
                 {props.useImgTag && (
                     <img
                         id={props.id}
-                        className={`img-tag${props.onClick ? " link" : ""} ${props.className ? props.className : ""}`}
+                        className={`img-tag${props.onClick ? " link" : ""}${props.className ? ` ${props.className}` : ""}`}
                         src={props.src}
                         alt={props.alt ? props.alt : ""}
                         style={{
