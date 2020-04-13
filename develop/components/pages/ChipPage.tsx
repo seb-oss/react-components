@@ -7,7 +7,7 @@ const docMD: string = require("../../../src/Chip/readme.md");
 
 const generateWord = () => loremIpsum({ units: "words", count: 1 });
 
-const IconPage: React.FunctionComponent = () => {
+const ChipPage: React.FunctionComponent = () => {
     const [chips, setChips] = React.useState<Array<string>>([generateWord()]);
 
     const closeChip = React.useCallback(
@@ -52,4 +52,4 @@ const IconPage: React.FunctionComponent = () => {
     );
 };
 
-export default IconPage;
+export default ChipPage;
