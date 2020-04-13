@@ -659,7 +659,6 @@ const Table: React.FunctionComponent<TableProps> = React.memo(
         const [tableColumns, setTableColumn] = React.useState<Array<TableHeader>>([]);
         const [tableRows, setTableRows] = React.useState<Array<TableRow>>([]);
         const [tableRowsImage, setTableRowsImage] = React.useState<Array<TableRow>>([]);
-        const [tableEditRows, setTableEditRows] = React.useState<Array<TableRow>>([]);
 
         // events -------------------------------------------------------------------------------------
 
@@ -965,27 +964,30 @@ const Table: React.FunctionComponent<TableProps> = React.memo(
 
         const onTextChange = React.useCallback(
             (e: React.ChangeEvent<HTMLInputElement>, row: TableRow, rowIndex?: number): void => {
-                const updatedRows: Array<TableRow> = tableEditRows?.map((updatedRow: TableRow) => {
-                    if (rowIndex > -1 && updatedRow.rowIndex === rowIndex) {
-                        return {
-                            ...updatedRow,
-                            subRows: updatedRow.subRows.map((subRow: TableRow) => {
-                                if (subRow.rowIndex === row.rowIndex) {
-                                    return {
-                                        ...subRow,
-                                        [e.target.name]: e.target.value,
-                                        cells: subRow.cells?.map((cell: Cell) => {
-                                            if (cell.accessor === e.target.name) {
-                                                return { ...cell, value: e.target.value };
-                                            }
-                                            return cell;
-                                        }),
-                                    };
-                                }
+                const updatedRows: Array<TableRow> = tableRows?.map((updatedRow: TableRow) => {
+                    if (rowIndex > -1) {
+                        if (updatedRow.rowIndex === rowIndex) {
+                            return {
+                                ...updatedRow,
+                                subRows: updatedRow.subRows.map((subRow: TableRow) => {
+                                    if (subRow.rowIndex === row.rowIndex) {
+                                        return {
+                                            ...subRow,
+                                            [e.target.name]: e.target.value,
+                                            cells: subRow.cells?.map((cell: Cell) => {
+                                                if (cell.accessor === e.target.name) {
+                                                    return { ...cell, value: e.target.value };
+                                                }
+                                                return cell;
+                                            }),
+                                        };
+                                    }
 
-                                return subRow;
-                            }),
-                        };
+                                    return subRow;
+                                }),
+                            };
+                        }
+                        return updatedRow;
                     } else if (updatedRow.rowIndex === row.rowIndex) {
                         return {
                             ...updatedRow,
@@ -1002,9 +1004,9 @@ const Table: React.FunctionComponent<TableProps> = React.memo(
                     return updatedRow;
                 });
 
-                setTableEditRows(updatedRows);
+                setTableRows(updatedRows);
             },
-            [tableEditRows]
+            [tableRows]
         );
 
         // functions -----------------------------------------------------------------------------
@@ -1081,25 +1083,22 @@ const Table: React.FunctionComponent<TableProps> = React.memo(
 
         const setDefaultTableRows = React.useCallback(() => {
             const updatedRows: Array<TableRow> = getRows(props.data);
-            const editTableRows: Array<TableRow> = updatedRows?.filter((row: TableRow) => row.selected);
             setTableRows(updatedRows);
-            setTableEditRows(editTableRows);
             setTableRowsImage(updatedRows);
         }, [props.data, props.columns]);
 
         const doPaginate = React.useCallback((): void => {
-            const chosenRows: Array<TableRow> = tableEditRows?.length ? tableEditRows : tableRows;
-            if (props.currentpage && props.offset && chosenRows?.length > 0) {
+            if (props.currentpage && props.offset && tableRows?.length > 0) {
                 // pagination start from 1 hence the need fro deducting 1
                 const start: number = (props.currentpage - 1) * props.offset;
                 const end: number = props.offset * props.currentpage;
 
-                const currentPage: Array<TableRow> = chosenRows?.slice(start, end);
+                const currentPage: Array<TableRow> = tableRows?.slice(start, end);
                 setCurrentTableRows(currentPage);
             } else {
-                setCurrentTableRows(chosenRows);
+                setCurrentTableRows(tableRows);
             }
-        }, [props.currentpage, props.offset, tableRows, tableEditRows]);
+        }, [props.currentpage, props.offset, tableRows]);
 
         const rowsAreCollapsable = React.useCallback((): boolean => {
             return (
@@ -1154,29 +1153,27 @@ const Table: React.FunctionComponent<TableProps> = React.memo(
                 case "edit":
                     updateRows = tableRows.map((row: TableRow) => ({ ...row, isEditMode: row.selected, subRows: row.subRows?.map((sub: TableRow) => ({ ...sub, isEditMode: sub.selected })) }));
                     if (updateRows?.length) {
-                        setTableEditRows(updateRows);
+                        setTableRows(updateRows);
                     }
                     break;
                 case "save":
-                    updateRows = tableEditRows.map((row: TableRow) => ({
+                    updateRows = tableRows.map((row: TableRow) => ({
                         ...row,
                         isEditMode: false,
                         selected: false,
                         subRows: row.subRows?.map((sub: TableRow) => ({ ...sub, isEditMode: false, selected: false })),
                     }));
                     setTableRows(updateRows);
-                    setTableEditRows([]);
                     props?.editProps?.onAfterEdit(updateRows);
                     break;
                 case "cancel":
-                    updateRows = tableEditRows.map((row: TableRow) => ({
+                    updateRows = tableRowsImage.map((row: TableRow) => ({
                         ...row,
                         isEditMode: false,
                         selected: false,
                         subRows: row.subRows?.map((sub: TableRow) => ({ ...sub, isEditMode: false, selected: false })),
                     }));
                     setTableRows(updateRows);
-                    setTableEditRows([]);
                     break;
             }
         }, [props.editProps?.mode]);
@@ -1248,7 +1245,7 @@ const Table: React.FunctionComponent<TableProps> = React.memo(
 
         React.useEffect(() => {
             doPaginate();
-        }, [props.offset, props.currentpage, tableRows, tableEditRows]);
+        }, [props.offset, props.currentpage, tableRows]);
 
         return (
             <div>

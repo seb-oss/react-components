@@ -6,6 +6,7 @@ $chip-height: 32px;
 $icon-size: 16px;
 $row-height: 40px;
 $transition-time: 200ms;
+$filter-gray: #e6e6e6;
 
 @mixin setInputGroupStyles() {
     .form-group.input-box-group {
@@ -156,7 +157,7 @@ table {
                             flex-wrap: wrap;
                             > .filter-item {
                                 height: $chip-height;
-                                background-color: $gray-800;
+                                background-color: $filter-gray;
                                 border-radius: 4px;
                                 padding: 4px;
                                 margin: 4px;
