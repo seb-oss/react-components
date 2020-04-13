@@ -36,7 +36,7 @@ export const Image: React.FunctionComponent<ImageProps> = React.memo(
             }
 
             setImageClassName(className);
-        }, [props?.className, props?.onClick]);
+        }, [props?.className, props?.onClick, props.useImgTag]);
 
         return (
             <>
