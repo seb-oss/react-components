@@ -20,13 +20,7 @@ export const Image: React.FunctionComponent<ImageProps> = React.memo(
         const [imageClassName, setImageClassName] = React.useState<string>("");
 
         React.useEffect(() => {
-            let className: string = "";
-            if (!props?.useImgTag) {
-                className += "div-tag";
-            } else {
-                className += "img-tag";
-            }
-
+            let className: string = props.useImgTag ? "img-tag" : "div-tag";
             if (props?.onClick) {
                 className += ` link`;
             }
@@ -40,21 +34,7 @@ export const Image: React.FunctionComponent<ImageProps> = React.memo(
 
         return (
             <>
-                {!props.useImgTag ? (
-                    <div
-                        id={props.id}
-                        className={imageClassName}
-                        style={{
-                            backgroundImage: "url(" + props.src + ")",
-                            width: props.width,
-                            height: props.height,
-                        }}
-                        onClick={props.onClick}
-                        aria-label={props.ariaLabel}
-                        aria-describedby={props.ariaDescribedBy}
-                        title={props.alt}
-                    />
-                ) : (
+                {props.useImgTag ? (
                     <img
                         id={props.id}
                         className={imageClassName}
@@ -68,6 +48,20 @@ export const Image: React.FunctionComponent<ImageProps> = React.memo(
                         onLoad={props.onLoad}
                         aria-label={props.ariaLabel}
                         aria-describedby={props.ariaDescribedBy}
+                    />
+                ) : (
+                    <div
+                        id={props.id}
+                        className={imageClassName}
+                        style={{
+                            backgroundImage: "url(" + props.src + ")",
+                            width: props.width,
+                            height: props.height,
+                        }}
+                        onClick={props.onClick}
+                        aria-label={props.ariaLabel}
+                        aria-describedby={props.ariaDescribedBy}
+                        title={props.alt}
                     />
                 )}
             </>
