@@ -17,12 +17,33 @@ export interface ImageProps {
 
 export const Image: React.FunctionComponent<ImageProps> = React.memo(
     (props: ImageProps): React.ReactElement<void> => {
+        const [imageClassName, setImageClassName] = React.useState<string>("");
+
+        React.useEffect(() => {
+            let className: string = "";
+            if (!props?.useImgTag) {
+                className += "div-tag";
+            } else {
+                className += "img-tag";
+            }
+
+            if (props?.onClick) {
+                className += ` link`;
+            }
+
+            if (props?.className) {
+                className += ` ${props.className}`;
+            }
+
+            setImageClassName(className);
+        }, [props?.className, props?.onClick]);
+
         return (
             <>
-                {!props.useImgTag && (
+                {!props.useImgTag ? (
                     <div
                         id={props.id}
-                        className={`div-tag${props.onClick ? " link" : ""}${props.className ? ` ${props.className}` : ""}`}
+                        className={imageClassName}
                         style={{
                             backgroundImage: "url(" + props.src + ")",
                             width: props.width,
@@ -33,11 +54,10 @@ export const Image: React.FunctionComponent<ImageProps> = React.memo(
                         aria-describedby={props.ariaDescribedBy}
                         title={props.alt}
                     />
-                )}
-                {props.useImgTag && (
+                ) : (
                     <img
                         id={props.id}
-                        className={`img-tag${props.onClick ? " link" : ""}${props.className ? ` ${props.className}` : ""}`}
+                        className={imageClassName}
                         src={props.src}
                         alt={props.alt ? props.alt : ""}
                         style={{
