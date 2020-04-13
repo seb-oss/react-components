@@ -10,7 +10,7 @@ const generateWord = () => loremIpsum({ units: "words", count: 1 });
 const ChipPage: React.FunctionComponent = () => {
     const [chips, setChips] = React.useState<Array<string>>([generateWord()]);
 
-    const closeChip = React.useCallback(
+    const closeChip: (index: number) => void = React.useCallback(
         (index: number) => {
             const newChips: Array<string> = [...chips];
             newChips.splice(index, 1);
@@ -19,7 +19,7 @@ const ChipPage: React.FunctionComponent = () => {
         [chips, setChips]
     );
 
-    const addChip = React.useCallback(() => {
+    const addChip: VoidFunction = React.useCallback(() => {
         setChips([...chips, generateWord()]);
     }, [chips, setChips]);
 
