@@ -49,6 +49,7 @@ interface TooltipState {
 
 export class Tooltip extends React.Component<TooltipProps, TooltipState> {
     private containerRef: React.RefObject<HTMLDivElement> = React.createRef();
+    private contentRef: React.RefObject<HTMLDivElement> = React.createRef();
 
     constructor(props: TooltipProps) {
         super(props);
@@ -84,8 +85,11 @@ export class Tooltip extends React.Component<TooltipProps, TooltipState> {
 
     onTooltipContentBlur = (e: React.FocusEvent<HTMLDivElement>): void => {
         const triggeredNode: Node = (e.relatedTarget as Node) || document.activeElement;
-        if (this.props.trigger !== "click" || !document.getElementById(this.state.referenceId).contains(triggeredNode)) {
+        const isWithinTriggerNode: boolean = this.containerRef.current.contains(triggeredNode);
+        if (this.state.visible && !isWithinTriggerNode) {
             this.onTooltipToggle(e, false);
+        } else if (this.props.trigger === "focus" && isWithinTriggerNode) {
+            this.contentRef?.current?.focus();
         }
     };
 
@@ -105,7 +109,7 @@ export class Tooltip extends React.Component<TooltipProps, TooltipState> {
 
     onTouchEndEvent = (e: React.TouchEvent<HTMLDivElement>) => this.onHover(e, false);
 
-    onFocusEvent = (e: React.FocusEvent<HTMLDivElement>) => this.props.trigger === "focus" && this.onTooltipToggle(e);
+    onFocusEvent = (e: React.FocusEvent<HTMLDivElement>) => this.props.trigger === "focus" && this.onTooltipToggle(e, true);
 
     // TODO: remove customSvg when attribute is removed
     render() {
@@ -114,7 +118,7 @@ export class Tooltip extends React.Component<TooltipProps, TooltipState> {
                 <div
                     id={this.state.referenceId}
                     ref={this.containerRef}
-                    className="tooltip-reference"
+                    className={`tooltip-reference${this.props.trigger === "click" ? " cursor" : ""}`}
                     tabIndex={-1}
                     onClick={this.onClickEvent}
                     onMouseEnter={this.onMouseEnterEvent}
@@ -125,7 +129,7 @@ export class Tooltip extends React.Component<TooltipProps, TooltipState> {
                 >
                     {this.props.children || <div className="default-content">{this.props.customSvg ? this.props.customSvg : InfoCircleIcon}</div>}
                 </div>
-                <TooltipContentContainer {...this.props} onContentBlur={this.onTooltipContentBlur} show={this.state.visible} tooltipReference={() => this.containerRef.current} />
+                <TooltipContentContainer {...this.props} ref={this.contentRef} onContentBlur={this.onTooltipContentBlur} show={this.state.visible} tooltipReference={() => this.containerRef.current} />
             </div>
         );
     }
@@ -153,10 +157,11 @@ type TooltipContentContainerProps = Pick<TooltipProps, "theme" | "position" | "c
     show: boolean;
     tooltipReference: () => HTMLDivElement;
     onContentBlur: (event: React.FocusEvent<HTMLDivElement>) => void;
+    ref?: React.RefObject<HTMLDivElement>;
 };
-const TooltipContentContainer: React.FunctionComponent<TooltipContentContainerProps> = (props: TooltipContentContainerProps) => {
+const TooltipContentContainer: React.FunctionComponent<TooltipContentContainerProps> = React.forwardRef((props: TooltipContentContainerProps, ref: React.RefObject<HTMLDivElement>) => {
     return (
-        <Overlay show={props.show} onBlur={props.onContentBlur} position={props.position} disableAutoPosition={props.disableAutoPosition} overlayReference={props.tooltipReference}>
+        <Overlay ref={ref} show={props.show} onBlur={props.onContentBlur} position={props.position} disableAutoPosition={props.disableAutoPosition} overlayReference={props.tooltipReference}>
             <div className={`tooltip ${props.theme || "default"} ${props.show ? "show" : ""}`} role="tooltip">
                 <div className="tooltip-arrow" />
                 <div className="tooltip-inner">
@@ -171,7 +176,7 @@ const TooltipContentContainer: React.FunctionComponent<TooltipContentContainerPr
             </div>
         </Overlay>
     );
-};
+});
 // TODO: remove when attribute is removed
 type TooltipMessage = Pick<TooltipProps, "title" | "message" | "width">;
 const TooltipMessage: React.FunctionComponent<TooltipMessage> = (props: TooltipMessage) => {

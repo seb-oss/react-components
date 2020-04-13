@@ -97,6 +97,11 @@
             "filePath": "pages/ButtonPage"
         },
         {
+            "name": "Chip",
+            "path": "/chip",
+            "filePath": "pages/ChipPage"
+        },
+        {
             "name": "Tooltip",
             "path": "/tooltip",
             "filePath": "pages/TooltipPage"
