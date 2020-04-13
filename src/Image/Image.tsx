@@ -22,7 +22,7 @@ export const Image: React.FunctionComponent<ImageProps> = React.memo(
                 {!props.useImgTag && (
                     <div
                         id={props.id}
-                        className={`div-tag${props.onClick ? " link" : ""} ${props.className ? props.className : ""}`}
+                        className={`div-tag${props.onClick ? " link" : ""}${props.className ? ` ${props.className}` : ""}`}
                         style={{
                             backgroundImage: "url(" + props.src + ")",
                             width: props.width,
