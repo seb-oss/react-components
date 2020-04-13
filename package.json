@@ -35,7 +35,7 @@
 		"start": "npm run build:dev",
 		"docs": "npm run clean:docs && npm run build:docs",
 		"build": "npm run clean && npm run format:staged &&  npm run test && npm run build:production",
-		"test": "npm run clean:test && jest --forceExit --detectOpenHandles",
+		"test": "npm run clean:test && jest --forceExit --detectOpenHandles --no-cache",
 		"coveralls": "cat ./coverage/lcov.info | coveralls",
 		"commit": "git-cz",
 		"semantic-release": "semantic-release",

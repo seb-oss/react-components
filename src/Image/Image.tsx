@@ -17,20 +17,20 @@ export interface ImageProps {
 
 export const Image: React.FunctionComponent<ImageProps> = React.memo(
     (props: ImageProps): React.ReactElement<void> => {
-        const [imageClassName, setImageClassName] = React.useState<string>("");
+        const [imageClassName, setImageClassName] = React.useState<string>("div-tag");
 
         React.useEffect(() => {
             let className: string = props.useImgTag ? "img-tag" : "div-tag";
-            if (props?.onClick) {
+            if (props.onClick) {
                 className += ` link`;
             }
 
-            if (props?.className) {
+            if (props.className) {
                 className += ` ${props.className}`;
             }
 
             setImageClassName(className);
-        }, [props?.className, props?.onClick, props.useImgTag]);
+        }, [props.className, props.onClick, props.useImgTag]);
 
         return (
             <>
