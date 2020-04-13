@@ -187,6 +187,11 @@ const TablePage: React.FunctionComponent = () => {
         []
     );
 
+    const smallEditableData: Array<DataItem<TableDataProps>> = React.useMemo(
+        () => makeData<Array<DataItem<TableDataProps>>>([5, 5]),
+        []
+    );
+
     const statusDropDownList: Array<DropdownItem> = React.useMemo(
         () =>
             smallData
@@ -285,7 +290,7 @@ const TablePage: React.FunctionComponent = () => {
                                 <Button title="Update" label={editMode === "edit" ? "Save" : "Edit"} onClick={() => setEditMode(editMode === "edit" ? "save" : "edit")} />
                             </div>
                         </div>
-                        <Table columns={columns} data={smallData} onRowSelected={(rows: Array<TableRow>) => {}} onRowExpanded={(rows: Array<TableRow>) => {}} editProps={editProps} />
+                        <Table columns={columns} data={smallEditableData} onRowSelected={(rows: Array<TableRow>) => {}} onRowExpanded={(rows: Array<TableRow>) => {}} editProps={editProps} />
                     </div>
 
                     <p>Here is an example with row selection and subRows</p>

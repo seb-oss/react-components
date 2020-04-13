@@ -8,7 +8,7 @@
  * `npm test Button RadioGroup`
  */
 const { argv } = process;
-const specific = argv.slice(4, argv.length); // Skipping test properties
+const specific = argv.slice(5, argv.length); // Skipping test properties
 
 const collectCoverageFrom = [];
 const testMatch = [];
