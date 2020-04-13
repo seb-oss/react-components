@@ -34,7 +34,6 @@ $tooltip-distance: 4px;
         margin: auto;
         display: inline-block;
         z-index: 0;
-        cursor: pointer;
         .default-content {
             height: $icon-size;
             width: $icon-size;
@@ -45,6 +44,9 @@ $tooltip-distance: 4px;
                 pointer-events: none;
                 vertical-align: top;
             }
+        }
+        &.cursor-pointer {
+            cursor: pointer;
         }
     }
 }
@@ -131,6 +133,9 @@ $tooltip-distance: 4px;
 
         &.purple {
             @include theme($purple, $white);
+        }
+        &.show {
+            opacity: 1;
         }
     }
 
@@ -219,8 +224,7 @@ $tooltip-distance: 4px;
             }
         }
     }
-    &.show,
-    &:focus {
+    &.show {
         > .tooltip {
             > .tooltip-arrow {
                 height: 13px;

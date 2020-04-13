@@ -9,19 +9,26 @@ export interface OverlayProps {
     onBlur: (event: React.FocusEvent<HTMLDivElement>) => void;
     show: boolean;
     position?: ElementPosition;
+    ref?: React.RefObject<HTMLDivElement>;
 }
 
-const Overlay: React.FC<React.PropsWithChildren<OverlayProps>> = (props: React.PropsWithChildren<OverlayProps>) => {
+const Overlay: React.FunctionComponent<React.PropsWithChildren<OverlayProps>> = React.forwardRef((props: React.PropsWithChildren<OverlayProps>, ref: React.RefObject<HTMLDivElement>) => {
     const overlayContentRef: React.MutableRefObject<HTMLDivElement> = React.useRef(null);
     const [placementWithCoords, setPlacementWithCoords] = React.useState<ElementPlacementWithCoord>(null);
-    const [tooltipPositionChecker, setTooltipPositionChecker] = React.useState<OverlayPositionChecker>(null);
+    const [overlayPositionChecker, setOverlayPositionChecker] = React.useState<OverlayPositionChecker>(null);
+
+    React.useImperativeHandle(ref, () => ({
+        ...ref?.current,
+        focus: () => overlayContentRef.current.focus(),
+        blur: () => overlayContentRef.current.blur()
+    }));
 
     React.useEffect(() => {
-        tooltipPositionChecker && tooltipPositionChecker.disableAutoPlacement(props.disableAutoPosition);
+        overlayPositionChecker && overlayPositionChecker.disableAutoPlacement(props.disableAutoPosition);
     }, [props.disableAutoPosition]);
 
     React.useEffect(() => {
-        setTooltipPositionChecker(() => {
+        setOverlayPositionChecker(() => {
             const newPositionChecker: OverlayPositionChecker = new OverlayPositionChecker(props.overlayReference(), props.disableAutoPosition);
             newPositionChecker.addOverlayContainer(overlayContentRef.current);
             return newPositionChecker;
@@ -46,7 +53,11 @@ const Overlay: React.FC<React.PropsWithChildren<OverlayProps>> = (props: React.P
     const onScroll = React.useCallback((ev: Event): void => {
         const target: HTMLDivElement = ev.target as HTMLDivElement;
         if (props.show && target.contains(props.overlayReference())) {
-            setPlacementWithCoords(tooltipPositionChecker.getPosition(props.position || "top"));
+            const referenceDomRect: DOMRect = props.overlayReference().getBoundingClientRect();
+            if (referenceDomRect.bottom < 0 || referenceDomRect.right < 0 || referenceDomRect.left > window.innerWidth || referenceDomRect.top > window.innerHeight) {
+                overlayContentRef?.current?.blur();
+            }
+            setPlacementWithCoords(overlayPositionChecker.getPosition(props.position || "top"));
         }
     }, [props.show, props.position]);
 
@@ -55,16 +66,16 @@ const Overlay: React.FC<React.PropsWithChildren<OverlayProps>> = (props: React.P
      */
     const getWithinViewportPosition = (): void => {
         overlayContentRef.current.focus();
-        const placementCoords: ElementPlacementWithCoord = tooltipPositionChecker.getPosition(props.position || "top");
+        const placementCoords: ElementPlacementWithCoord = overlayPositionChecker.getPosition(props.position || "top");
         setPlacementWithCoords(placementCoords);
     };
 
     return ReactDOM.createPortal(
         <div
-            className={`overlay-container ${placementWithCoords ? placementWithCoords.position : (props.position || "top")}`}
+            className={`overlay-container${props.show ? " show" : ""} ${placementWithCoords ? placementWithCoords.position : (props.position || "top")}`}
             ref={overlayContentRef}
             tabIndex={-1}
-            onBlur={props.onBlur}
+            onBlur={props.show ? props.onBlur : null}
             aria-hidden={!props.show}
             style={placementWithCoords ? placementWithCoords.coord : {}}
         >
@@ -72,6 +83,6 @@ const Overlay: React.FC<React.PropsWithChildren<OverlayProps>> = (props: React.P
         </div>,
         document.body
     );
-};
+});
 
 export { Overlay };
