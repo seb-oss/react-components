@@ -1,15 +1,15 @@
-@import './variable';
+@import "./variable";
 .route-template,
 .about-page {
     padding: 5px 20px 40px;
     min-width: 320px;
-    >.title {
+    > .title {
         font-size: $large;
         border-bottom: 1px solid $gray-400;
         padding: 5px 0px;
         margin-bottom: 10px;
     }
-    >.desc {
+    > .desc {
         color: $gray-600;
         margin-bottom: 30px;
     }
@@ -18,19 +18,19 @@
         margin: 15px 0px 10px 0px;
     }
     .info-holder {
-        >.title {
+        > .title {
             font-size: $large;
             border-bottom: 1px solid $gray-400;
             padding: 5px 0px;
         }
         .info {
-            h2 {
+            > h2 {
                 font-size: $large;
                 border-bottom: 1px solid $gray-400;
                 padding: 5px 0px;
                 margin-bottom: 10px;
             }
-            >.md-file {
+            > .md-file {
                 h2 {
                     font-size: $large;
                     border-bottom: 1px solid $gray-400;
@@ -75,7 +75,7 @@
                         }
                     }
                 }
-                >div {
+                > div {
                     hr,
                     p,
                     h2 {
@@ -88,7 +88,7 @@
                     // }
                 }
             }
-            >.result {
+            > .result {
                 position: relative;
                 max-width: 300px;
                 code,
