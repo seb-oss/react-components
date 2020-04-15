@@ -17,6 +17,7 @@ const DatepickerPage: React.FunctionComponent = () => {
     const [datepicker, setDatepicker] = React.useState<Date>(new Date());
     const [datepicker2, setDatepicker2] = React.useState<Date>(new Date());
     const [datepicker3, setDatepicker3] = React.useState<Date>(new Date());
+    const [datepicker4, setDatepicker4] = React.useState<Date>(new Date());
 
     return (
         <div className="route-template container">
@@ -51,6 +52,11 @@ const DatepickerPage: React.FunctionComponent = () => {
                             clearable={true}
                             showLeadingZeros={false}
                         />
+                    </div>
+
+                    <p>Month picker</p>
+                    <div className="result">
+                        <Datepicker name="datepicker" maxDetail="year" value={datepicker4} onChange={setDatepicker4} minDate={minDate} maxDate={maxDate} clearable={true} />
                     </div>
 
                     <p>Disabled</p>
