@@ -36,7 +36,7 @@ function clickHandler(e: React.MouseEvent<HTMLAnchorElement>) {
     /** In case you wanted to access the index of the item clicked */
     console.log("The index of the clicked is:" + e.currentTarget.dataset.value);
     /** remove the hash when you navigate */
-    history.push(e.currentTarget.href.replace("#", ""));
+    history.push(e.currentTarget.hash.replace("#", ""));
 }
 ```
 
