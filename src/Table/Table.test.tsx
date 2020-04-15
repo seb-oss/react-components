@@ -269,7 +269,7 @@ describe("Component: Table", () => {
         const onAfterEdit: jest.Mock = jest.fn((rows: Array<TableRow>) => {
             results = rows;
         });
-        const onRowSelected: jest.Mock = jest.fn((rows: Array<TableRow>) => {});
+        const onRowSelected: jest.Mock = jest.fn();
 
         const editProps: EditProps = {
             onAfterEdit,
@@ -367,7 +367,7 @@ describe("Component: Table", () => {
     describe("Should enable and handle custom actions : ", () => {
         let actionContainer: HTMLDivElement = null;
 
-        const customButtonCallBack: jest.Mock = jest.fn((event: React.MouseEvent<HTMLAnchorElement, MouseEvent>, selectedRow: TableRow) => {});
+        const customButtonCallBack: jest.Mock = jest.fn();
         const actionLinks: Array<ActionLinkItem> = [
             { label: "Add", onClick: customButtonCallBack },
             { label: "Edit", onClick: customButtonCallBack },
@@ -471,7 +471,7 @@ describe("Component: Table", () => {
     it("Should render and enable custom button", async () => {
         const primaryActionButton: PrimaryActionButton = {
             label: "Buy",
-            onClick: jest.fn((e: React.MouseEvent<HTMLButtonElement>) => {}),
+            onClick: jest.fn(),
         };
 
         await act(async () => {
@@ -486,7 +486,7 @@ describe("Component: Table", () => {
     });
 
     it("Should render and support filtering ", async () => {
-        let results: Array<TableRow> = smallData;
+        let results: Array<TableRow> = [...smallData];
 
         // before filter
         await act(async () => {
