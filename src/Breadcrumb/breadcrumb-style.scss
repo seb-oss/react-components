@@ -1,23 +1,26 @@
 @import "../../node_modules/@sebgroup/bootstrap/scss/variables";
 
-.custom-breadcrumb {
-    ol.breadcrumb {
+nav {
+    ol.seb.breadcrumb {
         li.breadcrumb-item {
-            font-size: $font-size-base;
-            &:not(.active) {
-                color: $blue;
-                cursor: pointer;
-                > svg {
-                    fill: $blue;
-                    width: $font-size-base;
-                    height: $font-size-base;
+            > a {
+                svg {
+                    width: $breadcrumb-divider-height;
+                    height: $breadcrumb-divider-height;
+                }
+            }
+            &:not(.active) > a {
+                svg {
+                    fill: $blue-darker;
                 }
                 &:hover {
-                    color: $blue-darker;
-                    > svg {
-                        fill: $blue-darker;
+                    svg {
+                        fill: $blue;
                     }
                 }
+            }
+            &.active > a svg {
+                fill: $breadcrumb-active-color;
             }
         }
     }
