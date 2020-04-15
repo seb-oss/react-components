@@ -173,9 +173,11 @@ export class OverlayPositionChecker {
         if (selectedPlacement) {
             const top: number = this.getPointPosition(selectedPlacement.y);
             const left: number = this.getPointPosition(selectedPlacement.x);
+            const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
             this.currentPosition = {
-                top,
-                left,
+                top: top + scrollTop,
+                left: left + scrollLeft,
                 bottom: top + overlayRect.height,
                 right: left + overlayRect.width
             };
