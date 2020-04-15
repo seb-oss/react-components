@@ -1,6 +1,7 @@
 import * as React from "react";
 import DatePicker from "react-date-picker";
 import "./date-picker-style.scss";
+import { Detail } from "react-calendar";
 
 const calendarAltIcon: JSX.Element = (
     <svg name="calendar-alt" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
@@ -26,6 +27,7 @@ export interface DatepickerProps {
     placeholder?: string;
     showLeadingZeros?: boolean;
     value: Date;
+    maxDetail?: Detail;
 }
 
 export const Datepicker: React.FunctionComponent<DatepickerProps> = (props: DatepickerProps): React.ReactElement<void> => {
@@ -45,6 +47,7 @@ export const Datepicker: React.FunctionComponent<DatepickerProps> = (props: Date
                         maxDate={props.maxDate}
                         locale={props.locale}
                         format={props.format}
+                        maxDetail={props.maxDetail}
                         showLeadingZeros={props.showLeadingZeros === undefined ? true : props.showLeadingZeros}
                     />
                     {!props.value && props.placeholder ? (
