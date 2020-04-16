@@ -22,7 +22,7 @@ const musicIcon: JSX.Element = (
     </svg>
 );
 
-const BreadcrumbPage: React.FunctionComponent = () => {
+const BreadcrumbPage: React.FC = () => {
     const history: H.History = useHistory();
 
     const clickHandler: React.MouseEventHandler<HTMLAnchorElement> = React.useCallback((e: React.MouseEvent<HTMLAnchorElement>) => {

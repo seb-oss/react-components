@@ -25,22 +25,20 @@ export interface BreadcrumbItem {
     title?: string;
 }
 
-export const Breadcrumb: React.FC<BreadcrumbProps> = React.memo(
-    (props: BreadcrumbProps): React.ReactElement<void> => (
-        <nav aria-label="breadcrumb" className={props.className} id={props.id}>
-            <ol className="seb breadcrumb">
-                {props.list.map((item: BreadcrumbItem, i: number) => {
-                    const isLast: boolean = i === props.list.length - 1;
+export const Breadcrumb: React.FC<BreadcrumbProps> = React.memo((props: BreadcrumbProps) => (
+    <nav aria-label="breadcrumb" className={props.className} id={props.id}>
+        <ol className="seb breadcrumb">
+            {props.list.map((item: BreadcrumbItem, i: number) => {
+                const isLast: boolean = i === props.list.length - 1;
 
-                    return (
-                        <li key={i} className={"breadcrumb-item" + (isLast ? " active" : "")} aria-current={isLast ? "page" : null}>
-                            <a title={item.title} href={isLast ? null : item.href || "#"} data-value={i} onClick={!isLast ? props.onClick : null}>
-                                {React.isValidElement(item.text) || isPrimitive(item.text) ? item.text : null}
-                            </a>
-                        </li>
-                    );
-                })}
-            </ol>
-        </nav>
-    )
-);
+                return (
+                    <li key={i + Math.random().toLocaleString().substring(2)} className={"breadcrumb-item" + (isLast ? " active" : "")} aria-current={isLast ? "page" : null}>
+                        <a title={item.title} href={isLast ? null : item.href || "#"} data-value={i} onClick={!isLast ? props.onClick : null}>
+                            {React.isValidElement(item.text) || isPrimitive(item.text) ? item.text : null}
+                        </a>
+                    </li>
+                );
+            })}
+        </ol>
+    </nav>
+));
