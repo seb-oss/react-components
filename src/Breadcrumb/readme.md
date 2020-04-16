@@ -32,7 +32,7 @@ const breadcrumbListObj: Array<BreadcrumbItem> = [
 ];
 
 function clickHandler(e: React.MouseEvent<HTMLAnchorElement>) {
-    e.preventDefaults();
+    e.preventDefault();
     /** In case you wanted to access the index of the item clicked */
     console.log("The index of the clicked is:" + e.currentTarget.dataset.value);
     /** remove the hash when you navigate */
