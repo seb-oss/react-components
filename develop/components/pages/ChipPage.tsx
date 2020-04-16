@@ -5,11 +5,13 @@ import { Button } from "../../../src/Button/Button";
 import { loremIpsum } from "lorem-ipsum";
 const docMD: string = require("../../../src/Chip/readme.md");
 
-const generateWord = () => loremIpsum({ units: "words", count: 1 });
+const ChipPage: React.FC = () => {
+    const [chips, setChips] = React.useState<Array<string>>([loremIpsum({ units: "word" })]);
 
-const ChipPage: React.FunctionComponent = () => {
-    const [chips, setChips] = React.useState<Array<string>>([generateWord()]);
-
+    /**
+     * Destroys a chip on click
+     * @param {number} index The index of the item clicked
+     */
     const closeChip: (index: number) => void = React.useCallback(
         (index: number) => {
             const newChips: Array<string> = [...chips];
@@ -19,8 +21,9 @@ const ChipPage: React.FunctionComponent = () => {
         [chips, setChips]
     );
 
+    /** Inserts a new chip on click */
     const addChip: VoidFunction = React.useCallback(() => {
-        setChips([...chips, generateWord()]);
+        setChips([...chips, loremIpsum({ units: "word" })]);
     }, [chips, setChips]);
 
     return (

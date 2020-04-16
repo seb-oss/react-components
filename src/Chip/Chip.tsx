@@ -1,22 +1,20 @@
 import React from "react";
-
+import classnames from "classnames";
 import "./chip.scss";
 
 export type ChipProps = React.PropsWithChildren<{
     id?: string;
     className?: string;
-    onClose: (e: React.MouseEvent<HTMLDivElement>) => void;
+    onClose: React.MouseEventHandler<HTMLDivElement>;
 }>;
 
-const Chip: React.FC<ChipProps> = (props: ChipProps) => {
-    return (
-        <div className={"custom-chip" + (props.className ? ` ${props.className}` : "")} id={props.id}>
-            <div className="content">{props.children}</div>
-            <div className="chip-close" onClick={props.onClose}>
-                &times;
-            </div>
+const Chip: React.FC<ChipProps> = (props: ChipProps) => (
+    <div className={classnames(["custom-chip", props.className])} id={props.id}>
+        <div className="content">{props.children}</div>
+        <div className="chip-close" onClick={props.onClose}>
+            &times;
         </div>
-    );
-};
+    </div>
+);
 
 export { Chip };
