@@ -8,12 +8,12 @@ export interface BreadcrumbProps {
     /** Element id */
     id?: string;
     /** The list of breadcrumb items */
-    list: Array<BreadcurmbItem>;
+    list: Array<BreadcrumbItem>;
     /** onClick callback */
     onClick?: (e?: React.MouseEvent<HTMLAnchorElement>) => void;
 }
 
-export interface BreadcurmbItem {
+export interface BreadcrumbItem {
     /** The content to be displayed in each breadcrumb item */
     text: React.ReactNode;
     /**
@@ -29,7 +29,7 @@ export const Breadcrumb: React.FC<BreadcrumbProps> = React.memo(
     (props: BreadcrumbProps): React.ReactElement<void> => (
         <nav aria-label="breadcrumb" className={props.className} id={props.id}>
             <ol className="seb breadcrumb">
-                {props.list.map((item: BreadcurmbItem, i: number) => {
+                {props.list.map((item: BreadcrumbItem, i: number) => {
                     const isLast: boolean = i === props.list.length - 1;
 
                     return (

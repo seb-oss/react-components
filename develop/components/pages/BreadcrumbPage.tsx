@@ -1,7 +1,7 @@
 import React from "react";
 import H from "history";
 import { useHistory } from "react-router";
-import { Breadcrumb, BreadcurmbItem } from "../../../src/Breadcrumb/Breadcrumb";
+import { Breadcrumb, BreadcrumbItem } from "../../../src/Breadcrumb/Breadcrumb";
 import Highlight from "react-highlight";
 const docMD: string = require("../../../src/Breadcrumb/readme.md");
 
@@ -64,12 +64,12 @@ const BreadcrumbPage: React.FunctionComponent = () => {
     );
 };
 
-const breadcrumbList1: Array<BreadcurmbItem> = [
+const breadcrumbList1: Array<BreadcrumbItem> = [
     { text: "About", href: "#/about", title: "Go to About page" },
     { text: "Accordion", href: "#/accordion", title: "Go to Accordion page for some reason" },
     { text: "Breadcrumb", href: "#/breadcrumb", title: "Do what's right and use titles" },
 ];
-const breadcrumbList2: Array<BreadcurmbItem> = [
+const breadcrumbList2: Array<BreadcrumbItem> = [
     { text: houseIcon, title: "House" },
     { text: musicIcon, title: "Music" },
 ];

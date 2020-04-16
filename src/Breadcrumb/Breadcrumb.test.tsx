@@ -1,12 +1,12 @@
 import React from "react";
-import { Breadcrumb, BreadcurmbItem } from "./Breadcrumb";
+import { Breadcrumb, BreadcrumbItem } from "./Breadcrumb";
 import { unmountComponentAtNode, render } from "react-dom";
 import { act } from "react-dom/test-utils";
 
 describe("Component: Breadcrumb", () => {
     let container: HTMLDivElement = null;
-    const breadcrumbList1: Array<BreadcurmbItem> = [{ text: "First" }, { text: "Second" }, { text: "Third" }];
-    const breadcrumbList2: Array<BreadcurmbItem> = [
+    const breadcrumbList1: Array<BreadcrumbItem> = [{ text: "First" }, { text: "Second" }, { text: "Third" }];
+    const breadcrumbList2: Array<BreadcrumbItem> = [
         { text: "First", title: "First", href: "First" },
         { text: "Second", title: "Second", href: "Second" },
     ];
