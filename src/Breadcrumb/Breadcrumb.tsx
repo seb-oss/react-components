@@ -1,5 +1,6 @@
 import React from "react";
 import { isPrimitive } from "@sebgroup/frontend-tools/dist/isPrimitive";
+import classNames from "classnames";
 import "./breadcrumb.scss";
 
 export interface BreadcrumbProps {
@@ -30,9 +31,10 @@ export const Breadcrumb: React.FC<BreadcrumbProps> = React.memo((props: Breadcru
         <ol className="seb breadcrumb">
             {props.list.map((item: BreadcrumbItem, i: number) => {
                 const isLast: boolean = i === props.list.length - 1;
+                const className: string = classNames(["breadcrumb-item", { active: isLast }]);
 
                 return (
-                    <li key={i + Math.random().toLocaleString().substring(2)} className={"breadcrumb-item" + (isLast ? " active" : "")} aria-current={isLast ? "page" : null}>
+                    <li key={i} className={className} aria-current={isLast ? "page" : null}>
                         <a title={item.title} href={isLast ? null : item.href || "#"} data-value={i} onClick={!isLast ? props.onClick : null}>
                             {React.isValidElement(item.text) || isPrimitive(item.text) ? item.text : null}
                         </a>
