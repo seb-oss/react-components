@@ -150,7 +150,7 @@ export const Pagination: React.FunctionComponent<PaginationProps> = React.memo(
                         <ul className={"pagination dotnav"}>
                             {dotnavList.map((num: number) => {
                                 return (
-                                    <li className={"page-item" + (props.value === num ? " active" : "")} key={num} onClick={() => props.onChange(num)} value={num}>
+                                    <li className="page-item" key={num} onClick={() => props.onChange(num)} value={num}>
                                         <span className={"page-dot-link" + (props.value === num ? " active" : "")} />
                                     </li>
                                 );
