@@ -1,6 +1,6 @@
 import React from "react";
 import { isPrimitive } from "@sebgroup/frontend-tools/dist/isPrimitive";
-import "./breadcrumb-style.scss";
+import "./breadcrumb.scss";
 
 export interface BreadcrumbProps {
     /** Element class name */
