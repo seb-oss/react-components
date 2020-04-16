@@ -1,6 +1,7 @@
 import React from "react";
 import { randomId } from "@sebgroup/frontend-tools/dist/randomId";
 import { isPrimitive } from "@sebgroup/frontend-tools/dist/isPrimitive";
+import classnames from "classnames";
 import { AccordionItemBody } from "./AccordionItemBody";
 import "./accordion.scss";
 
@@ -38,16 +39,9 @@ const Accordion: React.FC<AccordionProps> = React.memo((props: AccordionProps) =
     React.useEffect(() => constructIds(), [props.list]);
     React.useEffect(() => setActive(props.defaultExpanded), [props.defaultExpanded]);
     React.useEffect(() => setId(props.id || randomId("accordion-")), [props.id]);
-    React.useEffect(() => {
-        let cn: string = "seb accordion";
-        cn += props.alternative ? " alternative" : "";
-        cn += props.className ? ` ${props.className}` : "";
-        setClassName(cn);
-    }, [props.className, props.alternative]);
+    React.useEffect(() => setClassName(classnames(["seb", "accordion", { alternative: props.alternative }, props.className])), [props.className, props.alternative]);
 
-    /**
-     * Constructs identifiers for accordion items to be used enable accessibility features
-     */
+    /** Constructs identifiers for accordion items to be used enable accessibility features */
     const constructIds: VoidFunction = React.useCallback(() => {
         const idListToSet: Array<string> = [];
         props.list?.map(() => idListToSet.push(randomId("accordion-item-")));
@@ -58,7 +52,7 @@ const Accordion: React.FC<AccordionProps> = React.memo((props: AccordionProps) =
      * Handles accordion item click event
      * @param {React.MouseEvent<HTMLButtonElement>} e MouseEvent
      */
-    const onToggle: (e: React.MouseEvent<HTMLButtonElement>) => void = React.useCallback(
+    const onToggle: React.MouseEventHandler<HTMLButtonElement> = React.useCallback(
         (e: React.MouseEvent<HTMLButtonElement>) => {
             setActive(active === Number(e.currentTarget.value) ? null : Number(e.currentTarget.value));
         },
@@ -68,8 +62,11 @@ const Accordion: React.FC<AccordionProps> = React.memo((props: AccordionProps) =
     return (
         <div className={className} id={id}>
             {props.list?.map((item: AccrodionListItem, index: number) => {
+                const cardClassName: string = classnames(["card", { collapsed: active !== index }]);
+                const collapseClassName: string = classnames(["collapse", { collapsed: active !== index }]);
+
                 return (
-                    <div className={"card" + (active === index ? "" : " collapsed")} key={index}>
+                    <div className={cardClassName} key={index}>
                         <div className="card-header" id={idList[index] + "-header"}>
                             <button
                                 className="btn btn-link"
@@ -85,7 +82,7 @@ const Accordion: React.FC<AccordionProps> = React.memo((props: AccordionProps) =
                                 {item.subHeader && <h6>{React.isValidElement(item.subHeader) || isPrimitive(item.subHeader) ? item.subHeader : null}</h6>}
                             </button>
                         </div>
-                        <div id={idList[index]} className={"collapse" + (active === index ? "" : " collapsed")} aria-labelledby={idList[index] + "--header"} data-parent={`#${id}`}>
+                        <div id={idList[index]} className={collapseClassName} aria-labelledby={idList[index] + "--header"} data-parent={`#${id}`}>
                             <AccordionItemBody toggle={active === index}>{item.content}</AccordionItemBody>
                         </div>
                     </div>
