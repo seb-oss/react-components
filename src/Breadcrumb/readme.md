@@ -26,7 +26,7 @@ This React component is based on SEB Bootstrap style. Supports customization and
 ```
 ```typescript
 /** If you use hash router, you need to pass the hash in the href */
-const breadcrumbListObj: Array<BreadcurmbItem> = [
+const breadcrumbListObj: Array<BreadcrumbItem> = [
     { text: "Home", href: "#/" },
     { text: "Second page", href: "#/second-page" }
 ];
@@ -48,13 +48,13 @@ These are the current available properties:
 | ---------- | ----------------------------------------------- | -------------------------------------------------------- |
 | className? | `string`                                        | Element class                                            |
 | id?        | `string`                                        | Element id                                               |
-| list       | `Array<BreadcurmbItem>`<sup>1</sup>             | List of breadcrumb objects respresenting stages of depth |
+| list       | `Array<BreadcrumbItem>`<sup>1</sup>             | List of breadcrumb objects respresenting stages of depth |
 | onClick?   | `(e?: React.MouseEvent<HTMLLIElement>) => void` | Callback triggered when a breadcrumb is clicked          |
 
 ## Footnote
-1. BreadcurmbItem interface
+1. BreadcrumbItem interface
 ```typescript
-interface BreadcurmbItem {
+interface BreadcrumbItem {
     text: React.ReactNode;
     href?: string;
     title?: string;
