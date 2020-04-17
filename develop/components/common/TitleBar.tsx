@@ -1,8 +1,9 @@
 import * as React from "react";
 import { TextBoxGroup } from "../../../src/TextBoxGroup/TextBoxGroup";
-import { Icon } from "../../../src/Icon/Icon";
-const SEBLogo: string = require("../../assets/images/icons/seblogo.svg");
-const reactLogo: string = require("../../assets/images/icons/ReactLogo.png");
+import BarsIcon from "../../assets/icons/bars.svg";
+import MagnifierIcon from "../../assets/icons/magnifier.svg";
+import SEBLogo from "../../assets/svgs/seblogo.svg";
+const reactLogo: string = require("../../assets/images/ReactLogo.png");
 const sidebarData = require("../../assets/components-list.json");
 
 interface SideBarDataItem {
@@ -182,11 +183,7 @@ export default class TitleBar extends React.Component<TitleBarProps, TitleBarSta
                             onChange={this.searchTermChange}
                             onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => e.key.toLowerCase() === "escape" && e.preventDefault()}
                             reference={this.searchRef}
-                            rightIcon={
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                                    <path d="M508.5 481.6l-129-129c-2.3-2.3-5.3-3.5-8.5-3.5h-10.3C395 312 416 262.5 416 208 416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c54.5 0 104-21 141.1-55.2V371c0 3.2 1.3 6.2 3.5 8.5l129 129c4.7 4.7 12.3 4.7 17 0l9.9-9.9c4.7-4.7 4.7-12.3 0-17zM208 384c-97.3 0-176-78.7-176-176S110.7 32 208 32s176 78.7 176 176-78.7 176-176 176z" />
-                                </svg>
-                            }
+                            rightIcon={<MagnifierIcon />}
                         />
                         <div className="search-result">
                             {this.state.searchList && this.state.searchList.length > 0 && (
@@ -213,20 +210,12 @@ export default class TitleBar extends React.Component<TitleBarProps, TitleBarSta
                         </div>
                     </div>
                     <div className="logo">
-                        <img className="logo-icon" src={SEBLogo} />
+                        <SEBLogo className="logo-icon" />
                     </div>
                 </div>
                 <div className="subtitle-bar">
                     <div className="sidebar-toggler">
-                        <Icon
-                            className="bars"
-                            onClick={this.props.onToggleClick && this.props.onToggleClick}
-                            src={
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-                                    <path d="M442 114H6a6 6 0 0 0-6-6V84a6 6 0 0 0 6-6h436a6 6 0 0 0 6 6v24a6 6 0 0 0-6 6zm0 160H6a6 6 0 0 0-6-6v-24a6 6 0 0 0 6-6h436a6 6 0 0 0 6 6v24a6 6 0 0 0-6 6zm0 160H6a6 6 0 0 0-6-6v-24a6 6 0 0 0 6-6h436a6 6 0 0 0 6 6v24a6 6 0 0 0-6 6z" />
-                                </svg>
-                            }
-                        />
+                        <BarsIcon className="bars" onClick={this.props.onToggleClick ? this.props.onToggleClick : null} />
                     </div>
                     <div className="sidebar-title">@sebgroup/react-components</div>
                 </div>

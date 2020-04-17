@@ -23,6 +23,8 @@ let buildConfig = {
             { test: /\.(woff|woff2)$/, loader: "file-loader?prefix=font/&limit=5000&name=assets/fonts/[name].[ext]" },
             { test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/, loader: "file-loader?limit=10000&mimetype=application/octet-stream&name=assets/fonts/[name].[ext]" },
             { test: /\.md$/, loaders: ["html-loader", "markdown-loader"] },
+            { test: /\.svg$/, loader: "@svgr/webpack", include: [path.resolve(__dirname, "develop/assets/svgs")], options: { memo: true } },
+            { test: /\.svg$/, loader: "@svgr/webpack", include: [path.resolve(__dirname, "develop/assets/icons")], options: { icon: true, memo: true } },
         ],
     },
     node: {
@@ -111,7 +113,11 @@ switch (buildType) {
         };
         buildConfig.module.rules.push(
             { test: /\.(jpe?g|png|gif)$/i, loader: "file-loader?name=assets/images/[name].[ext]" },
-            { test: /\.svg(\?v=\d+\.\d+\.\d+)?$/, loader: "file-loader?name=assets/svgs/[name].[ext]" }
+            {
+                test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
+                loader: "file-loader?name=assets/svgs/[name].[ext]",
+                exclude: [path.resolve(__dirname, "develop")],
+            }
         );
         break;
 }
@@ -144,17 +150,14 @@ if (buildType !== "prod") {
         },
         {
             test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
-            use: [
-                {
-                    loader: "file-loader",
-                    options: {
-                        esModule: false,
-                        limit: 10000,
-                        mimetype: "image/svg+xml",
-                        name: "assets/svgs/[name].[ext]",
-                    },
-                },
-            ],
+            loader: "file-loader",
+            exclude: [path.resolve(__dirname, "develop")],
+            options: {
+                esModule: false,
+                limit: 10000,
+                mimetype: "image/svg+xml",
+                name: "assets/svgs/[name].[ext]",
+            },
         }
     );
 }
