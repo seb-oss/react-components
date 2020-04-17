@@ -3,8 +3,8 @@ import H from "history";
 import { useHistory } from "react-router";
 import { Breadcrumb, BreadcrumbItem } from "../../../src/Breadcrumb/Breadcrumb";
 import Highlight from "react-highlight";
-import { ReactComponent as HouseIcon } from "../../assets/icons/house.svg";
-import { ReactComponent as MusicIcon } from "../../assets/icons/music.svg";
+import HouseIcon from "../../assets/icons/house.svg";
+import MusicIcon from "../../assets/icons/music.svg";
 const docMD: string = require("../../../src/Breadcrumb/readme.md");
 
 const BreadcrumbPage: React.FC = () => {

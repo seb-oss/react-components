@@ -1,8 +1,8 @@
 import * as React from "react";
 import { TextBoxGroup } from "../../../src/TextBoxGroup/TextBoxGroup";
-import { ReactComponent as BarsIcon } from "../../assets/icons/bars.svg";
-import { ReactComponent as MagnifierIcon } from "../../assets/icons/magnifier.svg";
-import { ReactComponent as SEBLogo } from "../../assets/svgs/seblogo.svg";
+import BarsIcon from "../../assets/icons/bars.svg";
+import MagnifierIcon from "../../assets/icons/magnifier.svg";
+import SEBLogo from "../../assets/svgs/seblogo.svg";
 const reactLogo: string = require("../../assets/images/ReactLogo.png");
 const sidebarData = require("../../assets/components-list.json");
 
