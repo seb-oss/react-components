@@ -1,0 +1,27 @@
+@import "~@sebgroup/bootstrap/scss/core";
+
+nav {
+    ol.seb.breadcrumb {
+        li.breadcrumb-item {
+            > a {
+                svg {
+                    width: $breadcrumb-divider-height;
+                    height: $breadcrumb-divider-height;
+                }
+            }
+            &:not(.active) > a {
+                svg {
+                    fill: $blue-darker;
+                }
+                &:hover {
+                    svg {
+                        fill: $blue;
+                    }
+                }
+            }
+            &.active > a svg {
+                fill: $breadcrumb-active-color;
+            }
+        }
+    }
+}
