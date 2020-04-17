@@ -197,11 +197,6 @@
             "name": "Timer",
             "path": "/timer",
             "filePath": "pages/TimerPage"
-        },
-        {
-            "name": "Icons",
-            "path": "/icons",
-            "filePath": "pages/IconPage"
         }
     ]
 }

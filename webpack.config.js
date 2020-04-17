@@ -23,6 +23,18 @@ let buildConfig = {
             { test: /\.(woff|woff2)$/, loader: "file-loader?prefix=font/&limit=5000&name=assets/fonts/[name].[ext]" },
             { test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/, loader: "file-loader?limit=10000&mimetype=application/octet-stream&name=assets/fonts/[name].[ext]" },
             { test: /\.md$/, loaders: ["html-loader", "markdown-loader"] },
+            {
+                test: /\.svg$/,
+                include: [path.resolve(__dirname, "develop/assets/icons")],
+                loader: "@svgr/webpack",
+                options: { icon: true, memo: true },
+            },
+            {
+                test: /\.svg$/,
+                include: [path.resolve(__dirname, "develop/assets/svgs")],
+                loader: "@svgr/webpack",
+                options: { memo: true },
+            },
         ],
     },
     node: {
@@ -111,7 +123,11 @@ switch (buildType) {
         };
         buildConfig.module.rules.push(
             { test: /\.(jpe?g|png|gif)$/i, loader: "file-loader?name=assets/images/[name].[ext]" },
-            { test: /\.svg(\?v=\d+\.\d+\.\d+)?$/, loader: "file-loader?name=assets/svgs/[name].[ext]" }
+            {
+                test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
+                loader: "file-loader?name=assets/svgs/[name].[ext]",
+                exclude: [path.resolve(__dirname, "develop")],
+            }
         );
         break;
 }
