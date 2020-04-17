@@ -1,32 +1,46 @@
-import * as React from "react";
-import "./breadcrumb-style.scss";
+import React from "react";
+import { isPrimitive } from "@sebgroup/frontend-tools/dist/isPrimitive";
+import classNames from "classnames";
+import "./breadcrumb.scss";
 
 export interface BreadcrumbProps {
+    /** Element class name */
     className?: string;
+    /** Element id */
     id?: string;
-    list: Array<string | React.ReactNode>;
-    onClick?: (i: number, e?: React.MouseEvent<HTMLLIElement>) => void;
+    /** The list of breadcrumb items */
+    list: Array<BreadcrumbItem>;
+    /** onClick callback */
+    onClick?: (e?: React.MouseEvent<HTMLAnchorElement>) => void;
 }
 
-export const Breadcrumb: React.FunctionComponent<BreadcrumbProps> = React.memo(
-    (props: BreadcrumbProps): React.ReactElement<void> => {
-        function onClick(index: number, e?: React.MouseEvent<HTMLLIElement>): void {
-            if (index !== props.list.length - 1 && props.onClick) {
-                props.onClick(index, e);
-            }
-        }
-        return (
-            <div className={"custom-breadcrumb" + (props.className ? ` ${props.className}` : "")} id={props.id}>
-                <nav aria-label="breadcrumb">
-                    <ol className="breadcrumb">
-                        {props.list.map((item: string | React.ReactNode, i: number) => (
-                            <li key={i} className={"breadcrumb-item" + (i === props.list.length - 1 ? " active" : "")} onClick={(e: React.MouseEvent<HTMLLIElement>) => onClick(i, e)}>
-                                {item}
-                            </li>
-                        ))}
-                    </ol>
-                </nav>
-            </div>
-        );
-    }
-);
+export interface BreadcrumbItem {
+    /** The content to be displayed in each breadcrumb item */
+    text: React.ReactNode;
+    /**
+     * The link to where it leats. This is used to enable openning the link in new tab.
+     * Additionally, you can access it in the event passed with the onClick callback
+     */
+    href?: string;
+    /** The title of the anchor tag, used for accessibility to describte where the link takes you */
+    title?: string;
+}
+
+export const Breadcrumb: React.FC<BreadcrumbProps> = React.memo((props: BreadcrumbProps) => (
+    <nav aria-label="breadcrumb" className={props.className} id={props.id}>
+        <ol className="seb breadcrumb">
+            {props.list.map((item: BreadcrumbItem, i: number) => {
+                const isLast: boolean = i === props.list.length - 1;
+                const className: string = classNames(["breadcrumb-item", { active: isLast }]);
+
+                return (
+                    <li key={i} className={className} aria-current={isLast ? "page" : null}>
+                        <a title={item.title} href={isLast ? null : item.href || "#"} data-value={i} onClick={!isLast ? props.onClick : null}>
+                            {React.isValidElement(item.text) || isPrimitive(item.text) ? item.text : null}
+                        </a>
+                    </li>
+                );
+            })}
+        </ol>
+    </nav>
+));
