@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import { Table, Column, TableRow, PrimaryActionButton, ActionLinkItem, TableHeader, DataItem, FilterItem, FilterProps, EditProps, EditMode } from "../../../src/Table/Table";
 import makeData from "../../__utils/makeData";
 import { Pagination } from "../../../src/Pagination/Pagination";
@@ -137,16 +137,16 @@ const TablePage: React.FunctionComponent = () => {
 
     const primaryButton: PrimaryActionButton = {
         label: "Buy",
-        onClick: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, selectedRow: TableRow) => {},
+        onClick: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, selectedRow: TableRow) => null,
     };
 
     const actionLinks: Array<ActionLinkItem> = [
-        { label: "Add", onClick: (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>, selectedRow: TableRow) => {} },
-        { label: "Edit", onClick: (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>, selectedRow: TableRow) => {} },
+        { label: "Add", onClick: (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>, selectedRow: TableRow) => null },
+        { label: "Edit", onClick: (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>, selectedRow: TableRow) => null },
     ];
 
     const filterProps: FilterProps = {
-        onAfterFilter: (rows: Array<TableRow>) => {},
+        onAfterFilter: (rows: Array<TableRow>) => null,
         onRemoveFilter: (item: { accessor: string; value: string }) => {
             const updatedFilters: Array<FilterItem> = filters.map((filter: FilterItem) => {
                 if (filter.accessor === item.accessor) {
@@ -241,7 +241,7 @@ const TablePage: React.FunctionComponent = () => {
                             columns={columns}
                             data={smallData}
                             sortProps={{
-                                onAfterSorting: (rows: Array<TableRow>, sortByColumn: TableHeader) => {},
+                                onAfterSorting: (rows: Array<TableRow>, sortByColumn: TableHeader) => null,
                             }}
                         />
                     </div>
@@ -274,28 +274,32 @@ const TablePage: React.FunctionComponent = () => {
 
                     <p>Here is an example with expandable subrows and rowDetails</p>
                     <div className="result wide">
-                        <Table columns={columns} data={smallData} onRowExpanded={(rows: Array<TableRow>) => {}} />
+                        <Table columns={columns} data={smallData} onRowExpanded={(rows: Array<TableRow>) => null} />
                     </div>
 
                     <p>Here is an example with row selection</p>
                     <div className="result wide">
-                        <Table columns={columns} data={smallData} onRowSelected={(rows: Array<TableRow>) => {}} />
+                        <Table columns={columns} data={smallData} onRowSelected={(rows: Array<TableRow>) => null} />
                     </div>
 
                     <p>Here is an example with inline edit</p>
                     <div className="result wide">
                         <div className="row">
                             <div className="col text-right">
-                                <Button title="Cancel" label="Cancel" disabled={!editMode} onClick={() => setEditMode("cancel")} className="mr-2" />
-                                <Button title="Update" label={editMode === "edit" ? "Save" : "Edit"} onClick={() => setEditMode(editMode === "edit" ? "save" : "edit")} />
+                                <Button title="Cancel" disabled={!editMode} onClick={() => setEditMode("cancel")} className="mr-2">
+                                    Cancel
+                                </Button>
+                                <Button title="Update" onClick={() => setEditMode(editMode === "edit" ? "save" : "edit")}>
+                                    {editMode === "edit" ? "Save" : "Edit"}
+                                </Button>
                             </div>
                         </div>
-                        <Table columns={columns} data={smallEditableData} onRowSelected={(rows: Array<TableRow>) => {}} onRowExpanded={(rows: Array<TableRow>) => {}} editProps={editProps} />
+                        <Table columns={columns} data={smallEditableData} onRowSelected={(rows: Array<TableRow>) => null} onRowExpanded={(rows: Array<TableRow>) => null} editProps={editProps} />
                     </div>
 
                     <p>Here is an example with row selection and subRows</p>
                     <div className="result wide">
-                        <Table columns={columns} data={smallData} onRowSelected={(rows: Array<TableRow>) => {}} onRowExpanded={(rows: Array<TableRow>) => {}} />
+                        <Table columns={columns} data={smallData} onRowSelected={(rows: Array<TableRow>) => null} onRowExpanded={(rows: Array<TableRow>) => null} />
                     </div>
 
                     <p>Here is an example with actions column</p>
@@ -314,7 +318,7 @@ const TablePage: React.FunctionComponent = () => {
                             </div>
                             <div className="col-3"></div>
                         </div>
-                        <Table columns={columns} data={smallData} filterProps={filterProps} onRowSelected={(rows: Array<TableRow>) => {}} onRowExpanded={(rows: Array<TableRow>) => {}} />
+                        <Table columns={columns} data={smallData} filterProps={filterProps} onRowSelected={(rows: Array<TableRow>) => null} onRowExpanded={(rows: Array<TableRow>) => null} />
                     </div>
 
                     <p>Here is an example with search, sorting, pagination, subRows etc.:</p>
@@ -332,7 +336,9 @@ const TablePage: React.FunctionComponent = () => {
                                 />
                             </div>
                             <div className="col-3">
-                                <Button title="Search" label="search" onClick={() => setSearchTriggered(!searchTriggered)} />
+                                <Button title="Search" onClick={() => setSearchTriggered(!searchTriggered)}>
+                                    Search
+                                </Button>
                             </div>
                         </div>
                         <Table
@@ -345,15 +351,15 @@ const TablePage: React.FunctionComponent = () => {
                                 searchText: textBoxValue2,
                                 triggerSearchOn: "Submit",
                                 searchTriggered: searchTriggered,
-                                onSearch: (searchResults: Array<TableRow>) => {},
+                                onSearch: (searchResults: Array<TableRow>) => null,
                             }}
                             primaryActionButton={primaryButton}
                             actionLinks={actionLinks}
                             sortProps={{
-                                onAfterSorting: (rows: Array<TableRow>, sortByColumn: TableHeader) => {},
+                                onAfterSorting: (rows: Array<TableRow>, sortByColumn: TableHeader) => null,
                             }}
-                            onRowSelected={(rows: Array<TableRow>) => {}}
-                            onRowExpanded={(rows: Array<TableRow>) => {}}
+                            onRowSelected={(rows: Array<TableRow>) => null}
+                            onRowExpanded={(rows: Array<TableRow>) => null}
                             footer={<Pagination value={paginationValue1} onChange={setPagination1} size={listSize} useFirstAndLast={true} />}
                         />
                     </div>

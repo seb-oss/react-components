@@ -3,6 +3,7 @@ import { Chip } from "../../../src/Chip/Chip";
 import Highlight from "react-highlight";
 import { Button } from "../../../src/Button/Button";
 import { loremIpsum } from "lorem-ipsum";
+import PlusIcon from "../../assets/icons/plus.svg";
 const docMD: string = require("../../../src/Chip/readme.md");
 
 const ChipPage: React.FC = () => {
@@ -47,7 +48,10 @@ const ChipPage: React.FC = () => {
 
                     <p>Options</p>
                     <div className="row no-gutters">
-                        <Button label="Insert Chip" onClick={addChip} />
+                        <Button onClick={addChip}>
+                            <PlusIcon className="mr-2" fill="currentColor" />
+                            <span>Insert Chip</span>
+                        </Button>
                     </div>
                 </div>
             </div>
