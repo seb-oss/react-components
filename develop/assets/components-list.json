@@ -97,6 +97,11 @@
             "filePath": "pages/ButtonPage"
         },
         {
+            "name": "ButtonGroup",
+            "path": "/buttongroup",
+            "filePath": "pages/ButtonGroupPage"
+        },
+        {
             "name": "Chip",
             "path": "/chip",
             "filePath": "pages/ChipPage"

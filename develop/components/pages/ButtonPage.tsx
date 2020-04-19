@@ -57,7 +57,7 @@ const ButtonPage: React.FC = () => {
                             <CheckBox label="Loader" name="loader" checked={hasLoader} onChange={(e) => setHasLoader(e.target.checked)} condensed />
                             <CheckBox label="Icon" name="icon" checked={hasIcon} onChange={(e) => setHasIcon(e.target.checked)} condensed />
                             <CheckBox label="Size" name="size" checked={hasSize} onChange={sizeCheckboxChanged} condensed />
-                            {hasSize && <RadioGroup className="pl-4" list={sizeList} value={size} condensed name="icon-size" onChange={(e) => setSize(e.target.value as ButtonSizes)} />}
+                            {hasSize && <RadioGroup className="pl-4" list={sizeList} value={size} condensed name="button-size" onChange={(e) => setSize(e.target.value as ButtonSizes)} />}
                         </div>
                     </div>
                 </div>

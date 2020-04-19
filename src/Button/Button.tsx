@@ -15,7 +15,7 @@ export type ButtonProps = React.PropsWithChildren<
     }
 >;
 
-export const Button: React.FC<ButtonProps> = React.memo(
+const Button: React.FC<ButtonProps> = React.memo(
     ({ theme, size, block, className, ...props }: ButtonProps): React.ReactElement<void> => {
         const [processedClassName, setProcessedClassName] = React.useState<string>("btn btn-primary");
 
@@ -24,9 +24,11 @@ export const Button: React.FC<ButtonProps> = React.memo(
         }, [size, theme, block, className]);
 
         return (
-            <button className={processedClassName} {...props}>
+            <button {...props} className={processedClassName}>
                 {props.children}
             </button>
         );
     }
 );
+
+export { Button };
