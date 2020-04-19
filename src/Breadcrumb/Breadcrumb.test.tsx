@@ -72,11 +72,4 @@ describe("Component: Breadcrumb", () => {
         });
         expect(container.querySelectorAll("#mySvg").length).toBe(1);
     });
-
-    it("Should not crash when passing invalid object to render", () => {
-        act(() => {
-            render(<Breadcrumb list={[{ text: {} }, { text: [] }]} />, container);
-        });
-        expect(container.firstElementChild).toBeDefined();
-    });
 });

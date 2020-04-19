@@ -1,46 +1,24 @@
 import React from "react";
-import { isPrimitive } from "@sebgroup/frontend-tools/dist/isPrimitive";
-import classNames from "classnames";
-import "./breadcrumb.scss";
+import { BreadcrumbItemProps, BreadcrumbItem } from "./BreadcrumbItem";
 
-export interface BreadcrumbProps {
-    /** Element class name */
-    className?: string;
-    /** Element id */
-    id?: string;
-    /** The list of breadcrumb items */
-    list: Array<BreadcrumbItem>;
-    /** onClick callback */
-    onClick?: (e?: React.MouseEvent<HTMLAnchorElement>) => void;
-}
+export type BreadcrumbProps = React.PropsWithChildren<
+    React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & {
+        /** List of BreadcrumbItemProps to be rendered */
+        list?: Array<BreadcrumbItemProps>;
+        /** Event handler triggered when one of the breadcrumb links is clicked */
+        onNavigate?: React.MouseEventHandler<HTMLAnchorElement>;
+    }
+>;
 
-export interface BreadcrumbItem {
-    /** The content to be displayed in each breadcrumb item */
-    text: React.ReactNode;
-    /**
-     * The link to where it leats. This is used to enable openning the link in new tab.
-     * Additionally, you can access it in the event passed with the onClick callback
-     */
-    href?: string;
-    /** The title of the anchor tag, used for accessibility to describte where the link takes you */
-    title?: string;
-}
-
-export const Breadcrumb: React.FC<BreadcrumbProps> = React.memo((props: BreadcrumbProps) => (
-    <nav aria-label="breadcrumb" className={props.className} id={props.id}>
-        <ol className="seb breadcrumb">
-            {props.list.map((item: BreadcrumbItem, i: number) => {
-                const isLast: boolean = i === props.list.length - 1;
-                const className: string = classNames(["breadcrumb-item", { active: isLast }]);
-
-                return (
-                    <li key={i} className={className} aria-current={isLast ? "page" : null}>
-                        <a title={item.title} href={isLast ? null : item.href || "#"} data-value={i} onClick={!isLast ? props.onClick : null}>
-                            {React.isValidElement(item.text) || isPrimitive(item.text) ? item.text : null}
-                        </a>
-                    </li>
-                );
-            })}
-        </ol>
-    </nav>
-));
+export const Breadcrumb: React.FC<BreadcrumbProps> = React.memo(({ onNavigate, ...props }: BreadcrumbProps) => {
+    return (
+        <nav {...props} aria-label="breadcrumb">
+            <ol className="seb breadcrumb">
+                {props.list?.map((item: BreadcrumbItemProps, i: number) => (
+                    <BreadcrumbItem onNavigate={onNavigate} data-value={i} key={i} {...item} />
+                ))}
+                {props.children}
+            </ol>
+        </nav>
+    );
+});
