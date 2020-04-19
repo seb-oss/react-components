@@ -3,7 +3,7 @@ import classnames from "classnames";
 
 export type ButtonGroupSizes = "sm" | "md" | "lg";
 
-type ButtonGroupProps = React.PropsWithChildren<
+export type ButtonGroupProps = React.PropsWithChildren<
     React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> & {
         vertical?: boolean;
         size?: ButtonGroupSizes;
