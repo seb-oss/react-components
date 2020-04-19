@@ -35,14 +35,7 @@ export const BreadcrumbItem: React.FC<BreadcrumbItemProps> = React.memo(({ href,
     }, [active, props.className]);
 
     return (
-        <li
-            {...props}
-            className={className}
-            aria-current={active ? props["aria-current"] || "page" : null}
-            ref={(el) => {
-                setActiveIfLast(el);
-            }}
-        >
+        <li {...props} className={className} aria-current={active ? props["aria-current"] || "page" : null} ref={(el) => setActiveIfLast(el)}>
             <a title={props.title} href={active ? null : href || "#"} data-value={props["data-value"]} onClick={!active ? onNavigate : null}>
                 {props.children}
             </a>
