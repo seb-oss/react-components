@@ -48,11 +48,11 @@ describe("Component: Button", () => {
             { value: "outline-danger", expected: "btn-outline-danger" },
         ];
         list.map((item: ButtonTestItem<ButtonTheme, string>) => {
-            it(`Size: ${item.value} - Expected to render (btn-${item.expected})`, () => {
+            it(`Size: ${item.value} - Expected to render (${item.expected})`, () => {
                 act(() => {
                     render(<Button theme={item.value} />, container);
                 });
-                expect(container.firstElementChild.classList.contains(item.expected));
+                expect(container.firstElementChild.classList.contains(item.expected)).toBeTruthy();
             });
         });
     });
@@ -68,7 +68,7 @@ describe("Component: Button", () => {
                 act(() => {
                     render(<Button size={item.value} />, container);
                 });
-                expect(container.firstElementChild.classList.contains(item.expected));
+                expect(container.firstElementChild.classList.contains(item.expected)).toBeTruthy();
             });
         });
     });
