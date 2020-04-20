@@ -71,7 +71,7 @@ interface RangeSliderLabel {
 ```
 
 2. Supported themes: `'primary'`, `'inverted'`, `'success'`, `'danger'`, `'warning'`, `'purple'`
-3. Supported appearance: `'normal'`, `'smaller'`
+3. Supported appearance: `'normal'`, `'alternative'`
 4. This is an example of how to achieve a combination of a `textbox` with a `slider` like it's described in [SEB Design Library](https://designlibrary.sebgroup.com/components/slider/)
 
 HTML (tsx) would look like this
