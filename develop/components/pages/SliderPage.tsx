@@ -83,8 +83,8 @@ class SliderExamples extends React.Component<SliderPageProps, SliderPageState> {
     ];
 
     appearanceList: Array<RadioListModel<SliderAppearance>> = [
-        { label: "Normal (Default)", value: "normal" },
-        { label: "Smaller", value: "smaller" },
+        { label: "Normal (new default)", value: "normal" },
+        { label: "Alternative (old default)", value: "alternative" },
     ];
 
     constructor(props: SliderPageProps) {

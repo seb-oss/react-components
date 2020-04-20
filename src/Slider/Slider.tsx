@@ -14,7 +14,7 @@ const angleRightIcon: JSX.Element = (
 );
 
 export type SliderTheme = "primary" | "inverted" | "success" | "danger" | "warning" | "purple";
-export type SliderAppearance = "normal" | "smaller";
+export type SliderAppearance = "normal" | "alternative";
 
 export interface RangeSliderLabel {
     position: number;
@@ -58,8 +58,8 @@ const Slider: React.FunctionComponent<SliderProps> = (props: SliderProps): React
     const [thumbPosition, setThumbPosition] = React.useState<number>(0);
     const [activeTrackStyles, setActiveTrackStyles] = React.useState<React.CSSProperties>({});
     const appearanceSizesMap: AppearanceStyleMap = {
-        normal: { width: "27px", offset: "56px" },
-        smaller: { width: "5px", offset: "24px" },
+        alternative: { width: "27px", offset: "56px" },
+        normal: { width: "5px", offset: "24px" },
     };
     const defaultAppearance: SliderAppearance = "normal";
 
@@ -202,7 +202,7 @@ const Slider: React.FunctionComponent<SliderProps> = (props: SliderProps): React
                             <div className={"custom-slider-preview" + (props.alwaysShowTooltip ? " always-show" : "") + (props.tooltipTheme ? ` ${props.tooltipTheme}` : " inverted")}>
                                 {props.tooltipValue || props.value}
                             </div>
-                            {props.appearance && props.appearance !== "smaller" ? (
+                            {props.appearance && props.appearance === "alternative" ? (
                                 <>
                                     <span className="custom-slider-icon-left">{angleLeftIcon}</span>
                                     <span className="custom-slider-icon-right">{angleRightIcon}</span>
