@@ -74,5 +74,4 @@ describe("Component: ImagePreview", () => {
         expect(mountedWrapper.find(".profile-image").find("svg").exists()).toBeTruthy();
         doneFn();
     });
-
 });

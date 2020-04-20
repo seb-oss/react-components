@@ -2,7 +2,7 @@ import * as React from "react";
 import { shallow, mount, ShallowWrapper, ReactWrapper } from "enzyme";
 import { Tabs, TabsProps } from "./Tabs";
 
-type keyboardTestUnit = { key: string, registeredAt: number, expectedToChange: number };
+type keyboardTestUnit = { key: string; registeredAt: number; expectedToChange: number };
 
 describe("Component: Tabs", () => {
     let props: TabsProps;
@@ -17,7 +17,7 @@ describe("Component: Tabs", () => {
                 { text: "Fourth", disabled: true },
             ],
             activeTab: 0,
-            onClick: jest.fn()
+            onClick: jest.fn(),
         };
         wrapper = shallow(<Tabs {...props} />);
     });

@@ -97,7 +97,7 @@ describe("Component: TextBox", () => {
             onKeyUp: jest.fn(),
             onKeyPress: jest.fn(),
             onFocus: jest.fn(),
-            onBlur: jest.fn()
+            onBlur: jest.fn(),
         };
         mountedWrapper = mount(<TextBox {...props} {...eventListeners} />);
         mountedWrapper.find(".form-control").simulate("keyDown", { key: "a", keyCode: 65 });

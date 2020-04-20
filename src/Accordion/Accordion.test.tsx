@@ -2,15 +2,21 @@ import * as React from "react";
 import { shallow, ShallowWrapper, ReactWrapper, mount } from "enzyme";
 import { Accordion, AccrodionListItem, AccordionProps, AccordionIconRotation } from "./Accordion";
 
-type keyboardTestUnit = { key: string, registeredAt: number, expectedValue: boolean };
+type keyboardTestUnit = { key: string; registeredAt: number; expectedValue: boolean };
 
 describe("Component: Accordion", () => {
     let wrapper: ShallowWrapper<AccordionProps>;
     let mountedWrapper: ReactWrapper<AccordionProps>;
     const accordionList: Array<AccrodionListItem> = [
         { header: "Item 1", content: { title: "title", desc: "desc" } },
-        { header: "Item 2", content: [{ title: "title", desc: "desc" }, { title: "title", desc: "desc" }] },
-        { header: "Item 3", content: [{ desc: "desc" }, { desc: "desc" }] }
+        {
+            header: "Item 2",
+            content: [
+                { title: "title", desc: "desc" },
+                { title: "title", desc: "desc" },
+            ],
+        },
+        { header: "Item 3", content: [{ desc: "desc" }, { desc: "desc" }] },
     ];
 
     beforeEach(() => {
@@ -120,7 +126,14 @@ describe("Component: Accordion", () => {
 
     it("Should render react node as an accordion item", () => {
         const list: Array<AccrodionListItem> = JSON.parse(JSON.stringify(accordionList));
-        list.push({ header: "Item 4", content: <><p id="test-node">test content</p></> });
+        list.push({
+            header: "Item 4",
+            content: (
+                <>
+                    <p id="test-node">test content</p>
+                </>
+            ),
+        });
         mountedWrapper.setProps({ list });
         expect(mountedWrapper.find("#test-node").length).toBeTruthy();
     });

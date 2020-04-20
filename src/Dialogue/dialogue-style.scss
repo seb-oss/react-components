@@ -1,26 +1,10 @@
-@import "../colours";
-$default: 16px;
-$transparent: transparent;
+@import "../../node_modules/@sebgroup/bootstrap/scss/variables";
 $backdrop-background: rgba(0, 0, 0, 0.7);
 $dialogue-background: $white;
 $material-box-shadow: 0 7px 28px rgba(0, 0, 0, 0.25), 0 2px 2px rgba(0, 0, 0, 0.22);
 $header-font-size: 24px;
 $transition-time: 300ms;
 $close-button-size: 15px;
-
-@mixin transition($props) {
-    -webkit-transition: $props;
-    -moz-transition: $props;
-    -o-transition: $props;
-    transition: $props;
-}
-
-@mixin animation($props) {
-    -webkit-animation: $props;
-    -moz-animation: $props;
-    -o-animation: $props;
-    animation: $props;
-}
 
 .custom-dialogue {
     .dialogue-container {
@@ -50,7 +34,7 @@ $close-button-size: 15px;
             right: 0;
             margin: auto;
             transform: translateY(-50%);
-            @include transition($transition-time);
+            transition: $transition-time;
             box-shadow: $material-box-shadow;
             > .dialogue-header {
                 position: relative;
@@ -75,19 +59,6 @@ $close-button-size: 15px;
                     display: inline-block;
                     .dialogue-button {
                         min-width: 120px;
-                        font-size: $default;
-                        &.btn-primary {
-                            background: $blue-dark;
-                            &:hover {
-                                background: $blue-darker;
-                            }
-                            &:active {
-                                background-color: $blue-darker !important;
-                            }
-                        }
-                        &.btn-secondary {
-                            border: 1px solid $blue-dark;
-                        }
                     }
                     &:first-child {
                         padding-right: 16px;
@@ -166,7 +137,7 @@ $close-button-size: 15px;
     .custom-dialogue {
         &.open-dialogue {
             .dialogue-container {
-                @include animation(container-fade-in $transition-time forwards);
+                animation: container-fade-in $transition-time forwards;
                 .dialogue {
                     top: 50%;
                     opacity: 1;
@@ -175,7 +146,7 @@ $close-button-size: 15px;
         }
         &.close-dialogue {
             .dialogue-container {
-                @include animation(container-fade-out $transition-time forwards);
+                animation: container-fade-out $transition-time forwards;
             }
         }
     }
@@ -186,7 +157,7 @@ $close-button-size: 15px;
     .custom-dialogue {
         &.open-dialogue {
             .dialogue-container {
-                @include animation(container-fade-in $transition-time forwards);
+                animation: container-fade-in $transition-time forwards;
                 .dialogue {
                     transform: translateY(0);
                     opacity: 1;
@@ -195,7 +166,7 @@ $close-button-size: 15px;
         }
         &.close-dialogue {
             .dialogue-container {
-                @include animation(container-fade-out $transition-time * 2 forwards);
+                animation: container-fade-out $transition-time * 2 forwards;
             }
         }
         .dialogue-container {

@@ -28,5 +28,4 @@ describe("Component: InlineLink", () => {
         wrapper.simulate("click");
         expect(onClick).toBeCalled();
     });
-
 });

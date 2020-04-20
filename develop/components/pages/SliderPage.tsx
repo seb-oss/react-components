@@ -69,7 +69,7 @@ const SliderPageStateNames: { [K in keyof SliderPageState]: keyof SliderPageStat
     maxInputError: "maxInputError",
     step: "step",
     stepInputError: "stepInputError",
-    sliderLabels: "sliderLabels"
+    sliderLabels: "sliderLabels",
 };
 
 class SliderExamples extends React.Component<SliderPageProps, SliderPageState> {
@@ -79,12 +79,12 @@ class SliderExamples extends React.Component<SliderPageProps, SliderPageState> {
         { label: "Primary", value: "primary" },
         { label: "Purple", value: "purple" },
         { label: "Success", value: "success" },
-        { label: "Warning", value: "warning" }
+        { label: "Warning", value: "warning" },
     ];
 
     appearanceList: Array<RadioListModel<SliderAppearance>> = [
         { label: "Normal (Default)", value: "normal" },
-        { label: "Smaller", value: "smaller" }
+        { label: "Smaller", value: "smaller" },
     ];
 
     constructor(props: SliderPageProps) {
@@ -108,7 +108,7 @@ class SliderExamples extends React.Component<SliderPageProps, SliderPageState> {
             maxInputError: "",
             step: 1,
             stepInputError: "",
-            sliderLabels: []
+            sliderLabels: [],
         };
 
         this.onFormChange = this.onFormChange.bind(this);
@@ -124,7 +124,7 @@ class SliderExamples extends React.Component<SliderPageProps, SliderPageState> {
         const list: Array<RangeSliderLabel> = [
             { text: String(min), position: min },
             { text: String(middle), position: middle },
-            { text: String(max), position: max }
+            { text: String(max), position: max },
         ];
         if ((min !== 0 && min < 0 && max > 0) || (max !== 0 && max > 0 && min < 0)) {
             list[1].position !== 0 && list.push({ text: "0", position: 0 });

@@ -1,6 +1,5 @@
 import * as React from "react";
-import { randomId } from "../__utils/randomId";
-
+import { randomId } from "@sebgroup/frontend-tools/dist/randomId";
 import "./table-style.scss";
 
 const angleDown: JSX.Element = (
@@ -44,6 +43,7 @@ export interface Column {
     label: string | React.ReactNode;
     accessor: string;
     canSort?: boolean;
+    isHidden?: boolean;
 }
 
 export interface ActionLinkItem {
@@ -67,6 +67,7 @@ interface Cell {
     accessor: string;
     value: string | number | boolean;
     canEdit?: boolean;
+    hidden?: boolean;
 }
 
 export interface TableRow {
@@ -82,7 +83,7 @@ export interface TableRow {
 
 export const enum sortDirectionTypes {
     Ascending = "ASC",
-    Descending = "DESC"
+    Descending = "DESC",
 }
 
 /**
@@ -261,19 +262,21 @@ const ActionColumn: React.FunctionComponent<ActionColumnProps> = (props: ActionC
                     <div className="icon-holder" id={"ellipsis-" + props.selectedRow.rowIndex} role="link">
                         {ellipsis}
                     </div>
-                    <div className={actionColumnClass} ref={actionRef}>
-                        {props.actionLinks.map((link: ActionLinkItem, index: number) => (
-                            <a
-                                key={index}
-                                onClick={(e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
-                                    e.preventDefault();
-                                    link.onClick(e, props.selectedRow);
-                                }}
-                            >
-                                {link.label}
-                            </a>
-                        ))}
-                    </div>
+                    {props.selectedRow.actionsDropdownDropped ? (
+                        <div className={actionColumnClass} ref={actionRef}>
+                            {props.actionLinks.map((link: ActionLinkItem, index: number) => (
+                                <a
+                                    key={index}
+                                    onClick={(e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+                                        e.preventDefault();
+                                        link.onClick(e, props.selectedRow);
+                                    }}
+                                >
+                                    {link.label}
+                                </a>
+                            ))}
+                        </div>
+                    ) : null}
                 </div>
             ) : null}
         </div>
@@ -365,7 +368,7 @@ const RowUI: React.FunctionComponent<RowUIProps> = (props: RowUIProps) => {
                     )
                 )}
                 {props.row.cells.map((cell: Cell, cellIndex: number) => {
-                    return (
+                    return !cell.hidden ? (
                         <td key={`${props.type}-${cellIndex}`}>
                             {props.row?.isEditMode && cell.canEdit ? (
                                 <TextboxGroup
@@ -380,7 +383,7 @@ const RowUI: React.FunctionComponent<RowUIProps> = (props: RowUIProps) => {
                                 cell.value
                             )}
                         </td>
-                    );
+                    ) : null;
                 })}
                 {props.useShowActionColumn && (
                     <td>
@@ -499,26 +502,28 @@ const TableUI: React.FunctionComponent<TableUIProps> = React.memo(
                             ) : (
                                 props.rowsAreCollapsable && <th />
                             )}
-                            {props.columns?.map((header: TableHeader, index: number) => (
-                                <th
-                                    key={index}
-                                    className={props.sortable && header.canSort ? "sortable" : ""}
-                                    onClick={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-                                        if (props.sortable && header.canSort) {
-                                            props.onSort(header?.accessor, header.isSortedDesc ? sortDirectionTypes.Ascending : sortDirectionTypes.Descending);
-                                        } else {
-                                            e.preventDefault();
-                                        }
-                                    }}
-                                >
-                                    {header.label}
-                                    {props.sortable && header.canSort && (
-                                        <div role="link" className={"icon-holder" + (header.isSorted ? (header.isSortedDesc ? " desc" : " asc") : "")} id={header.accessor}>
-                                            {defaultSort}
-                                        </div>
-                                    )}
-                                </th>
-                            ))}
+                            {props.columns?.map((header: TableHeader, index: number) => {
+                                return !header.isHidden ? (
+                                    <th
+                                        key={index}
+                                        className={props.sortable && header.canSort ? "sortable" : ""}
+                                        onClick={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+                                            if (props.sortable && header.canSort) {
+                                                props.onSort(header?.accessor, header.isSortedDesc ? sortDirectionTypes.Ascending : sortDirectionTypes.Descending);
+                                            } else {
+                                                e.preventDefault();
+                                            }
+                                        }}
+                                    >
+                                        {header.label}
+                                        {props.sortable && header.canSort && (
+                                            <div role="link" className={"icon-holder" + (header.isSorted ? (header.isSortedDesc ? " desc" : " asc") : "")} id={header.accessor}>
+                                                {defaultSort}
+                                            </div>
+                                        )}
+                                    </th>
+                                ) : null;
+                            })}
                             {props.useShowActionColumn && <th />}
                         </tr>
                     </thead>
@@ -646,7 +651,7 @@ export interface TableProps {
     editProps?: EditProps;
 }
 
-export const Table: React.FunctionComponent<TableProps> = React.memo(
+const Table: React.FunctionComponent<TableProps> = React.memo(
     (props: TableProps): React.ReactElement<void> => {
         const [allItemsChecked, setAllRowsChecked] = React.useState<boolean>(false);
         const [currentTableRows, setCurrentTableRows] = React.useState<Array<TableRow>>([]);
@@ -654,7 +659,6 @@ export const Table: React.FunctionComponent<TableProps> = React.memo(
         const [tableColumns, setTableColumn] = React.useState<Array<TableHeader>>([]);
         const [tableRows, setTableRows] = React.useState<Array<TableRow>>([]);
         const [tableRowsImage, setTableRowsImage] = React.useState<Array<TableRow>>([]);
-        const [tableEditRows, setTableEditRows] = React.useState<Array<TableRow>>([]);
 
         // events -------------------------------------------------------------------------------------
 
@@ -677,7 +681,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo(
                     .map((newRow: TableRow) => {
                         return {
                             ...newRow,
-                            subRows: newRow.subRows.filter((subRowItem: TableRow) => subRowItem.selected)
+                            subRows: newRow.subRows.filter((subRowItem: TableRow) => subRowItem.selected),
                         };
                     });
 
@@ -842,7 +846,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo(
                             sortByColumn = {
                                 ...column,
                                 isSorted: true,
-                                isSortedDesc: sortDirection === sortDirectionTypes.Descending ? true : false
+                                isSortedDesc: sortDirection === sortDirectionTypes.Descending ? true : false,
                             };
                             return sortByColumn;
                         }
@@ -921,7 +925,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo(
                         return {
                             ...originalRow,
                             expanded: !originalRow.expanded,
-                            subRows: originalRow?.subRows.map((subRow: TableRow) => ({ ...subRow, expanded: false }))
+                            subRows: originalRow?.subRows.map((subRow: TableRow) => ({ ...subRow, expanded: false })),
                         };
                     }
 
@@ -933,7 +937,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo(
                         return {
                             ...currentRow,
                             expanded: !currentRow.expanded,
-                            subRows: currentRow?.subRows.map((subRow: TableRow) => ({ ...subRow, expanded: false }))
+                            subRows: currentRow?.subRows.map((subRow: TableRow) => ({ ...subRow, expanded: false })),
                         };
                     }
                     return currentRow;
@@ -946,7 +950,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo(
                     .map((newRow: TableRow) => {
                         return {
                             ...newRow,
-                            subRows: newRow.subRows.filter((subRowItem: TableRow) => subRowItem.expanded)
+                            subRows: newRow.subRows.filter((subRowItem: TableRow) => subRowItem.expanded),
                         };
                     });
 
@@ -960,27 +964,30 @@ export const Table: React.FunctionComponent<TableProps> = React.memo(
 
         const onTextChange = React.useCallback(
             (e: React.ChangeEvent<HTMLInputElement>, row: TableRow, rowIndex?: number): void => {
-                const updatedRows: Array<TableRow> = tableEditRows?.map((updatedRow: TableRow) => {
-                    if (rowIndex > -1 && updatedRow.rowIndex === rowIndex) {
-                        return {
-                            ...updatedRow,
-                            subRows: updatedRow.subRows.map((subRow: TableRow) => {
-                                if (subRow.rowIndex === row.rowIndex) {
-                                    return {
-                                        ...subRow,
-                                        [e.target.name]: e.target.value,
-                                        cells: subRow.cells?.map((cell: Cell) => {
-                                            if (cell.accessor === e.target.name) {
-                                                return { ...cell, value: e.target.value };
-                                            }
-                                            return cell;
-                                        })
-                                    };
-                                }
+                const updatedRows: Array<TableRow> = tableRows?.map((updatedRow: TableRow) => {
+                    if (rowIndex > -1) {
+                        if (updatedRow.rowIndex === rowIndex) {
+                            return {
+                                ...updatedRow,
+                                subRows: updatedRow.subRows.map((subRow: TableRow) => {
+                                    if (subRow.rowIndex === row.rowIndex) {
+                                        return {
+                                            ...subRow,
+                                            [e.target.name]: e.target.value,
+                                            cells: subRow.cells?.map((cell: Cell) => {
+                                                if (cell.accessor === e.target.name) {
+                                                    return { ...cell, value: e.target.value };
+                                                }
+                                                return cell;
+                                            }),
+                                        };
+                                    }
 
-                                return subRow;
-                            })
-                        };
+                                    return subRow;
+                                }),
+                            };
+                        }
+                        return updatedRow;
                     } else if (updatedRow.rowIndex === row.rowIndex) {
                         return {
                             ...updatedRow,
@@ -990,16 +997,16 @@ export const Table: React.FunctionComponent<TableProps> = React.memo(
                                     return { ...cell, value: e.target.value };
                                 }
                                 return cell;
-                            })
+                            }),
                         };
                     }
 
                     return updatedRow;
                 });
 
-                setTableEditRows(updatedRows);
+                setTableRows(updatedRows);
             },
-            [tableEditRows]
+            [tableRows]
         );
 
         // functions -----------------------------------------------------------------------------
@@ -1007,38 +1014,39 @@ export const Table: React.FunctionComponent<TableProps> = React.memo(
          *
          * @param rows The table or or data to initialize rows from
          */
-        const getRows = React.useCallback((rows: Array<DataItem<any>>): Array<TableRow> => {
-            const isBlackListed: (a: string) => boolean = (accessor: string): boolean => ["id", ...(props.editProps?.blackListedAccessors || [])].indexOf(accessor) > -1;
-            const updatedRows: Array<TableRow> = rows?.map((row: TableRow, index: number) => {
-                const updatedCells: Array<Cell> = Object.keys(row)
-                    .filter((key: string) => {
-                        return ["rowContentDetail", "subRows", "cells", "expanded", "actionsDropdownDropped", "selected", "rowIndex"].indexOf(key) < 0;
-                    })
-                    .map(
-                        (accessor: string): Cell => {
+        const getRows = React.useCallback(
+            (rows: Array<DataItem<any>>): Array<TableRow> => {
+                const isBlackListedForEdit: (a: string) => boolean = (accessor: string): boolean => ["id", ...(props.editProps?.blackListedAccessors || [])].indexOf(accessor) > -1;
+                const isHiddenColumn: (a: string) => boolean = (accessor: string): boolean => props.columns?.some((column: Column) => column.accessor === accessor && column?.isHidden);
+                const updatedRows: Array<TableRow> = rows?.map((row: TableRow, index: number) => {
+                    const updatedCells: Array<Cell> = props.columns?.map(
+                        (column: Column): Cell => {
                             return {
-                                id: accessor,
-                                accessor,
-                                value: row[accessor],
-                                canEdit: !isBlackListed(accessor)
+                                id: column.accessor,
+                                accessor: column?.accessor,
+                                value: row[column?.accessor],
+                                canEdit: !isBlackListedForEdit(column?.accessor),
+                                hidden: isHiddenColumn(column?.accessor),
                             };
                         }
                     );
 
-                return {
-                    ...row,
-                    rowIndex: index,
-                    cells: updatedCells,
-                    selected: row.selected || false,
-                    actionsDropdownDropped: row.actionsDropdownDropped || false,
-                    expanded: row.expanded || false,
-                    subRows: row.subRows ? getRows(row.subRows) : [],
-                    isEditMode: row.isEditMode || false
-                };
-            });
+                    return {
+                        ...row,
+                        rowIndex: index,
+                        cells: updatedCells,
+                        selected: row.selected || false,
+                        actionsDropdownDropped: row.actionsDropdownDropped || false,
+                        expanded: row.expanded || false,
+                        subRows: row.subRows ? getRows(row.subRows) : [],
+                        isEditMode: row.isEditMode || false,
+                    };
+                });
 
-            return updatedRows || [];
-        }, []);
+                return updatedRows || [];
+            },
+            [props.columns]
+        );
 
         /**
          * Call when item is selected
@@ -1075,25 +1083,22 @@ export const Table: React.FunctionComponent<TableProps> = React.memo(
 
         const setDefaultTableRows = React.useCallback(() => {
             const updatedRows: Array<TableRow> = getRows(props.data);
-            const editTableRows: Array<TableRow> = updatedRows?.filter((row: TableRow) => row.selected);
             setTableRows(updatedRows);
-            setTableEditRows(editTableRows);
             setTableRowsImage(updatedRows);
-        }, [props.data]);
+        }, [props.data, props.columns]);
 
         const doPaginate = React.useCallback((): void => {
-            const chosenRows: Array<TableRow> = tableEditRows?.length ? tableEditRows : tableRows;
-            if (props.currentpage && props.offset && chosenRows?.length > 0) {
+            if (props.currentpage && props.offset && tableRows?.length > 0) {
                 // pagination start from 1 hence the need fro deducting 1
                 const start: number = (props.currentpage - 1) * props.offset;
                 const end: number = props.offset * props.currentpage;
 
-                const currentPage: Array<TableRow> = chosenRows?.slice(start, end);
+                const currentPage: Array<TableRow> = tableRows?.slice(start, end);
                 setCurrentTableRows(currentPage);
             } else {
-                setCurrentTableRows(chosenRows);
+                setCurrentTableRows(tableRows);
             }
-        }, [props.currentpage, props.offset, tableRows, tableEditRows]);
+        }, [props.currentpage, props.offset, tableRows]);
 
         const rowsAreCollapsable = React.useCallback((): boolean => {
             return (
@@ -1148,29 +1153,27 @@ export const Table: React.FunctionComponent<TableProps> = React.memo(
                 case "edit":
                     updateRows = tableRows.map((row: TableRow) => ({ ...row, isEditMode: row.selected, subRows: row.subRows?.map((sub: TableRow) => ({ ...sub, isEditMode: sub.selected })) }));
                     if (updateRows?.length) {
-                        setTableEditRows(updateRows);
+                        setTableRows(updateRows);
                     }
                     break;
                 case "save":
-                    updateRows = tableEditRows.map((row: TableRow) => ({
+                    updateRows = tableRows.map((row: TableRow) => ({
                         ...row,
                         isEditMode: false,
                         selected: false,
-                        subRows: row.subRows?.map((sub: TableRow) => ({ ...sub, isEditMode: false, selected: false }))
+                        subRows: row.subRows?.map((sub: TableRow) => ({ ...sub, isEditMode: false, selected: false })),
                     }));
                     setTableRows(updateRows);
-                    setTableEditRows([]);
                     props?.editProps?.onAfterEdit(updateRows);
                     break;
                 case "cancel":
-                    updateRows = tableEditRows.map((row: TableRow) => ({
+                    updateRows = tableRowsImage.map((row: TableRow) => ({
                         ...row,
                         isEditMode: false,
                         selected: false,
-                        subRows: row.subRows?.map((sub: TableRow) => ({ ...sub, isEditMode: false, selected: false }))
+                        subRows: row.subRows?.map((sub: TableRow) => ({ ...sub, isEditMode: false, selected: false })),
                     }));
                     setTableRows(updateRows);
-                    setTableEditRows([]);
                     break;
             }
         }, [props.editProps?.mode]);
@@ -1229,7 +1232,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo(
                     isSorted: false,
                     canSort: column.canSort !== undefined ? column.canSort : !!props.sortProps ? true : false,
                     isSortedDesc: false,
-                    filters: column.filters || []
+                    filters: column.filters || [],
                 };
             });
 
@@ -1238,11 +1241,11 @@ export const Table: React.FunctionComponent<TableProps> = React.memo(
 
         React.useEffect(() => {
             setDefaultTableRows();
-        }, [props.data]);
+        }, [props.data, props.columns]);
 
         React.useEffect(() => {
             doPaginate();
-        }, [props.offset, props.currentpage, tableRows, tableEditRows]);
+        }, [props.offset, props.currentpage, tableRows]);
 
         return (
             <div>
@@ -1274,3 +1277,5 @@ export const Table: React.FunctionComponent<TableProps> = React.memo(
         );
     }
 );
+
+export { Table };

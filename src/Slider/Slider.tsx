@@ -59,7 +59,7 @@ const Slider: React.FunctionComponent<SliderProps> = (props: SliderProps): React
     const [activeTrackStyles, setActiveTrackStyles] = React.useState<React.CSSProperties>({});
     const appearanceSizesMap: AppearanceStyleMap = {
         normal: { width: "27px", offset: "56px" },
-        smaller: { width: "5px", offset: "24px" }
+        smaller: { width: "5px", offset: "24px" },
     };
     const defaultAppearance: SliderAppearance = "normal";
 

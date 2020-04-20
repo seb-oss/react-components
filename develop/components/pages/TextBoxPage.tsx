@@ -11,7 +11,6 @@ const TextBoxPage: React.FunctionComponent = () => {
     return (
         <div className="route-template container">
             <div className="info-holder">
-
                 <div className="info">
                     <div className="md-file">
                         <Highlight innerHTML={true}>{docMD}</Highlight>
@@ -53,9 +52,7 @@ const TextBoxPage: React.FunctionComponent = () => {
                         />
                     </div>
                 </div>
-
             </div>
-
         </div>
     );
 };

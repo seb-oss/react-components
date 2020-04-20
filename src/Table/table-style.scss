@@ -1,20 +1,12 @@
-@import "../colours.scss";
+@import "../../node_modules/@sebgroup/bootstrap/scss/variables";
 
 $icon-color: $gray-500;
 $icon-active-color: $blue-dark;
 $chip-height: 32px;
 $icon-size: 16px;
 $row-height: 40px;
-
-$input-body-color: #444 !default;
 $transition-time: 200ms;
-
-@mixin transition($props) {
-    -webkit-transition: $props;
-    -moz-transition: $props;
-    -o-transition: $props;
-    transition: $props;
-}
+$filter-gray: #e6e6e6;
 
 @mixin setInputGroupStyles() {
     .form-group.input-box-group {
@@ -23,8 +15,7 @@ $transition-time: 200ms;
         > .input-group {
             position: relative;
             > .input-box-group-wrapper {
-                color: $input-body-color;
-                @include transition(border $transition-time / 2);
+                transition: border $transition-time / 2;
                 position: relative;
                 width: 100%;
                 height: auto;
@@ -166,7 +157,7 @@ table {
                             flex-wrap: wrap;
                             > .filter-item {
                                 height: $chip-height;
-                                background-color: $grey-8;
+                                background-color: $filter-gray;
                                 border-radius: 4px;
                                 padding: 4px;
                                 margin: 4px;
@@ -254,7 +245,7 @@ table {
                                 max-height: 0;
                                 width: 0;
                                 overflow-y: auto;
-                                @include transition(max-height 200ms);
+                                transition: max-height 200ms;
 
                                 &.active {
                                     max-height: 10000px;
@@ -276,7 +267,7 @@ table {
                                     padding: 8px 16px;
                                     text-decoration: none;
                                     display: block;
-
+                                    cursor: pointer;
                                     &:hover {
                                         background-color: $icon-active-color;
                                         color: $white;

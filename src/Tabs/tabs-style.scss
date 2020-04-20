@@ -1,5 +1,5 @@
-$blue: #41B0EE;
-$gray: #868686;
+@import "../../node_modules/@sebgroup/bootstrap/scss/variables";
+
 .custom-tabs {
     .nav-tabs {
         .nav-item {
@@ -12,7 +12,7 @@ $gray: #868686;
             &.disabled {
                 .nav-link {
                     cursor: default;
-                    color: $gray;
+                    color: $gray-600;
                 }
             }
         }

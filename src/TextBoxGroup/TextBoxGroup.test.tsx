@@ -8,7 +8,7 @@ describe("Component: TextBoxGroup", () => {
     const props: TextBoxGroupProps = {
         name: "myTextboxgroup",
         value: "",
-        onChange: jest.fn()
+        onChange: jest.fn(),
     };
 
     beforeEach(() => {
@@ -55,7 +55,7 @@ describe("Component: TextBoxGroup", () => {
                 onKeyUp: jest.fn(),
                 onKeyPress: jest.fn(),
                 onFocus: jest.fn(),
-                onBlur: jest.fn()
+                onBlur: jest.fn(),
             };
             mountedWrapper = mount(<TextBoxGroup {...mountedProps} />);
             mountedWrapper.find(".form-control").simulate("keyDown", { key: "a", keyCode: 65 });

@@ -1,6 +1,5 @@
-@import "../colours";
-$default: 14px;
-$transparent: transparent;
+@import "../../node_modules/@sebgroup/bootstrap/scss/variables";
+
 $icon-dimention-sm: 15px;
 $icon-dimention-md: 18px;
 $icon-dimention-lg: 20px;
@@ -27,12 +26,12 @@ button.btn {
         justify-content: center;
         align-items: center;
 
-        >.button-label {
+        > .button-label {
             display: inline-flex;
             align-items: center;
         }
 
-        >.svg-holder {
+        > .svg-holder {
             display: inline-block;
             width: $icon-dimention-md;
             height: $icon-dimention-md;
@@ -56,8 +55,8 @@ button.btn {
         min-width: $min-width-sm;
         min-height: $min-height-sm;
 
-        >.button-content {
-            >.svg-holder {
+        > .button-content {
+            > .svg-holder {
                 width: $icon-dimention-sm;
                 height: $icon-dimention-sm;
             }
@@ -68,8 +67,8 @@ button.btn {
         min-width: $min-width-lg;
         min-height: $min-height-lg;
 
-        >.button-content {
-            >.svg-holder {
+        > .button-content {
+            > .svg-holder {
                 width: $icon-dimention-lg;
                 height: $icon-dimention-lg;
             }
@@ -77,7 +76,7 @@ button.btn {
     }
 
     &.btn-primary {
-        >.button-content>.svg-holder svg {
+        > .button-content > .svg-holder svg {
             fill: $white;
         }
     }
@@ -89,7 +88,7 @@ button.btn {
             color: $white;
             border-color: $white;
 
-            >.button-content>.svg-holder svg {
+            > .button-content > .svg-holder svg {
                 fill: $white;
             }
 
@@ -98,7 +97,7 @@ button.btn {
                 color: $gray-800;
                 background-color: $white;
 
-                >.button-content>.svg-holder svg {
+                > .button-content > .svg-holder svg {
                     fill: $gray-800;
                 }
             }
@@ -108,7 +107,7 @@ button.btn {
             border-color: $disabled-color;
             color: $disabled-color;
 
-            >.button-content>.svg-holder svg {
+            > .button-content > .svg-holder svg {
                 fill: $disabled-color;
             }
         }
@@ -121,7 +120,7 @@ button.btn {
             color: $black;
             border-color: $black;
 
-            >.button-content>.svg-holder svg {
+            > .button-content > .svg-holder svg {
                 fill: $black;
             }
 
@@ -130,7 +129,7 @@ button.btn {
                 color: $white;
                 background-color: $gray-800;
 
-                >.button-content>.svg-holder svg {
+                > .button-content > .svg-holder svg {
                     fill: $white;
                 }
             }
@@ -140,7 +139,7 @@ button.btn {
             border-color: $disabled-color-ghost;
             color: $disabled-color-ghost;
 
-            >.button-content>.svg-holder svg {
+            > .button-content > .svg-holder svg {
                 fill: $disabled-color-ghost;
             }
         }
@@ -149,19 +148,19 @@ button.btn {
     &.btn-outline-primary,
     &.btn-secondary {
         &:not(:disabled) {
-            >.button-content>.svg-holder svg {
+            > .button-content > .svg-holder svg {
                 fill: $blue-darker;
             }
 
             &:hover {
-                >.button-content>.svg-holder svg {
+                > .button-content > .svg-holder svg {
                     fill: $white;
                 }
             }
         }
 
         &:disabled {
-            >.button-content>.svg-holder svg {
+            > .button-content > .svg-holder svg {
                 fill: $gray-500;
             }
         }
@@ -169,32 +168,32 @@ button.btn {
 
     &.btn-danger {
         &:not(:disabled) {
-            >.button-content>.svg-holder svg {
+            > .button-content > .svg-holder svg {
                 fill: $white;
             }
         }
 
         &:disabled {
-            >.button-content>.svg-holder svg {
+            > .button-content > .svg-holder svg {
                 fill: $white;
             }
         }
     }
 
     &.icon-left {
-        >.button-content {
+        > .button-content {
             -ms-flex-direction: row-reverse;
             flex-direction: row-reverse;
 
-            >.svg-holder {
+            > .svg-holder {
                 margin-right: 5px;
             }
         }
     }
 
     &.icon-right {
-        >.button-content {
-            >.svg-holder {
+        > .button-content {
+            > .svg-holder {
                 margin-left: 5px;
             }
         }

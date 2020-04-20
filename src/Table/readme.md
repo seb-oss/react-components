@@ -43,6 +43,7 @@ These are the current available properties:
 | onRowSelection?      | `(rows: Array<TableRow>) => void` | Call when user select a row by checking a textBox. This props enable the row selection option |
 | onRowExpanded?       | `(rows: Array<TableRow>) => void` | The event for row collapse. Adding this prop enable subrows and inline row detail             |
 | footer?              | `React.ReactNode`                 | Incase you want to display something in the table footer, you can render your element here    |
+| editProps? | `EditProps` | The edit props, see the `EditProps` table below |
 
 ### SearchProps properties
 | Property         | Type                               | Description                                                                          |
@@ -75,6 +76,12 @@ These are the current available properties:
 | accessor | `string` | The name of the column or accessor |
 | filters | `Array<string>` | The array of the filter values |
 
+### EditProps properties
+| Property        | Type  | Description |
+|-----------------|-------|----------------------------------------------------------------------------|
+| mode | `edit | cancel | save` | The mode of the edit operation |
+| onAfterEdit | `(rows: Array<TableRow>) => Array<TableRow>` | The array of the new rows or updated data upon update |
+| blackListedAccessors | `Array<string>` | array of the columns not to be considered for edit|
 
 ## Footnote
 1. `Column`, `TableRow`, `PrimaryActionButton`, `ActionLinkItem`, `TableHeader`, `SortProps`, `Data`, `FilterItem`, `FilterProps` and `SearchProps` interfaces/types are all importable from the component;

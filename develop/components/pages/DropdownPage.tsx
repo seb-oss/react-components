@@ -14,13 +14,12 @@ const DropdownPage: React.FunctionComponent = () => {
     const [error, setError] = React.useState<string>("");
 
     const handleToggleError = React.useCallback(() => {
-        setError((currentError) => (currentError === null) ? "Example error message" : null);
+        setError((currentError) => (currentError === null ? "Example error message" : null));
     }, [setError]);
 
     return (
         <div className="route-template container">
             <div className="info-holder">
-
                 <div className="info">
                     <div className="md-file">
                         <Highlight innerHTML={true}>{docMD}</Highlight>
@@ -108,18 +107,8 @@ const DropdownPage: React.FunctionComponent = () => {
                     </div>
 
                     <div className="result mt-5">
-                        <Toggle
-                            name="disabled-toggle"
-                            label="Disabled all"
-                            value={disabled}
-                            onChange={(e) => setDisabled(e.target.checked)}
-                        />
-                        <Toggle
-                            name="show-error-toggle"
-                            label="Show error messages"
-                            value={!!error}
-                            onChange={handleToggleError}
-                        />
+                        <Toggle name="disabled-toggle" label="Disabled all" value={disabled} onChange={(e) => setDisabled(e.target.checked)} />
+                        <Toggle name="show-error-toggle" label="Show error messages" value={!!error} onChange={handleToggleError} />
                     </div>
                 </div>
             </div>

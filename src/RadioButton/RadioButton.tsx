@@ -1,5 +1,5 @@
 import * as React from "react";
-import { randomId } from "../__utils/randomId";
+import { randomId } from "@sebgroup/frontend-tools/dist/randomId";
 import "./radio-button-style.scss";
 
 export interface RadioButtonProps<T = any> {
@@ -36,7 +36,11 @@ const RadioButton: React.FunctionComponent<RadioButtonProps> = (props: RadioButt
     return (
         <div className={className}>
             <div className="input-field">
-            {props.topLabel && <label htmlFor={id} className="radio-toplabel">{props.topLabel}</label>}
+                {props.topLabel && (
+                    <label htmlFor={id} className="radio-toplabel">
+                        {props.topLabel}
+                    </label>
+                )}
 
                 <div className="custom-control">
                     <input
@@ -47,7 +51,9 @@ const RadioButton: React.FunctionComponent<RadioButtonProps> = (props: RadioButt
                         id={id}
                         checked={props.value === props.radioValue}
                         disabled={props.disabled}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => { props.onChange(props.radioValue, e); }}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                            props.onChange(props.radioValue, e);
+                        }}
                         ref={props.reference}
                     />
                     <label className="custom-control-label" htmlFor={id}>

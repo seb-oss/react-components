@@ -3,3 +3,10 @@
     background-repeat: no-repeat;
     background-size: cover;
 }
+
+.img-tag,
+.div-tag {
+    &.link {
+        cursor: pointer;
+    }
+}

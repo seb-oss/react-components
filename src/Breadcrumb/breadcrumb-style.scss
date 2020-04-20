@@ -1,23 +1,20 @@
-$default: 14px;
-$standard: 16px;
-$blue: #0092e1;
-$blue-dark: #007ac7;
-$blue-darker: #05578c;
+@import "../../node_modules/@sebgroup/bootstrap/scss/variables";
+
 .custom-breadcrumb {
     ol.breadcrumb {
         li.breadcrumb-item {
-            font-size: $standard;
+            font-size: $font-size-base;
             &:not(.active) {
                 color: $blue;
                 cursor: pointer;
                 > svg {
                     fill: $blue;
-                    width: $standard;
-                    height: $standard;
+                    width: $font-size-base;
+                    height: $font-size-base;
                 }
                 &:hover {
                     color: $blue-darker;
-                    >svg {
+                    > svg {
                         fill: $blue-darker;
                     }
                 }

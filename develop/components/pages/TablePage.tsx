@@ -1,11 +1,11 @@
 import * as React from "react";
-import { Table, Column, TableRow, PrimaryActionButton, ActionLinkItem, TableHeader, DataItem, FilterItem, FilterProps, EditProps, EditMode } from "../../../src/Table";
+import { Table, Column, TableRow, PrimaryActionButton, ActionLinkItem, TableHeader, DataItem, FilterItem, FilterProps, EditProps, EditMode } from "../../../src/Table/Table";
 import makeData from "../../__utils/makeData";
 import { Pagination } from "../../../src/Pagination/Pagination";
 import { Dropdown, DropdownItem } from "../../../src/Dropdown/Dropdown";
 import { TextBox } from "../../../src/TextBox/TextBox";
 import { Button } from "../../../src/Button/Button";
-const Highlight = require("react-highlight").default;
+import Highlight from "react-highlight";
 const docMD = require("../../../src/Table/readme.md");
 
 interface TableDataProps {
@@ -24,47 +24,90 @@ const TablePage: React.FunctionComponent = () => {
     const [dropDownList1Selected, setDropdownList1Selected] = React.useState<Array<DropdownItem>>([]);
     const [statusDropdownSelected, setStatusDropdownSelected] = React.useState<Array<DropdownItem>>([]);
     const [ageDropdownSelected, setAgeDropdownSelected] = React.useState<Array<DropdownItem>>([]);
+    const [blackListDropdownSelected, setBlacklisteDropdownSelected] = React.useState<Array<DropdownItem>>([]);
     const [textBoxValue2, setTextBoxValue2] = React.useState<string>("");
     const [searchTriggered, setSearchTriggered] = React.useState<boolean>(false);
     const [editMode, setEditMode] = React.useState<EditMode>(null);
+    const [editableColumns, setEditableColumns] = React.useState<Array<TableHeader>>([
+        {
+            label: "id",
+            accessor: "id",
+            canSort: false,
+        },
+        {
+            label: "First Name",
+            accessor: "firstName",
+        },
+        {
+            label: "Last Name",
+            accessor: "lastName",
+        },
+        {
+            label: "Age",
+            accessor: "age",
+        },
+        {
+            label: "Visits",
+            accessor: "visits",
+        },
+        {
+            label: "Profile Progress",
+            accessor: "progress",
+        },
+        {
+            label: "Status",
+            accessor: "status",
+        },
+    ]);
+
     const columns: Array<Column> = React.useMemo(
         () => [
             {
                 label: "id",
                 accessor: "id",
                 canSort: false,
-                canEdit: false
             },
             {
                 label: "First Name",
                 accessor: "firstName",
-                canEdit: false
             },
             {
                 label: "Last Name",
-                accessor: "lastName"
+                accessor: "lastName",
             },
             {
                 label: "Age",
-                accessor: "age"
+                accessor: "age",
             },
             {
                 label: "Visits",
-                accessor: "visits"
+                accessor: "visits",
             },
             {
                 label: "Profile Progress",
-                accessor: "progress"
+                accessor: "progress",
             },
             {
                 label: "Status",
-                accessor: "status"
-            }
+                accessor: "status",
+            },
         ],
         []
     );
-
     const [filters, setFilters] = React.useState<Array<FilterItem>>(columns.map((column: Column) => ({ accessor: column.accessor, filters: [] })));
+
+    React.useEffect(() => {
+        const isBlackListed: (c: string) => boolean = (accessor: string) => blackListDropdownSelected?.some((item: DropdownItem) => item.value === accessor);
+        const updateColumns: Array<TableHeader> = editableColumns?.map((column: Column) => {
+            if (isBlackListed(column?.accessor)) {
+                return { ...column, isHidden: true };
+            }
+
+            return { ...column, isHidden: false };
+        });
+
+        setEditableColumns(updateColumns);
+    }, [blackListDropdownSelected]);
 
     React.useEffect(() => {
         const updatedFilter: Array<string> = statusDropdownSelected?.map((item: DropdownItem) => item.value);
@@ -94,12 +137,12 @@ const TablePage: React.FunctionComponent = () => {
 
     const primaryButton: PrimaryActionButton = {
         label: "Buy",
-        onClick: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, selectedRow: TableRow) => {}
+        onClick: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, selectedRow: TableRow) => {},
     };
 
     const actionLinks: Array<ActionLinkItem> = [
         { label: "Add", onClick: (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>, selectedRow: TableRow) => {} },
-        { label: "Edit", onClick: (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>, selectedRow: TableRow) => {} }
+        { label: "Edit", onClick: (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>, selectedRow: TableRow) => {} },
     ];
 
     const filterProps: FilterProps = {
@@ -123,14 +166,15 @@ const TablePage: React.FunctionComponent = () => {
             }
             setFilters(updatedFilters);
         },
-        filterItems: filters
+        filterItems: filters,
     };
 
     const editProps: EditProps = {
         onAfterEdit: (rows: Array<TableRow>) => {
             setEditMode(null);
         },
-        mode: editMode
+        mode: editMode,
+        blackListedAccessors: ["firstName"],
     };
 
     const data: Array<DataItem<TableDataProps>> = React.useMemo(
@@ -139,6 +183,11 @@ const TablePage: React.FunctionComponent = () => {
     );
 
     const smallData: Array<DataItem<TableDataProps>> = React.useMemo(
+        () => makeData<Array<DataItem<TableDataProps>>>([5, 5]),
+        []
+    );
+
+    const smallEditableData: Array<DataItem<TableDataProps>> = React.useMemo(
         () => makeData<Array<DataItem<TableDataProps>>>([5, 5]),
         []
     );
@@ -167,6 +216,8 @@ const TablePage: React.FunctionComponent = () => {
         []
     );
 
+    const columnsDropDownList: Array<DropdownItem> = React.useMemo(() => columns.map((column: Column) => ({ value: column.accessor, label: column.label as string })).sort(), []);
+
     return (
         <div className="route-template container">
             <div className="info-holder">
@@ -190,9 +241,24 @@ const TablePage: React.FunctionComponent = () => {
                             columns={columns}
                             data={smallData}
                             sortProps={{
-                                onAfterSorting: (rows: Array<TableRow>, sortByColumn: TableHeader) => {}
+                                onAfterSorting: (rows: Array<TableRow>, sortByColumn: TableHeader) => {},
                             }}
                         />
+                    </div>
+
+                    <p>Here are sample outputs with hidden columns</p>
+                    <div className="result wide">
+                        <div className="row">
+                            <div className="col-3">
+                                <Dropdown
+                                    list={columnsDropDownList}
+                                    selectedValue={blackListDropdownSelected}
+                                    onChange={(value: Array<DropdownItem>) => setBlacklisteDropdownSelected(value)}
+                                    multi={true}
+                                />
+                            </div>
+                        </div>
+                        <Table columns={editableColumns} data={smallData} />
                     </div>
 
                     <p>Here an example with pagination</p>
@@ -224,7 +290,7 @@ const TablePage: React.FunctionComponent = () => {
                                 <Button title="Update" label={editMode === "edit" ? "Save" : "Edit"} onClick={() => setEditMode(editMode === "edit" ? "save" : "edit")} />
                             </div>
                         </div>
-                        <Table columns={columns} data={smallData} onRowSelected={(rows: Array<TableRow>) => {}} onRowExpanded={(rows: Array<TableRow>) => {}} editProps={editProps} />
+                        <Table columns={columns} data={smallEditableData} onRowSelected={(rows: Array<TableRow>) => {}} onRowExpanded={(rows: Array<TableRow>) => {}} editProps={editProps} />
                     </div>
 
                     <p>Here is an example with row selection and subRows</p>
@@ -279,12 +345,12 @@ const TablePage: React.FunctionComponent = () => {
                                 searchText: textBoxValue2,
                                 triggerSearchOn: "Submit",
                                 searchTriggered: searchTriggered,
-                                onSearch: (searchResults: Array<TableRow>) => {}
+                                onSearch: (searchResults: Array<TableRow>) => {},
                             }}
                             primaryActionButton={primaryButton}
                             actionLinks={actionLinks}
                             sortProps={{
-                                onAfterSorting: (rows: Array<TableRow>, sortByColumn: TableHeader) => {}
+                                onAfterSorting: (rows: Array<TableRow>, sortByColumn: TableHeader) => {},
                             }}
                             onRowSelected={(rows: Array<TableRow>) => {}}
                             onRowExpanded={(rows: Array<TableRow>) => {}}
@@ -300,7 +366,7 @@ const TablePage: React.FunctionComponent = () => {
 const dropDownList1: Array<DropdownItem> = [
     { value: "id", label: "Id" },
     { value: "firstName", label: "First Name" },
-    { value: "lastName", label: "Last Name" }
+    { value: "lastName", label: "Last Name" },
 ];
 
 export default TablePage;
