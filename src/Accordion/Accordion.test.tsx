@@ -1,21 +1,21 @@
 import React from "react";
 import { act } from "react-dom/test-utils";
 import { unmountComponentAtNode, render } from "react-dom";
-import { Accordion, AccrodionListItem } from "./Accordion";
+import { Accordion } from "./Accordion";
 import { loremIpsum } from "lorem-ipsum";
-import { deepCopy } from "@sebgroup/frontend-tools/dist/deepCopy";
+import { AccordionItem, AccordionItemProps } from "./AccordionItem";
 
 describe("Component: Accordion", () => {
     let container: HTMLDivElement = null;
-    const accordionList: Array<AccrodionListItem> = [
+    const accordionList: Array<AccordionItemProps> = [
         {
             header: loremIpsum({ units: "word" }),
-            content: loremIpsum({ units: "sentence" }),
+            children: loremIpsum({ units: "sentence" }),
         },
         {
             header: loremIpsum({ units: "word" }),
             subHeader: loremIpsum({ units: "word" }),
-            content: <p>{loremIpsum({ units: "paragraph" })}</p>,
+            children: <p>{loremIpsum({ units: "paragraph" })}</p>,
         },
     ];
 
@@ -30,75 +30,52 @@ describe("Component: Accordion", () => {
         container = null;
     });
 
-    it("Should render custom className and id", () => {
-        const className: string = "myAccordionClass";
-        const id: string = "myAccordionId";
+    it("Should render correctly", () => {
         act(() => {
-            render(<Accordion list={accordionList} className={className} id={id} />, container);
+            render(<Accordion />, container);
         });
-        expect(container.firstElementChild.classList.contains(className)).toBeTruthy();
+        expect(container.firstElementChild.classList.contains("seb")).toBeTruthy();
+        expect(container.firstElementChild.classList.contains("accordion")).toBeTruthy();
+        expect(container.firstElementChild.id).toBeDefined();
+    });
+
+    it("Should render with id, custom class and alternative style", () => {
+        const id: string = "myId";
+        const className: string = "myClassname";
+        act(() => {
+            render(<Accordion id={id} className={className} alternative />, container);
+        });
         expect(container.firstElementChild.id).toEqual(id);
-    });
-
-    it("Should render subheader is included in props and content as html", () => {
-        const newAccordionList: Array<AccrodionListItem> = deepCopy(accordionList);
-        newAccordionList[0].subHeader = "Test subheader";
-        act(() => {
-            render(<Accordion list={newAccordionList} />, container);
-        });
-        expect(container.querySelectorAll("h6").length).toBeGreaterThan(0);
-        expect(container.querySelectorAll(".content").item(1).firstElementChild instanceof HTMLParagraphElement).toBeTruthy();
-    });
-
-    it("Should toggle accordion when clicked, and toggled off when another item is clicked", () => {
-        act(() => {
-            render(<Accordion list={accordionList} />, container);
-        });
-        act(() => {
-            container
-                .querySelectorAll("button")
-                .item(0)
-                .dispatchEvent(new MouseEvent("click", { bubbles: true }));
-        });
-        expect(container.querySelectorAll(".card").item(0).classList.contains("collapsed")).toBeFalsy();
-
-        act(() => {
-            container
-                .querySelectorAll("button")
-                .item(1)
-                .dispatchEvent(new MouseEvent("click", { bubbles: true }));
-        });
-        expect(container.querySelectorAll(".card").item(0).classList.contains("collapsed")).toBeTruthy();
-        expect(container.querySelectorAll(".card").item(1).classList.contains("collapsed")).toBeFalsy();
-    });
-
-    it("Should untoggle accordion when clicked again", () => {
-        act(() => {
-            render(<Accordion list={accordionList} />, container);
-        });
-        // jest.spyOn(container.querySelector(".content-wrapper").firstElementChild, "scrollHeight", "get").mockImplementation(() => 200);
-        act(() => {
-            container
-                .querySelectorAll("button")
-                .item(0)
-                .dispatchEvent(new MouseEvent("click", { bubbles: true }));
-        });
-        expect(container.querySelectorAll(".card").item(0).classList.contains("collapsed")).toBeFalsy();
-
-        act(() => {
-            container
-                .querySelectorAll("button")
-                .item(0)
-                .dispatchEvent(new MouseEvent("click", { bubbles: true }));
-        });
-        expect(container.querySelectorAll(".card").item(0).classList.contains("collapsed")).toBeTruthy();
-    });
-
-    it("Should render alternative style", () => {
-        act(() => {
-            render(<Accordion list={accordionList} alternative />, container);
-        });
         expect(container.firstElementChild.classList.contains("alternative")).toBeTruthy();
+        expect(container.firstElementChild.classList.contains(className)).toBeTruthy();
+    });
+
+    it("Should toggle on and off an accordion item", () => {
+        act(() => {
+            render(
+                <Accordion>
+                    <AccordionItem header="First" />
+                    <AccordionItem header="Second" />
+                </Accordion>,
+                container
+            );
+        });
+        const firstButton: HTMLButtonElement = container.querySelectorAll<HTMLButtonElement>("button.btn-link").item(0);
+        act(() => {
+            firstButton.click();
+        });
+        expect(firstButton.getAttribute("aria-expanded")).toBe("true");
+        act(() => {
+            firstButton.click();
+        });
+        expect(firstButton.getAttribute("aria-expanded")).toBe("false");
+    });
+
+    it("Should render with a list", () => {
+        act(() => {
+            render(<Accordion list={accordionList} />, container);
+        });
+        expect(container.querySelectorAll(".card").length).toBeGreaterThan(0);
     });
 
     it("Should not crash when list prop is passed null or undefined", () => {
@@ -108,17 +85,39 @@ describe("Component: Accordion", () => {
         expect(container).toBeDefined();
     });
 
-    it("Should not crash when invalid header, subheader, and content is passed", () => {
+    it("Should allow rendering none elements", () => {
+        const text: string = "Some text";
         act(() => {
-            render(<Accordion list={[{ header: {}, subHeader: {}, content: {} }]} />, container);
+            render(<Accordion>{text}</Accordion>, container);
         });
-        expect(container).toBeDefined();
+        expect(container.firstElementChild.innerHTML).toEqual(text);
     });
 
-    it("Should not crash when passing primitive type values as header, subheader or content", () => {
-        act(() => {
-            render(<Accordion list={[{ header: "hello", subHeader: "hello", content: "hello" }]} />, container);
+    describe("Should forward the following props to children accordion items", () => {
+        const id: string = "myId";
+        let firstButton: HTMLButtonElement;
+
+        beforeEach(() => {
+            act(() => {
+                render(
+                    <Accordion id={id} defaultValue={0}>
+                        <AccordionItem header="First" />
+                        <AccordionItem header="Second" />
+                    </Accordion>,
+                    container
+                );
+            });
+            firstButton = container.querySelectorAll<HTMLButtonElement>("button").item(0);
         });
-        expect(container).toBeDefined();
+
+        test("paretnId", () => expect(container.querySelectorAll<HTMLDivElement>(".collapse").item(0).dataset.parent).toEqual(`#${id}`));
+        test("value", () => expect(firstButton.dataset.indexNumber).toEqual("0"));
+        test("active", () => expect(firstButton.getAttribute("aria-expanded")).toEqual("true"));
+        test("onToggle", () => {
+            act(() => {
+                firstButton.click();
+            });
+            expect(firstButton.getAttribute("aria-expanded")).toEqual("false");
+        });
     });
 });
