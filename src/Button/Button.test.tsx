@@ -1,7 +1,7 @@
 import * as React from "react";
 import { act } from "react-dom/test-utils";
 import { unmountComponentAtNode, render } from "react-dom";
-import { Button, ButtonTheme, ButtonSizes } from "./Button";
+import { Button, ButtonTheme, ButtonSize } from "./Button";
 
 type ButtonTestItem<T, K> = { value: T; expected: K };
 
@@ -58,12 +58,12 @@ describe("Component: Button", () => {
     });
 
     describe("Should render supported sizes", () => {
-        const list: Array<ButtonTestItem<ButtonSizes, string>> = [
+        const list: Array<ButtonTestItem<ButtonSize, string>> = [
             { value: "lg", expected: "btn-lg" },
             { value: "md", expected: "btn-md" },
             { value: "sm", expected: "btn-sm" },
         ];
-        list.map((item: ButtonTestItem<ButtonSizes, string>) => {
+        list.map((item: ButtonTestItem<ButtonSize, string>) => {
             it(`Size: ${item.value} - Expected to render (btn-${item.expected})`, () => {
                 act(() => {
                     render(<Button size={item.value} />, container);

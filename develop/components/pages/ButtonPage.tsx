@@ -1,5 +1,5 @@
-import React from "react";
-import { Button, ButtonTheme, ButtonSizes } from "../../../src/Button/Button";
+import React, { ReactHTML } from "react";
+import { Button, ButtonTheme, ButtonSize } from "../../../src/Button/Button";
 import { Loader } from "../../../src/Loader/Loader";
 import { RadioGroup, RadioListModel } from "../../../src/RadioGroup/RadioGroup";
 import { CheckBox } from "../../../src/CheckBox/CheckBox";
@@ -8,21 +8,45 @@ import PencilIcon from "../../assets/icons/pencil.svg";
 import { capitalize } from "@sebgroup/frontend-tools/dist/capitalize";
 const docMD: string = require("../../../src/Button/readme.md");
 
-const ButtonPage: React.FC = () => {
-    const [theme, setTheme] = React.useState<ButtonTheme>("primary");
-    const [block, setBlock] = React.useState<boolean>(false);
-    const [disabled, setDisabled] = React.useState<boolean>(false);
-    const [hasLoader, setHasLoader] = React.useState<boolean>(false);
-    const [hasIcon, setHasIcon] = React.useState<boolean>(false);
-    const [hasSize, setHasSize] = React.useState<boolean>(false);
-    const [size, setSize] = React.useState<ButtonSizes>(null);
+type ButtonPageState = {
+    theme: ButtonTheme;
+    block: boolean;
+    disabled: boolean;
+    hasLoader: boolean;
+    hasIcon: boolean;
+    hasSize: boolean;
+    size: ButtonSize;
+};
 
-    const sizeCheckboxChanged: React.ChangeEventHandler<HTMLInputElement> = React.useCallback(
+const ButtonPage: React.FC = () => {
+    const [state, setState] = React.useState<ButtonPageState>({
+        theme: "primary",
+        block: false,
+        disabled: false,
+        hasLoader: false,
+        hasIcon: false,
+        hasSize: false,
+        size: null,
+    });
+
+    const changeHandler: React.ChangeEventHandler<HTMLInputElement> = React.useCallback(
         (e: React.ChangeEvent<HTMLInputElement>) => {
-            setHasSize(e.target.checked);
-            !e.target.checked && setSize(null); // Reset size
+            const newState: ButtonPageState = { ...state };
+            switch (e.target.type) {
+                case "radio":
+                    newState[e.target.name] = e.target.value;
+                    break;
+                case "checkbox":
+                    newState[e.target.name] = e.target.checked;
+                    break;
+            }
+            /** Reset size */
+            if (e.target.name === "hasSize" && !e.target.checked) {
+                newState.size = null;
+            }
+            setState(newState);
         },
-        [setHasSize, setSize]
+        [state]
     );
 
     return (
@@ -36,11 +60,11 @@ const ButtonPage: React.FC = () => {
 
                 <div className="info">
                     <h2>Output</h2>
-                    <div className={"result p-3" + (theme === "light" ? " bg-dark" : "") + (theme === "dark" ? " bg-warning" : "")}>
-                        <Button title="Click me" theme={theme} onClick={null} disabled={disabled} block={block} size={size}>
-                            {capitalize(theme).replace("-", " ")}
-                            {hasIcon && <PencilIcon className="ml-2" fill="currentColor" />}
-                            {hasLoader && <Loader toggle={true} />}
+                    <div className={"result p-3" + (state.theme === "light" ? " bg-dark" : "") + (state.theme === "dark" ? " bg-warning" : "")}>
+                        <Button title="Click me" theme={state.theme} onClick={null} disabled={state.disabled} block={state.block} size={state.size}>
+                            {capitalize(state.theme).replace("-", " ")}
+                            {state.hasIcon && <PencilIcon className="ml-2" fill="currentColor" />}
+                            {state.hasLoader && <Loader toggle={true} />}
                         </Button>
                     </div>
 
@@ -48,16 +72,16 @@ const ButtonPage: React.FC = () => {
                     <div className="row">
                         <div className="col">
                             <p>Themes</p>
-                            <RadioGroup name="theme" list={themeList} value={theme} onChange={(e) => setTheme(e.currentTarget.value as ButtonTheme)} condensed />
+                            <RadioGroup name="theme" list={themeList} value={state.theme} onChange={changeHandler} condensed />
                         </div>
                         <div className="col">
                             <p>Options</p>
-                            <CheckBox label="Disabled" name="disabled" checked={disabled} onChange={(e) => setDisabled(e.target.checked)} condensed />
-                            <CheckBox label="Block" name="block" checked={block} onChange={(e) => setBlock(e.target.checked)} condensed />
-                            <CheckBox label="Loader" name="loader" checked={hasLoader} onChange={(e) => setHasLoader(e.target.checked)} condensed />
-                            <CheckBox label="Icon" name="icon" checked={hasIcon} onChange={(e) => setHasIcon(e.target.checked)} condensed />
-                            <CheckBox label="Size" name="size" checked={hasSize} onChange={sizeCheckboxChanged} condensed />
-                            {hasSize && <RadioGroup className="pl-4" list={sizeList} value={size} condensed name="button-size" onChange={(e) => setSize(e.target.value as ButtonSizes)} />}
+                            <CheckBox label="Disabled" name="disabled" checked={state.disabled} onChange={changeHandler} condensed />
+                            <CheckBox label="Block" name="block" checked={state.block} onChange={changeHandler} condensed />
+                            <CheckBox label="Loader" name="hasLoader" checked={state.hasLoader} onChange={changeHandler} condensed />
+                            <CheckBox label="Icon" name="hasIcon" checked={state.hasIcon} onChange={changeHandler} condensed />
+                            <CheckBox label="Size" name="hasSize" checked={state.hasSize} onChange={changeHandler} condensed />
+                            {state.hasSize && <RadioGroup className="pl-4" list={sizeList} value={state.size} condensed name="size" onChange={changeHandler} />}
                         </div>
                     </div>
                 </div>
@@ -76,7 +100,7 @@ const themeList: Array<RadioListModel<ButtonTheme>> = [
     { label: "Light", value: "light" },
     { label: "Link", value: "link" },
 ];
-const sizeList: Array<RadioListModel<ButtonSizes>> = [
+const sizeList: Array<RadioListModel<ButtonSize>> = [
     { label: "Small", value: "sm" },
     { label: "Medium", value: "md" },
     { label: "Large", value: "lg" },

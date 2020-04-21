@@ -97,7 +97,7 @@
             "filePath": "pages/ButtonPage"
         },
         {
-            "name": "ButtonGroup",
+            "name": "Button Group",
             "path": "/buttongroup",
             "filePath": "pages/ButtonGroupPage"
         },

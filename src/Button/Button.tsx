@@ -2,14 +2,14 @@ import React from "react";
 import classnames from "classnames";
 
 export type ButtonTheme = "primary" | "secondary" | "danger" | "outline-primary" | "outline-danger" | "dark" | "light" | "link";
-export type ButtonSizes = "lg" | "md" | "sm";
+export type ButtonSize = "lg" | "md" | "sm";
 
 export type ButtonProps = React.PropsWithChildren<
     React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement> & {
         /** Button Theme */
         theme?: ButtonTheme;
         /** Button size */
-        size?: ButtonSizes;
+        size?: ButtonSize;
         /** Fill the parent width */
         block?: boolean;
     }
