@@ -1,4 +1,4 @@
-import React, { HTMLAttributes } from "react";
+import React from "react";
 import { randomId } from "@sebgroup/frontend-tools/dist/randomId";
 import classnames from "classnames";
 import { AccordionItemProps, AccordionItem } from "./AccordionItem";
