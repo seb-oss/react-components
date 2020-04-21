@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import { Notification, NotificationAction } from "../../../src/Notification/Notification";
 import { Button } from "../../../src/Button/Button";
 import Highlight from "react-highlight";
@@ -38,7 +38,7 @@ const NotificationPage: React.FunctionComponent = () => {
                             dismissable={true}
                             onDismiss={() => setNotification1Toggle(false)}
                         />
-                        <Button label="Toggle" onClick={() => setNotification1Toggle(!notification1Toggle)} />
+                        <Button onClick={() => setNotification1Toggle(!notification1Toggle)}>Toggle</Button>
                     </div>
                     <p>Notification with actions</p>
                     <div className="result">
@@ -52,7 +52,7 @@ const NotificationPage: React.FunctionComponent = () => {
                             position="bottom-right"
                             theme="primary"
                         />
-                        <Button label="With actions" onClick={() => setNotification2Toggle(!notification2Toggle)} />
+                        <Button onClick={() => setNotification2Toggle(!notification2Toggle)}>With actions</Button>
                     </div>
                     <p>Bar notification</p>
                     <div className="result">
@@ -81,7 +81,7 @@ const NotificationPage: React.FunctionComponent = () => {
                                 )}
                             </div>
                         </Notification>
-                        <Button label="Bar" onClick={() => setNotification3Toggle(!notification3Toggle)} />
+                        <Button onClick={() => setNotification3Toggle(!notification3Toggle)}>Bar</Button>
                     </div>
                 </div>
             </div>

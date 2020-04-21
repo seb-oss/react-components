@@ -1,44 +1,39 @@
 import * as React from "react";
-import { shallow, ShallowWrapper, ReactWrapper, mount } from "enzyme";
-import { Button, ButtonProps, ButtonTheme, ButtonSizes } from "./Button";
+import { act } from "react-dom/test-utils";
+import { unmountComponentAtNode, render } from "react-dom";
+import { Button, ButtonTheme, ButtonSize } from "./Button";
 
 type ButtonTestItem<T, K> = { value: T; expected: K };
 
 describe("Component: Button", () => {
-    let wrapper: ShallowWrapper<ButtonProps>;
-    let mountedWrapper: ReactWrapper<ButtonProps>;
-
-    const props: ButtonProps = {
-        label: "label",
-        onClick: jest.fn(),
-    };
+    let container: HTMLDivElement = null;
 
     beforeEach(() => {
-        wrapper = shallow(<Button {...props} />);
-        mountedWrapper = mount(<Button {...props} />);
+        container = document.createElement("div");
+        document.body.appendChild(container);
     });
 
-    it("Should render", () => expect(wrapper).toBeDefined());
+    afterEach(() => {
+        unmountComponentAtNode(container);
+        container.remove();
+        container = null;
+    });
 
-    it("Should render label correctly", () => expect(wrapper.find(".button-content").children(".button-label").text()).toEqual("label"));
-
-    it("Should fire onClick callback when clicked", () => {
-        const onClick: jest.Mock = jest.fn();
-        wrapper.setProps({ onClick });
-        wrapper.find("button").simulate("click");
-        expect(onClick).toHaveBeenCalled();
+    it("Should render", () => {
+        const text: string = "Test";
+        act(() => {
+            render(<Button>{text}</Button>, container);
+        });
+        expect(container.firstElementChild).toBeDefined();
+        expect(container.firstElementChild.innerHTML).toEqual(text);
     });
 
     it("Should render custom className", () => {
         const className: string = "myButtonClass";
-        mountedWrapper = mount(<Button {...props} className={className} />);
-        expect(mountedWrapper.hasClass(className)).toBeTruthy();
-    });
-
-    it("Should pass id", () => {
-        const id: string = "myButtonId";
-        wrapper.setProps({ id });
-        expect(wrapper.find(`#${id}`).length).toBeTruthy();
+        act(() => {
+            render(<Button className={className} />, container);
+        });
+        expect(container.firstElementChild.classList.contains(className)).toBeTruthy();
     });
 
     describe("Should render supported themes", () => {
@@ -46,69 +41,48 @@ describe("Component: Button", () => {
             { value: "primary", expected: "btn-primary" },
             { value: "outline-primary", expected: "btn-outline-primary" },
             { value: "secondary", expected: "btn-secondary" },
-            { value: "ghost-dark", expected: "btn-ghost-dark" },
-            { value: "ghost-light", expected: "btn-ghost-light" },
-            { value: "anchor", expected: "btn-link" },
+            { value: "dark", expected: "btn-dark" },
+            { value: "light", expected: "btn-light" },
             { value: "link", expected: "btn-link" },
             { value: "danger", expected: "btn-danger" },
-            { value: "unsupported-theme" as any, expected: "btn-primary" },
+            { value: "outline-danger", expected: "btn-outline-danger" },
         ];
         list.map((item: ButtonTestItem<ButtonTheme, string>) => {
-            it(`Theme: ${item.value} - Expected to render (btn-${item.expected})`, () => {
-                mountedWrapper = mount(<Button {...props} theme={item.value} />);
-                expect(mountedWrapper.hasClass(item.expected));
+            it(`Size: ${item.value} - Expected to render (${item.expected})`, () => {
+                act(() => {
+                    render(<Button theme={item.value} />, container);
+                });
+                expect(container.firstElementChild.classList.contains(item.expected)).toBeTruthy();
             });
         });
     });
 
     describe("Should render supported sizes", () => {
-        const list: Array<ButtonTestItem<ButtonSizes, string>> = [
+        const list: Array<ButtonTestItem<ButtonSize, string>> = [
             { value: "lg", expected: "btn-lg" },
             { value: "md", expected: "btn-md" },
             { value: "sm", expected: "btn-sm" },
         ];
-        list.map((item: ButtonTestItem<ButtonSizes, string>) => {
+        list.map((item: ButtonTestItem<ButtonSize, string>) => {
             it(`Size: ${item.value} - Expected to render (btn-${item.expected})`, () => {
-                mountedWrapper = mount(<Button {...props} size={item.value} />);
-                expect(mountedWrapper.find("button").hasClass(item.expected));
+                act(() => {
+                    render(<Button size={item.value} />, container);
+                });
+                expect(container.firstElementChild.classList.contains(item.expected)).toBeTruthy();
             });
         });
     });
 
-    it("Should pass name, title, disabled to native button element", () => {
-        const name: string = "myButtonName";
-        const title: string = "myButtonTitle";
-        wrapper.setProps({ name, title, disabled: true });
-        expect(wrapper.find("button").getElement().props.name).toEqual(name);
-        expect(wrapper.find("button").getElement().props.title).toEqual(title);
-        expect(wrapper.find("button").getElement().props.disabled).toEqual(true);
-    });
-
     it("Should render icon inside button", () => {
-        const icon: React.ReactElement<SVGElement> = <svg className="customIcon" />;
-        mountedWrapper = mount(<Button {...props} icon={icon} />);
-        expect(mountedWrapper.find("button").hasClass("icon-left")).toBeTruthy();
-        expect(mountedWrapper.find(".svg-holder").length).toBe(1);
-        expect(mountedWrapper.find(".svg-holder").children("svg.customIcon")).toBeDefined();
-        mountedWrapper = mount(<Button {...props} icon={icon} iconPosition="right" />);
-        expect(mountedWrapper.find("button").hasClass("icon-right")).toBeTruthy();
+        act(() => {
+            render(
+                <Button>
+                    <svg id="mySvg" />
+                </Button>,
+                container
+            );
+        });
+        expect(container.firstElementChild.firstElementChild).toBeDefined();
+        expect(container.firstElementChild.firstElementChild.id).toEqual("mySvg");
     });
-
-    it("Should render icon to the left as default if no position is passed", () => {
-        const icon: React.ReactElement<SVGElement> = <svg />;
-        wrapper.setProps({ icon: icon });
-        expect(wrapper.hasClass("icon-left"));
-    });
-
-    it("Should render children in replacement for icons", () => {
-        const svgId: string = "my-test-svg";
-        wrapper = shallow(
-            <Button {...props} iconPosition="left">
-                <svg id={svgId} />
-            </Button>
-        );
-        expect(wrapper.find(`#${svgId}`).length).toBeDefined();
-    });
-
-    afterEach(() => mountedWrapper.unmount());
 });
