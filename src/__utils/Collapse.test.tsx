@@ -30,4 +30,9 @@ describe("Util: Animations", () => {
         });
         expect(container.firstElementChild.getAttribute("style")).toContain("height: 200px; opacity: 1;");
     });
+
+    it("Should not change the height if data-toggle value is not passed", () => {
+        act(() => { render(<Collapse><div>Test</div></Collapse>, container); });
+        expect(container.firstElementChild.getAttribute("style")).toContain("height: 0px; opacity: 0;");
+    });
 });

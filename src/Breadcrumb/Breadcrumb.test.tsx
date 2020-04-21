@@ -30,14 +30,14 @@ describe("Component: Breadcrumb", () => {
         expect(container.firstElementChild.firstElementChild.classList.contains("breadcrumb")).toBeTruthy();
     });
 
-    it("Should render with a list with data-value", () => {
+    it("Should render with a list with data-index-number", () => {
         act(() => {
             render(<Breadcrumb list={breadcrumbList1} />, container);
         });
         expect(container.firstElementChild.firstElementChild.children.length).toEqual(breadcrumbList1.length);
         expect(container.firstElementChild.firstElementChild.firstElementChild.tagName).toEqual("LI");
         expect(container.firstElementChild.firstElementChild.firstElementChild.firstElementChild.tagName).toEqual("A");
-        expect(container.firstElementChild.firstElementChild.firstElementChild.firstElementChild.getAttribute("data-value")).toEqual("0");
+        expect(container.firstElementChild.firstElementChild.firstElementChild.firstElementChild.getAttribute("data-index-number")).toEqual("0");
     });
 
     it("Should render BreadcrumbItem directly", () => {
@@ -68,5 +68,27 @@ describe("Component: Breadcrumb", () => {
             items[2].firstElementChild.dispatchEvent(new MouseEvent("click", { bubbles: true }));
         });
         expect(onNavigate).toBeCalledTimes(2);
+    });
+
+    it("Should allow rendering none elements", () => {
+        const text: string = "Some text";
+        act(() => {
+            render(<Breadcrumb>{text}</Breadcrumb>, container);
+        });
+        expect(container.firstElementChild.firstElementChild.innerHTML).toEqual(text);
+    });
+
+    it("Should set active to the last child even when rendering a list and children at the same time", () => {
+        act(() => {
+            render(
+                <Breadcrumb list={breadcrumbList1}>
+                    <BreadcrumbItem>First</BreadcrumbItem>
+                    <BreadcrumbItem>Second</BreadcrumbItem>
+                </Breadcrumb>,
+                container
+            );
+        });
+        const elements: NodeListOf<HTMLLIElement> = container.querySelectorAll<HTMLLIElement>(".breadcrumb-item");
+        elements.forEach((element: HTMLLIElement, i: number) => expect(element.classList.contains("active")).toBe(i === elements.length - 1));
     });
 });

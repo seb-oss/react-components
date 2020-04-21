@@ -54,7 +54,7 @@ describe("Component: Accordion", () => {
 
     it("Should be default to expanded when defaultValue is set to true", () => {
         act(() => {
-            render(<AccordionItem header="test" defaultValue="true" />, container);
+            render(<AccordionItem header="test" defaultChecked />, container);
         });
         expect(container.firstElementChild.classList.contains("collapsed")).toBeFalsy();
         expect(container.firstElementChild.lastElementChild.classList.contains("collapsed")).toBeFalsy();

@@ -22,10 +22,18 @@ const AccordionPage: React.FC = () => {
                     <p>Here is a sample output</p>
                     <div className="result wide">
                         <Accordion>
-                            <AccordionItem header="Accordion Header" subHeader="Accordion Sub-header">
+                            <AccordionItem
+                                defaultChecked
+                                header="Accordion Header"
+                                subHeader={
+                                    <span>
+                                        Expanded by default when setting <Code>defaultChecked</Code> to true in a child <Code>AccordionItem</Code>
+                                    </span>
+                                }
+                            >
                                 {lists[0][0].children}
                             </AccordionItem>
-                            <AccordionItem header={lists[0][1].header}>{lists[0][1].children}</AccordionItem>
+                            <AccordionItem header="Accordion header">{lists[0][1].children}</AccordionItem>
                             <AccordionItem header={lists[0][2].header}>{lists[0][2].children}</AccordionItem>
                         </Accordion>
                     </div>
@@ -42,10 +50,20 @@ const AccordionPage: React.FC = () => {
 
                     <p>Alternative theme</p>
                     <div className="result wide">
-                        <Accordion alternative defaultValue={0}>
+                        <Accordion alternative defaultValue={3}>
                             {lists[3].map((item: AccordionItemProps, i: number) => {
                                 return <AccordionItem key={i} {...item} />;
                             })}
+                            <AccordionItem
+                                header="Accordion header"
+                                subHeader={
+                                    <span>
+                                        Expanded by default when setting <Code>defaultValue</Code> to <Code>3</Code> (index) in the parent <Code>Accordion</Code>
+                                    </span>
+                                }
+                            >
+                                {lists[3][2].children}
+                            </AccordionItem>
                         </Accordion>
                     </div>
                 </div>
@@ -53,6 +71,8 @@ const AccordionPage: React.FC = () => {
         </div>
     );
 };
+
+const Code: React.FC = (props) => <code className="d-inline">{props.children}</code>;
 
 function generateList(): Array<AccordionItemProps> {
     return [

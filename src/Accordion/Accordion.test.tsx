@@ -64,11 +64,11 @@ describe("Component: Accordion", () => {
         act(() => {
             firstButton.click();
         });
-        expect(firstButton.getAttribute("aria-expanded")).toBe("true");
+        expect(JSON.parse(firstButton.getAttribute("aria-expanded"))).toBeTruthy();
         act(() => {
             firstButton.click();
         });
-        expect(firstButton.getAttribute("aria-expanded")).toBe("false");
+        expect(JSON.parse(firstButton.getAttribute("aria-expanded"))).toBeFalsy();
     });
 
     it("Should render with a list", () => {
@@ -112,12 +112,54 @@ describe("Component: Accordion", () => {
 
         test("paretnId", () => expect(container.querySelectorAll<HTMLDivElement>(".collapse").item(0).dataset.parent).toEqual(`#${id}`));
         test("value", () => expect(firstButton.dataset.indexNumber).toEqual("0"));
-        test("active", () => expect(firstButton.getAttribute("aria-expanded")).toEqual("true"));
+        test("active", () => expect(JSON.parse(firstButton.getAttribute("aria-expanded"))).toBeTruthy());
         test("onToggle", () => {
             act(() => {
                 firstButton.click();
             });
-            expect(firstButton.getAttribute("aria-expanded")).toEqual("false");
+            expect(JSON.parse(firstButton.getAttribute("aria-expanded"))).toBeFalsy();
         });
+    });
+
+    describe("Should set default expanded using default value and default checked", () => {
+        test("defaultValue", () => {
+            act(() => {
+                render(
+                    <Accordion defaultValue={0}>
+                        <AccordionItem header="First" />
+                        <AccordionItem header="Second" />
+                    </Accordion>,
+                    container
+                );
+            });
+            const firstCollapse: HTMLDivElement = container.querySelectorAll<HTMLDivElement>(".card-body").item(0);
+            expect(JSON.parse(firstCollapse.dataset.toggle)).toBeTruthy();
+        });
+        test("defaultValue", () => {
+            act(() => {
+                render(
+                    <Accordion>
+                        <AccordionItem defaultChecked header="First" />
+                        <AccordionItem header="Second" />
+                    </Accordion>,
+                    container
+                );
+            });
+            const firstCollapse: HTMLDivElement = container.querySelectorAll<HTMLDivElement>(".card-body").item(0);
+            expect(JSON.parse(firstCollapse.dataset.toggle)).toBeTruthy();
+        });
+    });
+
+    it("Should not expand any accordion item when defaultValue is set to null", () => {
+        act(() => {
+            render(
+                <Accordion defaultValue={null}>
+                    <AccordionItem header="First" />
+                    <AccordionItem header="Second" />
+                </Accordion>,
+                container
+            );
+        });
+        container.querySelectorAll<HTMLDivElement>(".card-body").forEach((element: HTMLDivElement) => expect(JSON.parse(element.dataset.toggle)).toBeFalsy());
     });
 });

@@ -7,7 +7,9 @@ export const Collapse: React.FC<CollapseProps> = React.memo((props: CollapseProp
     const [height, setHeight] = React.useState<number>(0);
 
     React.useEffect(() => {
-        collapseRef && setHeight(JSON.parse(props["data-toggle"]) ? collapseRef.current.scrollHeight : 0);
+        if (collapseRef && props["data-toggle"] !== undefined) {
+            setHeight(JSON.parse(props["data-toggle"]) ? collapseRef.current.scrollHeight : 0);
+        }
     }, [props.children, props["data-toggle"], collapseRef]);
 
     return (

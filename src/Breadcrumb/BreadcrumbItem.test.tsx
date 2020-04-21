@@ -28,32 +28,31 @@ describe("Component: Breadcrumb", () => {
         expect(container.firstElementChild.firstElementChild.innerHTML).toEqual("Home");
     });
 
-    it("Should pass data-value and title to anchor tag, pass href and onNavigate if not last item", () => {
+    it("Should pass data-index-number and title to anchor tag, pass href and onNavigate if not last item", () => {
         const href: string = "#/home";
         const title: string = "myTitle";
         const onNavigate: jest.Mock = jest.fn();
         act(() => {
             render(
                 <Breadcrumb>
-                    <BreadcrumbItem href={href} title={title} data-value="12" onNavigate={onNavigate}>
+                    <BreadcrumbItem href={href} title={title} onNavigate={onNavigate}>
                         First
                     </BreadcrumbItem>
-                    <BreadcrumbItem href={href} title={title} data-value="12" onNavigate={onNavigate}>
+                    <BreadcrumbItem href={href} title={title} onNavigate={onNavigate}>
                         Second
                     </BreadcrumbItem>
                 </Breadcrumb>,
                 container
             );
         });
-        const anchor1: HTMLAnchorElement = container.querySelectorAll("a").item(0);
-        const anchor2: HTMLAnchorElement = container.querySelectorAll("a").item(1);
-        expect(anchor1.title).toEqual(title);
-        expect(anchor1.hash).toEqual(href);
-        expect(anchor1.dataset.value).toEqual("12");
-        expect(anchor2.hash).toBe("");
+        const links: NodeListOf<HTMLAnchorElement> = container.querySelectorAll<HTMLAnchorElement>("a");
+        expect(links.item(0).title).toEqual(title);
+        expect(links.item(0).hash).toEqual(href);
+        expect(links.item(0).dataset.indexNumber).toEqual("0");
+        expect(links.item(1).hash).toBe("");
         act(() => {
-            anchor1.dispatchEvent(new MouseEvent("click", { bubbles: true }));
-            anchor2.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+            links.item(0).click();
+            links.item(1).click();
         });
         expect(onNavigate).toBeCalledTimes(1);
     });
@@ -62,16 +61,16 @@ describe("Component: Breadcrumb", () => {
         act(() => {
             render(<TestBed />, container);
         });
-        let items: NodeListOf<HTMLLIElement> = container.querySelectorAll(".breadcrumb-item");
+        let items: NodeListOf<HTMLLIElement> = container.querySelectorAll<HTMLLIElement>(".breadcrumb-item");
         expect(items[0].classList.contains("active")).toBeFalsy();
         expect(items[1].classList.contains("active")).toBeTruthy();
         expect(items[2]).toBeUndefined();
 
         act(() => {
-            container.querySelector("#trigger").dispatchEvent(new MouseEvent("click", { bubbles: true }));
+            container.querySelector<HTMLInputElement>("#trigger").click();
         });
 
-        items = container.querySelectorAll(".breadcrumb-item");
+        items = container.querySelectorAll<HTMLLIElement>(".breadcrumb-item");
         expect(items[0].classList.contains("active")).toBeFalsy();
         expect(items[1].classList.contains("active")).toBeFalsy();
         expect(items[2].classList.contains("active")).toBeTruthy();
@@ -86,11 +85,7 @@ const TestBed: React.FC = () => {
             <input id="trigger" type="checkbox" checked={value} onChange={(e) => setValue(e.target.checked)} />
             <Breadcrumb>
                 <BreadcrumbItem>First</BreadcrumbItem>
-                {/*
-                    The title is to trigger the memo component to recalculate
-                    The change works perfectly outside test environment
-                */}
-                <BreadcrumbItem title={value ? "title" : ""}>Second</BreadcrumbItem>
+                <BreadcrumbItem>Second</BreadcrumbItem>
                 {value && <BreadcrumbItem>Third</BreadcrumbItem>}
             </Breadcrumb>
         </div>

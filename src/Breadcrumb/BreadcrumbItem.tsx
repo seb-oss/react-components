@@ -17,26 +17,12 @@ export const BreadcrumbItem: React.FC<BreadcrumbItemProps> = React.memo(({ href,
     const [active, setActive] = React.useState<boolean>(false);
     const [className, setClassName] = React.useState<string>("breadcrumb-item");
 
-    const setActiveIfLast = React.useCallback(
-        (element: HTMLLIElement) => {
-            if (element) {
-                if (element.parentNode.lastChild === element && !active) {
-                    setActive(true);
-                } else if (element.parentNode.lastChild !== element && active) {
-                    setActive(false);
-                }
-            }
-        },
-        [active, setActive]
-    );
-
-    React.useEffect(() => {
-        setClassName(classnames(["breadcrumb-item", { active }, props.className]));
-    }, [active, props.className]);
+    React.useEffect(() => setActive(props["data-active"] !== undefined && JSON.parse(props["data-active"])), [props["data-active"]]);
+    React.useEffect(() => setClassName(classnames(["breadcrumb-item", { active }, props.className])), [active, props.className]);
 
     return (
-        <li {...props} className={className} aria-current={active ? props["aria-current"] || "page" : null} ref={(el) => setActiveIfLast(el)}>
-            <a title={props.title} href={active ? null : href || "#"} data-value={props["data-value"]} onClick={!active ? onNavigate : null}>
+        <li {...props} className={className} aria-current={active ? props["aria-current"] || "page" : null}>
+            <a title={props.title} href={active ? null : href || "#"} data-index-number={props["data-index-number"]} onClick={!active ? onNavigate : null}>
                 {props.children}
             </a>
         </li>
