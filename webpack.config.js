@@ -6,6 +6,17 @@ const CaseSensitivePathsPlugin = require("case-sensitive-paths-webpack-plugin");
 
 const buildType = process.argv[2].replace(/\-/g, "");
 
+function svgrIconTemplate({ template }, opts, { imports, interfaces, componentName, props, jsx, exports }) {
+    const plugins = ["jsx"];
+    opts.typescript && plugins.push("typescript");
+    jsx.openingElement.attributes.push({
+        type: "JSXAttribute",
+        name: { type: "JSXIdentifier", name: "fill" },
+        value: { type: "StringLiteral", value: "currentColor" },
+    });
+    return template.smart({ plugins }).ast`${imports}\n${interfaces}\nfunction ${componentName}(${props}) {\nreturn ${jsx};\n}\n${exports}`;
+}
+
 // Common Config
 let buildConfig = {
     devtool: false,
@@ -24,7 +35,7 @@ let buildConfig = {
             { test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/, loader: "file-loader?limit=10000&mimetype=application/octet-stream&name=assets/fonts/[name].[ext]" },
             { test: /\.md$/, loaders: ["html-loader", "markdown-loader"] },
             { test: /\.svg$/, loader: "@svgr/webpack", include: [path.resolve(__dirname, "develop/assets/svgs")], options: { memo: true } },
-            { test: /\.svg$/, loader: "@svgr/webpack", include: [path.resolve(__dirname, "develop/assets/icons")], options: { icon: true, memo: true } },
+            { test: /\.svg$/, loader: "@svgr/webpack", include: [path.resolve(__dirname, "develop/assets/icons")], options: { memo: true, icon: true, template: svgrIconTemplate } },
         ],
     },
     node: {
