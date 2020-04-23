@@ -1,54 +1,26 @@
-import * as React from "react";
-import { shallow, mount, ShallowWrapper, ReactWrapper } from "enzyme";
-import { Carousel, CarouselItem, CarouselProps } from "./Carousel";
+import React from "react";
+import { act } from "react-dom/test-utils";
+import { unmountComponentAtNode, render } from "react-dom";
+import { Carousel } from "./Carousel";
 
 describe("Component: Carousel", () => {
-    const carouselList: Array<CarouselItem> = [
-        { title: "title", desc: "desc", image: "imagepath" },
-        { title: "title", desc: "desc", image: "imagepath" },
-        { title: "title", desc: "desc", image: "imagepath" },
-    ];
-    let wrapper: ShallowWrapper<CarouselProps>;
+    let container: HTMLDivElement = null;
 
     beforeEach(() => {
-        wrapper = shallow(<Carousel list={carouselList} />);
+        container = document.createElement("div");
+        document.body.appendChild(container);
+    });
+
+    afterEach(() => {
+        unmountComponentAtNode(container);
+        container.remove();
+        container = null;
     });
 
     it("Should render", () => {
-        expect(wrapper).toBeDefined();
-    });
-
-    it("Should render and pass custom class and id", () => {
-        const className: string = "myCarouselClass";
-        const id: string = "myCarouselId";
-        wrapper.setProps({ className, id });
-        expect(wrapper.find(`.${className}`).length).toBeTruthy();
-        expect(wrapper.find(`#${id}`).length).toBeTruthy();
-    });
-
-    it("Should trigger change event when swiper arrow is clicked", async (done: jest.DoneCallback) => {
-        expect.assertions(1);
-        const onChange: jest.Mock = jest.fn();
-        const mountedWrapper: ReactWrapper<CarouselProps> = mount(<Carousel list={carouselList} afterChange={onChange} />);
-        mountedWrapper.find("button.slick-next").simulate("click");
-
-        await setTimeout(() => {
-            expect(onChange).toBeCalled();
-            mountedWrapper.unmount();
-            done();
-        }, 1000);
-    });
-
-    it("Should override the default values of autoplay and autoplayspeed", async (done) => {
-        expect.assertions(3);
-        const onChange: jest.Mock = jest.fn();
-        const mountedWrapper: ReactWrapper<CarouselProps> = mount(<Carousel list={carouselList} afterChange={onChange} autoPlay={true} autoPlaySpeed={500} infinite={true} />);
-        expect(mountedWrapper.prop("autoPlay")).toEqual(true);
-        expect(mountedWrapper.prop("autoPlaySpeed")).toEqual(500);
-        await setTimeout(() => {
-            expect(onChange).toBeCalled();
-            mountedWrapper.unmount();
-            done();
-        }, 2000);
+        act(() => {
+            render(<Carousel />, container);
+        });
+        expect(container).toBeDefined();
     });
 });

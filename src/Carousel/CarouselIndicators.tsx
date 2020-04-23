@@ -2,9 +2,13 @@ import React from "react";
 import classnames from "classnames";
 
 interface CarouselIndicatorsProps extends React.DetailedHTMLProps<React.OlHTMLAttributes<HTMLOListElement>, HTMLOListElement> {
+    /** Active state. (Managed by Carousel) */
     active?: number;
+    /** The full size of the carousel. (Managed by Carousel) */
     size?: number;
+    /** The parent ID, used to enable accessibility features. (Managed by Carousel) */
     parentId?: string;
+    /** A event handler triggered when and indicator is clicked. (Managed by Carousel) */
     onIndicatorClicked?: React.MouseEventHandler<HTMLLIElement>;
 }
 
