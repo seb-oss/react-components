@@ -1,11 +1,7 @@
 import * as React from "react";
-import { Carousel, CarouselItem } from "../../../src/Carousel/Carousel";
+import { Carousel } from "../../../src/Carousel/Carousel";
 import Highlight from "react-highlight";
 const docMD: string = require("../../../src/Carousel/readme.md");
-
-const firstImg: string = require("../../assets/images/cat-pet-animal-1.jpeg");
-const secondImg: string = require("../../assets/images/cat-pet-animal-2.jpg");
-const thirdImg: string = require("../../assets/images/cat-pet-animal-3.jpg");
 
 const CarouselPage: React.FunctionComponent = () => {
     return (
@@ -21,37 +17,22 @@ const CarouselPage: React.FunctionComponent = () => {
                     <h2>Output</h2>
                     <p>Here are sample outputs</p>
                     <div className="result wide">
-                        <Carousel
-                            list={carouselList}
-                            afterChange={() => {
-                                console.log("changed");
-                            }}
-                            autoPlay={true}
-                            infinite={true}
-                        />
+                        <Carousel infinite showIndicators>
+                            <div className="p-5 bg-dark">
+                                <h1 className="text-light text-center">First</h1>
+                            </div>
+                            <div className="p-5 bg-danger">
+                                <h1 className="text-light text-center">Second</h1>
+                            </div>
+                            <div className="p-5 bg-warning">
+                                <h1 className="text-light text-center">Third</h1>
+                            </div>
+                        </Carousel>
                     </div>
                 </div>
             </div>
         </div>
     );
 };
-
-const carouselList: Array<CarouselItem> = [
-    {
-        title: "Ipsum consequat nisl",
-        desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-        image: firstImg,
-    },
-    {
-        title: "Interdum velit euismod",
-        desc: "Lectus quam id leo in",
-        image: secondImg,
-    },
-    {
-        title: "Risus in hendrerit",
-        desc: "Augue eget arcu dictum varius",
-        image: thirdImg,
-    },
-];
 
 export default CarouselPage;
