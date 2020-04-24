@@ -1,11 +1,15 @@
-import * as React from "react";
+import React from "react";
 import { Dialogue } from "../../../src/Dialogue/Dialogue";
 import { Button } from "../../../src/Button/Button";
+import { loremIpsum } from "lorem-ipsum";
 import Highlight from "react-highlight";
 const docMD: string = require("../../../src/Dialogue/readme.md");
 
-const DialoguePage: React.FunctionComponent = () => {
+const DialoguePage: React.FC = () => {
     const [dialogue, setDialogue] = React.useState<boolean>(false);
+
+    const show: VoidFunction = React.useCallback(() => setDialogue(true), [setDialogue]);
+    const hide: VoidFunction = React.useCallback(() => setDialogue(false), [setDialogue]);
 
     return (
         <div className="route-template container">
@@ -20,18 +24,18 @@ const DialoguePage: React.FunctionComponent = () => {
                     <h2>Output</h2>
                     <p>Here are sample outputs</p>
                     <div className="result">
-                        <Button label="Trigger dialogue" onClick={() => setDialogue(true)} />
+                        <Button onClick={show}>Trigger dialogue</Button>
                         <Dialogue
                             header="Are you sure?"
-                            desc="Lorem ipsum dolor sit amet, ius quis veniam ad, mea id nemore probatus sensibus. Sed  lorem everti menandri cu, habeo."
+                            desc={loremIpsum({ units: "sentences", count: 2 })}
                             toggle={dialogue}
                             primaryBtn="Yes, delete it!"
                             secondaryBtn="Cancel"
-                            secondaryAction={() => setDialogue(false)}
-                            primaryAction={() => setDialogue(false)}
+                            secondaryAction={hide}
+                            primaryAction={hide}
                             enableCloseButton
                             enableBackdropDismiss
-                            onDismiss={() => setDialogue(false)}
+                            onDismiss={hide}
                         />
                     </div>
                 </div>

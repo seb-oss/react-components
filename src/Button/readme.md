@@ -17,7 +17,7 @@ Type: UI Component
 
 ## Element information
 
-This React component is based on SEB Bootstrap style. Supports customization and configurations. The component name is `Button` and the selector is `<Button/>`. This component support custom svg icon, which can be fully style via css classes. We use SVG code directly as we can change its color or size at any moment, like when you are hover over. Rememer to change the color of SVG, you should target svg and use `fill` property instead of `color`.
+This React component is based on SEB Bootstrap style. Supports customization and configurations. The component name is `Button` and the selector is `<Button/>`.
 
 ## Basic use
 
@@ -27,26 +27,15 @@ This React component is based on SEB Bootstrap style. Supports customization and
 
 ## Properties
 
-These are the current available properties:
+This component extends all native attributes of `HTMLButtonElement`, while offering the following customizations:
 
-| Property      | Type                                               | Description                                          |
-| ------------- | -------------------------------------------------- | ---------------------------------------------------- |
-| className?    | `string`                                           | Element class                                        |
-| disabled?     | `boolean`                                          | Disabled status                                      |
-| icon?         | `ReactNode`                                        | Icon to be rendered inside the button                |
-| iconPosition? | `string`<sup>1</sup>                               | Icon position. (default is `left`)                   |
-| id?           | `string`                                           | Id property                                          |
-| label         | `string`                                           | Button label                                         |
-| name?         | `string`                                           | Name property                                        |
-| onClick       | `(e: React.MouseEvent<HTMLButtonElement>) => void` | Click action                                         |
-| size?         | `string`<sup>2</sup>                               | Based on Bootstrap predefined sizes. (default: `md`) |
-| theme?        | `string`<sup>3</sup>                               | Based on SEB predefined colors. (default: `primary`) |
-| title?        | `string`                                           | Element title                                        |
-| type?         | `string`<sup>4</sup>                               | Button type. (default: `button`)                     |
+| Property | Type                 | Description                                          |
+| -------- | -------------------- | ---------------------------------------------------- |
+| size?    | `string`<sup>1</sup> | Based on Bootstrap predefined sizes. (default: `md`) |
+| theme?   | `string`<sup>2</sup> | Based on SEB predefined colors. (default: `primary`) |
+| block?   | `boolean`            | Extends the width of the button to its container     |
 
 ## Footnote
 
-1. Supported icon positions: `left` | `right`
-2. Supported size: `sm` | `md` | `lg`
-3. Supported themes: `primary` | `outline-primary` | `secondary` | `danger` | `alternative` | `ghost-dark` | `ghost-light` | `link` /n(We only support these. Any other theme will default back to primary)
-4. Supported button types: `button` | `submit` | `reset`
+1. Supported size: `sm` | `md` | `lg`
+2. Supported themes: `primary` | `secondary` | `danger` | `outline-primary` | `outline-danger` | `dark` | `light` | `link`
