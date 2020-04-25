@@ -10,14 +10,14 @@ export type BreadcrumbItemProps = React.PropsWithChildren<
         href?: string;
         /** Event handler triggered when the links is clicked */
         onNavigate?: React.MouseEventHandler<HTMLAnchorElement>;
+        /** Active state. (Managed by Breadcrumb) */
+        active?: boolean;
     }
 >;
 
-export const BreadcrumbItem: React.FC<BreadcrumbItemProps> = React.memo(({ href, onNavigate, ...props }: BreadcrumbItemProps) => {
-    const [active, setActive] = React.useState<boolean>(false);
+export const BreadcrumbItem: React.FC<BreadcrumbItemProps> = React.memo(({ href, onNavigate, active, ...props }: BreadcrumbItemProps) => {
     const [className, setClassName] = React.useState<string>("breadcrumb-item");
 
-    React.useEffect(() => setActive(props["data-active"] !== undefined && JSON.parse(props["data-active"])), [props["data-active"]]);
     React.useEffect(() => setClassName(classnames(["breadcrumb-item", { active }, props.className])), [active, props.className]);
 
     return (

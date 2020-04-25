@@ -8,15 +8,16 @@ export interface AccordionItemProps extends React.DetailedHTMLProps<React.HTMLAt
     header: React.ReactNode;
     /** A sub-header description rendered under the header */
     subHeader?: React.ReactNode;
-    /** An event handler triggered when an accordion toggle is clicked */
+    /** An event handler triggered when an accordion toggle is clicked. (Managed by Accordion) */
     onToggle?: React.MouseEventHandler<HTMLButtonElement>;
+    /** The id of the parent component used to enable accessibility features. (Managed by Accordion) */
+    parentId?: string;
 }
 
-export const AccordionItem: React.FC<AccordionItemProps> = React.memo(({ header, subHeader, onToggle, ...props }: AccordionItemProps) => {
+export const AccordionItem: React.FC<AccordionItemProps> = React.memo(({ header, subHeader, onToggle, parentId, ...props }: AccordionItemProps) => {
     const [cardClassName, setCardClassName] = React.useState<string>("card");
     const [collapseClassName, setCollapseClassName] = React.useState<string>("collapse");
     const [uniqueId] = React.useState<string>(randomId("accordion-item-"));
-    const parentId: string = props["data-parentid"];
 
     React.useEffect(() => {
         setCardClassName(classnames(["card", { collapsed: !props.defaultChecked }, props.className]));
@@ -41,7 +42,7 @@ export const AccordionItem: React.FC<AccordionItemProps> = React.memo(({ header,
                 </button>
             </div>
             <div id={uniqueId} className={collapseClassName} aria-labelledby={uniqueId + "--header"} data-parent={parentId ? `#${parentId}` : null}>
-                <Collapse className="card-body" data-toggle={props.defaultChecked}>
+                <Collapse className="card-body" toggle={props.defaultChecked}>
                     <div className="content">{props.children}</div>
                 </Collapse>
             </div>

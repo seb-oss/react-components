@@ -73,6 +73,7 @@ This interface extends all native attributes of `HTMLDivElement`, adding the fol
 | alternative? | `boolean`                                    | Toggle alternative style of accordion                          |
 | list?        | `Array<AccordionItemProps>`                  | List of accordion items                                        |
 | onToggle?    | `React.MouseEventHandler<HTMLButtonElement>` | An event handler triggered when an accordion toggle is clicked |
+| inverted?    | `boolean`                                    | Places the icon toggle on the right side                       |
 
 #### AccordionItemProps
 This interface extends all native attributes of `HTMLDivElement`, adding the following extra attributes:

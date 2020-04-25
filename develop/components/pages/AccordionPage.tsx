@@ -43,9 +43,9 @@ const AccordionPage: React.FC = () => {
                         <Accordion list={lists[1]} className="custom-accordion-icon" />
                     </div>
 
-                    <p>Custom icon on the right</p>
+                    <p>Place icon to the right (inverted)</p>
                     <div className="result wide">
-                        <Accordion list={lists[2]} className="custom-accordion-icon custom-accordion-right" />
+                        <Accordion list={lists[2]} inverted />
                     </div>
 
                     <p>Alternative theme</p>

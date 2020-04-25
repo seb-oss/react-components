@@ -14,21 +14,23 @@ export type AccordionProps = React.DetailedHTMLProps<React.HTMLAttributes<HTMLDi
     alternative?: boolean;
     /** An event handler triggered when an accordion toggle is clicked */
     onToggle?: React.MouseEventHandler<HTMLButtonElement>;
+    /** Places the icon toggle on the right side */
+    inverted?: boolean;
+    /** The default `active` item. (Overriding the native type) */
+    defaultValue?: number;
 };
 
-export const Accordion: React.FC<AccordionProps> = React.memo(({ list, alternative, onToggle, ...props }: AccordionProps) => {
+export const Accordion: React.FC<AccordionProps> = React.memo(({ list, alternative, onToggle, inverted, ...props }: AccordionProps) => {
     const [active, setActive] = React.useState<number>(Number(props.defaultValue));
     const [id, setId] = React.useState<string>(props.id);
     const [className, setClassName] = React.useState<string>("seb accordion");
 
-    React.useEffect(() => {
-        let defaultChecked: number;
-        defaultChecked = list?.findIndex((item: AccordionItemProps) => item.defaultChecked);
-        defaultChecked = React.Children.toArray(props.children).findIndex((Child: React.ReactElement<AccordionItemProps>) => Child.props?.defaultChecked);
-        setActive(defaultChecked >= 0 ? defaultChecked : props.defaultValue === null ? undefined : Number(props.defaultValue));
-    }, [props.defaultValue, list, props.children]);
+    /** Sets custom id if the user din't pass any */
     React.useEffect(() => setId(props.id || randomId("accordion-")), [props.id]);
-    React.useEffect(() => setClassName(classnames(["seb", "accordion", { alternative }, props.className])), [props.className, alternative]);
+    React.useEffect(() => setClassName(classnames(["seb", "accordion", { alternative }, { inverted }, props.className])), [props.className, alternative, inverted]);
+    React.useEffect(() => {
+        typeof props.defaultValue === "number" && setActive(props.defaultValue);
+    }, [props.defaultValue]);
 
     /**
      * Handles accordion item click event
@@ -36,23 +38,53 @@ export const Accordion: React.FC<AccordionProps> = React.memo(({ list, alternati
      */
     const onToggleInner: React.MouseEventHandler<HTMLButtonElement> = React.useCallback(
         (e: React.MouseEvent<HTMLButtonElement>) => {
-            setActive(active === Number(e.currentTarget.dataset.indexNumber) ? null : Number(e.currentTarget.dataset.indexNumber));
+            setActive(active === Number(e.currentTarget.dataset.indexNumber) ? -1 : Number(e.currentTarget.dataset.indexNumber));
         },
         [active]
     );
 
+    if (isNaN(active)) {
+        /**
+         * `active` is not initialized with `props.defaultValue` (`Number(undefined) === NaN`).
+         * Should only run once. The active state will never be set to NaN.
+         *
+         * At least one child is needed to determine the default.
+         */
+        if (list?.length || React.Children.count(props.children)) {
+            // If the default value is set from the parent, it should override anything else
+            if (typeof props.defaultValue === "number") {
+                setActive(props.defaultValue);
+            } else {
+                let defaultValue: number = -1;
+                // Trying to find an item set to active in the list prop first
+                defaultValue = list ? list.findIndex((item: AccordionItemProps) => item.defaultChecked) : -1;
+                if (defaultValue === -1) {
+                    // If the active is not found in one of the list items maybe it's one of the children
+                    defaultValue = React.Children.toArray(props.children).findIndex((Child: React.ReactElement<AccordionItemProps>) => Child.props?.defaultChecked);
+                    if (list) {
+                        defaultValue += list.length;
+                    }
+                }
+                // Set the active to the found child, else it's `-1`
+                setActive(defaultValue);
+            }
+        }
+    }
+
+    // console.log(active);
+
     return (
         <div className={className} id={id}>
             {list?.map((item: AccordionItemProps, i: number) => (
-                <AccordionItem key={i} {...item} onToggle={item.onToggle || onToggle || onToggleInner} defaultChecked={active === i} data-index-number={i} data-parentid={id} />
+                <AccordionItem key={i} {...item} onToggle={item.onToggle || onToggle || onToggleInner} defaultChecked={active === i} data-index-number={i} parentId={id} />
             ))}
             {React.Children.map(props.children, (Child: React.ReactElement<AccordionItemProps>, i: number) => {
-                return React.isValidElement<AccordionItemProps>(Child)
+                return React.isValidElement<React.FC<AccordionItemProps>>(Child)
                     ? React.cloneElement<any>(Child, {
                           onToggle: Child.props.onToggle || onToggle || onToggleInner,
-                          defaultChecked: active === i,
-                          "data-index-number": i,
-                          "data-parentid": id,
+                          parentId: id,
+                          defaultChecked: active === i + (list?.length || 0),
+                          "data-index-number": i + (list?.length || 0),
                       })
                     : Child;
             })}
