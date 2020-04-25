@@ -65,7 +65,7 @@ describe("Component: Breadcrumb", () => {
             const items: NodeListOf<HTMLLIElement> = container.querySelectorAll(".breadcrumb-item");
             items[0].firstElementChild.dispatchEvent(new MouseEvent("click", { bubbles: true }));
             items[1].firstElementChild.dispatchEvent(new MouseEvent("click", { bubbles: true }));
-            items[2].firstElementChild.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+            items[items.length - 1].firstElementChild.dispatchEvent(new MouseEvent("click", { bubbles: true }));
         });
         expect(onNavigate).toBeCalledTimes(2);
     });

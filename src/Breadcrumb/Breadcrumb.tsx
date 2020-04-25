@@ -40,14 +40,14 @@ export const Breadcrumb: React.FC<BreadcrumbProps> = React.memo(({ onNavigate, .
         <nav {...props} aria-label="breadcrumb">
             <ol className={breadcrumbListClassName}>
                 {props.list?.map((item: BreadcrumbItemProps, i: number) => (
-                    <BreadcrumbItem onNavigate={item.onNavigate || onNavigate} data-index-number={i} data-active={isActive("list", i)} key={i} {...item} />
+                    <BreadcrumbItem onNavigate={item.onNavigate || onNavigate} data-index-number={i} active={isActive("list", i)} key={i} {...item} />
                 ))}
                 {React.Children.map(props.children, (Child: React.ReactElement<BreadcrumbItemProps>, i: number) => {
                     return React.isValidElement<BreadcrumbItemProps>(Child)
                         ? React.cloneElement<any>(Child, {
                               onNavigate: Child.props.onNavigate || onNavigate,
+                              active: isActive("children", i),
                               "data-index-number": i,
-                              "data-active": isActive("children", i),
                           })
                         : Child;
                 })}
