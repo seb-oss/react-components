@@ -3,82 +3,42 @@ import React from "react";
 export interface CollapseProps extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
     /** True to expand, false to collapse */
     toggle?: boolean;
-    /** Automatically search for tab enabled children and disable them when it's collapsed */
-    autoDisableTabEnabledChildren?: boolean;
 }
 
-interface TabEnabledElement {
-    nativeElement: HTMLElement;
-    originalTabindex: number;
-}
-
-export const Collapse: React.FC<CollapseProps> = React.memo(({ toggle, autoDisableTabEnabledChildren, ...props }: CollapseProps) => {
+export const Collapse: React.FC<CollapseProps> = React.memo(({ toggle, ...props }: CollapseProps) => {
     const collapseRef: React.MutableRefObject<HTMLDivElement> = React.useRef<HTMLDivElement>();
-    const [height, setHeight] = React.useState<string | number>(0);
-    const tabEnabledElements = React.useRef<Array<TabEnabledElement>>([]);
-
-    /** Finds and stores all tab enabled elements */
-    React.useEffect(() => {
-        if (autoDisableTabEnabledChildren !== false && !tabEnabledElements.current.length) {
-            tabEnabledElements.current = findAllTabEnabledElements(collapseRef.current).map(
-                (el: HTMLElement): TabEnabledElement => {
-                    return { nativeElement: el, originalTabindex: el.tabIndex };
-                }
-            )
-        }
-    }, [props.children]);
+    const [height, setHeight] = React.useState<"auto" | number>(0);
+    const [display, setDisplay] = React.useState<"block" | "none">("none");
 
     /** Event handler triggered after collapse transition ended */
     const afterTransition: React.TransitionEventHandler<HTMLDivElement> = React.useCallback((e: React.TransitionEvent<HTMLDivElement>) => {
-        e.propertyName === "height" && height && toggle && setHeight("auto");
-    }, [height]);
-
-    /**
-     * Sets the height to zero when it's time to collapse and there height is specified.
-     * The timeout is used to allow enough time for browser to recognize height is not `auto` anymore
-     */
-    React.useEffect(() => {
-        !toggle && height && setTimeout(() => setHeight(0), 50);
-    }, [height]);
-
-    /**
-     * Enables or disabled tab enabled elements on toggle
-     * Height is always set to scroll height when toggle changes to enable transition
-     */
-    React.useEffect(() => {
-        if (autoDisableTabEnabledChildren !== false && tabEnabledElements.current.length) {
-            if (toggle) {
-                tabEnabledElements.current.map((el: TabEnabledElement) => {
-                    el.nativeElement.setAttribute("tabindex", el.originalTabindex.toString());
-                });
-            } else {
-                tabEnabledElements.current.map((el: TabEnabledElement) => {
-                    el.nativeElement.setAttribute("tabindex", "-1");
-                });
+        if (e.propertyName === "height") {
+            switch(true) {
+                /** After expand, the height is set to auto to enable responsiveness */
+                case toggle && height && height !== "auto": setHeight("auto"); break;
+                /** After collapse, the display is set to none to disable tab navigation inside the hidden collapse */
+                case !height && !toggle: setDisplay("none");
             }
         }
-        setHeight(collapseRef.current.scrollHeight);
-    }, [toggle]);
+    }, [height, toggle]);
+
+    /** Handle changing the values of height and display based on toggle changes */
+    React.useLayoutEffect(() => {
+        switch (true) {
+            /** Expanding: Starting point of height 0 and display none, first change is to enable display */
+            case toggle && display === "none" && !height: setDisplay("block"); break;
+            /** Expanding: Second stage of height 0 and display block, it should transition to scroll height */
+            case toggle && display === "block" && !height: setTimeout(() => setHeight(collapseRef.current.scrollHeight), 10); break;
+            /** Collapsing: Starting point of height auto and display block, first change is to set height to scroll height */
+            case !toggle && display === "block" && height === "auto": setHeight(collapseRef.current.scrollHeight); break;
+            /** Collapsing: Second stage of height equal to scroll height and display block is to set height to 0 */
+            case !toggle && display === "block" && height && height !== "auto": setTimeout(() => setHeight(0), 10); break;
+        }
+    }, [toggle, display, height]);
 
     return (
-        <div {...props} ref={collapseRef} style={{ height, opacity: height ? 1 : 0 }} onTransitionEnd={afterTransition}>
+        <div {...props} ref={collapseRef} style={{ height, display, opacity: +toggle }} onTransitionEnd={afterTransition}>
             {props.children}
         </div>
     );
 });
-
-// TODO: Should be removed once frontend-tools is updated with this utility
-function findAllTabEnabledElements(element: HTMLElement): Array<HTMLElement> {
-    const tabEnabledElements: Array<HTMLElement> = [];
-    if (element && element.hasChildNodes && element.hasChildNodes()) {
-        element.childNodes.forEach((child: HTMLElement) => {
-            if (typeof child.tabIndex === "number" && child.tabIndex !== -1) {
-                tabEnabledElements.push(child);
-            }
-            if (child.hasChildNodes()) {
-                tabEnabledElements.push(...findAllTabEnabledElements(child));
-            }
-        });
-    }
-    return tabEnabledElements;
-}
