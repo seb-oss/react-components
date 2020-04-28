@@ -1,7 +1,7 @@
 import React from "react";
-import { unmountComponentAtNode, render } from "react-dom";
+import { render, unmountComponentAtNode } from "react-dom";
 import { Collapse } from "./Collapse";
-import { act } from "react-dom/test-utils";
+import { act, Simulate } from "react-dom/test-utils";
 
 describe("Util: Animations", () => {
     let container: HTMLDivElement = null;
@@ -18,21 +18,68 @@ describe("Util: Animations", () => {
     });
 
     it("Should render", () => {
-        act(() => { render(<Collapse data-toggle={null}><div>Test</div></Collapse>, container); });
+        act(() => { render(<Collapse toggle={null}><div>Test</div></Collapse>, container); });
         expect(container).toBeDefined();
     });
 
-    it("Should expand with correct height", () => {
+    it("Should call custom transitionEnd when transition is triggered", () => {
+        const onTransitionEnd: React.TransitionEventHandler<HTMLDivElement> = jest.fn();
         act(() => {
-            render(<Collapse data-toggle={true}><div className="test">Test</div></Collapse>, container, () => {
-                jest.spyOn(container.firstElementChild, "scrollHeight", "get").mockImplementation(() => 200);
-            });
+            jest.useFakeTimers();
+            render(<Collapse toggle onTransitionEnd={onTransitionEnd}><div>Test</div></Collapse>, container);
         });
-        expect(container.firstElementChild.getAttribute("style")).toContain("height: 200px; opacity: 1;");
+        jest.spyOn(container.firstElementChild, "scrollHeight", "get").mockImplementation(() => 200);
+        act(() => { jest.advanceTimersByTime(20); });
+        act(() => { Simulate.transitionEnd(container.firstElementChild, { bubbles: true }); });
+        expect(onTransitionEnd).toBeCalled();
     });
 
-    it("Should not change the height if data-toggle value is not passed", () => {
-        act(() => { render(<Collapse><div>Test</div></Collapse>, container); });
-        expect(container.firstElementChild.getAttribute("style")).toContain("height: 0px; opacity: 0;");
+    it("Should expand and collapse correctly", () => {
+        const transitionEvent = new Event("transitionend", { bubbles: true });
+        transitionEvent["propertyName"] = "height";
+
+        act(() => {
+            jest.useFakeTimers();
+            render(<TestBed />, container);
+        });
+
+        // Default state collapsed
+        jest.spyOn(container.firstElementChild, "scrollHeight", "get").mockImplementation(() => 200);
+        expect(container.firstElementChild.getAttribute("style")).toContain("opacity: 0;");
+        expect(container.firstElementChild.getAttribute("style")).toContain("display: none;");
+        expect(container.firstElementChild.getAttribute("style")).toContain("height: 0px;");
+
+        // Expanding
+        act(() => { jest.advanceTimersByTime(3020); });
+        expect(container.firstElementChild.getAttribute("style")).toContain("opacity: 1;");
+        expect(container.firstElementChild.getAttribute("style")).toContain("display: block;");
+        expect(container.firstElementChild.getAttribute("style")).toContain("height: 200px;");
+        act(() => { container.firstElementChild.dispatchEvent(transitionEvent); });
+        expect(container.firstElementChild.getAttribute("style")).toContain("height: auto;");
+
+        // Collapsing
+        act(() => { jest.advanceTimersByTime(3020); });
+        expect(container.firstElementChild.getAttribute("style")).toContain("opacity: 0;");
+        expect(container.firstElementChild.getAttribute("style")).toContain("display: block;");
+        expect(container.firstElementChild.getAttribute("style")).toContain("height: 0px;");
+        act(() => { container.firstElementChild.dispatchEvent(transitionEvent); });
+        expect(container.firstElementChild.getAttribute("style")).toContain("display: none;");
     });
 });
+
+const TestBed: React.FC = () => {
+    const [toggle, setToggle] = React.useState<boolean>();
+    React.useEffect(() => {
+        setTimeout(() => {
+            setToggle(true);
+        }, 3000);
+        setTimeout(() => {
+            setToggle(false);
+        }, 6000);
+    }, []);
+    return (
+        <Collapse toggle={toggle}>
+            <div>test</div>
+        </Collapse>
+    );
+}

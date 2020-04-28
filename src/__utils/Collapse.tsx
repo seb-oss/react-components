@@ -5,15 +5,16 @@ export interface CollapseProps extends React.DetailedHTMLProps<React.HTMLAttribu
     toggle?: boolean;
 }
 
-export const Collapse: React.FC<CollapseProps> = React.memo(({ toggle, ...props }: CollapseProps) => {
+export const Collapse: React.FC<CollapseProps> = React.memo(({ toggle = false, ...props }: CollapseProps) => {
     const collapseRef: React.MutableRefObject<HTMLDivElement> = React.useRef<HTMLDivElement>();
     const [height, setHeight] = React.useState<"auto" | number>(0);
     const [display, setDisplay] = React.useState<"block" | "none">("none");
 
     /** Event handler triggered after collapse transition ended */
     const afterTransition: React.TransitionEventHandler<HTMLDivElement> = React.useCallback((e: React.TransitionEvent<HTMLDivElement>) => {
+        props.onTransitionEnd && props.onTransitionEnd(e);
         if (e.propertyName === "height") {
-            switch(true) {
+            switch (true) {
                 /** After expand, the height is set to auto to enable responsiveness */
                 case toggle && height && height !== "auto": setHeight("auto"); break;
                 /** After collapse, the display is set to none to disable tab navigation inside the hidden collapse */
