@@ -2,8 +2,7 @@ import React from "react";
 import { Breadcrumb } from "./Breadcrumb";
 import { BreadcrumbItem, BreadcrumbItemProps } from "./BreadcrumbItem";
 import { unmountComponentAtNode, render } from "react-dom";
-import { act } from "react-dom/test-utils";
-import { deepCopy } from "@sebgroup/frontend-tools/dist/deepCopy";
+import { act, Simulate } from "react-dom/test-utils";
 
 describe("Component: Breadcrumb", () => {
     let container: HTMLDivElement = null;
@@ -104,26 +103,23 @@ describe("Component: Breadcrumb", () => {
         expect(onToggle).toBeCalled();
     });
 
-    describe("Should allow onAuxClick to function normally even if it is hijacked by the parent", () => {
-        let onAuxClick: jest.Mock;
+    describe("Should allow onSeeked to function normally even if it is hijacked by the parent", () => {
+        let onSeeked: jest.Mock;
 
         const verify: (index: number) => void = (index: number) => {
             act(() => {
-                container
-                    .querySelectorAll("li")
-                    .item(index)
-                    .dispatchEvent(new MouseEvent("auxclick", { bubbles: true }));
+                Simulate.seeked(container.querySelectorAll("li").item(index));
             });
-            expect(onAuxClick).toBeCalledTimes(1);
+            expect(onSeeked).toBeCalledTimes(1);
         };
 
         beforeEach(() => {
-            onAuxClick = jest.fn();
+            onSeeked = jest.fn();
         });
 
         test("Passed in one of the list items", () => {
             act(() => {
-                render(<Breadcrumb list={[{ children: "first", onAuxClick }, { children: "second" }]} />, container);
+                render(<Breadcrumb list={[{ children: "first", onSeeked }, { children: "second" }]} />, container);
             });
             verify(0);
         });
@@ -132,7 +128,7 @@ describe("Component: Breadcrumb", () => {
             act(() => {
                 render(
                     <Breadcrumb>
-                        <BreadcrumbItem onAuxClick={onAuxClick}>First</BreadcrumbItem>
+                        <BreadcrumbItem onSeeked={onSeeked}>First</BreadcrumbItem>
                         <BreadcrumbItem>Second</BreadcrumbItem>
                     </Breadcrumb>,
                     container
@@ -145,7 +141,7 @@ describe("Component: Breadcrumb", () => {
             act(() => {
                 render(
                     <Breadcrumb list={breadcrumbList}>
-                        <BreadcrumbItem onAuxClick={onAuxClick}>First</BreadcrumbItem>
+                        <BreadcrumbItem onSeeked={onSeeked}>First</BreadcrumbItem>
                         <BreadcrumbItem>Second</BreadcrumbItem>
                     </Breadcrumb>,
                     container
@@ -154,11 +150,11 @@ describe("Component: Breadcrumb", () => {
             verify(breadcrumbList.length);
         });
 
-        test("onToggle click event should not trigger onAuxClick", () => {
+        test("onToggle click event should not trigger onSeeked", () => {
             act(() => {
                 render(
                     <Breadcrumb>
-                        <BreadcrumbItem onAuxClick={onAuxClick}>First</BreadcrumbItem>
+                        <BreadcrumbItem onSeeked={onSeeked}>First</BreadcrumbItem>
                         <BreadcrumbItem>Second</BreadcrumbItem>
                     </Breadcrumb>,
                     container

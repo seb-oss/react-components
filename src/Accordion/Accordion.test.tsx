@@ -1,5 +1,5 @@
 import React from "react";
-import { act } from "react-dom/test-utils";
+import { act, Simulate } from "react-dom/test-utils";
 import { unmountComponentAtNode, render } from "react-dom";
 import { Accordion } from "./Accordion";
 import { loremIpsum } from "lorem-ipsum";
@@ -220,26 +220,23 @@ describe("Component: Accordion", () => {
         expect(onToggle).toBeCalled();
     });
 
-    describe("Should allow onAuxClick to function normally even if it is hijacked by the parent", () => {
-        let onAuxClick: jest.Mock;
+    describe("Should allow onSeeked to function normally even if it is hijacked by the parent", () => {
+        let onSeeked: jest.Mock;
 
         const verify: (index: number) => void = (index: number) => {
             act(() => {
-                container
-                    .querySelectorAll(".card")
-                    .item(index)
-                    .dispatchEvent(new MouseEvent("auxclick", { bubbles: true }));
+                Simulate.seeked(container.querySelectorAll(".card").item(index));
             });
-            expect(onAuxClick).toBeCalled();
+            expect(onSeeked).toBeCalled();
         };
 
         beforeEach(() => {
-            onAuxClick = jest.fn();
+            onSeeked = jest.fn();
         });
 
         test("Passed in one of the list items", () => {
             const list: Array<AccordionItemProps> = deepCopy(accordionList);
-            list[0].onAuxClick = onAuxClick;
+            list[0].onSeeked = onSeeked;
             act(() => {
                 render(<Accordion list={list} />, container);
             });
@@ -250,7 +247,7 @@ describe("Component: Accordion", () => {
             act(() => {
                 render(
                     <Accordion>
-                        <AccordionItem onAuxClick={onAuxClick} header="First" />
+                        <AccordionItem onSeeked={onSeeked} header="First" />
                         <AccordionItem header="Second" />
                     </Accordion>,
                     container
@@ -263,7 +260,7 @@ describe("Component: Accordion", () => {
             act(() => {
                 render(
                     <Accordion list={accordionList}>
-                        <AccordionItem onAuxClick={onAuxClick} header="First" />
+                        <AccordionItem onSeeked={onSeeked} header="First" />
                         <AccordionItem header="Second" />
                     </Accordion>,
                     container
@@ -272,11 +269,11 @@ describe("Component: Accordion", () => {
             verify(accordionList.length);
         });
 
-        test("onToggle click event should not trigger onAuxClick", () => {
+        test("onToggle click event should not trigger onSeeked", () => {
             act(() => {
                 render(
                     <Accordion>
-                        <AccordionItem onAuxClick={onAuxClick} header="First" />
+                        <AccordionItem onSeeked={onSeeked} header="First" />
                         <AccordionItem header="Second" />
                     </Accordion>,
                     container

@@ -32,7 +32,7 @@ export const AccordionItem: React.FC<AccordionItemProps> = React.memo(({ header,
                     aria-expanded={props.defaultChecked}
                     data-target={`#${uniqueId}`}
                     aria-controls={uniqueId}
-                    onClick={onToggle || (props.onAuxClick as any)}
+                    onClick={onToggle || (props.onSeeked as any)}
                     data-index-number={props["data-index-number"]}
                 >
                     <h4>{header}</h4>
