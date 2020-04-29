@@ -3,10 +3,11 @@ import { Breadcrumb } from "./Breadcrumb";
 import { BreadcrumbItem, BreadcrumbItemProps } from "./BreadcrumbItem";
 import { unmountComponentAtNode, render } from "react-dom";
 import { act } from "react-dom/test-utils";
+import { deepCopy } from "@sebgroup/frontend-tools/dist/deepCopy";
 
 describe("Component: Breadcrumb", () => {
     let container: HTMLDivElement = null;
-    const breadcrumbList1: Array<BreadcrumbItemProps> = [{ children: "First" }, { children: "Second" }, { children: "Third" }];
+    const breadcrumbList: Array<BreadcrumbItemProps> = [{ children: "First" }, { children: "Second" }, { children: "Third" }];
 
     beforeEach(() => {
         container = document.createElement("div");
@@ -32,9 +33,9 @@ describe("Component: Breadcrumb", () => {
 
     it("Should render with a list with data-index-number", () => {
         act(() => {
-            render(<Breadcrumb list={breadcrumbList1} />, container);
+            render(<Breadcrumb list={breadcrumbList} />, container);
         });
-        expect(container.firstElementChild.firstElementChild.children.length).toEqual(breadcrumbList1.length);
+        expect(container.firstElementChild.firstElementChild.children.length).toEqual(breadcrumbList.length);
         expect(container.firstElementChild.firstElementChild.firstElementChild.tagName).toEqual("LI");
         expect(container.firstElementChild.firstElementChild.firstElementChild.firstElementChild.tagName).toEqual("A");
         expect(container.firstElementChild.firstElementChild.firstElementChild.firstElementChild.getAttribute("data-index-number")).toEqual("0");
@@ -59,7 +60,7 @@ describe("Component: Breadcrumb", () => {
     it("Should pass onNavigate to all items in the list", () => {
         const onNavigate: jest.Mock = jest.fn();
         act(() => {
-            render(<Breadcrumb list={breadcrumbList1} onNavigate={onNavigate} />, container);
+            render(<Breadcrumb list={breadcrumbList} onNavigate={onNavigate} />, container);
         });
         act(() => {
             const items: NodeListOf<HTMLLIElement> = container.querySelectorAll(".breadcrumb-item");
@@ -81,7 +82,7 @@ describe("Component: Breadcrumb", () => {
     it("Should set active to the last child even when rendering a list and children at the same time", () => {
         act(() => {
             render(
-                <Breadcrumb list={breadcrumbList1}>
+                <Breadcrumb list={breadcrumbList}>
                     <BreadcrumbItem>First</BreadcrumbItem>
                     <BreadcrumbItem>Second</BreadcrumbItem>
                 </Breadcrumb>,
@@ -90,5 +91,83 @@ describe("Component: Breadcrumb", () => {
         });
         const elements: NodeListOf<HTMLLIElement> = container.querySelectorAll<HTMLLIElement>(".breadcrumb-item");
         elements.forEach((element: HTMLLIElement, i: number) => expect(element.classList.contains("active")).toBe(i === elements.length - 1));
+    });
+
+    it("Should allow passing a custom onNavigate", () => {
+        const onToggle: jest.Mock = jest.fn();
+        act(() => {
+            render(<Breadcrumb onNavigate={onToggle} list={breadcrumbList} />, container);
+        });
+        act(() => {
+            container.querySelector("a").click();
+        });
+        expect(onToggle).toBeCalled();
+    });
+
+    describe("Should allow onAuxClick to function normally even if it is hijacked by the parent", () => {
+        let onAuxClick: jest.Mock;
+
+        const verify: (index: number) => void = (index: number) => {
+            act(() => {
+                container
+                    .querySelectorAll("li")
+                    .item(index)
+                    .dispatchEvent(new MouseEvent("auxclick", { bubbles: true }));
+            });
+            expect(onAuxClick).toBeCalledTimes(1);
+        };
+
+        beforeEach(() => {
+            onAuxClick = jest.fn();
+        });
+
+        test("Passed in one of the list items", () => {
+            act(() => {
+                render(<Breadcrumb list={[{ children: "first", onAuxClick }, { children: "second" }]} />, container);
+            });
+            verify(0);
+        });
+
+        test("Passed in one of the children", () => {
+            act(() => {
+                render(
+                    <Breadcrumb>
+                        <BreadcrumbItem onAuxClick={onAuxClick}>First</BreadcrumbItem>
+                        <BreadcrumbItem>Second</BreadcrumbItem>
+                    </Breadcrumb>,
+                    container
+                );
+            });
+            verify(0);
+        });
+
+        test("Passed in one of the children while a list is passed as well", () => {
+            act(() => {
+                render(
+                    <Breadcrumb list={breadcrumbList}>
+                        <BreadcrumbItem onAuxClick={onAuxClick}>First</BreadcrumbItem>
+                        <BreadcrumbItem>Second</BreadcrumbItem>
+                    </Breadcrumb>,
+                    container
+                );
+            });
+            verify(breadcrumbList.length);
+        });
+
+        test("onToggle click event should not trigger onAuxClick", () => {
+            act(() => {
+                render(
+                    <Breadcrumb>
+                        <BreadcrumbItem onAuxClick={onAuxClick}>First</BreadcrumbItem>
+                        <BreadcrumbItem>Second</BreadcrumbItem>
+                    </Breadcrumb>,
+                    container
+                );
+            });
+            act(() => {
+                container.querySelector("a").click();
+            });
+            verify(0);
+        });
     });
 });

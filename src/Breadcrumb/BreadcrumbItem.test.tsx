@@ -1,12 +1,11 @@
 import React from "react";
-import { Breadcrumb, BreadcrumbProps } from "./Breadcrumb";
-import { BreadcrumbItem, BreadcrumbItemProps } from "./BreadcrumbItem";
+import { Breadcrumb } from "./Breadcrumb";
+import { BreadcrumbItem } from "./BreadcrumbItem";
 import { unmountComponentAtNode, render } from "react-dom";
 import { act } from "react-dom/test-utils";
 
 describe("Component: Breadcrumb", () => {
     let container: HTMLDivElement = null;
-    const breadcrumbList1: Array<BreadcrumbItemProps> = [{ children: "First" }, { children: "Second" }, { children: "Third" }];
 
     beforeEach(() => {
         container = document.createElement("div");
@@ -34,11 +33,11 @@ describe("Component: Breadcrumb", () => {
         const onNavigate: jest.Mock = jest.fn();
         act(() => {
             render(
-                <Breadcrumb>
-                    <BreadcrumbItem href={href} title={title} onNavigate={onNavigate}>
+                <Breadcrumb onNavigate={onNavigate}>
+                    <BreadcrumbItem href={href} title={title}>
                         First
                     </BreadcrumbItem>
-                    <BreadcrumbItem href={href} title={title} onNavigate={onNavigate}>
+                    <BreadcrumbItem href={href} title={title}>
                         Second
                     </BreadcrumbItem>
                 </Breadcrumb>,
@@ -51,8 +50,7 @@ describe("Component: Breadcrumb", () => {
         expect(links.item(0).dataset.indexNumber).toEqual("0");
         expect(links.item(1).hash).toBe("");
         act(() => {
-            links.item(0).click();
-            links.item(1).click();
+            links.forEach((link: HTMLAnchorElement) => link.click());
         });
         expect(onNavigate).toBeCalledTimes(1);
     });

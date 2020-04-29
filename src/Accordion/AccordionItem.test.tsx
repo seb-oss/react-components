@@ -7,6 +7,9 @@ import { renderToStaticMarkup } from "react-dom/server";
 describe("Component: Accordion", () => {
     let container: HTMLDivElement = null;
 
+    /** To disable Collapse setTimeout calls */
+    beforeAll(() => jest.useFakeTimers());
+
     beforeEach(() => {
         container = document.createElement("div");
         document.body.appendChild(container);
@@ -63,7 +66,7 @@ describe("Component: Accordion", () => {
     it("Should render parent id in collapse div when available", () => {
         const parentId: string = "123";
         act(() => {
-            render(<AccordionItem header="test" data-parentid={parentId} />, container);
+            render(<AccordionItem header="test" data-parent-id={parentId} />, container);
         });
         expect(container.querySelector(".collapse").getAttribute("data-parent")).toEqual(`#${parentId}`);
     });
@@ -71,7 +74,7 @@ describe("Component: Accordion", () => {
     it("Should trigger onToggle when button is clicked", () => {
         const onToggle: jest.Mock = jest.fn();
         act(() => {
-            render(<AccordionItem header="test" onToggle={onToggle} />, container);
+            render(<AccordionItem header="test" onAuxClick={onToggle} />, container);
         });
         act(() => {
             container.querySelector("button").click();

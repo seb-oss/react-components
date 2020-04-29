@@ -23,7 +23,7 @@ describe("Util: Animations", () => {
     });
 
     it("Should call custom transitionEnd when transition is triggered", () => {
-        const onTransitionEnd: React.TransitionEventHandler<HTMLDivElement> = jest.fn();
+        const onTransitionEnd: jest.Mock = jest.fn();
         act(() => {
             jest.useFakeTimers();
             render(<Collapse toggle onTransitionEnd={onTransitionEnd}><div>Test</div></Collapse>, container);

@@ -4,6 +4,7 @@ import { unmountComponentAtNode, render } from "react-dom";
 import { Accordion } from "./Accordion";
 import { loremIpsum } from "lorem-ipsum";
 import { AccordionItem, AccordionItemProps } from "./AccordionItem";
+import { deepCopy } from "@sebgroup/frontend-tools/dist/deepCopy";
 
 describe("Component: Accordion", () => {
     let container: HTMLDivElement = null;
@@ -18,6 +19,9 @@ describe("Component: Accordion", () => {
             children: <p>{loremIpsum({ units: "paragraph" })}</p>,
         },
     ];
+
+    /** To disable Collapse setTimeout calls */
+    beforeAll(() => jest.useFakeTimers());
 
     beforeEach(() => {
         container = document.createElement("div");
@@ -112,17 +116,17 @@ describe("Component: Accordion", () => {
 
         test("paretnId", () => expect(container.querySelectorAll<HTMLDivElement>(".collapse").item(0).dataset.parent).toEqual(`#${id}`));
         test("value", () => expect(firstButton.dataset.indexNumber).toEqual("0"));
-        test("active", () => expect(JSON.parse(firstButton.getAttribute("aria-expanded"))).toBeTruthy());
+        test("active", () => expect(firstButton.getAttribute("aria-expanded")).toEqual("true"));
         test("onToggle", () => {
             act(() => {
                 firstButton.click();
             });
-            expect(JSON.parse(firstButton.getAttribute("aria-expanded"))).toBeFalsy();
+            expect(firstButton.getAttribute("aria-expanded")).toEqual("false");
         });
     });
 
     describe("Should set default expanded using default value and default checked", () => {
-        test("defaultValue", () => {
+        test("defaultValue from parent", () => {
             act(() => {
                 render(
                     <Accordion defaultValue={0}>
@@ -132,10 +136,9 @@ describe("Component: Accordion", () => {
                     container
                 );
             });
-            const firstCollapse: HTMLDivElement = container.querySelectorAll<HTMLDivElement>(".card-body").item(0);
-            expect(JSON.parse(firstCollapse.dataset.toggle)).toBeTruthy();
+            expect(container.querySelector<HTMLButtonElement>("button").getAttribute("aria-expanded")).toEqual("true");
         });
-        test("defaultValue", () => {
+        test("defaultValue from children", () => {
             act(() => {
                 render(
                     <Accordion>
@@ -145,21 +148,144 @@ describe("Component: Accordion", () => {
                     container
                 );
             });
-            const firstCollapse: HTMLDivElement = container.querySelectorAll<HTMLDivElement>(".card-body").item(0);
-            expect(JSON.parse(firstCollapse.dataset.toggle)).toBeTruthy();
+            expect(container.querySelector<HTMLButtonElement>("button").getAttribute("aria-expanded")).toEqual("true");
+        });
+        test("defaultValue from list", () => {
+            act(() => {
+                render(<Accordion defaultValue={0} list={accordionList} />, container);
+            });
+            expect(container.querySelector<HTMLButtonElement>("button").getAttribute("aria-expanded")).toEqual("true");
+        });
+        test("defaultValue from both list and children - default set in parent", () => {
+            act(() => {
+                render(
+                    <Accordion defaultValue={3} list={accordionList}>
+                        <AccordionItem header="First" />
+                        <AccordionItem header="Second" />
+                    </Accordion>,
+                    container
+                );
+            });
+            expect(container.querySelectorAll<HTMLButtonElement>("button").item(3).getAttribute("aria-expanded")).toEqual("true");
+        });
+        test("defaultValue from both list and children - default set in list item", () => {
+            const list: Array<AccordionItemProps> = deepCopy(accordionList);
+            list[0].defaultChecked = true;
+            act(() => {
+                render(
+                    <Accordion list={list}>
+                        <AccordionItem defaultChecked header="First" />
+                        <AccordionItem header="Second" />
+                    </Accordion>,
+                    container
+                );
+            });
+            expect(container.querySelectorAll<HTMLButtonElement>("button").item(0).getAttribute("aria-expanded")).toEqual("true");
+        });
+        test("defaultValue from both list and children - default set in child", () => {
+            act(() => {
+                render(
+                    <Accordion list={accordionList}>
+                        <AccordionItem defaultChecked header="First" />
+                        <AccordionItem header="Second" />
+                    </Accordion>,
+                    container
+                );
+            });
+            expect(container.querySelectorAll<HTMLButtonElement>("button").item(2).getAttribute("aria-expanded")).toEqual("true");
         });
     });
 
-    it("Should not expand any accordion item when defaultValue is set to null", () => {
+    it("it should accept both list and children", () => {
         act(() => {
             render(
-                <Accordion defaultValue={null}>
+                <Accordion list={accordionList}>
                     <AccordionItem header="First" />
                     <AccordionItem header="Second" />
                 </Accordion>,
                 container
             );
         });
-        container.querySelectorAll<HTMLDivElement>(".card-body").forEach((element: HTMLDivElement) => expect(JSON.parse(element.dataset.toggle)).toBeFalsy());
+        expect(container.querySelectorAll(".card")).toHaveLength(accordionList.length + 2);
+    });
+
+    it("Should allow passing a custom onToggle", () => {
+        const onToggle: jest.Mock = jest.fn();
+        act(() => {
+            render(<Accordion onToggle={onToggle} list={accordionList} />, container);
+        });
+        act(() => {
+            container.querySelector("button").click();
+        });
+        expect(onToggle).toBeCalled();
+    });
+
+    describe("Should allow onAuxClick to function normally even if it is hijacked by the parent", () => {
+        let onAuxClick: jest.Mock;
+
+        const verify: (index: number) => void = (index: number) => {
+            act(() => {
+                container
+                    .querySelectorAll(".card")
+                    .item(index)
+                    .dispatchEvent(new MouseEvent("auxclick", { bubbles: true }));
+            });
+            expect(onAuxClick).toBeCalled();
+        };
+
+        beforeEach(() => {
+            onAuxClick = jest.fn();
+        });
+
+        test("Passed in one of the list items", () => {
+            const list: Array<AccordionItemProps> = deepCopy(accordionList);
+            list[0].onAuxClick = onAuxClick;
+            act(() => {
+                render(<Accordion list={list} />, container);
+            });
+            verify(0);
+        });
+
+        test("Passed in one of the children", () => {
+            act(() => {
+                render(
+                    <Accordion>
+                        <AccordionItem onAuxClick={onAuxClick} header="First" />
+                        <AccordionItem header="Second" />
+                    </Accordion>,
+                    container
+                );
+            });
+            verify(0);
+        });
+
+        test("Passed in one of the children while a list is passed as well", () => {
+            act(() => {
+                render(
+                    <Accordion list={accordionList}>
+                        <AccordionItem onAuxClick={onAuxClick} header="First" />
+                        <AccordionItem header="Second" />
+                    </Accordion>,
+                    container
+                );
+            });
+            verify(accordionList.length);
+        });
+
+        test("onToggle click event should not trigger onAuxClick", () => {
+            act(() => {
+                render(
+                    <Accordion>
+                        <AccordionItem onAuxClick={onAuxClick} header="First" />
+                        <AccordionItem header="Second" />
+                    </Accordion>,
+                    container
+                );
+            });
+            act(() => {
+                container.querySelector("button").click();
+            });
+            verify(0);
+        });
     });
 });

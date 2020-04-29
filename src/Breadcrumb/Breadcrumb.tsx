@@ -11,10 +11,12 @@ export type BreadcrumbProps = React.DetailedHTMLProps<React.HTMLAttributes<HTMLE
     light?: boolean;
 };
 
-export const Breadcrumb: React.FC<BreadcrumbProps> = React.memo(({ onNavigate, ...props }: BreadcrumbProps) => {
+type ItemsSource = "list" | "children";
+
+export const Breadcrumb: React.FC<BreadcrumbProps> = React.memo(({ onNavigate, list, light, ...props }: BreadcrumbProps) => {
     const [breadcrumbListClassName, setBreadcrumbListClassName] = React.useState<string>("seb breadcrumb");
 
-    React.useEffect(() => setBreadcrumbListClassName(classnames(["seb", "breadcrumb", { "breadcrumb-light": props.light }])), [props.light]);
+    React.useEffect(() => setBreadcrumbListClassName(classnames(["seb", "breadcrumb", { "breadcrumb-light": light }])), [light]);
 
     /**
      * Find if a breadcrumb item is the last in the list so it can be disabled (active)
@@ -22,32 +24,60 @@ export const Breadcrumb: React.FC<BreadcrumbProps> = React.memo(({ onNavigate, .
      * @param {number} index The index of the item in its source
      * @returns {boolean} True if it's the absolute last in the parent
      */
-    const isActive: (source: "list" | "children", index: number) => boolean = React.useCallback(
-        (source: "list" | "children", index: number): boolean => {
-            const listCount: number = props.list?.length || 0;
+    const isActive: (source: ItemsSource, index: number) => boolean = React.useCallback(
+        (source: ItemsSource, index: number): boolean => {
+            const listCount: number = list?.length || 0;
             const childrenCount: number = React.Children.toArray(props.children).length;
-            switch (source) {
-                case "children":
-                    return index === childrenCount - 1;
-                case "list":
-                    return !childrenCount ? index === listCount - 1 : false;
+            if (source === "children") {
+                return index === childrenCount - 1;
+            } else {
+                return childrenCount ? false : index === listCount - 1;
             }
         },
-        [props.children, props.list]
+        [props.children, list]
+    );
+
+    /**
+     * Hijacks `onAuxClick` from the child element and uses it to pass `onToggle` event handler
+     * when the breadcrumb item button is clicked. It will also work if the user wanted to pass an
+     * `onAuxClick` event to the BreadcrumbItem element.
+     * @param {React.MouseEvent<any>} e The click event
+     * The reason why this is used instead of a custom `onNavigate` is because any element passed
+     * will receive data injected by the Breadcrumb, if the element is not an BreadcrumbItem, it
+     * will throw an error in the console that `onNavigate` is not a valid attribute.
+     */
+    const onToggleHandler: React.MouseEventHandler<any> = React.useCallback(
+        (e: React.MouseEvent<any>) => {
+            if (e.currentTarget.tagName === "A") {
+                onNavigate && onNavigate(e);
+            } else {
+                // This will only run if the user passed `onAuxClick` to an `breadcrumbItem`
+                let index: number = Number(e.currentTarget.dataset.indexNumber);
+                if (list && index < list.length && list[index].onAuxClick) {
+                    list[index].onAuxClick(e);
+                } else {
+                    const children: Array<any> = React.Children.toArray(props.children);
+                    children.filter((child: any) => React.isValidElement(child));
+                    index -= list?.length || 0;
+                    children[index] && children[index].props.onAuxClick && children[index].props.onAuxClick(e);
+                }
+            }
+        },
+        [onNavigate, list, props.children]
     );
 
     return (
         <nav {...props} aria-label="breadcrumb">
             <ol className={breadcrumbListClassName}>
-                {props.list?.map((item: BreadcrumbItemProps, i: number) => (
-                    <BreadcrumbItem onNavigate={item.onNavigate || onNavigate} data-index-number={i} active={isActive("list", i)} key={i} {...item} />
+                {list?.map((item: BreadcrumbItemProps, i: number) => (
+                    <BreadcrumbItem key={i} {...item} onAuxClick={onToggleHandler} defaultChecked={isActive("list", i)} data-index-number={i} />
                 ))}
                 {React.Children.map(props.children, (Child: React.ReactElement<BreadcrumbItemProps>, i: number) => {
                     return React.isValidElement<BreadcrumbItemProps>(Child)
                         ? React.cloneElement<any>(Child, {
-                              onNavigate: Child.props.onNavigate || onNavigate,
-                              active: isActive("children", i),
-                              "data-index-number": i,
+                              onAuxClick: onToggleHandler,
+                              defaultChecked: isActive("children", i),
+                              "data-index-number": i + (list?.length || 0),
                           })
                         : Child;
                 })}
