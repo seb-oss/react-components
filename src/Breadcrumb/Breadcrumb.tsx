@@ -37,45 +37,16 @@ export const Breadcrumb: React.FC<BreadcrumbProps> = React.memo(({ onNavigate, l
         [props.children, list]
     );
 
-    /**
-     * Hijacks `onSeeked` from the child element and uses it to pass `onToggle` event handler
-     * when the breadcrumb item button is clicked. It will also work if the user wanted to pass an
-     * `onSeeked` event to the BreadcrumbItem element.
-     * @param {React.MouseEvent<any>} e The click event
-     * The reason why this is used instead of a custom `onNavigate` is because any element passed
-     * will receive data injected by the Breadcrumb, if the element is not an BreadcrumbItem, it
-     * will throw an error in the console that `onNavigate` is not a valid attribute.
-     */
-    const onToggleHandler: React.MouseEventHandler<any> = React.useCallback(
-        (e: React.MouseEvent<any>) => {
-            if (e.currentTarget.tagName === "A") {
-                onNavigate && onNavigate(e);
-            } else {
-                // This will only run if the user passed `onSeeked` to an `breadcrumbItem`
-                let index: number = Number(e.currentTarget.dataset.indexNumber);
-                if (list && index < list.length && list[index].onSeeked) {
-                    list[index].onSeeked(e);
-                } else {
-                    const children: Array<any> = React.Children.toArray(props.children);
-                    children.filter((child: any) => React.isValidElement(child));
-                    index -= list?.length || 0;
-                    children[index] && children[index].props.onSeeked && children[index].props.onSeeked(e);
-                }
-            }
-        },
-        [onNavigate, list, props.children]
-    );
-
     return (
         <nav {...props} aria-label="breadcrumb">
             <ol className={breadcrumbListClassName}>
                 {list?.map((item: BreadcrumbItemProps, i: number) => (
-                    <BreadcrumbItem key={i} {...item} onSeeked={onToggleHandler} defaultChecked={isActive("list", i)} data-index-number={i} />
+                    <BreadcrumbItem key={i} {...item} onNavigate={onNavigate} defaultChecked={isActive("list", i)} data-index-number={i} />
                 ))}
                 {React.Children.map(props.children, (Child: React.ReactElement<BreadcrumbItemProps>, i: number) => {
                     return React.isValidElement<BreadcrumbItemProps>(Child)
                         ? React.cloneElement<any>(Child, {
-                              onSeeked: onToggleHandler,
+                              onNavigate: onNavigate,
                               defaultChecked: isActive("children", i),
                               "data-index-number": i + (list?.length || 0),
                           })

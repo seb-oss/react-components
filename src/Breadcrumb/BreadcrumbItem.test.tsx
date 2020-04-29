@@ -80,7 +80,7 @@ const TestBed: React.FC = () => {
 
     return (
         <div>
-            <input id="trigger" type="checkbox" checked={value} onChange={(e) => setValue(e.target.checked)} />
+            <input id="trigger" type="checkbox" checked={value} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setValue(e.target.checked)} />
             <Breadcrumb>
                 <BreadcrumbItem>First</BreadcrumbItem>
                 <BreadcrumbItem>Second</BreadcrumbItem>

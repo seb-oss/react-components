@@ -74,7 +74,7 @@ describe("Component: Accordion", () => {
     it("Should trigger onToggle when button is clicked", () => {
         const onToggle: jest.Mock = jest.fn();
         act(() => {
-            render(<AccordionItem header="test" onSeeked={onToggle} />, container);
+            render(<AccordionItem header="test" onToggle={onToggle} />, container);
         });
         act(() => {
             container.querySelector("button").click();

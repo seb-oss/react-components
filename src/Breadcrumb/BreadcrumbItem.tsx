@@ -18,12 +18,7 @@ export const BreadcrumbItem: React.FC<BreadcrumbItemProps> = React.memo(({ href 
 
     return (
         <li {...props} className={className} aria-current={props.defaultChecked ? props["aria-current"] || "page" : null}>
-            <a
-                title={props.title}
-                href={props.defaultChecked ? null : href}
-                data-index-number={props["data-index-number"]}
-                onClick={!props.defaultChecked ? onNavigate || (props.onSeeked as any) : null}
-            >
+            <a title={props.title} href={props.defaultChecked ? null : href} data-index-number={props["data-index-number"]} onClick={!props.defaultChecked ? onNavigate : null}>
                 {props.children}
             </a>
         </li>

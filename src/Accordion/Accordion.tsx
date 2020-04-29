@@ -44,35 +44,6 @@ export const Accordion: React.FC<AccordionProps> = React.memo(({ list, alternati
         [active]
     );
 
-    /**
-     * Hijacks `onSeeked` from the child element and uses it to pass `onToggle` event handler
-     * when the accordion item button is clicked. It will also work if the user wanted to pass an
-     * `onSeeked` event to the AccordionItem element.
-     * @param {React.MouseEvent<any>} e The click event
-     * The reason why this is used instead of a custom `onNavigate` is because any element passed
-     * will receive data injected by the Breadcrumb, if the element is not an AccordionItem, it
-     * will throw an error in the console that `onNavigate` is not a valid attribute.
-     */
-    const onToggleHandler: React.MouseEventHandler<any> = React.useCallback(
-        (e: React.MouseEvent<any>) => {
-            if (e.currentTarget.tagName === "BUTTON") {
-                onToggle ? onToggle(e) : onToggleInner(e);
-            } else {
-                // This will only run if the user passed `onSeeked` to an `AccordionItem`
-                let index: number = Number(e.currentTarget.dataset.indexNumber);
-                if (list && index < list.length && list[index].onSeeked) {
-                    list[index].onSeeked(e);
-                } else {
-                    const children: Array<any> = React.Children.toArray(props.children);
-                    children.filter((child: any) => React.isValidElement(child));
-                    index -= list?.length || 0;
-                    children[index] && children[index].props.onSeeked && children[index].props.onSeeked(e);
-                }
-            }
-        },
-        [onToggle, onToggleInner, list, props.children]
-    );
-
     if (isNaN(active)) {
         /**
          * `active` is not initialized with `props.defaultValue` (`Number(undefined) === NaN`).
@@ -100,12 +71,12 @@ export const Accordion: React.FC<AccordionProps> = React.memo(({ list, alternati
     return (
         <div className={className} id={id}>
             {list?.map((item: AccordionItemProps, i: number) => (
-                <AccordionItem key={i} {...item} onSeeked={onToggleHandler} defaultChecked={active === i} data-index-number={i} data-parent-id={id} />
+                <AccordionItem key={i} {...item} onToggle={onToggle || onToggleInner} defaultChecked={active === i} data-index-number={i} data-parent-id={id} />
             ))}
             {React.Children.map(props.children, (Child: React.ReactElement<AccordionItemProps>, i: number) => {
                 return React.isValidElement<React.FC<AccordionItemProps>>(Child)
                     ? React.cloneElement<any>(Child, {
-                          onSeeked: onToggleHandler,
+                          onToggle: onToggle || onToggleInner,
                           defaultChecked: active === i + (list?.length || 0),
                           "data-parent-id": id,
                           "data-index-number": i + (list?.length || 0),
