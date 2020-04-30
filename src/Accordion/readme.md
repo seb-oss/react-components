@@ -68,19 +68,21 @@ function onToggle(e: React.MouseEvent<HTMLButtonElement>) {
 #### AccordionProps
 This interface extends all native attributes of `HTMLDivElement`, adding the following extra attributes:
 
-| Property     | Type                                         | Description                                                    |
-| ------------ | -------------------------------------------- | -------------------------------------------------------------- |
-| alternative? | `boolean`                                    | Toggle alternative style of accordion                          |
-| list?        | `Array<AccordionItemProps>`                  | List of accordion items                                        |
-| onToggle?    | `React.MouseEventHandler<HTMLButtonElement>` | An event handler triggered when an accordion toggle is clicked |
-| inverted?    | `boolean`                                    | Places the icon toggle on the right side                       |
+| Property      | Type                                         | Description                                                    |
+| ------------- | -------------------------------------------- | -------------------------------------------------------------- |
+| alternative?  | `boolean`                                    | Toggle alternative style of accordion                          |
+| list?         | `Array<AccordionItemProps>`                  | List of accordion items                                        |
+| onToggle?     | `React.MouseEventHandler<HTMLButtonElement>` | An event handler triggered when an accordion toggle is clicked |
+| inverted?     | `boolean`                                    | Places the icon toggle on the right side                       |
+| defaultValue? | `number`                                     | The default active item                                        |
 
 #### AccordionItemProps
 This interface extends all native attributes of `HTMLDivElement`, adding the following extra attributes:
 
-| Property   | Type                                         | Description                                                    |
-| ---------- | -------------------------------------------- | -------------------------------------------------------------- |
-| header?    | `React.ReactNode`                            | The header of the accordion item                               |
-| subHeader? | `React.ReactNode`                            | A sub-header description rendered under the header             |
-| onToggle?  | `React.MouseEventHandler<HTMLButtonElement>` | An event handler triggered when an accordion toggle is clicked |
+| Property        | Type                                         | Description                                                    |
+| --------------- | -------------------------------------------- | -------------------------------------------------------------- |
+| header?         | `React.ReactNode`                            | The header of the accordion item                               |
+| subHeader?      | `React.ReactNode`                            | A sub-header description rendered under the header             |
+| onToggle?       | `React.MouseEventHandler<HTMLButtonElement>` | An event handler triggered when an accordion toggle is clicked |
+| defaultChecked? | `boolean`                                    | Default checked/expanded state                                 |
 

@@ -69,7 +69,7 @@ export const Accordion: React.FC<AccordionProps> = React.memo(({ list, alternati
     }
 
     return (
-        <div className={className} id={id}>
+        <div {...props} className={className} id={id}>
             {list?.map((item: AccordionItemProps, i: number) => (
                 <AccordionItem key={i} {...item} onToggle={onToggle || onToggleInner} defaultChecked={active === i} data-index-number={i} data-parent-id={id} />
             ))}

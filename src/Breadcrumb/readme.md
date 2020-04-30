@@ -79,7 +79,7 @@ This interface extends all native attributes of `HTMLAttributes`, adding the fol
 #### BreadcrumbItemProps
 This interface extends all native attributes of `LiHTMLAttributes`, adding the following extra attributes:
 
-| Property    | Type                                         | Description                                               |
-| ----------- | -------------------------------------------- | --------------------------------------------------------- |
-| href?       | `string`                                     | The link to where it navigates to. This is used to enable openning the link in new tab.<br/>Additionally, you can access it in the event passed with the onNavigate callback |
-| onNavigate? | `React.MouseEventHandler<HTMLAnchorElement>` | Event handler triggered when the links is clicked         |
+| Property        | Type                                         | Description                                                                                                                                                                  |
+| --------------- | -------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| href?           | `string`                                     | The link to where it navigates to. This is used to enable openning the link in new tab.<br/>Additionally, you can access it in the event passed with the onNavigate callback |
+| onNavigate?     | `React.MouseEventHandler<HTMLAnchorElement>` | Event handler triggered when the links is clicked                                                                                                                            |
