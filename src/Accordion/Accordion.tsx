@@ -52,10 +52,9 @@ export const Accordion: React.FC<AccordionProps> = React.memo(({ list, alternati
          * At least one child is needed to determine the default.
          */
         if (list?.length || React.Children.count(props.children)) {
-            // If the default value is set from the parent, it should override anything else
-            let defaultValue: number = -1;
-            // Trying to find an item set to active in the list prop first
-            defaultValue = list ? list.findIndex((item: AccordionItemProps) => item.defaultChecked) : -1;
+           // Trying to find an item set to active in the list prop first
+           // If the default value is set from the parent, it should override anything else
+            let defaultValue: list ? list.findIndex((item: AccordionItemProps) => item.defaultChecked) : -1;
             if (defaultValue === -1) {
                 // If the active is not found in one of the list items maybe it's one of the children
                 defaultValue = React.Children.toArray(props.children).findIndex((Child: React.ReactElement<AccordionItemProps>) => Child.props?.defaultChecked);
