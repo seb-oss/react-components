@@ -8,24 +8,3 @@
         }
     }
 }
-
-.seb.accordion.custom-accordion-right {
-    > .card {
-        &:not(.collapsed) > .card-header > button.btn-link > h4:before {
-            transform: translateY(-50%) rotateZ(90deg);
-        }
-        > .card-header {
-            > button.btn-link {
-                padding: 0.5rem 3rem 0.5rem 1rem;
-                > h4 {
-                    &:before {
-                        right: -2rem;
-                        left: auto;
-                        top: 50%;
-                        transform: translateY(-50%);
-                    }
-                }
-            }
-        }
-    }
-}

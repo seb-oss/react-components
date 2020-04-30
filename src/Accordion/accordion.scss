@@ -3,10 +3,8 @@
 .seb.accordion {
     > .card {
         overflow: visible;
-        &:not(.collapsed) {
-            > .card-header > button.btn-link > h4:before {
-                transform: translateY(-50%) rotateX(-180deg);
-            }
+        &:not(.collapsed) > .card-header > button.btn-link > h4:before {
+            transform: translateY(-50%) rotateX(-180deg);
         }
         > .card-header {
             padding: $accordion-header-padding;
@@ -129,6 +127,19 @@
                     }
                 }
             }
+        }
+    }
+    &.inverted {
+        > .card > .card-header > button.btn-link {
+            padding: 0.5rem 3rem 0.5rem 1rem;
+            > h4:before {
+                right: -2rem;
+                left: auto;
+                top: 50%;
+            }
+        }
+        > .card.collapsed > .card-header > button.btn-link > h4:before {
+            transform: translateY(-50%);
         }
     }
 }

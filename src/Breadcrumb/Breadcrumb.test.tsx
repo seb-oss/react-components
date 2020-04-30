@@ -1,15 +1,12 @@
 import React from "react";
-import { Breadcrumb, BreadcrumbItem } from "./Breadcrumb";
+import { Breadcrumb } from "./Breadcrumb";
+import { BreadcrumbItem, BreadcrumbItemProps } from "./BreadcrumbItem";
 import { unmountComponentAtNode, render } from "react-dom";
-import { act } from "react-dom/test-utils";
+import { act, Simulate } from "react-dom/test-utils";
 
 describe("Component: Breadcrumb", () => {
     let container: HTMLDivElement = null;
-    const breadcrumbList1: Array<BreadcrumbItem> = [{ text: "First" }, { text: "Second" }, { text: "Third" }];
-    const breadcrumbList2: Array<BreadcrumbItem> = [
-        { text: "First", title: "First", href: "First" },
-        { text: "Second", title: "Second", href: "Second" },
-    ];
+    const breadcrumbList: Array<BreadcrumbItemProps> = [{ children: "First" }, { children: "Second" }, { children: "Third" }];
 
     beforeEach(() => {
         container = document.createElement("div");
@@ -22,61 +19,87 @@ describe("Component: Breadcrumb", () => {
         container = null;
     });
 
-    it("Should render custom className and id", () => {
-        const className: string = "myBreadcrumbClass";
-        const id: string = "myBreadcrubID";
+    it("Should render", () => {
         act(() => {
-            render(<Breadcrumb list={breadcrumbList1} className={className} id={id} />, container);
+            render(<Breadcrumb />, container);
         });
-        expect(container.querySelector(".seb.breadcrumb").children.length).toEqual(breadcrumbList1.length);
-        expect(container.firstElementChild.classList.contains(className)).toBeTruthy();
-        expect(container.firstElementChild.id).toEqual(id);
+        expect(container.firstElementChild.tagName).toEqual("NAV");
+        expect(container.firstElementChild.getAttribute("aria-label")).toEqual("breadcrumb");
+        expect(container.firstElementChild.firstElementChild.tagName).toEqual("OL");
+        expect(container.firstElementChild.firstElementChild.classList.contains("seb")).toBeTruthy();
+        expect(container.firstElementChild.firstElementChild.classList.contains("breadcrumb")).toBeTruthy();
     });
 
-    it("Should fire click event when clicked", () => {
-        const onClick: jest.Mock = jest.fn();
+    it("Should render with a list with data-index-number", () => {
         act(() => {
-            render(<Breadcrumb list={breadcrumbList1} onClick={onClick} />, container);
+            render(<Breadcrumb list={breadcrumbList} />, container);
         });
-        container
-            .querySelectorAll(".breadcrumb-item")
-            .item(0)
-            .firstElementChild.dispatchEvent(new MouseEvent("click", { bubbles: true }));
-        expect(onClick).toBeCalled();
+        expect(container.firstElementChild.firstElementChild.children.length).toEqual(breadcrumbList.length);
+        expect(container.firstElementChild.firstElementChild.firstElementChild.tagName).toEqual("LI");
+        expect(container.firstElementChild.firstElementChild.firstElementChild.firstElementChild.tagName).toEqual("A");
+        expect(container.firstElementChild.firstElementChild.firstElementChild.firstElementChild.getAttribute("data-index-number")).toEqual("0");
     });
 
-    it("Should render with href, data-value, title, aria-label, and aria-current", () => {
+    it("Should render BreadcrumbItem directly", () => {
         act(() => {
-            render(<Breadcrumb list={breadcrumbList2} />, container);
+            render(
+                <Breadcrumb>
+                    <BreadcrumbItem>First</BreadcrumbItem>
+                    <BreadcrumbItem>Second</BreadcrumbItem>
+                </Breadcrumb>,
+                container
+            );
         });
         const items: NodeListOf<HTMLLIElement> = container.querySelectorAll(".breadcrumb-item");
-        expect(container.firstElementChild.getAttribute("aria-label")).toEqual("breadcrumb");
-        // First element
-        expect(items.item(0).hasAttribute("aria-current")).toBeFalsy();
-        expect(items.item(0).firstElementChild.getAttribute("title")).toEqual(breadcrumbList2[0].title);
-        expect(items.item(0).firstElementChild.getAttribute("href")).toEqual(breadcrumbList2[0].href);
-        expect(items.item(0).firstElementChild.getAttribute("data-value")).toEqual("0");
-        expect(items.item(0).firstElementChild.innerHTML).toEqual(breadcrumbList2[0].text);
-        // Last element
-        expect(items.item(1).hasAttribute("aria-current")).toBeTruthy();
-        expect(items.item(1).getAttribute("aria-current")).toEqual("page");
-        expect(items.item(1).firstElementChild.getAttribute("title")).toEqual(breadcrumbList2[1].title);
-        expect(items.item(1).firstElementChild.getAttribute("href")).toBeNull();
-        expect(items.item(1).firstElementChild.getAttribute("data-value")).toEqual("1");
-        expect(items.item(1).firstElementChild.innerHTML).toEqual(breadcrumbList2[1].text);
+        expect(items.length).toBe(2);
+        expect(items[0].firstElementChild.innerHTML).toEqual("First");
+        expect(items[1].firstElementChild.innerHTML).toEqual("Second");
     });
 
-    it("Should render ReactNode", () => {
+    it("Should pass onNavigate to all items in the list", () => {
+        const onNavigate: jest.Mock = jest.fn();
         act(() => {
-            render(<Breadcrumb list={[{ text: <svg id="mySvg" /> }]} />, container);
+            render(<Breadcrumb list={breadcrumbList} onNavigate={onNavigate} />, container);
         });
-        expect(container.querySelectorAll("#mySvg").length).toBe(1);
+        act(() => {
+            const items: NodeListOf<HTMLLIElement> = container.querySelectorAll(".breadcrumb-item");
+            items[0].firstElementChild.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+            items[1].firstElementChild.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+            items[items.length - 1].firstElementChild.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+        });
+        expect(onNavigate).toBeCalledTimes(2);
     });
 
-    it("Should not crash when passing invalid object to render", () => {
+    it("Should allow rendering none elements", () => {
+        const text: string = "Some text";
         act(() => {
-            render(<Breadcrumb list={[{ text: {} }, { text: [] }]} />, container);
+            render(<Breadcrumb>{text}</Breadcrumb>, container);
         });
-        expect(container.firstElementChild).toBeDefined();
+        expect(container.firstElementChild.firstElementChild.innerHTML).toEqual(text);
+    });
+
+    it("Should set active to the last child even when rendering a list and children at the same time", () => {
+        act(() => {
+            render(
+                <Breadcrumb list={breadcrumbList}>
+                    <BreadcrumbItem>First</BreadcrumbItem>
+                    <BreadcrumbItem>Second</BreadcrumbItem>
+                </Breadcrumb>,
+                container
+            );
+        });
+        const elements: NodeListOf<HTMLLIElement> = container.querySelectorAll<HTMLLIElement>(".breadcrumb-item");
+        elements.forEach((element: HTMLLIElement, i: number) => expect(element.classList.contains("active")).toBe(i === elements.length - 1));
+    });
+
+    it("Should allow passing a custom onNavigate", () => {
+        const onToggle: jest.Mock = jest.fn();
+        act(() => {
+            render(<Breadcrumb onNavigate={onToggle} list={breadcrumbList} />, container);
+        });
+        act(() => {
+            container.querySelector("a").click();
+        });
+        expect(onToggle).toBeCalled();
     });
 });

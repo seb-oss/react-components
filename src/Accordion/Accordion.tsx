@@ -1,95 +1,87 @@
 import React from "react";
 import { randomId } from "@sebgroup/frontend-tools/dist/randomId";
-import { isPrimitive } from "@sebgroup/frontend-tools/dist/isPrimitive";
 import classnames from "classnames";
-import { AccordionItemBody } from "./AccordionItemBody";
+import { AccordionItemProps, AccordionItem } from "./AccordionItem";
 import "./accordion.scss";
 
-export interface AccrodionListItem {
-    /** The header of the accordion item */
-    header: React.ReactNode;
-    /** A sub-header description rendered under the header */
-    subHeader?: React.ReactNode;
-    /** The content of the accordion item */
-    content: React.ReactNode;
-}
-
-export interface AccordionProps {
-    /** Element class name */
-    className?: string;
-    /** Element id */
-    id?: string;
+export type AccordionProps = React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> & {
     /**
      * The accordion list of items
-     * @see AccordionListItem interface
+     * @see AccordionItemProps interface
      */
-    list: Array<AccrodionListItem>;
+    list?: Array<AccordionItemProps>;
     /** An alternative version of the accordion */
     alternative?: boolean;
-    /** The index of an item that would be set to be expanded by default  */
-    defaultExpanded?: number;
-}
+    /** An event handler triggered when an accordion toggle is clicked */
+    onToggle?: React.MouseEventHandler<HTMLButtonElement>;
+    /** Places the icon toggle on the right side */
+    inverted?: boolean;
+    /** The default `active` item. (Overriding the native type) */
+    defaultValue?: number;
+};
 
-const Accordion: React.FC<AccordionProps> = React.memo((props: AccordionProps) => {
-    const [active, setActive] = React.useState<number>(props.defaultExpanded);
-    const [idList, setIdList] = React.useState<Array<string>>([]);
-    const [id, setId] = React.useState<string>("");
-    const [className, setClassName] = React.useState<string>("");
+export const Accordion: React.FC<AccordionProps> = React.memo(({ list, alternative, onToggle, inverted, ...props }: AccordionProps) => {
+    const [active, setActive] = React.useState<number>(Number(props.defaultValue));
+    const [id, setId] = React.useState<string>(props.id);
+    const [className, setClassName] = React.useState<string>("seb accordion");
 
-    React.useEffect(() => constructIds(), [props.list]);
-    React.useEffect(() => setActive(props.defaultExpanded), [props.defaultExpanded]);
+    /** Sets custom id if the user din't pass any */
     React.useEffect(() => setId(props.id || randomId("accordion-")), [props.id]);
-    React.useEffect(() => setClassName(classnames(["seb", "accordion", { alternative: props.alternative }, props.className])), [props.className, props.alternative]);
-
-    /** Constructs identifiers for accordion items to be used enable accessibility features */
-    const constructIds: VoidFunction = React.useCallback(() => {
-        const idListToSet: Array<string> = [];
-        props.list?.map(() => idListToSet.push(randomId("accordion-item-")));
-        setIdList(idListToSet);
-    }, [props.list, setIdList]);
+    React.useEffect(() => setClassName(classnames(["seb", "accordion", { alternative }, { inverted }, props.className])), [props.className, alternative, inverted]);
+    React.useEffect(() => {
+        typeof props.defaultValue === "number" && setActive(props.defaultValue);
+    }, [props.defaultValue]);
 
     /**
      * Handles accordion item click event
      * @param {React.MouseEvent<HTMLButtonElement>} e MouseEvent
      */
-    const onToggle: React.MouseEventHandler<HTMLButtonElement> = React.useCallback(
+    const onToggleInner: React.MouseEventHandler<HTMLButtonElement> = React.useCallback(
         (e: React.MouseEvent<HTMLButtonElement>) => {
-            setActive(active === Number(e.currentTarget.value) ? null : Number(e.currentTarget.value));
+            const index: number = Number(e.currentTarget.dataset.indexNumber);
+            !isNaN(index) && setActive(active === index ? -1 : index);
         },
-        [active, setActive]
+        [active]
     );
 
-    return (
-        <div className={className} id={id}>
-            {props.list?.map((item: AccrodionListItem, index: number) => {
-                const cardClassName: string = classnames(["card", { collapsed: active !== index }]);
-                const collapseClassName: string = classnames(["collapse", { collapsed: active !== index }]);
+    if (isNaN(active)) {
+        /**
+         * `active` is not initialized with `props.defaultValue` (`Number(undefined) === NaN`).
+         * Should only run once. The active state will never be set to NaN.
+         *
+         * At least one child is needed to determine the default.
+         */
+        if (list?.length || React.Children.count(props.children)) {
+            // Trying to find an item set to active in the list prop first
+            // If the default value is set from the parent, it should override anything else
+            let defaultValue: number = list ? list.findIndex((item: AccordionItemProps) => item.defaultChecked) : -1;
+            if (defaultValue === -1) {
+                // If the active is not found in one of the list items maybe it's one of the children
+                defaultValue = React.Children.toArray(props.children).findIndex((Child: React.ReactElement<AccordionItemProps>) => Child.props?.defaultChecked);
+                if (list) {
+                    defaultValue += list.length;
+                }
+            }
+            // Set the active to the found child, else it's `-1`
+            setActive(defaultValue);
+        }
+    }
 
-                return (
-                    <div className={cardClassName} key={index}>
-                        <div className="card-header" id={idList[index] + "-header"}>
-                            <button
-                                className="btn btn-link"
-                                type="button"
-                                data-toggle="collapse"
-                                aria-expanded={index === active ? "true" : "false"}
-                                data-target={`#${idList[index]}`}
-                                aria-controls={idList[index]}
-                                onClick={onToggle}
-                                value={index}
-                            >
-                                <h4>{React.isValidElement(item.header) || isPrimitive(item.header) ? item.header : null}</h4>
-                                {item.subHeader && <h6>{React.isValidElement(item.subHeader) || isPrimitive(item.subHeader) ? item.subHeader : null}</h6>}
-                            </button>
-                        </div>
-                        <div id={idList[index]} className={collapseClassName} aria-labelledby={idList[index] + "--header"} data-parent={`#${id}`}>
-                            <AccordionItemBody toggle={active === index}>{item.content}</AccordionItemBody>
-                        </div>
-                    </div>
-                );
+    return (
+        <div {...props} className={className} id={id}>
+            {list?.map((item: AccordionItemProps, i: number) => (
+                <AccordionItem key={i} {...item} onToggle={onToggle || onToggleInner} defaultChecked={active === i} data-index-number={i} data-parent-id={id} />
+            ))}
+            {React.Children.map(props.children, (Child: React.ReactElement<AccordionItemProps>, i: number) => {
+                return React.isValidElement<React.FC<AccordionItemProps>>(Child)
+                    ? React.cloneElement<any>(Child, {
+                          onToggle: onToggle || onToggleInner,
+                          defaultChecked: active === i + (list?.length || 0),
+                          "data-parent-id": id,
+                          "data-index-number": i + (list?.length || 0),
+                      })
+                    : Child;
             })}
         </div>
     );
 });
-
-export { Accordion };

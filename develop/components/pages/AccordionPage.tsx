@@ -1,15 +1,12 @@
 import React from "react";
-import { Accordion, AccrodionListItem } from "../../../src/Accordion/Accordion";
+import { Accordion } from "../../../src/Accordion/Accordion";
 import Highlight from "react-highlight";
 import { loremIpsum } from "lorem-ipsum";
+import { AccordionItemProps, AccordionItem } from "../../../src/Accordion/AccordionItem";
 const docMD: string = require("../../../src/Accordion/readme.md");
 
 const AccordionPage: React.FC = () => {
-    const [lists] = React.useState<Array<Array<AccrodionListItem>>>(
-        Array(4)
-            .fill(0)
-            .map(() => generateList())
-    );
+    const [lists] = React.useState<Array<Array<AccordionItemProps>>>([...Array(4)].map(() => generateList()));
 
     return (
         <div className="route-template container">
@@ -24,7 +21,21 @@ const AccordionPage: React.FC = () => {
                     <h2>Output</h2>
                     <p>Here is a sample output</p>
                     <div className="result wide">
-                        <Accordion list={lists[0]} />
+                        <Accordion>
+                            <AccordionItem
+                                defaultChecked
+                                header="Accordion Header"
+                                subHeader={
+                                    <span>
+                                        Expanded by default when setting <Code>defaultChecked</Code> to true in a child <Code>AccordionItem</Code>
+                                    </span>
+                                }
+                            >
+                                {lists[0][0].children}
+                            </AccordionItem>
+                            <AccordionItem header="Accordion header">{lists[0][1].children}</AccordionItem>
+                            <AccordionItem header={lists[0][2].header}>{lists[0][2].children}</AccordionItem>
+                        </Accordion>
                     </div>
 
                     <p>Custom icon when expanded</p>
@@ -32,14 +43,28 @@ const AccordionPage: React.FC = () => {
                         <Accordion list={lists[1]} className="custom-accordion-icon" />
                     </div>
 
-                    <p>Custom icon on the right</p>
+                    <p>Place icon to the right (inverted)</p>
                     <div className="result wide">
-                        <Accordion list={lists[2]} className="custom-accordion-icon custom-accordion-right" />
+                        <Accordion list={lists[2]} inverted />
                     </div>
 
                     <p>Alternative theme</p>
                     <div className="result wide">
-                        <Accordion list={lists[3]} alternative />
+                        <Accordion alternative defaultValue={3}>
+                            {lists[3].map((item: AccordionItemProps, i: number) => {
+                                return <AccordionItem key={i} {...item} />;
+                            })}
+                            <AccordionItem
+                                header="Accordion header"
+                                subHeader={
+                                    <span>
+                                        Expanded by default when setting <Code>defaultValue</Code> to <Code>3</Code> (index) in the parent <Code>Accordion</Code>
+                                    </span>
+                                }
+                            >
+                                {lists[3][2].children}
+                            </AccordionItem>
+                        </Accordion>
                     </div>
                 </div>
             </div>
@@ -47,12 +72,14 @@ const AccordionPage: React.FC = () => {
     );
 };
 
-function generateList(): Array<AccrodionListItem> {
+const Code: React.FC = (props) => <code className="d-inline">{props.children}</code>;
+
+function generateList(): Array<AccordionItemProps> {
     return [
         {
             header: loremIpsum({ units: "words", count: 3 }),
             subHeader: loremIpsum({ units: "words", count: 5 }),
-            content: (
+            children: (
                 <div>
                     <h5>{loremIpsum({ units: "words", count: 2 })}</h5>
                     <p>{loremIpsum({ units: "paragraph", count: 1 })}</p>
@@ -61,18 +88,21 @@ function generateList(): Array<AccrodionListItem> {
         },
         {
             header: loremIpsum({ units: "words", count: 3 }),
-            content: (
+            children: (
                 <div>
                     <h5>{loremIpsum({ units: "words", count: 2 })}</h5>
                     <p>{loremIpsum({ units: "paragraph", count: 1 })}</p>
                     <h5>{loremIpsum({ units: "words", count: 2 })}</h5>
                     <p>{loremIpsum({ units: "paragraph", count: 1 })}</p>
+                    <a href="https://seb.se" target="_blank">
+                        Link to seb.se
+                    </a>
                 </div>
             ),
         },
         {
             header: loremIpsum({ units: "words", count: 3 }),
-            content: (
+            children: (
                 <div>
                     <p className="m-0">{loremIpsum({ units: "sentences", count: 2 })}</p>
                     <a href="https://seb.se" target="_blank">
