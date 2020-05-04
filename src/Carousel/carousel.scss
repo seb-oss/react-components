@@ -18,7 +18,7 @@
     .carousel-item {
         &.carousel-item-next.carousel-item-left,
         &.carousel-item-prev.carousel-item-right {
-            animation: fade-in 600ms forwards;
+            animation: fade-in $carousel-transition-duration forwards;
         }
     }
 }
