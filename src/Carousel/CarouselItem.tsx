@@ -3,8 +3,6 @@ import classnames from "classnames";
 import { NavigationDirection, defaultTransitionDuration } from "./Carousel";
 
 export interface CarouselItemProps extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
-    /** Active state. (Managed by Carousel) */
-    active?: boolean;
     /** Navigation direction, whether the next slide is next in line or previous. (Managed by Carousel) */
     nav?: NavigationDirection;
     /** The duration it takes (in milliseconds) the carousel to transition to the next. (Managed by Carousel) */
@@ -40,7 +38,7 @@ export const CarouselItem: React.FC<CarouselItemProps> = React.memo(({ nav, tran
                 }, transitionDuration || defaultTransitionDuration);
             }
         }
-    }, [transitionDuration, nav, activeState, props.className, afterTransition]);
+    }, [transitionDuration, nav, activeState, props.className, props.defaultChecked, afterTransition]);
 
     const duration: string = (transitionDuration || defaultTransitionDuration) + "ms";
 
