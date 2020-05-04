@@ -26,7 +26,7 @@ describe("Component: Carousel", () => {
             render(<Carousel />, container);
         });
         act(() => jest.runOnlyPendingTimers());
-        expect(container.firstElementChild).toBeDefined();
+        expect(container.firstElementChild).not.toBeNull();
     });
 
     it("Should render with a list, children, or both", () => {

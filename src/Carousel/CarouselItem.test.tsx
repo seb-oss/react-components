@@ -24,7 +24,7 @@ describe("Component: Carousel", () => {
             render(<CarouselItem />, container);
         });
         act(() => jest.runOnlyPendingTimers());
-        expect(container.firstElementChild).toBeDefined();
+        expect(container.firstElementChild).not.toBeNull();
         expect(container.firstElementChild.classList.contains("carousel-item")).toBeTruthy();
     });
 
