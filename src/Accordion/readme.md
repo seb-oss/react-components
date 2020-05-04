@@ -17,49 +17,72 @@ Type: Form Component
 
 ## Element information
 
-This React component is based on SEB Bootstrap style. Supports customization and configurations. Use this component mainly for text content. The module name of this component is `Accordion` and the selector is `<Accordion/>`.
+This React component is based on SEB Bootstrap style. Supports customization and configurations. Use this component mainly for text content. The module name of this component is `Accordion` and the selector is `<Accordion/>`. A supplimentary child component is also available for use `AccordionItem`. See the examples below.
 
 ## Basic use
 
+It can be used in these combinations
 ```html
-<Accordion list="accordionListObj" />
+{/* Passing the list as prop with common onToggle handler and default value (index number) to show which one is checked */}
+<Accordion list="accordionList" onToggle={commonToggleHandler} defaultValue={value} />
+
+{/* Rendering a list of AccordionItem */}
+<Accordion defaultValue={value}>
+    {accordionList.map((item: AccordionItemProps, i: number) => {
+        /** Do whatever logic before rendering */
+        return (
+            <AccordionItem key={i} {...item} onToggle={individualToggleHandler}/>
+        )
+    })}
+</Accordion>
+
+{/* Rendering a bunch AccordionItem individually */}
+<Accordion>
+    <AccordionItem header="First">Some content</AccordionItem>
+    <AccordionItem header="Second" subHeader="Some description">
+        <h4>This is the second</h4>
+        <p>Some rich content</p>
+    </AccordionItem>
+    <AccordionItem header="Third" defaultChecked>
+        <SomeComponent>content</SomeComponent>
+    </AccordionItem>
+</Accordion>
+```
+**onToggle** handler can be passed to the parent as common handler, or passed to each individual child as a unique handler for each item
+**defaultChecked** can be used to set the default state on items rendered individually
+```jsx
+/** If you use hash router, you need to pass the hash in the href */
+const accordionList: Array<AccordionItemProps> = [
+    { header: "First", children: "Some content" },
+    { header: "Second", subHeader: "Some description", children: <><h4>This is the second</h4><p>Some rich content</p></> },
+    { header: "Third", children: <SomeComponent>content</SomeComponent> },
+];
+function onToggle(e: React.MouseEvent<HTMLButtonElement>) {
+    /** Run any necessary logic before setting the defaultValue */
+    setValue(Number(e.currentTarget.dataset.indexNumber));
+}
 ```
 
 ## Properties
 
-These are the current available properties:
+#### AccordionProps
+This interface extends all native attributes of `HTMLDivElement`, adding the following extra attributes:
 
-| Property            | Type                                   | Description                                                                            |
-|---------------------|----------------------------------------|----------------------------------------------------------------------------------------|
-| alternative?        | `boolean`                              | Toggle alternative style of accordion                                                  |
-| className?          | `string`                               | Element class                                                                          |
-| activeIndex?        | `number`                               | index of the default active item                                                       |
-| customIcon?         | `JSX.Element`                          | Custom icon for the accordion trigger                                                  |
-| customIconExpanded? | `JSX.Element`                          | Custom icon to be used when expanded. This will add a transition between the two icons |
-| iconPosition?       | `string`                               | Accordion icon placement<sup>1</sup>                                                   |
-| iconTransition?     | `string`                               | Icon transition rotation degree<sup>2</sup>                                            |
-| id?                 | `string`                               | Element id                                                                             |
-| list                | `Array<AccrodionListItem>`<sup>3</sup> | List of accordion items                                                                |
+| Property      | Type                                         | Description                                                    |
+| ------------- | -------------------------------------------- | -------------------------------------------------------------- |
+| alternative?  | `boolean`                                    | Toggle alternative style of accordion                          |
+| list?         | `Array<AccordionItemProps>`                  | List of accordion items                                        |
+| onToggle?     | `React.MouseEventHandler<HTMLButtonElement>` | An event handler triggered when an accordion toggle is clicked |
+| inverted?     | `boolean`                                    | Places the icon toggle on the right side                       |
+| defaultValue? | `number`                                     | The default active item                                        |
 
-## Footnote
+#### AccordionItemProps
+This interface extends all native attributes of `HTMLDivElement`, adding the following extra attributes:
 
-1. Icon positions supported are: `right` and `left`
-2. Icon transitions supported are: `"deg-180"`, `"deg-180-counter"`, `"deg-90"`, `"deg-90-counter"`
-3. Property `list` has an exported interface named `AccordionListItem`:
+| Property        | Type                                         | Description                                                    |
+| --------------- | -------------------------------------------- | -------------------------------------------------------------- |
+| header?         | `React.ReactNode`                            | The header of the accordion item                               |
+| subHeader?      | `React.ReactNode`                            | A sub-header description rendered under the header             |
+| onToggle?       | `React.MouseEventHandler<HTMLButtonElement>` | An event handler triggered when an accordion toggle is clicked |
+| defaultChecked? | `boolean`                                    | Default checked/expanded state                                 |
 
-```typescript
-interface AccordionListItem {
-    header: string;
-    subHeaderText?: string;
-    content?: AccordionContent | Array<AccordionContent> | React.ReactNode;
-}
-```
-
-`AccordionListItem`'s memeber `content` has an exported interface name `AccordionContent` and accepts a single `AccordionContent` object or an array of `AccordionContent` objects
-
-```typescript
-interface AccordionContent {
-    title?: string;
-    desc?: string;
-}
-```

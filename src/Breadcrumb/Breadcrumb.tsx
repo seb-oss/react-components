@@ -1,46 +1,58 @@
 import React from "react";
-import { isPrimitive } from "@sebgroup/frontend-tools/dist/isPrimitive";
-import classNames from "classnames";
-import "./breadcrumb.scss";
+import classnames from "classnames";
+import { BreadcrumbItemProps, BreadcrumbItem } from "./BreadcrumbItem";
 
-export interface BreadcrumbProps {
-    /** Element class name */
-    className?: string;
-    /** Element id */
-    id?: string;
-    /** The list of breadcrumb items */
-    list: Array<BreadcrumbItem>;
-    /** onClick callback */
-    onClick?: (e?: React.MouseEvent<HTMLAnchorElement>) => void;
-}
+export type BreadcrumbProps = React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & {
+    /** List of BreadcrumbItemProps to be rendered */
+    list?: Array<BreadcrumbItemProps>;
+    /** Event handler triggered when one of the breadcrumb links is clicked */
+    onNavigate?: React.MouseEventHandler<HTMLAnchorElement>;
+    /** Enables the light version of the Breadcrumb */
+    light?: boolean;
+};
 
-export interface BreadcrumbItem {
-    /** The content to be displayed in each breadcrumb item */
-    text: React.ReactNode;
+type ItemsSource = "list" | "children";
+
+export const Breadcrumb: React.FC<BreadcrumbProps> = React.memo(({ onNavigate, list, light, ...props }: BreadcrumbProps) => {
+    const [breadcrumbListClassName, setBreadcrumbListClassName] = React.useState<string>("seb breadcrumb");
+
+    React.useEffect(() => setBreadcrumbListClassName(classnames(["seb", "breadcrumb", { "breadcrumb-light": light }])), [light]);
+
     /**
-     * The link to where it leats. This is used to enable openning the link in new tab.
-     * Additionally, you can access it in the event passed with the onClick callback
+     * Find if a breadcrumb item is the last in the list so it can be disabled (active)
+     * @param {"list" | "children"} source The source of the breadcrumb item which might be from list prop or children
+     * @param {number} index The index of the item in its source
+     * @returns {boolean} True if it's the absolute last in the parent
      */
-    href?: string;
-    /** The title of the anchor tag, used for accessibility to describte where the link takes you */
-    title?: string;
-}
+    const isActive: (source: ItemsSource, index: number) => boolean = React.useCallback(
+        (source: ItemsSource, index: number): boolean => {
+            const listCount: number = list?.length || 0;
+            const childrenCount: number = React.Children.toArray(props.children).length;
+            if (source === "children") {
+                return index === childrenCount - 1;
+            } else {
+                return childrenCount ? false : index === listCount - 1;
+            }
+        },
+        [props.children, list]
+    );
 
-export const Breadcrumb: React.FC<BreadcrumbProps> = React.memo((props: BreadcrumbProps) => (
-    <nav aria-label="breadcrumb" className={props.className} id={props.id}>
-        <ol className="seb breadcrumb">
-            {props.list.map((item: BreadcrumbItem, i: number) => {
-                const isLast: boolean = i === props.list.length - 1;
-                const className: string = classNames(["breadcrumb-item", { active: isLast }]);
-
-                return (
-                    <li key={i} className={className} aria-current={isLast ? "page" : null}>
-                        <a title={item.title} href={isLast ? null : item.href || "#"} data-value={i} onClick={!isLast ? props.onClick : null}>
-                            {React.isValidElement(item.text) || isPrimitive(item.text) ? item.text : null}
-                        </a>
-                    </li>
-                );
-            })}
-        </ol>
-    </nav>
-));
+    return (
+        <nav {...props} aria-label="breadcrumb">
+            <ol className={breadcrumbListClassName}>
+                {list?.map((item: BreadcrumbItemProps, i: number) => (
+                    <BreadcrumbItem key={i} {...item} onNavigate={onNavigate} defaultChecked={isActive("list", i)} data-index-number={i} />
+                ))}
+                {React.Children.map(props.children, (Child: React.ReactElement<BreadcrumbItemProps>, i: number) => {
+                    return React.isValidElement<BreadcrumbItemProps>(Child)
+                        ? React.cloneElement<any>(Child, {
+                              onNavigate: onNavigate,
+                              defaultChecked: isActive("children", i),
+                              "data-index-number": i + (list?.length || 0),
+                          })
+                        : Child;
+                })}
+            </ol>
+        </nav>
+    );
+});
