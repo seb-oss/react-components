@@ -1,0 +1,39 @@
+@import "../../node_modules/@sebgroup/bootstrap/scss/core";
+/**
+ * TODO: This fixes the default `slide` transition, should be removed when it's fixed in Bootstrap
+ * See Pull request [#315](https://github.com/sebgroup/bootstrap/pull/315)
+ */
+.carousel-item-next:not(.carousel-item-left),
+.carousel-item-prev:not(.carousel-item-right),
+.active.carousel-item-right,
+.active.carousel-item-left {
+    z-index: 1;
+}
+
+/**
+  * TODO: This fixes the `fade` transition, should be removed when it's fixed in Bootstrap
+  * See Pull request [#315](https://github.com/sebgroup/bootstrap/pull/315)
+  */
+.carousel-fade {
+    .carousel-item {
+        &.carousel-item-next.carousel-item-left,
+        &.carousel-item-prev.carousel-item-right {
+            animation: fade-in 600ms forwards;
+        }
+    }
+}
+
+@keyframes fade-in {
+    0% {
+        display: none;
+        opacity: 0;
+    }
+    1% {
+        display: block;
+        opacity: 0;
+    }
+    100% {
+        display: block;
+        opacity: 1;
+    }
+}

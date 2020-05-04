@@ -38,7 +38,7 @@ const App: React.FunctionComponent<RouteComponentProps> = (props: RouteComponent
 
     return (
         <div className="app-container">
-            <TitleBar onToggleClick={toggleSidebar} history={props.history} />
+            {!brief && <TitleBar onToggleClick={toggleSidebar} history={props.history} />}
             <div className={"route-holder" + (sidebarToggle ? " sidebar-opened" : "") + (brief ? " brief" : "")}>
                 <React.Suspense fallback={<Loader toggle={true} fullscreen={true} />}>
                     <Switch>
@@ -51,7 +51,7 @@ const App: React.FunctionComponent<RouteComponentProps> = (props: RouteComponent
                     </Switch>
                 </React.Suspense>
             </div>
-            <SideBar toggle={sidebarToggle} history={props.history} />
+            {!brief && <SideBar toggle={sidebarToggle} history={props.history} />}
         </div>
     );
 };

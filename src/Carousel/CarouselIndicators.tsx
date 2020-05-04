@@ -20,7 +20,7 @@ export const CarouselIndicators: React.FC<CarouselIndicatorsProps> = React.memo(
     return (
         <ol {...props} className={className}>
             {[...Array(size)].map((v: undefined, i: number) => (
-                <li key={i} data-target={parentId ? `#${parentId}` : null} data-slide-to={i} className={classnames({ active: active === i })} onClick={onIndicatorClicked} />
+                <li key={i} data-target={parentId ? `#${parentId}` : null} data-slide-to={i} className={classnames({ active: active === i })} onClick={active !== i ? onIndicatorClicked : null} />
             ))}
         </ol>
     );
