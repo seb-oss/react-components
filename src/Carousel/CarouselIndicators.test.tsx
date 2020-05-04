@@ -22,7 +22,7 @@ describe("Component: Carousel", () => {
         act(() => {
             render(<CarouselIndicators />, container);
         });
-        expect(container.firstElementChild).toBeDefined();
+        expect(container.firstElementChild).not.toBeNull();
         expect(container.firstElementChild.classList.contains("carousel-indicators")).toBeTruthy();
     });
 
