@@ -6,7 +6,7 @@ import { CarouselIndicators } from "./CarouselIndicators";
 import { CarouselNavs } from "./CarouselNavs";
 import "./carousel.scss";
 
-export interface CarouselProps extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
+export type CarouselProps = JSX.IntrinsicElements["div"] & {
     /** Event handler triggered after change have happened to the carousel returning the index of the new active carousel slide */
     afterChange?: (index: number) => void;
     /** The duration (in milliseconds) it takes to transition from one slide to another. Default is `600` */
@@ -21,7 +21,7 @@ export interface CarouselProps extends React.DetailedHTMLProps<React.HTMLAttribu
     list?: Array<CarouselItemProps>;
     /** The index of default active slide */
     defaultValue?: number;
-}
+};
 
 export const defaultTransitionDuration: number = 600;
 export type NavigationDirection = "next" | "prev";

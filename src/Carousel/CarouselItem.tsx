@@ -2,14 +2,14 @@ import React from "react";
 import classnames from "classnames";
 import { NavigationDirection, defaultTransitionDuration } from "./Carousel";
 
-export interface CarouselItemProps extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
+export type CarouselItemProps = JSX.IntrinsicElements["div"] & {
     /** Navigation direction, whether the next slide is next in line or previous. (Managed by Carousel) */
     nav?: NavigationDirection;
     /** The duration it takes (in milliseconds) the carousel to transition to the next. (Managed by Carousel) */
     transitionDuration?: number;
     /** An event handler triggered after a transition ended. (Managed by Carousel) */
     afterTransition?: VoidFunction;
-}
+};
 
 export type TransitionDirection = "right" | "left";
 

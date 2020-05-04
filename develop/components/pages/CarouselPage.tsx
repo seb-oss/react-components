@@ -2,6 +2,7 @@ import * as React from "react";
 import { Carousel, CarouselItem } from "../../../src/Carousel";
 import Highlight from "react-highlight";
 import { CarouselProps } from "../../../src/Carousel/Carousel";
+import classnames from "classnames";
 const docMD: string = require("../../../src/Carousel/readme.md");
 
 const CarouselPage: React.FunctionComponent = () => {
@@ -35,55 +36,28 @@ const CarouselPage: React.FunctionComponent = () => {
     );
 };
 
+const Child: React.FC<JSX.IntrinsicElements["div"]> = React.memo((props: JSX.IntrinsicElements["div"]) => (
+    <div className={classnames("p-5", props.className)}>
+        <h1 className="text-light text-center">{props.children}</h1>
+        <p className="text-light text-center">
+            <a className="text-light" href="#">
+                test
+            </a>
+        </p>
+    </div>
+));
+
 const CarouselSample: React.FC<CarouselProps> = React.memo((props: CarouselProps) => {
     return (
-        <Carousel
-            {...props}
-            showIndicators
-            list={[
-                {
-                    children: (
-                        <div className="p-5 bg-primary">
-                            <h1 className="text-light text-center">Start</h1>
-                            <p className="text-light text-center">
-                                <a className="text-light" href="#">
-                                    test
-                                </a>
-                            </p>
-                        </div>
-                    ),
-                },
-            ]}
-        >
+        <Carousel {...props} showIndicators list={[{ children: <Child className="bg-primary">Start</Child> }]}>
             <CarouselItem>
-                <div className="p-5 bg-dark">
-                    <h1 className="text-light text-center">First</h1>
-                    <p className="text-light text-center">
-                        <a className="text-light" href="#">
-                            test
-                        </a>
-                    </p>
-                </div>
+                <Child className="bg-dark">First</Child>
             </CarouselItem>
             <CarouselItem>
-                <div className="p-5 bg-danger">
-                    <h1 className="text-light text-center">Second</h1>
-                    <p className="text-light text-center">
-                        <a className="text-light" href="#">
-                            test
-                        </a>
-                    </p>
-                </div>
+                <Child className="bg-danger">Second</Child>
             </CarouselItem>
             <CarouselItem>
-                <div className="p-5 bg-warning">
-                    <h1 className="text-light text-center">Third</h1>
-                    <p className="text-light text-center">
-                        <a className="text-light" href="#">
-                            test
-                        </a>
-                    </p>
-                </div>
+                <Child className="bg-warning">Third</Child>
             </CarouselItem>
         </Carousel>
     );
