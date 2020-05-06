@@ -231,4 +231,57 @@ describe("Component: Carousel", () => {
             expect(onTouchStart).toBeCalled();
         });
     });
+
+    it("Should allow autoplay", () => {
+        act(() => {
+            jest.useFakeTimers();
+            render(<Carousel autoplay list={carouselList} />, container);
+        });
+        act(() => jest.advanceTimersToNextTimer());
+        expect(element(0).classList.contains("carousel-item-left")).toBeTruthy();
+        act(() => Simulate.transitionEnd(element(0)));
+        act(() => Simulate.animationEnd(element(1)));
+        expect(element(1).classList.contains("active")).toBeTruthy();
+
+        jest.clearAllTimers();
+    });
+
+    it("Should be interrupted on hover", () => {
+        const onMouseEnter: jest.Mock = jest.fn();
+        const onMouseLeave: jest.Mock = jest.fn();
+
+        act(() => {
+            jest.useFakeTimers();
+            render(<Carousel onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} autoplay list={carouselList} />, container);
+        });
+        act(() => Simulate.mouseEnter(container.firstElementChild));
+        act(() => jest.advanceTimersToNextTimer());
+        expect(element(0).classList.contains("carousel-item-left")).toBeFalsy();
+
+        act(() => Simulate.mouseLeave(container.firstElementChild));
+        act(() => jest.advanceTimersByTime(1000));
+        expect(element(0).classList.contains("carousel-item-left")).toBeFalsy();
+
+        act(() => Simulate.mouseLeave(container.firstElementChild));
+        act(() => jest.advanceTimersToNextTimer());
+        expect(element(0).classList.contains("carousel-item-left")).toBeTruthy();
+
+        expect(onMouseEnter).toBeCalled();
+        expect(onMouseLeave).toBeCalled();
+
+        jest.clearAllTimers();
+    });
+
+    it("Should allow passing custom autoplayspeed", () => {
+        const autoplaySpeed: number = 9000;
+        act(() => {
+            jest.useFakeTimers();
+            render(<Carousel autoplay autoplaySpeed={autoplaySpeed} list={carouselList} />, container);
+        });
+
+        act(() => jest.advanceTimersByTime(autoplaySpeed));
+        expect(element(0).classList.contains("carousel-item-left")).toBeTruthy();
+
+        jest.clearAllTimers();
+    });
 });

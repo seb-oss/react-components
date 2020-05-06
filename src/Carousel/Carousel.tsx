@@ -21,15 +21,30 @@ export type CarouselProps = JSX.IntrinsicElements["div"] & {
     list?: Array<CarouselItemProps>;
     /** The index of default active slide */
     defaultValue?: number;
+    /** Enables autoplay slides */
+    autoplay?: boolean;
+    /** Autoplay speed in milliseconds. Default is `5000` */
+    autoplaySpeed?: number;
 };
 
 export const defaultTransitionDuration: number = 600;
+export const defaultAutoplaySpeed: number = 5000;
 export type NavigationDirection = "next" | "prev";
 type NavigateTrigger = React.MouseEvent<HTMLLIElement | HTMLAnchorElement | HTMLDivElement> | React.TouchEvent<HTMLDivElement> | React.KeyboardEvent<HTMLAnchorElement>;
 type SwipeEvent = React.TouchEvent<HTMLDivElement> | React.MouseEvent<HTMLDivElement>;
 
 export const Carousel: React.FC<CarouselProps> = React.memo(
-    ({ afterChange, transitionDuration = defaultTransitionDuration, transitionStyle = "slide", infinite = true, showIndicators, list = [], ...props }: CarouselProps) => {
+    ({
+        afterChange,
+        transitionDuration = defaultTransitionDuration,
+        transitionStyle = "slide",
+        infinite = true,
+        showIndicators,
+        list = [],
+        autoplay = false,
+        autoplaySpeed = defaultAutoplaySpeed,
+        ...props
+    }: CarouselProps) => {
         const [active, setActive] = React.useState<number>(0);
         const [size, setSize] = React.useState<number>(0);
         const [nav, setNav] = React.useState<NavigationDirection>("next");
@@ -37,6 +52,7 @@ export const Carousel: React.FC<CarouselProps> = React.memo(
         const [className, setClassName] = React.useState<string>("carousel");
         const [swipePos, setSwipePos] = React.useState<number>();
         const [comingNext, setComingNext] = React.useState<number>();
+        const interrupted: React.MutableRefObject<boolean> = React.useRef<boolean>(false);
 
         /** ----- Utilities ----- */
 
@@ -58,7 +74,7 @@ export const Carousel: React.FC<CarouselProps> = React.memo(
          * @param {NavigateTrigger} e Navigation trigger event
          */
         const goToSlide: (e: NavigateTrigger, slideTo?: NavigationDirection) => void = React.useCallback(
-            (e: NavigateTrigger, slideTo?: NavigationDirection) => {
+            (e: NavigateTrigger, slideTo?: NavigationDirection): void => {
                 e.cancelable && e.preventDefault();
                 let newActive: number;
                 let newNav: NavigationDirection;
@@ -93,11 +109,22 @@ export const Carousel: React.FC<CarouselProps> = React.memo(
             [active, infinite, nav, findNewActive]
         );
 
+        const triggerAutoplay: VoidFunction = React.useCallback((): void => {
+            if (autoplay && !interrupted.current) {
+                setTimeout(() => {
+                    if (!interrupted.current) {
+                        goToSlide(new MouseEvent("mousedown", { bubbles: true }) as any, "next");
+                    }
+                }, autoplaySpeed);
+            }
+        }, [autoplay, autoplaySpeed, goToSlide]);
+
         /** ----- Event handlers ----- */
         /** An event handler triggered after a transition has ended */
         const afterTransition: VoidFunction = React.useCallback((): void => {
+            triggerAutoplay();
             afterChange && afterChange(active);
-        }, [afterChange, active]);
+        }, [afterChange, active, triggerAutoplay]);
 
         /**
          * Handles swipe events
@@ -134,6 +161,23 @@ export const Carousel: React.FC<CarouselProps> = React.memo(
             [swipePos]
         );
 
+        const interruptionHandler: React.MouseEventHandler<HTMLDivElement> = React.useCallback(
+            (e: React.MouseEvent<HTMLDivElement>): void => {
+                switch (e.type as keyof HTMLElementEventMap) {
+                    case "mouseenter":
+                        interrupted.current = true;
+                        props.onMouseEnter && props.onMouseEnter(e);
+                        break;
+                    case "mouseleave":
+                        interrupted.current = false;
+                        triggerAutoplay();
+                        props.onMouseLeave && props.onMouseLeave(e);
+                        break;
+                }
+            },
+            [triggerAutoplay, props.onMouseEnter, props.onMouseLeave]
+        );
+
         /** ----- Effects ----- */
         /** Set a custom ID if there is none */
         React.useEffect(() => setId(props.id || randomId("carousel-")), [props.id]);
@@ -146,9 +190,20 @@ export const Carousel: React.FC<CarouselProps> = React.memo(
         React.useEffect(() => {
             swipePos && setComingNext(findNewActive(swipePos < 0 ? "next" : "prev"));
         }, [swipePos]);
+        /** Triggers autoplay if enabled */
+        React.useEffect(() => triggerAutoplay(), [autoplay]);
 
         return (
-            <div {...props} id={id} className={className} data-ride="carousel" onMouseDown={handleSwipe} onTouchStart={handleSwipe}>
+            <div
+                {...props}
+                id={id}
+                className={className}
+                data-ride="carousel"
+                onMouseDown={handleSwipe}
+                onTouchStart={handleSwipe}
+                onMouseEnter={interruptionHandler}
+                onMouseLeave={interruptionHandler}
+            >
                 {showIndicators && <CarouselIndicators active={active} size={size} parentId={id} onIndicatorClicked={goToSlide} />}
                 <div className="carousel-inner">
                     {list.map((item: CarouselItemProps, i: number) => (

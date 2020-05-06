@@ -49,7 +49,7 @@ const Child: React.FC<JSX.IntrinsicElements["div"]> = React.memo((props: JSX.Int
 
 const CarouselSample: React.FC<CarouselProps> = React.memo((props: CarouselProps) => {
     return (
-        <Carousel {...props} showIndicators list={[{ children: <Child className="bg-primary">Start</Child> }]}>
+        <Carousel autoplay {...props} showIndicators list={[{ children: <Child className="bg-primary">Start</Child> }]}>
             <CarouselItem>
                 <Child className="bg-dark">First</Child>
             </CarouselItem>
