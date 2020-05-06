@@ -54,7 +54,6 @@ $slider-height-alternative: 32px;
 @mixin thumb-styles-alternative {
     height: $slider-height-alternative;
     width: $slider-width-alternative;
-    border-radius: 4px;
 }
 
 @mixin setTheme($dark, $light) {
@@ -340,6 +339,7 @@ $slider-height-alternative: 32px;
                         margin: 0 -28px;
                     }
                     .custom-slider-thumb {
+                        border-radius: 4px;
                         width: $slider-width-alternative;
                         height: $slider-height-alternative;
                         top: -14px;

@@ -122,7 +122,7 @@ const Slider: React.FunctionComponent<SliderProps> = (props: SliderProps): React
      * Calculates the styles needed for the active track
      * @returns {React.CSSProperties} The active track styles object
      */
-    function getActiveTrackStyles(): React.CSSProperties {
+    const getActiveTrackStyles: () => React.CSSProperties = React.useCallback(() => {
         const calculatedThumbPosition: number = getPercentage();
         let zeroPosition: number;
         const appearance: SliderAppearance = props.appearance || defaultAppearance;
@@ -149,8 +149,8 @@ const Slider: React.FunctionComponent<SliderProps> = (props: SliderProps): React
                 style.width = calculatedThumbPosition - zeroPosition + "%";
             }
         }
-        return { ...style };
-    }
+        return style;
+    }, [props.appearance, props.value, getPercentage]);
 
     /**
      * Calculating the position of the label based on it's value
