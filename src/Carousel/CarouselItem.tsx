@@ -9,41 +9,56 @@ export type CarouselItemProps = JSX.IntrinsicElements["div"] & {
     transitionDuration?: number;
     /** An event handler triggered after a transition ended. (Managed by Carousel) */
     afterTransition?: VoidFunction;
+    /** Translate distance when swipe. (Managed by Carousel) */
+    translateX?: number;
+    /** Marking the carousel item as coming next during swipe gesture. (Managed by Carousel) */
+    comingNext?: boolean;
 };
 
-export type TransitionDirection = "right" | "left";
+type TransitionDirection = "right" | "left";
+type AfterSlideEvent = React.AnimationEvent<HTMLDivElement> | React.TransitionEvent<HTMLDivElement>;
 
-export const CarouselItem: React.FC<CarouselItemProps> = React.memo(({ nav, transitionDuration, afterTransition, ...props }: CarouselItemProps) => {
-    const [activeState, setActiveState] = React.useState<boolean>(false);
+export const CarouselItem: React.FC<CarouselItemProps> = React.memo(({ nav, transitionDuration, afterTransition, translateX, comingNext, ...props }: CarouselItemProps) => {
     const [className, setClassName] = React.useState<string>("carousel-item");
+    const [style, setStyle] = React.useState<React.CSSProperties>({});
 
-    React.useEffect(() => {
-        const direction: TransitionDirection = nav === "next" ? "left" : "right";
-        if (props.defaultChecked !== activeState) {
-            if (activeState) {
-                /** The current slide is the active, thus should be transitioning out */
-                setClassName(classnames("carousel-item", `carousel-item-${direction}`, "active", props.className));
-                setTimeout(() => {
-                    setClassName(classnames("carousel-item", props.className));
-                    setActiveState(false);
-                }, transitionDuration || defaultTransitionDuration);
+    /**
+     * Handles resetting class name after transition or animation ends
+     * @param {AfterSlideEvent} e Animation or transition end event
+     */
+    const afterSlidehandler: React.EventHandler<AfterSlideEvent> = React.useCallback(
+        (e: AfterSlideEvent) => {
+            setClassName(classnames("carousel-item", { active: props.defaultChecked }, props.className));
+            props.defaultChecked && afterTransition && afterTransition();
+            if (e.type === "transitionend") {
+                props.onTransitionEnd && props.onTransitionEnd(e as React.TransitionEvent<HTMLDivElement>);
             } else {
-                /** The current slide is not active, thus should be transitioning in */
-                setClassName(classnames("carousel-item", `carousel-item-${direction}`, `carousel-item-${nav}`, props.className));
-                setTimeout(() => {
-                    setClassName(classnames("carousel-item", "active", props.className));
-                    setActiveState(true);
-                    // Only the entering slide announces transition end
-                    afterTransition && afterTransition();
-                }, transitionDuration || defaultTransitionDuration);
+                props.onAnimationEnd && props.onAnimationEnd(e as React.AnimationEvent<HTMLDivElement>);
             }
-        }
-    }, [transitionDuration, nav, activeState, props.className, props.defaultChecked, afterTransition]);
+        },
+        [props.defaultChecked, props.className, afterTransition, props.onTransitionEnd, props.onAnimationEnd]
+    );
 
-    const duration: string = (transitionDuration || defaultTransitionDuration) + "ms";
+    /** Handles transitioning a slide in or out */
+    const transitionInOrOut: VoidFunction = React.useCallback(() => {
+        const direction: TransitionDirection = nav === "next" ? "left" : "right";
+        setClassName(classnames("carousel-item", `carousel-item-${direction}`, { [`carousel-item-${nav}`]: props.defaultChecked }, { active: !props.defaultChecked }, props.className));
+    }, [nav, props.defaultChecked, props.className]);
+
+    React.useEffect(() => transitionInOrOut(), [props.defaultChecked]);
+    React.useEffect(() => setClassName(classnames("carousel-item", { active: props.defaultChecked }, props.className)), []);
+    React.useEffect(() => {
+        const animationDuration: string = (transitionDuration || defaultTransitionDuration) + "ms";
+        const transform: string = translateX && props.defaultChecked ? `translate3d(${translateX}px, 0, 0)` : null;
+        setStyle({
+            transitionDuration: transform ? "0s" : animationDuration,
+            animationDuration,
+            transform,
+        });
+    }, [transitionDuration, props.defaultChecked, translateX]);
 
     return (
-        <div {...props} className={className} style={{ transitionDuration: duration, animationDuration: duration }}>
+        <div {...props} className={classnames(className, { "coming-next": comingNext })} style={style} onTransitionEnd={afterSlidehandler} onAnimationEnd={afterSlidehandler}>
             {props.children}
         </div>
     );

@@ -25,38 +25,51 @@ export type CarouselProps = JSX.IntrinsicElements["div"] & {
 
 export const defaultTransitionDuration: number = 600;
 export type NavigationDirection = "next" | "prev";
-type NavigateTrigger = React.MouseEvent<HTMLLIElement | HTMLAnchorElement> | React.KeyboardEvent<HTMLAnchorElement>;
+type NavigateTrigger = React.MouseEvent<HTMLLIElement | HTMLAnchorElement | HTMLDivElement> | React.TouchEvent<HTMLDivElement> | React.KeyboardEvent<HTMLAnchorElement>;
+type SwipeEvent = React.TouchEvent<HTMLDivElement> | React.MouseEvent<HTMLDivElement>;
 
-export const Carousel: React.FC<CarouselProps> = React.memo(({ afterChange, transitionDuration, transitionStyle, infinite, showIndicators, list = [], ...props }: CarouselProps) => {
-    const [active, setActive] = React.useState<number>(0);
-    const [size, setSize] = React.useState<number>(0);
-    const [nav, setNav] = React.useState<NavigationDirection>("next");
-    const [id, setId] = React.useState<string>("");
-    const [blocked, setBlocked] = React.useState<boolean>(false);
-    const [className, setClassName] = React.useState<string>("carousel");
+export const Carousel: React.FC<CarouselProps> = React.memo(
+    ({ afterChange, transitionDuration = defaultTransitionDuration, transitionStyle = "slide", infinite = true, showIndicators, list = [], ...props }: CarouselProps) => {
+        const [active, setActive] = React.useState<number>(0);
+        const [size, setSize] = React.useState<number>(0);
+        const [nav, setNav] = React.useState<NavigationDirection>("next");
+        const [id, setId] = React.useState<string>("");
+        const [className, setClassName] = React.useState<string>("carousel");
+        const [swipePos, setSwipePos] = React.useState<number>();
+        const [comingNext, setComingNext] = React.useState<number>();
 
-    /** ----- Utilities ----- */
+        /** ----- Utilities ----- */
 
-    /**
-     * Handles navigating to a slide
-     * @param {NavigateTrigger} e Navigation trigger event
-     */
-    const goToSlide: (e: NavigateTrigger) => void = React.useCallback(
-        (e: NavigateTrigger) => {
-            e.preventDefault();
-            let newActive: number;
-            let newNav: NavigationDirection;
-            const isInfinite: boolean = infinite || infinite === undefined;
-            if (!blocked) {
-                if (e.currentTarget.tagName === "LI") {
-                    /** Indicator clicked */
-                    const slideTo: number = Number(e.currentTarget.dataset.slideTo);
-                    newNav = slideTo > active ? "next" : "prev";
-                    newActive = slideTo;
+        const findNewActive: (newNav: NavigationDirection) => number = React.useCallback(
+            (newNav: NavigationDirection): number => {
+                const isInfinite: boolean = infinite || infinite === undefined;
+                switch (newNav) {
+                    case "prev":
+                        return active === 0 ? (isInfinite ? size - 1 : undefined) : active - 1;
+                    case "next":
+                        return active === size - 1 ? (isInfinite ? 0 : undefined) : active + 1;
+                }
+            },
+            [infinite, active, size]
+        );
+
+        /**
+         * Handles navigating to a slide
+         * @param {NavigateTrigger} e Navigation trigger event
+         */
+        const goToSlide: (e: NavigateTrigger, slideTo?: NavigationDirection) => void = React.useCallback(
+            (e: NavigateTrigger, slideTo?: NavigationDirection) => {
+                e.cancelable && e.preventDefault();
+                let newActive: number;
+                let newNav: NavigationDirection;
+                const target: EventTarget & HTMLElement = e.target as any;
+                if (["mousedown", "touchstart"].some((val) => val === e.type)) {
+                    /** Swipe gesture */
+                    newNav = slideTo;
+                    newActive = findNewActive(newNav);
                 } else {
-                    /** Navigation controls clicked or keyboard event happened */
                     if (e.type === "click") {
-                        newNav = e.currentTarget.dataset.slide as NavigationDirection;
+                        newNav = target.tagName === "LI" ? (Number(target.dataset.slideTo) > active ? "next" : "prev") : (target.dataset.slide as NavigationDirection);
                     } else {
                         switch ((e as React.KeyboardEvent<HTMLAnchorElement>).key.toLowerCase()) {
                             case "arrowleft":
@@ -67,74 +80,106 @@ export const Carousel: React.FC<CarouselProps> = React.memo(({ afterChange, tran
                                 break;
                             case "space":
                             case " ":
-                                newNav = e.currentTarget.dataset.slide as NavigationDirection;
+                                newNav = target.dataset.slide as NavigationDirection;
                         }
                     }
-                    switch (newNav) {
-                        case "prev":
-                            newActive = active === 0 ? (isInfinite ? size - 1 : newActive) : active - 1;
-                            break;
-                        case "next":
-                            newActive = active === size - 1 ? (isInfinite ? 0 : newActive) : active + 1;
-                            break;
-                    }
+                    newActive = target.tagName === "LI" ? Number(target.dataset.slideTo) : findNewActive(newNav);
                 }
-                if (newNav !== undefined && newActive !== undefined) {
+                if ([newNav, newActive].every((val) => val !== undefined)) {
                     newNav !== nav && setNav(newNav);
                     newActive !== active && setActive(newActive);
                 }
-            }
-        },
-        [active, blocked, infinite, size, nav]
-    );
+            },
+            [active, infinite, nav, findNewActive]
+        );
 
-    /** ----- Event handlers ----- */
-    /** An event handler triggered after a transition has ended */
-    const afterTransition: VoidFunction = React.useCallback((): void => {
-        setBlocked(false);
-        afterChange && afterChange(active);
-    }, [afterChange, active]);
+        /** ----- Event handlers ----- */
+        /** An event handler triggered after a transition has ended */
+        const afterTransition: VoidFunction = React.useCallback((): void => {
+            afterChange && afterChange(active);
+        }, [afterChange, active]);
 
-    /** ----- Effects ----- */
-    /** Blocks the UI Elements during the transistion */
-    React.useEffect(() => setBlocked(true), [active]);
-    /** Set a custom ID if there is none */
-    React.useEffect(() => setId(props.id || randomId("carousel-")), [props.id]);
-    /** Set the full size of carousel counting both children and list prop */
-    React.useEffect(() => setSize(list.length + React.Children.count(props.children)), [props.children, list]);
-    /** Sets the default value, if any. Otherwise default to the first item */
-    React.useEffect(() => setActive(props.defaultValue || 0), [props.defaultValue]);
-    /** Set class names */
-    React.useEffect(() => setClassName(classnames("seb", "carousel", { "carousel-fade": transitionStyle === "fade" }, props.className)), [props.className, transitionStyle]);
+        /**
+         * Handles swipe events
+         * @param e Touch or mouse event
+         */
+        const handleSwipe: React.EventHandler<SwipeEvent> = React.useCallback(
+            (e: SwipeEvent): void => {
+                e.persist();
+                const isTouch: boolean = e.type === "touchstart";
+                const startingPos: number = isTouch ? (e as React.TouchEvent).touches.item(0).clientX : (e as React.MouseEvent).clientX;
+                const parentWidth: number = e.currentTarget.clientWidth;
+                let xMovement: number;
 
-    return (
-        <div {...props} id={id} className={className} data-ride="carousel">
-            {showIndicators && <CarouselIndicators active={active} size={size} parentId={id} onIndicatorClicked={goToSlide} />}
-            <div className="carousel-inner">
-                {list.map((item: CarouselItemProps, i: number) => (
-                    <CarouselItem
-                        key={i}
-                        {...item}
-                        data-index-number={i}
-                        defaultChecked={active === i}
-                        nav={nav}
-                        transitionDuration={item.transitionDuration || transitionDuration >= 0 ? transitionDuration : defaultTransitionDuration}
-                        afterTransition={afterTransition}
-                    />
-                ))}
-                {React.Children.map(props.children, (Child: React.ReactElement<CarouselItemProps>, i: number) =>
-                    React.isValidElement<CarouselItemProps>(Child)
-                        ? React.cloneElement<any>(Child, {
-                              "data-index-number": i + list.length,
-                              defaultChecked: active === i + list.length,
-                              nav,
-                              transitionDuration: Child.props.transitionDuration || transitionDuration >= 0 ? transitionDuration : defaultTransitionDuration,
-                              afterTransition,
-                          })
-                        : Child
-                )}
+                const movementHandler: (ev: TouchEvent | MouseEvent) => void = (ev: TouchEvent | MouseEvent) => {
+                    xMovement = isTouch ? (ev as TouchEvent).touches.item(0).clientX : (ev as MouseEvent).clientX;
+                    if (xMovement !== swipePos) {
+                        setSwipePos(xMovement - startingPos);
+                    }
+                };
+
+                const endingHandler: VoidFunction = () => {
+                    if (Math.abs(xMovement - startingPos) > parentWidth / 4) {
+                        goToSlide(e, xMovement - startingPos < 0 ? "next" : "prev");
+                    }
+                    setSwipePos(undefined);
+                    document.body.removeEventListener(isTouch ? "touchmove" : "mousemove", movementHandler);
+                    document.body.removeEventListener(isTouch ? "touchend" : "mouseup", endingHandler);
+                };
+
+                document.body.addEventListener(isTouch ? "touchmove" : "mousemove", movementHandler);
+                document.body.addEventListener(isTouch ? "touchend" : "mouseup", endingHandler);
+                isTouch ? props.onTouchStart && props.onTouchStart(e as React.TouchEvent<HTMLDivElement>) : props.onMouseDown && props.onMouseDown(e as React.MouseEvent<HTMLDivElement>);
+            },
+            [swipePos]
+        );
+
+        /** ----- Effects ----- */
+        /** Set a custom ID if there is none */
+        React.useEffect(() => setId(props.id || randomId("carousel-")), [props.id]);
+        /** Set the full size of carousel counting both children and list prop */
+        React.useEffect(() => setSize(list.length + React.Children.count(props.children)), [props.children, list]);
+        /** Sets the default value, if any. Otherwise default to the first item */
+        React.useEffect(() => setActive(props.defaultValue || 0), [props.defaultValue]);
+        /** Set class names */
+        React.useEffect(() => setClassName(classnames("seb", "carousel", { "carousel-fade": transitionStyle === "fade" }, props.className)), [props.className, transitionStyle]);
+        React.useEffect(() => {
+            swipePos && setComingNext(findNewActive(swipePos < 0 ? "next" : "prev"));
+        }, [swipePos]);
+
+        return (
+            <div {...props} id={id} className={className} data-ride="carousel" onMouseDown={handleSwipe} onTouchStart={handleSwipe}>
+                {showIndicators && <CarouselIndicators active={active} size={size} parentId={id} onIndicatorClicked={goToSlide} />}
+                <div className="carousel-inner">
+                    {list.map((item: CarouselItemProps, i: number) => (
+                        <CarouselItem
+                            key={i}
+                            {...item}
+                            data-index-number={i}
+                            defaultChecked={active === i}
+                            nav={nav}
+                            transitionDuration={item.transitionDuration || transitionDuration}
+                            afterTransition={afterTransition}
+                            translateX={transitionStyle === "slide" && active === i ? swipePos : undefined}
+                            comingNext={i === comingNext}
+                        />
+                    ))}
+                    {React.Children.map(props.children, (Child: React.ReactElement<CarouselItemProps>, i: number) =>
+                        React.isValidElement<CarouselItemProps>(Child)
+                            ? React.cloneElement<any>(Child, {
+                                  "data-index-number": i + list.length,
+                                  defaultChecked: active === i + list.length,
+                                  nav,
+                                  transitionDuration: Child.props.transitionDuration || transitionDuration,
+                                  afterTransition,
+                                  translateX: transitionStyle === "slide" && active === i + list.length ? swipePos : undefined,
+                                  comingNext: i + list.length === comingNext,
+                              })
+                            : Child
+                    )}
+                </div>
+                <CarouselNavs onNavigate={goToSlide} parentId={id} />
             </div>
-            <CarouselNavs onNavigate={goToSlide} parentId={id} />
-        </div>
-    );
-});
+        );
+    }
+);
