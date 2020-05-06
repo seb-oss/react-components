@@ -208,7 +208,7 @@ class SliderExamples extends React.Component<SliderPageProps, SliderPageState> {
                                     error={this.state.withInputError || (this.state.hasError ? "Error message" : null)}
                                     disabled={this.state.disabled}
                                     tooltipTheme={this.state.tooltipTheme}
-                                    appearance={this.state.appearance}
+                                    alternative={this.state.appearance === "alternative"}
                                     onChange={this.onFormChange}
                                     alwaysShowTooltip={this.state.alwaysShowTooltip}
                                 />

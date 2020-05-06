@@ -37,7 +37,7 @@ export interface SliderProps {
     showTicks?: boolean;
     step?: number;
     theme?: SliderTheme;
-    appearance?: SliderAppearance;
+    alternative?: boolean;
     tooltipTheme?: SliderTheme;
     tooltipValue?: string;
     value: number;
@@ -61,7 +61,7 @@ const Slider: React.FunctionComponent<SliderProps> = (props: SliderProps): React
         alternative: { width: "27px", offset: "56px" },
         normal: { width: "5px", offset: "24px" },
     };
-    const defaultAppearance: SliderAppearance = "normal";
+    const appearance: SliderAppearance = props.alternative ? "alternative" : "normal";
 
     React.useEffect(() => {
         // Checking if the min or max are not numbers, null value or undefined
@@ -85,7 +85,7 @@ const Slider: React.FunctionComponent<SliderProps> = (props: SliderProps): React
     React.useEffect(() => {
         setThumbPosition(getPercentage());
         setActiveTrackStyles(getActiveTrackStyles());
-    }, [props.value, min, max, size, props.appearance]);
+    }, [props.value, min, max, size, appearance]);
 
     /**
      * Finds the size between two numbers
@@ -125,7 +125,6 @@ const Slider: React.FunctionComponent<SliderProps> = (props: SliderProps): React
     const getActiveTrackStyles: () => React.CSSProperties = React.useCallback(() => {
         const calculatedThumbPosition: number = getPercentage();
         let zeroPosition: number;
-        const appearance: SliderAppearance = props.appearance || defaultAppearance;
         const { width, offset }: AppearanceStyleMap[keyof AppearanceStyleMap] = appearanceSizesMap[appearance];
         const style: React.CSSProperties = {};
         if (min >= 0) {
@@ -150,7 +149,7 @@ const Slider: React.FunctionComponent<SliderProps> = (props: SliderProps): React
             }
         }
         return style;
-    }, [props.appearance, props.value, getPercentage]);
+    }, [appearance, props.value, getPercentage]);
 
     /**
      * Calculating the position of the label based on it's value
@@ -181,7 +180,7 @@ const Slider: React.FunctionComponent<SliderProps> = (props: SliderProps): React
     return (
         <div className={"form-group custom-slider" + (props.className ? ` ${props.className}` : "") + (props.disabled ? " disabled" : "")}>
             {props.label && <label className="custom-label">{props.label}</label>}
-            <div className={"input-field" + (props.labels && props.labels.length ? " has-labels" : "") + (props.appearance ? ` ${props.appearance}` : ` ${defaultAppearance}`)}>
+            <div className={"input-field" + (props.labels && props.labels.length ? " has-labels" : "") + ` ${appearance}`}>
                 <input
                     type="range"
                     id={props.id}
@@ -202,7 +201,7 @@ const Slider: React.FunctionComponent<SliderProps> = (props: SliderProps): React
                             <div className={"custom-slider-preview" + (props.alwaysShowTooltip ? " always-show" : "") + (props.tooltipTheme ? ` ${props.tooltipTheme}` : " inverted")}>
                                 {props.tooltipValue || props.value}
                             </div>
-                            {props.appearance && props.appearance === "alternative" ? (
+                            {appearance === "alternative" ? (
                                 <>
                                     <span className="custom-slider-icon-left">{angleLeftIcon}</span>
                                     <span className="custom-slider-icon-right">{angleRightIcon}</span>

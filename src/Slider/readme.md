@@ -55,7 +55,7 @@ These are the current available properties:
 | showTicks?         | `boolean`                             | Show ticks with labels (default: `false`)                           |
 | step?              | `number`                              | Step value (default: `1`)                                           |
 | theme?             | `string`                              | Based on SEB predefined colors. (default: `'primary'`)<sup>2</sup>  |
-| appearance?        | `string`                              | Thumb appearance (size and shape) (default: `'normal'`)<sup>3</sup> |
+| alternative?       | `boolean`                             | Thumb appearance (size and shape) (default: false)                  |
 | tooltipTheme?      | `string`                              | Based on SEB predefined colors. (default: `'inverted'`)<sup>2</sup> |
 | value              | `number`                              | Value of slider                                                     |
 
@@ -71,8 +71,7 @@ interface RangeSliderLabel {
 ```
 
 2. Supported themes: `'primary'`, `'inverted'`, `'success'`, `'danger'`, `'warning'`, `'purple'`
-3. Supported appearance: `'normal'`, `'alternative'`
-4. This is an example of how to achieve a combination of a `textbox` with a `slider` like it's described in [SEB Design Library](https://designlibrary.sebgroup.com/components/slider/)
+3. This is an example of how to achieve a combination of a `textbox` with a `slider` like it's described in [SEB Design Library](https://designlibrary.sebgroup.com/components/slider/)
 
 HTML (tsx) would look like this
 
