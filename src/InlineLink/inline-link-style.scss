@@ -1,5 +1,5 @@
-$blue : #41B0EE;
-$blue-dark : #0092E1;
+@import "../../node_modules/@sebgroup/bootstrap/scss/variables";
+
 .custom-inline-link {
     color: $blue-dark;
     font-weight: 500;

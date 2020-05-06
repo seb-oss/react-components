@@ -1,0 +1,28 @@
+@import "../../node_modules/@sebgroup/bootstrap/scss/variables";
+
+.custom-chip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: 4px;
+    background-color: $gray-200;
+    height: 32px;
+    padding: 0 8px;
+    font-size: $font-size-base;
+    &:hover {
+        background-color: $gray-100;
+        > .chip-close {
+            color: $red;
+        }
+    }
+    > .chip-close {
+        cursor: pointer;
+        margin-left: 8px;
+        font-size: 26px;
+        display: inline-block;
+        padding: 0;
+        line-height: 0.9;
+        position: relative;
+        top: -3px;
+    }
+}

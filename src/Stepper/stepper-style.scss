@@ -1,21 +1,7 @@
-@import "../colours";
+@import "../../node_modules/@sebgroup/bootstrap/scss/variables";
+
 $transition-time: 200ms;
-$transparent: transparent;
 $stepper-font-size: 24px;
-
-@mixin no-user-select {
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-}
-
-@mixin transition($props) {
-    -webkit-transition: $props;
-    -moz-transition: $props;
-    -o-transition: $props;
-    transition: $props;
-}
 
 .form-group.custom-stepper {
     display: inline-block;
@@ -26,7 +12,7 @@ $stepper-font-size: 24px;
         padding: 0;
         &:not(.disabled) {
             background-color: $white;
-            border: 1px solid $grey-6;
+            border: 1px solid $gray-600;
             .stepper-decrement,
             .stepper-increment {
                 &:not(.disabled) {
@@ -50,25 +36,25 @@ $stepper-font-size: 24px;
             }
         }
         &.disabled {
-            background-color: $grey-8;
-            border: 1px solid $grey-7;
-            [class^=stepper-] {
-                color: $grey-7;
+            background-color: $gray-100;
+            border: 1px solid $gray-400;
+            [class^="stepper-"] {
+                color: $gray-500;
             }
         }
-        [class^=stepper-] {
+        [class^="stepper-"] {
             display: inline-flex;
             align-items: center;
             justify-content: center;
             height: 100%;
             vertical-align: top;
-            @include no-user-select;
+            user-select: none;
         }
         .stepper-decrement,
         .stepper-increment {
             padding: 0 10px;
             will-change: background-color, color;
-            @include transition((background-color $transition-time, color $transition-time));
+            transition: background-color $transition-time, color $transition-time;
             padding-bottom: 3px;
             font-size: 38px;
             font-weight: 100;
@@ -81,7 +67,7 @@ $stepper-font-size: 24px;
             &:focus {
                 border-color: $blue;
             }
-            >span {
+            > span {
                 padding-bottom: 5px;
             }
         }
@@ -100,14 +86,14 @@ $stepper-font-size: 24px;
     }
     .alert {
         padding: 5px;
-        background: $transparent;
+        background: transparent;
         &.alert-danger {
-            border-color: #F03529;
-            color: #F03529;
+            border-color: #f03529;
+            color: #f03529;
         }
         &.alert-warning {
-            border-color: #F8A000;
-            color: #F8A000;
+            border-color: #f8a000;
+            color: #f8a000;
         }
     }
 }

@@ -34,9 +34,17 @@ describe("Component: StepTracker", () => {
         const onClick: jest.Mock = jest.fn();
         wrapper.setProps({ onClick });
         expect(wrapper.hasClass("clickable")).toBeTruthy();
-        wrapper.find(".step-wrapper").find(".step").first().simulate("click");
+        wrapper
+            .find(".step-wrapper")
+            .find(".step")
+            .first()
+            .simulate("click");
         wrapper.setProps({ orientation: "vertical" });
-        wrapper.find(".step-wrapper").find(".step").first().simulate("click");
+        wrapper
+            .find(".step-wrapper")
+            .find(".step")
+            .first()
+            .simulate("click");
         expect(onClick).toHaveBeenCalledTimes(2);
     });
 
@@ -52,9 +60,18 @@ describe("Component: StepTracker", () => {
 
     it("Should display numbers when useNumbers is set to true", () => {
         wrapper.setProps({ useNumbers: true });
-        expect(wrapper.find(".step").first().hasClass("numbered"));
+        expect(
+            wrapper
+                .find(".step")
+                .first()
+                .hasClass("numbered")
+        );
         wrapper.setProps({ orientation: "vertical" });
-        expect(wrapper.find(".step").first().hasClass("numbered"));
+        expect(
+            wrapper
+                .find(".step")
+                .first()
+                .hasClass("numbered")
+        );
     });
-
 });

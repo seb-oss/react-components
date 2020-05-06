@@ -11,7 +11,6 @@ const PaginationPage: React.FunctionComponent = () => {
     return (
         <div className="route-template container">
             <div className="info-holder">
-
                 <div className="info">
                     <div className="md-file">
                         <Highlight innerHTML={true}>{docMD}</Highlight>
@@ -23,40 +22,22 @@ const PaginationPage: React.FunctionComponent = () => {
 
                     <p>Here are sample outputs</p>
                     <div className="result">
-                        <Pagination
-                            value={pagination}
-                            onChange={setPagination}
-                            size={60}
-                            offset={6}
-                            pagingLength={7}
-                        />
+                        <Pagination value={pagination} onChange={setPagination} size={60} offset={6} pagingLength={7} />
                     </div>
 
-                    <p>With <b>first</b> and <b>last</b> enabled</p>
+                    <p>
+                        With <b>first</b> and <b>last</b> enabled
+                    </p>
                     <div className="result">
-                        <Pagination
-                            value={pagination2}
-                            onChange={setPagination2}
-                            size={60}
-                            offset={6}
-                            useFirstAndLast={true}
-                        />
+                        <Pagination value={pagination2} onChange={setPagination2} size={60} offset={6} useFirstAndLast={true} />
                     </div>
 
                     <p>Here are sample outputs of DotNav: {dotnav}</p>
                     <div className="result">
-                        <Pagination
-                            value={dotnav}
-                            onChange={setDotnav}
-                            size={60}
-                            offset={6}
-                            useDotNav={true}
-                        />
+                        <Pagination value={dotnav} onChange={setDotnav} size={60} offset={6} useDotNav={true} />
                     </div>
                 </div>
-
             </div>
-
         </div>
     );
 };

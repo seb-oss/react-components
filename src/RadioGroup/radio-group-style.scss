@@ -1,9 +1,10 @@
-@import "../colours";
-$default: 16px;
+@import "../../node_modules/@sebgroup/bootstrap/scss/variables";
+
 $transition-time: 200ms;
 $form-element-height: 44px;
 $radio-size: 16px;
 $radio-padding-left: 40px;
+
 .form-group.custom-radio {
     > .input-field {
         .custom-control {
@@ -64,14 +65,14 @@ $radio-padding-left: 40px;
         }
     }
     &.inline {
-        >.input-field {
-            >.custom-control {
+        > .input-field {
+            > .custom-control {
                 display: inline-block;
             }
         }
     }
     &.condensed {
-        >.input-field {
+        > .input-field {
             .custom-control {
                 margin: 0;
             }

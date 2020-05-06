@@ -39,7 +39,9 @@ const SideBar: React.FunctionComponent<SideBarProps> = (props: SideBarProps): Re
                 </div>
             </div>
             <div className="category">
-                <div className="title">Components <h5 className="badge badge-secondary">{forms.length + uis.length + others.length}</h5></div>
+                <div className="title">
+                    Components <h5 className="badge badge-secondary">{forms.length + uis.length + others.length}</h5>
+                </div>
                 <div className="nav-holder">
                     <SideBarList title="Form" list={forms} currentPath={currentPath} onClick={navigate} />
                     <SideBarList title="UI" list={uis} currentPath={currentPath} onClick={navigate} />
@@ -54,13 +56,13 @@ type SideBarListProps = {
     title?: string;
     list: Array<SideBarItem>;
     currentPath: string;
-    onClick: (e: React.MouseEvent<HTMLAnchorElement>) => void
+    onClick: (e: React.MouseEvent<HTMLAnchorElement>) => void;
 };
 
-const SideBarList: React.FunctionComponent<SideBarListProps> = (props: SideBarListProps) =>
+const SideBarList: React.FunctionComponent<SideBarListProps> = (props: SideBarListProps) => (
     <>
         {props.title && <div className="sub-title">{props.title}</div>}
-        {props.list.map((item: SideBarItem, index: number) =>
+        {props.list.map((item: SideBarItem, index: number) => (
             <a
                 key={index}
                 href={item.path.charAt(0) === "/" ? "#" + item.path : item.path}
@@ -70,7 +72,8 @@ const SideBarList: React.FunctionComponent<SideBarListProps> = (props: SideBarLi
             >
                 <span>{item.name}</span>
             </a>
-        )}
-    </>;
+        ))}
+    </>
+);
 
 export default SideBar;

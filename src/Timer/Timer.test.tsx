@@ -19,7 +19,6 @@ describe("Component: Timer", () => {
         const wrapper = shallow(<Timer {...props} className={className} id={id} />);
         expect(wrapper.hasClass(className)).toBeTruthy();
         expect(wrapper.find(`#${id}`).length).toBeTruthy();
-
     });
 
     it("check callback method", (done) => {
@@ -53,7 +52,9 @@ describe("Component: Timer", () => {
     test("Test Timer clearInterval method", () => {
         const wrapper = shallow(<Timer {...props} />);
         const instance: any = wrapper.instance();
-        instance.innerInterval = setInterval(() => { console.log("interval started"); }, 1000);
+        instance.innerInterval = setInterval(() => {
+            console.log("interval started");
+        }, 1000);
         instance.clearInterval();
         expect(instance.innerInterval).toEqual(null);
     });
@@ -118,5 +119,4 @@ describe("Component: Timer", () => {
         wrapper.setProps(newProps);
         expect(instance.innerInterval).not.toBe(undefined);
     });
-
 });

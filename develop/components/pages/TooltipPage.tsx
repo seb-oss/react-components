@@ -20,7 +20,7 @@ const TooltipPage: React.FunctionComponent = () => {
         { label: "Light", value: "light" },
         { label: "Purple", value: "purple" },
         { label: "Success", value: "success" },
-        { label: "Warning", value: "warning" },
+        { label: "Warning", value: "warning" }
     ];
     const positionList: Array<RadioListModel<TooltipPosition>> = [
         { label: "Top", value: "top" },
@@ -34,10 +34,15 @@ const TooltipPage: React.FunctionComponent = () => {
         { label: "Bottom Right", value: "bottom-right" },
         { label: "Left", value: "left" },
         { label: "Left Top", value: "left-top" },
-        { label: "Left Bottom", value: "left-bottom" },
+        { label: "Left Bottom", value: "left-bottom" }
     ];
     const defaultTooltipContent: string = "Tooltip content could be long, therefore, controlling the position and width is important";
-    const nodeTooltipContent: React.ReactNode = (<div><h1>Tooltip Header</h1><div>tooltip content</div></div>);
+    const nodeTooltipContent: React.ReactNode = (
+        <div>
+            <h1>Tooltip Header</h1>
+            <div>tooltip content</div>
+        </div>
+    );
     const [theme, setTheme] = React.useState<TooltipTheme>(themeList[0].value);
     const [position, setPosition] = React.useState<TooltipPosition>(positionList[0].value);
     const [trigger, setTrigger] = React.useState<TooltipTrigger>(triggerList[0].value);
@@ -50,7 +55,6 @@ const TooltipPage: React.FunctionComponent = () => {
     return (
         <div className="route-template container">
             <div className="info-holder">
-
                 <div className="info">
                     <div className="md-file">
                         <Highlight innerHTML={true}>{docMD}</Highlight>
@@ -70,7 +74,7 @@ const TooltipPage: React.FunctionComponent = () => {
                             onVisibleChange={hasCallback && (() => setNotifcationToggle(true))}
                         >
                             {hasCustomReference && <div>This is custom tooltip reference</div>}
-                        </ Tooltip>
+                        </Tooltip>
                     </div>
                     <p>Options</p>
                     <div className="row">
@@ -112,13 +116,7 @@ const TooltipPage: React.FunctionComponent = () => {
                         </div>
                         <div className="col">
                             <p>Themes</p>
-                            <RadioGroup
-                                name="theme"
-                                list={themeList}
-                                value={theme}
-                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTheme(e.currentTarget.value as TooltipTheme)}
-                                condensed
-                            />
+                            <RadioGroup name="theme" list={themeList} value={theme} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTheme(e.currentTarget.value as TooltipTheme)} condensed />
                         </div>
                         <div className="col">
                             <p>Triggers</p>
@@ -133,12 +131,7 @@ const TooltipPage: React.FunctionComponent = () => {
                     </div>
                 </div>
             </div>
-            <Notification
-                toggle={notifcationToggle}
-                style="slide-in"
-                dismissTimeout={3000}
-                onDismiss={() => setNotifcationToggle(false)}
-            >
+            <Notification toggle={notifcationToggle} style="slide-in" dismissTimeout={3000} onDismiss={() => setNotifcationToggle(false)}>
                 <div>Tooltip visibility changed!</div>
             </Notification>
         </div>

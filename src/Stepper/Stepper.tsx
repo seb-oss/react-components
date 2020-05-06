@@ -1,6 +1,6 @@
 import * as React from "react";
 import "./stepper-style.scss";
-import { randomId } from "../__utils/randomId";
+import { randomId } from "@sebgroup/frontend-tools/dist/randomId";
 
 export interface StepperProps {
     className?: string;
@@ -29,16 +29,18 @@ export const Stepper: React.FunctionComponent<StepperProps> = (props: StepperPro
             <div className={"stepper-container" + (props.disabled ? " disabled" : "")}>
                 <button
                     className={"stepper-decrement" + (props.value === props.min ? " disabled" : "")}
-                    onClick={(props.value > props.min && !props.disabled) ? props.onDecrease : null}
+                    onClick={props.value > props.min && !props.disabled ? props.onDecrease : null}
                     aria-controls={id}
                     aria-labelledby="decrement"
                 >
                     <span>&#8722;</span>
                 </button>
-                <div className="stepper-preview"><span>{props.value}</span></div>
+                <div className="stepper-preview">
+                    <span>{props.value}</span>
+                </div>
                 <button
                     className={"stepper-increment" + (props.value === props.max ? " disabled" : "")}
-                    onClick={(props.value < props.max && !props.disabled) ? props.onIncrease : null}
+                    onClick={props.value < props.max && !props.disabled ? props.onIncrease : null}
                     aria-controls={id}
                     aria-labelledby="increment"
                 >
@@ -58,7 +60,7 @@ export const Stepper: React.FunctionComponent<StepperProps> = (props: StepperPro
                 ref={props.reference}
                 aria-live="assertive"
             />
-            {(props.warning && !props.error) && <div className="alert alert-warning">{props.warning}</div>}
+            {props.warning && !props.error && <div className="alert alert-warning">{props.warning}</div>}
             {props.error && <div className="alert alert-danger">{props.error}</div>}
         </div>
     );

@@ -1,18 +1,13 @@
-@import "../colours";
+@import "../../node_modules/@sebgroup/bootstrap/scss/variables";
+
 $transition-time: 80ms;
 $box-shadow: rgba(85, 85, 85, 0.4) 0 2px 5px;
-$disabled-selected: #adadad;
+$disabled-selected: $gray-500;
 $disabled-unselected: #cccccc;
 $disabled-thumb-bg: #9a9a9a;
 $disabled-thumb-border-color: #8c8c8c;
 $slider-width-normal: 56px;
 $slider-width-smaller: 24px;
-
-@mixin appearance($props) {
-    -webkit-appearance: $props;
-    -moz-appearance: $props;
-    appearance: $props;
-}
 
 @mixin transition($props) {
     -webkit-transition: $props;
@@ -36,9 +31,9 @@ $slider-width-smaller: 24px;
 }
 
 @mixin track-styles {
-    @include appearance(none);
-    background: $transparent;
-    color: $transparent;
+    appearance: none;
+    background: transparent;
+    color: transparent;
     border: 0;
     outline: 0;
     box-shadow: 0;
@@ -46,10 +41,10 @@ $slider-width-smaller: 24px;
 }
 
 @mixin thumb-styles-normal {
-    @include appearance(none);
+    appearance: none;
     width: $slider-width-normal;
     height: 32px;
-    background: $transparent;
+    background: transparent;
     border-radius: 4px;
     border: 0;
     outline: 0;
@@ -98,8 +93,8 @@ $slider-width-smaller: 24px;
             position: relative;
             display: inline-block;
             width: 100%;
-            @include appearance(none);
-            background: $transparent;
+            appearance: none;
+            background: transparent;
             cursor: pointer;
             height: 15px;
             margin-top: 10px;
@@ -129,17 +124,17 @@ $slider-width-smaller: 24px;
                 display: none;
             } // IE Specific
             &::-ms-fill {
-                background-color: $transparent;
+                background-color: transparent;
             }
             &::-ms-fill-lower {
-                background-color: $transparent;
+                background-color: transparent;
                 border: 0;
             }
             &::-ms-ticks,
             &::-ms-ticks-after,
             &::-ms-ticks-after {
                 display: none;
-                color: $transparent;
+                color: transparent;
             }
             &:not(:disabled) {
                 &:focus {
@@ -238,7 +233,7 @@ $slider-width-smaller: 24px;
                         text-align: center;
                         color: $white;
                         border-radius: 5px;
-                        @include user-select(none);
+                        user-select: none;
                         @include transform(translateX(-49%));
                         left: 50%;
                         &:after {

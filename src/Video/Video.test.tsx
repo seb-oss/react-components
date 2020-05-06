@@ -35,31 +35,35 @@ describe("Component: Video ", () => {
     });
 
     it("Should enable autoplay, loop, showControls and showInfo when passed", () => {
-        const wrapperLocal = shallow(
-            <Video
-                {...props}
-                autoplay={true}
-                loop={true}
-                showControls={true}
-                showInfo={true}
-            />
-        );
+        const wrapperLocal = shallow(<Video {...props} autoplay={true} loop={true} showControls={true} showInfo={true} />);
         expect(wrapperLocal.find("video").prop("autoPlay")).toEqual(true);
         expect(wrapperLocal.find("video").prop("loop")).toEqual(true);
         expect(wrapperLocal.find("video").prop("controls")).toEqual(true);
-        const wrapperStream = shallow(
-            <Video
-                {...{ ...props, sourceType: "stream" }}
-                autoplay={true}
-                loop={true}
-                showControls={true}
-                showInfo={true}
-            />
-        );
-        expect(wrapperStream.find("iframe").prop("src").indexOf("autoplay=1")).toBeGreaterThan(-1);
-        expect(wrapperStream.find("iframe").prop("src").indexOf("loop=1")).toBeGreaterThan(-1);
-        expect(wrapperStream.find("iframe").prop("src").indexOf("controls=1")).toBeGreaterThan(-1);
-        expect(wrapperStream.find("iframe").prop("src").indexOf("&amp;showinfo=1&amp;title=1&amp;byline=1&amp;portrait=1")).toBeGreaterThan(-1);
+        const wrapperStream = shallow(<Video {...{ ...props, sourceType: "stream" }} autoplay={true} loop={true} showControls={true} showInfo={true} />);
+        expect(
+            wrapperStream
+                .find("iframe")
+                .prop("src")
+                .indexOf("autoplay=1")
+        ).toBeGreaterThan(-1);
+        expect(
+            wrapperStream
+                .find("iframe")
+                .prop("src")
+                .indexOf("loop=1")
+        ).toBeGreaterThan(-1);
+        expect(
+            wrapperStream
+                .find("iframe")
+                .prop("src")
+                .indexOf("controls=1")
+        ).toBeGreaterThan(-1);
+        expect(
+            wrapperStream
+                .find("iframe")
+                .prop("src")
+                .indexOf("&amp;showinfo=1&amp;title=1&amp;byline=1&amp;portrait=1")
+        ).toBeGreaterThan(-1);
     });
 
     // Prevent being blocked by some browsers

@@ -1,219 +1,315 @@
-@import "../colours.scss";
-@import "../../develop/styles/shared/mixins.scss";
+@import "../../node_modules/@sebgroup/bootstrap/scss/variables";
+
 $icon-color: $gray-500;
 $icon-active-color: $blue-dark;
-
+$chip-height: 32px;
 $icon-size: 16px;
-
 $row-height: 40px;
+$transition-time: 200ms;
+$filter-gray: #e6e6e6;
+
+@mixin setInputGroupStyles() {
+    .form-group.input-box-group {
+        position: relative;
+        margin-bottom: 0rem;
+        > .input-group {
+            position: relative;
+            > .input-box-group-wrapper {
+                transition: border $transition-time / 2;
+                position: relative;
+                width: 100%;
+                height: auto;
+                border: 1px solid $gray-500;
+                border-radius: 4px;
+                overflow: hidden;
+                display: flex;
+                align-items: center;
+                &:hover {
+                    border-color: $blue;
+                    background-color: $white;
+                }
+                &:focus-within {
+                    border-color: $blue-darker;
+                    box-shadow: none;
+                    background-color: $white;
+                    &:active {
+                        border-color: $blue-darker;
+                        box-shadow: none;
+                        background-color: $white;
+                    }
+                }
+                > input.form-control {
+                    display: inline-flex;
+                    z-index: 1;
+                    border: none;
+                    border-radius: 0;
+                    height: auto;
+                    min-height: 10px;
+                    padding: 5px 7px;
+                    &:focus {
+                        box-shadow: none;
+                    }
+                    &::-webkit-inner-spin-button,
+                    &::-webkit-textfield-decoration-container {
+                        -webkit-appearance: none;
+                        -moz-appearance: none;
+                        appearance: none;
+                    }
+                    &:nth-child(2):not(:last-child),
+                    &:first-child:not(:last-child) {
+                        padding-right: 0;
+                    }
+                }
+            }
+        }
+    }
+}
 
 table {
-  &.table {
-    thead {
-      > tr {
-        > th {
-          vertical-align: middle;
-          white-space: nowrap;
-          &.sortable {
-            cursor: pointer;
-            &:hover {
-              color: $icon-active-color;
+    &.table {
+        thead {
+            > tr {
+                > th {
+                    vertical-align: middle;
+                    white-space: nowrap;
+                    &.sortable {
+                        cursor: pointer;
+                        &:hover {
+                            color: $icon-active-color;
+                        }
+                    }
+                    &:first-child {
+                        border-bottom: none;
+                    }
 
-              svg {
-                fill: $icon-active-color;
-              }
+                    .custom-control {
+                        position: relative;
+                        display: block;
+                        min-height: 1.5rem;
+
+                        &.custom-checkbox {
+                            input[type="checkbox"] {
+                                box-sizing: border-box;
+                                padding: 0;
+                            }
+
+                            .custom-control-label {
+                                position: relative;
+                                margin-bottom: 0;
+                                vertical-align: top;
+                            }
+
+                            .custom-control-input {
+                                position: absolute;
+                                z-index: -1;
+                                opacity: 0;
+                            }
+                        }
+                    }
+
+                    .icon-holder {
+                        height: 100%;
+                        vertical-align: middle;
+                        position: relative;
+                        margin-left: 5px;
+                        height: $icon-size;
+
+                        > svg {
+                            width: 100%;
+                            height: 100%;
+                            fill: $icon-color;
+                            cursor: pointer;
+                        }
+
+                        &.asc {
+                            > svg {
+                                > path:first-child {
+                                    fill: $icon-active-color;
+                                }
+                            }
+                        }
+
+                        &.desc {
+                            > svg {
+                                > path:last-child {
+                                    fill: $icon-active-color;
+                                }
+                            }
+                        }
+                    }
+                }
             }
-          }
-          &:first-child {
-            border-bottom: none;
-          }
-
-          .custom-control {
-            position: relative;
-            display: block;
-            min-height: 1.5rem;
-
-            &.custom-checkbox {
-              input[type="checkbox"] {
-                box-sizing: border-box;
-                padding: 0;
-              }
-
-              .custom-control-label {
-                position: relative;
-                margin-bottom: 0;
-                vertical-align: top;
-              }
-
-              .custom-control-input {
-                position: absolute;
-                z-index: -1;
-                opacity: 0;
-              }
-            }
-          }
-
-          .icon-holder {
-            height: 100%;
-            vertical-align: middle;
-            position: relative;
-            margin-left: 5px;
-            height: $icon-size;
-
-            svg {
-              width: 100%;
-              height: 100%;
-              fill: $icon-color;
-              cursor: pointer;
-
-              &:hover {
-                fill: $icon-active-color;
-              }
-            }
-            &.active {
-              svg {
-                fill: $icon-active-color;
-              }
-            }
-          }
         }
-      }
+
+        tbody {
+            tr {
+                td {
+                    white-space: nowrap;
+                    position: relative;
+                    vertical-align: middle;
+                    max-width: 300px;
+
+                    @include setInputGroupStyles();
+
+                    &.filter-column {
+                        > .filter-item-holder {
+                            display: flex;
+                            flex-wrap: wrap;
+                            > .filter-item {
+                                height: $chip-height;
+                                background-color: $filter-gray;
+                                border-radius: 4px;
+                                padding: 4px;
+                                margin: 4px;
+
+                                display: flex;
+                                align-items: center;
+
+                                &:focus {
+                                    outline: 0;
+                                    border-color: $blue;
+                                    box-shadow: 0 0 0 0, 0 0 0 0.2rem rgba(38, 162, 230, 0.5);
+                                }
+                                .icon-holder {
+                                    margin-left: 12px;
+
+                                    svg {
+                                        fill: $black;
+                                        &:hover {
+                                            fill: $red;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    .icon-holder {
+                        cursor: pointer;
+                        height: $icon-size;
+                        display: flex;
+                        align-items: center;
+
+                        &:hover {
+                            svg {
+                                fill: $icon-active-color;
+                            }
+                        }
+
+                        svg {
+                            height: $icon-size;
+                            fill: $icon-color;
+                        }
+
+                        &.active {
+                            svg {
+                                fill: $icon-active-color;
+                            }
+                        }
+                    }
+
+                    > .action-column {
+                        position: relative;
+                        display: flex;
+                        align-items: center;
+
+                        button {
+                            min-width: $icon-size;
+                            min-height: $icon-size;
+                            margin: 0px 20px;
+                        }
+
+                        > .ellipsis-dropdown-holder {
+                            position: relative;
+                            display: inline-block;
+
+                            .icon-holder {
+                                &:hover {
+                                    background: $icon-active-color;
+
+                                    svg {
+                                        fill: $white;
+                                    }
+                                }
+                                svg {
+                                    fill: $icon-active-color;
+                                    height: calc(#{$icon-size} * 1.5);
+                                    width: 100%;
+                                }
+                            }
+
+                            > .dropdown-content {
+                                position: absolute;
+                                background-color: $white;
+                                outline: none;
+                                right: 0;
+                                max-height: 0;
+                                width: 0;
+                                overflow-y: auto;
+                                transition: max-height 200ms;
+
+                                &.active {
+                                    max-height: 10000px;
+                                    width: auto;
+                                    border: 1px solid $blue-darker;
+                                    border-radius: 4px;
+                                    z-index: 2;
+                                    min-width: 160px;
+                                    box-shadow: 0px 3px 3px 0px rgba(0, 0, 0, 0.4);
+
+                                    &.dropup {
+                                        top: auto;
+                                        bottom: 100%;
+                                        margin-bottom: 0.125rem;
+                                    }
+                                }
+                                > a {
+                                    color: inherit;
+                                    padding: 8px 16px;
+                                    text-decoration: none;
+                                    display: block;
+                                    cursor: pointer;
+                                    &:hover {
+                                        background-color: $icon-active-color;
+                                        color: $white;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    &.row-selections-column {
+                        display: flex;
+                        flex-direction: row;
+                        align-items: center;
+                    }
+                }
+                &.sub-row {
+                    td {
+                        > div {
+                            &:first-child {
+                                margin-left: 20px;
+                            }
+                        }
+                    }
+                }
+                &.sub-description-row {
+                    td {
+                        .description {
+                            margin-left: 40px;
+                            white-space: initial;
+                        }
+                    }
+                }
+
+                &.description-row {
+                    td {
+                        .description {
+                            margin-left: 20px;
+                            white-space: initial;
+                        }
+                    }
+                }
+            }
+        }
     }
-
-    tbody {
-      tr {
-        td {
-          white-space: nowrap;
-          position: relative;
-          vertical-align: middle;
-
-          .icon-holder {
-            cursor: pointer;
-            height: $icon-size;
-            display: flex;
-            align-items: center;
-
-            &:hover {
-              svg {
-                fill: $icon-active-color;
-              }
-            }
-
-            svg {
-              height: $icon-size;
-              fill: $icon-color;
-            }
-
-            &.active {
-              svg {
-                fill: $icon-active-color;
-              }
-            }
-          }
-
-          > .action-column {
-            position: relative;
-            display: flex;
-            align-items: center;
-
-            button {
-              min-width: $icon-size;
-              min-height: $icon-size;
-              margin: 0px 20px;
-            }
-
-            > .ellipsis-dropdown-holder {
-              position: relative;
-              display: inline-block;
-
-              .icon-holder {
-                &:hover {
-                  background: $icon-active-color;
-
-                  svg {
-                    fill: $white;
-                  }
-                }
-                svg {
-                  fill: $icon-active-color;
-                  height: calc(#{$icon-size} * 1.5);
-                  width: 100%;
-                }
-              }
-
-              > .dropdown-content {
-                position: absolute;
-                background-color: $white;
-                outline: none;
-                right: 0;
-                max-height: 0;
-                width: 0;
-                overflow-y: auto;
-                @include transition(max-height 200ms);
-
-                &.active {
-                  max-height: 10000px;
-                  width: auto;
-                  border: 1px solid #007ac7;
-                  border-radius: 4px;
-                  z-index: 1;
-                  min-width: 160px;
-                  box-shadow: 0px 3px 3px 0px rgba(0, 0, 0, 0.4);
-
-                  &.dropup {
-                    top: auto;
-                    bottom: 100%;
-                    margin-bottom: 0.125rem;
-                  }
-                }
-                > a {
-                  color: inherit;
-                  padding: 8px 16px;
-                  text-decoration: none;
-                  display: block;
-
-                  &:hover {
-                    background-color: $icon-active-color;
-                    color: $white;
-                  }
-                }
-              }
-            }
-          }
-
-          &.row-selections-column {
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-          }
-        }
-        &.sub-row {
-          td {
-            > div {
-              &:first-child {
-                margin-left: 20px;
-              }
-            }
-          }
-        }
-        &.sub-description-row {
-          td {
-            .description {
-              margin-left: 40px;
-              white-space: initial;
-            }
-          }
-        }
-
-        &.description-row {
-          td {
-            .description {
-              margin-left: 20px;
-              white-space: initial;
-            }
-          }
-        }
-      }
-    }
-  }
 }

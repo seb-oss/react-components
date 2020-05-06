@@ -1,9 +1,10 @@
-import * as React from "react";
-import { shallow, ShallowWrapper, ReactWrapper, mount } from "enzyme";
+import React from "react";
 import { Image, ImageProps } from "./Image";
+import { act } from "react-dom/test-utils";
+import { unmountComponentAtNode, render } from "react-dom";
 
 describe("Component: Image", () => {
-    let wrapper: ShallowWrapper<ImageProps>;
+    let container: HTMLDivElement = null;
     const props: ImageProps = {
         src: "my-image-src",
         width: "200px",
@@ -11,50 +12,71 @@ describe("Component: Image", () => {
     };
 
     beforeEach(() => {
-        wrapper = shallow(<Image {...props} />);
+        container = document.createElement("div");
+        document.body.appendChild(container);
     });
 
-    it("Should render", () => {
-        expect(wrapper).toBeDefined();
+    afterEach(() => {
+        unmountComponentAtNode(container);
+        container.remove();
+        container = null;
     });
 
     it("Should pass custom class and id", () => {
-        const updatedProps: ImageProps = { ...props, className: "myImageClass", id: "myImageId" };
-        wrapper.setProps({ ...updatedProps });
-        expect(wrapper.find(".div-tag").hasClass(updatedProps.className)).toBeTruthy();
-        expect(wrapper.find(`#${updatedProps.id}`).length).toBeGreaterThan(0);
-        wrapper.setProps({ useImgTag: true });
-        expect(wrapper.find(".img-tag").hasClass(updatedProps.className)).toBeTruthy();
-        expect(wrapper.find(`#${updatedProps.id}`).length).toBeGreaterThan(0);
+        const className: string = "myImageClass";
+        const id: string = "myImageId";
+
+        act(() => {
+            render(<Image {...props} className={className} id={id} />, container);
+        });
+        expect(container.firstElementChild.classList.contains(className)).toBeTruthy();
+        expect(container.firstElementChild.id).toEqual(id);
+
+        act(() => {
+            render(<Image {...props} className={className} id={id} useImgTag />, container);
+        });
+        expect(container.firstElementChild.classList.contains(className)).toBeTruthy();
+        expect(container.firstElementChild.id).toEqual(id);
     });
 
     it("Should pass alt, aria-label, and aria-describedby", () => {
         const updatedProps: ImageProps = { ...props, alt: "myImageAlt", ariaLabel: "myLabel", ariaDescribedBy: "myDescription" };
-        const mountedWrapper: ReactWrapper<ImageProps> = mount(<Image {...updatedProps} />);
-        mountedWrapper.setProps({ ...updatedProps });
-        expect(mountedWrapper.find(".div-tag").getDOMNode().hasAttribute("title")).toBeTruthy();
-        expect(mountedWrapper.find(".div-tag").getDOMNode().getAttribute("title")).toEqual(updatedProps.alt);
-        expect(mountedWrapper.find(".div-tag").getDOMNode().hasAttribute("aria-label")).toBeTruthy();
-        expect(mountedWrapper.find(".div-tag").getDOMNode().getAttribute("aria-label")).toEqual(updatedProps.ariaLabel);
-        expect(mountedWrapper.find(".div-tag").getDOMNode().hasAttribute("aria-describedby")).toBeTruthy();
-        expect(mountedWrapper.find(".div-tag").getDOMNode().getAttribute("aria-describedby")).toEqual(updatedProps.ariaDescribedBy);
-        mountedWrapper.setProps({ useImgTag: true });
-        expect(mountedWrapper.find(".img-tag").getDOMNode().hasAttribute("alt")).toBeTruthy();
-        expect(mountedWrapper.find(".img-tag").getDOMNode().getAttribute("alt")).toEqual(updatedProps.alt);
-        expect(mountedWrapper.find(".img-tag").getDOMNode().hasAttribute("aria-label")).toBeTruthy();
-        expect(mountedWrapper.find(".img-tag").getDOMNode().getAttribute("aria-label")).toEqual(updatedProps.ariaLabel);
-        expect(mountedWrapper.find(".img-tag").getDOMNode().hasAttribute("aria-describedby")).toBeTruthy();
-        expect(mountedWrapper.find(".img-tag").getDOMNode().getAttribute("aria-describedby")).toEqual(updatedProps.ariaDescribedBy);
+
+        act(() => {
+            render(<Image {...updatedProps} />, container);
+        });
+        expect(container.firstElementChild.hasAttribute("title")).toBeTruthy();
+        expect(container.firstElementChild.getAttribute("title")).toEqual(updatedProps.alt);
+        expect(container.firstElementChild.hasAttribute("aria-label")).toBeTruthy();
+        expect(container.firstElementChild.getAttribute("aria-label")).toEqual(updatedProps.ariaLabel);
+        expect(container.firstElementChild.hasAttribute("aria-describedby")).toBeTruthy();
+        expect(container.firstElementChild.getAttribute("aria-describedby")).toEqual(updatedProps.ariaDescribedBy);
+
+        act(() => {
+            render(<Image {...updatedProps} useImgTag />, container);
+        });
+        expect(container.firstElementChild.hasAttribute("alt")).toBeTruthy();
+        expect(container.firstElementChild.getAttribute("alt")).toEqual(updatedProps.alt);
+        expect(container.firstElementChild.hasAttribute("aria-label")).toBeTruthy();
+        expect(container.firstElementChild.getAttribute("aria-label")).toEqual(updatedProps.ariaLabel);
+        expect(container.firstElementChild.hasAttribute("aria-describedby")).toBeTruthy();
+        expect(container.firstElementChild.getAttribute("aria-describedby")).toEqual(updatedProps.ariaDescribedBy);
     });
 
     it("Should fire click event when clicked", () => {
         const action1 = jest.fn();
         const action2 = jest.fn();
-        wrapper.setProps({ onClick: action1 });
-        wrapper.children().first().simulate("click");
+
+        act(() => {
+            render(<Image {...props} onClick={action1} />, container);
+        });
+        container.firstChild.dispatchEvent(new MouseEvent("click", { bubbles: true }));
         expect(action1).toBeCalled();
-        wrapper.setProps({ useImgTag: true, onClick: action2 });
-        wrapper.children().first().simulate("click");
+
+        act(() => {
+            render(<Image {...props} onClick={action2} useImgTag />, container);
+        });
+        container.firstChild.dispatchEvent(new MouseEvent("click", { bubbles: true }));
         expect(action2).toBeCalled();
     });
 });
