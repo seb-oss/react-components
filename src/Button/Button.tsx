@@ -4,16 +4,14 @@ import classnames from "classnames";
 export type ButtonTheme = "primary" | "secondary" | "danger" | "outline-primary" | "outline-danger" | "dark" | "light" | "link";
 export type ButtonSize = "lg" | "md" | "sm";
 
-export type ButtonProps = React.PropsWithChildren<
-    React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement> & {
-        /** Button Theme */
-        theme?: ButtonTheme;
-        /** Button size */
-        size?: ButtonSize;
-        /** Fill the parent width */
-        block?: boolean;
-    }
->;
+export type ButtonProps = JSX.IntrinsicElements["button"] & {
+    /** Button Theme */
+    theme?: ButtonTheme;
+    /** Button size */
+    size?: ButtonSize;
+    /** Fill the parent width */
+    block?: boolean;
+};
 
 const Button: React.FC<ButtonProps> = React.memo(
     ({ theme, size, block, className, ...props }: ButtonProps): React.ReactElement<void> => {

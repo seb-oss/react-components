@@ -1,7 +1,7 @@
 import React from "react";
 import classnames from "classnames";
 
-export type BreadcrumbItemProps = React.DetailedHTMLProps<React.LiHTMLAttributes<HTMLLIElement>, HTMLLIElement> & {
+export type BreadcrumbItemProps = JSX.IntrinsicElements["li"] & {
     /**
      * The link to where it navigates to. This is used to enable openning the link in new tab.
      * Additionally, you can access it in the event passed with the onNavigate callback

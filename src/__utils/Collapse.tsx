@@ -1,9 +1,9 @@
 import React from "react";
 
-export interface CollapseProps extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
+export type CollapseProps = JSX.IntrinsicElements["div"] & {
     /** True to expand, false to collapse */
     toggle?: boolean;
-}
+};
 
 export const Collapse: React.FC<CollapseProps> = React.memo(({ toggle = false, ...props }: CollapseProps) => {
     const collapseRef: React.MutableRefObject<HTMLDivElement> = React.useRef<HTMLDivElement>();

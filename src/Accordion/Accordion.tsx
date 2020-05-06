@@ -4,7 +4,7 @@ import classnames from "classnames";
 import { AccordionItemProps, AccordionItem } from "./AccordionItem";
 import "./accordion.scss";
 
-export type AccordionProps = React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> & {
+export type AccordionProps = JSX.IntrinsicElements["div"] & {
     /**
      * The accordion list of items
      * @see AccordionItemProps interface

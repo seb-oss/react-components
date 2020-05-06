@@ -2,7 +2,7 @@ import React from "react";
 import classnames from "classnames";
 import { BreadcrumbItemProps, BreadcrumbItem } from "./BreadcrumbItem";
 
-export type BreadcrumbProps = React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & {
+export type BreadcrumbProps = JSX.IntrinsicElements["nav"] & {
     /** List of BreadcrumbItemProps to be rendered */
     list?: Array<BreadcrumbItemProps>;
     /** Event handler triggered when one of the breadcrumb links is clicked */

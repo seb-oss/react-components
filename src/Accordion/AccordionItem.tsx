@@ -3,14 +3,14 @@ import { Collapse } from "../__utils/Collapse";
 import classnames from "classnames";
 import { randomId } from "@sebgroup/frontend-tools/dist/randomId";
 
-export interface AccordionItemProps extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
+export type AccordionItemProps = JSX.IntrinsicElements["div"] & {
     /** The header of the accordion item */
     header: React.ReactNode;
     /** A sub-header description rendered under the header */
     subHeader?: React.ReactNode;
     /** An event handler triggered on an accordion button is clicked */
     onToggle?: React.MouseEventHandler<HTMLButtonElement>;
-}
+};
 
 export const AccordionItem: React.FC<AccordionItemProps> = React.memo(({ header, subHeader, onToggle, ...props }: AccordionItemProps) => {
     const [cardClassName, setCardClassName] = React.useState<string>("card");

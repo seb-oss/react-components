@@ -3,12 +3,10 @@ import classnames from "classnames";
 
 export type ButtonGroupSizes = "sm" | "md" | "lg";
 
-export type ButtonGroupProps = React.PropsWithChildren<
-    React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> & {
-        vertical?: boolean;
-        size?: ButtonGroupSizes;
-    }
->;
+export type ButtonGroupProps = JSX.IntrinsicElements["div"] & {
+    vertical?: boolean;
+    size?: ButtonGroupSizes;
+};
 
 /** Button group wrapper. Use this to group multiple buttons */
 const ButtonGroup: React.FC<ButtonGroupProps> = React.memo(({ vertical, size, ...props }: ButtonGroupProps) => {
