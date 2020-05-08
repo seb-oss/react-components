@@ -16,7 +16,7 @@ export class ImagePreview extends React.Component<ImagePreviewProps, ImagePrevie
     constructor(props: ImagePreviewProps) {
         super(props);
         this.state = {
-            cropDataResult: ""
+            cropDataResult: "",
         };
         this.onFileInputClick = this.onFileInputClick.bind(this);
     }

@@ -11,7 +11,7 @@ let buildConfig = {
     devtool: false,
     target: "web",
     resolve: {
-        extensions: [".ts", ".tsx", ".js", ".json"]
+        extensions: [".ts", ".tsx", ".js", ".json"],
     },
     module: {
         rules: [
@@ -22,16 +22,16 @@ let buildConfig = {
             { test: /\.eot(\?v=\d+.\d+.\d+)?$/, loader: "file-loader?prefix=font/&limit=5000&name=assets/fonts/[name].[ext]" },
             { test: /\.(woff|woff2)$/, loader: "file-loader?prefix=font/&limit=5000&name=assets/fonts/[name].[ext]" },
             { test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/, loader: "file-loader?limit=10000&mimetype=application/octet-stream&name=assets/fonts/[name].[ext]" },
-            { test: /\.md$/, loaders: ["html-loader", "markdown-loader"] }
-        ]
+            { test: /\.md$/, loaders: ["html-loader", "markdown-loader"] },
+        ],
     },
     node: {
         console: false,
         global: true,
         process: true,
         Buffer: false,
-        setImmediate: false
-    }
+        setImmediate: false,
+    },
 };
 
 // Specific config
@@ -50,18 +50,18 @@ switch (buildType) {
                     timings: false,
                     builtAt: false,
                     hash: false,
-                    excludeAssets: /\.(woff2?|ttf|eot|map)$/
-                }
+                    excludeAssets: /\.(woff2?|ttf|eot|map)$/,
+                },
             },
             output: {
-                path: path.resolve(__dirname, "dist")
+                path: path.resolve(__dirname, "dist"),
             },
             plugins: [
                 new HtmlWebpackPlugin({
                     template: "./develop/index.dev.html",
-                    filename: "./index.html"
-                })
-            ]
+                    filename: "./index.html",
+                }),
+            ],
         };
         buildConfig.module.rules[0].options = { configFile: "develop/tsconfig.json" };
         break;
@@ -70,15 +70,15 @@ switch (buildType) {
             ...buildConfig,
             mode: "production",
             output: {
-                path: path.resolve(__dirname, "docs")
+                path: path.resolve(__dirname, "docs"),
             },
             plugins: [
                 new HtmlWebpackPlugin({
                     template: "./develop/index.html",
-                    filename: "./index.html"
+                    filename: "./index.html",
                 }),
-                new CopyWebpackPlugin([{ from: "./develop/version.json" }, { from: "./develop/targetindex.json" }, { from: "./develop/contentindex.json" }])
-            ]
+                new CopyWebpackPlugin([{ from: "./develop/version.json" }, { from: "./develop/targetindex.json" }, { from: "./develop/contentindex.json" }]),
+            ],
         };
         break;
     case "prod":
@@ -91,23 +91,23 @@ switch (buildType) {
                 path: path.resolve(__dirname, "dist"),
                 library: "react-components",
                 libraryTarget: "umd",
-                umdNamedDefine: true
+                umdNamedDefine: true,
             },
             externals: {
                 react: {
                     commonjs: "react",
                     commonjs2: "react",
                     amd: "React",
-                    root: "React"
+                    root: "React",
                 },
                 "react-dom": {
                     commonjs: "react-dom",
                     commonjs2: "react-dom",
                     amd: "ReactDOM",
-                    root: "ReactDOM"
-                }
+                    root: "ReactDOM",
+                },
             },
-            plugins: [new CopyWebpackPlugin(components.indexes), new CaseSensitivePathsPlugin()]
+            plugins: [new CopyWebpackPlugin(components.indexes), new CaseSensitivePathsPlugin()],
         };
         buildConfig.module.rules.push(
             { test: /\.(jpe?g|png|gif)$/i, loader: "file-loader?name=assets/images/[name].[ext]" },
@@ -126,8 +126,8 @@ if (buildType !== "prod") {
             ...buildConfig.output,
             filename: "[name].js",
             chunkFilename: "js/[name].bundle.js",
-            publicPath: ""
-        }
+            publicPath: "",
+        },
     };
     buildConfig.module.rules.push(
         {
@@ -137,10 +137,10 @@ if (buildType !== "prod") {
                     loader: "file-loader",
                     options: {
                         esModule: false,
-                        name: "assets/images/[name].[ext]"
-                    }
-                }
-            ]
+                        name: "assets/images/[name].[ext]",
+                    },
+                },
+            ],
         },
         {
             test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
@@ -151,10 +151,10 @@ if (buildType !== "prod") {
                         esModule: false,
                         limit: 10000,
                         mimetype: "image/svg+xml",
-                        name: "assets/svgs/[name].[ext]"
-                    }
-                }
-            ]
+                        name: "assets/svgs/[name].[ext]",
+                    },
+                },
+            ],
         }
     );
 }

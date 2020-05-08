@@ -36,7 +36,7 @@ module.exports = components = {
         Tooltip: "./src/Tooltip/index.ts",
         Video: "./src/Video/index.ts",
         ImageCropper: "./src/ImageCropper/index.ts",
-        Timer: "./src/Timer/index.ts"
+        Timer: "./src/Timer/index.ts",
     },
     indexes: [
         { from: "./src/Accordion/index.ts", to: "./Accordion/index.js" },
@@ -75,6 +75,6 @@ module.exports = components = {
         { from: "./src/Tooltip/index.ts", to: "./Tooltip/index.js" },
         { from: "./src/Video/index.ts", to: "./Video/index.js" },
         { from: "./src/ImageCropper/index.ts", to: "./ImageCropper/index.js" },
-        { from: "./src/Timer/index.ts", to: "./Timer/index.js" }
-    ]
+        { from: "./src/Timer/index.ts", to: "./Timer/index.js" },
+    ],
 };

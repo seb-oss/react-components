@@ -34,7 +34,7 @@ export const Carousel: React.FunctionComponent<CarouselProps> = (props: Carousel
         slidesToScroll: 1,
         autoplay: props.autoPlay ? true : false,
         autoplaySpeed: props.autoPlaySpeed ? props.autoPlaySpeed : 3000,
-        afterChange: props.afterChange
+        afterChange: props.afterChange,
     };
 
     return (
@@ -49,7 +49,7 @@ export const Carousel: React.FunctionComponent<CarouselProps> = (props: Carousel
                                         className="carousel-img"
                                         style={{
                                             backgroundSize: props.backgroundPlacement || "cover",
-                                            backgroundImage: "url(" + item.image + ")"
+                                            backgroundImage: "url(" + item.image + ")",
                                         }}
                                     />
                                 )}
