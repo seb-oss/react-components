@@ -6,7 +6,7 @@ describe("Component: Toggle ", () => {
     const props: ToggleProps = {
         value: true,
         onChange: jest.fn(),
-        name: "myToggle"
+        name: "myToggle",
     };
     let wrapper: ShallowWrapper<ToggleProps>;
 
@@ -41,7 +41,7 @@ describe("Component: Toggle ", () => {
             },
             stopPropagation: () => {
                 console.log("We are stopping propagation ");
-            }
+            },
         });
         expect(props.onChange).toBeCalled();
     });

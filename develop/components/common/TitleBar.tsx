@@ -33,7 +33,7 @@ export default class TitleBar extends React.Component<TitleBarProps, TitleBarSta
             searchTerm: "",
             searchList: [],
             searchInFocus: false,
-            highlighted: 0
+            highlighted: 0,
         };
         this.searchRef = React.createRef();
         this.chooseHighlightedItem = this.chooseHighlightedItem.bind(this);

@@ -23,26 +23,11 @@ describe("Component: ImagePreview", () => {
     it("Should render default svg image when previewSrc is empty", () => {
         wrapper.setProps({ previewSrc: "" });
         expect(wrapper.find(".profile-image").find("svg")).toBeTruthy();
-        expect(
-            wrapper
-                .find(".profile-image")
-                .find("img")
-                .exists()
-        ).toBeFalsy();
+        expect(wrapper.find(".profile-image").find("img").exists()).toBeFalsy();
         wrapper.setProps({ previewSrc: "xxxxx" });
         wrapper.instance().componentDidMount();
-        expect(
-            wrapper
-                .find(".profile-image")
-                .find("svg")
-                .exists()
-        ).toBeFalsy();
-        expect(
-            wrapper
-                .find(".profile-image")
-                .find("img")
-                .exists()
-        ).toBeTruthy();
+        expect(wrapper.find(".profile-image").find("svg").exists()).toBeFalsy();
+        expect(wrapper.find(".profile-image").find("img").exists()).toBeTruthy();
     });
 
     it("Button select image should trigger file upload on click", () => {
@@ -81,27 +66,12 @@ describe("Component: ImagePreview", () => {
     it("CroppedData should be cleared or initialised on first mount", (doneFn) => {
         const previewSrc: string = "imageSource";
         const mountedWrapper: ReactWrapper<ImagePreviewProps, ImagePreviewState, ImagePreview> = mount(<ImagePreview {...props} previewSrc={previewSrc} />);
-        expect(
-            mountedWrapper
-                .find(".profile-image")
-                .find("img")
-                .prop("src")
-        ).toEqual(previewSrc);
+        expect(mountedWrapper.find(".profile-image").find("img").prop("src")).toEqual(previewSrc);
         mountedWrapper.unmount();
         mountedWrapper.setProps({ previewSrc: undefined });
         mountedWrapper.mount();
-        expect(
-            mountedWrapper
-                .find(".profile-image")
-                .find("img")
-                .exists()
-        ).toBeFalsy();
-        expect(
-            mountedWrapper
-                .find(".profile-image")
-                .find("svg")
-                .exists()
-        ).toBeTruthy();
+        expect(mountedWrapper.find(".profile-image").find("img").exists()).toBeFalsy();
+        expect(mountedWrapper.find(".profile-image").find("svg").exists()).toBeTruthy();
         doneFn();
     });
 });

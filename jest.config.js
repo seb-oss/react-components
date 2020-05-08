@@ -33,24 +33,24 @@ module.exports = {
     testMatch,
     modulePaths: ["<rootDir>/src", "<rootDir>/node_modules"],
     globals: {
-        NODE_ENV: "test"
+        NODE_ENV: "test",
     },
     verbose: true,
     moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json"],
     transform: {
         "^.+\\.jsx?$": require.resolve("babel-jest"),
-        "^.+\\.tsx?$": "ts-jest"
+        "^.+\\.tsx?$": "ts-jest",
     },
     transformIgnorePatterns: ["<rootDir>/node_modules/(?!(react|@sebgroup/frontend-tools)/)"],
     testEnvironment: "node",
     moduleNameMapper: {
         "aurelia-(.*)": "<rootDir>/node_modules/$1",
         "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/__mocks__/fileMock.js",
-        "\\.(css|less|scss)$": "<rootDir>/__mocks__/styleMock.js"
+        "\\.(css|less|scss)$": "<rootDir>/__mocks__/styleMock.js",
     },
     // some coverage and results processing options
     collectCoverage: true,
     collectCoverageFrom,
     coverageDirectory: "./coverage",
-    coverageReporters: ["json", "lcov", "text"]
+    coverageReporters: ["json", "lcov", "text"],
 };

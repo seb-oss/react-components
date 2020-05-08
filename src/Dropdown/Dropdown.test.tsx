@@ -14,10 +14,10 @@ describe("Component: Dropdown", () => {
             list: [
                 { label: "A", value: "a" },
                 { label: "B", value: "b" },
-                { label: "C", value: "c" }
+                { label: "C", value: "c" },
             ],
             onChange: jest.fn(),
-            selectedValue: null
+            selectedValue: null,
         };
     });
 
@@ -51,7 +51,7 @@ describe("Component: Dropdown", () => {
         const props: DropdownProps = {
             ...DEFAULT_PROPS,
             className: "my-custom-class",
-            id: "my-custom-id"
+            id: "my-custom-id",
         };
 
         act(() => {
@@ -76,7 +76,7 @@ describe("Component: Dropdown", () => {
     it("Should render label", () => {
         const props: DropdownProps = {
             ...DEFAULT_PROPS,
-            label: "my-custom-label"
+            label: "my-custom-label",
         };
 
         act(() => {
@@ -98,7 +98,7 @@ describe("Component: Dropdown", () => {
     it("Should render placeholder", () => {
         const props: DropdownProps = {
             ...DEFAULT_PROPS,
-            placeholder: "my-custom-placeholder"
+            placeholder: "my-custom-placeholder",
         };
 
         act(() => {
@@ -169,7 +169,7 @@ describe("Component: Dropdown", () => {
     it('Should display "Empty" and be disabled if list prop is an empty array', () => {
         const props: DropdownProps = {
             ...DEFAULT_PROPS,
-            list: []
+            list: [],
         };
 
         act(() => {
@@ -184,7 +184,7 @@ describe("Component: Dropdown", () => {
     it("Should display item label when one item is selected", () => {
         const props: DropdownProps = {
             ...DEFAULT_PROPS,
-            selectedValue: { ...DEFAULT_PROPS.list[0] }
+            selectedValue: { ...DEFAULT_PROPS.list[0] },
         };
 
         act(() => {
@@ -203,7 +203,7 @@ describe("Component: Dropdown", () => {
     it("Should display correct label in multi mode for each scenario (none, 1 selected, more than one but not all selected and all selected)", () => {
         const props: DropdownProps = {
             ...DEFAULT_PROPS,
-            multi: true
+            multi: true,
         };
 
         act(() => {
@@ -244,7 +244,7 @@ describe("Component: Dropdown", () => {
         const props: DropdownProps = {
             ...DEFAULT_PROPS,
             selectedValue: [{ ...DEFAULT_PROPS.list[0] }],
-            multi: true
+            multi: true,
         };
 
         act(() => {
@@ -269,7 +269,7 @@ describe("Component: Dropdown", () => {
     it("Should enable search when searchable prop set to true", () => {
         const props: DropdownProps = {
             ...DEFAULT_PROPS,
-            searchable: true
+            searchable: true,
         };
 
         act(() => {
@@ -284,7 +284,7 @@ describe("Component: Dropdown", () => {
     it("Should enable more button when set to true", () => {
         const props: DropdownProps = {
             ...DEFAULT_PROPS,
-            more: true
+            more: true,
         };
 
         act(() => {
@@ -308,7 +308,7 @@ describe("Component: Dropdown", () => {
     it("Should enable search when searchable prop set to true", () => {
         const props: DropdownProps = {
             ...DEFAULT_PROPS,
-            native: true
+            native: true,
         };
 
         act(() => {
@@ -324,7 +324,7 @@ describe("Component: Dropdown", () => {
     it("Should display error is error prop set", () => {
         const props: DropdownProps = {
             ...DEFAULT_PROPS,
-            error: "my-custom-error"
+            error: "my-custom-error",
         };
 
         act(() => {
@@ -346,7 +346,7 @@ describe("Component: Dropdown", () => {
     it("Should disable component when disabled set to true", () => {
         const props: DropdownProps = {
             ...DEFAULT_PROPS,
-            disabled: true
+            disabled: true,
         };
 
         act(() => {
@@ -375,7 +375,7 @@ describe("Component: Dropdown", () => {
         const props: DropdownProps = {
             ...DEFAULT_PROPS,
             multi: true,
-            selectedValue: [{ ...DEFAULT_PROPS.list[0] }]
+            selectedValue: [{ ...DEFAULT_PROPS.list[0] }],
         };
 
         act(() => {
@@ -388,7 +388,7 @@ describe("Component: Dropdown", () => {
         const newProps: DropdownProps = {
             ...DEFAULT_PROPS,
             clearable: true,
-            selectedValue: { ...DEFAULT_PROPS.list[0] }
+            selectedValue: { ...DEFAULT_PROPS.list[0] },
         };
 
         act(() => {
@@ -401,7 +401,7 @@ describe("Component: Dropdown", () => {
     it("Should not display clear button if all items are unselected even when clearable prop set to true", () => {
         const props: DropdownProps = {
             ...DEFAULT_PROPS,
-            clearable: true
+            clearable: true,
         };
 
         act(() => {
@@ -416,7 +416,7 @@ describe("Component: Dropdown", () => {
         const props: DropdownProps = {
             ...DEFAULT_PROPS,
             selectedValue: { ...DEFAULT_PROPS.list[0] },
-            clearable: true
+            clearable: true,
         };
 
         act(() => {
@@ -445,7 +445,7 @@ describe("Component: Dropdown", () => {
         const props: DropdownProps = {
             ...DEFAULT_PROPS,
             selectedValue: [{ ...DEFAULT_PROPS.list[0] }],
-            multi: true
+            multi: true,
         };
 
         act(() => {
@@ -475,7 +475,7 @@ describe("Component: Dropdown", () => {
         const props: DropdownProps = {
             ...DEFAULT_PROPS,
             selectedValue: [...DEFAULT_PROPS.list],
-            multi: true
+            multi: true,
         };
 
         act(() => {
@@ -506,7 +506,7 @@ describe("Component: Dropdown", () => {
     it("Should only display items that fit the search term when searchable is set to true", () => {
         const props: DropdownProps = {
             ...DEFAULT_PROPS,
-            searchable: true
+            searchable: true,
         };
 
         act(() => {
@@ -531,7 +531,7 @@ describe("Component: Dropdown", () => {
 
     it("Should focus and highlight the option on mouse enter", () => {
         const props: DropdownProps = {
-            ...DEFAULT_PROPS
+            ...DEFAULT_PROPS,
         };
 
         act(() => {
@@ -668,7 +668,7 @@ describe("Component: Dropdown", () => {
     it("Should navigate between options when keyboard up and down arrows are pressed in multi mode", () => {
         const props: DropdownProps = {
             ...DEFAULT_PROPS,
-            multi: true
+            multi: true,
         };
 
         act(() => {
@@ -804,7 +804,7 @@ describe("Component: Dropdown", () => {
             ...DEFAULT_PROPS,
             clearable: true,
             disabled: true,
-            selectedValue: { ...DEFAULT_PROPS.list[0] }
+            selectedValue: { ...DEFAULT_PROPS.list[0] },
         };
 
         act(() => {

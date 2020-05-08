@@ -79,8 +79,8 @@ const accordionList: Array<AccrodionListItem> = [
             title: "Tempor incididun",
             desc:
                 "Lorem ipsum dolor sit amet, consectetur adipiscing elit, " +
-                "sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Morbi tristique senectus et netus. Lectus mauris ultrices eros in cursus turpis massa tincidunt."
-        }
+                "sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Morbi tristique senectus et netus. Lectus mauris ultrices eros in cursus turpis massa tincidunt.",
+        },
     },
     {
         header: "Accordion List Item 2",
@@ -89,15 +89,15 @@ const accordionList: Array<AccrodionListItem> = [
                 title: "Excepteur sint",
                 desc:
                     "Vitae suscipit tellus mauris a diam maecenas sed. Feugiat in fermentum posuere urna nec tincidunt praesent semper." +
-                    "Tellus id interdum velit laoreet id donec. Morbi enim nunc faucibus a pellentesque sit. Vitae congue mauris rhoncus aenean."
+                    "Tellus id interdum velit laoreet id donec. Morbi enim nunc faucibus a pellentesque sit. Vitae congue mauris rhoncus aenean.",
             },
             {
                 title: "Duis aute",
                 desc:
                     "Eleifend donec pretium vulputate sapien nec sagittis. Malesuada fames ac turpis egestas." +
-                    "Molestie ac feugiat sed lectus vestibulum mattis. Suscipit adipiscing bibendum est ultricies integer quis auctor elit sed."
-            }
-        ]
+                    "Molestie ac feugiat sed lectus vestibulum mattis. Suscipit adipiscing bibendum est ultricies integer quis auctor elit sed.",
+            },
+        ],
     },
     {
         header: "Accordion List Item 3",
@@ -108,8 +108,8 @@ const accordionList: Array<AccrodionListItem> = [
                     Link to seb.se
                 </a>
             </>
-        )
-    }
+        ),
+    },
 ];
 
 export default AccordionPage;

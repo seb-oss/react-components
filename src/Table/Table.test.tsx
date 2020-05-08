@@ -12,32 +12,32 @@ describe("Component: Table", () => {
         {
             label: "id",
             accessor: "id",
-            canSort: false
+            canSort: false,
         },
         {
             label: "First Name",
-            accessor: "firstName"
+            accessor: "firstName",
         },
         {
             label: "Last Name",
-            accessor: "lastName"
+            accessor: "lastName",
         },
         {
             label: "Age",
-            accessor: "age"
+            accessor: "age",
         },
         {
             label: "Visits",
-            accessor: "visits"
+            accessor: "visits",
         },
         {
             label: "Profile Progress",
-            accessor: "progress"
+            accessor: "progress",
         },
         {
             label: "Status",
-            accessor: "status"
-        }
+            accessor: "status",
+        },
     ];
 
     const data: Array<DataItem<any>> = makeData([30, 5]);
@@ -273,7 +273,7 @@ describe("Component: Table", () => {
 
         const editProps: EditProps = {
             onAfterEdit,
-            mode: null
+            mode: null,
         };
 
         const selector: string = "tbody tr.parent-row td .form-group.input-box-group";
@@ -370,7 +370,7 @@ describe("Component: Table", () => {
         const customButtonCallBack: jest.Mock = jest.fn((event: React.MouseEvent<HTMLAnchorElement, MouseEvent>, selectedRow: TableRow) => {});
         const actionLinks: Array<ActionLinkItem> = [
             { label: "Add", onClick: customButtonCallBack },
-            { label: "Edit", onClick: customButtonCallBack }
+            { label: "Edit", onClick: customButtonCallBack },
         ];
 
         // for the sake of subrow, collapse data
@@ -471,7 +471,7 @@ describe("Component: Table", () => {
     it("Should render and enable custom button", async () => {
         const primaryActionButton: PrimaryActionButton = {
             label: "Buy",
-            onClick: jest.fn((e: React.MouseEvent<HTMLButtonElement>) => {})
+            onClick: jest.fn((e: React.MouseEvent<HTMLButtonElement>) => {}),
         };
 
         await act(async () => {
@@ -512,11 +512,11 @@ describe("Component: Table", () => {
                         filterItems: [
                             {
                                 accessor: "status",
-                                filters: filterValues.slice(0, 1)
-                            }
+                                filters: filterValues.slice(0, 1),
+                            },
                         ],
                         onAfterFilter: onAfterFilterCallBack,
-                        onRemoveFilter: onRemoveFilter
+                        onRemoveFilter: onRemoveFilter,
                     }}
                 />,
                 container
@@ -562,7 +562,7 @@ describe("Component: Table", () => {
                         triggerSearchOn: "Submit",
                         searchText: smallData[1].firstName,
                         onSearch: customButtonCallBack,
-                        searchTriggered: true
+                        searchTriggered: true,
                     }}
                 />,
                 container
@@ -581,7 +581,7 @@ describe("Component: Table", () => {
                         triggerSearchOn: "Submit",
                         searchText: null,
                         onSearch: customButtonCallBack,
-                        searchTriggered: true
+                        searchTriggered: true,
                     }}
                 />,
                 container
@@ -600,7 +600,7 @@ describe("Component: Table", () => {
                         searchInColumns: ["firstName", "lastName"],
                         triggerSearchOn: "Change",
                         searchText: smallData[1].firstName,
-                        onSearch: customButtonCallBack
+                        onSearch: customButtonCallBack,
                     }}
                 />,
                 container
@@ -618,7 +618,7 @@ describe("Component: Table", () => {
                         searchInColumns: ["age"],
                         triggerSearchOn: "Change",
                         searchText: smallData[1].age,
-                        onSearch: customButtonCallBack
+                        onSearch: customButtonCallBack,
                     }}
                 />,
                 container
@@ -637,7 +637,7 @@ describe("Component: Table", () => {
                         triggerSearchOn: "Submit",
                         searchText: smallData[1].firstName,
                         onSearch: customButtonCallBack,
-                        searchTriggered: true
+                        searchTriggered: true,
                     }}
                 />,
                 container

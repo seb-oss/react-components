@@ -8,7 +8,7 @@ describe("Component: Image", () => {
     const props: ImageProps = {
         src: "my-image-src",
         width: "200px",
-        height: "200px"
+        height: "200px",
     };
 
     beforeEach(() => {

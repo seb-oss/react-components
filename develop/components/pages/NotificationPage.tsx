@@ -12,7 +12,7 @@ const NotificationPage: React.FunctionComponent = () => {
     const description: string = "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.";
     const notificationActions: Array<NotificationAction> = [
         { text: "Yes, I'm in", action: () => setNotification2Toggle(false) },
-        { text: "Ignore", action: () => setNotification2Toggle(false) }
+        { text: "Ignore", action: () => setNotification2Toggle(false) },
     ];
 
     return (
