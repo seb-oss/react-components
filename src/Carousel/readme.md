@@ -17,42 +17,57 @@ Type: UI Component
 
 ## Element information
 
-This React component is based on `react-slick`. Supports customization and configurations. The component name is `Carousel` and the selector is `<Carousel/>`.
+This React component is based on SEB Bootstrap style. Supports customization and configurations. The component name is `Carousel` and the selector is `<Carousel/>`.
 
 ## Basic use
 
+It can be used in these combinations
 ```html
-<Carousel list="{this.state.list}" />
+{/* Passing the list as prop with common onToggle handler and default value (index number) to show which one is checked */}
+<Carousel list="carouselList" onNavigate={commonToggleHandler} defaultValue={value} />
+
+{/* Rendering a list of CarouselItem */}
+<Carousel defaultValue={value}>
+    {carouselList.map((item: CarouselItemProps, i: number) => {
+        /** Do whatever logic before rendering */
+        return (
+            <CarouselItem key={i} {...item} onNavigate={individualToggleHandler}/>
+        )
+    })}
+</Carousel>
+
+{/* Rendering a bunch CarouselItem individually */}
+<Carousel>
+    <CarouselItem>Some content</CarouselItem>
+    <CarouselItem>
+        <h4>This is the second</h4>
+        <p>Some rich content</p>
+    </CarouselItem>
+    <CarouselItem defaultChecked>
+        <SomeComponent>content</SomeComponent>
+    </CarouselItem>
+</Carousel>
 ```
+**onNavigate** handler can be passed to the parent as common handler, or passed to each individual child as a unique handler for each item
+**defaultChecked** can be used to set the default state on items rendered individually
 
 ## Properties
 
-These are the current available properties:
+#### CarouselProps
+This interface extends all native attributes of `HTMLDivElement`, adding the following extra attributes:
 
-| Property             | Type                               | Description                                                                        |
-| -------------------- | ---------------------------------- | ---------------------------------------------------------------------------------- |
-| afterChange?         | `(index: number) => void`          | Callback triggered after carousel is changed                                       |
-| autoPlay?            | `boolean`                          | Enable auto change mode. default is `false`                                        |
-| autoPlaySpeed?       | `number`                           | Autoplay speed in milliseconds (default: 3000)                                     |
-| backgroundPlacement? | `string`                           | CSS background-placement property, default is `cover`                              |
-| className?           | `string`                           | Element class                                                                      |
-| height?              | `number`                           | Height of carousel                                                                 |
-| id?                  | `string`                           | Element id                                                                         |
-| infinite?            | `boolean`                          | Coupled with autoPlay, enables the carousel to loop infinitely. default is `false` |
-| list                 | `Array<CarouselItem>` <sup>1</sup> | An array of `CarouselItem`                                                         |
-
-## Reference
-
-This component is a wrapper around [react-slick](https://www.npmjs.com/package/react-slick) which uses [slick-carousel](https://www.npmjs.com/package/slick-carousel)
+| Property            | Type                                           | Description                                                |
+| ------------------- | ---------------------------------------------- | ---------------------------------------------------------- |
+| afterChange?        | `(event: AfterSlideEvent) => void`<sup>1</sup> | Callback triggered after carousel is changed               |
+| transitionDuration? | `number`                                       | Transition duration in milliseconds. Default is `600`      |
+| transitionStyle?    | `"slide" | "fade"`                             | Transition style. Default is `slide`                       |
+| infinite?           | `boolean`                                      | Enables the carousel to loop infinitely. default is `true` |
+| showIndicators?     | `boolean`                                      | Shows indicators at the bottom. default is `false`         |
+| list                | `Array<CarouselItem>` <sup>1</sup>             | An array of `CarouselItem`                                 |
+| defaultValue?       | `number`                                       | The index of the default active carousel                   |
+| autoplay?           | `boolean`                                      | Shows indicators at the bottom. default is `false`         |
+| autoplaySpeed?      | `number`                                       | Autoplay speed in milliseconds. Default is `5000`          |
 
 ## Footnote
 
-1. `list` items has an exported interface named `CarouselItem`
-
-```typescript
-interface CarouselItem {
-    title?: string;
-    desc?: string;
-    image?: string;
-}
-```
+1. `AfterSlideEvent` is an event of type `React.AnimationEvent<HTMLDivElement> | React.TransitionEvent<HTMLDivElement>`

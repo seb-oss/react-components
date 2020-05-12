@@ -57,6 +57,7 @@ switch (buildType) {
             devServer: {
                 contentBase: "./dist",
                 port: 3000,
+                host: "0.0.0.0",
                 stats: {
                     modules: false,
                     version: false,

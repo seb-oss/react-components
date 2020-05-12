@@ -1,11 +1,9 @@
 import * as React from "react";
-import { Carousel, CarouselItem } from "../../../src/Carousel/Carousel";
+import { Carousel, CarouselItem } from "../../../src/Carousel";
 import Highlight from "react-highlight";
+import { CarouselProps } from "../../../src/Carousel/Carousel";
+import classnames from "classnames";
 const docMD: string = require("../../../src/Carousel/readme.md");
-
-const firstImg: string = require("../../assets/images/cat-pet-animal-1.jpeg");
-const secondImg: string = require("../../assets/images/cat-pet-animal-2.jpg");
-const thirdImg: string = require("../../assets/images/cat-pet-animal-3.jpg");
 
 const CarouselPage: React.FunctionComponent = () => {
     return (
@@ -19,16 +17,18 @@ const CarouselPage: React.FunctionComponent = () => {
 
                 <div className="info">
                     <h2>Output</h2>
-                    <p>Here are sample outputs</p>
+                    <p>
+                        Carousel with <b>slide</b> transition
+                    </p>
                     <div className="result wide">
-                        <Carousel
-                            list={carouselList}
-                            afterChange={() => {
-                                console.log("changed");
-                            }}
-                            autoPlay={true}
-                            infinite={true}
-                        />
+                        <CarouselSample />
+                    </div>
+
+                    <p>
+                        Carousel with <b>fade</b> transition
+                    </p>
+                    <div className="result wide">
+                        <CarouselSample transitionStyle="fade" />
                     </div>
                 </div>
             </div>
@@ -36,22 +36,31 @@ const CarouselPage: React.FunctionComponent = () => {
     );
 };
 
-const carouselList: Array<CarouselItem> = [
-    {
-        title: "Ipsum consequat nisl",
-        desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-        image: firstImg,
-    },
-    {
-        title: "Interdum velit euismod",
-        desc: "Lectus quam id leo in",
-        image: secondImg,
-    },
-    {
-        title: "Risus in hendrerit",
-        desc: "Augue eget arcu dictum varius",
-        image: thirdImg,
-    },
-];
+const Child: React.FC<JSX.IntrinsicElements["div"]> = React.memo((props: JSX.IntrinsicElements["div"]) => (
+    <div className={classnames("p-5", props.className)}>
+        <h1 className="text-light text-center">{props.children}</h1>
+        <p className="text-light text-center">
+            <a className="text-light" href="#">
+                test
+            </a>
+        </p>
+    </div>
+));
+
+const CarouselSample: React.FC<CarouselProps> = React.memo((props: CarouselProps) => {
+    return (
+        <Carousel autoplay {...props} showIndicators list={[{ children: <Child className="bg-primary">Start</Child> }]}>
+            <CarouselItem>
+                <Child className="bg-dark">First</Child>
+            </CarouselItem>
+            <CarouselItem>
+                <Child className="bg-danger">Second</Child>
+            </CarouselItem>
+            <CarouselItem>
+                <Child className="bg-warning">Third</Child>
+            </CarouselItem>
+        </Carousel>
+    );
+});
 
 export default CarouselPage;
