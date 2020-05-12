@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Slider, RangeSliderLabel, SliderTheme, SliderProps } from "../../../src/Slider/Slider";
+import { Slider, RangeSliderLabel, SliderTheme, SliderProps, SliderAppearance } from "../../../src/Slider/Slider";
 import { TextBoxGroup } from "../../../src/TextBoxGroup/TextBoxGroup";
 import { RadioListModel, RadioGroup } from "../../../src/RadioGroup/RadioGroup";
 import { CheckBox } from "../../../src/CheckBox/CheckBox";
@@ -34,6 +34,7 @@ interface SliderPageState {
     slider: number;
     theme: SliderTheme;
     tooltipTheme: SliderTheme;
+    appearance: SliderAppearance;
     disabled: boolean;
     hasError: boolean;
     hasLabels: boolean;
@@ -54,6 +55,7 @@ const SliderPageStateNames: { [K in keyof SliderPageState]: keyof SliderPageStat
     slider: "slider",
     theme: "theme",
     tooltipTheme: "tooltipTheme",
+    appearance: "appearance",
     disabled: "disabled",
     hasError: "hasError",
     hasLabels: "hasLabels",
@@ -80,10 +82,16 @@ class SliderExamples extends React.Component<SliderPageProps, SliderPageState> {
         { label: "Warning", value: "warning" },
     ];
 
+    appearanceList: Array<RadioListModel<SliderAppearance>> = [
+        { label: "Normal (new default)", value: "normal" },
+        { label: "Alternative (old default)", value: "alternative" },
+    ];
+
     constructor(props: SliderPageProps) {
         super(props);
 
         this.state = {
+            appearance: "normal",
             slider: 25,
             theme: "primary",
             tooltipTheme: "inverted",
@@ -200,6 +208,7 @@ class SliderExamples extends React.Component<SliderPageProps, SliderPageState> {
                                     error={this.state.withInputError || (this.state.hasError ? "Error message" : null)}
                                     disabled={this.state.disabled}
                                     tooltipTheme={this.state.tooltipTheme}
+                                    alternative={this.state.appearance === "alternative"}
                                     onChange={this.onFormChange}
                                     alwaysShowTooltip={this.state.alwaysShowTooltip}
                                 />
@@ -227,6 +236,10 @@ class SliderExamples extends React.Component<SliderPageProps, SliderPageState> {
                         <div className="col">
                             <p>Tooltip Themes</p>
                             <RadioGroup name={SliderPageStateNames.tooltipTheme} list={this.themeList} value={this.state.tooltipTheme} onChange={this.onFormChange} condensed />
+                        </div>
+                        <div className="col">
+                            <p>Appearance</p>
+                            <RadioGroup name={SliderPageStateNames.appearance} list={this.appearanceList} value={this.state.appearance} onChange={this.onFormChange} condensed />
                         </div>
                         <div className="col">
                             <p>Options</p>
