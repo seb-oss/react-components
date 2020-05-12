@@ -80,7 +80,7 @@ export const Carousel: React.FC<CarouselProps> = React.memo(
                 let newActive: number;
                 let newNav: NavigationDirection;
                 const target: EventTarget & HTMLElement = e.target as any;
-                if (["mousedown", "touchstart"].some((val) => val === e.type)) {
+                if (["mousedown", "touchstart"].some((val: string) => val === e.type)) {
                     /** Swipe gesture */
                     newNav = slideTo;
                     newActive = findNewActive(newNav);
