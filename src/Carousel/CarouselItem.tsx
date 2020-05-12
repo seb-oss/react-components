@@ -8,15 +8,15 @@ export type CarouselItemProps = JSX.IntrinsicElements["div"] & {
     /** The duration it takes (in milliseconds) the carousel to transition to the next. (Managed by Carousel) */
     transitionDuration?: number;
     /** An event handler triggered after a transition ended. (Managed by Carousel) */
-    afterTransition?: VoidFunction;
+    afterTransition?: (e: AfterSlideEvent) => void;
     /** Translate distance when swipe. (Managed by Carousel) */
     translateX?: number;
     /** Marking the carousel item as coming next during swipe gesture. (Managed by Carousel) */
     comingNext?: boolean;
 };
 
-type TransitionDirection = "right" | "left";
-type AfterSlideEvent = React.AnimationEvent<HTMLDivElement> | React.TransitionEvent<HTMLDivElement>;
+export type TransitionDirection = "right" | "left";
+export type AfterSlideEvent = React.AnimationEvent<HTMLDivElement> | React.TransitionEvent<HTMLDivElement>;
 
 export const CarouselItem: React.FC<CarouselItemProps> = React.memo(({ nav, transitionDuration, afterTransition, translateX, comingNext, ...props }: CarouselItemProps) => {
     const [className, setClassName] = React.useState<string>("carousel-item");
@@ -26,10 +26,13 @@ export const CarouselItem: React.FC<CarouselItemProps> = React.memo(({ nav, tran
      * Handles resetting class name after transition or animation ends
      * @param {AfterSlideEvent} e Animation or transition end event
      */
-    const afterSlidehandler: React.EventHandler<AfterSlideEvent> = React.useCallback(
+    const afterSlidehandler = React.useCallback(
         (e: AfterSlideEvent) => {
             setClassName(classnames("carousel-item", { active: props.defaultChecked }, props.className));
-            props.defaultChecked && afterTransition && afterTransition();
+            if (props.defaultChecked && afterTransition) {
+                e.persist();
+                afterTransition(e);
+            }
             if (e.type === "transitionend") {
                 props.onTransitionEnd && props.onTransitionEnd(e as React.TransitionEvent<HTMLDivElement>);
             } else {
@@ -40,7 +43,7 @@ export const CarouselItem: React.FC<CarouselItemProps> = React.memo(({ nav, tran
     );
 
     /** Handles transitioning a slide in or out */
-    const transitionInOrOut: VoidFunction = React.useCallback(() => {
+    const transitionInOrOut = React.useCallback(() => {
         const direction: TransitionDirection = nav === "next" ? "left" : "right";
         setClassName(classnames("carousel-item", `carousel-item-${direction}`, { [`carousel-item-${nav}`]: props.defaultChecked }, { active: !props.defaultChecked }, props.className));
     }, [nav, props.defaultChecked, props.className]);

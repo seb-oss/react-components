@@ -56,12 +56,18 @@ It can be used in these combinations
 #### CarouselProps
 This interface extends all native attributes of `HTMLDivElement`, adding the following extra attributes:
 
-| Property            | Type                               | Description                                                |
-| ------------------- | ---------------------------------- | ---------------------------------------------------------- |
-| afterChange?        | `(index: number) => void`          | Callback triggered after carousel is changed               |
-| transitionDuration? | `number`                           | Transition duration in milliseconds. Default is `600ms`    |
-| transitionStyle?    | `"slide" | "fade"`                 | Transition style. Default is `slide`                       |
-| infinite?           | `boolean`                          | Enables the carousel to loop infinitely. default is `true` |
-| showIndicators?     | `boolean`                          | Shows indicators at the bottom. default is `false`         |
-| list                | `Array<CarouselItem>` <sup>1</sup> | An array of `CarouselItem`                                 |
-| defaultValue?       | `number`                           | The index of the default active carousel                   |
+| Property            | Type                                           | Description                                                |
+| ------------------- | ---------------------------------------------- | ---------------------------------------------------------- |
+| afterChange?        | `(event: AfterSlideEvent) => void`<sup>1</sup> | Callback triggered after carousel is changed               |
+| transitionDuration? | `number`                                       | Transition duration in milliseconds. Default is `600`      |
+| transitionStyle?    | `"slide" | "fade"`                             | Transition style. Default is `slide`                       |
+| infinite?           | `boolean`                                      | Enables the carousel to loop infinitely. default is `true` |
+| showIndicators?     | `boolean`                                      | Shows indicators at the bottom. default is `false`         |
+| list                | `Array<CarouselItem>` <sup>1</sup>             | An array of `CarouselItem`                                 |
+| defaultValue?       | `number`                                       | The index of the default active carousel                   |
+| autoplay?           | `boolean`                                      | Shows indicators at the bottom. default is `false`         |
+| autoplaySpeed?      | `number`                                       | Autoplay speed in milliseconds. Default is `5000`          |
+
+## Footnote
+
+1. `AfterSlideEvent` is an event of type `React.AnimationEvent<HTMLDivElement> | React.TransitionEvent<HTMLDivElement>`
