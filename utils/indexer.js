@@ -16,6 +16,7 @@ var __assign =
 exports.__esModule = true;
 var path_1 = require("path");
 var fs_1 = require("fs");
+var child_process_1 = require("child_process");
 var version = "v1.0.0";
 var Indexer = /** @class */ (function () {
     function Indexer() {
@@ -55,10 +56,11 @@ var Indexer = /** @class */ (function () {
             console.log(version);
             process.exit(0);
         } else {
-            foundArgs.src = args.s || args.src || "";
+            foundArgs.src = args.e || args.entry || "";
             foundArgs.ignorePattern = (args.i ? args.i : args["ignore-pattern"] || "").split("|");
             foundArgs.output = args.o || args.output || foundArgs.src;
             foundArgs.logProcess = args.l !== undefined ? !!args.l : !!args.log;
+            foundArgs.stage = args.s !== undefined ? !!args.s : !!args.entry;
         }
         if (foundArgs.logProcess) {
             console.log("\x1b[34m%s\x1b[0m", "1) Scanning for process arguments...");
@@ -90,7 +92,18 @@ var Indexer = /** @class */ (function () {
                     to: value.indexTo,
                 });
             });
-            this.configs.logProcess && console.log("\x1b[32m%s\x1b[0m", "Indexes file is generated successfully");
+            fs_1.writeFileSync(this.configs.output + "/index.json", "" + JSON.stringify(this.generated, null, 4));
+            /** Stage the generated file */
+            if (this.configs.stage) {
+                child_process_1.exec("git add " + this.configs.output + "/index.json", function (error, stdout, stderr) {
+                    if (error) {
+                        console.log("error: " + error.message);
+                        return;
+                    }
+                    console.log(stdout);
+                });
+            }
+            console.log("\x1b[32m%s\x1b[0m", "Indexes file is generated successfully");
         } else {
             console.log("\x1b[31m%s\x1b[0m", "Error! No index files found in this directory");
             process.exit(9);

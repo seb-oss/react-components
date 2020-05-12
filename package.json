@@ -39,7 +39,8 @@
 		"coveralls": "cat ./coverage/lcov.info | coveralls",
 		"commit": "git-cz",
 		"semantic-release": "semantic-release",
-		"sanitize": "package-lock-sanitizer && git add package-lock.json"
+		"sanitize": "package-lock-sanitizer && git add package-lock.json",
+		"generate:indexes": "node utils/indexer.js -e src -i __utils -s"
 	},
 	"dependencies": {
 		"@sebgroup/bootstrap": "^5.1.0",
@@ -134,7 +135,7 @@
 	"husky": {
 		"hooks": {
 			"commit-msg": "commitlint --edit",
-			"pre-commit": "npm run sanitize && npm run format:staged"
+			"pre-commit": "npm run generate:indexes && npm run sanitize && npm run format:staged"
 		}
 	},
 	"release": {

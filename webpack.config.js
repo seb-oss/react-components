@@ -1,5 +1,5 @@
 const path = require("path");
-const components = require("./src/index");
+const components = require("./src/index.json");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CaseSensitivePathsPlugin = require("case-sensitive-paths-webpack-plugin");

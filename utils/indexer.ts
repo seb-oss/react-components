@@ -1,5 +1,6 @@
 import { join } from "path";
-import { existsSync, readdirSync, Stats, lstatSync } from "fs";
+import { existsSync, readdirSync, Stats, lstatSync, writeFileSync } from "fs";
+import { exec } from "child_process";
 
 const version: string = "v1.0.0";
 
@@ -10,9 +11,9 @@ interface IndexerGeneratedIndex {
 
 interface IndexerArguments {
     /** The source directory to look for indexes */
-    src?: string;
+    entry?: string;
     /** The source directory to look for indexes */
-    s?: string;
+    e?: string;
     /** Utility version */
     version?: string;
     /** Utility version */
@@ -22,13 +23,17 @@ interface IndexerArguments {
     /** Output directory */
     o?: string;
     /** Ignore pattern passed as string with pipes in between. Example: `first|second|third` */
-    "ignore-pattern": string;
+    "ignore-pattern"?: string;
     /** Ignore pattern passed as string with pipes in between. Example: `first|second|third` */
-    i: string;
+    i?: string;
     /** Logs the generated indexes if successful */
-    log: boolean;
+    log?: boolean;
     /** Logs the generated indexes if successful */
-    l: boolean;
+    l?: boolean;
+    /** Stage the generated file */
+    stage?: boolean;
+    /** Stage the generated file */
+    s?: boolean;
 }
 
 interface IndexerConfig {
@@ -40,6 +45,8 @@ interface IndexerConfig {
     ignorePattern?: Array<string>;
     /** Logs the generated indexes if successful */
     logProcess?: boolean;
+    /** Stage the generated file */
+    stage?: boolean;
 }
 
 interface IndexedComponent {
@@ -93,10 +100,11 @@ class Indexer {
             console.log(version);
             process.exit(0);
         } else {
-            foundArgs.src = args.s || args.src || "";
+            foundArgs.src = args.e || args.entry || "";
             foundArgs.ignorePattern = (args.i ? args.i : args["ignore-pattern"] || "").split("|");
             foundArgs.output = args.o || args.output || foundArgs.src;
             foundArgs.logProcess = args.l !== undefined ? !!args.l : !!args.log;
+            foundArgs.stage = args.s !== undefined ? !!args.s : !!args.entry;
         }
         if (foundArgs.logProcess) {
             console.log("\x1b[34m%s\x1b[0m", "1) Scanning for process arguments...");
@@ -126,7 +134,18 @@ class Indexer {
                     to: value.indexTo,
                 });
             });
-            this.configs.logProcess && console.log("\x1b[32m%s\x1b[0m", "Indexes file is generated successfully");
+            writeFileSync(this.configs.output + "/index.json", `${JSON.stringify(this.generated, null, 4)}`);
+            /** Stage the generated file */
+            if (this.configs.stage) {
+                exec(`git add ${this.configs.output}/index.json`, (error, stdout, stderr) => {
+                    if (error) {
+                        console.log(`error: ${error.message}`);
+                        return;
+                    }
+                    console.log(stdout);
+                });
+            }
+            console.log("\x1b[32m%s\x1b[0m", "Indexes file is generated successfully");
         } else {
             console.log("\x1b[31m%s\x1b[0m", `Error! No index files found in this directory`);
             process.exit(9);
