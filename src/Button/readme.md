@@ -36,7 +36,7 @@ These are the current available properties:
 | icon?         | `ReactNode`                                        | Icon to be rendered inside the button                |
 | iconPosition? | `string`<sup>1</sup>                               | Icon position. (default is `left`)                   |
 | id?           | `string`                                           | Id property                                          |
-| label         | `string`                                           | Button label                                         |
+| label         | `React.ReactNode`                                  | Button label                                         |
 | name?         | `string`                                           | Name property                                        |
 | onClick       | `(e: React.MouseEvent<HTMLButtonElement>) => void` | Click action                                         |
 | size?         | `string`<sup>2</sup>                               | Based on Bootstrap predefined sizes. (default: `md`) |
