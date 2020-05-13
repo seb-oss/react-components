@@ -102,13 +102,9 @@ export class Tooltip extends React.Component<TooltipProps, TooltipState> {
     };
 
     onMouseEnterEvent = (e: React.MouseEvent<HTMLDivElement>) => this.onHover(e, true);
-
     onMouseLeaveEvent = (e: React.MouseEvent<HTMLDivElement>) => this.onHover(e, false);
-
     onTouchStartEvent = (e: React.TouchEvent<HTMLDivElement>) => this.onHover(e, true);
-
     onTouchEndEvent = (e: React.TouchEvent<HTMLDivElement>) => this.onHover(e, false);
-
     onFocusEvent = (e: React.FocusEvent<HTMLDivElement>) => this.props.trigger === "focus" && this.onTooltipToggle(e, true);
 
     // TODO: remove customSvg when attribute is removed
@@ -157,21 +153,16 @@ type TooltipContentContainerProps = Pick<TooltipProps, "theme" | "position" | "c
     show: boolean;
     tooltipReference: () => HTMLDivElement;
     onContentBlur: (event: React.FocusEvent<HTMLDivElement>) => void;
-    ref?: React.RefObject<HTMLDivElement>;
+    ref?: React.Ref<HTMLDivElement>;
 };
-const TooltipContentContainer: React.FunctionComponent<TooltipContentContainerProps> = React.forwardRef((props: TooltipContentContainerProps, ref: React.RefObject<HTMLDivElement>) => {
+const TooltipContentContainer: React.FC<TooltipContentContainerProps> = React.forwardRef((props: TooltipContentContainerProps, ref: React.RefObject<HTMLDivElement>) => {
     return (
         <Overlay ref={ref} show={props.show} onBlur={props.onContentBlur} position={props.position} disableAutoPosition={props.disableAutoPosition} overlayReference={props.tooltipReference}>
             <div className={`tooltip ${props.theme || "default"} ${props.show ? "show" : ""}`} role="tooltip">
                 <div className="tooltip-arrow" />
                 <div className="tooltip-inner">
-                    {props.content ? (
-                        props.content
-                    ) : props.messageGroup ? ( // TODO: remove when attribute is removed
-                        <TooltipMessageGroup {...props} />
-                    ) : (
-                        <TooltipMessage {...props} />
-                    )}
+                    {/* TODO: remove when attribute is removed */}
+                    {props.content ? props.content : props.messageGroup ? <TooltipMessageGroup {...props} /> : <TooltipMessage {...props} />}
                 </div>
             </div>
         </Overlay>
@@ -179,7 +170,7 @@ const TooltipContentContainer: React.FunctionComponent<TooltipContentContainerPr
 });
 // TODO: remove when attribute is removed
 type TooltipMessage = Pick<TooltipProps, "title" | "message" | "width">;
-const TooltipMessage: React.FunctionComponent<TooltipMessage> = (props: TooltipMessage) => {
+const TooltipMessage: React.FC<TooltipMessage> = (props: TooltipMessage) => {
     return (
         <div className="message-container" style={{ width: `${props.width || 120}px` }}>
             {props.title && <div className="title">{props.title}</div>}
@@ -188,7 +179,7 @@ const TooltipMessage: React.FunctionComponent<TooltipMessage> = (props: TooltipM
     );
 };
 type TooltipMessageGroup = Pick<TooltipProps, "messageGroup" | "width">;
-const TooltipMessageGroup: React.FunctionComponent<TooltipMessageGroup> = (props: TooltipMessageGroup) => {
+const TooltipMessageGroup: React.FC<TooltipMessageGroup> = (props: TooltipMessageGroup) => {
     return (
         <div className="message-container" style={{ width: `${props.width || 120}px` }}>
             {props.messageGroup.map((item, index) => (
