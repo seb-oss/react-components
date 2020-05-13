@@ -1,18 +1,18 @@
-import * as React from "react";
-import "./overlay-style.scss";
-import ReactDOM from "react-dom";
+import React from "react";
+import { createPortal } from "react-dom";
 import { ElementPosition, ElementPlacementWithCoord, OverlayPositionChecker } from "./placement";
+import "./overlay-style.scss";
 
-export interface OverlayProps {
+export type OverlayProps = React.PropsWithChildren<{
     disableAutoPosition?: boolean;
     overlayReference: () => HTMLDivElement;
     onBlur: (event: React.FocusEvent<HTMLDivElement>) => void;
     show: boolean;
     position?: ElementPosition;
-    ref?: React.RefObject<HTMLDivElement>;
-}
+    ref?: React.Ref<HTMLDivElement>;
+}>;
 
-const Overlay: React.FunctionComponent<React.PropsWithChildren<OverlayProps>> = React.forwardRef((props: React.PropsWithChildren<OverlayProps>, ref: React.RefObject<HTMLDivElement>) => {
+const Overlay: React.FC<OverlayProps> = React.forwardRef((props: OverlayProps, ref: React.RefObject<HTMLDivElement>) => {
     const overlayContentRef: React.MutableRefObject<HTMLDivElement> = React.useRef(null);
     const [placementWithCoords, setPlacementWithCoords] = React.useState<ElementPlacementWithCoord>(null);
     const [overlayPositionChecker, setOverlayPositionChecker] = React.useState<OverlayPositionChecker>(null);
@@ -20,7 +20,7 @@ const Overlay: React.FunctionComponent<React.PropsWithChildren<OverlayProps>> = 
     React.useImperativeHandle(ref, () => ({
         ...ref?.current,
         focus: () => overlayContentRef.current.focus(),
-        blur: () => overlayContentRef.current.blur()
+        blur: () => overlayContentRef.current.blur(),
     }));
 
     React.useEffect(() => {
@@ -48,10 +48,11 @@ const Overlay: React.FunctionComponent<React.PropsWithChildren<OverlayProps>> = 
     }, [props.show]);
 
     /**
-     * on scroll callback
+     * onScroll handler
+     * @param {Event} ev The window scroll event
      */
-    const onScroll = React.useCallback((ev: Event): void => {
-        const target: HTMLDivElement = ev.target as HTMLDivElement;
+    function onScroll(ev: Event): void {
+        const target: HTMLElement = ev.target as HTMLElement;
         if (props.show && target.contains(props.overlayReference())) {
             const referenceDomRect: DOMRect = props.overlayReference().getBoundingClientRect();
             if (referenceDomRect.bottom < 0 || referenceDomRect.right < 0 || referenceDomRect.left > window.innerWidth || referenceDomRect.top > window.innerHeight) {
@@ -59,20 +60,18 @@ const Overlay: React.FunctionComponent<React.PropsWithChildren<OverlayProps>> = 
             }
             setPlacementWithCoords(overlayPositionChecker.getPosition(props.position || "top"));
         }
-    }, [props.show, props.position]);
+    }
 
-    /**
-     * get position within view port
-     */
-    const getWithinViewportPosition = (): void => {
+    /** Get position within view port */
+    function getWithinViewportPosition(): void {
         overlayContentRef.current.focus();
         const placementCoords: ElementPlacementWithCoord = overlayPositionChecker.getPosition(props.position || "top");
         setPlacementWithCoords(placementCoords);
-    };
+    }
 
-    return ReactDOM.createPortal(
+    return createPortal(
         <div
-            className={`overlay-container${props.show ? " show" : ""} ${placementWithCoords ? placementWithCoords.position : (props.position || "top")}`}
+            className={`overlay-container${props.show ? " show" : ""} ${placementWithCoords ? placementWithCoords.position : props.position || "top"}`}
             ref={overlayContentRef}
             tabIndex={-1}
             onBlur={props.show ? props.onBlur : null}

@@ -2,9 +2,9 @@
 *.yml
 __mocks__
 coverage
-docs
 node_modules
 dist
+.github
+.vscode
 package.json
 package-lock.json
-__utils

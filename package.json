@@ -28,8 +28,8 @@
 		"clean:test": "rimraf ./coverage",
 		"clean": "npm run clean:dist && npm run clean:test",
 		"copy": "cp package.json dist/ && cp README.md dist/",
-		"format:check:all": "prettier --list-different \"./{src,develop}/**/*{.ts,.tsx}\"",
-		"format:all": "prettier --write \"./{src,develop}/**/*{.ts,.tsx}\"",
+		"format:check:all": "prettier --list-different \"{,*/**/}*.{js,jsx, ts, tsx,json}\"",
+		"format:all": "prettier --write \"{,*/**/}*.{js,jsx, ts, tsx,json}\"",
 		"format:staged": "pretty-quick --staged --verbose",
 		"format:check": "pretty-quick --check --verbose",
 		"start": "npm run build:dev",
@@ -39,7 +39,8 @@
 		"coveralls": "cat ./coverage/lcov.info | coveralls",
 		"commit": "git-cz",
 		"semantic-release": "semantic-release",
-		"sanitize": "package-lock-sanitizer && git add package-lock.json"
+		"sanitize": "package-lock-sanitizer && git add package-lock.json",
+		"generate:indexes": "node utils/indexer.js -e src -i __utils -s"
 	},
 	"dependencies": {
 		"@sebgroup/bootstrap": "^5.1.0",
@@ -56,7 +57,7 @@
 		"react-rating": "^2.0.4",
 		"react-router": "^5.1.2",
 		"react-router-dom": "^5.1.2",
-		"react-slick": "^0.25.2",
+		"react-slick": "^0.26.1",
 		"slick-carousel": "^1.8.1"
 	},
 	"devDependencies": {
@@ -67,7 +68,7 @@
 		"@types/chart.js": "^2.9.19",
 		"@types/enzyme": "^3.10.5",
 		"@types/jest": "^25.2.1",
-		"@types/node": "^13.11.1",
+		"@types/node": "^14.0.1",
 		"@types/react": "^16.9.34",
 		"@types/react-calendar": "^3.0.1",
 		"@types/react-dom": "^16.9.5",
@@ -78,7 +79,7 @@
 		"@types/systemjs": "^6.1.0",
 		"autoprefixer": "^9.7.5",
 		"babel-core": "^6.26.3",
-		"babel-jest": "^25.2.6",
+		"babel-jest": "^26.0.1",
 		"babel-polyfill": "^6.26.0",
 		"case-sensitive-paths-webpack-plugin": "^2.3.0",
 		"commitizen": "^4.0.3",
@@ -88,12 +89,12 @@
 		"cz-conventional-changelog": "^3.1.0",
 		"enzyme": "^3.11.0",
 		"enzyme-adapter-react-16": "^1.15.2",
-		"fibers": "^4.0.2",
+		"fibers": "^5.0.0",
 		"file-loader": "^6.0.0",
 		"html-loader": "^1.0.0",
 		"html-webpack-plugin": "^4.2.0",
 		"husky": "^4.2.5",
-		"jest": "^25.1.0",
+		"jest": "^26.0.1",
 		"jest-enzyme": "^7.1.2",
 		"jsdom": "^16.1.0",
 		"jsdom-global": "^3.0.2",
@@ -113,9 +114,9 @@
 		"semantic-release": "^17.0.2",
 		"style-loader": "^1.1.3",
 		"ts-jest": "^25.3.1",
-		"ts-loader": "^6.2.1",
-		"tslib": "^1.10.0",
-		"typescript": "^3.7.5",
+		"ts-loader": "^7.0.3",
+		"tslib": "^1.12.0",
+		"typescript": "^3.9.2",
 		"webpack": "^4.41.5",
 		"webpack-cli": "^3.3.10",
 		"webpack-dev-server": "^3.10.3",
@@ -134,7 +135,7 @@
 	"husky": {
 		"hooks": {
 			"commit-msg": "commitlint --edit",
-			"pre-commit": "npm run sanitize && npm run format:staged"
+			"pre-commit": "npm run generate:indexes && npm run sanitize && npm run format:staged"
 		}
 	},
 	"release": {
