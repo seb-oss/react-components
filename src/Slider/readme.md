@@ -55,6 +55,7 @@ These are the current available properties:
 | showTicks?         | `boolean`                             | Show ticks with labels (default: `false`)                           |
 | step?              | `number`                              | Step value (default: `1`)                                           |
 | theme?             | `string`                              | Based on SEB predefined colors. (default: `'primary'`)<sup>2</sup>  |
+| alternative?       | `boolean`                             | Thumb appearance (size and shape) (default: false)                  |
 | tooltipTheme?      | `string`                              | Based on SEB predefined colors. (default: `'inverted'`)<sup>2</sup> |
 | value              | `number`                              | Value of slider                                                     |
 

@@ -14,6 +14,7 @@ const angleRightIcon: JSX.Element = (
 );
 
 export type SliderTheme = "primary" | "inverted" | "success" | "danger" | "warning" | "purple";
+export type SliderAppearance = "normal" | "alternative";
 
 export interface RangeSliderLabel {
     position: number;
@@ -36,10 +37,18 @@ export interface SliderProps {
     showTicks?: boolean;
     step?: number;
     theme?: SliderTheme;
+    alternative?: boolean;
     tooltipTheme?: SliderTheme;
     tooltipValue?: string;
     value: number;
 }
+
+type AppearanceStyleMap = {
+    [key in SliderAppearance]: {
+        width: string;
+        offset: string;
+    };
+};
 
 const Slider: React.FunctionComponent<SliderProps> = (props: SliderProps): React.ReactElement<void> => {
     const [min, setMin] = React.useState<number>(props.min || 0);
@@ -48,6 +57,11 @@ const Slider: React.FunctionComponent<SliderProps> = (props: SliderProps): React
     const [labelsPositions, setLabelsPositions] = React.useState<Array<string>>([]);
     const [thumbPosition, setThumbPosition] = React.useState<number>(0);
     const [activeTrackStyles, setActiveTrackStyles] = React.useState<React.CSSProperties>({});
+    const appearanceSizesMap: AppearanceStyleMap = {
+        alternative: { width: "27px", offset: "56px" },
+        normal: { width: "5px", offset: "24px" },
+    };
+    const appearance: SliderAppearance = props.alternative ? "alternative" : "normal";
 
     React.useEffect(() => {
         // Checking if the min or max are not numbers, null value or undefined
@@ -71,7 +85,7 @@ const Slider: React.FunctionComponent<SliderProps> = (props: SliderProps): React
     React.useEffect(() => {
         setThumbPosition(getPercentage());
         setActiveTrackStyles(getActiveTrackStyles());
-    }, [props.value, min, max, size]);
+    }, [props.value, min, max, size, appearance]);
 
     /**
      * Finds the size between two numbers
@@ -108,33 +122,34 @@ const Slider: React.FunctionComponent<SliderProps> = (props: SliderProps): React
      * Calculates the styles needed for the active track
      * @returns {React.CSSProperties} The active track styles object
      */
-    function getActiveTrackStyles(): React.CSSProperties {
+    const getActiveTrackStyles: () => React.CSSProperties = React.useCallback(() => {
         const calculatedThumbPosition: number = getPercentage();
         let zeroPosition: number;
+        const { width, offset }: AppearanceStyleMap[keyof AppearanceStyleMap] = appearanceSizesMap[appearance];
         const style: React.CSSProperties = {};
         if (min >= 0) {
             zeroPosition = 0;
             style.left = `${zeroPosition}%`;
-            style.width = `calc(${calculatedThumbPosition}% + 27px)`;
+            style.width = `calc(${calculatedThumbPosition}% + ${width})`;
         } else if (max <= 0) {
             zeroPosition = 100;
-            style.left = `calc(${zeroPosition}% + 56px)`;
-            style.width = `calc(${100 - calculatedThumbPosition}% + 27px)`;
+            style.left = `calc(${zeroPosition}% + ${offset})`;
+            style.width = `calc(${100 - calculatedThumbPosition}% + ${width})`;
             style.transform = "rotateY(180deg)";
         } else {
             if (props.value <= 0) {
                 zeroPosition = size ? Math.abs((min / size) * 100) : 0;
-                style.left = `calc(${zeroPosition}% + 27px)`;
+                style.left = `calc(${zeroPosition}% + ${width})`;
                 style.width = zeroPosition - calculatedThumbPosition + "%";
                 style.transform = "rotateY(180deg)";
             } else {
                 zeroPosition = size ? Math.abs(100 - (max / size) * 100) : 0;
-                style.left = `calc(${zeroPosition}% + 27px)`;
+                style.left = `calc(${zeroPosition}% + ${width})`;
                 style.width = calculatedThumbPosition - zeroPosition + "%";
             }
         }
         return style;
-    }
+    }, [appearance, props.value, getPercentage]);
 
     /**
      * Calculating the position of the label based on it's value
@@ -165,7 +180,7 @@ const Slider: React.FunctionComponent<SliderProps> = (props: SliderProps): React
     return (
         <div className={"form-group custom-slider" + (props.className ? ` ${props.className}` : "") + (props.disabled ? " disabled" : "")}>
             {props.label && <label className="custom-label">{props.label}</label>}
-            <div className={"input-field" + (props.labels && props.labels.length ? " has-labels" : "")}>
+            <div className={"input-field" + (props.labels && props.labels.length ? " has-labels" : "") + ` ${appearance}`}>
                 <input
                     type="range"
                     id={props.id}
@@ -186,8 +201,12 @@ const Slider: React.FunctionComponent<SliderProps> = (props: SliderProps): React
                             <div className={"custom-slider-preview" + (props.alwaysShowTooltip ? " always-show" : "") + (props.tooltipTheme ? ` ${props.tooltipTheme}` : " inverted")}>
                                 {props.tooltipValue || props.value}
                             </div>
-                            <span className="custom-slider-icon-left">{angleLeftIcon}</span>
-                            <span className="custom-slider-icon-right">{angleRightIcon}</span>
+                            {appearance === "alternative" ? (
+                                <>
+                                    <span className="custom-slider-icon-left">{angleLeftIcon}</span>
+                                    <span className="custom-slider-icon-right">{angleRightIcon}</span>
+                                </>
+                            ) : null}
                         </div>
                         {props.labels && props.labels.length
                             ? props.labels.map((label: RangeSliderLabel, i: number) => (
