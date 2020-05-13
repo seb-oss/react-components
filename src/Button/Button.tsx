@@ -13,7 +13,7 @@ export interface ButtonProps {
     icon?: React.ReactNode;
     iconPosition?: ButtonIconPosition;
     id?: string;
-    label: string;
+    label: React.ReactNode;
     name?: string;
     onClick: (e?: React.MouseEvent<HTMLButtonElement>) => void;
     size?: ButtonSizes;
