@@ -1,6 +1,6 @@
-import * as React from "react";
-import { Switch, withRouter } from "react-router-dom";
-import { RouteComponentProps, Route, Redirect } from "react-router";
+import React from "react";
+import { Switch, withRouter, Route, Redirect } from "react-router-dom";
+import { RouteComponentProps } from "react-router";
 // Components
 import TitleBar from "./common/TitleBar";
 import SideBar from "./common/SideBar";
@@ -8,7 +8,7 @@ import { Loader } from "../../src/Loader/Loader";
 import { getParameterByName } from "../__utils/queryString";
 import { SideBarContent, SideBarItem } from "typings/generic.type";
 const sidebarData: SideBarContent = require("../assets/components-list.json");
-type RouteItem = { path: string; component: React.LazyExoticComponent<any> };
+type RouteItem = { path: string; component: React.LazyExoticComponent<React.FC> };
 
 /** Routes are generated dynamically based on the information provided in `assets/components-list.json` */
 const routes: Array<RouteItem> = [{ path: "/about", component: React.lazy(() => import("./common/About")) }];
@@ -21,20 +21,20 @@ routes.push({ path: "*", component: React.lazy(() => import("./common/NotFound")
 
 const storedSidebarToggle: boolean = localStorage.getItem("sidebar") === null ? true : JSON.parse(localStorage.getItem("sidebar"));
 
-const App: React.FunctionComponent<RouteComponentProps> = (props: RouteComponentProps) => {
+const App: React.FC<RouteComponentProps> = (props: RouteComponentProps) => {
     const [sidebarToggle, setSidebarToggle] = React.useState<boolean>(storedSidebarToggle);
     const [brief, setBrief] = React.useState<boolean>(false);
+
+    const toggleSidebar = React.useCallback(() => {
+        localStorage.setItem("sidebar", String(!sidebarToggle));
+        setSidebarToggle(!sidebarToggle);
+    }, [sidebarToggle]);
 
     React.useEffect(() => {
         const mode: string = getParameterByName(props.location.search, "mode");
         const isBrief: boolean = mode && mode.toLowerCase() === "dl";
         isBrief !== brief && setBrief(isBrief);
-    }, [props.location]);
-
-    function toggleSidebar(): void {
-        localStorage.setItem("sidebar", String(!sidebarToggle));
-        setSidebarToggle(!sidebarToggle);
-    }
+    }, [props.location, brief]);
 
     return (
         <div className="app-container">
