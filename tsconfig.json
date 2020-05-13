@@ -17,6 +17,6 @@
         "esModuleInterop": true,
         "allowSyntheticDefaultImports": true
     },
-    "exclude": ["node_modules", "webpack", "dist", "develop", "coverage", "**/*.test.tsx", "src/__utils"],
+    "exclude": ["node_modules", "webpack", "dist", "develop", "coverage", "**/*.test.tsx", "src/__utils", "utils"],
     "types": ["typePatches"]
 }
