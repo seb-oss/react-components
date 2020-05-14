@@ -49,7 +49,7 @@ describe("Component: CheckBox", () => {
 
     it("Should render an indicator when passed", () => {
         act(() => {
-            render(<CheckBox indicator={{ type: "danger", text: "error" }} />, container);
+            render(<CheckBox indicator={{ type: "danger", message: "error" }} />, container);
         });
         expect(container.querySelector(".custom-control").classList.contains("is-danger")).toBeTruthy();
         expect(container.querySelector(".progress-feedback")).not.toBeNull();
