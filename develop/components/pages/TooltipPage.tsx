@@ -79,7 +79,7 @@ const TooltipPage: React.FunctionComponent = () => {
                     <p>Options</p>
                     <div className="row">
                         <div className="col-md-6 col-sm-12">
-                            <CheckBox label="Callback on visibility change" name="hasCallback" checked={hasCallback} onChange={(e) => setHasCallback(e.target.checked)} condensed />
+                            <CheckBox label="Callback on visibility change" name="hasCallback" checked={hasCallback} onChange={(e) => setHasCallback(e.target.checked)} />
                         </div>
                         <div className="col-md-6 col-sm-12">
                             <CheckBox
@@ -87,11 +87,10 @@ const TooltipPage: React.FunctionComponent = () => {
                                 name="hasNodeAsContent"
                                 checked={hasNodeAsContent}
                                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => setHasNodeAsContent(e.target.checked)}
-                                condensed
                             />
                         </div>
                         <div className="col-md-6 col-sm-12">
-                            <CheckBox label="Disable auto position" name="disableAutoPosition" checked={disableAutoPosition} onChange={(e) => setDisableAutoPosition(e.target.checked)} condensed />
+                            <CheckBox label="Disable auto position" name="disableAutoPosition" checked={disableAutoPosition} onChange={(e) => setDisableAutoPosition(e.target.checked)} />
                         </div>
                         <div className="col-md-6 col-sm-12">
                             <CheckBox
@@ -99,7 +98,6 @@ const TooltipPage: React.FunctionComponent = () => {
                                 name="hasCustomReference"
                                 checked={hasCustomReference}
                                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => setHasCustomReference(e.target.checked)}
-                                condensed
                             />
                         </div>
                     </div>

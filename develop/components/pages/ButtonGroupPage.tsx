@@ -62,9 +62,9 @@ const ButtonPage: React.FC = () => {
                     <div className="row">
                         <div className="col">
                             <p>Options</p>
-                            <CheckBox label="Vertical" name="vertical" checked={state.vertical} onChange={changeHandler} condensed />
-                            <CheckBox label="Size" name="hasSize" checked={state.hasSize} onChange={changeHandler} condensed />
-                            {state.hasSize && <RadioGroup name="size" className="pl-4" list={sizeList} value={state.size} condensed onChange={changeHandler} />}
+                            <CheckBox label="Vertical" name="vertical" checked={state.vertical} onChange={changeHandler} />
+                            <CheckBox label="Size" name="hasSize" checked={state.hasSize} onChange={changeHandler} />
+                            {state.hasSize && <RadioGroup name="size" className="pl-4" list={sizeList} value={state.size} onChange={changeHandler} />}
                         </div>
                     </div>
                 </div>

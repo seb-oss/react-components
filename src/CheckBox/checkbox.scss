@@ -1,0 +1,58 @@
+@import "~@sebgroup/bootstrap/scss/core";
+
+/**
+ TODO: This padding matches the checkbox with design library guidelines.
+ Should be removed when it's updated in Bootstrap
+ */
+$checkbox-padding: 0.563rem;
+$checkbox-padding-left: 2.23rem;
+$checkbox-padding: $checkbox-padding $checkbox-padding $checkbox-padding $checkbox-padding-left;
+
+.seb.checkbox {
+    &.inline {
+        display: inline-block;
+        vertical-align: top;
+    }
+    .custom-checkbox.custom-control {
+        padding: $checkbox-padding;
+        border: 1px solid transparent;
+        border-radius: 4px;
+        transition: border-color 200ms;
+
+        > .custom-control-label {
+            > .checkbox-label {
+                margin-right: 8px;
+            }
+        }
+        > .checkbox-description {
+            margin: 0;
+            color: $gray-600;
+            font-size: $font-size-sm;
+            line-height: 1.5rem;
+        }
+        &.custom-control-inline {
+            flex-direction: column;
+        }
+
+        > .custom-control-input {
+            &:disabled ~ .checkbox-description {
+                color: $gray-300;
+            }
+        }
+
+        &.is-danger {
+            border-color: $red-dark;
+        }
+        &.is-success {
+            border-color: $green-darker;
+        }
+        &.is-warning {
+            border-color: $yellow;
+        }
+        & + .progress-feedback {
+            &:before {
+                content: none;
+            }
+        }
+    }
+}
