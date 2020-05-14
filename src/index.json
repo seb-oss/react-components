@@ -11,6 +11,7 @@
         "Datepicker": "./src/Datepicker/index.ts",
         "Dialogue": "./src/Dialogue/index.ts",
         "Dropdown": "./src/Dropdown/index.ts",
+        "FeedbackIndicator": "./src/FeedbackIndicator/index.ts",
         "Image": "./src/Image/index.ts",
         "ImageCropper": "./src/ImageCropper/index.ts",
         "InlineLink": "./src/InlineLink/index.ts",
@@ -23,8 +24,8 @@
         "RadioGroup": "./src/RadioGroup/index.ts",
         "Rating": "./src/Rating/index.ts",
         "Slider": "./src/Slider/index.ts",
-        "Stepper": "./src/Stepper/index.ts",
         "StepTracker": "./src/StepTracker/index.ts",
+        "Stepper": "./src/Stepper/index.ts",
         "Table": "./src/Table/index.ts",
         "Tabs": "./src/Tabs/index.ts",
         "TextArea": "./src/TextArea/index.ts",
@@ -84,6 +85,10 @@
             "to": "./Dropdown/index.js"
         },
         {
+            "from": "./src/FeedbackIndicator/index.ts",
+            "to": "./FeedbackIndicator/index.js"
+        },
+        {
             "from": "./src/Image/index.ts",
             "to": "./Image/index.js"
         },
@@ -132,12 +137,12 @@
             "to": "./Slider/index.js"
         },
         {
-            "from": "./src/Stepper/index.ts",
-            "to": "./Stepper/index.js"
-        },
-        {
             "from": "./src/StepTracker/index.ts",
             "to": "./StepTracker/index.js"
+        },
+        {
+            "from": "./src/Stepper/index.ts",
+            "to": "./Stepper/index.js"
         },
         {
             "from": "./src/Table/index.ts",
