@@ -1,6 +1,6 @@
 ---
 title: FeedbackIndicator
-componentid: component-button
+componentid: component-feedback-indicator
 variantid: default
 guid: "feedback-indicator-guid-default-component-react"
 ---
@@ -8,7 +8,7 @@ guid: "feedback-indicator-guid-default-component-react"
 ## Element name
 
 ```javascript
-Name: Button Component
+Name: FeedbackIndicator Component
 Component: "FeedbackIndicator"
 Selector: "<FeedbackIndicator/>"
 Import: "@sebgroup/react-components/dist/FeedbackIndicator"
