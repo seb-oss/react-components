@@ -1,0 +1,18 @@
+@import "~@sebgroup/bootstrap/scss/core";
+
+div.seb.img {
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    overflow: auto;
+
+    &.img-thumbnail {
+        background-clip: content-box;
+    }
+    &.img-fixed {
+        background-attachment: fixed;
+    }
+    &.img-rounded {
+        border-radius: $border-radius-utility;
+    }
+}

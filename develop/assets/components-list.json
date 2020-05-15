@@ -184,7 +184,7 @@
             "filePath": "pages/ChartPage"
         },
         {
-            "name": "Image Holder",
+            "name": "Image",
             "path": "/image",
             "filePath": "pages/ImagePage"
         },
