@@ -27,7 +27,7 @@ export const Accordion: React.FC<AccordionProps> = React.memo(({ list, alternati
 
     /** Sets custom id if the user din't pass any */
     React.useEffect(() => setId(props.id || randomId("accordion-")), [props.id]);
-    React.useEffect(() => setClassName(classnames(["seb", "accordion", { alternative }, { inverted }, props.className])), [props.className, alternative, inverted]);
+    React.useEffect(() => setClassName(classnames(["rc", "accordion", { alternative }, { inverted }, props.className])), [props.className, alternative, inverted]);
     React.useEffect(() => {
         typeof props.defaultValue === "number" && setActive(props.defaultValue);
     }, [props.defaultValue]);

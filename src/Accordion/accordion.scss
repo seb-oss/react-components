@@ -1,6 +1,6 @@
 @import "~@sebgroup/bootstrap/scss/core";
 
-.seb.accordion {
+.rc.accordion {
     > .card {
         overflow: visible;
         &:not(.collapsed) > .card-header > button.btn-link > h4:before {

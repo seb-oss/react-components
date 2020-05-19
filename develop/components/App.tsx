@@ -19,7 +19,7 @@ const routes: Array<RouteItem> = [{ path: "/about", component: React.lazy(() => 
 );
 routes.push({ path: "*", component: React.lazy(() => import("./common/NotFound")) });
 
-const storedSidebarToggle: boolean = localStorage.getItem("sidebar") === null ? true : JSON.parse(localStorage.getItem("sidebar"));
+const storedSidebarToggle: boolean = localStorage.getItem("sidebar") === "false" ? false : true;
 
 const App: React.FC<RouteComponentProps> = (props: RouteComponentProps) => {
     const [sidebarToggle, setSidebarToggle] = React.useState<boolean>(storedSidebarToggle);
@@ -32,7 +32,7 @@ const App: React.FC<RouteComponentProps> = (props: RouteComponentProps) => {
 
     React.useEffect(() => {
         const mode: string = getParameterByName(props.location.search, "mode");
-        const isBrief: boolean = mode && mode.toLowerCase() === "dl";
+        const isBrief: boolean = mode?.toLowerCase() === "dl";
         isBrief !== brief && setBrief(isBrief);
     }, [props.location, brief]);
 
@@ -42,9 +42,7 @@ const App: React.FC<RouteComponentProps> = (props: RouteComponentProps) => {
             <div className={"route-holder" + (sidebarToggle ? " sidebar-opened" : "") + (brief ? " brief" : "")}>
                 <React.Suspense fallback={<Loader toggle={true} fullscreen={true} />}>
                     <Switch>
-                        <Route path="/" exact={true}>
-                            <Redirect to="/about" />
-                        </Route>
+                        <Redirect from="/" to="/about" exact />
                         {routes.map((item: RouteItem, index: number) => (
                             <Route key={index} {...item} />
                         ))}

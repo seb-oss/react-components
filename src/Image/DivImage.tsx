@@ -51,7 +51,7 @@ export const DivImage: React.FC<DivImageProps> = React.memo(({ responsive, round
     React.useEffect(() => {
         setClassName(
             classnames(
-                "seb",
+                "rc",
                 "img",
                 {
                     "img-fluid": responsive,

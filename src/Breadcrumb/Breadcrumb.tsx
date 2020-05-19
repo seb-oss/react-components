@@ -16,7 +16,7 @@ type ItemsSource = "list" | "children";
 export const Breadcrumb: React.FC<BreadcrumbProps> = React.memo(({ onNavigate, list, light, ...props }: BreadcrumbProps) => {
     const [breadcrumbListClassName, setBreadcrumbListClassName] = React.useState<string>("seb breadcrumb");
 
-    React.useEffect(() => setBreadcrumbListClassName(classnames(["seb", "breadcrumb", { "breadcrumb-light": light }])), [light]);
+    React.useEffect(() => setBreadcrumbListClassName(classnames(["rc", "breadcrumb", { "breadcrumb-light": light }])), [light]);
 
     /**
      * Find if a breadcrumb item is the last in the list so it can be disabled (active)

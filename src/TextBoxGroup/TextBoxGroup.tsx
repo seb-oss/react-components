@@ -66,7 +66,7 @@ export const TextBoxGroup: React.FunctionComponent<TextBoxGroupProps> = (props: 
                     {props.label}
                 </label>
             )}
-            <div className={"input-group" + (props.success ? " success" : props.error ? " has-error" : "") + (props.disabled ? " disabled" : "")}>
+            <div className={"rc input-group" + (props.success ? " success" : props.error ? " has-error" : "") + (props.disabled ? " disabled" : "")}>
                 <div className="input-box-group-wrapper">
                     {(props.leftIcon || props.leftText) && (
                         <div className={"input-group-prepend" + (props.onLeftClick ? " clickable" : "")} role={props.onLeftClick ? "button" : ""} onClick={props.onLeftClick}>

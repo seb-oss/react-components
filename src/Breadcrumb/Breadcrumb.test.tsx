@@ -26,7 +26,7 @@ describe("Component: Breadcrumb", () => {
         expect(container.firstElementChild.tagName).toEqual("NAV");
         expect(container.firstElementChild.getAttribute("aria-label")).toEqual("breadcrumb");
         expect(container.firstElementChild.firstElementChild.tagName).toEqual("OL");
-        expect(container.firstElementChild.firstElementChild.classList.contains("seb")).toBeTruthy();
+        expect(container.firstElementChild.firstElementChild.classList.contains("rc")).toBeTruthy();
         expect(container.firstElementChild.firstElementChild.classList.contains("breadcrumb")).toBeTruthy();
     });
 

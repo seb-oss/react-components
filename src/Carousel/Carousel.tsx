@@ -190,7 +190,7 @@ export const Carousel: React.FC<CarouselProps> = React.memo(
         /** Sets the default value, if any. Otherwise default to the first item */
         React.useEffect(() => setActive(props.defaultValue || 0), [props.defaultValue]);
         /** Set class names */
-        React.useEffect(() => setClassName(classnames("seb", "carousel", { "carousel-fade": transitionStyle === "fade" }, props.className)), [props.className, transitionStyle]);
+        React.useEffect(() => setClassName(classnames("rc", "carousel", { "carousel-fade": transitionStyle === "fade" }, props.className)), [props.className, transitionStyle]);
         React.useEffect(() => {
             swipePos && setComingNext(findNewActive(swipePos < 0 ? "next" : "prev"));
         }, [swipePos]);

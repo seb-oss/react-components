@@ -38,7 +38,7 @@ describe("Component: Accordion", () => {
         act(() => {
             render(<Accordion />, container);
         });
-        expect(container.firstElementChild.classList.contains("seb")).toBeTruthy();
+        expect(container.firstElementChild.classList.contains("rc")).toBeTruthy();
         expect(container.firstElementChild.classList.contains("accordion")).toBeTruthy();
         expect(container.firstElementChild.id).toBeDefined();
     });
