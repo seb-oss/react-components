@@ -11,13 +11,13 @@ import { CheckBox } from "../../../src/CheckBox/CheckBox";
 import classnames from "classnames";
 const docMD: string = require("../../../src/Loader/readme.md");
 
-type Colors = "primary" | "secondary" | "warning" | "danger" | "success" | "white" | "info" | "light" | "dark" | "body" | "muted";
-const lightColors: Array<Colors> = ["white", "secondary", "light"];
+type Color = "primary" | "secondary" | "warning" | "danger" | "success" | "white" | "info" | "light" | "dark" | "body" | "muted";
+const lightColors: Array<Color> = ["white", "secondary", "light"];
 
 const LoaderPage: React.FC = () => {
     const [size, setSize] = React.useState<LoaderSize>("md");
     const [type, setType] = React.useState<LoaderType>("spinner");
-    const [color, setColor] = React.useState<DropdownItem<Colors>>();
+    const [color, setColor] = React.useState<DropdownItem<Color>>();
     const [showText, setShowText] = React.useState<boolean>(false);
 
     return (
@@ -33,7 +33,7 @@ const LoaderPage: React.FC = () => {
                     <h2>Output</h2>
 
                     <div className="result">
-                        <SampleContainer color={lightColors.some((c: Colors) => c === color?.value) ? "#636363" : "#efefef"} height={200} />
+                        <SampleContainer color={lightColors.some((c: Color) => c === color?.value) ? "#636363" : "#efefef"} height={200} />
                         <Loader className={classnames({ [`text-${color?.value}`]: color?.value })} size={size} type={type} cover>
                             {showText && <p className={classnames("mt-1", "mb-0", `text-${size}`)}>Loading, please wait...</p>}
                         </Loader>
@@ -100,7 +100,7 @@ const typeList: Array<RadioListModel<LoaderType>> = [
     { value: "square", label: "Square" },
 ];
 
-const colorList: Array<DropdownItem<Colors>> = [
+const colorList: Array<DropdownItem<Color>> = [
     { value: undefined, label: "none" },
     { value: "primary", label: "text-primary" },
     { value: "secondary", label: "text-secondary" },
