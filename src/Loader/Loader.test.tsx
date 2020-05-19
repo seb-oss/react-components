@@ -1,46 +1,95 @@
-import * as React from "react";
-import { shallow, ShallowWrapper, ReactWrapper, mount } from "enzyme";
-import { Loader, LoaderProps, LoaderSize } from "./Loader";
+import React from "react";
+import { act } from "react-dom/test-utils";
+import { unmountComponentAtNode, render } from "react-dom";
+import { Loader, LoaderSize, LoaderType } from "./Loader";
 
 describe("Component: Loader", () => {
-    let wrapper: ShallowWrapper<LoaderProps>;
-    let mountedWrapper: ReactWrapper<LoaderProps>;
+    let container: HTMLDivElement = null;
 
     beforeEach(() => {
-        wrapper = shallow(<Loader toggle={true} />);
+        container = document.createElement("div");
+        document.body.appendChild(container);
+    });
+
+    afterEach(() => {
+        unmountComponentAtNode(container);
+        container.remove();
+        container = null;
     });
 
     it("Should render", () => {
-        expect(wrapper).toBeDefined();
+        act(() => {
+            render(<Loader />, container);
+        });
+        expect(container.firstElementChild).not.toBeNull();
     });
 
-    it("Should pass custom class and id", () => {
-        const className: string = "myLoaderClass";
-        const id: string = "myLoaderId";
-        mountedWrapper = mount(<Loader toggle={true} className={className} id={id} />);
-        expect(mountedWrapper.find(".seb-loader-wrapper").hasClass(className)).toBeTruthy();
-        expect(mountedWrapper.find(`#${id}`).length).toBeTruthy();
+    it("Should display backdrop and either cover or fullscreen when passed and cover only when both are passed", () => {
+        act(() => {
+            render(<Loader cover />, container);
+        });
+        expect(container.firstElementChild.classList.contains("loader-cover")).toBeTruthy();
+
+        act(() => {
+            render(<Loader fullscreen backdrop />, container);
+        });
+        expect(container.firstElementChild.classList.contains("loader-fullscreen")).toBeTruthy();
+        expect(container.firstElementChild.classList.contains("loader-backdrop")).toBeTruthy();
+
+        act(() => {
+            render(<Loader cover fullscreen />, container);
+        });
+        expect(container.firstElementChild.classList.contains("loader-cover")).toBeTruthy();
     });
 
-    it("Should enable fullscreen when set to true", () => {
-        mountedWrapper = mount(<Loader toggle={true} fullscreen={true} />);
-        expect(mountedWrapper.find(".seb-loader-wrapper").hasClass("fullscreen")).toBeTruthy();
-        mountedWrapper = mount(<Loader toggle={true} fullscreen={false} />);
-        expect(mountedWrapper.find(".seb-loader-wrapper").hasClass("fullscreen")).toBeFalsy();
-    });
-
-    it("Should hide loader when toggle is true", () => {
-        wrapper.setProps({ toggle: false });
-        expect(wrapper.find(".seb-loader-wrapper").length).toBe(0);
-    });
-
-    describe("Should render with different sizes", () => {
-        const testCases: Array<LoaderSize> = ["lg", "md", "sm"];
-        testCases.map((size: LoaderSize) => {
-            test(`Loader size: ${size}`, () => {
-                mountedWrapper = mount(<Loader toggle={true} size={size} />);
-                expect(mountedWrapper.find(".seb-loader").hasClass(`loader-${size}`));
+    describe("Should render with all supported sizes", () => {
+        const sizeList: Array<LoaderSize> = ["xs", "sm", "md", "lg"];
+        sizeList.map((size: LoaderSize) => {
+            test(`- size (${size})`, () => {
+                act(() => {
+                    render(<Loader size={size} />, container);
+                });
+                expect(container.firstElementChild.classList.contains(`loader-${size}`)).toBeTruthy();
             });
         });
+    });
+
+    describe("Should render with all supported types", () => {
+        const typeList: Array<LoaderType> = ["spinner", "square"];
+        typeList.map((type: LoaderType) => {
+            test(`- type (${type})`, () => {
+                act(() => {
+                    render(<Loader type={type} />, container);
+                });
+                expect(container.firstElementChild.classList.contains(`loader-${type}`)).toBeTruthy();
+            });
+        });
+    });
+
+    it("Should render custom classname", () => {
+        const className: string = "custom-classname";
+        act(() => {
+            render(<Loader className={className} />, container);
+        });
+        expect(container.firstElementChild.classList.contains(className)).toBeTruthy();
+    });
+
+    it("Should render children under the loader and sr-only at the end with option to pass custom text to it", () => {
+        const text: string = "testing...";
+        const srText: string = "sr text";
+        act(() => {
+            render(
+                <Loader srText={srText}>
+                    <p>{text}</p>
+                </Loader>,
+                container
+            );
+        });
+        expect(container.firstElementChild.firstElementChild.tagName.toUpperCase()).toEqual("SVG");
+        expect(container.firstElementChild.children.item(1).tagName.toUpperCase()).toEqual("P");
+        expect(container.firstElementChild.children.item(1).textContent).toEqual(text);
+        expect(container.firstElementChild.lastElementChild.tagName.toUpperCase()).toEqual("SPAN");
+        expect(container.firstElementChild.lastElementChild.classList.contains("sr-only")).toBeTruthy();
+        expect(container.firstElementChild.lastElementChild.textContent).toEqual(srText);
     });
 });

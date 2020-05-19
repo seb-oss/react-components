@@ -40,7 +40,7 @@ const App: React.FC<RouteComponentProps> = (props: RouteComponentProps) => {
         <div className="app-container">
             {!brief && <TitleBar onToggleClick={toggleSidebar} history={props.history} />}
             <div className={"route-holder" + (sidebarToggle ? " sidebar-opened" : "") + (brief ? " brief" : "")}>
-                <React.Suspense fallback={<Loader toggle={true} fullscreen={true} />}>
+                <React.Suspense fallback={<Loader fullscreen backdrop />}>
                     <Switch>
                         <Redirect from="/" to="/about" exact />
                         {routes.map((item: RouteItem, index: number) => (
