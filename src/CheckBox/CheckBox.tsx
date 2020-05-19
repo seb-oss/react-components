@@ -1,64 +1,39 @@
-import * as React from "react";
+import React from "react";
 import { randomId } from "@sebgroup/frontend-tools/dist/randomId";
-import "./check-box-style.scss";
+import classnames from "classnames";
+import { Indicator, FeedbackIndicator } from "../FeedbackIndicator/FeedbackIndicator";
+import "./checkbox.scss";
 
-export interface CheckBoxProps {
-    checked: boolean;
-    className?: string;
-    condensed?: boolean;
-    description?: string;
-    disabled?: boolean;
-    id?: string;
+export type CheckBoxProps = JSX.IntrinsicElements["input"] & {
+    /** Displays the checkbox inline */
     inline?: boolean;
-    label: string;
-    name: string;
-    onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-    reference?: React.RefObject<HTMLInputElement>;
-    topLabel?: string;
-}
+    /** Description to be displayed underneath the checkbox element */
+    description?: React.ReactNode;
+    /** Label to be displayed next to the checkbox */
+    label?: React.ReactNode;
+    /** Div wrapper props */
+    wrapperProps?: JSX.IntrinsicElements["div"];
+    /** Indicator for error, warning or success */
+    indicator?: Indicator;
+};
 
-const CheckBox: React.FunctionComponent<CheckBoxProps> = (props: CheckBoxProps): React.ReactElement<void> => {
+const CheckBox: React.FunctionComponent<CheckBoxProps> = ({ inline, description, label, wrapperProps, indicator, ...props }: CheckBoxProps): React.ReactElement<void> => {
     const [id, setId] = React.useState<string>(props.id);
-    const [formClass, setFormClass] = React.useState<string>("");
 
-    React.useEffect(() => {
-        setId(props.id ? id : randomId("checkbox-"));
-    }, [props.id]);
-
-    React.useEffect(() => {
-        let formClassName: string = "form-group custom-checkbox";
-        formClassName += props.inline ? " inline" : "";
-        formClassName += props.condensed ? " condensed" : "";
-        formClassName += props.className ? ` ${props.className}` : "";
-        setFormClass(formClassName);
-    }, [props.inline, props.condensed, props.className]);
+    React.useEffect(() => setId(props.id || label ? props.id || randomId("checkbox-") : null), [props.id, label]);
 
     return (
-        <div className={formClass}>
-            <div className="input-field">
-                {props.topLabel && (
-                    <label htmlFor={id} className="checkbox-toplabel">
-                        {props.topLabel}
+        <div {...wrapperProps} className={classnames("seb", "checkbox", { inline }, wrapperProps?.className)}>
+            <div className={classnames("custom-control", "custom-checkbox", { "custom-control-inline": inline }, { [`is-${indicator?.type}`]: indicator })}>
+                <input {...props} type="checkbox" id={id} className={classnames("custom-control-input", props.className)} />
+                {label && (
+                    <label className="custom-control-label" htmlFor={id}>
+                        <span className="checkbox-label">{label}</span>
                     </label>
                 )}
-
-                <div className="custom-control">
-                    <input
-                        type="checkbox"
-                        className="custom-control-input"
-                        id={id}
-                        disabled={props.disabled}
-                        name={props.name}
-                        checked={props.checked}
-                        onChange={props.onChange}
-                        ref={props.reference}
-                    />
-                    <label className="custom-control-label" htmlFor={id}>
-                        {props.label}
-                        {props.description && <span className="checkbox-description">{props.description}</span>}
-                    </label>
-                </div>
+                {description && <p className="checkbox-description">{description}</p>}
             </div>
+            {indicator && <FeedbackIndicator {...indicator} />}
         </div>
     );
 };

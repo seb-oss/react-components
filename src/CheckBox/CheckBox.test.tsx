@@ -1,64 +1,75 @@
-import * as React from "react";
-import { shallow, ShallowWrapper, ReactWrapper, mount } from "enzyme";
-import { CheckBox, CheckBoxProps } from "./CheckBox";
+import React from "react";
+import { act } from "react-dom/test-utils";
+import { unmountComponentAtNode, render } from "react-dom";
+import { CheckBox } from ".";
 
 describe("Component: CheckBox", () => {
-    const props: CheckBoxProps = {
-        name: "myCheckbox",
-        label: "myLabel",
-        checked: false,
-        onChange: jest.fn(),
-    };
-    let wrapper: ShallowWrapper<CheckBoxProps>;
+    let container: HTMLDivElement = null;
 
     beforeEach(() => {
-        wrapper = shallow(<CheckBox {...props} />);
+        container = document.createElement("div");
+        document.body.appendChild(container);
+    });
+
+    afterEach(() => {
+        unmountComponentAtNode(container);
+        container.remove();
+        container = null;
     });
 
     it("Should render", () => {
-        expect(wrapper).toBeDefined();
+        act(() => {
+            render(<CheckBox />, container);
+        });
+        expect(container.firstElementChild).not.toBeNull();
     });
 
-    it("Should renders and pass custom class", () => {
-        const className: string = "myCheckboxClass";
-        const id: string = "myCheckboxId";
-        const mountedWrapper: ReactWrapper<CheckBoxProps> = mount(<CheckBox {...props} className={className} id={id} />);
-        expect(mountedWrapper.find(".custom-checkbox").hasClass(className)).toBeTruthy();
-        expect(mountedWrapper.find(`#${id}`)).toHaveLength(2); // Input and label
+    it("Should render checkbox inline and render description and label", () => {
+        const label: string = "Some label";
+        const description: string = "Some description";
+        act(() => {
+            render(<CheckBox label={label} description={description} inline />, container);
+        });
+        expect(container.firstElementChild.classList.contains("inline")).toBeTruthy();
+        expect(container.querySelector(".custom-control").classList.contains("custom-control-inline")).toBeTruthy();
+        expect(container.querySelector(".checkbox-description")).not.toBeNull();
+        expect(container.querySelector(".checkbox-description").textContent).toEqual(description);
+        expect(container.querySelector(".custom-control-label")).not.toBeNull();
+        expect(container.querySelector(".custom-control-label").firstElementChild.classList.contains("checkbox-label")).toBeTruthy();
+        expect(container.querySelector(".custom-control-label").firstElementChild.textContent).toEqual(label);
     });
 
-    it("Should generated a random id when id is not passed", () => {
-        const mountedWrapper: ReactWrapper<CheckBoxProps> = mount(<CheckBox {...props} />);
-        expect(mountedWrapper.find("input").getElement().props.id).toBeTruthy();
+    it("Should pass wrapper props when passed", () => {
+        const className: string = "wrapper-classname";
+        act(() => {
+            render(<CheckBox wrapperProps={{ className }} />, container);
+        });
+        expect(container.firstElementChild.classList.contains(className)).toBeTruthy();
     });
 
-    it("Should pass down the name to the html input component", () => {
-        expect(wrapper.find("input").getElement().props.name).toEqual("myCheckbox");
+    it("Should render an indicator when passed", () => {
+        act(() => {
+            render(<CheckBox indicator={{ type: "danger", message: "error" }} />, container);
+        });
+        expect(container.querySelector(".custom-control").classList.contains("is-danger")).toBeTruthy();
+        expect(container.querySelector(".progress-feedback")).not.toBeNull();
     });
 
-    it("Should render inline and condensed when passed", () => {
-        const mountedWrapper: ReactWrapper<CheckBoxProps> = mount(<CheckBox {...props} inline={true} condensed={true} />);
-        expect(mountedWrapper.find(".custom-checkbox").hasClass("inline")).toBeTruthy();
-        expect(mountedWrapper.find(".custom-checkbox").hasClass("condensed")).toBeTruthy();
-    });
+    it("Should render random id when there is a label and no id passed", () => {
+        const id: string = "some-id";
+        act(() => {
+            render(<CheckBox />, container);
+        });
+        expect(container.querySelector("input").id).toEqual("");
 
-    it("Should render top label and description when passed", () => {
-        const topLabel: string = "my top label";
-        const description: string = "my description";
-        wrapper.setProps({ topLabel, description });
-        expect(wrapper.find(".checkbox-toplabel").length).toBe(1); // Top Label
-        expect(wrapper.find(".checkbox-toplabel").text()).toEqual(topLabel); // Top Label
-        expect(wrapper.find(".checkbox-description").length).toBe(1); // Description
-        expect(wrapper.find(".checkbox-description").text()).toEqual(description); // Description
-    });
+        act(() => {
+            render(<CheckBox label="some label" />, container);
+        });
+        expect(container.querySelector("input").id).not.toEqual("");
 
-    it("Should fire a change event when checkbox input value is changed", () => {
-        wrapper.find("input").simulate("change");
-        expect(props.onChange).toHaveBeenCalled();
-    });
-
-    it("Should disable checkbox when disabled prop is set to true", () => {
-        wrapper.setProps({ disabled: true });
-        expect(wrapper.find("input").props().disabled).toBeTruthy();
+        act(() => {
+            render(<CheckBox label="some label" id={id} />, container);
+        });
+        expect(container.querySelector("input").id).toEqual(id);
     });
 });

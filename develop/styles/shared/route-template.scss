@@ -13,9 +13,6 @@
         color: $gray-600;
         margin-bottom: 30px;
     }
-    p {
-        margin: 15px 0px 10px 0px;
-    }
     .info-holder {
         > .title {
             font-size: $large;
@@ -82,16 +79,13 @@
                             display: none !important;
                         }
                     }
-                    // p:last-child {
-                    //     display: none !important;
-                    // }
                 }
             }
             > .result {
                 position: relative;
                 max-width: 300px;
                 code,
-                p {
+                > p {
                     display: block;
                     padding: 5px 0px;
                 }
