@@ -23,28 +23,36 @@ This React component is based on SEB Bootstrap style. Supports customization and
 
 ```html
 <CheckBox
-    name="checkbox"
     label="Checkbox label"
-    checked={this.state.checkbox}
-    onChange={(event) => { this.setState({ checkbox: event.target.checked }); }}
+    checked={checkboxValue}
+    onChange={onChangeHandler}
 />
 ```
 
 ## Properties
 
-These are the current available properties:
+This component extends all native attributes of `HTMLInputElement`, while offering the following customizations:
 
-| Property     | Type                                                   | Description                                                            |
-| ------------ | ------------------------------------------------------ | ---------------------------------------------------------------------- |
-| checked      | `boolean`                                              | The checked value                                                      |
-| className?   | `string`                                               | Custom class                                                           |
-| description? | `string`                                               | A option description                                                   |
-| disabled?    | `boolean`                                              | Disabled status                                                        |
-| id?          | `string`                                               | Id property                                                            |
-| inline?      | `boolean`                                              | Renders inline checkbox                                                |
-| label        | `string`                                               | Checkbox label                                                         |
-| name         | `string`                                               | Name property                                                          |
-| onChange     | `(event: React.ChangeEvent<HTMLInputElement>) => void` | On change action                                                       |
-| reference?   | `React.RefObject<HTMLInputElement>`                    | React Ref obj                                                          |
-| topLabel?    | `string`                                               | A label which shows on top of component                                |
-| condensed?   | `boolean`                                              | Condenses the checkboxes. Usefull when rendering them below each other |
+| Property     | Type                    | Description                                                 |
+| ------------ | ----------------------- | ----------------------------------------------------------- |
+| description? | `string`                | Description to be displayed underneath the checkbox element |
+| inline?      | `boolean`               | Displays the checkbox inline                                |
+| label        | `string`                | Label to be displayed next to the checkbox                  |
+| indicator    | `Indicator`<sup>1</sup> | Indicator for error, warning or success                     |
+
+## Footnote
+
+1. `Indicator` interface
+   ```typescript
+   interface Indicator {
+       type: "danger" | "warning" | "success";
+       message?: React.ReactNode;
+   }
+   ```
+2. To wrap multiple checkbox with a single indicator, use `FeedbackIndicator` component like such ([output](#footnote-2-example)):
+   ```html
+   <FeedbackIndicator type="danger" message="Error message here">
+       <CheckBox label="First" />
+       <CheckBox label="Second" />
+    </FeedbackIndicator>
+   ```

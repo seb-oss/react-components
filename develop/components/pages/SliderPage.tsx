@@ -243,12 +243,12 @@ class SliderExamples extends React.Component<SliderPageProps, SliderPageState> {
                         </div>
                         <div className="col">
                             <p>Options</p>
-                            <CheckBox label="Disabled" name={SliderPageStateNames.disabled} checked={this.state.disabled} onChange={this.onFormChange} condensed />
-                            <CheckBox label="Has error" name={SliderPageStateNames.hasError} checked={this.state.hasError} onChange={this.onFormChange} condensed />
-                            <CheckBox label="Has labels" name={SliderPageStateNames.hasLabels} checked={this.state.hasLabels} onChange={this.onFormChange} condensed />
-                            <CheckBox label="Show ticks" name={SliderPageStateNames.showTicks} checked={this.state.showTicks} onChange={this.onFormChange} condensed disabled={!this.state.hasLabels} />
-                            <CheckBox label="With Input" name={SliderPageStateNames.withInput} checked={this.state.withInput} onChange={this.onFormChange} condensed />
-                            <CheckBox label="Always Show tooltip" name={SliderPageStateNames.alwaysShowTooltip} checked={this.state.alwaysShowTooltip} onChange={this.onFormChange} condensed />
+                            <CheckBox label="Disabled" name={SliderPageStateNames.disabled} checked={this.state.disabled} onChange={this.onFormChange} />
+                            <CheckBox label="Has error" name={SliderPageStateNames.hasError} checked={this.state.hasError} onChange={this.onFormChange} />
+                            <CheckBox label="Has labels" name={SliderPageStateNames.hasLabels} checked={this.state.hasLabels} onChange={this.onFormChange} />
+                            <CheckBox label="Show ticks" name={SliderPageStateNames.showTicks} checked={this.state.showTicks} onChange={this.onFormChange} disabled={!this.state.hasLabels} />
+                            <CheckBox label="With Input" name={SliderPageStateNames.withInput} checked={this.state.withInput} onChange={this.onFormChange} />
+                            <CheckBox label="Always Show tooltip" name={SliderPageStateNames.alwaysShowTooltip} checked={this.state.alwaysShowTooltip} onChange={this.onFormChange} />
                         </div>
                     </div>
                 </div>

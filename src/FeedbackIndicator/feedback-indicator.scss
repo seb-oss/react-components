@@ -1,0 +1,13 @@
+.seb.progress-feedback {
+    &.wrapper-indicator {
+        &:before {
+            content: none;
+        }
+        &:not(.progress-0) {
+            > .children {
+                border-radius: 4px;
+                border: 1px solid currentColor;
+            }
+        }
+    }
+}

@@ -21,9 +21,7 @@ function svgrIconTemplate({ template }, opts, { imports, interfaces, componentNa
 let buildConfig = {
     devtool: false,
     target: "web",
-    resolve: {
-        extensions: [".ts", ".tsx", ".js", ".json"],
-    },
+    resolve: { extensions: [".ts", ".tsx", ".js", ".json"] },
     module: {
         rules: [
             { test: /\.tsx?$/, loader: "ts-loader", exclude: [/node_modules/, /\.(test)\.ts$/] },
@@ -67,15 +65,7 @@ switch (buildType) {
                     excludeAssets: /\.(woff2?|ttf|eot|map)$/,
                 },
             },
-            output: {
-                path: path.resolve(__dirname, "dist"),
-            },
-            plugins: [
-                new HtmlWebpackPlugin({
-                    template: "./develop/index.dev.html",
-                    filename: "./index.html",
-                }),
-            ],
+            output: { path: path.resolve(__dirname, "dist") },
         };
         buildConfig.module.rules[0].options = { configFile: "develop/tsconfig.json" };
         break;
@@ -83,16 +73,7 @@ switch (buildType) {
         buildConfig = {
             ...buildConfig,
             mode: "production",
-            output: {
-                path: path.resolve(__dirname, "docs"),
-            },
-            plugins: [
-                new HtmlWebpackPlugin({
-                    template: "./develop/index.html",
-                    filename: "./index.html",
-                }),
-                new CopyWebpackPlugin([{ from: "./develop/version.json" }, { from: "./develop/targetindex.json" }, { from: "./develop/contentindex.json" }]),
-            ],
+            output: { path: path.resolve(__dirname, "docs") },
         };
         break;
     case "prod":
@@ -121,7 +102,7 @@ switch (buildType) {
                     root: "ReactDOM",
                 },
             },
-            plugins: [new CopyWebpackPlugin(components.indexes), new CaseSensitivePathsPlugin()],
+            plugins: [new CopyWebpackPlugin({ patterns: components.indexes }), new CaseSensitivePathsPlugin()],
         };
         buildConfig.module.rules.push(
             { test: /\.(jpe?g|png|gif)$/i, loader: "file-loader?name=assets/images/[name].[ext]" },
@@ -146,6 +127,7 @@ if (buildType !== "prod") {
             chunkFilename: "js/[name].bundle.js",
             publicPath: "",
         },
+        plugins: [new HtmlWebpackPlugin({ template: "./develop/index.html", filename: "./index.html" })],
     };
     buildConfig.module.rules.push(
         {

@@ -76,11 +76,11 @@ const ButtonPage: React.FC = () => {
                         </div>
                         <div className="col">
                             <p>Options</p>
-                            <CheckBox label="Disabled" name="disabled" checked={state.disabled} onChange={changeHandler} condensed />
-                            <CheckBox label="Block" name="block" checked={state.block} onChange={changeHandler} condensed />
-                            <CheckBox label="Loader" name="hasLoader" checked={state.hasLoader} onChange={changeHandler} condensed />
-                            <CheckBox label="Icon" name="hasIcon" checked={state.hasIcon} onChange={changeHandler} condensed />
-                            <CheckBox label="Size" name="hasSize" checked={state.hasSize} onChange={changeHandler} condensed />
+                            <CheckBox label="Disabled" name="disabled" checked={state.disabled} onChange={changeHandler} />
+                            <CheckBox label="Block" name="block" checked={state.block} onChange={changeHandler} />
+                            <CheckBox label="Loader" name="hasLoader" checked={state.hasLoader} onChange={changeHandler} />
+                            <CheckBox label="Icon" name="hasIcon" checked={state.hasIcon} onChange={changeHandler} />
+                            <CheckBox label="Size" name="hasSize" checked={state.hasSize} onChange={changeHandler} />
                             {state.hasSize && <RadioGroup className="pl-4" list={sizeList} value={state.size} condensed name="size" onChange={changeHandler} />}
                         </div>
                     </div>
