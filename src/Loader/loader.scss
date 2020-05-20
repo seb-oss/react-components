@@ -11,6 +11,11 @@
 $offset: 200;
 $duration: 1.5s;
 $duration-sq: 1.2s;
+$loader-xs: 1rem;
+$loader-sm: 2.125rem;
+$loader-md: 4.063rem;
+$loader-lg: 6.25rem;
+
 .rc.loader {
     color: $green;
     &:not(.loader-cover):not(.loader-fullscreen) {
@@ -39,16 +44,16 @@ $duration-sq: 1.2s;
         background-color: rgba($black, 0.55);
     }
     &.loader-xs {
-        @include setLoaderSize(16px);
+        @include setLoaderSize($loader-xs);
     }
     &.loader-sm {
-        @include setLoaderSize(34px);
+        @include setLoaderSize($loader-sm);
     }
     &.loader-md {
-        @include setLoaderSize(65px);
+        @include setLoaderSize($loader-md);
     }
     &.loader-lg {
-        @include setLoaderSize(100px);
+        @include setLoaderSize($loader-lg);
     }
     &.loader-spinner {
         > svg {
