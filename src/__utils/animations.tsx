@@ -1,8 +1,8 @@
-import * as React from "react";
+import React from "react";
 
 type SlideUpDownProps = {
     /** The value that the transition will depend on to recalculate */
-    triggerValue: any
+    triggerValue: any;
 };
 
 const SlideUpDown: React.FC<React.PropsWithChildren<SlideUpDownProps>> = (props: React.PropsWithChildren<SlideUpDownProps>) => {
@@ -26,7 +26,7 @@ const SlideUpDown: React.FC<React.PropsWithChildren<SlideUpDownProps>> = (props:
                 overflow: "hidden",
                 height,
                 opacity: height ? 1 : 0,
-                transition: "height 200ms linear, opacity 400ms linear"
+                transition: "height 200ms linear, opacity 400ms linear",
             }}
         >
             {props.children}

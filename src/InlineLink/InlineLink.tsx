@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import "./inline-link-style.scss";
 
 export interface InlineLinkProps {

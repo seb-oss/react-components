@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import { TextArea } from "../../../src/TextArea/TextArea";
 import Highlight from "react-highlight";
 const docMD: string = require("../../../src/TextArea/readme.md");

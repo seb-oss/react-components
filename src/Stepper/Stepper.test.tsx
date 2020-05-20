@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import { shallow, ReactWrapper, mount } from "enzyme";
 import { Stepper, StepperProps } from "./Stepper";
 

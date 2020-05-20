@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import { Timer } from "../../../src/Timer/Timer";
 import Highlight from "react-highlight";
 const docMD: string = require("../../../src/Timer/readme.md");

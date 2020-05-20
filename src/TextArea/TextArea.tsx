@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import { randomId } from "@sebgroup/frontend-tools/dist/randomId";
 import "./text-area-style.scss";
 

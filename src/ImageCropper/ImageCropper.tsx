@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import { ImagePreview } from "./ImagePreview";
 import { Loader } from "./Loader";
 import Cropper from "cropperjs";

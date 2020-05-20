@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import { Pagination } from "../../../src/Pagination/Pagination";
 import Highlight from "react-highlight";
 const docMD: string = require("../../../src/Pagination/readme.md");

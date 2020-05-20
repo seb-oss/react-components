@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import { Loader, LoaderSize, LoaderType } from "../../../src/Loader/Loader";
 import { Button } from "../../../src/Button/Button";
 import { TextBoxGroup } from "../../../src/TextBoxGroup/TextBoxGroup";

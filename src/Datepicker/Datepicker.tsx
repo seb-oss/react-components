@@ -1,7 +1,7 @@
-import * as React from "react";
+import React from "react";
 import DatePicker from "react-date-picker";
-import "./date-picker-style.scss";
 import { Detail } from "react-calendar";
+import "./date-picker-style.scss";
 
 const calendarAltIcon: JSX.Element = (
     <svg name="calendar-alt" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">

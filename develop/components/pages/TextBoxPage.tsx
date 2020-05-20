@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import { TextBox } from "../../../src/TextBox/TextBox";
 import Highlight from "react-highlight";
 const docMD: string = require("../../../src/TextBox/readme.md");

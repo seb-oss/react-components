@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import "./video-style.scss";
 
 export type VideoSourceType = "stream" | "local";

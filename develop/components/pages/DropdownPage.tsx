@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import { Dropdown, DropdownItem } from "../../../src/Dropdown/Dropdown";
 import { Toggle } from "../../../src/Toggle/Toggle";
 import Highlight from "react-highlight";

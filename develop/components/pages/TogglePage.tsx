@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import { Toggle } from "../../../src/Toggle/Toggle";
 import Highlight from "react-highlight";
 const docMD: string = require("../../../src/Toggle/readme.md");

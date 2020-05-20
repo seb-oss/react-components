@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import { Chart, ExtendedChartOptions } from "../../../src/Chart/Chart";
 import { ChartData, ChartOptions } from "chart.js";
 import Highlight from "react-highlight";

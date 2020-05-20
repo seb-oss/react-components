@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import { Rating } from "../../../src/Rating/Rating";
 import Highlight from "react-highlight";
 const docMD: string = require("../../../src/Rating/readme.md");

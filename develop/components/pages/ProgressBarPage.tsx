@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import { ProgressBar, ProgressBarProps } from "../../../src/ProgressBar/ProgressBar";
 import { RouteComponentProps } from "react-router";
 import Highlight from "react-highlight";

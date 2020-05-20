@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import { Timeline, TimelineListItem } from "../../../src/Timeline/Timeline";
 import Highlight from "react-highlight";
 const docMD: string = require("../../../src/Timeline/readme.md");

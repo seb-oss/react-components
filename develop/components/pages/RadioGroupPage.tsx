@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import { RadioGroup, RadioListModel } from "../../../src/RadioGroup/RadioGroup";
 import { Tabs } from "../../../src/Tabs/Tabs";
 import Highlight from "react-highlight";

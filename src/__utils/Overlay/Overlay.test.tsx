@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import { unmountComponentAtNode, render } from "react-dom";
 import { act } from "react-dom/test-utils";
 import { ElementPosition } from "./placement";
@@ -15,7 +15,7 @@ describe("Component: Overlay", () => {
     const overlayProps: OverlayProps = {
         overlayReference: null,
         onBlur: jest.fn(),
-        show: false
+        show: false,
     };
     beforeEach(() => {
         container = document.createElement("div");
@@ -31,14 +31,30 @@ describe("Component: Overlay", () => {
 
     it("Should render", () => {
         const newProps: OverlayProps = { ...overlayProps, overlayReference: () => container.querySelector(".ref") };
-        act(() => { render(<div><div className="ref">ref</div><Overlay {...newProps}>overlay</Overlay></div>, container); });
+        act(() => {
+            render(
+                <div>
+                    <div className="ref">ref</div>
+                    <Overlay {...newProps}>overlay</Overlay>
+                </div>,
+                container
+            );
+        });
         expect(document.body.querySelector(".overlay-container")).toBeTruthy();
     });
 
     it("Should render content", () => {
         const content: string = "my overlay";
         const newProps: OverlayProps = { ...overlayProps, overlayReference: () => container.querySelector(".ref") };
-        act(() => { render(<div><div className="ref">ref</div><Overlay {...newProps}>{content}</Overlay></div>, container); });
+        act(() => {
+            render(
+                <div>
+                    <div className="ref">ref</div>
+                    <Overlay {...newProps}>{content}</Overlay>
+                </div>,
+                container
+            );
+        });
         const overlayContainer: Element = document.body.querySelector(".overlay-container");
         expect(overlayContainer).toBeTruthy();
         expect(overlayContainer.innerHTML).toEqual(content);
@@ -46,10 +62,26 @@ describe("Component: Overlay", () => {
 
     it("Should be set to focus on overlay show", () => {
         const newProps: OverlayProps = { ...overlayProps, overlayReference: () => container.querySelector(".ref") };
-        act(() => { render(<div><div className="ref">ref</div><Overlay {...newProps}>overlay</Overlay></div>, container); });
+        act(() => {
+            render(
+                <div>
+                    <div className="ref">ref</div>
+                    <Overlay {...newProps}>overlay</Overlay>
+                </div>,
+                container
+            );
+        });
         expect(document.body.querySelector(".overlay-container:focus")).toBeFalsy();
         const updatedProps: OverlayProps = { ...newProps, show: true };
-        act(() => { render(<div><div className="ref">ref</div><Overlay {...updatedProps}>overlay</Overlay></div>, container); });
+        act(() => {
+            render(
+                <div>
+                    <div className="ref">ref</div>
+                    <Overlay {...updatedProps}>overlay</Overlay>
+                </div>,
+                container
+            );
+        });
         expect(document.body.querySelector(".overlay-container:focus")).toBeTruthy();
     });
 

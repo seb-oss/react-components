@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import { act } from "react-dom/test-utils";
 import { unmountComponentAtNode, render } from "react-dom";
 import { Column, Table, TableRow, ActionLinkItem, DataItem, sortDirectionTypes, PrimaryActionButton, EditProps } from "./Table";

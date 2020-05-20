@@ -1,6 +1,6 @@
-import * as React from "react";
-import "./text-box-style.scss";
+import React from "react";
 import { randomId } from "@sebgroup/frontend-tools/dist/randomId";
+import "./text-box-style.scss";
 
 export interface TextBoxProps {
     autoComplete?: "on" | "off";

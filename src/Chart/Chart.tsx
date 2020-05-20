@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import { Line, Bar, HorizontalBar, Pie, Doughnut, Polar, Radar, Bubble, Scatter } from "react-chartjs-2";
 import { ChartData, ChartOptions } from "chart.js";
 import "./chart-style.scss";

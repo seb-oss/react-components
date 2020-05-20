@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import { Dialogue } from "./Dialogue";
 import { unmountComponentAtNode, render } from "react-dom";
 import { act } from "react-dom/test-utils";

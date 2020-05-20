@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import { shallow, ShallowWrapper, ReactWrapper, mount } from "enzyme";
 import { RadioButton, RadioButtonProps } from "./RadioButton";
 

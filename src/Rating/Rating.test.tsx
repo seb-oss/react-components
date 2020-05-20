@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import { shallow, mount, ShallowWrapper, ReactWrapper } from "enzyme";
 import { Rating, RatingProps } from "./Rating";
 import { SVGStarHollow } from "./RatingStar";

@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import ReactRating from "react-rating";
 import { SVGStar, SVGStarHollow } from "./RatingStar";
 

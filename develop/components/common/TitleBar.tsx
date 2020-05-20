@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import { TextBoxGroup } from "../../../src/TextBoxGroup/TextBoxGroup";
 import BarsIcon from "../../assets/icons/bars.svg";
 import MagnifierIcon from "../../assets/icons/magnifier.svg";

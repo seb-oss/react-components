@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import { Tabs, TabsListItem } from "../../../src/Tabs/Tabs";
 import Highlight from "react-highlight";
 const docMD = require("../../../src/Tabs/readme.md");
