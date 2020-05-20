@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import { Slider, RangeSliderLabel, SliderProps, SliderTheme } from "./Slider";
 import { unmountComponentAtNode, render } from "react-dom";
 import { act } from "react-dom/test-utils";

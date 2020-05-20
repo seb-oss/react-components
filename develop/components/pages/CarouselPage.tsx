@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import { Carousel, CarouselItem } from "../../../src/Carousel";
 import Highlight from "react-highlight";
 import { CarouselProps } from "../../../src/Carousel/Carousel";

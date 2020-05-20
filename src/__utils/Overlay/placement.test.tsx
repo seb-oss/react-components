@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import { unmountComponentAtNode, render } from "react-dom";
 import { act } from "react-dom/test-utils";
 import { OverlayPositionChecker, ElementPosition } from "./placement";
@@ -36,13 +36,29 @@ describe("Placement class", () => {
     });
 
     it("Should render", () => {
-        act(() => { render(<div className="wrapper"><div className="reference">ref</div><div className="overlay">overlay</div></div>, container); });
+        act(() => {
+            render(
+                <div className="wrapper">
+                    <div className="reference">ref</div>
+                    <div className="overlay">overlay</div>
+                </div>,
+                container
+            );
+        });
         const checker: OverlayPositionChecker = new OverlayPositionChecker(container.querySelector(".reference"), false);
         expect(checker).toBeDefined();
     });
 
     it("Should throw error if overlay container is not set", () => {
-        act(() => { render(<div className="wrapper"><div className="reference">ref</div><div className="overlay">overlay</div></div>, container); });
+        act(() => {
+            render(
+                <div className="wrapper">
+                    <div className="reference">ref</div>
+                    <div className="overlay">overlay</div>
+                </div>,
+                container
+            );
+        });
         const checker: OverlayPositionChecker = new OverlayPositionChecker(container.querySelector(".reference"), true);
         checker.addOverlayContainer(null);
         try {
@@ -54,7 +70,15 @@ describe("Placement class", () => {
     });
 
     it("Should render null position", () => {
-        act(() => { render(<div className="wrapper"><div className="reference">ref</div><div className="overlay">overlay</div></div>, container); });
+        act(() => {
+            render(
+                <div className="wrapper">
+                    <div className="reference">ref</div>
+                    <div className="overlay">overlay</div>
+                </div>,
+                container
+            );
+        });
         const checker: OverlayPositionChecker = new OverlayPositionChecker(container.querySelector(".reference"), true);
         checker.addOverlayContainer(container.querySelector(".overlay"));
         expect(checker.getPosition(null)).toStrictEqual({ coord: null, position: null });
@@ -126,7 +150,15 @@ describe("Placement class", () => {
         for (const testCase of positionTestCases) {
             test(`able to render on ${testCase.position}`, () => {
                 container.style.position = "relative";
-                act(() => { render(<div className="wrapper"><div className="reference">ref</div><div className="overlay">overlay</div></div>, container); });
+                act(() => {
+                    render(
+                        <div className="wrapper">
+                            <div className="reference">ref</div>
+                            <div className="overlay">overlay</div>
+                        </div>,
+                        container
+                    );
+                });
                 const referenceElement: HTMLDivElement = container.querySelector(".reference");
                 const overlayElement: HTMLDivElement = container.querySelector(".overlay");
                 const checker: OverlayPositionChecker = new OverlayPositionChecker(referenceElement, false);
@@ -148,79 +180,87 @@ describe("Placement class", () => {
                 position: "top",
                 mockRefBoundingClientRect: { top: -100, bottom: 0, right: 200, left: 200, height: 100, width: 50 },
                 mockTooltipBoundingClientRect: { top: -100, bottom: 0, right: 0, left: 0, height: 100, width: 100 },
-                relativePosition: "bottom"
+                relativePosition: "bottom",
             },
             {
                 position: "right",
                 mockRefBoundingClientRect: { top: -100, bottom: 0, right: 768, left: 200, height: 100, width: 50 },
                 mockTooltipBoundingClientRect: { top: -100, bottom: 0, right: 0, left: 0, height: 100, width: 100 },
-                relativePosition: "bottom"
+                relativePosition: "bottom",
             },
             {
                 position: "bottom",
                 mockRefBoundingClientRect: { top: 150, bottom: 780, right: 768, left: 200, height: 100, width: 50 },
                 mockTooltipBoundingClientRect: { top: 0, bottom: 0, right: 0, left: 0, height: 100, width: 100 },
-                relativePosition: "top"
+                relativePosition: "top",
             },
             {
                 position: "left",
                 mockRefBoundingClientRect: { top: -100, bottom: 0, right: 768, left: 0, height: 100, width: 50 },
                 mockTooltipBoundingClientRect: { top: -100, bottom: 0, right: 0, left: 0, height: 100, width: 100 },
-                relativePosition: "bottom-left"
+                relativePosition: "bottom-left",
             },
             {
                 position: "top-left",
                 mockRefBoundingClientRect: { top: 200, bottom: 768, right: 200, left: -100, height: 100, width: 50 },
                 mockTooltipBoundingClientRect: { top: -100, bottom: 0, right: 0, left: 0, height: 100, width: 100 },
-                relativePosition: "right"
+                relativePosition: "right",
             },
             {
                 position: "top-right",
                 mockRefBoundingClientRect: { top: 0, bottom: 600, right: 1025, left: 0, height: 100, width: 50 },
                 mockTooltipBoundingClientRect: { top: 0, bottom: 0, right: 0, left: 0, height: 100, width: 100 },
-                relativePosition: "bottom-left"
+                relativePosition: "bottom-left",
             },
             {
                 position: "bottom-left",
                 mockRefBoundingClientRect: { top: 200, bottom: 300, right: 200, left: -500, height: 100, width: 50 },
                 mockTooltipBoundingClientRect: { top: -100, bottom: 0, right: 0, left: 0, height: 100, width: 100 },
-                relativePosition: "right"
+                relativePosition: "right",
             },
             {
                 position: "bottom-right",
                 mockRefBoundingClientRect: { top: 200, bottom: 300, right: 1025, left: 300, height: 100, width: 50 },
                 mockTooltipBoundingClientRect: { top: -100, bottom: 0, right: 0, left: 0, height: 100, width: 100 },
-                relativePosition: "top"
+                relativePosition: "top",
             },
             {
                 position: "left-top",
                 mockRefBoundingClientRect: { top: 50, bottom: 50, right: 200, left: 0, height: 100, width: 50 },
                 mockTooltipBoundingClientRect: { top: -100, bottom: 0, right: 0, left: 0, height: 100, width: 100 },
-                relativePosition: "bottom-left"
+                relativePosition: "bottom-left",
             },
             {
                 position: "left-bottom",
                 mockRefBoundingClientRect: { top: -100, bottom: 0, right: 500, left: -500, height: 100, width: 50 },
                 mockTooltipBoundingClientRect: { top: -100, bottom: 0, right: 0, left: 0, height: 100, width: 100 },
-                relativePosition: "bottom-right"
+                relativePosition: "bottom-right",
             },
             {
                 position: "right-top",
                 mockRefBoundingClientRect: { top: -100, bottom: 0, right: 768, left: 200, height: 100, width: 50 },
                 mockTooltipBoundingClientRect: { top: -100, bottom: 0, right: 0, left: 0, height: 100, width: 100 },
-                relativePosition: "bottom"
+                relativePosition: "bottom",
             },
             {
                 position: "right-bottom",
                 mockRefBoundingClientRect: { top: -100, bottom: 0, right: window.innerWidth + 200, left: 200, height: 100, width: 50 },
                 mockTooltipBoundingClientRect: { top: -100, bottom: 0, right: 0, left: 0, height: 100, width: 100 },
-                relativePosition: "bottom"
+                relativePosition: "bottom",
             },
         ];
         for (const testCase of positionTestCases) {
             test(`able to render on ${testCase.relativePosition} when tooltip is overflow on ${testCase.position}`, () => {
                 container.style.position = "relative";
-                act(() => { render(<div className="wrapper"><div className="reference">ref</div><div className="overlay">overlay</div></div>, container); });
+                act(() => {
+                    render(
+                        <div className="wrapper">
+                            <div className="reference">ref</div>
+                            <div className="overlay">overlay</div>
+                        </div>,
+                        container
+                    );
+                });
                 const referenceElement: HTMLDivElement = container.querySelector(".reference");
                 const overlayElement: HTMLDivElement = container.querySelector(".overlay");
                 const checker: OverlayPositionChecker = new OverlayPositionChecker(referenceElement, false);
@@ -242,79 +282,87 @@ describe("Placement class", () => {
                 position: "top",
                 mockRefBoundingClientRect: { top: -100, bottom: 0, right: 200, left: 200, height: 100, width: 50 },
                 mockTooltipBoundingClientRect: { top: -100, bottom: 0, right: 0, left: 0, height: 100, width: 100 },
-                relativePosition: "bottom"
+                relativePosition: "bottom",
             },
             {
                 position: "right",
                 mockRefBoundingClientRect: { top: -100, bottom: 0, right: 768, left: 200, height: 100, width: 50 },
                 mockTooltipBoundingClientRect: { top: -100, bottom: 0, right: 0, left: 0, height: 100, width: 100 },
-                relativePosition: "bottom"
+                relativePosition: "bottom",
             },
             {
                 position: "bottom",
                 mockRefBoundingClientRect: { top: 150, bottom: 780, right: 768, left: 200, height: 100, width: 50 },
                 mockTooltipBoundingClientRect: { top: 0, bottom: 0, right: 0, left: 0, height: 100, width: 100 },
-                relativePosition: "top"
+                relativePosition: "top",
             },
             {
                 position: "left",
                 mockRefBoundingClientRect: { top: -100, bottom: 0, right: 768, left: 0, height: 100, width: 50 },
                 mockTooltipBoundingClientRect: { top: -100, bottom: 0, right: 0, left: 0, height: 100, width: 100 },
-                relativePosition: "bottom-left"
+                relativePosition: "bottom-left",
             },
             {
                 position: "top-left",
                 mockRefBoundingClientRect: { top: 200, bottom: 768, right: 200, left: -100, height: 100, width: 50 },
                 mockTooltipBoundingClientRect: { top: -100, bottom: 0, right: 0, left: 0, height: 100, width: 100 },
-                relativePosition: "right"
+                relativePosition: "right",
             },
             {
                 position: "top-right",
                 mockRefBoundingClientRect: { top: 0, bottom: 600, right: 1025, left: 0, height: 100, width: 50 },
                 mockTooltipBoundingClientRect: { top: 0, bottom: 0, right: 0, left: 0, height: 100, width: 100 },
-                relativePosition: "bottom-left"
+                relativePosition: "bottom-left",
             },
             {
                 position: "bottom-left",
                 mockRefBoundingClientRect: { top: 200, bottom: 300, right: 200, left: -500, height: 100, width: 50 },
                 mockTooltipBoundingClientRect: { top: -100, bottom: 0, right: 0, left: 0, height: 100, width: 100 },
-                relativePosition: "right"
+                relativePosition: "right",
             },
             {
                 position: "bottom-right",
                 mockRefBoundingClientRect: { top: 200, bottom: 300, right: 1025, left: 300, height: 100, width: 50 },
                 mockTooltipBoundingClientRect: { top: -100, bottom: 0, right: 0, left: 0, height: 100, width: 100 },
-                relativePosition: "top"
+                relativePosition: "top",
             },
             {
                 position: "left-top",
                 mockRefBoundingClientRect: { top: 50, bottom: 50, right: 200, left: 0, height: 100, width: 50 },
                 mockTooltipBoundingClientRect: { top: -100, bottom: 0, right: 0, left: 0, height: 100, width: 100 },
-                relativePosition: "bottom-left"
+                relativePosition: "bottom-left",
             },
             {
                 position: "left-bottom",
                 mockRefBoundingClientRect: { top: -100, bottom: 0, right: 500, left: -500, height: 100, width: 50 },
                 mockTooltipBoundingClientRect: { top: -100, bottom: 0, right: 0, left: 0, height: 100, width: 100 },
-                relativePosition: "bottom-right"
+                relativePosition: "bottom-right",
             },
             {
                 position: "right-top",
                 mockRefBoundingClientRect: { top: -100, bottom: 0, right: 768, left: 200, height: 100, width: 50 },
                 mockTooltipBoundingClientRect: { top: -100, bottom: 0, right: 0, left: 0, height: 100, width: 100 },
-                relativePosition: "bottom"
+                relativePosition: "bottom",
             },
             {
                 position: "right-bottom",
                 mockRefBoundingClientRect: { top: -100, bottom: 0, right: window.innerWidth + 200, left: 200, height: 100, width: 50 },
                 mockTooltipBoundingClientRect: { top: -100, bottom: 0, right: 0, left: 0, height: 100, width: 100 },
-                relativePosition: "bottom"
+                relativePosition: "bottom",
             },
         ];
         for (const testCase of positionTestCases) {
             test(`able to render on ${testCase.position} when tooltip is overflow on ${testCase.position}`, () => {
                 container.style.position = "relative";
-                act(() => { render(<div className="wrapper"><div className="reference">ref</div><div className="overlay">overlay</div></div>, container); });
+                act(() => {
+                    render(
+                        <div className="wrapper">
+                            <div className="reference">ref</div>
+                            <div className="overlay">overlay</div>
+                        </div>,
+                        container
+                    );
+                });
                 const referenceElement: HTMLDivElement = container.querySelector(".reference");
                 const overlayElement: HTMLDivElement = container.querySelector(".overlay");
                 const checker: OverlayPositionChecker = new OverlayPositionChecker(referenceElement, false);

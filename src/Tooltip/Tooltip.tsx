@@ -1,8 +1,8 @@
-import * as React from "react";
-import "./tooltip-style.scss";
+import React from "react";
 import { ElementPosition } from "../__utils/Overlay/placement";
 import { randomId } from "@sebgroup/frontend-tools/dist/randomId";
 import { Overlay } from "../__utils/Overlay/Overlay";
+import "./tooltip-style.scss";
 
 const InfoCircleIcon: JSX.Element = (
     <svg name="info-circle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">

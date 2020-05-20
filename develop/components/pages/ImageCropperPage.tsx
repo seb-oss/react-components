@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import { ImageCropper, OptionProps } from "../../../src/ImageCropper";
 import Highlight from "react-highlight";
 const docMD: string = require("../../../src/ImageCropper/readme.md");

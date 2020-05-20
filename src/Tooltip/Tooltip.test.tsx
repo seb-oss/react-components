@@ -1,5 +1,5 @@
-import * as React from "react";
-import { Tooltip, TooltipProps, TooltipPosition, TooltipTheme, TooltipTrigger, TooltipMessageGroupItem } from "./Tooltip";
+import React from "react";
+import { Tooltip, TooltipPosition, TooltipTheme, TooltipTrigger, TooltipMessageGroupItem } from "./Tooltip";
 import { unmountComponentAtNode, render } from "react-dom";
 import { act } from "react-dom/test-utils";
 

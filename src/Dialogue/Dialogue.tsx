@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import "./dialogue-style.scss";
 
 const TimesIcon: JSX.Element = (

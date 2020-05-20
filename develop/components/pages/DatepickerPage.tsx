@@ -1,6 +1,6 @@
-import * as React from "react";
+import React from "react";
 import { Datepicker } from "../../../src/Datepicker/Datepicker";
-import * as moment from "moment";
+import moment from "moment";
 import Highlight from "react-highlight";
 const docMD: string = require("../../../src/Datepicker/readme.md");
 

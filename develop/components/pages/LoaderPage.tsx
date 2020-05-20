@@ -1,9 +1,8 @@
-import * as React from "react";
+import React from "react";
 import { Loader } from "../../../src/Loader/Loader";
 import { Button } from "../../../src/Button/Button";
 import { TextBoxGroup } from "../../../src/TextBoxGroup/TextBoxGroup";
 import SampleContainer from "../../assets/svgs/sample-container.svg";
-
 import Highlight from "react-highlight";
 const docMD: string = require("../../../src/Loader/readme.md");
 

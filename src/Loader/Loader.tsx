@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import "./loader-style.scss";
 
 export interface LoaderProps {

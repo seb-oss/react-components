@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import { Slider, RangeSliderLabel, SliderTheme, SliderProps, SliderAppearance } from "../../../src/Slider/Slider";
 import { TextBoxGroup } from "../../../src/TextBoxGroup/TextBoxGroup";
 import { RadioListModel, RadioGroup } from "../../../src/RadioGroup/RadioGroup";

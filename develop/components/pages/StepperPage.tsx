@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import { Stepper } from "../../../src/Stepper/Stepper";
 import Highlight from "react-highlight";
 const docMD = require("../../../src/Stepper/readme.md");

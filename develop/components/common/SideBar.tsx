@@ -1,5 +1,5 @@
-import * as React from "react";
-import * as H from "history";
+import React from "react";
+import { History } from "history";
 import { sortBy } from "lodash";
 import { SideBarContent, SideBarItem } from "../../typings/generic.type";
 const sidebarData: SideBarContent = require("../../assets/components-list.json");
@@ -10,7 +10,7 @@ const others: Array<SideBarItem> = sortBy(sidebarData.other, "name");
 
 interface SideBarProps {
     toggle: boolean;
-    history: H.History;
+    history: History;
 }
 
 const SideBar: React.FunctionComponent<SideBarProps> = (props: SideBarProps): React.ReactElement<void> => {

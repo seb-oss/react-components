@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import { Timepicker, TimepickerValue, TimepickerDayperiodTypes } from "../../../src/Timepicker/Timepicker";
 import Highlight from "react-highlight";
 const docMD: string = require("../../../src/Timepicker/readme.md");

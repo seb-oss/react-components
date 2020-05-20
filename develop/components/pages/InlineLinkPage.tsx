@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import { InlineLink } from "../../../src/InlineLink/InlineLink";
 import Highlight from "react-highlight";
 const docMD: string = require("../../../src/InlineLink/readme.md");
