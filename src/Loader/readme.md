@@ -22,29 +22,24 @@ This React component supports customization and configurations. The component na
 ## Basic use
 
 ```html
-<Loader toggle="{true}" />
-```
-
-## Usage with button
-
-```html
- <Button label="Test Label" onClick={() => { alert('Button Clicked') }}>
-      <Loader toggle={true} fullscreen={false} />
-</Button>
+<!-- Basic -->
+<Loader />
+<!-- fullscreen with a text -->
+<Loader fullscreen>Loading, please wait...</Loader>
+<!-- inside a button -->
+<Button disabled>Saving...<Loader className="ml-2" /></Button>
 ```
 
 ## Properties
 
-These are the current available properties:
+This component extends all native attributes of `HTMLDivElement`, while offering the following customizations:
 
-| Property    | Type      | Description                                              |
-| ----------- | --------- | -------------------------------------------------------- |
-| className?  | `string`  | Element class                                            |
-| fullscreen? | `boolean` | Show the loader in fullscreen                            |
-| id?         | `string`  | Element id                                               |
-| size?       | `Size`    | Define the size of the loader<sup>1</sup>. (default: md) |
-| toggle      | `boolean` | Toggle                                                   |
-
-## Footnote
-
-1. Supported sizes: `lg` , `md`, `sm`
+| Property    | Type      | Description                                                                |
+| ----------- | --------- | -------------------------------------------------------------------------- |
+| size?       | `string`  | Loader size. Supported sizes: `xs`, `sm`, `md`, `lg`                       |
+| type?       | `string`  | Loader types. Supportes types: `spinner`, `square`                         |
+| cover?      | `boolean` | Have the loader take over it's parent                                      |
+| fullscreen? | `boolean` | Have the loader take over the screen                                       |
+| backdrop?   | `boolean` | Dims the background the background to indicate UI interactions are blocked |
+| srText?     | `string`  | Screen reader text. Default is `Loading...`                                |
+| toggle?     | `boolean` | Show or hide the loader. Default is `true`                                 |

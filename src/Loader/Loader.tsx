@@ -1,47 +1,56 @@
 import React from "react";
-import "./loader-style.scss";
+import classnames from "classnames";
+import "./loader.scss";
 
-export interface LoaderProps {
-    className?: string;
-    fullscreen?: boolean;
-    id?: string;
+export type LoaderSize = "xs" | "sm" | "md" | "lg";
+export type LoaderType = "spinner" | "square";
+export type LoaderProps = JSX.IntrinsicElements["div"] & {
+    /** Loader size. Supported sizes: `xs`, `sm`, `md`, `lg` */
     size?: LoaderSize;
-    toggle: boolean;
-}
+    /** Loader types. Supportes types: `spinner`, `square` */
+    type?: LoaderType;
+    /** Have the loader take over it's parent */
+    cover?: boolean;
+    /** Have the loader take over the screen */
+    fullscreen?: boolean;
+    /** Dims the background the background to indicate UI interactions are blocked */
+    backdrop?: boolean;
+    /** Screen reader text. Default is `Loading...` */
+    srText?: string;
+    /** Show or hide the loader. Default is `true` */
+    toggle?: boolean;
+};
 
-export type LoaderSize = "lg" | "md" | "sm";
+export const Loader: React.FC<LoaderProps> = React.memo(({ size = "md", type = "spinner", srText = "Loading...", toggle = true, fullscreen, cover, backdrop, ...props }: LoaderProps) => {
+    const [className, setClassName] = React.useState<string>("");
 
-export const Loader: React.FunctionComponent<LoaderProps> = React.memo(
-    (props: LoaderProps): React.ReactElement<void> => {
-        const [size, setSize] = React.useState<string>("");
-        const [className, setClassName] = React.useState<string>("seb-loader-wrapper");
+    React.useEffect(() => {
+        setClassName(
+            classnames(
+                "rc",
+                "loader",
+                {
+                    "loader-cover": cover,
+                    "loader-fullscreen": fullscreen && !cover,
+                    "loader-backdrop": backdrop,
+                    [`loader-${size}`]: size,
+                    [`loader-${type}`]: type,
+                },
+                props.className
+            )
+        );
+    }, [props.className, cover, fullscreen, size, type]);
 
-        React.useEffect(() => {
-            let classNameToSet: string = "seb-loader-wrapper";
-            classNameToSet += props.fullscreen !== undefined ? (props.fullscreen ? " fullscreen" : "") : "";
-            classNameToSet += props.className ? ` ${props.className}` : "";
-            setClassName(classNameToSet);
-        }, [props.className, props.fullscreen]);
-
-        React.useEffect(() => {
-            setSize(`loader-${props.size || "md"}`);
-        }, [props.size]);
-
-        return props.toggle ? (
-            <div className={className} id={props.id}>
-                <div className={"seb-loader" + (size ? ` ${size}` : "")}>
-                    <div className="seb-loader-container">
-                        <div className="seb-loader-rotator">
-                            <div className="seb-loader-left">
-                                <div className="seb-loader-circle" />
-                            </div>
-                            <div className="seb-loader-right">
-                                <div className="seb-loader-circle" />
-                            </div>
-                        </div>
-                    </div>
-                </div>
+    return (
+        toggle && (
+            <div {...props} className={className} role={props.role || "status"}>
+                <svg viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
+                    {type === "spinner" && <circle cx="33" cy="33" r="30" fill="none" />}
+                    {type === "square" && <rect x="0" y="0" width="100%" height="100%" />}
+                </svg>
+                {props.children}
+                <span className="sr-only">{srText}</span>
             </div>
-        ) : null;
-    }
-);
+        )
+    );
+});

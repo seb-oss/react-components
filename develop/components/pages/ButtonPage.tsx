@@ -64,7 +64,7 @@ const ButtonPage: React.FC = () => {
                         <Button title="Click me" theme={state.theme} onClick={null} disabled={state.disabled} block={state.block} size={state.size}>
                             {capitalize(state.theme).replace("-", " ")}
                             {state.hasIcon && <PencilIcon className="ml-2" fill="currentColor" />}
-                            {state.hasLoader && <Loader toggle={true} />}
+                            <Loader toggle={state.hasLoader} size="xs" className="ml-2" />
                         </Button>
                     </div>
 

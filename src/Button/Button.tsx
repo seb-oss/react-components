@@ -14,15 +14,15 @@ export type ButtonProps = JSX.IntrinsicElements["button"] & {
 };
 
 const Button: React.FC<ButtonProps> = React.memo(
-    ({ theme, size, block, className, ...props }: ButtonProps): React.ReactElement<void> => {
-        const [processedClassName, setProcessedClassName] = React.useState<string>("btn btn-primary");
+    ({ theme = "primary", size, block, ...props }: ButtonProps): React.ReactElement<void> => {
+        const [className, setClassName] = React.useState<string>("btn btn-primary");
 
         React.useEffect(() => {
-            setProcessedClassName(classnames(["btn", "btn-" + (theme || "primary"), size && "btn-" + size, { "btn-block": block }, className]));
-        }, [size, theme, block, className]);
+            setClassName(classnames("rc", "btn", `btn-${theme}`, { [`btn-${size}`]: size, "btn-block": block }, props.className));
+        }, [size, theme, block, props.className]);
 
         return (
-            <button {...props} className={processedClassName}>
+            <button {...props} className={className}>
                 {props.children}
             </button>
         );
