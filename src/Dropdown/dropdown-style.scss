@@ -1,4 +1,4 @@
-@import "../../node_modules/@sebgroup/bootstrap/scss/variables";
+@import "~@sebgroup/bootstrap/scss/core";
 
 $transition-time: 300ms;
 $icon-size: 18px;
@@ -246,6 +246,12 @@ $dropdown-toggle-height: 44px;
             }
         }
     }
+
+    &.has-error {
+        > .custom-dropdown-toggle {
+            border-color: $red;
+        }
+    }
 }
 
 .alert.custom-alert {
@@ -263,6 +269,14 @@ $dropdown-toggle-height: 44px;
 // Native version
 .custom-native-dropdown {
     margin-bottom: 8px;
+    /* for Firefox */
+    -moz-appearance: none;
+    /* for Chrome */
+    -webkit-appearance: none;
+    &::-ms-expand {
+        display: none;
+    }
+
     > .form-control {
         &.disabled {
             border-color: $gray-500;
@@ -274,6 +288,12 @@ $dropdown-toggle-height: 44px;
     > .dropdown-label {
         &.disabled {
             color: $gray-500;
+        }
+    }
+
+    &.has-error {
+        .custom-native-dropdown {
+            border-color: $red;
         }
     }
 }
