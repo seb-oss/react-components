@@ -1229,9 +1229,9 @@ const Table: React.FunctionComponent<TableProps> = React.memo(
             const updatedColumns: Array<TableHeader> = props.columns.map((column: TableHeader) => {
                 return {
                     ...column,
-                    isSorted: false,
+                    isSorted: column.isSorted || false,
                     canSort: column.canSort !== undefined ? column.canSort : !!props.sortProps ? true : false,
-                    isSortedDesc: false,
+                    isSortedDesc: column.isSortedDesc || false,
                     filters: column.filters || [],
                 };
             });

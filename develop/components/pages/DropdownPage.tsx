@@ -14,7 +14,7 @@ const DropdownPage: React.FunctionComponent = () => {
     const [error, setError] = React.useState<string>("");
 
     const handleToggleError = React.useCallback(() => {
-        setError((currentError) => (currentError === null ? "Example error message" : null));
+        setError((currentError) => (currentError === "" ? "Example error message" : ""));
     }, [setError]);
 
     return (
