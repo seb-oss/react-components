@@ -1,45 +1,27 @@
 import React from "react";
 import { randomId } from "@sebgroup/frontend-tools/dist/randomId";
+import classnames from "classnames";
 import "./toggle.scss";
 
-export interface ToggleProps {
-    className?: string;
-    disabled?: boolean;
-    id?: string;
+export type ToggleProps = JSX.IntrinsicElements["input"] & {
     label?: string;
-    name: string;
-    onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-    reference?: React.RefObject<any>;
-    value: boolean;
-}
+    inline?: boolean;
+    wrapperProps?: JSX.IntrinsicElements["div"];
+};
 
-export const Toggle: React.FunctionComponent<ToggleProps> = (props: ToggleProps): React.ReactElement<void> => {
-    const [id, setId] = React.useState<string>("");
+export const Toggle: React.FC<ToggleProps> = ({ wrapperProps, label, inline, ...props }: ToggleProps) => {
+    const [id, setId] = React.useState<string>(props.id);
 
-    React.useEffect(() => {
-        setId(props.id || randomId("toggle-"));
-    }, [props.id]);
+    React.useEffect(() => setId(props.id || (!!label ? randomId("toggle-") : null)), [props.id]);
 
     return (
-        <div className={"form-group custom-toggle" + (props.className ? ` ${props.className}` : "")}>
-            <div className="custom-control custom-slide-toggle">
-                <input
-                    className="custom-control-input"
-                    id={id}
-                    name={props.name}
-                    type="checkbox"
-                    checked={props.value}
-                    onChange={props.onChange}
-                    ref={props.reference}
-                    disabled={props.disabled}
-                    aria-checked={!!props.value}
-                    tabIndex={0}
-                    role="switch"
-                />
+        <div {...wrapperProps} className={classnames("seb", "custom-control", "custom-slide-toggle", { inline }, wrapperProps?.className)}>
+            <input {...props} className={classnames("custom-control-input", props.className)} id={id} type="checkbox" role={props.role || "switch"} />
+            {label && (
                 <label className="custom-control-label" htmlFor={id}>
-                    {props.label}
+                    {label}
                 </label>
-            </div>
+            )}
         </div>
     );
 };

@@ -17,10 +17,10 @@ export type CheckBoxProps = JSX.IntrinsicElements["input"] & {
     indicator?: Indicator;
 };
 
-const CheckBox: React.FunctionComponent<CheckBoxProps> = ({ inline, description, label, wrapperProps, indicator, ...props }: CheckBoxProps): React.ReactElement<void> => {
+const CheckBox: React.FC<CheckBoxProps> = ({ inline, description, label, wrapperProps, indicator, ...props }: CheckBoxProps) => {
     const [id, setId] = React.useState<string>(props.id);
 
-    React.useEffect(() => setId(props.id || label ? props.id || randomId("checkbox-") : null), [props.id, label]);
+    React.useEffect(() => setId(props.id || (label ? props.id || randomId("checkbox-") : null)), [props.id, label]);
 
     return (
         <div {...wrapperProps} className={classnames("seb", "checkbox", { inline }, wrapperProps?.className)}>

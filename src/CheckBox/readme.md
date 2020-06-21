@@ -39,6 +39,7 @@ This component extends all native attributes of `HTMLInputElement`, while offeri
 | inline?      | `boolean`               | Displays the checkbox inline                                |
 | label        | `string`                | Label to be displayed next to the checkbox                  |
 | indicator    | `Indicator`<sup>1</sup> | Indicator for error, warning or success                     |
+| wrapperProps | `HTMLDivElement`        | Div wrapper props                                           |
 
 ## Footnote
 

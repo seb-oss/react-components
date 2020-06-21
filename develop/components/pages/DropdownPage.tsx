@@ -107,8 +107,8 @@ const DropdownPage: React.FunctionComponent = () => {
                     </div>
 
                     <div className="result mt-5">
-                        <Toggle name="disabled-toggle" label="Disabled all" value={disabled} onChange={(e) => setDisabled(e.target.checked)} />
-                        <Toggle name="show-error-toggle" label="Show error messages" value={!!error} onChange={handleToggleError} />
+                        <Toggle name="disabled-toggle" label="Disabled all" checked={disabled} onChange={(e) => setDisabled(e.target.checked)} />
+                        <Toggle name="show-error-toggle" label="Show error messages" checked={!!error} onChange={handleToggleError} />
                     </div>
                 </div>
             </div>

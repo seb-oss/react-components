@@ -1,57 +1,62 @@
 import React from "react";
-import { shallow, ShallowWrapper, ReactWrapper, mount } from "enzyme";
-import { Toggle, ToggleProps } from "./Toggle";
+import { act } from "react-dom/test-utils";
+import { unmountComponentAtNode, render } from "react-dom";
+import { Toggle } from "./Toggle";
 
 describe("Component: Toggle ", () => {
-    const props: ToggleProps = {
-        value: true,
-        onChange: jest.fn(),
-        name: "myToggle",
-    };
-    let wrapper: ShallowWrapper<ToggleProps>;
+    let container: HTMLDivElement = null;
 
     beforeEach(() => {
-        wrapper = shallow(<Toggle {...props} />);
+        container = document.createElement("div");
+        document.body.appendChild(container);
+    });
+
+    afterEach(() => {
+        unmountComponentAtNode(container);
+        container.remove();
+        container = null;
     });
 
     it("Should render", () => {
-        expect(wrapper).toBeDefined();
-    });
-
-    it("Should pass custom class", () => {
-        const className: string = "myToggleClass";
-        wrapper.setProps({ className });
-        expect(wrapper.hasClass(className)).toBeTruthy();
-    });
-
-    it("Should pass custom id", () => {
-        let mountedWrapper: ReactWrapper<ToggleProps>;
-        const id: string = "my-toggle-id";
-        mountedWrapper = mount(<Toggle {...props} id={id} />);
-        expect(mountedWrapper.find(`#${id}`).length).toBeTruthy();
-        mountedWrapper = mount(<Toggle {...props} />);
-        expect(mountedWrapper.find("input").getElement().props.id).toBeTruthy();
-    });
-
-    it("Should fire change event when changed", () => {
-        wrapper.find("input").simulate("change", { target: { value: false } });
-        wrapper.find("input").simulate("focus", {
-            preventDefault: () => {
-                console.log("Its preventing the default");
-            },
-            stopPropagation: () => {
-                console.log("We are stopping propagation ");
-            },
+        act(() => {
+            render(<Toggle />, container);
         });
-        expect(props.onChange).toBeCalled();
+        expect(container.firstElementChild).not.toBeNull();
     });
 
-    it("Should render label and name", () => {
+    it("Should pass custom id and label", () => {
+        const id: string = "my-toggle-id";
         const label: string = "my toggle label";
-        const name: string = "my-toggle-name";
-        wrapper.setProps({ label, name });
-        expect(wrapper.find(".custom-control-label").length).toBe(1);
-        expect(wrapper.find(".custom-control-label").text()).toEqual(label);
-        expect(wrapper.find("input").getElement().props.name).toEqual(name);
+        act(() => {
+            render(<Toggle id={id} label={label} />, container);
+        });
+        expect(container.querySelector("input").id).toEqual(id);
+        expect(container.querySelector("label").getAttribute("for")).toEqual(id);
+        expect(container.querySelector("label").textContent).toEqual(label);
+    });
+
+    it("Should render with custom classnames and inline", () => {
+        const wrapperClassName: string = "myWrapperClassName";
+        const toggleClassName: string = "myToggleClassName";
+        act(() => {
+            render(<Toggle className={toggleClassName} wrapperProps={{ className: wrapperClassName }} inline />, container);
+        });
+        expect(container.firstElementChild.classList.contains("inline")).toBeTruthy();
+        expect(container.firstElementChild.classList.contains(wrapperClassName)).toBeTruthy();
+        expect(container.querySelector("input").classList.contains(toggleClassName)).toBeTruthy();
+    });
+
+    it("Should only generated random ID when no id is passed and there is a label", () => {
+        act(() => {
+            render(<Toggle />, container);
+        });
+        expect(container.querySelector("input").id.length).toBe(0);
+
+        unmountComponentAtNode(container);
+
+        act(() => {
+            render(<Toggle label="label" />, container);
+        });
+        expect(container.querySelector("input").id.length).toBeGreaterThan(0);
     });
 });
