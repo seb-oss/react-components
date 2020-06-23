@@ -52,6 +52,7 @@ These are the current available properties:
 | placeholder?       | `string`                                           | Optional text to display inside the toggle button when no item selected |
 | searchable?        | `boolean`                                          | Enables searching                                                       |
 | searchPlaceholder? | `string`                                           | Optional text to display inside the empty search bar                    |
+| selectAllLabel?    | `string`                                           | Optional text to display as select all label if `multi` is enabled      |
 | selectedValue      | `Array<DropdownItem> \| DropdownItem`              | An array of the currently selected dropdown item(s)                     |
 
 ## Important
