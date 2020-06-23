@@ -22,7 +22,6 @@ export type DropdownChangeEvent = DropdownItem | Array<DropdownItem> | React.Cha
 export interface DropdownProps {
     className?: string;
     clearable?: boolean;
-    selectAllLabel?: string;
     disabled?: boolean;
     error?: string;
     id?: string;
@@ -35,6 +34,7 @@ export interface DropdownProps {
     onChange: (event: DropdownChangeEvent) => void;
     placeholder?: string;
     searchable?: boolean;
+    selectAllText?: string;
     searchPlaceholder?: string;
     selectedValue: DropdownItem | Array<DropdownItem>;
 }
@@ -175,7 +175,7 @@ const Dropdown: React.FunctionComponent<DropdownProps> = (props: DropdownProps):
             id: "select-all",
             dropdownItem: {
                 value: "select-all",
-                label: props.selectAllLabel || "Select All",
+                label: props.selectAllText || "Select All",
             },
             selected: allSelected,
             className: `dropdown-item select-all custom-dropdown-item multi${allSelected ? " selected" : ""}`,

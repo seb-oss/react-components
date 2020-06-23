@@ -472,12 +472,12 @@ describe("Component: Dropdown", () => {
     });
 
     it("Should allow user to set custom label for select all item", () => {
-        const customLabel: string = "customLabel";
+        const customText: string = "customText";
         const props: DropdownProps = {
             ...DEFAULT_PROPS,
             selectedValue: [{ ...DEFAULT_PROPS.list[0] }],
             multi: true,
-            selectAllLabel: customLabel,
+            selectAllText: customText,
         };
 
         act(() => {
@@ -486,7 +486,7 @@ describe("Component: Dropdown", () => {
 
         const target: Element = container.querySelector("#select-all");
         expect(target).toBeTruthy();
-        expect(target.nextSibling.textContent).toBe(customLabel);
+        expect(target.nextSibling.textContent).toBe(customText);
     });
 
     it("Should toggle deselect all items when select all button is pressed and all items are already selected", () => {
