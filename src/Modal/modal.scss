@@ -1,78 +1,15 @@
-@keyframes custom-slideInUp {
-    0% {
-        transform: translate3d(0, 30%, 0);
-    }
-    100% {
-        transform: translate3d(0, 0, 0);
-    }
-}
+@import "../../node_modules/@sebgroup/bootstrap/scss/variables";
 
 .modal {
-    overflow: hidden;
-    opacity: 0;
-    height: 0;
-    display: block;
-
+    &.show {
+        display: block;
+    }
     > .modal-backdrop {
         position: absolute;
         top: 0;
         left: 0;
         right: 0;
-        background-color: rgba(0, 0, 0, 0.6);
+        background-color: rgba($black, 0.6);
         z-index: -1;
-    }
-
-    &.show {
-        height: 100%;
-        animation: fadeIn 200ms linear forwards;
-        &:not(.modal-aside) {
-            > .modal-dialog {
-                > .modal-content {
-                    animation: custom-slideInUp 200ms linear forwards;
-                }
-            }
-        }
-    }
-    &.fade {
-        height: 0;
-        animation: fadeOut 200ms linear forwards;
-    }
-}
-
-// TODO: This is a fix for a weird behaviour in bootstrap where the aside will be misplaced
-@media only screen and (min-width: 575px) and (max-width: 767px) {
-    .modal {
-        &.modal-aside {
-            &.modal-aside-right {
-                .modal-dialog {
-                    right: inherit;
-                }
-            }
-        }
-    }
-}
-
-@media only screen and (min-width: 576px) {
-    .modal {
-        &:not(.modal-fullscreen):not(.modal-aside) {
-            > .modal-dialog {
-                max-height: 90vh;
-                > .modal-content {
-                    border: none;
-                    max-height: 90vh;
-                    overflow: hidden;
-                }
-            }
-        }
-    }
-}
-
-@media only screen and (max-width: 575px) {
-    .modal {
-        > .modal-dialog {
-            > .modal-content {
-                max-height: 100vh;
-            }
-        }
     }
 }

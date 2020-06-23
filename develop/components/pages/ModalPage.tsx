@@ -10,6 +10,8 @@ class ModalPage extends React.Component<RouteComponentProps, Partial<ModalProps>
         toggle: false,
         fullscreen: false,
         position: null,
+        centered: false,
+        size: null,
         disableBackdropDismiss: false,
     };
 
@@ -50,6 +52,29 @@ class ModalPage extends React.Component<RouteComponentProps, Partial<ModalProps>
                                     this.toggleModal(e, { disableBackdropDismiss: true });
                                 }}
                             />
+                            <p>Modal Size</p>
+                            <div className="d-flex">
+                                <Button
+                                    className="mr-5"
+                                    label="Large Modal"
+                                    onClick={(e) => {
+                                        this.toggleModal(e, { size: "modal-lg" });
+                                    }}
+                                />
+                                <Button
+                                    label="Small Modal"
+                                    onClick={(e) => {
+                                        this.toggleModal(e, { size: "modal-sm" });
+                                    }}
+                                />
+                            </div>
+                            <p>Vertically Centered</p>
+                            <Button
+                                label="Vertically Centered"
+                                onClick={(e) => {
+                                    this.toggleModal(e, { centered: true });
+                                }}
+                            />
                             <p>Aside Modal</p>
                             <div className="d-flex">
                                 <Button
@@ -66,6 +91,22 @@ class ModalPage extends React.Component<RouteComponentProps, Partial<ModalProps>
                                     }}
                                 />
                             </div>
+                            <p>Aside Large Modal</p>
+                            <div className="d-flex">
+                                <Button
+                                    className="mr-5"
+                                    label="Open aside left"
+                                    onClick={(e) => {
+                                        this.toggleModal(e, { position: "left", size: "modal-lg" });
+                                    }}
+                                />
+                                <Button
+                                    label="Open aside right"
+                                    onClick={(e) => {
+                                        this.toggleModal(e, { position: "right", size: "modal-lg" });
+                                    }}
+                                />
+                            </div>
                             <p>Fullscreen modal</p>
                             <Button
                                 label="Open fullscreen modal"
@@ -78,9 +119,16 @@ class ModalPage extends React.Component<RouteComponentProps, Partial<ModalProps>
                                 fullscreen={this.state.fullscreen}
                                 disableBackdropDismiss={this.state.disableBackdropDismiss}
                                 position={this.state.position}
+                                centered={this.state.centered}
+                                size={this.state.size}
                                 onDismiss={this.toggleModal}
                                 header={<h3>Header</h3>}
-                                body={<p>This is the body</p>}
+                                body={
+                                    <div>
+                                        <p>This is the body</p>
+                                        {this.state.size && this.state.position && <img src={"https://via.placeholder.com/700"} />}
+                                    </div>
+                                }
                                 footer={<Button label="Close Modal" onClick={this.toggleModal} />}
                                 ariaLabel="My Label"
                                 ariaDescribedby="My Description"

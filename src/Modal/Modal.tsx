@@ -1,7 +1,8 @@
 import * as React from "react";
 import "./modal.scss";
 
-export type ModalPositionProp = "left" | "right";
+export type ModalPositionProp = "left" | "right" | null;
+export type ModalSizeProp = "modal-lg" | "modal-sm" | null;
 
 export interface ModalProps {
     ariaDescribedby?: string;
@@ -9,6 +10,8 @@ export interface ModalProps {
     body?: React.ReactNode;
     className?: string;
     disableBackdropDismiss?: boolean;
+    centered?: boolean;
+    size?: ModalSizeProp;
     footer?: React.ReactNode;
     fullscreen?: boolean;
     header?: React.ReactNode;
@@ -30,26 +33,16 @@ export const Modal: React.FunctionComponent<ModalProps> = (props: ModalProps): R
         }
     }
 
-    /**
-     * NOTE: Accessibility Feature
-     * @description Helps the user to use `tab` button to focus into elements inside the modal
-     */
-    function focusWhenToggled(el: HTMLDivElement): void {
-        if (props.toggle && el) {
-            el.focus();
-        }
-    }
-
-    let classNames: string = "modal";
-    classNames += props.toggle ? " show" : " fade";
-    classNames += !!props.position ? " modal-aside modal-aside-" + (props.position === "left" ? "left" : "right") : "";
+    let classNames: string = "modal fade";
+    classNames += props.toggle ? " show" : "";
+    classNames += !!props.position && props.toggle ? " modal-aside modal-aside-" + (props.position === "left" ? "left" : "right") : "";
     classNames += props.fullscreen ? " modal-fullscreen" : "";
-    classNames += props.className ? " " + props.className : "";
+    classNames += props.className ? ` ${props.className}` : "";
 
     return (
-        <div role="dialog" tabIndex={-1} className={classNames} id={props.id} ref={focusWhenToggled} aria-label={props.ariaLabel} aria-describedby={props.ariaDescribedby}>
+        <div role="dialog" tabIndex={-1} aria-modal="true" className={classNames} id={props.id} aria-label={props.ariaLabel} aria-describedby={props.ariaDescribedby}>
             <div className="modal-backdrop" onClick={onDismiss} />
-            <div role="document" className="modal-dialog" tabIndex={-1}>
+            <div role="document" className={"modal-dialog " + (props.centered ? " modal-dialog-centered" : "") + (props.size ? props.size : "")}>
                 <div className="modal-content">
                     {props.header && <div className="modal-header">{props.header}</div>}
                     {props.body && <div className="modal-body">{props.body}</div>}
