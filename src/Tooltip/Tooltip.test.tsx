@@ -22,6 +22,11 @@ type OverflowTestCase = PositionTestCase & {
 };
 describe("Component: Tooltip", () => {
     let container: HTMLDivElement = null;
+
+    beforeAll(() => {
+        jest.spyOn(console, "warn").mockImplementation(() => null);
+    });
+
     beforeEach(() => {
         container = document.createElement("div");
         document.body.appendChild(container);

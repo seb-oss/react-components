@@ -24,8 +24,8 @@
         "RadioGroup": "./src/RadioGroup/index.ts",
         "Rating": "./src/Rating/index.ts",
         "Slider": "./src/Slider/index.ts",
-        "StepTracker": "./src/StepTracker/index.ts",
         "Stepper": "./src/Stepper/index.ts",
+        "StepTracker": "./src/StepTracker/index.ts",
         "Table": "./src/Table/index.ts",
         "Tabs": "./src/Tabs/index.ts",
         "TextArea": "./src/TextArea/index.ts",
@@ -137,12 +137,12 @@
             "to": "./Slider/index.js"
         },
         {
-            "from": "./src/StepTracker/index.ts",
-            "to": "./StepTracker/index.js"
-        },
-        {
             "from": "./src/Stepper/index.ts",
             "to": "./Stepper/index.js"
+        },
+        {
+            "from": "./src/StepTracker/index.ts",
+            "to": "./StepTracker/index.js"
         },
         {
             "from": "./src/Table/index.ts",

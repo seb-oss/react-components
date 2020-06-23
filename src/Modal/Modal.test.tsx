@@ -95,7 +95,7 @@ describe("Component: Modal", () => {
 
     it("Should display warning when onDismiss is not passed", () => {
         const mountedWrapper: ReactWrapper<ModalProps> = mount(<Modal toggle={false} onDismiss={null} />);
-        const consoleWarn: jest.SpyInstance = jest.spyOn(console, "warn");
+        const consoleWarn: jest.SpyInstance = jest.spyOn(console, "warn").mockImplementation(() => null);
         mountedWrapper.find(".modal-backdrop").simulate("click");
         expect(consoleWarn).toBeCalled();
     });
