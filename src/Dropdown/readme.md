@@ -35,25 +35,26 @@ This React component supports customization and configurations. The component na
 
 These are the current available properties:
 
-| Property           | Type                                               | Description                                                             |
-| ------------------ | -------------------------------------------------- | ----------------------------------------------------------------------- |
-| className?         | `string`                                           | Custom class                                                            |
-| clearable?         | `boolean`                                          | Enables clearning the value, ignored if `multi` is enabled              |
-| disabled?          | `boolean`                                          | Disabled status                                                         |
-| error?             | `string`                                           | Optional error string to be displayed under the dropdown                |
-| id?                | `string`                                           | Element id                                                              |
-| label?             | `string`                                           | Optional label to display above the dropdown                            |
-| list               | `Array<DropdownItem>` <sup>1</sup>                 | An array of all the dropdown items to display                           |
-| more?              | `boolean`                                          | Version of the component with a more menu button alligned to the right  |
-| multi?             | `boolean`                                          | Enables selecting multiple choices                                      |
-| name?              | `string`                                           | Element name                                                            |
-| native?            | `boolean`                                          | A mobile friendly version using native `<select>` html element          |
-| onChange           | `(value: DropdownChangeEvent) => void`<sup>2</sup> | On change event callback                                                |
-| placeholder?       | `string`                                           | Optional text to display inside the toggle button when no item selected |
-| searchable?        | `boolean`                                          | Enables searching                                                       |
-| searchPlaceholder? | `string`                                           | Optional text to display inside the empty search bar                    |
-| selectAllText?    | `string`                                           | Optional text to display as select all label if `multi` is enabled      |
-| selectedValue      | `Array<DropdownItem> \| DropdownItem`              | An array of the currently selected dropdown item(s)                     |
+| Property                | Type                                               | Description                                                                  |
+| ----------------------- | -------------------------------------------------- | ---------------------------------------------------------------------------- |
+| className?              | `string`                                           | Custom class                                                                 |
+| clearable?              | `boolean`                                          | Enables clearning the value, ignored if `multi` is enabled                   |
+| disabled?               | `boolean`                                          | Disabled status                                                              |
+| error?                  | `string`                                           | Optional error string to be displayed under the dropdown                     |
+| id?                     | `string`                                           | Element id                                                                   |
+| label?                  | `string`                                           | Optional label to display above the dropdown                                 |
+| list                    | `Array<DropdownItem>` <sup>1</sup>                 | An array of all the dropdown items to display                                |
+| more?                   | `boolean`                                          | Version of the component with a more menu button alligned to the right       |
+| multi?                  | `boolean`                                          | Enables selecting multiple choices                                           |
+| name?                   | `string`                                           | Element name                                                                 |
+| native?                 | `boolean`                                          | A mobile friendly version using native `<select>` html element               |
+| onChange                | `(value: DropdownChangeEvent) => void`<sup>2</sup> | On change event callback                                                     |
+| placeholder?            | `string`                                           | Optional text to display inside the toggle button when no item selected      |
+| searchable?             | `boolean`                                          | Enables searching                                                            |
+| searchPlaceholder?      | `string`                                           | Optional text to display inside the empty search bar                         |
+| selectAllText?          | `string`                                           | Optional text to display when all options are selected if `multi` is enabled |
+| selectAllOptionText?    | `string`                                           | Optional text to display as select all label if `multi` is enabled           |
+| selectedValue           | `Array<DropdownItem> \| DropdownItem`              | An array of the currently selected dropdown item(s)                          |
 
 ## Important
 When `multi` and `native` props are used together the change event will return a change event as normal, however, setting the value will required processing of the change event. This is a sample implementation of it:

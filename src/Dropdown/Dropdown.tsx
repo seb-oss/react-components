@@ -34,6 +34,7 @@ export interface DropdownProps {
     onChange: (event: DropdownChangeEvent) => void;
     placeholder?: string;
     searchable?: boolean;
+    selectAllOptionText?: string;
     selectAllText?: string;
     searchPlaceholder?: string;
     selectedValue: DropdownItem | Array<DropdownItem>;
@@ -56,6 +57,7 @@ const moreIcon: JSX.Element = (
 );
 
 const Dropdown: React.FunctionComponent<DropdownProps> = (props: DropdownProps): React.ReactElement<void> => {
+    const selectedDisplayLength: number = 2;
     // COMPONENT INTERNAL STATE INIT ================================
     const [open, setOpen] = React.useState<boolean>(false);
     const [shouldFocus, setShouldFocus] = React.useState<boolean>(false);
@@ -175,7 +177,7 @@ const Dropdown: React.FunctionComponent<DropdownProps> = (props: DropdownProps):
             id: "select-all",
             dropdownItem: {
                 value: "select-all",
-                label: props.selectAllText || "Select All",
+                label: props.selectAllOptionText || "Select All",
             },
             selected: allSelected,
             className: `dropdown-item select-all custom-dropdown-item multi${allSelected ? " selected" : ""}`,
@@ -321,13 +323,17 @@ const Dropdown: React.FunctionComponent<DropdownProps> = (props: DropdownProps):
         }
         if (selectedList && selectedList.length > 0) {
             if (allSelected) {
-                return `All selected (${selectedList.length})`;
+                return props.selectAllText || `All selected (${selectedList.length})`;
             }
             if (props.multi) {
                 if (selectedList.length === 1) {
                     return selectedList[0].label;
                 }
-                return selectedList.length + " Selected"; // TODO should be like this example: 1st Item, 2nd Item... (+2)
+                const displayText: string = selectedList
+                    .slice(0, selectedDisplayLength)
+                    .map(({ label }: DropdownItem) => label)
+                    .join(", ");
+                return `${displayText}${selectedList.length > selectedDisplayLength ? `... (+${selectedList.slice(selectedDisplayLength).length})` : ""}`;
             }
             return (props.selectedValue as DropdownItem).label;
         }

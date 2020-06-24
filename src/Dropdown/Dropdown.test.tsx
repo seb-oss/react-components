@@ -1,5 +1,5 @@
 import React from "react";
-import { Dropdown, DropdownProps } from "./Dropdown";
+import { Dropdown, DropdownProps, DropdownItem } from "./Dropdown";
 import { unmountComponentAtNode, render } from "react-dom";
 import { act } from "react-dom/test-utils";
 
@@ -15,6 +15,7 @@ describe("Component: Dropdown", () => {
                 { label: "A", value: "a" },
                 { label: "B", value: "b" },
                 { label: "C", value: "c" },
+                { label: "D", value: "d" },
             ],
             onChange: jest.fn(),
             selectedValue: null,
@@ -213,7 +214,7 @@ describe("Component: Dropdown", () => {
         const title: Element = container.querySelector(".title");
         expect(title.innerHTML).toBe("Select ...");
         const options: NodeListOf<Element> = container.querySelectorAll(".custom-dropdown-item:not(.select-all)");
-        expect(options.length).toBe(3);
+        expect(options.length).toBe(props.list.length);
 
         act(() => {
             options.item(options.length - 1).dispatchEvent(new MouseEvent("click", { bubbles: true }));
@@ -231,7 +232,23 @@ describe("Component: Dropdown", () => {
             render(<Dropdown {...props} selectedValue={[{ ...DEFAULT_PROPS.list[0] }, { ...DEFAULT_PROPS.list[1] }]} />, container);
         });
 
-        expect(title.innerHTML).toBe("2 Selected");
+        expect(title.innerHTML).toBe(
+            DEFAULT_PROPS.list
+                .slice(0, 2)
+                .map(({ label }: DropdownItem) => label)
+                .join(", ")
+        );
+
+        act(() => {
+            render(<Dropdown {...props} selectedValue={DEFAULT_PROPS.list.slice(0, 3)} />, container);
+        });
+
+        expect(title.innerHTML).toBe(
+            `${DEFAULT_PROPS.list
+                .slice(0, 2)
+                .map(({ label }: DropdownItem) => label)
+                .join(", ")}... (+1)`
+        );
 
         act(() => {
             render(<Dropdown {...props} selectedValue={[...DEFAULT_PROPS.list]} />, container);
@@ -252,7 +269,7 @@ describe("Component: Dropdown", () => {
         });
 
         const options: NodeListOf<Element> = container.querySelectorAll(".custom-dropdown-item:not(.select-all)");
-        expect(options.length).toBe(3);
+        expect(options.length).toBe(props.list.length);
 
         expect(options.item(0).classList.contains("selected")).toBeTruthy();
         expect(options.item(1).classList.contains("selected")).toBeFalsy();
@@ -468,7 +485,7 @@ describe("Component: Dropdown", () => {
             render(<Dropdown {...props} selectedValue={props.list} />, container);
         });
 
-        expect(container.querySelectorAll(".custom-dropdown-item.selected").length).toBe(4);
+        expect(container.querySelectorAll(".custom-dropdown-item.selected").length).toBe(props.list.length + 1);
     });
 
     it("Should allow user to set custom label for select all item", () => {
@@ -477,7 +494,7 @@ describe("Component: Dropdown", () => {
             ...DEFAULT_PROPS,
             selectedValue: [{ ...DEFAULT_PROPS.list[0] }],
             multi: true,
-            selectAllText: customText,
+            selectAllOptionText: customText,
         };
 
         act(() => {
@@ -504,7 +521,7 @@ describe("Component: Dropdown", () => {
         expect(target).toBeTruthy();
 
         const selectedOptions: NodeListOf<Element> = container.querySelectorAll(".custom-dropdown-item.selected");
-        expect(selectedOptions.length).toBe(4);
+        expect(selectedOptions.length).toBe(props.list.length + 1);
 
         act(() => {
             target.dispatchEvent(new MouseEvent("click", { bubbles: true }));
@@ -532,7 +549,7 @@ describe("Component: Dropdown", () => {
         });
 
         const options: NodeListOf<Element> = container.querySelectorAll(".custom-dropdown-item");
-        expect(options.length).toBe(3);
+        expect(options.length).toBe(props.list.length);
 
         const searchInput: HTMLInputElement = container.querySelector(".search-input");
         expect(searchInput.getAttribute("value")).toBe("");
@@ -557,7 +574,7 @@ describe("Component: Dropdown", () => {
         });
 
         const options: NodeListOf<Element> = container.querySelectorAll(".custom-dropdown-item");
-        expect(options.length).toBe(3);
+        expect(options.length).toBe(props.list.length);
 
         options.forEach((option: Element) => {
             expect(option.classList.contains("highlighted")).toBeFalsy();
@@ -596,7 +613,7 @@ describe("Component: Dropdown", () => {
         const toggle: Element = container.querySelector(".custom-dropdown-toggle");
         expect(toggle).toBeTruthy();
         const options = container.querySelectorAll(".custom-dropdown-item");
-        expect(options.length).toBe(3);
+        expect(options.length).toBe(DEFAULT_PROPS.list.length);
 
         act(() => {
             toggle.dispatchEvent(new MouseEvent("click", { bubbles: true }));
@@ -613,6 +630,7 @@ describe("Component: Dropdown", () => {
         expect(options.item(0).classList.contains("highlighted")).toBeTruthy();
         expect(options.item(1).classList.contains("highlighted")).toBeFalsy();
         expect(options.item(2).classList.contains("highlighted")).toBeFalsy();
+        expect(options.item(3).classList.contains("highlighted")).toBeFalsy();
 
         act(() => {
             menu.dispatchEvent(new KeyboardEvent("keydown", { bubbles: true, key: "arrowdown" }));
@@ -621,6 +639,7 @@ describe("Component: Dropdown", () => {
         expect(options.item(0).classList.contains("highlighted")).toBeFalsy();
         expect(options.item(1).classList.contains("highlighted")).toBeTruthy();
         expect(options.item(2).classList.contains("highlighted")).toBeFalsy();
+        expect(options.item(3).classList.contains("highlighted")).toBeFalsy();
 
         act(() => {
             menu.dispatchEvent(new KeyboardEvent("keydown", { bubbles: true, key: "arrowup" }));
@@ -629,6 +648,7 @@ describe("Component: Dropdown", () => {
         expect(options.item(0).classList.contains("highlighted")).toBeTruthy();
         expect(options.item(1).classList.contains("highlighted")).toBeFalsy();
         expect(options.item(2).classList.contains("highlighted")).toBeFalsy();
+        expect(options.item(3).classList.contains("highlighted")).toBeFalsy();
 
         act(() => {
             menu.dispatchEvent(new KeyboardEvent("keydown", { bubbles: true, key: "arrowup" }));
@@ -637,6 +657,7 @@ describe("Component: Dropdown", () => {
         expect(options.item(0).classList.contains("highlighted")).toBeFalsy();
         expect(options.item(1).classList.contains("highlighted")).toBeFalsy();
         expect(options.item(2).classList.contains("highlighted")).toBeFalsy();
+        expect(options.item(3).classList.contains("highlighted")).toBeFalsy();
 
         act(() => {
             menu.dispatchEvent(new KeyboardEvent("keydown", { bubbles: true, key: "arrowup" }));
@@ -644,7 +665,8 @@ describe("Component: Dropdown", () => {
 
         expect(options.item(0).classList.contains("highlighted")).toBeFalsy();
         expect(options.item(1).classList.contains("highlighted")).toBeFalsy();
-        expect(options.item(2).classList.contains("highlighted")).toBeTruthy();
+        expect(options.item(2).classList.contains("highlighted")).toBeFalsy();
+        expect(options.item(3).classList.contains("highlighted")).toBeTruthy();
 
         act(() => {
             menu.dispatchEvent(new KeyboardEvent("keydown", { bubbles: true, key: "arrowdown" }));
@@ -653,6 +675,7 @@ describe("Component: Dropdown", () => {
         expect(options.item(0).classList.contains("highlighted")).toBeFalsy();
         expect(options.item(1).classList.contains("highlighted")).toBeFalsy();
         expect(options.item(2).classList.contains("highlighted")).toBeFalsy();
+        expect(options.item(3).classList.contains("highlighted")).toBeFalsy();
 
         act(() => {
             menu.dispatchEvent(new KeyboardEvent("keydown", { bubbles: true, key: "arrowdown" }));
@@ -661,6 +684,7 @@ describe("Component: Dropdown", () => {
         expect(options.item(0).classList.contains("highlighted")).toBeTruthy();
         expect(options.item(1).classList.contains("highlighted")).toBeFalsy();
         expect(options.item(2).classList.contains("highlighted")).toBeFalsy();
+        expect(options.item(3).classList.contains("highlighted")).toBeFalsy();
 
         act(() => {
             menu.dispatchEvent(new KeyboardEvent("keydown", { bubbles: true, key: "enter" }));
@@ -696,7 +720,7 @@ describe("Component: Dropdown", () => {
         const toggle: Element = container.querySelector(".custom-dropdown-toggle");
         expect(toggle).toBeTruthy();
         const options: NodeListOf<Element> = container.querySelectorAll(".custom-dropdown-item");
-        expect(options.length).toBe(4);
+        expect(options.length).toBe(props.list.length + 1);
 
         act(() => {
             toggle.dispatchEvent(new MouseEvent("click", { bubbles: true }));
@@ -804,7 +828,7 @@ describe("Component: Dropdown", () => {
         });
 
         const options: NodeListOf<Element> = container.querySelectorAll(".custom-dropdown-item:not(.search-input)");
-        expect(options.length).toBe(3);
+        expect(options.length).toBe(DEFAULT_PROPS.list.length);
         expect(options.item(0).classList.contains("highlighted")).toBeTruthy();
         expect(document.activeElement).toBe(options.item(0));
 
