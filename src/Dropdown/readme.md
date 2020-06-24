@@ -51,9 +51,8 @@ These are the current available properties:
 | onChange                | `(value: DropdownChangeEvent) => void`<sup>2</sup> | On change event callback                                                     |
 | placeholder?            | `string`                                           | Optional text to display inside the toggle button when no item selected      |
 | searchable?             | `boolean`                                          | Enables searching                                                            |
-| searchPlaceholder?      | `string`                                           | Optional text to display inside the empty search bar                         |
-| selectAllText?          | `string`                                           | Optional text to display when all options are selected if `multi` is enabled |
-| selectAllOptionText?    | `string`                                           | Optional text to display as select all label if `multi` is enabled           |
+| searchPlaceholder?      | `string`                                           | **```[Deprecated]```** Optional text to display inside the empty search bar  |        
+| placeholdersConfig?     | `DropdownPlaceholder`<sup>3</sup>                  | Optional text to display placeholder                                         |
 | selectedValue           | `Array<DropdownItem> \| DropdownItem`              | An array of the currently selected dropdown item(s)                          |
 
 ## Important
@@ -92,4 +91,15 @@ interface DropdownItem<T = any> {
     - Multi: `Array<DropdownItem>`
     - Native: `React.ChangeEvent<HTMLSelectElement>`
 
+3. `placedholdersConfig` items has an exported interface named `DropdownPlaceholder`
+
+```typescript
+interface DropdownPlaceholder {
+    searchText?: string;
+    selectAllOptionText?: string;
+    selectAllText?: string;
+    emptyText?: string;
+    noResultText?: string;
+}
+```
 

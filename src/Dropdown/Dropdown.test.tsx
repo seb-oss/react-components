@@ -3,6 +3,12 @@ import { Dropdown, DropdownProps, DropdownItem } from "./Dropdown";
 import { unmountComponentAtNode, render } from "react-dom";
 import { act } from "react-dom/test-utils";
 
+type CustomPlaceholderTestCase = {
+    statement: string;
+    props: DropdownProps;
+    expectCallback: () => void;
+};
+
 describe("Component: Dropdown", () => {
     let container: HTMLDivElement = null;
     let DEFAULT_PROPS: DropdownProps = null;
@@ -488,24 +494,6 @@ describe("Component: Dropdown", () => {
         expect(container.querySelectorAll(".custom-dropdown-item.selected").length).toBe(props.list.length + 1);
     });
 
-    it("Should allow user to set custom label for select all item", () => {
-        const customText: string = "customText";
-        const props: DropdownProps = {
-            ...DEFAULT_PROPS,
-            selectedValue: [{ ...DEFAULT_PROPS.list[0] }],
-            multi: true,
-            selectAllOptionText: customText,
-        };
-
-        act(() => {
-            render(<Dropdown {...props} />, container);
-        });
-
-        const target: Element = container.querySelector("#select-all");
-        expect(target).toBeTruthy();
-        expect(target.nextSibling.textContent).toBe(customText);
-    });
-
     it("Should toggle deselect all items when select all button is pressed and all items are already selected", () => {
         const props: DropdownProps = {
             ...DEFAULT_PROPS,
@@ -856,5 +844,122 @@ describe("Component: Dropdown", () => {
         const clearButton: Element = container.querySelector(".right-items > .dropdown-icon-holder:not(.chevron)");
         expect(clearButton).toBeTruthy();
         expect(clearButton.getAttribute("onclick")).toBeFalsy();
+    });
+
+    describe("Should allow user to set custom placeholder:", () => {
+        const customText: string = "customText";
+        const defaultProps: DropdownProps = {
+            list: [
+                { label: "A", value: "a" },
+                { label: "B", value: "b" },
+                { label: "C", value: "c" },
+                { label: "D", value: "d" },
+            ],
+            onChange: jest.fn(),
+            selectedValue: null,
+        };
+        const testCases: Array<CustomPlaceholderTestCase> = [
+            {
+                statement: "Custom select all option text",
+                props: {
+                    ...defaultProps,
+                    selectedValue: [{ ...defaultProps.list[0] }],
+                    multi: true,
+                    placeholdersConfig: {
+                        selectAllOptionText: customText,
+                    },
+                },
+                expectCallback: () => {
+                    const target: Element = container.querySelector("#select-all");
+                    expect(target).toBeTruthy();
+                    expect(target.nextSibling.textContent).toBe(customText);
+                },
+            },
+            {
+                statement: "Custom select all text",
+                props: {
+                    ...defaultProps,
+                    selectedValue: [...defaultProps.list],
+                    multi: true,
+                    placeholdersConfig: {
+                        selectAllText: customText,
+                    },
+                },
+                expectCallback: () => {
+                    expect(container.querySelector(".title").innerHTML).toBe(customText);
+                },
+            },
+            {
+                statement: "*Deprecated: Custom search text by setting searchPlaceholder",
+                props: {
+                    ...defaultProps,
+                    multi: true,
+                    searchable: true,
+                    searchPlaceholder: customText,
+                },
+                expectCallback: () => {
+                    expect(container.querySelector(".search-input").getAttribute("placeholder")).toBe(customText);
+                },
+            },
+            {
+                statement: "Custom search text",
+                props: {
+                    ...defaultProps,
+                    multi: true,
+                    searchable: true,
+                    placeholdersConfig: {
+                        searchText: customText,
+                    },
+                },
+                expectCallback: () => {
+                    expect(container.querySelector(".search-input").getAttribute("placeholder")).toBe(customText);
+                },
+            },
+            {
+                statement: "Custom no result text",
+                props: {
+                    ...defaultProps,
+                    multi: true,
+                    searchable: true,
+                    placeholdersConfig: {
+                        noResultText: customText,
+                    },
+                },
+                expectCallback: () => {
+                    const searchInput: HTMLInputElement = container.querySelector(".search-input");
+                    expect(searchInput.getAttribute("value")).toBe("");
+                    searchInput.setAttribute("value", "random value");
+
+                    act(() => {
+                        searchInput.dispatchEvent(new Event("change", { bubbles: true }));
+                    });
+                    const newOptions: NodeListOf<Element> = container.querySelectorAll(".custom-dropdown-item");
+                    expect(newOptions.length).toBe(1);
+                    expect(newOptions[0].querySelector(".label").innerHTML).toBe(customText);
+                },
+            },
+            {
+                statement: "Custom empty text",
+                props: {
+                    ...defaultProps,
+                    list: [],
+                    multi: true,
+                    placeholdersConfig: {
+                        emptyText: customText,
+                    },
+                },
+                expectCallback: () => {
+                    expect(container.querySelector(".title").innerHTML).toBe(customText);
+                },
+            },
+        ];
+        testCases.map((testCase: CustomPlaceholderTestCase) => {
+            it(testCase.statement, () => {
+                act(() => {
+                    render(<Dropdown {...testCase.props} />, container);
+                });
+                testCase.expectCallback();
+            });
+        });
     });
 });
