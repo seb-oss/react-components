@@ -1,38 +1,34 @@
-@import "../../node_modules/@sebgroup/bootstrap/scss/variables";
+@import "~@sebgroup/bootstrap/scss/variables";
 
-.form-group.custom-toggle {
-    > .custom-control.custom-slide-toggle {
+.seb.custom-control.custom-slide-toggle {
+    margin-top: 10px;
+    margin-bottom: 10px;
+
+    &.inline {
         display: inline-block;
-        margin-top: 10px;
-        margin-bottom: 10px;
-        > .custom-control-input {
-            &:disabled:not(:checked) {
-                & + label.custom-control-label {
-                    &:before {
-                        background-color: $gray-300;
-                    }
-                }
-            }
-            &:checked:disabled {
-                & + label.custom-control-label {
-                    &:before {
-                        background-color: $gray-500;
-                    }
-                }
-            }
-            &:not(:disabled) {
-                & + label.custom-control-label {
-                    cursor: pointer;
+        &:not(:last-child) {
+            margin-right: 40px;
+        }
+    }
+
+    > .custom-control-input {
+        &:disabled:not(:checked) {
+            & + label.custom-control-label {
+                &:before {
+                    background-color: $gray-300;
                 }
             }
         }
-        > .custom-control-label {
-            &:before,
-            &:after {
-                top: 2px;
+        &:checked:disabled {
+            & + label.custom-control-label {
+                &:before {
+                    background-color: $gray-500;
+                }
             }
-            &:after {
-                transition: left 200ms ease-in-out;
+        }
+        &:not(:disabled) {
+            & + label.custom-control-label {
+                cursor: pointer;
             }
         }
     }

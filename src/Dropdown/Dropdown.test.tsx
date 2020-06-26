@@ -7,6 +7,10 @@ describe("Component: Dropdown", () => {
     let container: HTMLDivElement = null;
     let DEFAULT_PROPS: DropdownProps = null;
 
+    beforeAll(() => {
+        jest.spyOn(console, "warn").mockImplementation(() => null);
+    });
+
     beforeEach(() => {
         container = document.createElement("div");
         document.body.appendChild(container);

@@ -14,17 +14,19 @@ describe("Component: Image", () => {
     function fakeImageConstructor(props: DivImageProps) {
         jest.useFakeTimers();
 
-        global["Image"] = class {
-            constructor() {
-                setTimeout(() => {
-                    const loadEv: Event = new Event("load", { bubbles: true });
-                    const errorEv: Event = new Event("error", { bubbles: true });
-                    jest.spyOn(loadEv, "currentTarget", "get").mockImplementation(() => ({ naturalHeight: 15, naturalWidth: 15 } as HTMLImageElement));
-                    ((this as unknown) as HTMLImageElement).onload(loadEv);
-                    ((this as unknown) as HTMLImageElement).onerror(errorEv);
-                }, 100);
-            }
-        };
+        Object.defineProperty(global, "Image", {
+            value: class {
+                constructor() {
+                    setTimeout(() => {
+                        const loadEv: Event = new Event("load", { bubbles: true });
+                        const errorEv: Event = new Event("error", { bubbles: true });
+                        jest.spyOn(loadEv, "currentTarget", "get").mockImplementation(() => ({ naturalHeight: 15, naturalWidth: 15 } as HTMLImageElement));
+                        ((this as unknown) as HTMLImageElement).onload(loadEv);
+                        ((this as unknown) as HTMLImageElement).onerror(errorEv);
+                    }, 100);
+                }
+            },
+        });
 
         act(() => {
             render(<DivImage {...props} />, container);
