@@ -19,6 +19,14 @@ interface DisplayDropdownItem extends UniqueDropdownItem {
 
 export type DropdownChangeEvent = DropdownItem | Array<DropdownItem> | React.ChangeEvent<HTMLSelectElement>;
 
+export interface DropdownPlaceholder {
+    searchText?: string;
+    selectAllOptionText?: string;
+    selectAllText?: string;
+    emptyText?: string;
+    noResultText?: string;
+}
+
 export interface DropdownProps {
     className?: string;
     clearable?: boolean;
@@ -34,6 +42,8 @@ export interface DropdownProps {
     onChange: (event: DropdownChangeEvent) => void;
     placeholder?: string;
     searchable?: boolean;
+    placeholdersConfig?: DropdownPlaceholder;
+    /** @deprecated use placedholdersConfig.searchText instead */
     searchPlaceholder?: string;
     selectedValue: DropdownItem | Array<DropdownItem>;
 }
@@ -55,6 +65,7 @@ const moreIcon: JSX.Element = (
 );
 
 const Dropdown: React.FunctionComponent<DropdownProps> = (props: DropdownProps): React.ReactElement<void> => {
+    const selectedDisplayLength: number = 2;
     // COMPONENT INTERNAL STATE INIT ================================
     const [open, setOpen] = React.useState<boolean>(false);
     const [shouldFocus, setShouldFocus] = React.useState<boolean>(false);
@@ -174,7 +185,7 @@ const Dropdown: React.FunctionComponent<DropdownProps> = (props: DropdownProps):
             id: "select-all",
             dropdownItem: {
                 value: "select-all",
-                label: "Select All",
+                label: props.placeholdersConfig?.selectAllOptionText || "Select All",
             },
             selected: allSelected,
             className: `dropdown-item select-all custom-dropdown-item multi${allSelected ? " selected" : ""}`,
@@ -316,17 +327,21 @@ const Dropdown: React.FunctionComponent<DropdownProps> = (props: DropdownProps):
     /** Returns the appropriate title for different situations and component types */
     const getTitleLabel = () => {
         if (uniqueList && uniqueList.length === 0) {
-            return "Empty";
+            return props.placeholdersConfig?.emptyText || "Empty";
         }
         if (selectedList && selectedList.length > 0) {
             if (allSelected) {
-                return `All selected (${selectedList.length})`;
+                return props.placeholdersConfig?.selectAllText || `All selected (${selectedList.length})`;
             }
             if (props.multi) {
                 if (selectedList.length === 1) {
                     return selectedList[0].label;
                 }
-                return selectedList.length + " Selected"; // TODO should be like this example: 1st Item, 2nd Item... (+2)
+                const displayText: string = selectedList
+                    .slice(0, selectedDisplayLength)
+                    .map(({ label }: DropdownItem) => label)
+                    .join(", ");
+                return `${displayText}${selectedList.length > selectedDisplayLength ? `... (+${selectedList.slice(selectedDisplayLength).length})` : ""}`;
             }
             return (props.selectedValue as DropdownItem).label;
         }
@@ -409,7 +424,7 @@ const Dropdown: React.FunctionComponent<DropdownProps> = (props: DropdownProps):
                             type="search"
                             className="search-input"
                             name="search-input"
-                            placeholder={props.searchPlaceholder || "Search ..."}
+                            placeholder={props.placeholdersConfig?.searchText || props.searchPlaceholder || "Search ..."}
                             value={searchText}
                             onChange={handleOnChangeSearch}
                         />
@@ -468,7 +483,7 @@ const Dropdown: React.FunctionComponent<DropdownProps> = (props: DropdownProps):
 
                 {displayList.length === 0 && (
                     <a className={`dropdown-item custom-dropdown-item disabled`}>
-                        <div className="label">No results</div>
+                        <div className="label">{props.placeholdersConfig?.noResultText || "No results"}</div>
                     </a>
                 )}
             </div>
