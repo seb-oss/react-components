@@ -13,7 +13,7 @@ export type LoaderProps = JSX.IntrinsicElements["div"] & {
     cover?: boolean;
     /** Have the loader take over the screen */
     fullscreen?: boolean;
-    /** Dims the background the background to indicate UI interactions are blocked */
+    /** Dims the background to indicate UI interactions are blocked */
     backdrop?: boolean;
     /** Screen reader text. Default is `Loading...` */
     srText?: string;
