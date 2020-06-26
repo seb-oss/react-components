@@ -13,6 +13,8 @@ describe("Component: Dropdown", () => {
     let container: HTMLDivElement = null;
     let DEFAULT_PROPS: DropdownProps = null;
 
+    beforeAll(() => jest.spyOn(console, "warn").mockImplementation(() => null));
+
     beforeEach(() => {
         container = document.createElement("div");
         document.body.appendChild(container);
@@ -865,7 +867,7 @@ describe("Component: Dropdown", () => {
                     ...defaultProps,
                     selectedValue: [{ ...defaultProps.list[0] }],
                     multi: true,
-                    placeholdersConfig: {
+                    placeholders: {
                         selectAllOptionText: customText,
                     },
                 },
@@ -881,7 +883,7 @@ describe("Component: Dropdown", () => {
                     ...defaultProps,
                     selectedValue: [...defaultProps.list],
                     multi: true,
-                    placeholdersConfig: {
+                    placeholders: {
                         selectAllText: customText,
                     },
                 },
@@ -907,7 +909,7 @@ describe("Component: Dropdown", () => {
                     ...defaultProps,
                     multi: true,
                     searchable: true,
-                    placeholdersConfig: {
+                    placeholders: {
                         searchText: customText,
                     },
                 },
@@ -921,7 +923,7 @@ describe("Component: Dropdown", () => {
                     ...defaultProps,
                     multi: true,
                     searchable: true,
-                    placeholdersConfig: {
+                    placeholders: {
                         noResultText: customText,
                     },
                 },
@@ -944,7 +946,7 @@ describe("Component: Dropdown", () => {
                     ...defaultProps,
                     list: [],
                     multi: true,
-                    placeholdersConfig: {
+                    placeholders: {
                         emptyText: customText,
                     },
                 },
