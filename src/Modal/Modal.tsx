@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import "./modal.scss";
 
 export type ModalPositionProp = "left" | "right" | null;
@@ -21,7 +21,8 @@ export interface ModalProps {
     toggle: boolean;
 }
 
-export const Modal: React.FunctionComponent<ModalProps> = (props: ModalProps): React.ReactElement<void> => {
+export const Modal: React.FC<ModalProps> = (props: ModalProps) => {
+    const mounted: React.MutableRefObject<boolean> = React.useRef<boolean>(false);
     /**
      * Dismisses the modal
      * @param {React.MouseEvent} event clicked element
@@ -33,16 +34,23 @@ export const Modal: React.FunctionComponent<ModalProps> = (props: ModalProps): R
         }
     }
 
-    let classNames: string = "modal fade";
-    classNames += props.toggle ? " show" : "";
-    classNames += !!props.position && props.toggle ? " modal-aside modal-aside-" + (props.position === "left" ? "left" : "right") : "";
+    let classNames: string = "seb modal";
+    classNames += props.toggle ? " show" : !mounted.current ? "" : " hide";
+    classNames += props.centered ? " modal-centered" : "";
+    classNames += !!props.position ? " modal-aside modal-aside-" + (props.position === "left" ? "left" : "right") : "";
     classNames += props.fullscreen ? " modal-fullscreen" : "";
     classNames += props.className ? ` ${props.className}` : "";
 
+    let dialogClassname: string = "modal-dialog";
+    dialogClassname += props.size ? ` ${props.size}` : "";
+
+    React.useEffect(() => {
+        mounted.current = true;
+    }, []);
+
     return (
-        <div role="dialog" tabIndex={-1} aria-modal="true" className={classNames} id={props.id} aria-label={props.ariaLabel} aria-describedby={props.ariaDescribedby}>
-            <div className="modal-backdrop" onClick={onDismiss} />
-            <div role="document" className={"modal-dialog " + (props.centered ? " modal-dialog-centered" : "") + (props.size ? props.size : "")}>
+        <div className={classNames} id={props.id} aria-label={props.ariaLabel} aria-describedby={props.ariaDescribedby} role="dialog" tabIndex={-1} aria-modal="true" onClick={onDismiss}>
+            <div role="document" className={dialogClassname} onClick={(e) => e.stopPropagation()}>
                 <div className="modal-content">
                     {props.header && <div className="modal-header">{props.header}</div>}
                     {props.body && <div className="modal-body">{props.body}</div>}
