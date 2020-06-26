@@ -19,7 +19,7 @@ interface DisplayDropdownItem extends UniqueDropdownItem {
 
 export type DropdownChangeEvent = DropdownItem | Array<DropdownItem> | React.ChangeEvent<HTMLSelectElement>;
 
-export interface DropdownPlaceholder {
+export interface DropdownPlaceholders {
     searchText?: string;
     selectAllOptionText?: string;
     selectAllText?: string;
@@ -42,7 +42,7 @@ export interface DropdownProps {
     onChange: (event: DropdownChangeEvent) => void;
     placeholder?: string;
     searchable?: boolean;
-    placeholdersConfig?: DropdownPlaceholder;
+    placeholders?: DropdownPlaceholders;
     /** @deprecated use placedholdersConfig.searchText instead */
     searchPlaceholder?: string;
     selectedValue: DropdownItem | Array<DropdownItem>;
@@ -185,7 +185,7 @@ const Dropdown: React.FunctionComponent<DropdownProps> = (props: DropdownProps):
             id: "select-all",
             dropdownItem: {
                 value: "select-all",
-                label: props.placeholdersConfig?.selectAllOptionText || "Select All",
+                label: props.placeholders?.selectAllOptionText || "Select All",
             },
             selected: allSelected,
             className: `dropdown-item select-all custom-dropdown-item multi${allSelected ? " selected" : ""}`,
@@ -327,11 +327,11 @@ const Dropdown: React.FunctionComponent<DropdownProps> = (props: DropdownProps):
     /** Returns the appropriate title for different situations and component types */
     const getTitleLabel = () => {
         if (uniqueList && uniqueList.length === 0) {
-            return props.placeholdersConfig?.emptyText || "Empty";
+            return props.placeholders?.emptyText || "Empty";
         }
         if (selectedList && selectedList.length > 0) {
             if (allSelected) {
-                return props.placeholdersConfig?.selectAllText || `All selected (${selectedList.length})`;
+                return props.placeholders?.selectAllText || `All selected (${selectedList.length})`;
             }
             if (props.multi) {
                 if (selectedList.length === 1) {
@@ -424,7 +424,7 @@ const Dropdown: React.FunctionComponent<DropdownProps> = (props: DropdownProps):
                             type="search"
                             className="search-input"
                             name="search-input"
-                            placeholder={props.placeholdersConfig?.searchText || props.searchPlaceholder || "Search ..."}
+                            placeholder={props.placeholders?.searchText || props.searchPlaceholder || "Search ..."}
                             value={searchText}
                             onChange={handleOnChangeSearch}
                         />
@@ -483,7 +483,7 @@ const Dropdown: React.FunctionComponent<DropdownProps> = (props: DropdownProps):
 
                 {displayList.length === 0 && (
                     <a className={`dropdown-item custom-dropdown-item disabled`}>
-                        <div className="label">{props.placeholdersConfig?.noResultText || "No results"}</div>
+                        <div className="label">{props.placeholders?.noResultText || "No results"}</div>
                     </a>
                 )}
             </div>
