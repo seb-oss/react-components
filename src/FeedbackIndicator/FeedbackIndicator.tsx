@@ -32,7 +32,7 @@ export const FeedbackIndicator: React.FC<FeedbackIndicatorProps> = React.memo(({
     }, [type]);
 
     return (
-        <div {...props} className={classnames("seb", "progress-feedback", `progress-${indicatorValue}`, { "wrapper-indicator": children }, props.className)}>
+        <div {...props} className={classnames("rc", "progress-feedback", `progress-${indicatorValue}`, { "wrapper-indicator": children }, props.className)}>
             {children && <div className="children">{children}</div>}
             {!!indicatorValue && message}
         </div>

@@ -1,62 +1,83 @@
 import React from "react";
+import classnames from "classnames";
 import "./modal.scss";
 
 export type ModalPositionProp = "left" | "right" | null;
-export type ModalSizeProp = "modal-lg" | "modal-sm" | null;
+export type ModalSizeProp = "lg" | "sm" | null;
 
-export interface ModalProps {
-    ariaDescribedby?: string;
-    ariaLabel?: string;
+export type ModalProps = JSX.IntrinsicElements["div"] & {
     body?: React.ReactNode;
-    className?: string;
     disableBackdropDismiss?: boolean;
     centered?: boolean;
     size?: ModalSizeProp;
     footer?: React.ReactNode;
     fullscreen?: boolean;
     header?: React.ReactNode;
-    id?: string;
     onDismiss: VoidFunction;
     position?: ModalPositionProp;
     toggle: boolean;
-}
+    disableCloseButton?: boolean;
+};
 
-export const Modal: React.FC<ModalProps> = (props: ModalProps) => {
-    const mounted: React.MutableRefObject<boolean> = React.useRef<boolean>(false);
-    /**
-     * Dismisses the modal
-     * @param {React.MouseEvent} event clicked element
-     */
-    function onDismiss(event: React.MouseEvent<HTMLDivElement>): void {
-        event && event.stopPropagation();
-        if (!props.disableBackdropDismiss) {
-            props.onDismiss ? props.onDismiss() : console.warn("onDismiss is compulsory in Modal!");
-        }
-    }
+export const Modal: React.FC<ModalProps> = React.memo(
+    ({ body, disableCloseButton, disableBackdropDismiss, centered, size, footer, fullscreen, header, onDismiss, position, toggle, ...props }: ModalProps) => {
+        const mounted: React.MutableRefObject<boolean> = React.useRef<boolean>(false);
+        const [className, setClassName] = React.useState<string>("seb modal");
 
-    let classNames: string = "seb modal";
-    classNames += props.toggle ? " show" : !mounted.current ? "" : " hide";
-    classNames += props.centered ? " modal-centered" : "";
-    classNames += !!props.position ? " modal-aside modal-aside-" + (props.position === "left" ? "left" : "right") : "";
-    classNames += props.fullscreen ? " modal-fullscreen" : "";
-    classNames += props.className ? ` ${props.className}` : "";
+        /**
+         * Dismisses the modal
+         * @param {React.MouseEvent} event clicked element
+         */
+        const onClick = React.useCallback(
+            (event: React.MouseEvent<HTMLDivElement | HTMLButtonElement>): void => {
+                event && event.stopPropagation();
+                if (!disableBackdropDismiss) {
+                    onDismiss ? onDismiss() : console.warn("onDismiss is compulsory in Modal!");
+                }
+            },
+            [disableBackdropDismiss, onDismiss]
+        );
 
-    let dialogClassname: string = "modal-dialog";
-    dialogClassname += props.size ? ` ${props.size}` : "";
+        React.useEffect(() => {
+            setClassName(
+                classnames(
+                    "rc",
+                    "modal",
+                    {
+                        show: toggle,
+                        hide: !toggle && mounted.current,
+                        "modal-centered": centered,
+                        "modal-fullscreen": fullscreen,
+                        [`modal-aside modal-aside-${position}`]: !!position,
+                    },
+                    props.className
+                )
+            );
+        }, [toggle, centered, position, fullscreen, props.className]);
 
-    React.useEffect(() => {
-        mounted.current = true;
-    }, []);
+        React.useEffect(() => {
+            mounted.current = true;
+        }, []);
 
-    return (
-        <div className={classNames} id={props.id} aria-label={props.ariaLabel} aria-describedby={props.ariaDescribedby} role="dialog" tabIndex={-1} aria-modal="true" onClick={onDismiss}>
-            <div role="document" className={dialogClassname} onClick={(e) => e.stopPropagation()}>
-                <div className="modal-content">
-                    {props.header && <div className="modal-header">{props.header}</div>}
-                    {props.body && <div className="modal-body">{props.body}</div>}
-                    {props.footer && <div className="modal-footer">{props.footer}</div>}
+        return (
+            <div {...props} className={className} role={props.role || "dialog"} tabIndex={-1} aria-modal="true" onClick={onClick}>
+                <div role="document" className={classnames("modal-dialog", { [`modal-${size}`]: size })} onClick={(e) => e.stopPropagation()}>
+                    <div className="modal-content">
+                        {header && (
+                            <div className="modal-header">
+                                {header}
+                                {!disableCloseButton && (
+                                    <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={onDismiss}>
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                )}
+                            </div>
+                        )}
+                        {body && <div className="modal-body">{body}</div>}
+                        {footer && <div className="modal-footer">{footer}</div>}
+                    </div>
                 </div>
             </div>
-        </div>
-    );
-};
+        );
+    }
+);

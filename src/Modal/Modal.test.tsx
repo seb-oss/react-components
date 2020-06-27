@@ -88,7 +88,7 @@ describe("Component: Modal", () => {
 
     it("Should have a header, body, and footer", () => {
         act(() => {
-            render(<Modal onDismiss={null} header={<h1>Header</h1>} body={<p>Body</p>} footer={<p>Footer</p>} toggle />, container);
+            render(<Modal disableCloseButton onDismiss={null} header={<h1>Header</h1>} body={<p>Body</p>} footer={<p>Footer</p>} toggle />, container);
         });
         expect(container.querySelector(".modal-header").textContent).toEqual("Header");
         expect(container.querySelector(".modal-body").textContent).toEqual("Body");
@@ -114,18 +114,6 @@ describe("Component: Modal", () => {
         expect(consoleWarn).toBeCalled();
     });
 
-    it("Should pass accessibility attributes", () => {
-        const ariaLabel: string = "myLabel";
-        const ariaDescribedby: string = "myDescription";
-        act(() => {
-            render(<Modal toggle={false} onDismiss={null} ariaLabel={ariaLabel} ariaDescribedby={ariaDescribedby} />, container);
-        });
-        expect(container.firstElementChild.hasAttribute("aria-label")).toBeTruthy();
-        expect(container.firstElementChild.getAttribute("aria-label")).toEqual(ariaLabel);
-        expect(container.firstElementChild.hasAttribute("aria-describedby")).toBeTruthy();
-        expect(container.firstElementChild.getAttribute("aria-describedby")).toEqual(ariaDescribedby);
-    });
-
     it("Should render centered", () => {
         act(() => {
             render(<Modal toggle centered onDismiss={null} />, container);
@@ -135,11 +123,11 @@ describe("Component: Modal", () => {
 
     it("Should render with lg and sm sizes", () => {
         act(() => {
-            render(<Modal toggle onDismiss={null} size="modal-lg" />, container);
+            render(<Modal toggle onDismiss={null} size="lg" />, container);
         });
         expect(container.firstElementChild.firstElementChild.classList.contains("modal-lg")).toBeTruthy();
         act(() => {
-            render(<Modal toggle onDismiss={null} size="modal-sm" />, container);
+            render(<Modal toggle onDismiss={null} size="sm" />, container);
         });
         expect(container.firstElementChild.firstElementChild.classList.contains("modal-sm")).toBeTruthy();
     });
@@ -153,6 +141,15 @@ describe("Component: Modal", () => {
             Simulate.click(container.firstElementChild.firstElementChild);
         });
         expect(onDismiss).not.toBeCalled();
+    });
+
+    it("Should dismiss when close button is clicked", () => {
+        const onDismiss: jest.Mock = jest.fn();
+        act(() => {
+            render(<Modal toggle onDismiss={onDismiss} header="test" />, container);
+        });
+        Simulate.click(container.querySelector("button.close"));
+        expect(onDismiss).toBeCalled();
     });
 
     it("Should start without `hide` class and add it after it's been dismissed at least once", () => {

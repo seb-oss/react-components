@@ -15,7 +15,7 @@ export const Toggle: React.FC<ToggleProps> = ({ wrapperProps, label, inline, ...
     React.useEffect(() => setId(props.id || (!!label ? randomId("toggle-") : null)), [props.id]);
 
     return (
-        <div {...wrapperProps} className={classnames("seb", "custom-control", "custom-slide-toggle", { inline }, wrapperProps?.className)}>
+        <div {...wrapperProps} className={classnames("rc", "custom-control", "custom-slide-toggle", { inline }, wrapperProps?.className)}>
             <input {...props} className={classnames("custom-control-input", props.className)} id={id} type="checkbox" role={props.role || "switch"} />
             {label && (
                 <label className="custom-control-label" htmlFor={id}>

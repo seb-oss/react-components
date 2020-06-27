@@ -1,6 +1,6 @@
 @import "~@sebgroup/bootstrap/scss/core";
 
-.seb.progress-feedback {
+.rc.progress-feedback {
     &.wrapper-indicator {
         &:before {
             content: none;
@@ -11,7 +11,7 @@
                 border: 1px solid currentColor;
             }
             &.progress-10 {
-                .seb.checkbox {
+                .rc.checkbox {
                     > .custom-checkbox {
                         > .custom-control-label {
                             &::before {
@@ -22,7 +22,7 @@
                 }
             }
             &.progress-50 {
-                .seb.checkbox {
+                .rc.checkbox {
                     > .custom-checkbox {
                         > .custom-control-label {
                             &::before {
@@ -33,7 +33,7 @@
                 }
             }
             &.progress-100 {
-                .seb.checkbox {
+                .rc.checkbox {
                     > .custom-checkbox {
                         > .custom-control-label {
                             &::before {

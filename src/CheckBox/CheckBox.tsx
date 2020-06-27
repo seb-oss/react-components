@@ -23,7 +23,7 @@ const CheckBox: React.FC<CheckBoxProps> = ({ inline, description, label, wrapper
     React.useEffect(() => setId(props.id || (label ? props.id || randomId("checkbox-") : null)), [props.id, label]);
 
     return (
-        <div {...wrapperProps} className={classnames("seb", "checkbox", { inline }, wrapperProps?.className)}>
+        <div {...wrapperProps} className={classnames("rc", "checkbox", { inline }, wrapperProps?.className)}>
             <div className={classnames("custom-control", "custom-checkbox", { "custom-control-inline": inline }, { [`is-${indicator?.type}`]: indicator })}>
                 <input {...props} type="checkbox" id={id} className={classnames("custom-control-input", props.className)} />
                 {label && (

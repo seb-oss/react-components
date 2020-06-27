@@ -2,8 +2,8 @@ $modal-sm-width: 300px;
 $modal-md-width: 500px;
 $modal-lg-width: 800px;
 
-div.seb.modal,
-div.seb.modal.modal-aside {
+div.rc.modal,
+div.rc.modal.modal-aside {
     display: flex;
     justify-content: center;
     height: 0;
@@ -25,7 +25,7 @@ div.seb.modal.modal-aside {
 }
 
 /** Normal Modal */
-div.seb.modal:not(.modal-aside):not(.modal-fullscreen) {
+div.rc.modal:not(.modal-aside):not(.modal-fullscreen) {
     > .modal-dialog {
         height: max-content;
         &:not(.modal-lg):not(.modal-sm) {
@@ -59,7 +59,7 @@ div.seb.modal:not(.modal-aside):not(.modal-fullscreen) {
     }
 }
 /** Aside Modal */
-div.seb.modal.modal-aside {
+div.rc.modal.modal-aside {
     > .modal-dialog {
         position: absolute;
     }
@@ -81,7 +81,7 @@ div.seb.modal.modal-aside {
     }
 }
 /** Fullscreen Modal */
-div.seb.modal.modal-fullscreen {
+div.rc.modal.modal-fullscreen {
     > .modal-dialog {
         position: absolute;
         left: 0;

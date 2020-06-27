@@ -3,6 +3,7 @@ import { Button } from "../../../src/Button";
 import { Modal, ModalProps } from "../../../src/Modal";
 import Highlight from "react-highlight";
 import docMD from "../../../src/Modal/readme.md";
+import { loremIpsum } from "lorem-ipsum";
 
 const initialState: ModalProps = {
     toggle: false,
@@ -14,8 +15,11 @@ const initialState: ModalProps = {
     onDismiss: null,
 };
 
+const dialogueBodyText: string = loremIpsum({ units: "sentences", count: 2 });
+
 const ModalPage: React.FC = React.memo(() => {
     const [modalProps, setModalProps] = React.useState<ModalProps>({ ...initialState });
+    const [dialogueToggle, setDialogueToggle] = React.useState<boolean>(false);
 
     const openModal = React.useCallback(
         (e: React.MouseEvent<HTMLButtonElement>, props: Partial<ModalProps> = {}) => {
@@ -45,10 +49,10 @@ const ModalPage: React.FC = React.memo(() => {
                         <Button onClick={(e) => openModal(e, { disableBackdropDismiss: true })}>No backdrop dismiss</Button>
                         <p>Modal Size</p>
                         <div className="d-flex">
-                            <Button className="mr-5" onClick={(e) => openModal(e, { size: "modal-lg" })}>
+                            <Button className="mr-5" onClick={(e) => openModal(e, { size: "lg" })}>
                                 Large Modal
                             </Button>
-                            <Button onClick={(e) => openModal(e, { size: "modal-sm" })}>Small Modal</Button>
+                            <Button onClick={(e) => openModal(e, { size: "sm" })}>Small Modal</Button>
                         </div>
                         <p>Vertically Centered</p>
                         <Button onClick={(e) => openModal(e, { centered: true })}>Vertically Centered</Button>
@@ -61,17 +65,19 @@ const ModalPage: React.FC = React.memo(() => {
                         </div>
                         <p>Aside Large Modal</p>
                         <div className="d-flex">
-                            <Button className="mr-5" onClick={(e) => openModal(e, { position: "left", size: "modal-lg" })}>
+                            <Button className="mr-5" onClick={(e) => openModal(e, { position: "left", size: "lg" })}>
                                 Open aside left
                             </Button>
-                            <Button onClick={(e) => openModal(e, { position: "right", size: "modal-lg" })}>Open aside right</Button>
+                            <Button onClick={(e) => openModal(e, { position: "right", size: "lg" })}>Open aside right</Button>
                         </div>
                         <p>Fullscreen modal</p>
                         <Button onClick={(e) => openModal(e, { fullscreen: true })}>Open fullscreen modal</Button>
+                        <p>Dialogue example</p>
+                        <Button onClick={(e) => setDialogueToggle(true)}>Dialogue</Button>
                         <Modal
                             {...modalProps}
                             onDismiss={onDismiss}
-                            header={<h3>Header</h3>}
+                            header={<h3 className="m-0">Header</h3>}
                             body={
                                 <div>
                                     <p>This is the body</p>
@@ -79,8 +85,24 @@ const ModalPage: React.FC = React.memo(() => {
                                 </div>
                             }
                             footer={<Button onClick={onDismiss}>Close Modal</Button>}
-                            ariaLabel="My Label"
-                            ariaDescribedby="My Description"
+                        />
+                        <Modal
+                            toggle={dialogueToggle}
+                            onDismiss={() => setDialogueToggle(false)}
+                            header={<h3 className="m-0">Are you sure?</h3>}
+                            disableBackdropDismiss
+                            body={
+                                <>
+                                    <p>{dialogueBodyText}</p>
+                                    <div className="text-right">
+                                        <Button className="mr-3" theme="outline-primary" onClick={() => setDialogueToggle(false)}>
+                                            Cancel
+                                        </Button>
+                                        <Button onClick={() => setDialogueToggle(false)}>Yes delete it!</Button>
+                                    </div>
+                                </>
+                            }
+                            centered
                         />
                     </div>
                 </div>

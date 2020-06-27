@@ -9,13 +9,11 @@
         "CheckBox": "./src/CheckBox/index.ts",
         "Chip": "./src/Chip/index.ts",
         "Datepicker": "./src/Datepicker/index.ts",
-        "Dialogue": "./src/Dialogue/index.ts",
         "DivImage": "./src/DivImage/index.ts",
         "Dropdown": "./src/Dropdown/index.ts",
         "FeedbackIndicator": "./src/FeedbackIndicator/index.ts",
         "Image": "./src/Image/index.ts",
         "ImageCropper": "./src/ImageCropper/index.ts",
-        "InlineLink": "./src/InlineLink/index.ts",
         "Loader": "./src/Loader/index.ts",
         "Modal": "./src/Modal/index.ts",
         "Notification": "./src/Notification/index.ts",
@@ -78,10 +76,6 @@
             "to": "./Datepicker/index.js"
         },
         {
-            "from": "./src/Dialogue/index.ts",
-            "to": "./Dialogue/index.js"
-        },
-        {
             "from": "./src/DivImage/index.ts",
             "to": "./DivImage/index.js"
         },
@@ -100,10 +94,6 @@
         {
             "from": "./src/ImageCropper/index.ts",
             "to": "./ImageCropper/index.js"
-        },
-        {
-            "from": "./src/InlineLink/index.ts",
-            "to": "./InlineLink/index.js"
         },
         {
             "from": "./src/Loader/index.ts",

@@ -174,11 +174,6 @@
             "filePath": "pages/TablePage"
         },
         {
-            "name": "Dialogue",
-            "path": "/dialogue",
-            "filePath": "pages/DialoguePage"
-        },
-        {
             "name": "Modal",
             "path": "/modal",
             "filePath": "pages/ModalPage"
@@ -197,11 +192,6 @@
             "name": "DivImage",
             "path": "/div-image",
             "filePath": "pages/DivImagePage"
-        },
-        {
-            "name": "Inline Link",
-            "path": "/inlinelink",
-            "filePath": "pages/InlineLinkPage"
         },
         {
             "name": "Video Holder",
