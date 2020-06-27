@@ -1,6 +1,6 @@
 import React from "react";
 import { shallow, ShallowWrapper } from "enzyme";
-import { Video, VideoProps, VideoSourceType } from "./Video";
+import { Video, VideoProps, VideoSourceType } from ".";
 
 describe("Component: Video ", () => {
     const props: VideoProps = {

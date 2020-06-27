@@ -30,7 +30,7 @@ export interface TextBoxProps {
     showErrorMessage?: boolean;
 }
 
-export const TextBox: React.FunctionComponent<TextBoxProps> = (props: TextBoxProps): React.ReactElement<void> => {
+export const TextBox: React.FC<TextBoxProps> = (props: TextBoxProps) => {
     const [id, setId] = React.useState<string>(null);
     const [showErrorMessage, setShowErrorMessage] = React.useState<boolean>(true);
 

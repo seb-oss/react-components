@@ -1,9 +1,8 @@
 import React from "react";
-import { act, Simulate } from "react-dom/test-utils";
+import { act } from "react-dom/test-utils";
 import { unmountComponentAtNode, render } from "react-dom";
-import { Accordion } from "./Accordion";
+import { Accordion, AccordionItem, AccordionItemProps } from ".";
 import { loremIpsum } from "lorem-ipsum";
-import { AccordionItem, AccordionItemProps } from "./AccordionItem";
 import { deepCopy } from "@sebgroup/frontend-tools/dist/deepCopy";
 
 describe("Component: Accordion", () => {

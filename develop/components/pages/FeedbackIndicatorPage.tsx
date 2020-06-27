@@ -1,9 +1,9 @@
 import React from "react";
-import { FeedbackIndicator, IndicatorType } from "../../../src/FeedbackIndicator/FeedbackIndicator";
+import { FeedbackIndicator, IndicatorType } from "../../../src/FeedbackIndicator";
 import Highlight from "react-highlight";
-import { CheckBox } from "../../../src/CheckBox/CheckBox";
+import { CheckBox } from "../../../src/CheckBox";
 import { Button } from "../../../src/Button";
-const docMD: string = require("../../../src/FeedbackIndicator/readme.md");
+import docMD from "../../../src/FeedbackIndicator/readme.md";
 
 const FeedbackIndicatorPage: React.FC = () => {
     const [message, setMessage] = React.useState<string>("");

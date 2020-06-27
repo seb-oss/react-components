@@ -1,13 +1,13 @@
 import React from "react";
-import { Slider, RangeSliderLabel, SliderTheme, SliderProps, SliderAppearance } from "../../../src/Slider/Slider";
-import { TextBoxGroup } from "../../../src/TextBoxGroup/TextBoxGroup";
-import { RadioListModel, RadioGroup } from "../../../src/RadioGroup/RadioGroup";
-import { CheckBox } from "../../../src/CheckBox/CheckBox";
-import { TextBox } from "../../../src/TextBox/TextBox";
+import { Slider, RangeSliderLabel, SliderTheme, SliderAppearance } from "../../../src/Slider";
+import { TextBoxGroup } from "../../../src/TextBoxGroup";
+import { RadioListModel, RadioGroup } from "../../../src/RadioGroup";
+import { CheckBox } from "../../../src/CheckBox";
+import { TextBox } from "../../../src/TextBox";
 import Highlight from "react-highlight";
-const docMD: string = require("../../../src/Slider/readme.md");
+import docMD from "../../../src/Slider/readme.md";
 
-const SliderPage: React.FunctionComponent = () => {
+const SliderPage: React.FC = () => {
     return (
         <div className="route-template p-5 container">
             <div className="info-holder">
@@ -18,7 +18,7 @@ const SliderPage: React.FunctionComponent = () => {
     );
 };
 
-const SliderDocs: React.FunctionComponent = React.memo(() => {
+const SliderDocs: React.FC = React.memo(() => {
     return (
         <div className="info">
             <div className="md-file">

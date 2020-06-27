@@ -1,7 +1,7 @@
 import React from "react";
 import { act } from "react-dom/test-utils";
 import { unmountComponentAtNode, render } from "react-dom";
-import { Loader, LoaderSize, LoaderType } from "./Loader";
+import { Loader, LoaderSize, LoaderType } from ".";
 
 describe("Component: Loader", () => {
     let container: HTMLDivElement = null;

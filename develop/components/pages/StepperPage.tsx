@@ -1,9 +1,9 @@
 import React from "react";
-import { Stepper } from "../../../src/Stepper/Stepper";
+import { Stepper } from "../../../src/Stepper";
 import Highlight from "react-highlight";
 const docMD = require("../../../src/Stepper/readme.md");
 
-const StepperPage: React.FunctionComponent = () => {
+const StepperPage: React.FC = () => {
     const [stepper, setStepper] = React.useState<number>(1);
 
     return (

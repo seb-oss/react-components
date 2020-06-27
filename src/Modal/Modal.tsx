@@ -16,7 +16,7 @@ export interface ModalProps {
     fullscreen?: boolean;
     header?: React.ReactNode;
     id?: string;
-    onDismiss: () => void;
+    onDismiss: VoidFunction;
     position?: ModalPositionProp;
     toggle: boolean;
 }

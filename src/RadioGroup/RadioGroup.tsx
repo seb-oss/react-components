@@ -22,7 +22,7 @@ export interface RadioGroupProps<T = any> {
     value: T;
 }
 
-export const RadioGroup: React.FunctionComponent<RadioGroupProps> = (props: RadioGroupProps): React.ReactElement<void> => {
+export const RadioGroup: React.FC<RadioGroupProps> = (props: RadioGroupProps) => {
     const [className, setClassName] = React.useState<string>("form-group custom-radio");
     const [idList, setIdList] = React.useState<Array<string>>([]);
 

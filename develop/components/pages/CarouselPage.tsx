@@ -1,11 +1,10 @@
 import React from "react";
-import { Carousel, CarouselItem } from "../../../src/Carousel";
+import { Carousel, CarouselItem, CarouselProps } from "../../../src/Carousel";
 import Highlight from "react-highlight";
-import { CarouselProps } from "../../../src/Carousel/Carousel";
 import classnames from "classnames";
-const docMD: string = require("../../../src/Carousel/readme.md");
+import docMD from "../../../src/Carousel/readme.md";
 
-const CarouselPage: React.FunctionComponent = () => {
+const CarouselPage: React.FC = () => {
     return (
         <div className="route-template container">
             <div className="info-holder">

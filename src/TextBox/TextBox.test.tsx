@@ -1,6 +1,6 @@
 import React from "react";
 import { shallow, mount, ShallowWrapper, ReactWrapper } from "enzyme";
-import { TextBox, TextBoxProps } from "./TextBox";
+import { TextBox, TextBoxProps } from ".";
 
 describe("Component: TextBox", () => {
     const props: TextBoxProps = {

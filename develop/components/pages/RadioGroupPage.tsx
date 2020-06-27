@@ -1,10 +1,10 @@
 import React from "react";
-import { RadioGroup, RadioListModel } from "../../../src/RadioGroup/RadioGroup";
-import { Tabs } from "../../../src/Tabs/Tabs";
+import { RadioGroup, RadioListModel } from "../../../src/RadioGroup";
+import { Tabs } from "../../../src/Tabs";
 import Highlight from "react-highlight";
-const docMD: string = require("../../../src/RadioGroup/readme.md");
+import docMD from "../../../src/RadioGroup/readme.md";
 
-const RadioGroupPage: React.FunctionComponent = () => {
+const RadioGroupPage: React.FC = () => {
     const [radioListSelected, setRadioListSelected] = React.useState<string>("second");
     const [tabValue, setTabValue] = React.useState<number>(0);
 

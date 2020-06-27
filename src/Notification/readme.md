@@ -38,7 +38,7 @@ These are the current available properties:
 | dismissTimeout? | `number`                                             | Dismiss timeout in miliseconds if not `dismissable` and not `persistant` (default: `5000`)      |
 | message         | `string`                                             | Notification message                                                                            |
 | onClick?        | `(event?: React.MouseEvent<HTMLDivElement>) => void` | Click handler                                                                                   |
-| onDismiss       | `() => void`                                         | Dismiss handler                                                                                 |
+| onDismiss       | `VoidFunction`                                       | Dismiss handler                                                                                 |
 | persist?        | `boolean`                                            | Persist notification until dismissed (default: `false`)                                         |
 | position?       | `string`                                             | Element position<sup>2</sup> (default: `bottom-left` on `slide-in` style, `top` on `bar` style) |
 | style?          | `string`                                             | Notification style<sup>1</sup> (default: `slide-in`)                                            |
@@ -55,7 +55,7 @@ These are the current available properties:
 ```typescript
 interface NotificationAction {
       text: string;
-      action: () => void;
+      action: VoidFunction;
 }
 ```
 

@@ -8,7 +8,7 @@ export interface ProgressBarProps {
     value: number;
 }
 
-export const ProgressBar: React.FunctionComponent<ProgressBarProps> = (props: ProgressBarProps): React.ReactElement<void> => {
+export const ProgressBar: React.FC<ProgressBarProps> = (props: ProgressBarProps) => {
     return (
         <div className={"custom-progress" + (props.className ? ` ${props.className}` : "")} id={props.id}>
             <div className={"custom-progress-bar" + (props.showProgress ? " show-progress" : "")} style={{ width: `${props.value}%` }} />

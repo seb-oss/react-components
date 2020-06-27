@@ -7,7 +7,7 @@ type NotificationTheme = "purple" | "primary" | "danger" | "success" | "warning"
 
 export interface NotificationAction {
     text: string;
-    action: () => void;
+    action: VoidFunction;
 }
 
 export interface NotificationProps {
@@ -17,7 +17,7 @@ export interface NotificationProps {
     dismissTimeout?: number;
     message?: string;
     onClick?: (event?: React.MouseEvent<HTMLDivElement>) => void;
-    onDismiss: () => void;
+    onDismiss: VoidFunction;
     persist?: boolean;
     position?: NotificationPosition;
     style?: NotificationStyle;

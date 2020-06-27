@@ -1,10 +1,10 @@
 import React from "react";
-import { Chart, ExtendedChartOptions } from "../../../src/Chart/Chart";
+import { Chart, ExtendedChartOptions } from "../../../src/Chart";
 import { ChartData, ChartOptions } from "chart.js";
 import Highlight from "react-highlight";
-const docMD: string = require("../../../src/Chart/readme.md");
+import docMD from "../../../src/Chart/readme.md";
 
-const ChartPage: React.FunctionComponent = () => {
+const ChartPage: React.FC = () => {
     function randomScalingFactor() {
         return Math.round(Math.random() * 100);
     }

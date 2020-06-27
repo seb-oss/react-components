@@ -1,6 +1,6 @@
 import React from "react";
 import { shallow, ShallowWrapper, ReactWrapper, mount } from "enzyme";
-import { RadioGroup, RadioGroupProps } from "./RadioGroup";
+import { RadioGroup, RadioGroupProps } from ".";
 
 describe("Component: RadioGroup", () => {
     const props: RadioGroupProps<string> = {

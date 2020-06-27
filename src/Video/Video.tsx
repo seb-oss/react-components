@@ -18,7 +18,7 @@ export interface VideoProps {
     width: string;
 }
 
-export const Video: React.FunctionComponent<VideoProps> = (props: VideoProps): React.ReactElement<void> => {
+export const Video: React.FC<VideoProps> = (props: VideoProps) => {
     return (
         <div className={"video-holder-component" + (props.className ? ` ${props.className}` : "")} id={props.id}>
             {props.sourceType === "local" && (

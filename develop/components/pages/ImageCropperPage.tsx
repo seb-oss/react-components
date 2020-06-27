@@ -1,9 +1,9 @@
 import React from "react";
 import { ImageCropper, OptionProps } from "../../../src/ImageCropper";
 import Highlight from "react-highlight";
-const docMD: string = require("../../../src/ImageCropper/readme.md");
+import docMD from "../../../src/ImageCropper/readme.md";
 
-const ImageCropperPage: React.FunctionComponent = () => {
+const ImageCropperPage: React.FC = () => {
     const [cropResult, setCropResult] = React.useState<any>("");
 
     return (

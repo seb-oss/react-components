@@ -1,10 +1,10 @@
 import React from "react";
-import { CheckBox, CheckBoxProps } from "../../../src/CheckBox/CheckBox";
+import { CheckBox, CheckBoxProps } from "../../../src/CheckBox";
 import Highlight from "react-highlight";
 import { loremIpsum } from "lorem-ipsum";
-import { RadioGroup, RadioListModel } from "../../../src/RadioGroup/RadioGroup";
-import { FeedbackIndicator, IndicatorType } from "../../../src/FeedbackIndicator/FeedbackIndicator";
-const docMD: string = require("../../../src/CheckBox/readme.md");
+import { RadioGroup, RadioListModel } from "../../../src/RadioGroup";
+import { FeedbackIndicator, IndicatorType } from "../../../src/FeedbackIndicator";
+import docMD from "../../../src/CheckBox/readme.md";
 
 type CheckboxPageState = {
     inline: boolean;
@@ -16,7 +16,7 @@ type CheckboxPageState = {
 
 const errorMessage: string = "Accept agreement and terms";
 
-const CheckBoxPage: React.FunctionComponent = () => {
+const CheckBoxPage: React.FC = () => {
     const [state, setState] = React.useState<CheckboxPageState>({
         inline: false,
         disabled: false,

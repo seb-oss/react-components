@@ -1,12 +1,12 @@
 import React from "react";
-import { Dropdown, DropdownProps, DropdownItem } from "./Dropdown";
+import { Dropdown, DropdownProps, DropdownItem } from ".";
 import { unmountComponentAtNode, render } from "react-dom";
 import { act } from "react-dom/test-utils";
 
 type CustomPlaceholderTestCase = {
     statement: string;
     props: DropdownProps;
-    expectCallback: () => void;
+    expectCallback: VoidFunction;
 };
 
 describe("Component: Dropdown", () => {

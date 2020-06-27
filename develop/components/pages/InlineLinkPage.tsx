@@ -1,9 +1,9 @@
 import React from "react";
-import { InlineLink } from "../../../src/InlineLink/InlineLink";
+import { InlineLink } from "../../../src/InlineLink";
 import Highlight from "react-highlight";
-const docMD: string = require("../../../src/InlineLink/readme.md");
+import docMD from "../../../src/InlineLink/readme.md";
 
-const InlineLinkPage: React.FunctionComponent = () => {
+const InlineLinkPage: React.FC = () => {
     return (
         <div className="route-template container">
             <div className="info-holder">

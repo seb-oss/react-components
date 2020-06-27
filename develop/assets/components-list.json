@@ -194,6 +194,11 @@
             "filePath": "pages/ImagePage"
         },
         {
+            "name": "DivImage",
+            "path": "/div-image",
+            "filePath": "pages/DivImagePage"
+        },
+        {
             "name": "Inline Link",
             "path": "/inlinelink",
             "filePath": "pages/InlineLinkPage"

@@ -2,9 +2,9 @@ import React from "react";
 import { Img } from ".";
 import { act } from "react-dom/test-utils";
 import { unmountComponentAtNode, render } from "react-dom";
-import { CommonImageProps } from "./CommonType";
+import { ImgProps } from ".";
 
-type TestCase = { prop: keyof CommonImageProps; className: string };
+type TestCase = { prop: keyof ImgProps; className: string };
 
 describe("Component: Image", () => {
     let container: HTMLDivElement = null;
@@ -35,7 +35,7 @@ describe("Component: Image", () => {
         ];
         testCases.map((testCase: TestCase) => {
             test(`- ${testCase.prop}`, () => {
-                const props: CommonImageProps = { [testCase.prop]: true };
+                const props: ImgProps = { [testCase.prop]: true };
                 act(() => {
                     render(<Img {...props} />, container);
                 });

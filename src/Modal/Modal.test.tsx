@@ -1,7 +1,7 @@
 import React from "react";
 import { unmountComponentAtNode, render } from "react-dom";
 import { act, Simulate } from "react-dom/test-utils";
-import { Modal } from "./Modal";
+import { Modal } from ".";
 
 describe("Component: Modal", () => {
     let container: HTMLDivElement = null;

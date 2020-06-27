@@ -5,12 +5,7 @@
         "module": "esnext",
         "moduleResolution": "node",
         "target": "es5",
-        "lib": [
-            "es2015",
-            "es6",
-            "es7",
-            "dom"
-        ],
+        "lib": ["es2015", "es6", "es7", "dom"],
         "jsx": "react",
         "declaration": false,
         "sourceMap": true,
@@ -19,9 +14,8 @@
         "noImplicitThis": false,
         "noImplicitAny": false,
         "strictNullChecks": false,
-        "allowSyntheticDefaultImports": true
+        "allowSyntheticDefaultImports": true,
+        "resolveJsonModule": true
     },
-    "exclude": [
-        "**/*.test.tsx"
-    ]
+    "exclude": ["**/*.test.tsx"]
 }

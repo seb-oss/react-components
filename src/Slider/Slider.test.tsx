@@ -1,5 +1,5 @@
 import React from "react";
-import { Slider, RangeSliderLabel, SliderProps, SliderTheme } from "./Slider";
+import { Slider, RangeSliderLabel, SliderProps, SliderTheme } from ".";
 import { unmountComponentAtNode, render } from "react-dom";
 import { act } from "react-dom/test-utils";
 

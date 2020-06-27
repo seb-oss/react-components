@@ -1,9 +1,8 @@
 import React from "react";
-import { Accordion } from "../../../src/Accordion/Accordion";
 import Highlight from "react-highlight";
 import { loremIpsum } from "lorem-ipsum";
-import { AccordionItemProps, AccordionItem } from "../../../src/Accordion/AccordionItem";
-const docMD: string = require("../../../src/Accordion/readme.md");
+import { Accordion, AccordionItemProps, AccordionItem } from "../../../src/Accordion";
+import docMD from "../../../src/Accordion/readme.md";
 
 const AccordionPage: React.FC = () => {
     const [lists] = React.useState<Array<Array<AccordionItemProps>>>([...Array(4)].map(() => generateList()));

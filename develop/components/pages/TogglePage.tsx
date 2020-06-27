@@ -2,14 +2,14 @@ import React from "react";
 import { Toggle } from "../../../src/Toggle";
 import Highlight from "react-highlight";
 import { CheckBox } from "../../../src/CheckBox";
-const docMD: string = require("../../../src/Toggle/readme.md");
+import docMD from "../../../src/Toggle/readme.md";
 
 type TogglePageState = {
     inline: boolean;
     disabled: boolean;
 };
 
-const TogglePage: React.FunctionComponent = () => {
+const TogglePage: React.FC = () => {
     const [state, setState] = React.useState<TogglePageState>({
         inline: false,
         disabled: false,

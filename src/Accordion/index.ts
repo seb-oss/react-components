@@ -1,1 +1,2 @@
-export { Accordion } from "./Accordion";
+export * from "./Accordion";
+export * from "./AccordionItem";

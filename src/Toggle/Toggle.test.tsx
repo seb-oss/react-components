@@ -1,7 +1,7 @@
 import React from "react";
 import { act } from "react-dom/test-utils";
 import { unmountComponentAtNode, render } from "react-dom";
-import { Toggle } from "./Toggle";
+import { Toggle } from ".";
 
 describe("Component: Toggle ", () => {
     let container: HTMLDivElement = null;

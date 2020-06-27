@@ -1,9 +1,9 @@
 import React from "react";
-import { Timepicker, TimepickerValue, TimepickerDayperiodTypes } from "../../../src/Timepicker/Timepicker";
+import { Timepicker, TimepickerValue, TimepickerDayperiodTypes } from "../../../src/Timepicker";
 import Highlight from "react-highlight";
-const docMD: string = require("../../../src/Timepicker/readme.md");
+import docMD from "../../../src/Timepicker/readme.md";
 
-const TimepickerPage: React.FunctionComponent = () => {
+const TimepickerPage: React.FC = () => {
     const [timepickerValue, setTimepickerValue] = React.useState<TimepickerValue>({ hours: 10, minutes: 0, dayperiod: TimepickerDayperiodTypes.AM });
 
     return (

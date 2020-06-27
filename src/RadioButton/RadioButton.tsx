@@ -19,7 +19,7 @@ export interface RadioButtonProps<T = any> {
     value: T;
 }
 
-const RadioButton: React.FunctionComponent<RadioButtonProps> = (props: RadioButtonProps): React.ReactElement<void> => {
+const RadioButton: React.FC<RadioButtonProps> = (props: RadioButtonProps) => {
     const [className, setClassName] = React.useState<string>("form-group custom-radio");
     const [id, setId] = React.useState<string>("");
 

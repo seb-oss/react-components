@@ -296,7 +296,7 @@ export class ImageCropper extends React.Component<ImageCropperProps, ImageCroppe
         return this.cropper.getData(rounded);
     }
 
-    crop(image: string, callBack: () => void) {
+    crop(image: string, callBack: VoidFunction) {
         if (this.props.onCrop) {
             this.props.onCrop(image);
         }
@@ -305,7 +305,7 @@ export class ImageCropper extends React.Component<ImageCropperProps, ImageCroppe
         });
     }
 
-    onResfreshCropper(image: string, callBack: () => void) {
+    onResfreshCropper(image: string, callBack: VoidFunction) {
         this.cropper.reset().clear().replace(image);
 
         return callBack();

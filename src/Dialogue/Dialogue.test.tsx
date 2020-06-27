@@ -1,5 +1,5 @@
 import React from "react";
-import { Dialogue } from "./Dialogue";
+import { Dialogue } from ".";
 import { unmountComponentAtNode, render } from "react-dom";
 import { act } from "react-dom/test-utils";
 

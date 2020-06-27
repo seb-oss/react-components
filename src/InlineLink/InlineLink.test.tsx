@@ -1,6 +1,6 @@
 import React from "react";
 import { shallow, ShallowWrapper } from "enzyme";
-import { InlineLink, InlineLinkProps } from "./InlineLink";
+import { InlineLink, InlineLinkProps } from ".";
 
 describe("Component: InlineLink", () => {
     let wrapper: ShallowWrapper<InlineLinkProps>;

@@ -1,10 +1,10 @@
 import React from "react";
-import { Notification, NotificationAction } from "../../../src/Notification/Notification";
-import { Button } from "../../../src/Button/Button";
+import { Notification, NotificationAction } from "../../../src/Notification";
+import { Button } from "../../../src/Button";
 import Highlight from "react-highlight";
-const docMD: string = require("../../../src/Notification/readme.md");
+import docMD from "../../../src/Notification/readme.md";
 
-const NotificationPage: React.FunctionComponent = () => {
+const NotificationPage: React.FC = () => {
     const [notification1Toggle, setNotification1Toggle] = React.useState<boolean>(false);
     const [notification2Toggle, setNotification2Toggle] = React.useState<boolean>(false);
     const [notification3Toggle, setNotification3Toggle] = React.useState<boolean>(false);

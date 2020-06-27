@@ -38,7 +38,7 @@ export interface TextBoxGroupProps {
     showErrorMessage?: boolean;
 }
 
-export const TextBoxGroup: React.FunctionComponent<TextBoxGroupProps> = (props: TextBoxGroupProps) => {
+export const TextBoxGroup: React.FC<TextBoxGroupProps> = (props: TextBoxGroupProps) => {
     const [id, setId] = React.useState<string>(null);
     const [showErrorMessage, setShowErrorMessage] = React.useState<boolean>(true);
 

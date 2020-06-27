@@ -184,7 +184,7 @@ interface TextboxGroupProps {
     value: string | number;
 }
 
-const TextboxGroup: React.FunctionComponent<TextboxGroupProps> = (props: TextboxGroupProps) => {
+const TextboxGroup: React.FC<TextboxGroupProps> = (props: TextboxGroupProps) => {
     return (
         <div className="form-group input-box-group">
             <div className="input-group">
@@ -204,7 +204,7 @@ interface ActionColumnProps {
     tableRef: React.RefObject<HTMLTableElement>;
 }
 
-const ActionColumn: React.FunctionComponent<ActionColumnProps> = (props: ActionColumnProps) => {
+const ActionColumn: React.FC<ActionColumnProps> = (props: ActionColumnProps) => {
     const [btnPrimaryRandomIds] = React.useState<string>(randomId("btn"));
     const [dropup, setDropup] = React.useState<boolean>(false);
     const actionRef: React.RefObject<HTMLDivElement> = React.createRef<HTMLDivElement>();
@@ -303,7 +303,7 @@ interface RowUIProps {
     useShowActionColumn: boolean;
 }
 
-const RowUI: React.FunctionComponent<RowUIProps> = (props: RowUIProps) => {
+const RowUI: React.FC<RowUIProps> = (props: RowUIProps) => {
     const [checkRowRandomIds] = React.useState<string>(randomId("chk-"));
 
     return (
@@ -418,7 +418,7 @@ interface FilterRowProps {
     filterProps: FilterProps;
 }
 
-const FilterRowUI: React.FunctionComponent<FilterRowProps> = (props: FilterRowProps) => {
+const FilterRowUI: React.FC<FilterRowProps> = (props: FilterRowProps) => {
     return (
         props.showFilterRow && (
             <tr className="tr-filter">
@@ -475,136 +475,134 @@ interface TableUIProps {
     filterProps: FilterProps;
 }
 
-const TableUI: React.FunctionComponent<TableUIProps> = React.memo(
-    (props: TableUIProps): React.ReactElement<void> => {
-        const [checkAllRandomIds] = React.useState<string>(randomId("chk-all"));
-        const tableRef: React.RefObject<HTMLTableElement> = React.createRef<HTMLTableElement>();
+const TableUI: React.FC<TableUIProps> = React.memo((props: TableUIProps) => {
+    const [checkAllRandomIds] = React.useState<string>(randomId("chk-all"));
+    const tableRef: React.RefObject<HTMLTableElement> = React.createRef<HTMLTableElement>();
 
-        return (
-            <div className={"table-responsive" + (props.loading ? " skeleton-loader skeleton-loader-table" : "")}>
-                <table className={"table" + (props.className ? ` ${props.className}` : "")} ref={tableRef}>
-                    <thead>
-                        <tr>
-                            {props.useRowSelection ? (
-                                <th>
-                                    <div className="custom-control custom-checkbox">
-                                        <input
-                                            type="checkbox"
-                                            className="custom-control-input"
-                                            id={checkAllRandomIds}
-                                            name="chkCheckAll"
-                                            checked={props.allRowsAreSelected}
-                                            onChange={props.onAllItemsSelected}
-                                        />
-                                        <label className="custom-control-label" htmlFor={checkAllRandomIds} />
-                                    </div>
-                                </th>
-                            ) : (
-                                props.rowsAreCollapsable && <th />
-                            )}
-                            {props.columns?.map((header: TableHeader, index: number) => {
-                                return !header.isHidden ? (
-                                    <th
-                                        key={index}
-                                        className={props.sortable && header.canSort ? "sortable" : ""}
-                                        onClick={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-                                            if (props.sortable && header.canSort) {
-                                                props.onSort(header?.accessor, header.isSortedDesc ? sortDirectionTypes.Ascending : sortDirectionTypes.Descending);
-                                            } else {
-                                                e.preventDefault();
-                                            }
-                                        }}
-                                    >
-                                        {header.label}
-                                        {props.sortable && header.canSort && (
-                                            <div role="link" className={"icon-holder" + (header.isSorted ? (header.isSortedDesc ? " desc" : " asc") : "")} id={header.accessor}>
-                                                {defaultSort}
-                                            </div>
-                                        )}
-                                    </th>
-                                ) : null;
-                            })}
-                            {props.useShowActionColumn && <th />}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <FilterRowUI
-                            showFilterRow={props.showFilterRow}
-                            columns={props.columns}
-                            useRowCollapse={props.useRowCollapse}
-                            filterProps={props.filterProps}
-                            useRowSelection={props.useRowSelection}
-                        />
-                        {props.rows?.map((row: TableRow, i: number) => {
-                            return (
-                                <React.Fragment key={row.rowIndex}>
-                                    <RowUI
-                                        row={row}
-                                        type="row"
-                                        tableRef={tableRef}
-                                        onActionDropped={props.onActionDropped}
-                                        onRowExpanded={props.onRowExpanded}
-                                        useShowActionColumn={props.useShowActionColumn}
-                                        rowsAreCollapsable={props.rowsAreCollapsable}
-                                        onItemSelected={props.onItemSelected}
-                                        primaryActionButton={props.primaryActionButton}
-                                        actionLinks={props.actionLinks}
-                                        useRowSelection={props.useRowSelection}
-                                        useRowCollapse={props.useRowCollapse}
-                                        columns={props.columns}
-                                        onChange={(e: React.ChangeEvent<HTMLInputElement>, updatedRow: TableRow) => {
-                                            props.onChange(e, updatedRow);
-                                        }}
+    return (
+        <div className={"table-responsive" + (props.loading ? " skeleton-loader skeleton-loader-table" : "")}>
+            <table className={"table" + (props.className ? ` ${props.className}` : "")} ref={tableRef}>
+                <thead>
+                    <tr>
+                        {props.useRowSelection ? (
+                            <th>
+                                <div className="custom-control custom-checkbox">
+                                    <input
+                                        type="checkbox"
+                                        className="custom-control-input"
+                                        id={checkAllRandomIds}
+                                        name="chkCheckAll"
+                                        checked={props.allRowsAreSelected}
+                                        onChange={props.onAllItemsSelected}
                                     />
-                                    {row.subRows?.map((subRow: TableRow) => {
-                                        return (
-                                            <React.Fragment key={`sub-row-${subRow.rowIndex}`}>
-                                                <RowUI
-                                                    row={subRow}
-                                                    type="subRow"
-                                                    tableRef={tableRef}
-                                                    onActionDropped={props.onActionDropped}
-                                                    onRowExpanded={props.onRowExpanded}
-                                                    useShowActionColumn={props.useShowActionColumn}
-                                                    rowsAreCollapsable={props.rowsAreCollapsable}
-                                                    onItemSelected={props.onItemSelected}
-                                                    primaryActionButton={props.primaryActionButton}
-                                                    actionLinks={props.actionLinks}
-                                                    useRowSelection={props.useRowSelection}
-                                                    onSubRowExpanded={props.onSubRowExpanded}
-                                                    useRowCollapse={props.useRowCollapse}
-                                                    columns={props.columns}
-                                                    parentRowIsExpanded={row.expanded}
-                                                    parentRowIndex={row.rowIndex}
-                                                    onChange={(e: React.ChangeEvent<HTMLInputElement>, updatedSubRow: TableRow) => {
-                                                        props.onChange(e, updatedSubRow, row.rowIndex);
-                                                    }}
-                                                />
-                                            </React.Fragment>
-                                        );
-                                    })}
-
-                                    <tr className="description-row" style={{ display: row.expanded ? "table-row" : "none" }}>
-                                        <td colSpan={sumCols(props.columns?.length, props.useRowSelection || props.useRowCollapse, props.useShowActionColumn, false)}>
-                                            <div className="description">{row.rowContentDetail}</div>
-                                        </td>
-                                    </tr>
-                                </React.Fragment>
-                            );
-                        })}
-                    </tbody>
-                    <tfoot>
-                        {props.footer && (
-                            <tr>
-                                <td colSpan={sumCols(props.columns?.length, props.useRowSelection || props.useRowCollapse, props.useShowActionColumn, false)}>{props.footer}</td>
-                            </tr>
+                                    <label className="custom-control-label" htmlFor={checkAllRandomIds} />
+                                </div>
+                            </th>
+                        ) : (
+                            props.rowsAreCollapsable && <th />
                         )}
-                    </tfoot>
-                </table>
-            </div>
-        );
-    }
-);
+                        {props.columns?.map((header: TableHeader, index: number) => {
+                            return !header.isHidden ? (
+                                <th
+                                    key={index}
+                                    className={props.sortable && header.canSort ? "sortable" : ""}
+                                    onClick={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+                                        if (props.sortable && header.canSort) {
+                                            props.onSort(header?.accessor, header.isSortedDesc ? sortDirectionTypes.Ascending : sortDirectionTypes.Descending);
+                                        } else {
+                                            e.preventDefault();
+                                        }
+                                    }}
+                                >
+                                    {header.label}
+                                    {props.sortable && header.canSort && (
+                                        <div role="link" className={"icon-holder" + (header.isSorted ? (header.isSortedDesc ? " desc" : " asc") : "")} id={header.accessor}>
+                                            {defaultSort}
+                                        </div>
+                                    )}
+                                </th>
+                            ) : null;
+                        })}
+                        {props.useShowActionColumn && <th />}
+                    </tr>
+                </thead>
+                <tbody>
+                    <FilterRowUI
+                        showFilterRow={props.showFilterRow}
+                        columns={props.columns}
+                        useRowCollapse={props.useRowCollapse}
+                        filterProps={props.filterProps}
+                        useRowSelection={props.useRowSelection}
+                    />
+                    {props.rows?.map((row: TableRow, i: number) => {
+                        return (
+                            <React.Fragment key={row.rowIndex}>
+                                <RowUI
+                                    row={row}
+                                    type="row"
+                                    tableRef={tableRef}
+                                    onActionDropped={props.onActionDropped}
+                                    onRowExpanded={props.onRowExpanded}
+                                    useShowActionColumn={props.useShowActionColumn}
+                                    rowsAreCollapsable={props.rowsAreCollapsable}
+                                    onItemSelected={props.onItemSelected}
+                                    primaryActionButton={props.primaryActionButton}
+                                    actionLinks={props.actionLinks}
+                                    useRowSelection={props.useRowSelection}
+                                    useRowCollapse={props.useRowCollapse}
+                                    columns={props.columns}
+                                    onChange={(e: React.ChangeEvent<HTMLInputElement>, updatedRow: TableRow) => {
+                                        props.onChange(e, updatedRow);
+                                    }}
+                                />
+                                {row.subRows?.map((subRow: TableRow) => {
+                                    return (
+                                        <React.Fragment key={`sub-row-${subRow.rowIndex}`}>
+                                            <RowUI
+                                                row={subRow}
+                                                type="subRow"
+                                                tableRef={tableRef}
+                                                onActionDropped={props.onActionDropped}
+                                                onRowExpanded={props.onRowExpanded}
+                                                useShowActionColumn={props.useShowActionColumn}
+                                                rowsAreCollapsable={props.rowsAreCollapsable}
+                                                onItemSelected={props.onItemSelected}
+                                                primaryActionButton={props.primaryActionButton}
+                                                actionLinks={props.actionLinks}
+                                                useRowSelection={props.useRowSelection}
+                                                onSubRowExpanded={props.onSubRowExpanded}
+                                                useRowCollapse={props.useRowCollapse}
+                                                columns={props.columns}
+                                                parentRowIsExpanded={row.expanded}
+                                                parentRowIndex={row.rowIndex}
+                                                onChange={(e: React.ChangeEvent<HTMLInputElement>, updatedSubRow: TableRow) => {
+                                                    props.onChange(e, updatedSubRow, row.rowIndex);
+                                                }}
+                                            />
+                                        </React.Fragment>
+                                    );
+                                })}
+
+                                <tr className="description-row" style={{ display: row.expanded ? "table-row" : "none" }}>
+                                    <td colSpan={sumCols(props.columns?.length, props.useRowSelection || props.useRowCollapse, props.useShowActionColumn, false)}>
+                                        <div className="description">{row.rowContentDetail}</div>
+                                    </td>
+                                </tr>
+                            </React.Fragment>
+                        );
+                    })}
+                </tbody>
+                <tfoot>
+                    {props.footer && (
+                        <tr>
+                            <td colSpan={sumCols(props.columns?.length, props.useRowSelection || props.useRowCollapse, props.useShowActionColumn, false)}>{props.footer}</td>
+                        </tr>
+                    )}
+                </tfoot>
+            </table>
+        </div>
+    );
+});
 
 export interface SearchProps {
     onSearch?: (rows: Array<TableRow>) => void;
@@ -651,631 +649,629 @@ export interface TableProps {
     editProps?: EditProps;
 }
 
-const Table: React.FunctionComponent<TableProps> = React.memo(
-    (props: TableProps): React.ReactElement<void> => {
-        const [allItemsChecked, setAllRowsChecked] = React.useState<boolean>(false);
-        const [currentTableRows, setCurrentTableRows] = React.useState<Array<TableRow>>([]);
-        const [hasAnOpenedAction, setAnOpenedAction] = React.useState<boolean>(false);
-        const [tableColumns, setTableColumn] = React.useState<Array<TableHeader>>([]);
-        const [tableRows, setTableRows] = React.useState<Array<TableRow>>([]);
-        const [tableRowsImage, setTableRowsImage] = React.useState<Array<TableRow>>([]);
+const Table: React.FC<TableProps> = React.memo((props: TableProps) => {
+    const [allItemsChecked, setAllRowsChecked] = React.useState<boolean>(false);
+    const [currentTableRows, setCurrentTableRows] = React.useState<Array<TableRow>>([]);
+    const [hasAnOpenedAction, setAnOpenedAction] = React.useState<boolean>(false);
+    const [tableColumns, setTableColumn] = React.useState<Array<TableHeader>>([]);
+    const [tableRows, setTableRows] = React.useState<Array<TableRow>>([]);
+    const [tableRowsImage, setTableRowsImage] = React.useState<Array<TableRow>>([]);
 
-        // events -------------------------------------------------------------------------------------
+    // events -------------------------------------------------------------------------------------
 
-        /**
-         * Call when item is selected
-         * @param e change event
-         * @param selectedRow The selected row
-         * @param type The row type (i.e either a row or subRow)
-         * @param rowIndex The index of the parent row incase of subRow
-         */
-        const onItemSelected = React.useCallback(
-            (e: React.ChangeEvent<HTMLInputElement>, selectedRow: TableRow, type: "subRow" | "row", rowIndex?: number): void => {
-                const updatedOriginalRows: Array<TableRow> = selectItems(e.target.checked, tableRows, selectedRow, rowIndex, type);
-                const updatedRows: Array<TableRow> = selectItems(e.target.checked, currentTableRows, selectedRow, rowIndex, type);
+    /**
+     * Call when item is selected
+     * @param e change event
+     * @param selectedRow The selected row
+     * @param type The row type (i.e either a row or subRow)
+     * @param rowIndex The index of the parent row incase of subRow
+     */
+    const onItemSelected = React.useCallback(
+        (e: React.ChangeEvent<HTMLInputElement>, selectedRow: TableRow, type: "subRow" | "row", rowIndex?: number): void => {
+            const updatedOriginalRows: Array<TableRow> = selectItems(e.target.checked, tableRows, selectedRow, rowIndex, type);
+            const updatedRows: Array<TableRow> = selectItems(e.target.checked, currentTableRows, selectedRow, rowIndex, type);
 
-                const selectedRowList: Array<TableRow> = updatedOriginalRows
-                    .filter((item: TableRow) => {
-                        return item.selected || item.subRows.some((sub: TableRow) => sub.selected);
-                    })
-                    .map((newRow: TableRow) => {
-                        return {
-                            ...newRow,
-                            subRows: newRow.subRows.filter((subRowItem: TableRow) => subRowItem.selected),
-                        };
-                    });
-
-                setCurrentTableRows(updatedRows);
-                setTableRows(updatedOriginalRows);
-                setTableRowsImage(updatedOriginalRows);
-                props.onRowSelected(selectedRowList);
-            },
-            [tableRows, currentTableRows, props.onRowSelected]
-        );
-
-        /**
-         *
-         * @param exchange
-         * Called onAllItemsSelected
-         */
-        const onAllItemsSelected = React.useCallback(
-            (e: React.ChangeEvent<HTMLInputElement>): void => {
-                const updatedOriginalRows: Array<TableRow> = tableRows?.map((originalRow: TableRow) => {
-                    const updatedSubRows: Array<TableRow> = originalRow.subRows.map((subRow: TableRow) => {
-                        return { ...subRow, selected: e.target.checked };
-                    });
-                    return { ...originalRow, selected: e.target.checked, subRows: updatedSubRows };
+            const selectedRowList: Array<TableRow> = updatedOriginalRows
+                .filter((item: TableRow) => {
+                    return item.selected || item.subRows.some((sub: TableRow) => sub.selected);
+                })
+                .map((newRow: TableRow) => {
+                    return {
+                        ...newRow,
+                        subRows: newRow.subRows.filter((subRowItem: TableRow) => subRowItem.selected),
+                    };
                 });
 
-                const updatedRows: Array<TableRow> = currentTableRows?.map((row: TableRow) => {
-                    const updatedSubRows: Array<TableRow> = row.subRows.map((subRow: TableRow) => {
-                        return { ...subRow, selected: e.target.checked };
+            setCurrentTableRows(updatedRows);
+            setTableRows(updatedOriginalRows);
+            setTableRowsImage(updatedOriginalRows);
+            props.onRowSelected(selectedRowList);
+        },
+        [tableRows, currentTableRows, props.onRowSelected]
+    );
+
+    /**
+     *
+     * @param exchange
+     * Called onAllItemsSelected
+     */
+    const onAllItemsSelected = React.useCallback(
+        (e: React.ChangeEvent<HTMLInputElement>): void => {
+            const updatedOriginalRows: Array<TableRow> = tableRows?.map((originalRow: TableRow) => {
+                const updatedSubRows: Array<TableRow> = originalRow.subRows.map((subRow: TableRow) => {
+                    return { ...subRow, selected: e.target.checked };
+                });
+                return { ...originalRow, selected: e.target.checked, subRows: updatedSubRows };
+            });
+
+            const updatedRows: Array<TableRow> = currentTableRows?.map((row: TableRow) => {
+                const updatedSubRows: Array<TableRow> = row.subRows.map((subRow: TableRow) => {
+                    return { ...subRow, selected: e.target.checked };
+                });
+                return { ...row, selected: e.target.checked, subRows: updatedSubRows };
+            });
+
+            setCurrentTableRows(updatedRows);
+            setTableRows(updatedOriginalRows);
+            setTableRowsImage(updatedOriginalRows);
+
+            if (e.target.checked) {
+                props.onRowSelected(updatedOriginalRows);
+            } else {
+                props.onRowSelected([]);
+            }
+        },
+        [tableRows, currentTableRows, props.onRowSelected]
+    );
+
+    /**
+     * Close all opened actions div
+     */
+    const onClickOutside = React.useCallback(
+        (e: MouseEvent) => {
+            const parentElement: Element = (e.target as Element).parentElement;
+            if (hasAnOpenedAction && parentElement.id.indexOf("ellipsis") < 0 && !parentElement.classList.contains("dropdown-content")) {
+                const updatedOriginalRows: Array<TableRow> = tableRows?.map((originalRow: TableRow) => {
+                    const subRows: Array<TableRow> = originalRow.subRows.map((subRow: TableRow) => {
+                        return { ...subRow, actionsDropdownDropped: false };
                     });
-                    return { ...row, selected: e.target.checked, subRows: updatedSubRows };
+                    return { ...originalRow, actionsDropdownDropped: false, subRows };
+                });
+
+                const updatedRows: Array<TableRow> = currentTableRows?.map((currentRow: TableRow) => {
+                    const subRows: Array<TableRow> = currentRow.subRows.map((subRow: TableRow) => {
+                        return { ...subRow, actionsDropdownDropped: false };
+                    });
+                    return { ...currentRow, actionsDropdownDropped: false, subRows };
                 });
 
                 setCurrentTableRows(updatedRows);
                 setTableRows(updatedOriginalRows);
                 setTableRowsImage(updatedOriginalRows);
+            }
+        },
+        [hasAnOpenedAction, tableRows, currentTableRows]
+    );
 
-                if (e.target.checked) {
-                    props.onRowSelected(updatedOriginalRows);
-                } else {
-                    props.onRowSelected([]);
-                }
-            },
-            [tableRows, currentTableRows, props.onRowSelected]
-        );
-
-        /**
-         * Close all opened actions div
-         */
-        const onClickOutside = React.useCallback(
-            (e: MouseEvent) => {
-                const parentElement: Element = (e.target as Element).parentElement;
-                if (hasAnOpenedAction && parentElement.id.indexOf("ellipsis") < 0 && !parentElement.classList.contains("dropdown-content")) {
-                    const updatedOriginalRows: Array<TableRow> = tableRows?.map((originalRow: TableRow) => {
-                        const subRows: Array<TableRow> = originalRow.subRows.map((subRow: TableRow) => {
-                            return { ...subRow, actionsDropdownDropped: false };
-                        });
-                        return { ...originalRow, actionsDropdownDropped: false, subRows };
-                    });
-
-                    const updatedRows: Array<TableRow> = currentTableRows?.map((currentRow: TableRow) => {
-                        const subRows: Array<TableRow> = currentRow.subRows.map((subRow: TableRow) => {
-                            return { ...subRow, actionsDropdownDropped: false };
-                        });
-                        return { ...currentRow, actionsDropdownDropped: false, subRows };
-                    });
-
-                    setCurrentTableRows(updatedRows);
-                    setTableRows(updatedOriginalRows);
-                    setTableRowsImage(updatedOriginalRows);
-                }
-            },
-            [hasAnOpenedAction, tableRows, currentTableRows]
-        );
-
-        /**
-         *
-         * @param event click event
-         * @param row The selected row
-         * @param rowIndex The index of the parent row
-         */
-        const onActionColumnDropped = React.useCallback(
-            (event: React.MouseEvent<HTMLDivElement, MouseEvent>, row: TableRow, rowIndex?: number) => {
-                let updatedOriginalRows: Array<TableRow> = [];
-                let updatedRows: Array<TableRow> = [];
-                if (rowIndex) {
-                    updatedOriginalRows = tableRows?.map((originalRow: TableRow) => {
-                        if (originalRow.rowIndex === rowIndex) {
-                            const subRows: Array<TableRow> = originalRow.subRows.map((subRow: TableRow) => {
-                                if (subRow.rowIndex === row.rowIndex) {
-                                    return { ...subRow, actionsDropdownDropped: !subRow.actionsDropdownDropped };
-                                }
-
-                                return { ...subRow, actionsDropdownDropped: false };
-                            });
-
-                            return { ...originalRow, subRows };
-                        }
-                        return { ...originalRow, actionsDropdownDropped: false };
-                    });
-
-                    updatedRows = currentTableRows?.map((currentRow: TableRow) => {
-                        if (currentRow.rowIndex === rowIndex) {
-                            const subRows: Array<TableRow> = currentRow.subRows.map((subRow: TableRow) => {
-                                if (subRow.rowIndex === row.rowIndex) {
-                                    return { ...subRow, actionsDropdownDropped: !subRow.actionsDropdownDropped };
-                                }
-
-                                return { ...subRow, actionsDropdownDropped: false };
-                            });
-
-                            return { ...currentRow, subRows };
-                        }
-                        return { ...currentRow, actionsDropdownDropped: false };
-                    });
-                } else {
-                    updatedOriginalRows = tableRows?.map((originalRow: TableRow) => {
-                        if (originalRow.rowIndex === row.rowIndex) {
-                            return { ...originalRow, actionsDropdownDropped: !originalRow.actionsDropdownDropped };
-                        }
-
-                        return { ...originalRow, actionsDropdownDropped: false };
-                    });
-
-                    updatedRows = currentTableRows?.map((currentRow: TableRow, index) => {
-                        if (currentRow.rowIndex === row.rowIndex) {
-                            return { ...currentRow, actionsDropdownDropped: !currentRow.actionsDropdownDropped };
-                        }
-                        return { ...currentRow, actionsDropdownDropped: false };
-                    });
-                }
-
-                setCurrentTableRows(updatedRows);
-                setTableRows(updatedOriginalRows);
-                setTableRowsImage(updatedOriginalRows);
-            },
-            [tableRows, currentTableRows]
-        );
-
-        /**
-         * Sort rows in ASC or DESC order
-         * @param accessor The id of the selected column header
-         * @param sortDirection The direction of the sort : ASC or DESC
-         */
-        const onSortItems = React.useCallback(
-            (accessor: string, sortDirection: sortDirectionTypes) => {
-                let updatedOriginalRows: Array<TableRow> = [];
-                let updatedCurrentTableRows: Array<TableRow> = [];
-                let sortByColumn: TableHeader = null;
-
-                if (props.sortProps?.onSort && props.sortProps?.useServerSorting) {
-                    props.sortProps?.onSort(tableRows, accessor, sortDirection);
-                } else {
-                    if (props.sortProps?.onSort) {
-                        updatedOriginalRows = props.sortProps.onSort(tableRows, accessor, sortDirection);
-                        updatedCurrentTableRows = props.sortProps.onSort(currentTableRows, accessor, sortDirection);
-                    } else {
-                        updatedOriginalRows = sortArray(tableRows, accessor, sortDirection);
-                        updatedCurrentTableRows = sortArray(currentTableRows, accessor, sortDirection);
-                    }
-                    const updatedColumns: Array<TableHeader> = tableColumns.map((column: TableHeader) => {
-                        if (column?.accessor === accessor) {
-                            sortByColumn = {
-                                ...column,
-                                isSorted: true,
-                                isSortedDesc: sortDirection === sortDirectionTypes.Descending ? true : false,
-                            };
-                            return sortByColumn;
-                        }
-                        return { ...column, isSorted: false, isSortedDesc: false };
-                    });
-
-                    setTableRows(updatedOriginalRows);
-                    setCurrentTableRows(updatedCurrentTableRows);
-                    setTableRowsImage(updatedOriginalRows);
-                    setTableColumn(updatedColumns);
-                    props.sortProps?.onAfterSorting(updatedOriginalRows, sortByColumn);
-                }
-            },
-            [props.sortProps, tableColumns, tableRows, currentTableRows]
-        );
-
-        /**
-         * Called on sub row is clicked
-         * @param e change ve
-         * @param row The subrow Selected row
-         * @param rowIndex The parent row index
-         */
-        const onSubRowExpanded = React.useCallback(
-            (e: React.MouseEvent<HTMLDivElement, MouseEvent>, row: TableRow, rowIndex: number): void => {
-                const updatedOriginalRows: Array<TableRow> = tableRows?.map((originalRow: TableRow) => {
+    /**
+     *
+     * @param event click event
+     * @param row The selected row
+     * @param rowIndex The index of the parent row
+     */
+    const onActionColumnDropped = React.useCallback(
+        (event: React.MouseEvent<HTMLDivElement, MouseEvent>, row: TableRow, rowIndex?: number) => {
+            let updatedOriginalRows: Array<TableRow> = [];
+            let updatedRows: Array<TableRow> = [];
+            if (rowIndex) {
+                updatedOriginalRows = tableRows?.map((originalRow: TableRow) => {
                     if (originalRow.rowIndex === rowIndex) {
                         const subRows: Array<TableRow> = originalRow.subRows.map((subRow: TableRow) => {
                             if (subRow.rowIndex === row.rowIndex) {
-                                return { ...subRow, expanded: !subRow.expanded };
+                                return { ...subRow, actionsDropdownDropped: !subRow.actionsDropdownDropped };
                             }
 
-                            return subRow;
+                            return { ...subRow, actionsDropdownDropped: false };
                         });
 
                         return { ...originalRow, subRows };
                     }
-                    return originalRow;
+                    return { ...originalRow, actionsDropdownDropped: false };
                 });
 
-                const updatedRows: Array<TableRow> = currentTableRows?.map((currentRow: TableRow) => {
+                updatedRows = currentTableRows?.map((currentRow: TableRow) => {
                     if (currentRow.rowIndex === rowIndex) {
                         const subRows: Array<TableRow> = currentRow.subRows.map((subRow: TableRow) => {
                             if (subRow.rowIndex === row.rowIndex) {
-                                return { ...subRow, expanded: !subRow.expanded };
+                                return { ...subRow, actionsDropdownDropped: !subRow.actionsDropdownDropped };
                             }
 
-                            return subRow;
+                            return { ...subRow, actionsDropdownDropped: false };
                         });
 
                         return { ...currentRow, subRows };
                     }
-                    return currentRow;
+                    return { ...currentRow, actionsDropdownDropped: false };
                 });
-
-                const expandedRowList: Array<TableRow> = updatedOriginalRows.filter((item: TableRow) => {
-                    return item.expanded || item.subRows.some((sub: TableRow) => sub.expanded);
-                });
-
-                setCurrentTableRows(updatedRows);
-                setTableRows(updatedOriginalRows);
-                setTableRowsImage(updatedOriginalRows);
-                props.onRowExpanded(expandedRowList);
-            },
-            [currentTableRows, tableRows, props.onRowExpanded]
-        );
-
-        /**
-         *
-         * @param e change event
-         * @param row The selected row
-         */
-        const onRowExpanded = React.useCallback(
-            (e: React.MouseEvent<HTMLDivElement, MouseEvent>, row: TableRow): void => {
-                const updatedOriginalRows: Array<TableRow> = tableRows?.map((originalRow: TableRow) => {
+            } else {
+                updatedOriginalRows = tableRows?.map((originalRow: TableRow) => {
                     if (originalRow.rowIndex === row.rowIndex) {
-                        return {
-                            ...originalRow,
-                            expanded: !originalRow.expanded,
-                            subRows: originalRow?.subRows.map((subRow: TableRow) => ({ ...subRow, expanded: false })),
-                        };
+                        return { ...originalRow, actionsDropdownDropped: !originalRow.actionsDropdownDropped };
                     }
 
-                    return originalRow;
+                    return { ...originalRow, actionsDropdownDropped: false };
                 });
 
-                const updatedRows: Array<TableRow> = currentTableRows?.map((currentRow: TableRow) => {
+                updatedRows = currentTableRows?.map((currentRow: TableRow, index) => {
                     if (currentRow.rowIndex === row.rowIndex) {
-                        return {
-                            ...currentRow,
-                            expanded: !currentRow.expanded,
-                            subRows: currentRow?.subRows.map((subRow: TableRow) => ({ ...subRow, expanded: false })),
-                        };
+                        return { ...currentRow, actionsDropdownDropped: !currentRow.actionsDropdownDropped };
                     }
-                    return currentRow;
+                    return { ...currentRow, actionsDropdownDropped: false };
+                });
+            }
+
+            setCurrentTableRows(updatedRows);
+            setTableRows(updatedOriginalRows);
+            setTableRowsImage(updatedOriginalRows);
+        },
+        [tableRows, currentTableRows]
+    );
+
+    /**
+     * Sort rows in ASC or DESC order
+     * @param accessor The id of the selected column header
+     * @param sortDirection The direction of the sort : ASC or DESC
+     */
+    const onSortItems = React.useCallback(
+        (accessor: string, sortDirection: sortDirectionTypes) => {
+            let updatedOriginalRows: Array<TableRow> = [];
+            let updatedCurrentTableRows: Array<TableRow> = [];
+            let sortByColumn: TableHeader = null;
+
+            if (props.sortProps?.onSort && props.sortProps?.useServerSorting) {
+                props.sortProps?.onSort(tableRows, accessor, sortDirection);
+            } else {
+                if (props.sortProps?.onSort) {
+                    updatedOriginalRows = props.sortProps.onSort(tableRows, accessor, sortDirection);
+                    updatedCurrentTableRows = props.sortProps.onSort(currentTableRows, accessor, sortDirection);
+                } else {
+                    updatedOriginalRows = sortArray(tableRows, accessor, sortDirection);
+                    updatedCurrentTableRows = sortArray(currentTableRows, accessor, sortDirection);
+                }
+                const updatedColumns: Array<TableHeader> = tableColumns.map((column: TableHeader) => {
+                    if (column?.accessor === accessor) {
+                        sortByColumn = {
+                            ...column,
+                            isSorted: true,
+                            isSortedDesc: sortDirection === sortDirectionTypes.Descending ? true : false,
+                        };
+                        return sortByColumn;
+                    }
+                    return { ...column, isSorted: false, isSortedDesc: false };
                 });
 
-                const expandedRowList: Array<TableRow> = updatedOriginalRows
-                    .filter((item: TableRow) => {
-                        return item.expanded || item.subRows.some((sub: TableRow) => sub.expanded);
-                    })
-                    .map((newRow: TableRow) => {
-                        return {
-                            ...newRow,
-                            subRows: newRow.subRows.filter((subRowItem: TableRow) => subRowItem.expanded),
-                        };
+                setTableRows(updatedOriginalRows);
+                setCurrentTableRows(updatedCurrentTableRows);
+                setTableRowsImage(updatedOriginalRows);
+                setTableColumn(updatedColumns);
+                props.sortProps?.onAfterSorting(updatedOriginalRows, sortByColumn);
+            }
+        },
+        [props.sortProps, tableColumns, tableRows, currentTableRows]
+    );
+
+    /**
+     * Called on sub row is clicked
+     * @param e change ve
+     * @param row The subrow Selected row
+     * @param rowIndex The parent row index
+     */
+    const onSubRowExpanded = React.useCallback(
+        (e: React.MouseEvent<HTMLDivElement, MouseEvent>, row: TableRow, rowIndex: number): void => {
+            const updatedOriginalRows: Array<TableRow> = tableRows?.map((originalRow: TableRow) => {
+                if (originalRow.rowIndex === rowIndex) {
+                    const subRows: Array<TableRow> = originalRow.subRows.map((subRow: TableRow) => {
+                        if (subRow.rowIndex === row.rowIndex) {
+                            return { ...subRow, expanded: !subRow.expanded };
+                        }
+
+                        return subRow;
                     });
 
-                setCurrentTableRows(updatedRows);
-                setTableRows(updatedOriginalRows);
-                setTableRowsImage(updatedOriginalRows);
-                props.onRowExpanded(expandedRowList);
-            },
-            [tableRows, currentTableRows, props.onRowExpanded]
-        );
-
-        const onTextChange = React.useCallback(
-            (e: React.ChangeEvent<HTMLInputElement>, row: TableRow, rowIndex?: number): void => {
-                const updatedRows: Array<TableRow> = tableRows?.map((updatedRow: TableRow) => {
-                    if (rowIndex > -1) {
-                        if (updatedRow.rowIndex === rowIndex) {
-                            return {
-                                ...updatedRow,
-                                subRows: updatedRow.subRows.map((subRow: TableRow) => {
-                                    if (subRow.rowIndex === row.rowIndex) {
-                                        return {
-                                            ...subRow,
-                                            [e.target.name]: e.target.value,
-                                            cells: subRow.cells?.map((cell: Cell) => {
-                                                if (cell.accessor === e.target.name) {
-                                                    return { ...cell, value: e.target.value };
-                                                }
-                                                return cell;
-                                            }),
-                                        };
-                                    }
-
-                                    return subRow;
-                                }),
-                            };
-                        }
-                        return updatedRow;
-                    } else if (updatedRow.rowIndex === row.rowIndex) {
-                        return {
-                            ...updatedRow,
-                            [e.target.name]: e.target.value,
-                            cells: updatedRow.cells?.map((cell: Cell) => {
-                                if (cell.accessor === e.target.name) {
-                                    return { ...cell, value: e.target.value };
-                                }
-                                return cell;
-                            }),
-                        };
-                    }
-
-                    return updatedRow;
-                });
-
-                setTableRows(updatedRows);
-            },
-            [tableRows]
-        );
-
-        // functions -----------------------------------------------------------------------------
-        /**
-         *
-         * @param rows The table or or data to initialize rows from
-         */
-        const getRows = React.useCallback(
-            (rows: Array<DataItem<any>>): Array<TableRow> => {
-                const isBlackListedForEdit: (a: string) => boolean = (accessor: string): boolean => ["id", ...(props.editProps?.blackListedAccessors || [])].indexOf(accessor) > -1;
-                const isHiddenColumn: (a: string) => boolean = (accessor: string): boolean => props.columns?.some((column: Column) => column.accessor === accessor && column?.isHidden);
-                const updatedRows: Array<TableRow> = rows?.map((row: TableRow, index: number) => {
-                    const updatedCells: Array<Cell> = props.columns?.map(
-                        (column: Column): Cell => {
-                            return {
-                                id: column.accessor,
-                                accessor: column?.accessor,
-                                value: row[column?.accessor],
-                                canEdit: !isBlackListedForEdit(column?.accessor),
-                                hidden: isHiddenColumn(column?.accessor),
-                            };
-                        }
-                    );
-
-                    return {
-                        ...row,
-                        rowIndex: index,
-                        cells: updatedCells,
-                        selected: row.selected || false,
-                        actionsDropdownDropped: row.actionsDropdownDropped || false,
-                        expanded: row.expanded || false,
-                        subRows: row.subRows ? getRows(row.subRows) : [],
-                        isEditMode: row.isEditMode || false,
-                    };
-                });
-
-                return updatedRows || [];
-            },
-            [props.columns]
-        );
-
-        /**
-         * Call when item is selected
-         * @param checked boolean representing checkbox value
-         * @param selectedRow The selected row
-         * @param type The row type (i.e either a row or subRow)
-         * @param rowIndex The index of the parent row incase of subRow
-         */
-        const selectItems = React.useCallback((checked: boolean, rows: Array<TableRow>, selectedRow: TableRow, rowIndex: number, type: RowTypes): Array<TableRow> => {
-            const updatedRows: Array<TableRow> = rows.map((originalRow: TableRow) => {
-                let updatedSubrows: Array<TableRow> = originalRow.subRows;
-                if (type === "row") {
-                    if (originalRow.rowIndex === selectedRow.rowIndex) {
-                        updatedSubrows = updatedSubrows.map((subRow: TableRow) => ({ ...subRow, selected: checked }));
-
-                        return { ...originalRow, selected: checked, subRows: updatedSubrows };
-                    }
-                } else if (type === "subRow") {
-                    if (originalRow.rowIndex === rowIndex) {
-                        updatedSubrows = originalRow.subRows.map((originalSubrow: TableRow) => {
-                            if (originalSubrow.rowIndex === selectedRow.rowIndex) {
-                                return { ...originalSubrow, selected: checked };
-                            }
-                            return originalSubrow;
-                        });
-                        return { ...originalRow, subRows: updatedSubrows, selected: false };
-                    }
+                    return { ...originalRow, subRows };
                 }
                 return originalRow;
             });
 
-            return updatedRows;
-        }, []);
+            const updatedRows: Array<TableRow> = currentTableRows?.map((currentRow: TableRow) => {
+                if (currentRow.rowIndex === rowIndex) {
+                    const subRows: Array<TableRow> = currentRow.subRows.map((subRow: TableRow) => {
+                        if (subRow.rowIndex === row.rowIndex) {
+                            return { ...subRow, expanded: !subRow.expanded };
+                        }
 
-        const setDefaultTableRows = React.useCallback(() => {
-            const updatedRows: Array<TableRow> = getRows(props.data);
-            setTableRows(updatedRows);
-            setTableRowsImage(updatedRows);
-        }, [props.data, props.columns]);
+                        return subRow;
+                    });
 
-        const doPaginate = React.useCallback((): void => {
-            if (props.currentpage && props.offset && tableRows?.length > 0) {
-                // pagination start from 1 hence the need fro deducting 1
-                const start: number = (props.currentpage - 1) * props.offset;
-                const end: number = props.offset * props.currentpage;
-
-                const currentPage: Array<TableRow> = tableRows?.slice(start, end);
-                setCurrentTableRows(currentPage);
-            } else {
-                setCurrentTableRows(tableRows);
-            }
-        }, [props.currentpage, props.offset, tableRows]);
-
-        const rowsAreCollapsable = React.useCallback((): boolean => {
-            return (
-                currentTableRows?.some((row: TableRow) => {
-                    return row.subRows.length > 0 || row.rowContentDetail || row.subRows.some((subRow: TableRow) => subRow.rowContentDetail || (row.subRows && row.subRows.length > 0));
-                }) && !!props.onRowExpanded
-            );
-        }, [currentTableRows]);
-
-        const showFilterRow = React.useCallback((): boolean => {
-            return tableColumns.some((column: TableHeader) => column.filters?.length);
-        }, [tableColumns]);
-
-        const doSearch = React.useCallback((): void => {
-            let searchResult: Array<TableRow> = [];
-            if (props.searchProps?.searchText && props.searchProps?.searchInColumns && props.searchProps?.searchInColumns?.length) {
-                searchResult = searchTextInArray(tableRowsImage, props.searchProps.searchText, props.searchProps.searchInColumns);
-            } else {
-                searchResult = [...tableRowsImage];
-            }
-
-            setTableRows(searchResult);
-            props.searchProps?.onSearch && props.searchProps?.onSearch(searchResult);
-        }, [props.searchProps, tableRowsImage]);
-
-        // useEffects ----------------------------------------------------------
-
-        // Adding event listener to listen to clicks outside the component on mount, removing on unmount
-        React.useEffect(() => {
-            document.addEventListener("mousedown", onClickOutside);
-            return () => {
-                document.removeEventListener("mousedown", onClickOutside);
-            };
-        });
-
-        React.useEffect(() => {
-            if (tableColumns?.length && tableRows?.length) {
-                const shouldFilter: boolean = tableColumns.some((column: TableHeader) => column.filters?.length);
-                if (shouldFilter) {
-                    const filteredRows: Array<TableRow> = filterArray(tableRowsImage, tableColumns);
-                    props.filterProps?.onAfterFilter && props.filterProps.onAfterFilter(filteredRows);
-                    setTableRows(filteredRows);
-                } else {
-                    setTableRows(tableRowsImage);
+                    return { ...currentRow, subRows };
                 }
-            }
-        }, [tableColumns]);
-
-        React.useEffect(() => {
-            let updateRows: Array<TableRow> = [];
-            switch (props?.editProps?.mode) {
-                case "edit":
-                    updateRows = tableRows.map((row: TableRow) => ({ ...row, isEditMode: row.selected, subRows: row.subRows?.map((sub: TableRow) => ({ ...sub, isEditMode: sub.selected })) }));
-                    if (updateRows?.length) {
-                        setTableRows(updateRows);
-                    }
-                    break;
-                case "save":
-                    updateRows = tableRows.map((row: TableRow) => ({
-                        ...row,
-                        isEditMode: false,
-                        selected: false,
-                        subRows: row.subRows?.map((sub: TableRow) => ({ ...sub, isEditMode: false, selected: false })),
-                    }));
-                    setTableRows(updateRows);
-                    props?.editProps?.onAfterEdit(updateRows);
-                    break;
-                case "cancel":
-                    updateRows = tableRowsImage.map((row: TableRow) => ({
-                        ...row,
-                        isEditMode: false,
-                        selected: false,
-                        subRows: row.subRows?.map((sub: TableRow) => ({ ...sub, isEditMode: false, selected: false })),
-                    }));
-                    setTableRows(updateRows);
-                    break;
-            }
-        }, [props.editProps?.mode]);
-
-        React.useEffect(() => {
-            if (!!props.onRowSelected) {
-                const notAllsAreRowsSelected: boolean = tableRows?.some((row: TableRow) => !row.selected);
-
-                if (notAllsAreRowsSelected) {
-                    setAllRowsChecked(false);
-                } else {
-                    setAllRowsChecked(true);
-                }
-            }
-
-            const actionColumnIsOpened: boolean = tableRows?.some((row: TableRow) => {
-                return row.actionsDropdownDropped || row.subRows?.some((sub: TableRow) => sub.actionsDropdownDropped);
+                return currentRow;
             });
-            setAnOpenedAction(actionColumnIsOpened);
-        }, [currentTableRows]);
 
-        React.useEffect(() => {
-            if (!!props.searchProps?.onSearch) {
-                if (props.searchProps.triggerSearchOn === "Change") {
-                    doSearch();
+            const expandedRowList: Array<TableRow> = updatedOriginalRows.filter((item: TableRow) => {
+                return item.expanded || item.subRows.some((sub: TableRow) => sub.expanded);
+            });
+
+            setCurrentTableRows(updatedRows);
+            setTableRows(updatedOriginalRows);
+            setTableRowsImage(updatedOriginalRows);
+            props.onRowExpanded(expandedRowList);
+        },
+        [currentTableRows, tableRows, props.onRowExpanded]
+    );
+
+    /**
+     *
+     * @param e change event
+     * @param row The selected row
+     */
+    const onRowExpanded = React.useCallback(
+        (e: React.MouseEvent<HTMLDivElement, MouseEvent>, row: TableRow): void => {
+            const updatedOriginalRows: Array<TableRow> = tableRows?.map((originalRow: TableRow) => {
+                if (originalRow.rowIndex === row.rowIndex) {
+                    return {
+                        ...originalRow,
+                        expanded: !originalRow.expanded,
+                        subRows: originalRow?.subRows.map((subRow: TableRow) => ({ ...subRow, expanded: false })),
+                    };
                 }
-            }
-        }, [props.searchProps?.searchInColumns, props.searchProps?.searchText]);
 
-        React.useEffect(() => {
-            if (!!props.searchProps?.onSearch) {
-                if (props.searchProps?.triggerSearchOn === "Submit") {
-                    doSearch();
+                return originalRow;
+            });
+
+            const updatedRows: Array<TableRow> = currentTableRows?.map((currentRow: TableRow) => {
+                if (currentRow.rowIndex === row.rowIndex) {
+                    return {
+                        ...currentRow,
+                        expanded: !currentRow.expanded,
+                        subRows: currentRow?.subRows.map((subRow: TableRow) => ({ ...subRow, expanded: false })),
+                    };
                 }
-            }
-        }, [props.searchProps?.searchTriggered]);
+                return currentRow;
+            });
 
-        React.useEffect(() => {
-            if (tableColumns && props.filterProps?.filterItems?.length) {
-                const updatedColumns: Array<TableHeader> = tableColumns.map((column: TableHeader) => {
-                    const selectedFilter: FilterItem = props.filterProps?.filterItems?.find((filter: FilterItem) => filter?.accessor === column.accessor);
-                    if (column?.accessor === selectedFilter?.accessor) {
-                        return { ...column, filters: selectedFilter.filters };
-                    }
-                    return column;
+            const expandedRowList: Array<TableRow> = updatedOriginalRows
+                .filter((item: TableRow) => {
+                    return item.expanded || item.subRows.some((sub: TableRow) => sub.expanded);
+                })
+                .map((newRow: TableRow) => {
+                    return {
+                        ...newRow,
+                        subRows: newRow.subRows.filter((subRowItem: TableRow) => subRowItem.expanded),
+                    };
                 });
 
-                setTableColumn(updatedColumns);
-            }
-        }, [props.filterProps]);
+            setCurrentTableRows(updatedRows);
+            setTableRows(updatedOriginalRows);
+            setTableRowsImage(updatedOriginalRows);
+            props.onRowExpanded(expandedRowList);
+        },
+        [tableRows, currentTableRows, props.onRowExpanded]
+    );
 
-        React.useEffect(() => {
-            const updatedColumns: Array<TableHeader> = props.columns.map((column: TableHeader) => {
+    const onTextChange = React.useCallback(
+        (e: React.ChangeEvent<HTMLInputElement>, row: TableRow, rowIndex?: number): void => {
+            const updatedRows: Array<TableRow> = tableRows?.map((updatedRow: TableRow) => {
+                if (rowIndex > -1) {
+                    if (updatedRow.rowIndex === rowIndex) {
+                        return {
+                            ...updatedRow,
+                            subRows: updatedRow.subRows.map((subRow: TableRow) => {
+                                if (subRow.rowIndex === row.rowIndex) {
+                                    return {
+                                        ...subRow,
+                                        [e.target.name]: e.target.value,
+                                        cells: subRow.cells?.map((cell: Cell) => {
+                                            if (cell.accessor === e.target.name) {
+                                                return { ...cell, value: e.target.value };
+                                            }
+                                            return cell;
+                                        }),
+                                    };
+                                }
+
+                                return subRow;
+                            }),
+                        };
+                    }
+                    return updatedRow;
+                } else if (updatedRow.rowIndex === row.rowIndex) {
+                    return {
+                        ...updatedRow,
+                        [e.target.name]: e.target.value,
+                        cells: updatedRow.cells?.map((cell: Cell) => {
+                            if (cell.accessor === e.target.name) {
+                                return { ...cell, value: e.target.value };
+                            }
+                            return cell;
+                        }),
+                    };
+                }
+
+                return updatedRow;
+            });
+
+            setTableRows(updatedRows);
+        },
+        [tableRows]
+    );
+
+    // functions -----------------------------------------------------------------------------
+    /**
+     *
+     * @param rows The table or or data to initialize rows from
+     */
+    const getRows = React.useCallback(
+        (rows: Array<DataItem<any>>): Array<TableRow> => {
+            const isBlackListedForEdit: (a: string) => boolean = (accessor: string): boolean => ["id", ...(props.editProps?.blackListedAccessors || [])].indexOf(accessor) > -1;
+            const isHiddenColumn: (a: string) => boolean = (accessor: string): boolean => props.columns?.some((column: Column) => column.accessor === accessor && column?.isHidden);
+            const updatedRows: Array<TableRow> = rows?.map((row: TableRow, index: number) => {
+                const updatedCells: Array<Cell> = props.columns?.map(
+                    (column: Column): Cell => {
+                        return {
+                            id: column.accessor,
+                            accessor: column?.accessor,
+                            value: row[column?.accessor],
+                            canEdit: !isBlackListedForEdit(column?.accessor),
+                            hidden: isHiddenColumn(column?.accessor),
+                        };
+                    }
+                );
+
                 return {
-                    ...column,
-                    isSorted: column.isSorted || false,
-                    canSort: column.canSort !== undefined ? column.canSort : !!props.sortProps ? true : false,
-                    isSortedDesc: column.isSortedDesc || false,
-                    filters: column.filters || [],
+                    ...row,
+                    rowIndex: index,
+                    cells: updatedCells,
+                    selected: row.selected || false,
+                    actionsDropdownDropped: row.actionsDropdownDropped || false,
+                    expanded: row.expanded || false,
+                    subRows: row.subRows ? getRows(row.subRows) : [],
+                    isEditMode: row.isEditMode || false,
                 };
             });
 
-            setTableColumn(updatedColumns);
-        }, [props.columns]);
+            return updatedRows || [];
+        },
+        [props.columns]
+    );
 
-        React.useEffect(() => {
-            setDefaultTableRows();
-        }, [props.data, props.columns]);
+    /**
+     * Call when item is selected
+     * @param checked boolean representing checkbox value
+     * @param selectedRow The selected row
+     * @param type The row type (i.e either a row or subRow)
+     * @param rowIndex The index of the parent row incase of subRow
+     */
+    const selectItems = React.useCallback((checked: boolean, rows: Array<TableRow>, selectedRow: TableRow, rowIndex: number, type: RowTypes): Array<TableRow> => {
+        const updatedRows: Array<TableRow> = rows.map((originalRow: TableRow) => {
+            let updatedSubrows: Array<TableRow> = originalRow.subRows;
+            if (type === "row") {
+                if (originalRow.rowIndex === selectedRow.rowIndex) {
+                    updatedSubrows = updatedSubrows.map((subRow: TableRow) => ({ ...subRow, selected: checked }));
 
-        React.useEffect(() => {
-            doPaginate();
-        }, [props.offset, props.currentpage, tableRows]);
+                    return { ...originalRow, selected: checked, subRows: updatedSubrows };
+                }
+            } else if (type === "subRow") {
+                if (originalRow.rowIndex === rowIndex) {
+                    updatedSubrows = originalRow.subRows.map((originalSubrow: TableRow) => {
+                        if (originalSubrow.rowIndex === selectedRow.rowIndex) {
+                            return { ...originalSubrow, selected: checked };
+                        }
+                        return originalSubrow;
+                    });
+                    return { ...originalRow, subRows: updatedSubrows, selected: false };
+                }
+            }
+            return originalRow;
+        });
 
+        return updatedRows;
+    }, []);
+
+    const setDefaultTableRows = React.useCallback(() => {
+        const updatedRows: Array<TableRow> = getRows(props.data);
+        setTableRows(updatedRows);
+        setTableRowsImage(updatedRows);
+    }, [props.data, props.columns]);
+
+    const doPaginate = React.useCallback((): void => {
+        if (props.currentpage && props.offset && tableRows?.length > 0) {
+            // pagination start from 1 hence the need fro deducting 1
+            const start: number = (props.currentpage - 1) * props.offset;
+            const end: number = props.offset * props.currentpage;
+
+            const currentPage: Array<TableRow> = tableRows?.slice(start, end);
+            setCurrentTableRows(currentPage);
+        } else {
+            setCurrentTableRows(tableRows);
+        }
+    }, [props.currentpage, props.offset, tableRows]);
+
+    const rowsAreCollapsable = React.useCallback((): boolean => {
         return (
-            <div>
-                <TableUI
-                    columns={tableColumns}
-                    rows={currentTableRows}
-                    footer={props.footer}
-                    onSort={onSortItems}
-                    sortable={!!props.sortProps}
-                    useRowSelection={!!props.onRowSelected}
-                    useRowCollapse={!!props.onRowExpanded}
-                    allRowsAreSelected={allItemsChecked}
-                    onItemSelected={onItemSelected}
-                    onAllItemsSelected={onAllItemsSelected}
-                    onRowExpanded={onRowExpanded}
-                    onSubRowExpanded={onSubRowExpanded}
-                    onActionDropped={onActionColumnDropped}
-                    useShowActionColumn={(props.actionLinks && props.actionLinks.length > 0) || !!props.primaryActionButton}
-                    actionLinks={props.actionLinks}
-                    primaryActionButton={props.primaryActionButton}
-                    loading={!props.data}
-                    rowsAreCollapsable={rowsAreCollapsable()}
-                    className={props.className}
-                    showFilterRow={showFilterRow()}
-                    filterProps={props.filterProps}
-                    onChange={onTextChange}
-                />
-            </div>
+            currentTableRows?.some((row: TableRow) => {
+                return row.subRows.length > 0 || row.rowContentDetail || row.subRows.some((subRow: TableRow) => subRow.rowContentDetail || (row.subRows && row.subRows.length > 0));
+            }) && !!props.onRowExpanded
         );
-    }
-);
+    }, [currentTableRows]);
+
+    const showFilterRow = React.useCallback((): boolean => {
+        return tableColumns.some((column: TableHeader) => column.filters?.length);
+    }, [tableColumns]);
+
+    const doSearch = React.useCallback((): void => {
+        let searchResult: Array<TableRow> = [];
+        if (props.searchProps?.searchText && props.searchProps?.searchInColumns && props.searchProps?.searchInColumns?.length) {
+            searchResult = searchTextInArray(tableRowsImage, props.searchProps.searchText, props.searchProps.searchInColumns);
+        } else {
+            searchResult = [...tableRowsImage];
+        }
+
+        setTableRows(searchResult);
+        props.searchProps?.onSearch && props.searchProps?.onSearch(searchResult);
+    }, [props.searchProps, tableRowsImage]);
+
+    // useEffects ----------------------------------------------------------
+
+    // Adding event listener to listen to clicks outside the component on mount, removing on unmount
+    React.useEffect(() => {
+        document.addEventListener("mousedown", onClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", onClickOutside);
+        };
+    });
+
+    React.useEffect(() => {
+        if (tableColumns?.length && tableRows?.length) {
+            const shouldFilter: boolean = tableColumns.some((column: TableHeader) => column.filters?.length);
+            if (shouldFilter) {
+                const filteredRows: Array<TableRow> = filterArray(tableRowsImage, tableColumns);
+                props.filterProps?.onAfterFilter && props.filterProps.onAfterFilter(filteredRows);
+                setTableRows(filteredRows);
+            } else {
+                setTableRows(tableRowsImage);
+            }
+        }
+    }, [tableColumns]);
+
+    React.useEffect(() => {
+        let updateRows: Array<TableRow> = [];
+        switch (props?.editProps?.mode) {
+            case "edit":
+                updateRows = tableRows.map((row: TableRow) => ({ ...row, isEditMode: row.selected, subRows: row.subRows?.map((sub: TableRow) => ({ ...sub, isEditMode: sub.selected })) }));
+                if (updateRows?.length) {
+                    setTableRows(updateRows);
+                }
+                break;
+            case "save":
+                updateRows = tableRows.map((row: TableRow) => ({
+                    ...row,
+                    isEditMode: false,
+                    selected: false,
+                    subRows: row.subRows?.map((sub: TableRow) => ({ ...sub, isEditMode: false, selected: false })),
+                }));
+                setTableRows(updateRows);
+                props?.editProps?.onAfterEdit(updateRows);
+                break;
+            case "cancel":
+                updateRows = tableRowsImage.map((row: TableRow) => ({
+                    ...row,
+                    isEditMode: false,
+                    selected: false,
+                    subRows: row.subRows?.map((sub: TableRow) => ({ ...sub, isEditMode: false, selected: false })),
+                }));
+                setTableRows(updateRows);
+                break;
+        }
+    }, [props.editProps?.mode]);
+
+    React.useEffect(() => {
+        if (!!props.onRowSelected) {
+            const notAllsAreRowsSelected: boolean = tableRows?.some((row: TableRow) => !row.selected);
+
+            if (notAllsAreRowsSelected) {
+                setAllRowsChecked(false);
+            } else {
+                setAllRowsChecked(true);
+            }
+        }
+
+        const actionColumnIsOpened: boolean = tableRows?.some((row: TableRow) => {
+            return row.actionsDropdownDropped || row.subRows?.some((sub: TableRow) => sub.actionsDropdownDropped);
+        });
+        setAnOpenedAction(actionColumnIsOpened);
+    }, [currentTableRows]);
+
+    React.useEffect(() => {
+        if (!!props.searchProps?.onSearch) {
+            if (props.searchProps.triggerSearchOn === "Change") {
+                doSearch();
+            }
+        }
+    }, [props.searchProps?.searchInColumns, props.searchProps?.searchText]);
+
+    React.useEffect(() => {
+        if (!!props.searchProps?.onSearch) {
+            if (props.searchProps?.triggerSearchOn === "Submit") {
+                doSearch();
+            }
+        }
+    }, [props.searchProps?.searchTriggered]);
+
+    React.useEffect(() => {
+        if (tableColumns && props.filterProps?.filterItems?.length) {
+            const updatedColumns: Array<TableHeader> = tableColumns.map((column: TableHeader) => {
+                const selectedFilter: FilterItem = props.filterProps?.filterItems?.find((filter: FilterItem) => filter?.accessor === column.accessor);
+                if (column?.accessor === selectedFilter?.accessor) {
+                    return { ...column, filters: selectedFilter.filters };
+                }
+                return column;
+            });
+
+            setTableColumn(updatedColumns);
+        }
+    }, [props.filterProps]);
+
+    React.useEffect(() => {
+        const updatedColumns: Array<TableHeader> = props.columns.map((column: TableHeader) => {
+            return {
+                ...column,
+                isSorted: column.isSorted || false,
+                canSort: column.canSort !== undefined ? column.canSort : !!props.sortProps ? true : false,
+                isSortedDesc: column.isSortedDesc || false,
+                filters: column.filters || [],
+            };
+        });
+
+        setTableColumn(updatedColumns);
+    }, [props.columns]);
+
+    React.useEffect(() => {
+        setDefaultTableRows();
+    }, [props.data, props.columns]);
+
+    React.useEffect(() => {
+        doPaginate();
+    }, [props.offset, props.currentpage, tableRows]);
+
+    return (
+        <div>
+            <TableUI
+                columns={tableColumns}
+                rows={currentTableRows}
+                footer={props.footer}
+                onSort={onSortItems}
+                sortable={!!props.sortProps}
+                useRowSelection={!!props.onRowSelected}
+                useRowCollapse={!!props.onRowExpanded}
+                allRowsAreSelected={allItemsChecked}
+                onItemSelected={onItemSelected}
+                onAllItemsSelected={onAllItemsSelected}
+                onRowExpanded={onRowExpanded}
+                onSubRowExpanded={onSubRowExpanded}
+                onActionDropped={onActionColumnDropped}
+                useShowActionColumn={(props.actionLinks && props.actionLinks.length > 0) || !!props.primaryActionButton}
+                actionLinks={props.actionLinks}
+                primaryActionButton={props.primaryActionButton}
+                loading={!props.data}
+                rowsAreCollapsable={rowsAreCollapsable()}
+                className={props.className}
+                showFilterRow={showFilterRow()}
+                filterProps={props.filterProps}
+                onChange={onTextChange}
+            />
+        </div>
+    );
+});
 
 export { Table };

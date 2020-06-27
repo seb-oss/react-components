@@ -1,6 +1,6 @@
 import React from "react";
 import { shallow, ShallowWrapper } from "enzyme";
-import { ProgressBar, ProgressBarProps } from "./ProgressBar";
+import { ProgressBar, ProgressBarProps } from ".";
 
 describe("Component: ProgressBar", () => {
     let wrapper: ShallowWrapper<ProgressBarProps>;

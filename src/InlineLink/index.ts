@@ -1,1 +1,1 @@
-export { InlineLink } from "./InlineLink";
+export * from "./InlineLink";

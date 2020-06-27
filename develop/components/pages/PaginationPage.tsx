@@ -1,9 +1,9 @@
 import React from "react";
-import { Pagination } from "../../../src/Pagination/Pagination";
+import { Pagination } from "../../../src/Pagination";
 import Highlight from "react-highlight";
-const docMD: string = require("../../../src/Pagination/readme.md");
+import docMD from "../../../src/Pagination/readme.md";
 
-const PaginationPage: React.FunctionComponent = () => {
+const PaginationPage: React.FC = () => {
     const [pagination, setPagination] = React.useState<number>(1);
     const [pagination2, setPagination2] = React.useState<number>(1);
     const [dotnav, setDotnav] = React.useState<number>(1);

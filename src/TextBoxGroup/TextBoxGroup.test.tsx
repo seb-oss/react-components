@@ -1,6 +1,6 @@
 import React from "react";
 import { shallow, mount, ShallowWrapper, ReactWrapper } from "enzyme";
-import { TextBoxGroup, TextBoxGroupProps } from "./TextBoxGroup";
+import { TextBoxGroup, TextBoxGroupProps } from ".";
 
 describe("Component: TextBoxGroup", () => {
     let wrapper: ShallowWrapper<TextBoxGroupProps>;

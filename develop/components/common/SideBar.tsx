@@ -1,8 +1,8 @@
 import React from "react";
 import { History } from "history";
 import { sortBy } from "lodash";
-import { SideBarContent, SideBarItem } from "../../typings/generic.type";
-const sidebarData: SideBarContent = require("../../assets/components-list.json");
+import { SideBarItem } from "../../typings/generic.type";
+import sidebarData from "../../assets/components-list.json";
 
 const forms: Array<SideBarItem> = sortBy(sidebarData.form, "name");
 const uis: Array<SideBarItem> = sortBy(sidebarData.ui, "name");
@@ -13,7 +13,7 @@ interface SideBarProps {
     history: History;
 }
 
-const SideBar: React.FunctionComponent<SideBarProps> = (props: SideBarProps): React.ReactElement<void> => {
+const SideBar: React.FC<SideBarProps> = (props: SideBarProps) => {
     const currentPath: string = props.history.location.pathname;
 
     /**
@@ -59,7 +59,7 @@ type SideBarListProps = {
     onClick: (e: React.MouseEvent<HTMLAnchorElement>) => void;
 };
 
-const SideBarList: React.FunctionComponent<SideBarListProps> = (props: SideBarListProps) => (
+const SideBarList: React.FC<SideBarListProps> = (props: SideBarListProps) => (
     <>
         {props.title && <div className="sub-title">{props.title}</div>}
         {props.list.map((item: SideBarItem, index: number) => (

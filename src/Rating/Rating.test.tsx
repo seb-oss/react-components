@@ -1,6 +1,6 @@
 import React from "react";
 import { shallow, mount, ShallowWrapper, ReactWrapper } from "enzyme";
-import { Rating, RatingProps } from "./Rating";
+import { Rating, RatingProps } from ".";
 import { SVGStarHollow } from "./RatingStar";
 
 const initialColors: [string, string] = ["#A9A9A9", "#FFC500"];

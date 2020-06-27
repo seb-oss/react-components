@@ -1,10 +1,10 @@
 import React from "react";
-import { TextLabel } from "../../../src/TextLabel/TextLabel";
-import { Tooltip } from "../../../src/Tooltip/Tooltip";
+import { TextLabel } from "../../../src/TextLabel";
+import { Tooltip } from "../../../src/Tooltip";
 import Highlight from "react-highlight";
-const docMD: string = require("../../../src/TextLabel/readme.md");
+import docMD from "../../../src/TextLabel/readme.md";
 
-const TextLabelPage: React.FunctionComponent = () => {
+const TextLabelPage: React.FC = () => {
     return (
         <div className="route-template container">
             <div className="info-holder">

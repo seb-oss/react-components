@@ -1,13 +1,13 @@
 import React from "react";
-import { Tooltip, TooltipTrigger, TooltipTheme, TooltipPosition, TooltipMessageGroupItem } from "../../../src/Tooltip/Tooltip";
-import { RadioListModel, RadioGroup } from "../../../src/RadioGroup/RadioGroup";
-import { CheckBox } from "../../../src/CheckBox/CheckBox";
-import { Notification } from "../../../src/Notification/Notification";
+import { Tooltip, TooltipTrigger, TooltipTheme, TooltipPosition } from "../../../src/Tooltip";
+import { RadioListModel, RadioGroup } from "../../../src/RadioGroup";
+import { CheckBox } from "../../../src/CheckBox";
+import { Notification } from "../../../src/Notification";
 import Highlight from "react-highlight";
 
-const docMD: string = require("../../../src/Tooltip/readme.md");
+import docMD from "../../../src/Tooltip/readme.md";
 
-const TooltipPage: React.FunctionComponent = () => {
+const TooltipPage: React.FC = () => {
     const triggerList: Array<RadioListModel<TooltipTrigger>> = [
         { label: "Click", value: "click" },
         { label: "Hover", value: "hover" },

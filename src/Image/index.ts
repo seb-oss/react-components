@@ -1,2 +1,1 @@
-export { Img } from "./Img";
-export { DivImage } from "./DivImage";
+export * from "./Img";

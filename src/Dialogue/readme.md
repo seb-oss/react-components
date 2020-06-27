@@ -34,16 +34,16 @@ These are the current available properties:
 | Property               | Type                                                | Description                                             |
 | ---------------------- | --------------------------------------------------- | ------------------------------------------------------- |
 | className?             | `string`                                            | Custom class                                            |
-| desc?                  | `string | JSX.Element | React.ReactNode`            | Description text                                        |
+| desc?                  | `string \| JSX.Element \| React.ReactNode`          | Description text                                        |
 | enableBackdropDismiss? | `boolean`                                           | Enables backdrop dismiss. Requires `onDismiss`          |
 | enableCloseButton?     | `boolean`                                           | Enables close button. Requires `onDismiss`              |
-| header?                | `string | JSX.Element | React.ReactNode`            | Header text                                             |
+| header?                | `string \| JSX.Element \| React.ReactNode`          | Header text                                             |
 | id?                    | `string`                                            | Element id                                              |
 | onDismiss?             | `(e?: React.MouseEvent<HTMLButtonElement>) => void` | Click event fired when backdrop or close button clicked |
 | primaryAction?         | `(e?: React.MouseEvent<HTMLButtonElement>) => void` | Click event fired when primary button is clicked        |
-| primaryBtn?            | `string | JSX.Element`                              | Primary btn text                                        |
+| primaryBtn?            | `string \| JSX.Element`                             | Primary btn text                                        |
 | primaryBtnDisabled?    | `boolean`                                           | Disable primary button                                  |
 | secondaryAction?       | `(e?: React.MouseEvent<HTMLButtonElement>) => void` | Click event fired when secondary button is clicked      |
-| secondaryBtn?          | `string | JSX.Element`                              | Secondary btn text                                      |
+| secondaryBtn?          | `string \| JSX.Element`                             | Secondary btn text                                      |
 | secondaryBtnDisabled?  | `boolean`                                           | Disable secondary button                                |
 | toggle                 | `boolean`                                           | Show or hide the popup                                  |

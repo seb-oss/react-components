@@ -1,9 +1,9 @@
 import React from "react";
-import { TextArea } from "../../../src/TextArea/TextArea";
+import { TextArea } from "../../../src/TextArea";
 import Highlight from "react-highlight";
-const docMD: string = require("../../../src/TextArea/readme.md");
+import docMD from "../../../src/TextArea/readme.md";
 
-const TextAreaPage: React.FunctionComponent = () => {
+const TextAreaPage: React.FC = () => {
     const [textBoxValue, setTextBoxValue] = React.useState<string>("");
     const [textBox2Value, setTextBox2Value] = React.useState<string>("");
 

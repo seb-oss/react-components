@@ -1,9 +1,9 @@
 import React from "react";
-import { Dialogue } from "../../../src/Dialogue/Dialogue";
-import { Button } from "../../../src/Button/Button";
+import { Dialogue } from "../../../src/Dialogue";
+import { Button } from "../../../src/Button";
 import { loremIpsum } from "lorem-ipsum";
 import Highlight from "react-highlight";
-const docMD: string = require("../../../src/Dialogue/readme.md");
+import docMD from "../../../src/Dialogue/readme.md";
 
 const DialoguePage: React.FC = () => {
     const [dialogue, setDialogue] = React.useState<boolean>(false);

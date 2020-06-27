@@ -1,9 +1,9 @@
 import React from "react";
-import { TextBox } from "../../../src/TextBox/TextBox";
+import { TextBox } from "../../../src/TextBox";
 import Highlight from "react-highlight";
-const docMD: string = require("../../../src/TextBox/readme.md");
+import docMD from "../../../src/TextBox/readme.md";
 
-const TextBoxPage: React.FunctionComponent = () => {
+const TextBoxPage: React.FC = () => {
     const [textBoxValue, setTextBoxValue] = React.useState<string>("");
     const [textBoxValue2, setTextBoxValue2] = React.useState<string>("Not good");
     const [textBoxValue3, setTextBoxValue3] = React.useState<string>("All good");

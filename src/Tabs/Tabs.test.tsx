@@ -1,6 +1,6 @@
 import React from "react";
 import { shallow, mount, ShallowWrapper, ReactWrapper } from "enzyme";
-import { Tabs, TabsProps } from "./Tabs";
+import { Tabs, TabsProps } from ".";
 
 type keyboardTestUnit = { key: string; registeredAt: number; expectedToChange: number };
 

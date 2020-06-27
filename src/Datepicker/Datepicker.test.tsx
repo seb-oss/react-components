@@ -1,6 +1,6 @@
 import React from "react";
 import { shallow, mount, ShallowWrapper, ReactWrapper } from "enzyme";
-import { Datepicker, DatepickerProps } from "./Datepicker";
+import { Datepicker, DatepickerProps } from ".";
 
 describe("Component: Datepicker", () => {
     const props: DatepickerProps = {

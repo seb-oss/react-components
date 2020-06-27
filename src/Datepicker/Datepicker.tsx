@@ -30,7 +30,7 @@ export interface DatepickerProps {
     maxDetail?: Detail;
 }
 
-export const Datepicker: React.FunctionComponent<DatepickerProps> = (props: DatepickerProps): React.ReactElement<void> => {
+export const Datepicker: React.FC<DatepickerProps> = (props: DatepickerProps) => {
     return (
         <div className={"form-group date-picker" + (props.className ? ` ${props.className}` : "")} id={props.id}>
             <div className={"input-field" + (props.error ? " has-error" : "")}>

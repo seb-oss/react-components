@@ -1,10 +1,10 @@
 import React from "react";
-import { TextBoxGroup } from "../../../src/TextBoxGroup/TextBoxGroup";
+import { TextBoxGroup } from "../../../src/TextBoxGroup";
 import BarsIcon from "../../assets/icons/bars.svg";
 import MagnifierIcon from "../../assets/icons/magnifier.svg";
 import SEBLogo from "../../assets/svgs/seblogo.svg";
-const reactLogo: string = require("../../assets/images/ReactLogo.png");
-const sidebarData = require("../../assets/components-list.json");
+import reactLogo from "../../assets/images/ReactLogo.png";
+import sidebarData from "../../assets/components-list.json";
 
 interface SideBarDataItem {
     name: string;
@@ -12,7 +12,7 @@ interface SideBarDataItem {
 }
 
 interface TitleBarProps {
-    onToggleClick: () => any;
+    onToggleClick: VoidFunction;
     history?: any;
 }
 

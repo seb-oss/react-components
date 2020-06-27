@@ -1,12 +1,12 @@
-import React, { ReactHTML } from "react";
-import { Button, ButtonTheme, ButtonSize } from "../../../src/Button/Button";
+import React from "react";
+import { Button, ButtonTheme, ButtonSize } from "../../../src/Button";
 import { Loader } from "../../../src/Loader/Loader";
-import { RadioGroup, RadioListModel } from "../../../src/RadioGroup/RadioGroup";
-import { CheckBox } from "../../../src/CheckBox/CheckBox";
+import { RadioGroup, RadioListModel } from "../../../src/RadioGroup";
+import { CheckBox } from "../../../src/CheckBox";
 import Highlight from "react-highlight";
 import PencilIcon from "../../assets/icons/pencil.svg";
 import { capitalize } from "@sebgroup/frontend-tools/dist/capitalize";
-const docMD: string = require("../../../src/Button/readme.md");
+import docMD from "../../../src/Button/readme.md";
 
 type ButtonPageState = {
     theme: ButtonTheme;

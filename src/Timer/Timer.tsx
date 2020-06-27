@@ -1,7 +1,7 @@
 import React from "react";
 
 export interface TimerProps {
-    callback?: () => void;
+    callback?: VoidFunction;
     className?: string;
     duration: number;
     id?: string;

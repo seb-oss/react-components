@@ -1,5 +1,5 @@
 import React from "react";
-import { Tooltip, TooltipPosition, TooltipTheme, TooltipTrigger, TooltipMessageGroupItem } from "./Tooltip";
+import { Tooltip, TooltipPosition, TooltipTheme, TooltipTrigger, TooltipMessageGroupItem } from ".";
 import { unmountComponentAtNode, render } from "react-dom";
 import { act } from "react-dom/test-utils";
 
@@ -164,7 +164,7 @@ describe("Component: Tooltip", () => {
         let myTooltip: Tooltip;
         let forceShowSpy: jest.SpyInstance;
         let forceDismissSpy: jest.SpyInstance;
-        const toggleTooltip: () => void = () => {
+        const toggleTooltip: VoidFunction = () => {
             const isToggled: boolean = document.body.querySelector(".overlay-container.show") !== null;
             if (isToggled) {
                 myTooltip.forceDismiss();

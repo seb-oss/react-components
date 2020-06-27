@@ -1,6 +1,6 @@
 import React from "react";
 import { shallow, mount, ShallowWrapper, ReactWrapper } from "enzyme";
-import { TextArea, TextAreaProps } from "./TextArea";
+import { TextArea, TextAreaProps } from ".";
 
 describe("Component: TextArea", () => {
     const props: TextAreaProps = {

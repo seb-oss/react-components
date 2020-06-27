@@ -1,6 +1,6 @@
 import React from "react";
 import { shallow, ReactWrapper, mount } from "enzyme";
-import { Stepper, StepperProps } from "./Stepper";
+import { Stepper, StepperProps } from ".";
 
 describe("Component: Stepper", () => {
     const props = {

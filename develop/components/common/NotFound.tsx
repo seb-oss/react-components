@@ -1,7 +1,7 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 
-const NotFound: React.FunctionComponent = (): React.ReactElement<void> => {
+const NotFound: React.FC = () => {
     return (
         <div className="notfound-container">
             <div className="content">

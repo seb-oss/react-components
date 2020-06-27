@@ -7,7 +7,7 @@ export interface LoaderProps {
     className?: string;
 }
 
-export const Loader: React.FunctionComponent<LoaderProps> = (props: LoaderProps): React.ReactElement<void> => {
+export const Loader: React.FC<LoaderProps> = (props: LoaderProps) => {
     const fullscreen: boolean = props.fullscreen === undefined ? true : props.fullscreen;
     let loaderWrapper: string = "loader-cropper ";
     if (fullscreen) {

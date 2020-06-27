@@ -23,7 +23,7 @@ export interface RatingProps {
 const initialColors: [string, string] = ["#A9A9A9", "#FFC500"];
 const disabledColors: [string, string] = ["#dddddd", "#bfbfbf"];
 
-export const Rating: React.FunctionComponent<RatingProps> = (props: RatingProps): React.ReactElement<void> => {
+export const Rating: React.FC<RatingProps> = (props: RatingProps) => {
     const height: number = props.iconHeight || 25;
     const width: number = props.iconWidth || 25;
 
@@ -55,7 +55,7 @@ export const Rating: React.FunctionComponent<RatingProps> = (props: RatingProps)
                 emptySymbol={!props.useHollow ? <SVGStar fill={getColors()[0]} width={width} height={height} /> : <SVGStarHollow fill={getColors()[0]} width={width} height={height} />}
                 fullSymbol={
                     props.tooltipList && props.tooltipList.length ? (
-                        props.tooltipList.map((title: string, index: number): React.ReactElement<void> => <SVGStar key={index} fill={getColors()[1]} title={title} width={width} height={height} />)
+                        props.tooltipList.map((title: string, index: number) => <SVGStar key={index} fill={getColors()[1]} title={title} width={width} height={height} />)
                     ) : (
                         <SVGStar fill={getColors()[1]} width={width} height={height} />
                     )

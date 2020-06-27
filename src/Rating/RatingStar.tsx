@@ -7,7 +7,7 @@ interface StarProps {
     title?: string;
 }
 
-export const SVGStarHollow: React.FunctionComponent<StarProps> = (props: StarProps): React.ReactElement<void> => {
+export const SVGStarHollow: React.FC<StarProps> = (props: StarProps) => {
     return (
         <svg
             className="custom-svg-star-hollow"
@@ -48,7 +48,7 @@ export const SVGStarHollow: React.FunctionComponent<StarProps> = (props: StarPro
     );
 };
 
-export const SVGStar: React.FunctionComponent<StarProps> = (props: StarProps): React.ReactElement<void> => {
+export const SVGStar: React.FC<StarProps> = (props: StarProps) => {
     return (
         <svg className="custom-svg-star" width={props.width} height={props.height} viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">
             {props.title && <title>{props.title}</title>}

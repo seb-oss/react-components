@@ -14,7 +14,7 @@ export interface TabsProps {
     onClick: (index: number) => any;
 }
 
-const Tabs: React.FunctionComponent<TabsProps> = (props: TabsProps) => {
+const Tabs: React.FC<TabsProps> = (props: TabsProps) => {
     const elementRefAnchors: Array<HTMLAnchorElement> = [];
 
     /**

@@ -1,6 +1,6 @@
 import React from "react";
 import { shallow } from "enzyme";
-import { Chart } from "./Chart";
+import { Chart } from ".";
 
 describe("Component: Chart", () => {
     const randomScalingFactor = () => Math.round(Math.random() * 100);

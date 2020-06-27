@@ -1,2 +1,2 @@
-export { Breadcrumb } from "./Breadcrumb";
-export { BreadcrumbItem } from "./BreadcrumbItem";
+export * from "./Breadcrumb";
+export * from "./BreadcrumbItem";

@@ -48,6 +48,6 @@ These are the current available properties:
 | fullscreen?             | `boolean`       | Toggle fullscreen modal, default is false                              |
 | header?                 | `ReactNode`     | HTML element to be displayed on the header                             |
 | id?                     | `string`        | the id property of the modal                                           |
-| onDismiss?              | `() => void`    | click event when modal is toggled                                      |
+| onDismiss?              | `VoidFunction`  | click event when modal is toggled                                      |
 | position?               | `right or left` | Stick modal to one of the sides, accepted values (right or left)       |
 | toggle                  | `boolean`       | Show or hide the modal, default is false                               |

@@ -1,3 +1,5 @@
+@import "~@sebgroup/bootstrap/scss/core";
+
 .seb.progress-feedback {
     &.wrapper-indicator {
         &:before {
@@ -7,6 +9,39 @@
             > .children {
                 border-radius: 4px;
                 border: 1px solid currentColor;
+            }
+            &.progress-10 {
+                .seb.checkbox {
+                    > .custom-checkbox {
+                        > .custom-control-label {
+                            &::before {
+                                border-color: $red-dark;
+                            }
+                        }
+                    }
+                }
+            }
+            &.progress-50 {
+                .seb.checkbox {
+                    > .custom-checkbox {
+                        > .custom-control-label {
+                            &::before {
+                                border-color: $yellow;
+                            }
+                        }
+                    }
+                }
+            }
+            &.progress-100 {
+                .seb.checkbox {
+                    > .custom-checkbox {
+                        > .custom-control-label {
+                            &::before {
+                                border-color: $green-darker;
+                            }
+                        }
+                    }
+                }
             }
         }
     }

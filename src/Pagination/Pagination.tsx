@@ -39,126 +39,124 @@ export interface PaginationProps {
     value: number;
 }
 
-export const Pagination: React.FunctionComponent<PaginationProps> = React.memo(
-    (props: PaginationProps): React.ReactElement<void> => {
-        const [list, setList] = React.useState<Array<number>>([]);
-        const [dotnavList, setDotnavList] = React.useState<Array<number>>([]);
-        const [pagingSize, setPagingSize] = React.useState<number>(0);
+export const Pagination: React.FC<PaginationProps> = React.memo((props: PaginationProps) => {
+    const [list, setList] = React.useState<Array<number>>([]);
+    const [dotnavList, setDotnavList] = React.useState<Array<number>>([]);
+    const [pagingSize, setPagingSize] = React.useState<number>(0);
 
-        React.useEffect(() => {
-            const initialOffset: number = props.offset ? props.offset : 10;
-            setPagingSize(Math.ceil(props.size / initialOffset));
-        }, [props.offset, props.size]);
+    React.useEffect(() => {
+        const initialOffset: number = props.offset ? props.offset : 10;
+        setPagingSize(Math.ceil(props.size / initialOffset));
+    }, [props.offset, props.size]);
 
-        React.useEffect(() => {
-            const intialLength: number = props.pagingLength ? props.pagingLength : 5;
-            generateList(props.value, intialLength);
-        }, [pagingSize, props.pagingLength, props.value]);
+    React.useEffect(() => {
+        const intialLength: number = props.pagingLength ? props.pagingLength : 5;
+        generateList(props.value, intialLength);
+    }, [pagingSize, props.pagingLength, props.value]);
 
-        /**
-         * Generates an array of the pages that needs to be displayed
-         * It depends on the size, offset, and the current value
-         * @param {number} value The current value. The current page.
-         * @param {number} length The length of the pagination, number of pages to be displayed.
-         * @returns {Array<number>} An array of the pages that needs to be displayed
-         */
-        function generateList(value: number, length: number): void {
-            const genList: Array<number> = [];
-            // generate the array
-            for (let i = 1; i <= pagingSize; i++) {
-                genList.push(i);
-            }
-
-            // the median value is what you use to obtain the centre of the page or equilibrium
-            const medianValue: number = Math.ceil(length / 2);
-            let start: number = 0;
-            let end: number = pagingSize;
-
-            /**
-             * If The expected length is lessthan the size of the page, Do the
-             * conversion/calculations.
-             * 1. If the current value is less than the first centre, then its in the first page. Set start equal the size of the page - the length.
-             * 2. if the current value subtract the median or the centre value is greater than minus 1, set start to value - the medianValue.
-             * 3. the end is always start of the page plus the length regardless.
-             */
-
-            if (length < pagingSize) {
-                if (pagingSize - value < medianValue) {
-                    start = pagingSize - length;
-                } else if (value - medianValue > -1) {
-                    start = value - medianValue;
-                }
-
-                end = start + length;
-            }
-            setDotnavList(genList);
-            setList(genList.slice(start, end));
+    /**
+     * Generates an array of the pages that needs to be displayed
+     * It depends on the size, offset, and the current value
+     * @param {number} value The current value. The current page.
+     * @param {number} length The length of the pagination, number of pages to be displayed.
+     * @returns {Array<number>} An array of the pages that needs to be displayed
+     */
+    function generateList(value: number, length: number): void {
+        const genList: Array<number> = [];
+        // generate the array
+        for (let i = 1; i <= pagingSize; i++) {
+            genList.push(i);
         }
 
-        return (
-            <div className={"pagination-wrapper" + (props.className ? ` ${props.className}` : "")} id={props.id}>
-                <nav className="custom-pagination">
-                    {!props.useDotNav && (
-                        <ul className={"pagination"}>
-                            {props.value !== 1 && props.useFirstAndLast && (
-                                <li className="page-item" onClick={() => props.onChange(1)}>
-                                    <button className="page-link" title={props.firstText}>
-                                        <span className="nav-action">{props.useTextNav ? (props.firstText ? props.firstText : "First") : angleDoubleLeftIcon}</span>
-                                        <span className="sr-only">{props.firstText || "First"}</span>
-                                    </button>
-                                </li>
-                            )}
-                            {props.value !== 1 && (
-                                <li className="page-item" onClick={() => props.onChange(props.value - 1)}>
-                                    <button className="page-link" title={props.previousText}>
-                                        <span className="nav-action">{props.useTextNav ? (props.previousText ? props.previousText : "Previous") : angleLeftIcon}</span>
-                                        <span className="sr-only">{props.previousText || "Previous"}</span>
-                                    </button>
-                                </li>
-                            )}
-                            {list.map((num: number) => {
-                                return (
-                                    <li className={"page-item" + (props.value === num ? " active" : "")} key={num} onClick={() => props.onChange(num)} value={num}>
-                                        <button className={"page-link" + (props.value === num ? " active" : "")}>
-                                            <span className="nav-num">{num}</span>
-                                            <span className="sr-only">{num}</span>
-                                        </button>
-                                    </li>
-                                );
-                            })}
+        // the median value is what you use to obtain the centre of the page or equilibrium
+        const medianValue: number = Math.ceil(length / 2);
+        let start: number = 0;
+        let end: number = pagingSize;
 
-                            {props.value !== pagingSize && (
-                                <li className="page-item" onClick={() => props.onChange(props.value + 1)}>
-                                    <button className="page-link" title={props.nextText}>
-                                        <span className="nav-action">{props.useTextNav ? (props.nextText ? props.nextText : "Next") : angleRightIcon}</span>
-                                        <span className="sr-only">{props.nextText || "Next"}</span>
-                                    </button>
-                                </li>
-                            )}
+        /**
+         * If The expected length is lessthan the size of the page, Do the
+         * conversion/calculations.
+         * 1. If the current value is less than the first centre, then its in the first page. Set start equal the size of the page - the length.
+         * 2. if the current value subtract the median or the centre value is greater than minus 1, set start to value - the medianValue.
+         * 3. the end is always start of the page plus the length regardless.
+         */
 
-                            {props.value !== pagingSize && props.useFirstAndLast && (
-                                <li className="page-item" onClick={() => props.onChange(pagingSize)}>
-                                    <button className="page-link" title={props.lastText}>
-                                        <span className="nav-action">{props.useTextNav ? (props.lastText ? props.lastText : "Last") : angleDoubleRightIcon}</span>
-                                        <span className="sr-only">{props.lastText || "Last"}</span>
-                                    </button>
-                                </li>
-                            )}
-                        </ul>
-                    )}
-                    {props.useDotNav && (
-                        <ul className={"pagination dotnav"}>
-                            {dotnavList.map((num: number) => {
-                                return (
-                                    <li className="page-item" key={num} onClick={() => props.onChange(num)} value={num}>
-                                        <span className={"page-dot-link" + (props.value === num ? " active" : "")} />
-                                    </li>
-                                );
-                            })}
-                        </ul>
-                    )}
-                </nav>
-            </div>
-        );
+        if (length < pagingSize) {
+            if (pagingSize - value < medianValue) {
+                start = pagingSize - length;
+            } else if (value - medianValue > -1) {
+                start = value - medianValue;
+            }
+
+            end = start + length;
+        }
+        setDotnavList(genList);
+        setList(genList.slice(start, end));
     }
-);
+
+    return (
+        <div className={"pagination-wrapper" + (props.className ? ` ${props.className}` : "")} id={props.id}>
+            <nav className="custom-pagination">
+                {!props.useDotNav && (
+                    <ul className={"pagination"}>
+                        {props.value !== 1 && props.useFirstAndLast && (
+                            <li className="page-item" onClick={() => props.onChange(1)}>
+                                <button className="page-link" title={props.firstText}>
+                                    <span className="nav-action">{props.useTextNav ? (props.firstText ? props.firstText : "First") : angleDoubleLeftIcon}</span>
+                                    <span className="sr-only">{props.firstText || "First"}</span>
+                                </button>
+                            </li>
+                        )}
+                        {props.value !== 1 && (
+                            <li className="page-item" onClick={() => props.onChange(props.value - 1)}>
+                                <button className="page-link" title={props.previousText}>
+                                    <span className="nav-action">{props.useTextNav ? (props.previousText ? props.previousText : "Previous") : angleLeftIcon}</span>
+                                    <span className="sr-only">{props.previousText || "Previous"}</span>
+                                </button>
+                            </li>
+                        )}
+                        {list.map((num: number) => {
+                            return (
+                                <li className={"page-item" + (props.value === num ? " active" : "")} key={num} onClick={() => props.onChange(num)} value={num}>
+                                    <button className={"page-link" + (props.value === num ? " active" : "")}>
+                                        <span className="nav-num">{num}</span>
+                                        <span className="sr-only">{num}</span>
+                                    </button>
+                                </li>
+                            );
+                        })}
+
+                        {props.value !== pagingSize && (
+                            <li className="page-item" onClick={() => props.onChange(props.value + 1)}>
+                                <button className="page-link" title={props.nextText}>
+                                    <span className="nav-action">{props.useTextNav ? (props.nextText ? props.nextText : "Next") : angleRightIcon}</span>
+                                    <span className="sr-only">{props.nextText || "Next"}</span>
+                                </button>
+                            </li>
+                        )}
+
+                        {props.value !== pagingSize && props.useFirstAndLast && (
+                            <li className="page-item" onClick={() => props.onChange(pagingSize)}>
+                                <button className="page-link" title={props.lastText}>
+                                    <span className="nav-action">{props.useTextNav ? (props.lastText ? props.lastText : "Last") : angleDoubleRightIcon}</span>
+                                    <span className="sr-only">{props.lastText || "Last"}</span>
+                                </button>
+                            </li>
+                        )}
+                    </ul>
+                )}
+                {props.useDotNav && (
+                    <ul className={"pagination dotnav"}>
+                        {dotnavList.map((num: number) => {
+                            return (
+                                <li className="page-item" key={num} onClick={() => props.onChange(num)} value={num}>
+                                    <span className={"page-dot-link" + (props.value === num ? " active" : "")} />
+                                </li>
+                            );
+                        })}
+                    </ul>
+                )}
+            </nav>
+        </div>
+    );
+});

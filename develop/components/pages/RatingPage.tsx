@@ -1,9 +1,9 @@
 import React from "react";
-import { Rating } from "../../../src/Rating/Rating";
+import { Rating } from "../../../src/Rating";
 import Highlight from "react-highlight";
-const docMD: string = require("../../../src/Rating/readme.md");
+import docMD from "../../../src/Rating/readme.md";
 
-const RatingPage: React.FunctionComponent = () => {
+const RatingPage: React.FC = () => {
     const [rating, setRating] = React.useState<number>(3.5);
 
     return (

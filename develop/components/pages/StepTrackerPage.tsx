@@ -1,9 +1,9 @@
 import React from "react";
-import { StepTracker } from "../../../src/StepTracker/StepTracker";
+import { StepTracker } from "../../../src/StepTracker";
 import Highlight from "react-highlight";
 const docMD = require("../../../src/StepTracker/readme.md");
 
-const StepTrackerPage: React.FunctionComponent = () => {
+const StepTrackerPage: React.FC = () => {
     const [stepTracker, setStepTracker] = React.useState<number>(1);
 
     return (

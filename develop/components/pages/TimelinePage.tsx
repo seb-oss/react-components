@@ -1,9 +1,9 @@
 import React from "react";
-import { Timeline, TimelineListItem } from "../../../src/Timeline/Timeline";
+import { Timeline, TimelineListItem } from "../../../src/Timeline";
 import Highlight from "react-highlight";
-const docMD: string = require("../../../src/Timeline/readme.md");
+import docMD from "../../../src/Timeline/readme.md";
 
-const TimelinePage: React.FunctionComponent = () => {
+const TimelinePage: React.FC = () => {
     return (
         <div className="route-template container">
             <div className="info-holder">

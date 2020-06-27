@@ -64,7 +64,7 @@ const moreIcon: JSX.Element = (
     </svg>
 );
 
-const Dropdown: React.FunctionComponent<DropdownProps> = (props: DropdownProps): React.ReactElement<void> => {
+const Dropdown: React.FC<DropdownProps> = (props: DropdownProps) => {
     const selectedDisplayLength: number = 2;
     // COMPONENT INTERNAL STATE INIT ================================
     const [open, setOpen] = React.useState<boolean>(false);

@@ -1,6 +1,6 @@
 import React from "react";
 import { shallow, ShallowWrapper } from "enzyme";
-import { Timeline, TimelineListItem, TimelineProps } from "./Timeline";
+import { Timeline, TimelineListItem, TimelineProps } from ".";
 
 describe("Component: Timeline", () => {
     const timelineList: Array<TimelineListItem> = [

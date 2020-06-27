@@ -15,7 +15,8 @@
         "noImplicitAny": false,
         "strictNullChecks": false,
         "esModuleInterop": true,
-        "allowSyntheticDefaultImports": true
+        "allowSyntheticDefaultImports": true,
+        "resolveJsonModule": true
     },
     "exclude": ["node_modules", "webpack", "dist", "develop", "coverage", "**/*.test.tsx", "src/__utils", "utils"],
     "types": ["typePatches"]

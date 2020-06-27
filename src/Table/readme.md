@@ -29,7 +29,7 @@ This React component supports customization and configurations. The component na
 These are the current available properties:
 
 | Property             | Type                              | Description                                                                                   |
-|----------------------|-----------------------------------|-----------------------------------------------------------------------------------------------|
+| -------------------- | --------------------------------- | --------------------------------------------------------------------------------------------- |
 | className?           | `string`                          | Custom class                                                                                  |
 | columns              | `Array<Column>`                   | Array of the table columns                                                                    |
 | data                 | `Array<object>`                   | Array of the objects that make of the rows                                                    |
@@ -43,11 +43,11 @@ These are the current available properties:
 | onRowSelection?      | `(rows: Array<TableRow>) => void` | Call when user select a row by checking a textBox. This props enable the row selection option |
 | onRowExpanded?       | `(rows: Array<TableRow>) => void` | The event for row collapse. Adding this prop enable subrows and inline row detail             |
 | footer?              | `React.ReactNode`                 | Incase you want to display something in the table footer, you can render your element here    |
-| editProps? | `EditProps` | The edit props, see the `EditProps` table below |
+| editProps?           | `EditProps`                       | The edit props, see the `EditProps` table below                                               |
 
 ### SearchProps properties
 | Property         | Type                               | Description                                                                          |
-|------------------|------------------------------------|--------------------------------------------------------------------------------------|
+| ---------------- | ---------------------------------- | ------------------------------------------------------------------------------------ |
 | searchInColumns  | `Array<string>`                    | Array for the columns to consider during searching                                   |
 | triggerSearchOn  | `Change \| Submit`                 | During search, you can either trigger search on Submit or onChange                   |
 | onSearch?        | ` (rows: Array<TableRow>) => void` | The onSearch event. This along with the three props on top consitutes search feature |
@@ -56,32 +56,32 @@ These are the current available properties:
 
 ### SortProps properties
 
-| Property        | Type                                                                                              | Description                                                                |
-|-----------------|---------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------|
-| onAfterSorting? | `(rows: Array<TableRow>, sortByColumn: TableHeader) => void`                                      | The onsort event, triggered when you click sort. This props enable sorting |
-| onSort?         | `(rows: Array<TableRow>, accessor: string, sortDirection: sortDirectionTypes) => Array<TableRow>` | A custom sorting function that can be alternatively passed by user         |
-| useServerSorting | `boolean` | when this is enable, the front end sorting is disable, sorting will take place on the backend and the data should be updated |
+| Property         | Type                                                                                              | Description                                                                                                                  |
+| ---------------- | ------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| onAfterSorting?  | `(rows: Array<TableRow>, sortByColumn: TableHeader) => void`                                      | The onsort event, triggered when you click sort. This props enable sorting                                                   |
+| onSort?          | `(rows: Array<TableRow>, accessor: string, sortDirection: sortDirectionTypes) => Array<TableRow>` | A custom sorting function that can be alternatively passed by user                                                           |
+| useServerSorting | `boolean`                                                                                         | when this is enable, the front end sorting is disable, sorting will take place on the backend and the data should be updated |
 
 ### FilterProps properties
 
-| Property        | Type  | Description |
-|-----------------|-------|----------------------------------------------------------------------------|
-| filterItems | `Array<FilterItem>` | Array of the filter items, onsists of multiple columns|
-| onAfterFilter | `(rows: Array<TableRow>) => void;` |A callback that returns filtered table rows |
-| onRemoveFilter | `(item: { accessor: string; value: string }) => void` | A callBack that returns the filter item to be deleted |
+| Property       | Type                                                  | Description                                            |
+| -------------- | ----------------------------------------------------- | ------------------------------------------------------ |
+| filterItems    | `Array<FilterItem>`                                   | Array of the filter items, onsists of multiple columns |
+| onAfterFilter  | `(rows: Array<TableRow>) => void;`                    | A callback that returns filtered table rows            |
+| onRemoveFilter | `(item: { accessor: string; value: string }) => void` | A callBack that returns the filter item to be deleted  |
 
 ### FilterItem properties
-| Property        | Type  | Description |
-|-----------------|-------|----------------------------------------------------------------------------|
-| accessor | `string` | The name of the column or accessor |
-| filters | `Array<string>` | The array of the filter values |
+| Property | Type            | Description                        |
+| -------- | --------------- | ---------------------------------- |
+| accessor | `string`        | The name of the column or accessor |
+| filters  | `Array<string>` | The array of the filter values     |
 
 ### EditProps properties
-| Property        | Type  | Description |
-|-----------------|-------|----------------------------------------------------------------------------|
-| mode | `edit | cancel | save` | The mode of the edit operation |
-| onAfterEdit | `(rows: Array<TableRow>) => Array<TableRow>` | The array of the new rows or updated data upon update |
-| blackListedAccessors | `Array<string>` | array of the columns not to be considered for edit|
+| Property             | Type                                         | Description                                           |
+| -------------------- | -------------------------------------------- | ----------------------------------------------------- |
+| mode                 | `edit \| cancel \| save`                     | The mode of the edit operation                        |
+| onAfterEdit          | `(rows: Array<TableRow>) => Array<TableRow>` | The array of the new rows or updated data upon update |
+| blackListedAccessors | `Array<string>`                              | array of the columns not to be considered for edit    |
 
 ## Footnote
 1. `Column`, `TableRow`, `PrimaryActionButton`, `ActionLinkItem`, `TableHeader`, `SortProps`, `Data`, `FilterItem`, `FilterProps` and `SearchProps` interfaces/types are all importable from the component;

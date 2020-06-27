@@ -1,6 +1,6 @@
 import React from "react";
 import { shallow, ShallowWrapper } from "enzyme";
-import { StepTracker, StepTrackerProps } from "./StepTracker";
+import { StepTracker, StepTrackerProps } from ".";
 
 describe("Component: StepTracker", () => {
     const props: StepTrackerProps = {

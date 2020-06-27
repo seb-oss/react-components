@@ -1,6 +1,6 @@
 import React from "react";
 import { shallow, mount, ShallowWrapper, ReactWrapper } from "enzyme";
-import { Notification, NotificationProps, NotificationAction } from "./Notification";
+import { Notification, NotificationProps, NotificationAction } from ".";
 
 describe("Component: Notification", () => {
     let wrapper: ShallowWrapper<NotificationProps>;

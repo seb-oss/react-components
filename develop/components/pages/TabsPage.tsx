@@ -1,9 +1,9 @@
 import React from "react";
-import { Tabs, TabsListItem } from "../../../src/Tabs/Tabs";
+import { Tabs, TabsListItem } from "../../../src/Tabs";
 import Highlight from "react-highlight";
 const docMD = require("../../../src/Tabs/readme.md");
 
-const TabsPage: React.FunctionComponent = () => {
+const TabsPage: React.FC = () => {
     const [activeTab, setActiveTab] = React.useState<number>(0);
 
     return (

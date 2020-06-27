@@ -1,6 +1,6 @@
 import React from "react";
 import { shallow, ShallowWrapper } from "enzyme";
-import { TextLabel, TextLabelProps } from "./TextLabel";
+import { TextLabel, TextLabelProps } from ".";
 
 describe("Component: TextLabel", () => {
     let wrapper: ShallowWrapper<TextLabelProps>;

@@ -1,1 +1,1 @@
-export { TextLabel } from "./TextLabel";
+export * from "./TextLabel";

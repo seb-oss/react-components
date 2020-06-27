@@ -1,10 +1,10 @@
 import React from "react";
-import { ButtonGroup, ButtonGroupSizes } from "../../../src/ButtonGroup/ButtonGroup";
+import { ButtonGroup, ButtonGroupSizes } from "../../../src/ButtonGroup";
+import { RadioGroup, RadioListModel } from "../../../src/RadioGroup";
 import { Button } from "../../../src/Button";
-import { CheckBox } from "../../../src/CheckBox/CheckBox";
+import { CheckBox } from "../../../src/CheckBox";
 import Highlight from "react-highlight";
-import { RadioGroup, RadioListModel } from "../../../src/RadioGroup/RadioGroup";
-const docMD: string = require("../../../src/ButtonGroup/readme.md");
+import docMD from "../../../src/ButtonGroup/readme.md";
 
 type ButtonPageState = {
     vertical: boolean;

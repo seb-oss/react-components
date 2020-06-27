@@ -1,10 +1,10 @@
 import React from "react";
-import { Chip } from "../../../src/Chip/Chip";
+import { Chip } from "../../../src/Chip";
 import Highlight from "react-highlight";
-import { Button } from "../../../src/Button/Button";
+import { Button } from "../../../src/Button";
 import { loremIpsum } from "lorem-ipsum";
 import PlusIcon from "../../assets/icons/plus.svg";
-const docMD: string = require("../../../src/Chip/readme.md");
+import docMD from "../../../src/Chip/readme.md";
 
 const ChipPage: React.FC = () => {
     const [chips, setChips] = React.useState<Array<string>>([loremIpsum({ units: "word" })]);

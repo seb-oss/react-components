@@ -1,7 +1,7 @@
 import React from "react";
-import { TextBoxGroup } from "../../../src/TextBoxGroup/TextBoxGroup";
+import { TextBoxGroup } from "../../../src/TextBoxGroup";
 import Highlight from "react-highlight";
-const docMD: string = require("../../../src/TextBoxGroup/readme.md");
+import docMD from "../../../src/TextBoxGroup/readme.md";
 
 const moneyIcon: JSX.Element = (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 170 170">
@@ -20,7 +20,7 @@ const userIcon: JSX.Element = (
     </svg>
 );
 
-const TextBoxGroupPage: React.FunctionComponent = () => {
+const TextBoxGroupPage: React.FC = () => {
     const [textBoxGroupValue, setTextBoxGroupValue] = React.useState<string>("");
     const [textBoxGroupValue2, setTextBoxGroupValue2] = React.useState<string>("");
     const [textBoxGroupValue3, setTextBoxGroupValue3] = React.useState<string>("Not good");

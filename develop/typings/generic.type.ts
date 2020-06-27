@@ -8,7 +8,7 @@ export interface AppSharedProps<Params extends { [K in keyof Params]?: string } 
 export type SideBarItem = {
     name: string;
     path: string;
-    filePath: string;
+    filePath?: string;
 };
 export type SideBarContent = {
     links: Array<SideBarItem>;

@@ -1,10 +1,10 @@
 import React from "react";
-import { RadioButton } from "../../../src/RadioButton/RadioButton";
+import { RadioButton } from "../../../src/RadioButton";
 import { Tabs } from "../../../src/Tabs/Tabs";
 import Highlight from "react-highlight";
-const docMD: string = require("../../../src/RadioButton/readme.md");
+import docMD from "../../../src/RadioButton/readme.md";
 
-const RadioButtonPage: React.FunctionComponent = () => {
+const RadioButtonPage: React.FC = () => {
     const [radioListSelected, setRadioListSelected] = React.useState<string>("third");
     const [tabValue, setTabValue] = React.useState<number>(0);
 

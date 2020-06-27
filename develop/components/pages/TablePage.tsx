@@ -1,10 +1,10 @@
 import React from "react";
 import { Table, Column, TableRow, PrimaryActionButton, ActionLinkItem, TableHeader, DataItem, FilterItem, FilterProps, EditProps, EditMode } from "../../../src/Table/Table";
 import makeData from "../../__utils/makeData";
-import { Pagination } from "../../../src/Pagination/Pagination";
-import { Dropdown, DropdownItem } from "../../../src/Dropdown/Dropdown";
-import { TextBox } from "../../../src/TextBox/TextBox";
-import { Button } from "../../../src/Button/Button";
+import { Pagination } from "../../../src/Pagination";
+import { Dropdown, DropdownItem } from "../../../src/Dropdown";
+import { TextBox } from "../../../src/TextBox";
+import { Button } from "../../../src/Button";
 import Highlight from "react-highlight";
 const docMD = require("../../../src/Table/readme.md");
 
@@ -18,7 +18,7 @@ interface TableDataProps {
     status: string;
 }
 
-const TablePage: React.FunctionComponent = () => {
+const TablePage: React.FC = () => {
     const [paginationValue, setPagination] = React.useState<number>(1);
     const [paginationValue1, setPagination1] = React.useState<number>(1);
     const [dropDownList1Selected, setDropdownList1Selected] = React.useState<Array<DropdownItem>>([]);

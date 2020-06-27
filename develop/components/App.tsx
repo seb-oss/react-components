@@ -4,7 +4,7 @@ import { RouteComponentProps } from "react-router";
 // Components
 import TitleBar from "./common/TitleBar";
 import SideBar from "./common/SideBar";
-import { Loader } from "../../src/Loader/Loader";
+import { Loader } from "../../src/Loader";
 import { getParameterByName } from "../__utils/queryString";
 import { SideBarContent, SideBarItem } from "typings/generic.type";
 const sidebarData: SideBarContent = require("../assets/components-list.json");

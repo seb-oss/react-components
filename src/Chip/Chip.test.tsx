@@ -1,6 +1,6 @@
 import React from "react";
 import { unmountComponentAtNode, render } from "react-dom";
-import { Chip } from "./Chip";
+import { Chip } from ".";
 import { act, Simulate } from "react-dom/test-utils";
 
 describe("Component: Chip", () => {

@@ -24,7 +24,7 @@ export interface DialogueProps {
     toggle: boolean;
 }
 
-const Dialogue: React.FunctionComponent<DialogueProps> = (props: DialogueProps) => {
+const Dialogue: React.FC<DialogueProps> = (props: DialogueProps) => {
     const onDismiss = React.useCallback((e: React.MouseEvent<HTMLDivElement>): void => {
         if (props.enableBackdropDismiss && e.currentTarget.classList.contains("dialogue-container")) {
             props.onDismiss && props.onDismiss(e);

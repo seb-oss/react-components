@@ -1,6 +1,6 @@
 import React from "react";
 import { mount } from "enzyme";
-import { ImageCropper } from "./ImageCropper";
+import { ImageCropper } from ".";
 
 describe("Component: ImageCropper", () => {
     const props = {

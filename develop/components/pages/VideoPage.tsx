@@ -1,12 +1,12 @@
 import React from "react";
-import { Video } from "../../../src/Video/Video";
+import { Video } from "../../../src/Video";
 import Highlight from "react-highlight";
-const docMD: string = require("../../../src/Video/readme.md");
+import docMD from "../../../src/Video/readme.md";
 const videoSrc: string = require("../../assets/videos/sample.mp4").default;
 const vimeoSrc: string = "https://player.vimeo.com/video/259422408";
 const youtubeSrc: string = "https://www.youtube.com/embed/f19fctL72CY";
 
-const VideoPage: React.FunctionComponent = () => {
+const VideoPage: React.FC = () => {
     return (
         <div className="route-template container">
             <div className="info-holder">

@@ -1,9 +1,9 @@
 import React from "react";
-import { Timer } from "../../../src/Timer/Timer";
+import { Timer } from "../../../src/Timer";
 import Highlight from "react-highlight";
-const docMD: string = require("../../../src/Timer/readme.md");
+import docMD from "../../../src/Timer/readme.md";
 
-const TimerPage: React.FunctionComponent = () => {
+const TimerPage: React.FC = () => {
     return (
         <div className="route-template container">
             <div className="info-holder">

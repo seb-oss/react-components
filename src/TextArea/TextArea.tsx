@@ -26,7 +26,7 @@ export interface TextAreaProps {
     value: string;
 }
 
-export const TextArea: React.FunctionComponent<TextAreaProps> = (props: TextAreaProps): React.ReactElement<void> => {
+export const TextArea: React.FC<TextAreaProps> = (props: TextAreaProps) => {
     const [id, setId] = React.useState<string>();
 
     React.useEffect(() => {

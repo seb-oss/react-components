@@ -13,20 +13,18 @@ export type ButtonProps = JSX.IntrinsicElements["button"] & {
     block?: boolean;
 };
 
-const Button: React.FC<ButtonProps> = React.memo(
-    ({ theme = "primary", size, block, ...props }: ButtonProps): React.ReactElement<void> => {
-        const [className, setClassName] = React.useState<string>("btn btn-primary");
+const Button: React.FC<ButtonProps> = React.memo(({ theme = "primary", size, block, ...props }: ButtonProps) => {
+    const [className, setClassName] = React.useState<string>("btn btn-primary");
 
-        React.useEffect(() => {
-            setClassName(classnames("rc", "btn", `btn-${theme}`, { [`btn-${size}`]: size, "btn-block": block }, props.className));
-        }, [size, theme, block, props.className]);
+    React.useEffect(() => {
+        setClassName(classnames("rc", "btn", `btn-${theme}`, { [`btn-${size}`]: size, "btn-block": block }, props.className));
+    }, [size, theme, block, props.className]);
 
-        return (
-            <button {...props} className={className}>
-                {props.children}
-            </button>
-        );
-    }
-);
+    return (
+        <button {...props} className={className}>
+            {props.children}
+        </button>
+    );
+});
 
 export { Button };

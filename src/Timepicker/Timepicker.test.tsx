@@ -1,6 +1,6 @@
 import React from "react";
 import { shallow, mount } from "enzyme";
-import { Timepicker, TimepickerDayperiodTypes, TimepickerValue } from "./Timepicker";
+import { Timepicker, TimepickerDayperiodTypes, TimepickerValue } from ".";
 
 describe("Component: Timepicker", () => {
     const props = {

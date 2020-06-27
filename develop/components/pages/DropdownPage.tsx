@@ -1,10 +1,10 @@
 import React from "react";
-import { Dropdown, DropdownItem } from "../../../src/Dropdown/Dropdown";
-import { Toggle } from "../../../src/Toggle/Toggle";
+import { Dropdown, DropdownItem } from "../../../src/Dropdown";
+import { Toggle } from "../../../src/Toggle";
 import Highlight from "react-highlight";
-const docMD: string = require("../../../src/Dropdown/readme.md");
+import docMD from "../../../src/Dropdown/readme.md";
 
-const DropdownPage: React.FunctionComponent = () => {
+const DropdownPage: React.FC = () => {
     const [dropDownList1Selected, setDropdownList1Selected] = React.useState<DropdownItem>(null);
     const [dropDownList2Selected, setDropdownList2Selected] = React.useState<Array<DropdownItem>>([]);
     const [dropDownList3Selected, setDropdownList3Selected] = React.useState<DropdownItem>(null);

@@ -1,15 +1,15 @@
 import React from "react";
-import { Loader, LoaderSize, LoaderType } from "../../../src/Loader/Loader";
-import { Button } from "../../../src/Button/Button";
-import { TextBoxGroup } from "../../../src/TextBoxGroup/TextBoxGroup";
+import { Loader, LoaderSize, LoaderType } from "../../../src/Loader";
+import { Button } from "../../../src/Button";
+import { TextBoxGroup } from "../../../src/TextBoxGroup";
 import SampleContainer from "../../assets/svgs/sample-container.svg";
 import Highlight from "react-highlight";
-import { RadioGroup, RadioListModel } from "../../../src/RadioGroup/RadioGroup";
+import { RadioGroup, RadioListModel } from "../../../src/RadioGroup";
 import { Link } from "react-router-dom";
-import { Dropdown, DropdownItem } from "../../../src/Dropdown/Dropdown";
-import { CheckBox } from "../../../src/CheckBox/CheckBox";
+import { Dropdown, DropdownItem } from "../../../src/Dropdown";
+import { CheckBox } from "../../../src/CheckBox";
 import classnames from "classnames";
-const docMD: string = require("../../../src/Loader/readme.md");
+import docMD from "../../../src/Loader/readme.md";
 
 type Color = "primary" | "secondary" | "warning" | "danger" | "success" | "white" | "info" | "light" | "dark" | "body" | "muted";
 const lightColors: Array<Color> = ["white", "secondary", "light"];

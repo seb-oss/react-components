@@ -1,8 +1,8 @@
 import React from "react";
-import { Button } from "../../../src/Button/Button";
-import { Modal, ModalProps } from "../../../src/Modal/Modal";
+import { Button } from "../../../src/Button";
+import { Modal, ModalProps } from "../../../src/Modal";
 import Highlight from "react-highlight";
-const docMD: string = require("../../../src/Modal/readme.md");
+import docMD from "../../../src/Modal/readme.md";
 
 const initialState: ModalProps = {
     toggle: false,

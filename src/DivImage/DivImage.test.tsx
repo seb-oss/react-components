@@ -1,12 +1,10 @@
 import React from "react";
-import { DivImage } from ".";
+import { DivImage, DivImageProps } from ".";
 import { act } from "react-dom/test-utils";
 import { unmountComponentAtNode, render } from "react-dom";
-import { CommonImageProps } from "./CommonType";
-import { DivImageProps } from "./DivImage";
 const src: string = "data:image/gif;base64,R0lGODdhDwAPAPAAAP///yZFySH5BAEAAAEALAAAAAAPAA8AAAINhI+py+0Po5y02otnAQA7";
 
-type TestCase = { prop: keyof CommonImageProps; className: string };
+type TestCase = { prop: keyof DivImageProps; className: string };
 
 describe("Component: Image", () => {
     let container: HTMLDivElement = null;
@@ -61,7 +59,7 @@ describe("Component: Image", () => {
         ];
         testCases.map((testCase: TestCase) => {
             test(`- ${testCase.prop}`, () => {
-                const props: CommonImageProps = { [testCase.prop]: true };
+                const props: DivImageProps = { [testCase.prop]: true };
                 act(() => {
                     render(<DivImage {...props} />, container);
                 });

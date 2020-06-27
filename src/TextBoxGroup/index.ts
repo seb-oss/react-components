@@ -1,1 +1,1 @@
-export { TextBoxGroup } from "./TextBoxGroup";
+export * from "./TextBoxGroup";

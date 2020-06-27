@@ -1,10 +1,9 @@
 import React from "react";
-import { Breadcrumb, BreadcrumbItem } from "../../../src/Breadcrumb";
-import { BreadcrumbItemProps } from "../../../src/Breadcrumb/BreadcrumbItem";
+import { Breadcrumb, BreadcrumbItem, BreadcrumbItemProps } from "../../../src/Breadcrumb";
 import Highlight from "react-highlight";
 import HouseIcon from "../../assets/icons/house.svg";
 import MusicIcon from "../../assets/icons/music.svg";
-const docMD: string = require("../../../src/Breadcrumb/readme.md");
+import docMD from "../../../src/Breadcrumb/readme.md";
 
 const BreadcrumbPage: React.FC = () => {
     /** Pops up a confirm alert before navigating to the clicked URL */

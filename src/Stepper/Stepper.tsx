@@ -18,7 +18,7 @@ export interface StepperProps {
     warning?: string;
 }
 
-export const Stepper: React.FunctionComponent<StepperProps> = (props: StepperProps): React.ReactElement<void> => {
+export const Stepper: React.FC<StepperProps> = (props: StepperProps) => {
     const [id, setId] = React.useState<string>("");
     React.useEffect(() => {
         setId(props.id ? props.id : randomId("stepper-"));

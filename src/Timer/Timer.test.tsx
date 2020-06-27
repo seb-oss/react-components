@@ -1,6 +1,6 @@
 import React from "react";
 import { shallow, mount } from "enzyme";
-import { Timer } from "./Timer";
+import { Timer } from ".";
 
 describe("Component: Timer", () => {
     const props = {

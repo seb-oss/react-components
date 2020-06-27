@@ -1,8 +1,7 @@
 import React from "react";
 import { act } from "react-dom/test-utils";
 import { unmountComponentAtNode, render } from "react-dom";
-import { FeedbackIndicator } from ".";
-import { IndicatorType } from "./FeedbackIndicator";
+import { FeedbackIndicator, IndicatorType } from ".";
 
 type TestCase = { type: IndicatorType; value: number };
 

@@ -1,6 +1,6 @@
 import React from "react";
 import { shallow, ShallowWrapper, ReactWrapper, mount } from "enzyme";
-import { RadioButton, RadioButtonProps } from "./RadioButton";
+import { RadioButton, RadioButtonProps } from ".";
 
 describe("Component: RadioButton", () => {
     let wrapper: ShallowWrapper<RadioButtonProps>;

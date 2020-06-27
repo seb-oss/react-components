@@ -1,8 +1,8 @@
 import React from "react";
-import { Datepicker } from "../../../src/Datepicker/Datepicker";
+import { Datepicker } from "../../../src/Datepicker";
 import moment from "moment";
 import Highlight from "react-highlight";
-const docMD: string = require("../../../src/Datepicker/readme.md");
+import docMD from "../../../src/Datepicker/readme.md";
 
 const moreIcon: JSX.Element = (
     <svg className="dropdown-more-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
@@ -13,7 +13,7 @@ const moreIcon: JSX.Element = (
 const minDate: Date = moment().subtract(30, "years").toDate();
 const maxDate: Date = moment().add(8, "years").toDate();
 
-const DatepickerPage: React.FunctionComponent = () => {
+const DatepickerPage: React.FC = () => {
     const [datepicker, setDatepicker] = React.useState<Date>(new Date());
     const [datepicker2, setDatepicker2] = React.useState<Date>(new Date());
     const [datepicker3, setDatepicker3] = React.useState<Date>(new Date());
