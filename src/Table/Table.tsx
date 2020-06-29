@@ -95,17 +95,16 @@ export const enum sortDirectionTypes {
  */
 function sumCols(colsLength: number, useSelection?: boolean, useShowActionColumn?: boolean, useGroupBy?: boolean): number {
     let sum = colsLength;
-    if (useSelection || useGroupBy) {
-        if (useSelection) {
-            sum = sum + 1;
-        }
 
-        if (useGroupBy) {
-            sum = sum + 1;
-        }
-        if (useShowActionColumn) {
-            sum = sum + 1;
-        }
+    if (useSelection) {
+        sum = sum + 1;
+    }
+
+    if (useGroupBy) {
+        sum = sum + 1;
+    }
+    if (useShowActionColumn) {
+        sum = sum + 1;
     }
 
     return sum;
@@ -410,46 +409,6 @@ const RowUI: React.FunctionComponent<RowUIProps> = (props: RowUIProps) => {
     );
 };
 
-interface FilterRowProps {
-    columns: Array<TableHeader>;
-    useRowCollapse: boolean;
-    useRowSelection: boolean;
-    showFilterRow?: boolean;
-    filterProps: FilterProps;
-}
-
-const FilterRowUI: React.FunctionComponent<FilterRowProps> = (props: FilterRowProps) => {
-    return (
-        props.showFilterRow && (
-            <tr className="tr-filter">
-                {(props.useRowSelection || props.useRowCollapse) && <td />}
-                {props.columns?.map((column: TableHeader, index: number) => (
-                    <td key={`filter-column-${index}`} className="filter-column">
-                        <div className="filter-item-holder">
-                            {column.filters?.map((filter: string, filterIndex: number) => {
-                                return (
-                                    <div className="filter-item" key={`filter-item-${filterIndex}`}>
-                                        {filter}
-                                        <div
-                                            className="icon-holder"
-                                            role="link"
-                                            onClick={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-                                                props.filterProps?.onRemoveFilter({ accessor: column?.accessor, value: filter });
-                                            }}
-                                        >
-                                            {timesIcon}
-                                        </div>
-                                    </div>
-                                );
-                            })}
-                        </div>
-                    </td>
-                ))}
-            </tr>
-        )
-    );
-};
-
 interface TableUIProps {
     actionLinks?: Array<ActionLinkItem>;
     allRowsAreSelected?: boolean;
@@ -515,11 +474,11 @@ const TableUI: React.FunctionComponent<TableUIProps> = React.memo(
                                             }
                                         }}
                                     >
-                                        {header.label}
+                                        <span className="th-label">{header.label}</span>
                                         {props.sortable && header.canSort && (
-                                            <div role="link" className={"icon-holder" + (header.isSorted ? (header.isSortedDesc ? " desc" : " asc") : "")} id={header.accessor}>
+                                            <span role="link" className={"icon-holder" + (header.isSorted ? (header.isSortedDesc ? " desc" : " asc") : "")} id={header.accessor}>
                                                 {defaultSort}
-                                            </div>
+                                            </span>
                                         )}
                                     </th>
                                 ) : null;
@@ -528,13 +487,6 @@ const TableUI: React.FunctionComponent<TableUIProps> = React.memo(
                         </tr>
                     </thead>
                     <tbody>
-                        <FilterRowUI
-                            showFilterRow={props.showFilterRow}
-                            columns={props.columns}
-                            useRowCollapse={props.useRowCollapse}
-                            filterProps={props.filterProps}
-                            useRowSelection={props.useRowSelection}
-                        />
                         {props.rows?.map((row: TableRow, i: number) => {
                             return (
                                 <React.Fragment key={row.rowIndex}>
@@ -592,6 +544,11 @@ const TableUI: React.FunctionComponent<TableUIProps> = React.memo(
                                 </React.Fragment>
                             );
                         })}
+                        {props.rows?.length === 0 && (
+                            <tr>
+                                <td colSpan={sumCols(props.columns?.length, props.useRowSelection || props.useRowCollapse, props.useShowActionColumn, false)}>Record empty</td>
+                            </tr>
+                        )}
                     </tbody>
                     <tfoot>
                         {props.footer && (
@@ -625,7 +582,6 @@ export interface FilterItem {
 export interface FilterProps {
     filterItems: Array<FilterItem>;
     onAfterFilter: (rows: Array<TableRow>) => void;
-    onRemoveFilter: (item: { accessor: string; value: string }) => void;
 }
 
 export interface EditProps {
@@ -1135,7 +1091,7 @@ const Table: React.FunctionComponent<TableProps> = React.memo(
         });
 
         React.useEffect(() => {
-            if (tableColumns?.length && tableRows?.length) {
+            if (tableColumns?.length && tableRowsImage?.length) {
                 const shouldFilter: boolean = tableColumns.some((column: TableHeader) => column.filters?.length);
                 if (shouldFilter) {
                     const filteredRows: Array<TableRow> = filterArray(tableRowsImage, tableColumns);

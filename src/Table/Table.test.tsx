@@ -499,8 +499,6 @@ describe("Component: Table", () => {
             results = rows;
         });
 
-        const onRemoveFilter: jest.Mock = jest.fn();
-
         const filterValues: Array<string> = smallData.map((data: DataItem<any>) => data.status);
 
         await act(async () => {
@@ -516,7 +514,6 @@ describe("Component: Table", () => {
                             },
                         ],
                         onAfterFilter: onAfterFilterCallBack,
-                        onRemoveFilter: onRemoveFilter,
                     }}
                 />,
                 container
@@ -526,15 +523,6 @@ describe("Component: Table", () => {
         // after filter, the length of the result should decrease
         expect(results.length).not.toEqual(smallData.length);
         expect(onAfterFilterCallBack).toBeCalled();
-        expect(onRemoveFilter).not.toBeCalled();
-
-        // mock on
-
-        await act(async () => {
-            container.querySelector("tbody .filter-item-holder .filter-item .icon-holder").dispatchEvent(new MouseEvent("click", { bubbles: true }));
-        });
-
-        expect(onRemoveFilter).toBeCalled();
     });
 
     it("Should render and support searching ", async () => {
