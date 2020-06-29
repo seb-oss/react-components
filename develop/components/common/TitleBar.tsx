@@ -56,7 +56,7 @@ export default class TitleBar extends React.Component<TitleBarProps, TitleBarSta
     /** Search components list as you type */
     searchComponents(): void {
         if (this.state.searchTerm.length >= 2) {
-            const result = this.state.componentsList.filter((x) => x.name.toLowerCase().match(this.state.searchTerm)).slice(0, 5);
+            const result = this.state.componentsList.filter((x) => x.name.toLowerCase().match(escape(this.state.searchTerm))).slice(0, 5);
             this.setState({ searchList: result });
         }
         if (this.state.searchTerm === "") {
