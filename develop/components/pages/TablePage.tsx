@@ -6,6 +6,7 @@ import { Dropdown, DropdownItem } from "../../../src/Dropdown/Dropdown";
 import { TextBox } from "../../../src/TextBox/TextBox";
 import { Button } from "../../../src/Button/Button";
 import Highlight from "react-highlight";
+import { Chip } from "../../../src/Chip/Chip";
 const docMD = require("../../../src/Table/readme.md");
 
 interface TableDataProps {
@@ -94,6 +95,7 @@ const TablePage: React.FunctionComponent = () => {
         ],
         []
     );
+
     const [filters, setFilters] = React.useState<Array<FilterItem>>(columns.map((column: Column) => ({ accessor: column.accessor, filters: [] })));
 
     React.useEffect(() => {
@@ -147,25 +149,6 @@ const TablePage: React.FunctionComponent = () => {
 
     const filterProps: FilterProps = {
         onAfterFilter: (rows: Array<TableRow>) => {},
-        onRemoveFilter: (item: { accessor: string; value: string }) => {
-            const updatedFilters: Array<FilterItem> = filters.map((filter: FilterItem) => {
-                if (filter.accessor === item.accessor) {
-                    const indexOfFilterTobeRemoved: number = filter?.filters?.findIndex((filterItem: string) => filterItem === item.value);
-                    return { ...filter, filters: [...filter?.filters?.slice(0, indexOfFilterTobeRemoved), ...filter?.filters?.slice(indexOfFilterTobeRemoved + 1)] };
-                }
-                return filter;
-            });
-            if (item?.accessor === "status") {
-                const selectedFilter: FilterItem = updatedFilters?.find((filter: FilterItem) => filter.accessor === "status");
-                const updatedStatus: Array<DropdownItem> = selectedFilter?.filters?.map((item: string) => ({ label: item, value: item }));
-                setStatusDropdownSelected(updatedStatus);
-            } else if (item?.accessor === "age") {
-                const selectedFilter: FilterItem = updatedFilters?.find((filter: FilterItem) => filter.accessor === "age");
-                const updatedStatus: Array<DropdownItem> = selectedFilter?.filters?.map((item: string) => ({ label: item, value: item }));
-                setAgeDropdownSelected(updatedStatus);
-            }
-            setFilters(updatedFilters);
-        },
         filterItems: filters,
     };
 
@@ -300,7 +283,13 @@ const TablePage: React.FunctionComponent = () => {
 
                     <p>Here is an example with actions column</p>
                     <div className="result wide">
-                        <Table columns={columns} data={smallData} primaryActionButton={primaryButton} actionLinks={actionLinks} />
+                        <Table
+                            columns={columns}
+                            data={smallData}
+                            primaryActionButton={primaryButton}
+                            actionLinks={actionLinks}
+                            footer={<Pagination value={paginationValue1} onChange={setPagination1} size={listSize} useFirstAndLast={true} />}
+                        />
                     </div>
 
                     <p>Here is an example with filter</p>
@@ -313,6 +302,23 @@ const TablePage: React.FunctionComponent = () => {
                                 <Dropdown list={ageDropDownList} selectedValue={ageDropdownSelected} onChange={(value: Array<DropdownItem>) => setAgeDropdownSelected(value)} multi={true} />
                             </div>
                             <div className="col-3"></div>
+                        </div>
+                        <div className="d-flex flex-row">
+                            {statusDropdownSelected.map((status: DropdownItem) => {
+                                return (
+                                    <Chip key={status.value} className="m-2" onClose={null}>
+                                        {status.label}
+                                    </Chip>
+                                );
+                            })}
+
+                            {ageDropdownSelected.map((status: DropdownItem) => {
+                                return (
+                                    <Chip key={status.value} className="m-2" onClose={null}>
+                                        {status.label}
+                                    </Chip>
+                                );
+                            })}
                         </div>
                         <Table columns={columns} data={smallData} filterProps={filterProps} onRowSelected={(rows: Array<TableRow>) => {}} onRowExpanded={(rows: Array<TableRow>) => {}} />
                     </div>
