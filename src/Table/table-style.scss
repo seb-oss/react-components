@@ -75,9 +75,6 @@ table {
                         &:hover {
                             color: $icon-active-color;
                         }
-                        svg {
-                            width: 12px;
-                        }
                     }
                     &:first-child {
                         border-bottom: none;
@@ -109,11 +106,13 @@ table {
                     }
 
                     .icon-holder {
-                        height: 100%;
                         vertical-align: middle;
                         position: relative;
                         margin-left: 5px;
                         height: $icon-size;
+                        width: $icon-size;
+                        display: inline-block;
+                        vertical-align: baseline;
 
                         > svg {
                             width: 100%;
@@ -178,7 +177,9 @@ table {
 
                         button {
                             min-height: $icon-size;
-                            margin: 0px 20px;
+                            & + .ellipsis-dropdown-holder {
+                                margin-left: 20px;
+                            }
                         }
 
                         > .ellipsis-dropdown-holder {

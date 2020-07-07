@@ -53,6 +53,8 @@ export interface ActionLinkItem {
 
 export interface PrimaryActionButton {
     label: string;
+    buttonTheme?: "link" | "outline-primary" | "secondary" | "ghost-dark" | "ghost-light" | "danger" | "primary";
+    buttonSize?: "btn-lg" | "btn-md" | "btn-sm";
     onClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>, selectedRow: TableRow) => void;
 }
 
@@ -228,7 +230,9 @@ const ActionColumn: React.FunctionComponent<ActionColumnProps> = (props: ActionC
                 <button
                     id={btnPrimaryRandomIds}
                     type="button"
-                    className="btn btn-outline-primary btn-sm"
+                    className={`btn btn-${props.primaryActionButton.buttonTheme ? props.primaryActionButton.buttonTheme : "outline-primary"} btn-${
+                        props.primaryActionButton?.buttonSize ? props.primaryActionButton?.buttonSize : "sm"
+                    }`}
                     onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
                         props.primaryActionButton?.onClick && props.primaryActionButton.onClick(e, props.selectedRow);
                     }}
