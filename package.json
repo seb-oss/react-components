@@ -5,7 +5,11 @@
 	"license": "Apache-2.0",
 	"keywords": [
 		"react",
-		"components"
+		"components",
+		"javascript",
+		"typescript",
+		"frontend",
+		"ui"
 	],
 	"publishConfig": {
 		"registry": "https://registry.npmjs.org/",
