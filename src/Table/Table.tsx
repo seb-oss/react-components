@@ -54,7 +54,7 @@ export interface ActionLinkItem {
 export interface PrimaryActionButton {
     label: string;
     buttonTheme?: "link" | "outline-primary" | "secondary" | "ghost-dark" | "ghost-light" | "danger" | "primary";
-    buttonSize?: "btn-lg" | "btn-md" | "btn-sm";
+    buttonSize?: "lg" | "md" | "sm";
     onClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>, selectedRow: TableRow) => void;
 }
 
