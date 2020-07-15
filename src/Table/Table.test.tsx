@@ -471,6 +471,8 @@ describe("Component: Table", () => {
     it("Should render and enable custom button", async () => {
         const primaryActionButton: PrimaryActionButton = {
             label: "Buy",
+            buttonSize: "sm",
+            buttonTheme: "danger",
             onClick: jest.fn((e: React.MouseEvent<HTMLButtonElement>) => {}),
         };
 
@@ -483,6 +485,10 @@ describe("Component: Table", () => {
         });
 
         expect(primaryActionButton.onClick).toHaveBeenCalled();
+
+        //check theme and button sizes
+        expect(container.querySelector("tbody tr.parent-row td .action-column > .btn-danger")).toBeTruthy();
+        expect(container.querySelector("tbody tr.parent-row td .action-column > .btn-sm")).toBeTruthy();
     });
 
     it("Should render and support filtering ", async () => {
