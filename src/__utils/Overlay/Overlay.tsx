@@ -16,6 +16,7 @@ const Overlay: React.FC<OverlayProps> = React.forwardRef((props: OverlayProps, r
     const overlayContentRef: React.MutableRefObject<HTMLDivElement> = React.useRef(null);
     const [placementWithCoords, setPlacementWithCoords] = React.useState<ElementPlacementWithCoord>(null);
     const [overlayPositionChecker, setOverlayPositionChecker] = React.useState<OverlayPositionChecker>(null);
+    const [isInitiated, setIsInitiated] = React.useState<boolean>(false);
 
     React.useImperativeHandle(ref, () => ({
         ...ref?.current,
@@ -47,6 +48,13 @@ const Overlay: React.FC<OverlayProps> = React.forwardRef((props: OverlayProps, r
         };
     }, [props.show]);
 
+    React.useEffect(() => {
+        if (overlayPositionChecker && !isInitiated) {
+            getWithinViewportPosition(true);
+            setIsInitiated(true);
+        }
+    }, [overlayPositionChecker]);
+
     /**
      * onScroll handler
      * @param {Event} ev The window scroll event
@@ -63,8 +71,8 @@ const Overlay: React.FC<OverlayProps> = React.forwardRef((props: OverlayProps, r
     }
 
     /** Get position within view port */
-    function getWithinViewportPosition(): void {
-        overlayContentRef.current.focus();
+    function getWithinViewportPosition(disableFocus?: boolean): void {
+        !disableFocus && overlayContentRef.current.focus();
         const placementCoords: ElementPlacementWithCoord = overlayPositionChecker.getPosition(props.position || "top");
         setPlacementWithCoords(placementCoords);
     }
