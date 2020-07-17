@@ -471,6 +471,8 @@ describe("Component: Table", () => {
     it("Should render and enable custom button", async () => {
         const primaryActionButton: PrimaryActionButton = {
             label: "Buy",
+            buttonSize: "sm",
+            buttonTheme: "danger",
             onClick: jest.fn((e: React.MouseEvent<HTMLButtonElement>) => {}),
         };
 
@@ -483,6 +485,10 @@ describe("Component: Table", () => {
         });
 
         expect(primaryActionButton.onClick).toHaveBeenCalled();
+
+        //check theme and button sizes
+        expect(container.querySelector("tbody tr.parent-row td .action-column > .btn-danger")).toBeTruthy();
+        expect(container.querySelector("tbody tr.parent-row td .action-column > .btn-sm")).toBeTruthy();
     });
 
     it("Should render and support filtering ", async () => {
@@ -499,8 +505,6 @@ describe("Component: Table", () => {
             results = rows;
         });
 
-        const onRemoveFilter: jest.Mock = jest.fn();
-
         const filterValues: Array<string> = smallData.map((data: DataItem<any>) => data.status);
 
         await act(async () => {
@@ -516,7 +520,6 @@ describe("Component: Table", () => {
                             },
                         ],
                         onAfterFilter: onAfterFilterCallBack,
-                        onRemoveFilter: onRemoveFilter,
                     }}
                 />,
                 container
@@ -526,15 +529,6 @@ describe("Component: Table", () => {
         // after filter, the length of the result should decrease
         expect(results.length).not.toEqual(smallData.length);
         expect(onAfterFilterCallBack).toBeCalled();
-        expect(onRemoveFilter).not.toBeCalled();
-
-        // mock on
-
-        await act(async () => {
-            container.querySelector("tbody .filter-item-holder .filter-item .icon-holder").dispatchEvent(new MouseEvent("click", { bubbles: true }));
-        });
-
-        expect(onRemoveFilter).toBeCalled();
     });
 
     it("Should render and support searching ", async () => {
