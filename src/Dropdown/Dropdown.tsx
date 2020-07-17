@@ -180,7 +180,7 @@ const Dropdown: React.FunctionComponent<DropdownProps> = (props: DropdownProps):
     const allSelected: boolean = selectedList.length === uniqueList.length;
 
     // adding the select all row on top of the list for multi select option
-    if (props.multi && searchText.length === 0) {
+    if (props.multi && props.list.length > 1 && searchText.length === 0) {
         displayList.unshift({
             id: "select-all",
             dropdownItem: {
