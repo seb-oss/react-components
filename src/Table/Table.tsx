@@ -38,7 +38,7 @@ const timesIcon: JSX.Element = (
 export type DataItem<T = any> = T & TableRow;
 type RowTypes = "row" | "subRow";
 export type EditMode = "save" | "cancel" | "edit";
-
+export type TableTheme = "light" | "dark";
 export interface Column {
     label: string | React.ReactNode;
     accessor: string;
@@ -436,6 +436,8 @@ interface TableUIProps {
     useShowActionColumn: boolean;
     showFilterRow?: boolean;
     filterProps: FilterProps;
+    theadTheme: TableTheme;
+    theme?: TableTheme;
 }
 
 const TableUI: React.FunctionComponent<TableUIProps> = React.memo(
@@ -445,8 +447,8 @@ const TableUI: React.FunctionComponent<TableUIProps> = React.memo(
 
         return (
             <div className={"table-responsive" + (props.loading ? " skeleton-loader skeleton-loader-table" : "")}>
-                <table className={"table" + (props.className ? ` ${props.className}` : "")} ref={tableRef}>
-                    <thead>
+                <table className={"table" + (props.className ? ` ${props.className}` : "") + (props.theme ? ` table-${props.theme}` : "")} ref={tableRef}>
+                    <thead className={props.theadTheme ? `thead-${props.theadTheme}` : ""}>
                         <tr>
                             {props.useRowSelection ? (
                                 <th>
@@ -609,6 +611,8 @@ export interface TableProps {
     searchProps?: SearchProps;
     sortProps?: SortProps;
     editProps?: EditProps;
+    theme?: TableTheme;
+    theadTheme?: TableTheme;
 }
 
 const Table: React.FunctionComponent<TableProps> = React.memo(
@@ -1232,6 +1236,8 @@ const Table: React.FunctionComponent<TableProps> = React.memo(
                     showFilterRow={showFilterRow()}
                     filterProps={props.filterProps}
                     onChange={onTextChange}
+                    theme={props.theme}
+                    theadTheme={props.theadTheme}
                 />
             </div>
         );
