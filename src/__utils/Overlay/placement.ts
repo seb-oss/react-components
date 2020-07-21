@@ -3,20 +3,20 @@ export type ElementPosition = "top" | "bottom" | "left" | "right" | "top-right" 
 type PointPositionLabel = "vertical-center" | "horizontal-center" | "side-top" | "side-bottom" | "side-left" | "side-right" | "bottom" | "left" | "right" | "top";
 
 type ElementPositionCoord = {
-    left?: number,
-    top?: number,
-    right?: number,
-    bottom?: number
+    left?: number;
+    top?: number;
+    right?: number;
+    bottom?: number;
 };
 
 type ElementStylePosition = {
-    left: string,
-    top: string
+    left: string;
+    top: string;
 };
 
 type ElementPlacement = {
-    x: PointPositionLabel,
-    y: PointPositionLabel
+    x: PointPositionLabel;
+    y: PointPositionLabel;
 };
 
 export type ElementPlacements = {
@@ -29,58 +29,71 @@ export type ElementPlacementWithCoord = {
 };
 
 export const elementPlacements: ElementPlacements = {
-    "top": {
+    top: {
         x: "horizontal-center",
-        y: "top"
+        y: "top",
     },
-    "right": {
+    right: {
         x: "right",
-        y: "vertical-center"
+        y: "vertical-center",
     },
-    "bottom": {
+    bottom: {
         x: "horizontal-center",
-        y: "bottom"
+        y: "bottom",
     },
-    "left": {
+    left: {
         x: "left",
-        y: "vertical-center"
+        y: "vertical-center",
     },
     "top-left": {
         x: "side-left",
-        y: "top"
+        y: "top",
     },
     "top-right": {
         x: "side-right",
-        y: "top"
+        y: "top",
     },
     "bottom-left": {
         x: "side-left",
-        y: "bottom"
+        y: "bottom",
     },
     "bottom-right": {
         x: "side-right",
-        y: "bottom"
+        y: "bottom",
     },
     "left-top": {
         x: "left",
-        y: "side-top"
+        y: "side-top",
     },
     "left-bottom": {
         x: "left",
-        y: "side-bottom"
+        y: "side-bottom",
     },
     "right-top": {
         x: "right",
-        y: "side-top"
+        y: "side-top",
     },
     "right-bottom": {
         x: "right",
-        y: "side-bottom"
+        y: "side-bottom",
     },
 };
 
 export class OverlayPositionChecker {
-    private defaultPositionsList: Array<ElementPosition> = ["top", "left", "right", "bottom", "bottom-left", "bottom-right", "left-bottom", "left-top", "right-bottom", "right-top", "top-left", "top-right"];
+    private defaultPositionsList: Array<ElementPosition> = [
+        "top",
+        "left",
+        "right",
+        "bottom",
+        "bottom-left",
+        "bottom-right",
+        "left-bottom",
+        "left-top",
+        "right-bottom",
+        "right-top",
+        "top-left",
+        "top-right",
+    ];
     private referenceElement: HTMLDivElement;
     private overlayElement: HTMLDivElement;
     private disableAutoPosition: boolean;
@@ -143,6 +156,7 @@ export class OverlayPositionChecker {
             });
             return placementWithCoord;
         } else {
+            this.getOverlayPositionCoord(position);
             return this.getPlacement(position);
         }
     }
@@ -155,7 +169,7 @@ export class OverlayPositionChecker {
         if (this.currentPosition) {
             return {
                 left: `${this.currentPosition.left}px`,
-                top: `${this.currentPosition.top}px`
+                top: `${this.currentPosition.top}px`,
             };
         }
         return null;
@@ -179,7 +193,7 @@ export class OverlayPositionChecker {
                 top: top + scrollTop,
                 left: left + scrollLeft,
                 bottom: top + overlayRect.height,
-                right: left + overlayRect.width
+                right: left + overlayRect.width,
             };
         } else {
             this.currentPosition = null;
@@ -196,16 +210,35 @@ export class OverlayPositionChecker {
         const overlayRect: ClientRect = this.overlayElement.getBoundingClientRect();
         let calculatedPosition: number = 0;
         switch (point) {
-            case "vertical-center": calculatedPosition = referenceRect.bottom - (overlayRect.height / 2) - (referenceRect.height / 2); break;
-            case "horizontal-center": calculatedPosition = referenceRect.left - (overlayRect.width / 2) + (referenceRect.width / 2); break;
-            case "side-top": calculatedPosition = referenceRect.bottom - referenceRect.height; break;
-            case "side-bottom": calculatedPosition = referenceRect.bottom - overlayRect.height; break;
-            case "side-left": calculatedPosition = referenceRect.left; break;
-            case "side-right": calculatedPosition = referenceRect.right - overlayRect.width; break;
-            case "bottom": calculatedPosition = referenceRect.bottom; break;
-            case "left": calculatedPosition = referenceRect.left - overlayRect.width; break;
-            case "right": calculatedPosition = referenceRect.right; break;
-            default: calculatedPosition = referenceRect.top - overlayRect.height;
+            case "vertical-center":
+                calculatedPosition = referenceRect.bottom - overlayRect.height / 2 - referenceRect.height / 2;
+                break;
+            case "horizontal-center":
+                calculatedPosition = referenceRect.left - overlayRect.width / 2 + referenceRect.width / 2;
+                break;
+            case "side-top":
+                calculatedPosition = referenceRect.bottom - referenceRect.height;
+                break;
+            case "side-bottom":
+                calculatedPosition = referenceRect.bottom - overlayRect.height;
+                break;
+            case "side-left":
+                calculatedPosition = referenceRect.left;
+                break;
+            case "side-right":
+                calculatedPosition = referenceRect.right - overlayRect.width;
+                break;
+            case "bottom":
+                calculatedPosition = referenceRect.bottom;
+                break;
+            case "left":
+                calculatedPosition = referenceRect.left - overlayRect.width;
+                break;
+            case "right":
+                calculatedPosition = referenceRect.right;
+                break;
+            default:
+                calculatedPosition = referenceRect.top - overlayRect.height;
         }
         return calculatedPosition;
     }
@@ -216,8 +249,9 @@ export class OverlayPositionChecker {
      */
     private isElementOverflow(position: ElementPosition): boolean {
         this.getOverlayPositionCoord(position);
-        return !this.currentPosition ||
-            (this.currentPosition.left < 0 || this.currentPosition.top < 0 || this.currentPosition.right > window.innerWidth || this.currentPosition.bottom > window.innerHeight);
+        return (
+            !this.currentPosition || this.currentPosition.left < 0 || this.currentPosition.top < 0 || this.currentPosition.right > window.innerWidth || this.currentPosition.bottom > window.innerHeight
+        );
     }
 
     /**
@@ -228,7 +262,7 @@ export class OverlayPositionChecker {
     private getPlacement(pos: ElementPosition): ElementPlacementWithCoord {
         return {
             coord: this.getNewStyle(),
-            position: pos
+            position: pos,
         };
     }
 }
