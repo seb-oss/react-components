@@ -66,15 +66,18 @@ const Overlay: React.FC<OverlayProps> = React.forwardRef((props: OverlayProps, r
             if (referenceDomRect.bottom < 0 || referenceDomRect.right < 0 || referenceDomRect.left > window.innerWidth || referenceDomRect.top > window.innerHeight) {
                 overlayContentRef?.current?.blur();
             }
-            setPlacementWithCoords(await overlayPositionChecker.getPosition(props.position || "top"));
+            overlayPositionChecker.getPosition(props.position || "top").then((position: ElementPlacementWithCoord) => {
+                setPlacementWithCoords(position);
+            });
         }
     }
 
     /** Get position within view port */
     async function getWithinViewportPosition(disableFocus?: boolean) {
-        const placementCoords: ElementPlacementWithCoord = await overlayPositionChecker.getPosition(props.position || "top");
-        setPlacementWithCoords(placementCoords);
-        !disableFocus && overlayContentRef.current.focus();
+        overlayPositionChecker.getPosition(props.position || "top").then((position: ElementPlacementWithCoord) => {
+            setPlacementWithCoords(position);
+            !disableFocus && overlayContentRef.current.focus();
+        });
     }
 
     return createPortal(
