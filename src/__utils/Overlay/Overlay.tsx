@@ -59,22 +59,25 @@ const Overlay: React.FC<OverlayProps> = React.forwardRef((props: OverlayProps, r
      * onScroll handler
      * @param {Event} ev The window scroll event
      */
-    function onScroll(ev: Event): void {
+    async function onScroll(ev: Event) {
         const target: HTMLElement = ev.target as HTMLElement;
         if (props.show && target.contains(props.overlayReference())) {
             const referenceDomRect: DOMRect = props.overlayReference().getBoundingClientRect();
             if (referenceDomRect.bottom < 0 || referenceDomRect.right < 0 || referenceDomRect.left > window.innerWidth || referenceDomRect.top > window.innerHeight) {
                 overlayContentRef?.current?.blur();
             }
-            setPlacementWithCoords(overlayPositionChecker.getPosition(props.position || "top"));
+            overlayPositionChecker.getPosition(props.position || "top").then((position: ElementPlacementWithCoord) => {
+                setPlacementWithCoords(position);
+            });
         }
     }
 
     /** Get position within view port */
-    function getWithinViewportPosition(disableFocus?: boolean): void {
-        !disableFocus && overlayContentRef.current.focus();
-        const placementCoords: ElementPlacementWithCoord = overlayPositionChecker.getPosition(props.position || "top");
-        setPlacementWithCoords(placementCoords);
+    async function getWithinViewportPosition(disableFocus?: boolean) {
+        overlayPositionChecker.getPosition(props.position || "top").then((position: ElementPlacementWithCoord) => {
+            setPlacementWithCoords(position);
+            !disableFocus && overlayContentRef.current.focus();
+        });
     }
 
     return createPortal(
