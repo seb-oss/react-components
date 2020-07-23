@@ -128,14 +128,16 @@ export class OverlayPositionChecker {
      * @param position selected position
      * @returns overlay position and coordinates
      */
-    getPosition(position: ElementPosition): ElementPlacementWithCoord {
-        if (this.disableAutoPosition) {
-            this.getOverlayPositionCoord(position);
-            this.currentPlacementWithCoord = this.getPlacement(position);
-        } else {
-            this.currentPlacementWithCoord = this.setPositionWithinViewport(position);
-        }
-        return this.currentPlacementWithCoord;
+    async getPosition(position: ElementPosition): Promise<ElementPlacementWithCoord> {
+        return new Promise((resolve: (value?: ElementPlacementWithCoord | PromiseLike<ElementPlacementWithCoord>) => void) => {
+            if (this.disableAutoPosition) {
+                this.getOverlayPositionCoord(position);
+                this.currentPlacementWithCoord = this.getPlacement(position);
+            } else {
+                this.currentPlacementWithCoord = this.setPositionWithinViewport(position);
+            }
+            resolve(this.currentPlacementWithCoord);
+        });
     }
 
     /**
