@@ -330,10 +330,10 @@ const Dropdown: React.FunctionComponent<DropdownProps> = (props: DropdownProps):
             return props.placeholders?.emptyText || "Empty";
         }
         if (selectedList && selectedList.length > 0) {
-            if (allSelected) {
-                return props.placeholders?.selectAllText || `All selected (${selectedList.length})`;
-            }
             if (props.multi) {
+                if (allSelected) {
+                    return props.placeholders?.selectAllText || `All selected (${selectedList.length})`;
+                }
                 if (selectedList.length === 1) {
                     return selectedList[0].label;
                 }
