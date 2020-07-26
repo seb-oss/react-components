@@ -8,63 +8,6 @@ $row-height: 40px;
 $transition-time: 200ms;
 $filter-gray: #e6e6e6;
 
-@mixin setInputGroupStyles() {
-    .form-group.input-box-group {
-        position: relative;
-        margin-bottom: 0rem;
-        > .input-group {
-            position: relative;
-            > .input-box-group-wrapper {
-                transition: border $transition-time / 2;
-                position: relative;
-                width: 100%;
-                height: auto;
-                border: 1px solid $gray-500;
-                border-radius: 4px;
-                overflow: hidden;
-                display: flex;
-                align-items: center;
-                &:hover {
-                    border-color: $blue;
-                    background-color: $white;
-                }
-                &:focus-within {
-                    border-color: $blue-darker;
-                    box-shadow: none;
-                    background-color: $white;
-                    &:active {
-                        border-color: $blue-darker;
-                        box-shadow: none;
-                        background-color: $white;
-                    }
-                }
-                > input.form-control {
-                    display: inline-flex;
-                    z-index: 1;
-                    border: none;
-                    border-radius: 0;
-                    height: auto;
-                    min-height: 10px;
-                    padding: 5px 7px;
-                    &:focus {
-                        box-shadow: none;
-                    }
-                    &::-webkit-inner-spin-button,
-                    &::-webkit-textfield-decoration-container {
-                        -webkit-appearance: none;
-                        -moz-appearance: none;
-                        appearance: none;
-                    }
-                    &:nth-child(2):not(:last-child),
-                    &:first-child:not(:last-child) {
-                        padding-right: 0;
-                    }
-                }
-            }
-        }
-    }
-}
-
 table {
     &.table {
         thead {
@@ -72,36 +15,9 @@ table {
                 > th {
                     &.sortable {
                         cursor: pointer;
+
                         &:hover {
                             color: $icon-active-color;
-                        }
-                    }
-                    &:first-child {
-                        border-bottom: none;
-                    }
-
-                    .custom-control {
-                        position: relative;
-                        display: block;
-                        min-height: 1.5rem;
-
-                        &.custom-checkbox {
-                            input[type="checkbox"] {
-                                box-sizing: border-box;
-                                padding: 0;
-                            }
-
-                            .custom-control-label {
-                                position: relative;
-                                margin-bottom: 0;
-                                vertical-align: top;
-                            }
-
-                            .custom-control-input {
-                                position: absolute;
-                                z-index: -1;
-                                opacity: 0;
-                            }
                         }
                     }
 
@@ -112,7 +28,6 @@ table {
                         height: $icon-size;
                         width: $icon-size;
                         display: inline-block;
-                        vertical-align: baseline;
 
                         > svg {
                             width: 100%;
@@ -143,9 +58,13 @@ table {
 
         tbody {
             tr {
-                td {
-                    @include setInputGroupStyles();
+                &:first-child {
+                    td {
+                        border-top: none;
+                    }
+                }
 
+                td {
                     .icon-holder {
                         cursor: pointer;
                         height: $icon-size;
@@ -177,6 +96,7 @@ table {
 
                         button {
                             min-height: $icon-size;
+
                             & + .ellipsis-dropdown-holder {
                                 margin-left: 20px;
                             }
@@ -194,6 +114,7 @@ table {
                                         fill: $white;
                                     }
                                 }
+
                                 svg {
                                     fill: $icon-active-color;
                                     height: calc(#{$icon-size} * 1.5);
@@ -225,12 +146,14 @@ table {
                                         margin-bottom: 0.125rem;
                                     }
                                 }
+
                                 > a {
                                     color: inherit;
                                     padding: 8px 16px;
                                     text-decoration: none;
                                     display: block;
                                     cursor: pointer;
+
                                     &:hover {
                                         background-color: $icon-active-color;
                                         color: $white;
@@ -246,6 +169,7 @@ table {
                         align-items: center;
                     }
                 }
+
                 &.sub-row {
                     td {
                         > div {
@@ -255,6 +179,7 @@ table {
                         }
                     }
                 }
+
                 &.sub-description-row {
                     td {
                         .description {

@@ -187,12 +187,8 @@ interface TextboxGroupProps {
 
 const TextboxGroup: React.FunctionComponent<TextboxGroupProps> = (props: TextboxGroupProps) => {
     return (
-        <div className="form-group input-box-group">
-            <div className="input-group">
-                <div className="input-box-group-wrapper">
-                    <input id={props.name} name={props.name} type={props.type} value={String(props.value)} onChange={props.onChange} className="form-control" />
-                </div>
-            </div>
+        <div className="form-group">
+            <input id={props.name} className="form-control" name={props.name} type={props.type} value={String(props.value)} onChange={props.onChange} />
         </div>
     );
 };
