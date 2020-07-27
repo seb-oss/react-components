@@ -22,16 +22,14 @@ The component name is `Timer` and the selector is `<Timer/>`, it will support co
 ## Basic use
 
 ```html
-<Timer duration={90000} callback={() => { console.log("TIMER ENDED callback"); }} />
+<Timer duration={60} onTimerEnded={() => console.log("TIMER ENDED callback")} />
 ```
 
 ## Properties
 
-These are the current available properties:
+This component extends all native attributes of `HTMLTimeElement`, while offering the following customizations:
 
-| Property   | Type           | Description                                            |
-| ---------- | -------------- | ------------------------------------------------------ |
-| callback   | `VoidFunction` | This method will be triggered when timer reached ended |
-| className? | `string`       | Custom class                                           |
-| duration   | `number`       | Duration of timer in `Millisecond`                     |
-| id?        | `string`       | Element id                                             |
+| Property     | Type           | Description                                           |
+| ------------ | -------------- | ----------------------------------------------------- |
+| duration     | `number`       | Duration in **seconds**                               |
+| onTimerEnded | `VoidFunction` | This method will be triggered when timer reaches zero |
