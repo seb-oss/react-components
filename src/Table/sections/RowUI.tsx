@@ -3,7 +3,7 @@ import { TableRow, RowTypes, ActionLinkItem, TableHeader, PrimaryActionButton, C
 import { randomId } from "@sebgroup/frontend-tools/dist/randomId";
 
 // components
-import TextboxGroup from "./TextboxGroup";
+import { TextboxGroup } from "./TextboxGroup";
 import { ActionColumnUI } from "./ActionColumnUI";
 import { sumCols } from "./helperFunctions";
 
