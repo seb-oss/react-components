@@ -180,7 +180,7 @@ const Dropdown: React.FC<DropdownProps> = (props: DropdownProps) => {
     const allSelected: boolean = selectedList.length === uniqueList.length;
 
     // adding the select all row on top of the list for multi select option
-    if (props.multi && searchText.length === 0) {
+    if (props.multi && props.list.length > 1 && searchText.length === 0) {
         displayList.unshift({
             id: "select-all",
             dropdownItem: {
@@ -330,10 +330,10 @@ const Dropdown: React.FC<DropdownProps> = (props: DropdownProps) => {
             return props.placeholders?.emptyText || "Empty";
         }
         if (selectedList && selectedList.length > 0) {
-            if (allSelected) {
-                return props.placeholders?.selectAllText || `All selected (${selectedList.length})`;
-            }
             if (props.multi) {
+                if (allSelected) {
+                    return props.placeholders?.selectAllText || `All selected (${selectedList.length})`;
+                }
                 if (selectedList.length === 1) {
                     return selectedList[0].label;
                 }

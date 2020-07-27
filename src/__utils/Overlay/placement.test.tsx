@@ -1,7 +1,7 @@
 import React from "react";
 import { unmountComponentAtNode, render } from "react-dom";
 import { act } from "react-dom/test-utils";
-import { OverlayPositionChecker, ElementPosition } from "./placement";
+import { OverlayPositionChecker, ElementPosition, ElementPlacementWithCoord } from "./placement";
 
 // type TriggerTestCase = {
 //     toggleEvent: Event;
@@ -69,7 +69,7 @@ describe("Placement class", () => {
         }
     });
 
-    it("Should render null position", () => {
+    it("Should render null position", async () => {
         act(() => {
             render(
                 <div className="wrapper">
@@ -81,7 +81,7 @@ describe("Placement class", () => {
         });
         const checker: OverlayPositionChecker = new OverlayPositionChecker(container.querySelector(".reference"), true);
         checker.addOverlayContainer(container.querySelector(".overlay"));
-        expect(checker.getPosition(null)).toStrictEqual({ coord: null, position: null });
+        expect(await checker.getPosition(null)).toStrictEqual({ coord: null, position: null });
     });
 
     describe("Should render in all allowed positions", () => {
@@ -148,7 +148,7 @@ describe("Placement class", () => {
             },
         ];
         for (const testCase of positionTestCases) {
-            test(`able to render on ${testCase.position}`, () => {
+            test(`able to render on ${testCase.position}`, async () => {
                 container.style.position = "relative";
                 act(() => {
                     render(
@@ -169,7 +169,8 @@ describe("Placement class", () => {
                 (overlayElement.getBoundingClientRect as any) = jest.fn(() => {
                     return testCase.mockTooltipBoundingClientRect;
                 });
-                expect(checker.getPosition(testCase.position).position === testCase.position).toBeTruthy();
+                const coord: ElementPlacementWithCoord = await checker.getPosition(testCase.position);
+                expect(coord.position === testCase.position).toBeTruthy();
             });
         }
     });
@@ -250,7 +251,7 @@ describe("Placement class", () => {
             },
         ];
         for (const testCase of positionTestCases) {
-            test(`able to render on ${testCase.relativePosition} when tooltip is overflow on ${testCase.position}`, () => {
+            test(`able to render on ${testCase.relativePosition} when tooltip is overflow on ${testCase.position}`, async () => {
                 container.style.position = "relative";
                 act(() => {
                     render(
@@ -271,7 +272,8 @@ describe("Placement class", () => {
                 (overlayElement.getBoundingClientRect as any) = jest.fn(() => {
                     return testCase.mockTooltipBoundingClientRect;
                 });
-                expect(checker.getPosition(testCase.position).position === testCase.relativePosition).toBeTruthy();
+                const coord: ElementPlacementWithCoord = await checker.getPosition(testCase.position);
+                expect(coord.position === testCase.relativePosition).toBeTruthy();
             });
         }
     });
@@ -352,7 +354,7 @@ describe("Placement class", () => {
             },
         ];
         for (const testCase of positionTestCases) {
-            test(`able to render on ${testCase.position} when tooltip is overflow on ${testCase.position}`, () => {
+            test(`able to render on ${testCase.position} when tooltip is overflow on ${testCase.position}`, async () => {
                 container.style.position = "relative";
                 act(() => {
                     render(
@@ -374,7 +376,8 @@ describe("Placement class", () => {
                     return testCase.mockTooltipBoundingClientRect;
                 });
                 checker.disableAutoPlacement(true);
-                expect(checker.getPosition(testCase.position).position === testCase.position).toBeTruthy();
+                const coord: ElementPlacementWithCoord = await checker.getPosition(testCase.position);
+                expect(coord.position === testCase.position).toBeTruthy();
             });
         }
     });

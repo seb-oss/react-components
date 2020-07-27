@@ -21,8 +21,8 @@ export type ModalProps = JSX.IntrinsicElements["div"] & {
 
 export const Modal: React.FC<ModalProps> = React.memo(
     ({ body, disableCloseButton, disableBackdropDismiss, centered, size, footer, fullscreen, header, onDismiss, position, toggle, ...props }: ModalProps) => {
-        const mounted: React.MutableRefObject<boolean> = React.useRef<boolean>(false);
         const [className, setClassName] = React.useState<string>("seb modal");
+        const prestine: React.MutableRefObject<boolean> = React.useRef<boolean>(true);
 
         /**
          * Dismisses the modal
@@ -45,7 +45,7 @@ export const Modal: React.FC<ModalProps> = React.memo(
                     "modal",
                     {
                         show: toggle,
-                        hide: !toggle && mounted.current,
+                        hide: !prestine.current,
                         "modal-centered": centered,
                         "modal-fullscreen": fullscreen,
                         [`modal-aside modal-aside-${position}`]: !!position,
@@ -56,8 +56,8 @@ export const Modal: React.FC<ModalProps> = React.memo(
         }, [toggle, centered, position, fullscreen, props.className]);
 
         React.useEffect(() => {
-            mounted.current = true;
-        }, []);
+            prestine.current = false;
+        }, [toggle]);
 
         return (
             <div {...props} className={className} role={props.role || "dialog"} tabIndex={-1} aria-modal="true" onClick={onClick}>

@@ -60,7 +60,7 @@ describe("Component: Overlay", () => {
         expect(overlayContainer.innerHTML).toEqual(content);
     });
 
-    it("Should be set to focus on overlay show", () => {
+    it("Should be set to focus on overlay show", async () => {
         const newProps: OverlayProps = { ...overlayProps, overlayReference: () => container.querySelector(".ref") };
         act(() => {
             render(
@@ -78,6 +78,26 @@ describe("Component: Overlay", () => {
                 <div>
                     <div className="ref">ref</div>
                     <Overlay {...updatedProps}>overlay</Overlay>
+                </div>,
+                container
+            );
+        });
+        await act(async () => {
+            render(
+                <div>
+                    <div className="ref">ref</div>
+                    <Overlay {...newProps}>overlay</Overlay>
+                </div>,
+                container
+            );
+        });
+        expect(document.body.querySelector(".overlay-container:focus")).toBeFalsy();
+        const updatedProps2: OverlayProps = { ...newProps, show: true };
+        await act(async () => {
+            render(
+                <div>
+                    <div className="ref">ref</div>
+                    <Overlay {...updatedProps2}>overlay</Overlay>
                 </div>,
                 container
             );

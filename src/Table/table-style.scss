@@ -1,4 +1,4 @@
-@import "../../node_modules/@sebgroup/bootstrap/scss/variables";
+@import "~@sebgroup/bootstrap/scss/variables";
 
 $icon-color: $gray-500;
 $icon-active-color: $blue-dark;
@@ -70,8 +70,6 @@ table {
         thead {
             > tr {
                 > th {
-                    vertical-align: middle;
-                    white-space: nowrap;
                     &.sortable {
                         cursor: pointer;
                         &:hover {
@@ -108,11 +106,13 @@ table {
                     }
 
                     .icon-holder {
-                        height: 100%;
                         vertical-align: middle;
                         position: relative;
                         margin-left: 5px;
                         height: $icon-size;
+                        width: $icon-size;
+                        display: inline-block;
+                        vertical-align: baseline;
 
                         > svg {
                             width: 100%;
@@ -144,45 +144,8 @@ table {
         tbody {
             tr {
                 td {
-                    white-space: nowrap;
-                    position: relative;
-                    vertical-align: middle;
-                    max-width: 300px;
-
                     @include setInputGroupStyles();
 
-                    &.filter-column {
-                        > .filter-item-holder {
-                            display: flex;
-                            flex-wrap: wrap;
-                            > .filter-item {
-                                height: $chip-height;
-                                background-color: $filter-gray;
-                                border-radius: 4px;
-                                padding: 4px;
-                                margin: 4px;
-
-                                display: flex;
-                                align-items: center;
-
-                                &:focus {
-                                    outline: 0;
-                                    border-color: $blue;
-                                    box-shadow: 0 0 0 0, 0 0 0 0.2rem rgba(38, 162, 230, 0.5);
-                                }
-                                .icon-holder {
-                                    margin-left: 12px;
-
-                                    svg {
-                                        fill: $black;
-                                        &:hover {
-                                            fill: $red;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
                     .icon-holder {
                         cursor: pointer;
                         height: $icon-size;
@@ -213,9 +176,10 @@ table {
                         align-items: center;
 
                         button {
-                            min-width: $icon-size;
                             min-height: $icon-size;
-                            margin: 0px 20px;
+                            & + .ellipsis-dropdown-holder {
+                                margin-left: 20px;
+                            }
                         }
 
                         > .ellipsis-dropdown-holder {
@@ -233,7 +197,6 @@ table {
                                 svg {
                                     fill: $icon-active-color;
                                     height: calc(#{$icon-size} * 1.5);
-                                    width: 100%;
                                 }
                             }
 
