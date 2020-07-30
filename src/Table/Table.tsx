@@ -1,43 +1,13 @@
-import * as React from "react";
-import { randomId } from "@sebgroup/frontend-tools/dist/randomId";
+import React from "react";
 import "./table-style.scss";
 
-const angleDown: JSX.Element = (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512">
-        <path d="M119.5 326.9L3.5 209.1c-4.7-4.7-4.7-12.3 0-17l7.1-7.1c4.7-4.7 12.3-4.7 17 0L128 287.3l100.4-102.2c4.7-4.7 12.3-4.7 17 0l7.1 7.1c4.7 4.7 4.7 12.3 0 17L136.5 327c-4.7 4.6-12.3 4.6-17-.1z" />
-    </svg>
-);
-const angleRightIcon: JSX.Element = (
-    <svg name="angle-right" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 512">
-        <path d="M166.9 264.5l-117.8 116c-4.7 4.7-12.3 4.7-17 0l-7.1-7.1c-4.7-4.7-4.7-12.3 0-17L127.3 256 25.1 155.6c-4.7-4.7-4.7-12.3 0-17l7.1-7.1c4.7-4.7 12.3-4.7 17 0l117.8 116c4.6 4.7 4.6 12.3-.1 17z" />
-    </svg>
-);
-const ellipsis: JSX.Element = (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
-        <path d="M192 256c0 17.7-14.3 32-32 32s-32-14.3-32-32 14.3-32 32-32 32 14.3 32 32zm88-32c-17.7 0-32 14.3-32 32s14.3 32 32 32 32-14.3 32-32-14.3-32-32-32zm-240 0c-17.7 0-32 14.3-32 32s14.3 32 32 32 32-14.3 32-32-14.3-32-32-32z" />
-    </svg>
-);
-const defaultSort: JSX.Element = (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 644">
-        <path
-            transform="translate(0 240)"
-            d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z"
-        />
-        <path
-            transform="translate(0 -100)"
-            d="M240.971 130.524l194.343 194.343c9.373 9.373 9.373 24.569 0 33.941l-22.667 22.667c-9.357 9.357-24.522 9.375-33.901.04L224 227.495 69.255 381.516c-9.379 9.335-24.544 9.317-33.901-.04l-22.667-22.667c-9.373-9.373-9.373-24.569 0-33.941L207.03 130.525c9.372-9.373 24.568-9.373 33.941-.001z"
-        />
-    </svg>
-);
-const timesIcon: JSX.Element = (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512">
-        <path d="M217.5 256l137.2-137.2c4.7-4.7 4.7-12.3 0-17l-8.5-8.5c-4.7-4.7-12.3-4.7-17 0L192 230.5 54.8 93.4c-4.7-4.7-12.3-4.7-17 0l-8.5 8.5c-4.7 4.7-4.7 12.3 0 17L166.5 256 29.4 393.2c-4.7 4.7-4.7 12.3 0 17l8.5 8.5c4.7 4.7 12.3 4.7 17 0L192 281.5l137.2 137.2c4.7 4.7 12.3 4.7 17 0l8.5-8.5c4.7-4.7 4.7-12.3 0-17L217.5 256z" />
-    </svg>
-);
+import { TableUI } from "./sections/TableUI";
+import { sortArray, searchTextInArray, filterArray } from "./sections/helperFunctions";
 
 export type DataItem<T = any> = T & TableRow;
-type RowTypes = "row" | "subRow";
+export type RowTypes = "row" | "subRow";
 export type EditMode = "save" | "cancel" | "edit";
+export type TableTheme = "light" | "dark";
 
 export interface Column {
     label: string | React.ReactNode;
@@ -45,33 +15,28 @@ export interface Column {
     canSort?: boolean;
     isHidden?: boolean;
 }
-
 export interface ActionLinkItem {
     label: string;
     onClick: (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>, selectedRow: TableRow) => void;
 }
-
 export interface PrimaryActionButton {
     label: string;
     buttonTheme?: "link" | "outline-primary" | "secondary" | "ghost-dark" | "ghost-light" | "danger" | "primary";
     buttonSize?: "lg" | "md" | "sm";
     onClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>, selectedRow: TableRow) => void;
 }
-
 export interface TableHeader extends Column {
     isSorted?: boolean;
     isSortedDesc?: boolean;
     filters?: Array<string>;
 }
-
-interface Cell {
+export interface Cell {
     id: string | number;
     accessor: string;
     value: string | number | boolean;
     canEdit?: boolean;
     hidden?: boolean;
 }
-
 export interface TableRow {
     rowIndex: number;
     cells: Array<Cell>;
@@ -82,491 +47,10 @@ export interface TableRow {
     rowContentDetail?: React.ReactNode;
     isEditMode?: boolean;
 }
-
 export const enum sortDirectionTypes {
     Ascending = "ASC",
     Descending = "DESC",
 }
-
-/**
- * sum the total of columns or cols in a row
- * @param colsLength the length of the columns
- * @param useSelection add a column for selection checkboxes
- * @param useShowActionColumn add another column for action columns
- * @param useGroupBy add another columns for groupby
- */
-function sumCols(colsLength: number, useSelection?: boolean, useShowActionColumn?: boolean, useGroupBy?: boolean): number {
-    let sum = colsLength;
-
-    if (useSelection) {
-        sum = sum + 1;
-    }
-
-    if (useGroupBy) {
-        sum = sum + 1;
-    }
-    if (useShowActionColumn) {
-        sum = sum + 1;
-    }
-
-    return sum;
-}
-
-/**
- * sort array of tabke rows
- * @param items table rows array
- * @param columnName the target column name
- * @param sortDirection the sort direction
- */
-function sortArray(items: Array<TableRow> = [], columnName: string, sortDirection: sortDirectionTypes): Array<TableRow> {
-    const languages: Readonly<Array<string>> = window.navigator?.languages || ["sw", "en"];
-
-    const sortedItems: Array<any> = [...items].sort((firstItem: TableRow, secondItem: TableRow) => {
-        let result: number = 0;
-        if (sortDirection === sortDirectionTypes.Ascending) {
-            if (isNaN(secondItem[columnName]) && isNaN(firstItem[columnName])) {
-                result = String(firstItem[columnName]).localeCompare(String(secondItem[columnName]), languages as Array<string>, { sensitivity: "base", ignorePunctuation: true });
-            } else {
-                result = firstItem[columnName] - secondItem[columnName];
-            }
-        } else {
-            if (isNaN(secondItem[columnName]) && isNaN(firstItem[columnName])) {
-                result = String(secondItem[columnName]).localeCompare(String(firstItem[columnName]), languages as Array<string>, { sensitivity: "base", ignorePunctuation: true });
-            } else {
-                result = secondItem[columnName] - firstItem[columnName];
-            }
-        }
-        return result;
-    });
-    return sortedItems;
-}
-
-function filterArray(items: Array<TableRow>, columns: Array<TableHeader>): Array<TableRow> {
-    return [...items].filter((row: TableRow) => {
-        return columns.some((column: TableHeader) => {
-            return column.filters?.some((filterValue: string) => {
-                const currentColumn: Cell = row?.cells.find((cell: Cell) => cell?.accessor === column?.accessor);
-                return currentColumn.value === filterValue;
-            });
-        });
-    });
-}
-
-/**
- * search text in array of table row
- * @param items the array of table rows
- * @param keyword The keyword to search in the array
- * @param searchFields the target field to search
- */
-function searchTextInArray(items: Array<TableRow>, keyword: string, searchFields: Array<string>): Array<TableRow> {
-    return [...items].filter((row: TableRow) => {
-        const searchText: string = String(keyword);
-
-        return searchFields.some((searchColumn: string) => {
-            let result: boolean = false;
-            const searchField: string = searchColumn;
-            const regEx: RegExp = new RegExp(searchText, "gi");
-            if (row[searchField] === null || row[searchField] === undefined) {
-                result = false;
-            } else if (typeof row[searchField] === "string") {
-                result = row[searchField].search(regEx) > -1;
-            } else if (typeof row[searchField] === "number") {
-                result = String(row[searchField]).search(regEx) !== -1;
-            }
-            return result;
-        });
-    });
-}
-
-interface TextboxGroupProps {
-    type: string;
-    onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-    name: string;
-    value: string | number;
-}
-
-const TextboxGroup: React.FunctionComponent<TextboxGroupProps> = (props: TextboxGroupProps) => {
-    return (
-        <div className="form-group input-box-group">
-            <div className="input-group">
-                <div className="input-box-group-wrapper">
-                    <input id={props.name} name={props.name} type={props.type} value={String(props.value)} onChange={props.onChange} className="form-control" />
-                </div>
-            </div>
-        </div>
-    );
-};
-
-interface ActionColumnProps {
-    actionLinks?: Array<ActionLinkItem>;
-    onActionDropped?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
-    primaryActionButton?: PrimaryActionButton;
-    selectedRow: TableRow;
-    tableRef: React.RefObject<HTMLTableElement>;
-}
-
-const ActionColumn: React.FunctionComponent<ActionColumnProps> = (props: ActionColumnProps) => {
-    const [btnPrimaryRandomIds] = React.useState<string>(randomId("btn"));
-    const [dropup, setDropup] = React.useState<boolean>(false);
-    const actionRef: React.RefObject<HTMLDivElement> = React.createRef<HTMLDivElement>();
-    const [actionColumnClass, setActionColumnClass] = React.useState<string>("");
-
-    React.useEffect(() => {
-        let className: string = "dropdown-content";
-        if (props.selectedRow?.actionsDropdownDropped) {
-            className += " active";
-        }
-
-        if (dropup) {
-            className += " dropup";
-        }
-
-        setActionColumnClass(className);
-    }, [props.selectedRow, dropup]);
-
-    return (
-        <div className="action-column">
-            {props.primaryActionButton && (
-                <button
-                    id={btnPrimaryRandomIds}
-                    type="button"
-                    className={`btn btn-${props.primaryActionButton.buttonTheme ? props.primaryActionButton.buttonTheme : "outline-primary"} btn-${
-                        props.primaryActionButton?.buttonSize ? props.primaryActionButton?.buttonSize : "sm"
-                    }`}
-                    onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-                        props.primaryActionButton?.onClick && props.primaryActionButton.onClick(e, props.selectedRow);
-                    }}
-                >
-                    {props.primaryActionButton.label}
-                </button>
-            )}
-            {props.actionLinks && props.actionLinks?.length ? (
-                <div
-                    className="ellipsis-dropdown-holder"
-                    onClick={(e: React.MouseEvent<HTMLDivElement>) => {
-                        const tableSize: DOMRect = props.tableRef?.current?.getBoundingClientRect();
-                        const actionColumnHeight: number = actionRef.current?.scrollHeight;
-                        const actionColumSize: DOMRect = actionRef.current?.getBoundingClientRect();
-
-                        if (tableSize?.height > actionColumnHeight) {
-                            const lengthOffset: number = tableSize?.bottom - actionColumSize?.bottom;
-                            if (lengthOffset < actionColumnHeight) {
-                                setDropup(true);
-                            } else {
-                                setDropup(false);
-                            }
-                        } else {
-                            setDropup(false);
-                        }
-                        e.preventDefault();
-                        props.onActionDropped(e);
-                    }}
-                >
-                    <div className="icon-holder" id={"ellipsis-" + props.selectedRow.rowIndex} role="link">
-                        {ellipsis}
-                    </div>
-                    {props.selectedRow.actionsDropdownDropped ? (
-                        <div className={actionColumnClass} ref={actionRef}>
-                            {props.actionLinks.map((link: ActionLinkItem, index: number) => (
-                                <a
-                                    key={index}
-                                    onClick={(e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
-                                        e.preventDefault();
-                                        link.onClick(e, props.selectedRow);
-                                    }}
-                                >
-                                    {link.label}
-                                </a>
-                            ))}
-                        </div>
-                    ) : null}
-                </div>
-            ) : null}
-        </div>
-    );
-};
-
-interface RowUIProps {
-    actionLinks?: Array<ActionLinkItem>;
-    columns: Array<TableHeader>;
-    onActionDropped: (event: React.MouseEvent<HTMLDivElement, MouseEvent>, row: TableRow, rowIndex?: number) => void;
-    onItemSelected?: (e: React.ChangeEvent<HTMLInputElement>, row: TableRow, type: RowTypes, rowIndex?: number) => void;
-    onRowExpanded?: (e: React.MouseEvent<HTMLDivElement, MouseEvent>, row: TableRow) => void;
-    onSubRowExpanded?: (e: React.MouseEvent<HTMLDivElement, MouseEvent>, row: TableRow, rowIndex: number) => void;
-    onChange?: (e: React.ChangeEvent<HTMLInputElement>, row: TableRow) => void;
-    parentRowIndex?: number;
-    parentRowIsExpanded?: boolean;
-    primaryActionButton?: PrimaryActionButton;
-    row: TableRow;
-    rowsAreCollapsable: boolean;
-    tableRef: React.RefObject<HTMLTableElement>;
-    type: RowTypes;
-    useRowCollapse: boolean;
-    useRowSelection: boolean;
-    useShowActionColumn: boolean;
-}
-
-const RowUI: React.FunctionComponent<RowUIProps> = (props: RowUIProps) => {
-    const [checkRowRandomIds] = React.useState<string>(randomId("chk-"));
-
-    return (
-        <React.Fragment>
-            <tr
-                className={(props.type === "row" ? "parent-row" : "sub-row") + (props.row.expanded ? " expanded" : "")}
-                style={{ display: props.type === "subRow" ? (props.parentRowIsExpanded ? "table-row" : "none") : "table-row" }}
-            >
-                {props.useRowSelection ? (
-                    <td className="row-selections-column">
-                        <div className="custom-control custom-checkbox">
-                            <input
-                                type="checkbox"
-                                className="custom-control-input"
-                                id={checkRowRandomIds}
-                                checked={props.row.selected}
-                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                                    if (props.type === "row") {
-                                        props.onItemSelected && props.onItemSelected(e, props.row, props.type);
-                                    } else {
-                                        props.onItemSelected(e, props.row, "subRow", props.parentRowIndex);
-                                    }
-                                }}
-                                name={`chk` + (props.type === "subRow" ? `${props.parentRowIndex}-${props.row.rowIndex}` : props.row.rowIndex)}
-                            />
-                            <label className="custom-control-label" htmlFor={checkRowRandomIds} />
-                        </div>
-                        {(props.row.subRows.length > 0 || props.row.rowContentDetail) && props.rowsAreCollapsable && (
-                            <div
-                                className={"icon-holder" + (props.row.expanded ? " active" : "")}
-                                role="link"
-                                onClick={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-                                    if (props.type === "row") {
-                                        props.onRowExpanded(e, props.row);
-                                    } else {
-                                        props.onSubRowExpanded(e, props.row, props.parentRowIndex);
-                                    }
-                                }}
-                            >
-                                {props.row.expanded ? angleDown : angleRightIcon}
-                            </div>
-                        )}
-                    </td>
-                ) : (
-                    (props.row.subRows.length > 0 || props.row.rowContentDetail) &&
-                    props.rowsAreCollapsable && (
-                        <td>
-                            <div
-                                className={"icon-holder" + (props.row.expanded ? " active" : "")}
-                                role="link"
-                                onClick={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-                                    if (props.type === "row") {
-                                        props.onRowExpanded && props.onRowExpanded(e, props.row);
-                                    } else {
-                                        props.onSubRowExpanded(e, props.row, props.parentRowIndex);
-                                    }
-                                }}
-                            >
-                                {props.row.expanded ? angleDown : angleRightIcon}
-                            </div>
-                        </td>
-                    )
-                )}
-                {props.row.cells.map((cell: Cell, cellIndex: number) => {
-                    return !cell.hidden ? (
-                        <td key={`${props.type}-${cellIndex}`}>
-                            {props.row?.isEditMode && cell.canEdit ? (
-                                <TextboxGroup
-                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                                        props.onChange(e, props.row);
-                                    }}
-                                    name={cell.id?.toString()}
-                                    type={"text"}
-                                    value={String(cell.value)}
-                                />
-                            ) : (
-                                cell.value
-                            )}
-                        </td>
-                    ) : null;
-                })}
-                {props.useShowActionColumn && (
-                    <td>
-                        <ActionColumn
-                            actionLinks={props.actionLinks}
-                            primaryActionButton={props.primaryActionButton}
-                            selectedRow={props.row}
-                            tableRef={props.tableRef}
-                            onActionDropped={(event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-                                props.onActionDropped && props.onActionDropped(event, props.row, props.type === "subRow" ? props.parentRowIndex : null);
-                            }}
-                        />
-                    </td>
-                )}
-            </tr>
-            {props.type === "subRow" && (
-                <tr className="sub-description-row" style={{ display: props.row.expanded ? "table-row" : "none" }}>
-                    <td colSpan={sumCols(props.columns.length, props.useRowSelection || props.useRowCollapse, props.useShowActionColumn, false)}>
-                        <div className="description">{props.row.rowContentDetail}</div>
-                    </td>
-                </tr>
-            )}
-        </React.Fragment>
-    );
-};
-
-interface TableUIProps {
-    actionLinks?: Array<ActionLinkItem>;
-    allRowsAreSelected?: boolean;
-    className: string;
-    columns: Array<TableHeader>;
-    footer: React.ReactNode;
-    loading: boolean;
-    onActionDropped: (event: React.MouseEvent<HTMLDivElement, MouseEvent>, row: TableRow, rowIndex?: number) => void;
-    onAllItemsSelected?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-    onItemSelected?: (e: React.ChangeEvent<HTMLInputElement>, row: TableRow, type: RowTypes, rowIndex?: number) => void;
-    onRowExpanded?: (e: React.MouseEvent<HTMLDivElement, MouseEvent>, row: TableRow) => void;
-    onSort?: (accessor: string, sortDirection: sortDirectionTypes) => void;
-    onSubRowExpanded?: (e: React.MouseEvent<HTMLDivElement, MouseEvent>, row: TableRow, rowIndex: number) => void;
-    onChange?: (e: React.ChangeEvent<HTMLInputElement>, row: TableRow, rowIndex?: number) => void;
-    primaryActionButton?: PrimaryActionButton;
-    rows: Array<TableRow>;
-    rowsAreCollapsable?: boolean;
-    sortable: boolean;
-    useRowCollapse: boolean;
-    useRowSelection: boolean;
-    useShowActionColumn: boolean;
-    showFilterRow?: boolean;
-    filterProps: FilterProps;
-}
-
-const TableUI: React.FunctionComponent<TableUIProps> = React.memo(
-    (props: TableUIProps): React.ReactElement<void> => {
-        const [checkAllRandomIds] = React.useState<string>(randomId("chk-all"));
-        const tableRef: React.RefObject<HTMLTableElement> = React.createRef<HTMLTableElement>();
-
-        return (
-            <div className={"table-responsive" + (props.loading ? " skeleton-loader skeleton-loader-table" : "")}>
-                <table className={"table" + (props.className ? ` ${props.className}` : "")} ref={tableRef}>
-                    <thead>
-                        <tr>
-                            {props.useRowSelection ? (
-                                <th>
-                                    <div className="custom-control custom-checkbox">
-                                        <input
-                                            type="checkbox"
-                                            className="custom-control-input"
-                                            id={checkAllRandomIds}
-                                            name="chkCheckAll"
-                                            checked={props.allRowsAreSelected}
-                                            onChange={props.onAllItemsSelected}
-                                        />
-                                        <label className="custom-control-label" htmlFor={checkAllRandomIds} />
-                                    </div>
-                                </th>
-                            ) : (
-                                props.rowsAreCollapsable && <th />
-                            )}
-                            {props.columns?.map((header: TableHeader, index: number) => {
-                                return !header.isHidden ? (
-                                    <th
-                                        key={index}
-                                        className={props.sortable && header.canSort ? "sortable" : ""}
-                                        onClick={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-                                            if (props.sortable && header.canSort) {
-                                                props.onSort(header?.accessor, header.isSortedDesc ? sortDirectionTypes.Ascending : sortDirectionTypes.Descending);
-                                            } else {
-                                                e.preventDefault();
-                                            }
-                                        }}
-                                    >
-                                        <span className="th-label">{header.label}</span>
-                                        {props.sortable && header.canSort && (
-                                            <span role="link" className={"icon-holder" + (header.isSorted ? (header.isSortedDesc ? " desc" : " asc") : "")} id={header.accessor}>
-                                                {defaultSort}
-                                            </span>
-                                        )}
-                                    </th>
-                                ) : null;
-                            })}
-                            {props.useShowActionColumn && <th />}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {props.rows?.map((row: TableRow, i: number) => {
-                            return (
-                                <React.Fragment key={row.rowIndex}>
-                                    <RowUI
-                                        row={row}
-                                        type="row"
-                                        tableRef={tableRef}
-                                        onActionDropped={props.onActionDropped}
-                                        onRowExpanded={props.onRowExpanded}
-                                        useShowActionColumn={props.useShowActionColumn}
-                                        rowsAreCollapsable={props.rowsAreCollapsable}
-                                        onItemSelected={props.onItemSelected}
-                                        primaryActionButton={props.primaryActionButton}
-                                        actionLinks={props.actionLinks}
-                                        useRowSelection={props.useRowSelection}
-                                        useRowCollapse={props.useRowCollapse}
-                                        columns={props.columns}
-                                        onChange={(e: React.ChangeEvent<HTMLInputElement>, updatedRow: TableRow) => {
-                                            props.onChange(e, updatedRow);
-                                        }}
-                                    />
-                                    {row.subRows?.map((subRow: TableRow) => {
-                                        return (
-                                            <React.Fragment key={`sub-row-${subRow.rowIndex}`}>
-                                                <RowUI
-                                                    row={subRow}
-                                                    type="subRow"
-                                                    tableRef={tableRef}
-                                                    onActionDropped={props.onActionDropped}
-                                                    onRowExpanded={props.onRowExpanded}
-                                                    useShowActionColumn={props.useShowActionColumn}
-                                                    rowsAreCollapsable={props.rowsAreCollapsable}
-                                                    onItemSelected={props.onItemSelected}
-                                                    primaryActionButton={props.primaryActionButton}
-                                                    actionLinks={props.actionLinks}
-                                                    useRowSelection={props.useRowSelection}
-                                                    onSubRowExpanded={props.onSubRowExpanded}
-                                                    useRowCollapse={props.useRowCollapse}
-                                                    columns={props.columns}
-                                                    parentRowIsExpanded={row.expanded}
-                                                    parentRowIndex={row.rowIndex}
-                                                    onChange={(e: React.ChangeEvent<HTMLInputElement>, updatedSubRow: TableRow) => {
-                                                        props.onChange(e, updatedSubRow, row.rowIndex);
-                                                    }}
-                                                />
-                                            </React.Fragment>
-                                        );
-                                    })}
-
-                                    <tr className="description-row" style={{ display: row.expanded ? "table-row" : "none" }}>
-                                        <td colSpan={sumCols(props.columns?.length, props.useRowSelection || props.useRowCollapse, props.useShowActionColumn, false)}>
-                                            <div className="description">{row.rowContentDetail}</div>
-                                        </td>
-                                    </tr>
-                                </React.Fragment>
-                            );
-                        })}
-                        {props.rows?.length === 0 && (
-                            <tr>
-                                <td colSpan={sumCols(props.columns?.length, props.useRowSelection || props.useRowCollapse, props.useShowActionColumn, false)}>Record empty</td>
-                            </tr>
-                        )}
-                    </tbody>
-                    <tfoot>
-                        {props.footer && (
-                            <tr>
-                                <td colSpan={sumCols(props.columns?.length, props.useRowSelection || props.useRowCollapse, props.useShowActionColumn, false)}>{props.footer}</td>
-                            </tr>
-                        )}
-                    </tfoot>
-                </table>
-            </div>
-        );
-    }
-);
-
 export interface SearchProps {
     onSearch?: (rows: Array<TableRow>) => void;
     searchInColumns?: Array<string>;
@@ -587,7 +71,6 @@ export interface FilterProps {
     filterItems: Array<FilterItem>;
     onAfterFilter: (rows: Array<TableRow>) => void;
 }
-
 export interface EditProps {
     mode: EditMode;
     onAfterEdit: (rows: Array<TableRow>) => void;
@@ -609,6 +92,8 @@ export interface TableProps {
     searchProps?: SearchProps;
     sortProps?: SortProps;
     editProps?: EditProps;
+    theme?: TableTheme;
+    theadTheme?: TableTheme;
 }
 
 const Table: React.FunctionComponent<TableProps> = React.memo(
@@ -1232,6 +717,8 @@ const Table: React.FunctionComponent<TableProps> = React.memo(
                     showFilterRow={showFilterRow()}
                     filterProps={props.filterProps}
                     onChange={onTextChange}
+                    theme={props.theme}
+                    theadTheme={props.theadTheme}
                 />
             </div>
         );

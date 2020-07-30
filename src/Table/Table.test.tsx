@@ -276,7 +276,7 @@ describe("Component: Table", () => {
             mode: null,
         };
 
-        const selector: string = "tbody tr.parent-row td .form-group.input-box-group";
+        const selector: string = "tbody tr.parent-row td .form-group";
 
         const updatedSelectedRows: Array<TableRow> = smallData?.slice(0, 2).map((row: TableRow) => ({ ...row, selected: true }));
 
