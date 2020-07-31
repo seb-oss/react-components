@@ -1,6 +1,5 @@
 import React from "react";
 import classnames from "classnames";
-import { min } from "lodash";
 
 export type TimerProps = JSX.IntrinsicElements["time"] & {
     duration?: number;
@@ -9,8 +8,8 @@ export type TimerProps = JSX.IntrinsicElements["time"] & {
 
 export const Timer: React.FC<TimerProps> = React.memo(({ duration, onTimerEnded, ...props }: TimerProps) => {
     const [time, setTime] = React.useState<string>("00:00");
-    const countDown = React.useRef<number>(0);
-    const timer = React.useRef<any>(0);
+    const countDown: React.MutableRefObject<number> = React.useRef<number>(0);
+    const timer: React.MutableRefObject<any> = React.useRef<any>(0);
 
     /**
      * Converts the numeric value into two digits string for display purposes
@@ -18,7 +17,7 @@ export const Timer: React.FC<TimerProps> = React.memo(({ duration, onTimerEnded,
      * @returns The two digits string value
      */
     const toDoubleDigits = React.useCallback((value: number): string => {
-        return value < 10 ? `0${value}` : String(value);
+        return value.toLocaleString("en", { minimumIntegerDigits: 2 });
     }, []);
 
     /** Clears the timer */
