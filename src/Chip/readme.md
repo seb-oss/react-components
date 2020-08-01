@@ -8,7 +8,7 @@ guid: "chip-guid-default-component-react"
 ## Element name
 
 ```javascript
-Name: Datepicker Component
+Name: Chip Component
 Component: "Chip"
 Selector: "<Chip/>"
 Import: "@sebgroup/react-components/dist/Chip"

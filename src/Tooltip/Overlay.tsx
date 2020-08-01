@@ -1,7 +1,7 @@
 import React from "react";
 import { createPortal } from "react-dom";
 import { ElementPosition, ElementPlacementWithCoord, OverlayPositionChecker } from "./placement";
-import "./overlay-style.scss";
+import "./overlay.scss";
 
 export type OverlayProps = React.PropsWithChildren<{
     disableAutoPosition?: boolean;

@@ -8,6 +8,7 @@
         "Chart": "./src/Chart/index.ts",
         "CheckBox": "./src/CheckBox/index.ts",
         "Chip": "./src/Chip/index.ts",
+        "Collapse": "./src/Collapse/index.ts",
         "Datepicker": "./src/Datepicker/index.ts",
         "DivImage": "./src/DivImage/index.ts",
         "Dropdown": "./src/Dropdown/index.ts",
@@ -70,6 +71,10 @@
         {
             "from": "./src/Chip/index.ts",
             "to": "./Chip/index.js"
+        },
+        {
+            "from": "./src/Collapse/index.ts",
+            "to": "./Collapse/index.js"
         },
         {
             "from": "./src/Datepicker/index.ts",

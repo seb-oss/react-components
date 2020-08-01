@@ -97,6 +97,11 @@
             "filePath": "pages/ButtonPage"
         },
         {
+            "name": "Collapse",
+            "path": "/collapse",
+            "filePath": "pages/CollapsePage"
+        },
+        {
             "name": "Button Group",
             "path": "/buttongroup",
             "filePath": "pages/ButtonGroupPage"
