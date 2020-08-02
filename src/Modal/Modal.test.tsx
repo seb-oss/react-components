@@ -1,7 +1,7 @@
 import React from "react";
 import { unmountComponentAtNode, render } from "react-dom";
 import { act, Simulate } from "react-dom/test-utils";
-import { Modal } from ".";
+import { Modal, ModalSize, ModalPosition } from ".";
 
 describe("Component: Modal", () => {
     let container: HTMLDivElement = null;
@@ -17,169 +17,213 @@ describe("Component: Modal", () => {
         container = null;
     });
 
-    it("Should render and be hidden until toggled", () => {
+    it("Should render correctly", () => {
         act(() => {
-            render(<Modal toggle={false} onDismiss={null} />, container);
+            render(<Modal />, container);
         });
+        const dialogElement: HTMLDivElement = container.firstElementChild.firstElementChild as any;
+
         expect(container.firstElementChild).not.toBeNull();
-        expect(container.firstElementChild.classList.contains("show")).toBeFalsy();
+        expect(dialogElement).not.toBeNull();
+
+        expect(container.firstElementChild.classList.contains("rc")).toBeTruthy();
+        expect(container.firstElementChild.classList.contains("modal")).toBeTruthy();
+        expect(container.firstElementChild.getAttribute("role")).toEqual("dialog");
+        expect(container.firstElementChild.getAttribute("aria-modal")).toEqual("true");
+
+        expect(dialogElement.classList.contains("modal-dialog")).toBeTruthy();
+        expect(dialogElement.getAttribute("role")).toEqual("document");
+
+        expect(dialogElement.firstElementChild).not.toBeNull();
+        expect(dialogElement.firstElementChild.classList.contains("modal-content")).toBeTruthy();
     });
 
-    it("Should render and be displayed when toggled", () => {
+    it("Should render the component fullscreen or centered when passed", () => {
         act(() => {
-            render(<Modal onDismiss={null} toggle />, container);
-        });
-        expect(container.firstElementChild.classList.contains("show")).toBeTruthy();
-        expect(container.firstElementChild.classList.contains("modal-fullscreen")).toBeFalsy();
-        expect(container.firstElementChild.classList.contains("modal-aside")).toBeFalsy();
-    });
-
-    it("It should open in full screen", () => {
-        act(() => {
-            render(<Modal onDismiss={null} toggle fullscreen />, container);
-        });
-        expect(container.firstElementChild.classList.contains("show")).toBeTruthy();
-        expect(container.firstElementChild.classList.contains("fade")).toBeFalsy();
-        expect(container.firstElementChild.classList.contains("modal-aside")).toBeFalsy();
-        expect(container.querySelector(".modal-fullscreen")).not.toBeNull();
-    });
-
-    it("should open with position left", () => {
-        act(() => {
-            render(<Modal onDismiss={null} toggle position="left" />, container);
-        });
-        expect(container.firstElementChild.classList.contains("show")).toBeTruthy();
-        expect(container.firstElementChild.classList.contains("fade")).toBeFalsy();
-        expect(container.querySelector(".modal-aside")).not.toBeNull();
-        expect(container.querySelector(".modal-aside-left")).not.toBeNull();
-    });
-
-    it("Should open with position right", () => {
-        act(() => {
-            render(<Modal onDismiss={null} toggle position="right" />, container);
-        });
-        expect(container.firstElementChild.classList.contains("show")).toBeTruthy();
-        expect(container.firstElementChild.classList.contains("fade")).toBeFalsy();
-        expect(container.querySelector(".modal-aside")).not.toBeNull();
-        expect(container.querySelector(".modal-aside-right")).not.toBeNull();
-    });
-
-    it("Should call `onDismiss` when backdrop is clicked", () => {
-        const onDismiss: jest.Mock = jest.fn();
-        act(() => {
-            render(<Modal onDismiss={onDismiss} toggle />, container);
-        });
-        act(() => {
-            Simulate.click(container.firstElementChild);
-        });
-        expect(onDismiss).toBeCalled();
-    });
-
-    it("Should not call `onDismiss` when backdrop is clicked and `disableBackdropDismiss` is set to true", () => {
-        const onDismiss: jest.Mock = jest.fn();
-        act(() => {
-            render(<Modal onDismiss={onDismiss} toggle disableBackdropDismiss />, container);
-        });
-        act(() => {
-            Simulate.click(container.firstElementChild);
-        });
-        expect(onDismiss).not.toBeCalled();
-    });
-
-    it("Should have a header, body, and footer", () => {
-        act(() => {
-            render(<Modal disableCloseButton onDismiss={null} header={<h1>Header</h1>} body={<p>Body</p>} footer={<p>Footer</p>} toggle />, container);
-        });
-        expect(container.querySelector(".modal-header").textContent).toEqual("Header");
-        expect(container.querySelector(".modal-body").textContent).toEqual("Body");
-        expect(container.querySelector(".modal-footer").textContent).toEqual("Footer");
-    });
-
-    it("Should pass ID and className", () => {
-        const id: string = "myId";
-        const className: string = "myId";
-        act(() => {
-            render(<Modal onDismiss={null} toggle id={id} className={className} />, container);
-        });
-        expect(container.firstElementChild.id).toEqual(id);
-        expect(container.firstElementChild.classList.contains(className)).toBeTruthy();
-    });
-
-    it("Should display warning when onDismiss is not passed", () => {
-        act(() => {
-            render(<Modal toggle={false} onDismiss={null} />, container);
-        });
-        const consoleWarn: jest.SpyInstance = jest.spyOn(console, "warn").mockImplementation(() => null);
-        Simulate.click(container.firstElementChild);
-        expect(consoleWarn).toBeCalled();
-    });
-
-    it("Should render centered", () => {
-        act(() => {
-            render(<Modal toggle centered onDismiss={null} />, container);
+            render(<Modal centered />, container);
         });
         expect(container.firstElementChild.classList.contains("modal-centered")).toBeTruthy();
+
+        act(() => {
+            render(<Modal fullscreen={true} />, container);
+        });
+
+        expect(container.firstElementChild.classList.contains("modal-fullscreen")).toBeTruthy();
     });
 
-    it("Should render with lg and sm sizes", () => {
+    it("Should pass optional parameters correctly", () => {
+        const id: string = "myID";
+        const className: string = "myClassName";
+        const ariaLabel: string = "myAriaLabel";
+        const ariaLabelledby: string = "myAriaLabelledby";
+        const ariaDescribedby: string = "myAriaDescribedby";
+
         act(() => {
-            render(<Modal toggle onDismiss={null} size="lg" />, container);
+            render(<Modal id={id} className={className} aria-label={ariaLabel} aria-labelledby={ariaLabelledby} aria-describedby={ariaDescribedby} />, container);
         });
-        expect(container.firstElementChild.firstElementChild.classList.contains("modal-lg")).toBeTruthy();
-        act(() => {
-            render(<Modal toggle onDismiss={null} size="sm" />, container);
-        });
-        expect(container.firstElementChild.firstElementChild.classList.contains("modal-sm")).toBeTruthy();
+
+        expect(container.firstElementChild.id).toEqual(id);
+        expect(container.firstElementChild.classList.contains(className)).toBeTruthy();
+        expect(container.firstElementChild.getAttribute("aria-label")).toEqual(ariaLabel);
+        expect(container.firstElementChild.getAttribute("aria-labelledby")).toEqual(ariaLabelledby);
+        expect(container.firstElementChild.getAttribute("aria-describedby")).toEqual(ariaDescribedby);
     });
 
-    it("Should not allow clicking through the modal-dialog to the backdrop", () => {
+    it("Should emit dismiss when close button or backdrop is clicked", () => {
         const onDismiss: jest.Mock = jest.fn();
+
         act(() => {
-            render(<Modal onDismiss={onDismiss} toggle />, container);
+            render(<Modal onDismiss={onDismiss} />, container);
+        });
+
+        act(() => {
+            // Backdrop click
+            Simulate.click(container.firstElementChild);
+            // Close button click
+            Simulate.click(container.querySelector(".close"));
+        });
+
+        expect(onDismiss).toHaveBeenCalledTimes(2);
+
+        act(() => {
+            render(<Modal toggle onDismiss={onDismiss} />, container);
+        });
+
+        act(() => {
+            window.dispatchEvent(new KeyboardEvent("keyup", { key: "Escape", bubbles: true }));
+        });
+
+        expect(onDismiss).toHaveBeenCalledTimes(3);
+    });
+
+    it("Should not emit since the backdrop dismiss is disabled", () => {
+        const onDismiss: jest.Mock = jest.fn();
+
+        act(() => {
+            render(<Modal toggle backdropDismiss={false} escapeToDismiss={false} onDismiss={onDismiss} />, container);
+        });
+
+        act(() => {
+            Simulate.click(container.firstElementChild);
+            window.dispatchEvent(new KeyboardEvent("keyup", { key: "Escape", bubbles: true }));
+            window.dispatchEvent(new KeyboardEvent("keyup", { key: "Enter", bubbles: true }));
+        });
+
+        expect(onDismiss).not.toBeCalled();
+    });
+
+    it("Should handle window keyup event correctly as the toggle changes", () => {
+        const onDismiss: jest.Mock = jest.fn();
+
+        // If the modal is hidden, no listener is added
+        act(() => {
+            render(<Modal onDismiss={onDismiss} escapeToDismiss={false} toggle={false} />, container);
         });
         act(() => {
-            Simulate.click(container.firstElementChild.firstElementChild);
+            window.dispatchEvent(new KeyboardEvent("keyup", { key: "Escape", bubbles: true }));
+        });
+        expect(onDismiss).not.toBeCalled();
+
+        // It should not add a listener when escapeToDismiss is disabled
+        act(() => {
+            onDismiss.mockReset();
+            render(<Modal onDismiss={onDismiss} escapeToDismiss={false} toggle />, container);
+        });
+        act(() => {
+            window.dispatchEvent(new KeyboardEvent("keyup", { key: "Escape", bubbles: true }));
+        });
+        expect(onDismiss).not.toBeCalled();
+
+        // It should try to remove the listner when the modal is hidden
+        act(() => {
+            onDismiss.mockReset();
+            render(<Modal onDismiss={onDismiss} escapeToDismiss toggle={false} />, container);
+        });
+        act(() => {
+            window.dispatchEvent(new KeyboardEvent("keyup", { key: "Escape", bubbles: true }));
         });
         expect(onDismiss).not.toBeCalled();
     });
 
-    it("Should dismiss when close button is clicked", () => {
-        const onDismiss: jest.Mock = jest.fn();
-        act(() => {
-            render(<Modal toggle onDismiss={onDismiss} header="test" />, container);
+    describe("Should render with all supported sizes", () => {
+        const sizes: Array<ModalSize> = ["lg", "sm"];
+
+        sizes.forEach((size: ModalSize) => {
+            it(`- ${size}`, () => {
+                act(() => {
+                    render(<Modal size={size} />, container);
+                });
+
+                expect(container.firstElementChild.firstElementChild.classList.contains(`modal-${size}`)).toBeTruthy();
+            });
         });
-        Simulate.click(container.querySelector("button.close"));
-        expect(onDismiss).toBeCalled();
     });
 
-    it("Should start without `hide` class and add it after it's been dismissed at least once", () => {
-        act(() => {
-            render(<TestBed />, container);
+    describe("Should render with all supported positions", () => {
+        const positions: Array<ModalPosition> = ["left", "right"];
+
+        positions.forEach((position: ModalPosition) => {
+            it(`- ${position}`, () => {
+                act(() => {
+                    render(<Modal position={position} />, container);
+                });
+
+                expect(container.firstElementChild.classList.contains("modal-aside")).toBeTruthy();
+                expect(container.firstElementChild.classList.contains(`modal-aside-${position}`)).toBeTruthy();
+            });
         });
-        expect(container.querySelector(".modal").classList.contains("show")).toBeFalsy();
-        expect(container.querySelector(".modal").classList.contains("hide")).toBeFalsy();
+    });
+
+    it("Should not render fullscreen when aside is enable and centered when fullscreen is enabled", () => {
         act(() => {
-            Simulate.click(container.querySelector("#test"));
+            render(<Modal fullscreen position="left" />, container);
         });
-        expect(container.querySelector(".modal").classList.contains("show")).toBeTruthy();
-        expect(container.querySelector(".modal").classList.contains("hide")).toBeFalsy();
+
+        expect(container.firstElementChild.classList.contains("modal-fullscreen")).toBeFalsy();
+
         act(() => {
-            Simulate.click(container.querySelector("#test"));
+            render(<Modal fullscreen centered />, container);
         });
-        expect(container.querySelector(".modal").classList.contains("show")).toBeFalsy();
-        expect(container.querySelector(".modal").classList.contains("hide")).toBeTruthy();
+
+        expect(container.firstElementChild.classList.contains("modal-fullscreen")).toBeTruthy();
+        expect(container.firstElementChild.classList.contains("modal-centered")).toBeFalsy();
+    });
+
+    it("Should remove the hide class after the modal becomes hidden", () => {
+        const onAnimationEnd: jest.Mock = jest.fn();
+        act(() => {
+            render(<Modal toggle onAnimationEnd={onAnimationEnd} />, container);
+        });
+        act(() => {
+            Simulate.animationEnd(container.firstElementChild.firstElementChild);
+        });
+
+        expect(container.firstElementChild.classList.contains("show")).toBeTruthy();
+        expect(container.firstElementChild.classList.contains("hide")).toBeFalsy();
+
+        act(() => {
+            render(<Modal toggle={false} />, container);
+        });
+        expect(container.firstElementChild.classList.contains("show")).toBeFalsy();
+        expect(container.firstElementChild.classList.contains("hide")).toBeTruthy();
+
+        act(() => {
+            Simulate.animationEnd(container.firstElementChild.firstElementChild);
+        });
+
+        expect(container.firstElementChild.classList.contains("show")).toBeFalsy();
+        expect(container.firstElementChild.classList.contains("hide")).toBeFalsy();
+        expect(onAnimationEnd).toBeCalled();
+    });
+
+    it("Should render header, body, and footer", async () => {
+        act(() => {
+            render(<Modal closeButton={false} header={<div>my header</div>} body={<div>my body</div>} footer={<div>my footer</div>} />, container);
+        });
+
+        // Verifies if `closeButton` is also working, otherwise, textContent will be `my headerx`
+        expect(container.querySelector(".modal-header").textContent).toEqual("my header");
+        expect(container.querySelector(".modal-body").textContent).toEqual("my body");
+        expect(container.querySelector(".modal-footer").textContent).toEqual("my footer");
     });
 });
-
-const TestBed: React.FC = () => {
-    const [toggle, setToggle] = React.useState<boolean>(false);
-
-    return (
-        <div>
-            <Modal toggle={toggle} onDismiss={null} />
-            <button id="test" onClick={() => setToggle(!toggle)}>
-                toggle
-            </button>
-        </div>
-    );
-};

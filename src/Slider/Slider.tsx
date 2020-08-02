@@ -1,6 +1,5 @@
 import React from "react";
-import { SlideUpDown } from "../__utils/animations";
-import "./slider-style.scss";
+import "./slider.scss";
 
 const angleLeftIcon: JSX.Element = (
     <svg name="angle-left" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 512">
@@ -218,9 +217,7 @@ const Slider: React.FC<SliderProps> = (props: SliderProps) => {
                     </div>
                 </div>
             </div>
-            <SlideUpDown triggerValue={props.error}>
-                <div className="alert alert-danger">{props.error}</div>
-            </SlideUpDown>
+            {props.error && <div className="alert alert-danger">{props.error}</div>}
         </div>
     );
 };

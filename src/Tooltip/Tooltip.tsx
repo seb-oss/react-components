@@ -1,7 +1,7 @@
 import React from "react";
-import { ElementPosition } from "../__utils/Overlay/placement";
+import { ElementPosition } from "./placement";
 import { randomId } from "@sebgroup/frontend-tools/dist/randomId";
-import { Overlay } from "../__utils/Overlay/Overlay";
+import { Overlay } from "./Overlay";
 import "./tooltip-style.scss";
 
 const InfoCircleIcon: JSX.Element = (

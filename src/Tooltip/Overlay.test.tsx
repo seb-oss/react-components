@@ -29,9 +29,9 @@ describe("Component: Overlay", () => {
         document.body.innerHTML = "";
     });
 
-    it("Should render", () => {
+    it("Should render", async () => {
         const newProps: OverlayProps = { ...overlayProps, overlayReference: () => container.querySelector(".ref") };
-        act(() => {
+        await act(async () => {
             render(
                 <div>
                     <div className="ref">ref</div>
@@ -43,10 +43,10 @@ describe("Component: Overlay", () => {
         expect(document.body.querySelector(".overlay-container")).toBeTruthy();
     });
 
-    it("Should render content", () => {
+    it("Should render content", async () => {
         const content: string = "my overlay";
         const newProps: OverlayProps = { ...overlayProps, overlayReference: () => container.querySelector(".ref") };
-        act(() => {
+        await act(async () => {
             render(
                 <div>
                     <div className="ref">ref</div>
@@ -55,14 +55,14 @@ describe("Component: Overlay", () => {
                 container
             );
         });
-        const overlayContainer: Element = document.body.querySelector(".overlay-container");
+        const overlayContainer: HTMLDivElement = document.body.querySelector(".overlay-container");
         expect(overlayContainer).toBeTruthy();
         expect(overlayContainer.innerHTML).toEqual(content);
     });
 
     it("Should be set to focus on overlay show", async () => {
         const newProps: OverlayProps = { ...overlayProps, overlayReference: () => container.querySelector(".ref") };
-        act(() => {
+        await act(async () => {
             render(
                 <div>
                     <div className="ref">ref</div>
@@ -73,7 +73,7 @@ describe("Component: Overlay", () => {
         });
         expect(document.body.querySelector(".overlay-container:focus")).toBeFalsy();
         const updatedProps: OverlayProps = { ...newProps, show: true };
-        act(() => {
+        await act(async () => {
             render(
                 <div>
                     <div className="ref">ref</div>
@@ -105,16 +105,32 @@ describe("Component: Overlay", () => {
         expect(document.body.querySelector(".overlay-container:focus")).toBeTruthy();
     });
 
-    // it("Should update position on scroll", () => {
-    //     const newProps: OverlayProps = { ...overlayProps, overlayReference: () => container.querySelector(".ref") };
-    //     act(() => { render(<div><div className="ref">ref</div><Overlay {...newProps}>overlay</Overlay></div>, container); });
-    //     expect(document.body.querySelector(".overlay-container:focus")).toBeFalsy();
-    //     const updatedProps: OverlayProps = { ...newProps, show: true };
-    //     act(() => { render(<div className="ref-holder"><div className="ref">ref</div><Overlay {...updatedProps}>overlay</Overlay></div>, container); });
-    //     expect(document.body.querySelector(".overlay-container:focus")).toBeTruthy();
-    //     act(() => {
-    //         const holderElement: Element = container.querySelector(".ref-holder");
-    //         holderElement.dispatchEvent(new Event("scroll", { bubbles: true }));
-    //     });
-    // });
+    it("Should update position on scroll", async () => {
+        const newProps: OverlayProps = { ...overlayProps, overlayReference: () => container.querySelector(".ref") };
+        await act(async () => {
+            render(
+                <div>
+                    <div className="ref">ref</div>
+                    <Overlay {...newProps}>overlay</Overlay>
+                </div>,
+                container
+            );
+        });
+        expect(document.body.querySelector(".overlay-container:focus")).toBeFalsy();
+        const updatedProps: OverlayProps = { ...newProps, show: true };
+        await act(async () => {
+            render(
+                <div className="ref-holder">
+                    <div className="ref">ref</div>
+                    <Overlay {...updatedProps}>overlay</Overlay>
+                </div>,
+                container
+            );
+        });
+        expect(document.body.querySelector(".overlay-container:focus")).toBeTruthy();
+        await act(async () => {
+            const holderElement: Element = container.querySelector(".ref-holder");
+            holderElement.dispatchEvent(new Event("scroll", { bubbles: true }));
+        });
+    });
 });
