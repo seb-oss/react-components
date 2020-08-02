@@ -1,0 +1,70 @@
+@import "~@sebgroup/bootstrap/scss/variables";
+
+.custom-timepicker {
+    display: inline-block;
+    > [class*="timepicker-"] {
+        display: inline-block;
+        position: relative;
+        text-align: center;
+        margin: 0 2px;
+        .timepicker-input {
+            width: 40px;
+            display: inline-block;
+            box-shadow: none;
+            border: 1px solid $white;
+            text-align: center;
+            &:active {
+                box-shadow: none;
+            }
+            &::-webkit-inner-spin-button,
+            &::-webkit-textfield-decoration-container {
+                -webkit-appearance: none;
+                -moz-appearance: none;
+                appearance: none;
+            }
+            appearance: none;
+            -moz-appearance: textfield;
+        }
+        > [class*="triangle-"] {
+            cursor: pointer;
+            border: 1px solid $white;
+            position: relative;
+            transition: background-color 200ms, border 200ms;
+            svg {
+                fill: $blue;
+                position: relative;
+                width: 30px;
+                height: 30px;
+                transition: color 200ms;
+                &:hover {
+                    color: $blue-darker;
+                }
+            }
+            &:hover {
+                background-color: $blue;
+                border: 1px solid $blue;
+                svg {
+                    fill: $white;
+                }
+            }
+            &:active {
+                background-color: $blue-dark;
+            }
+        }
+        .triangle-after {
+            svg {
+                top: 3px;
+            }
+        }
+        &:hover {
+            outline: 1px solid $blue;
+        }
+        &:last-child {
+            .timepicker-input {
+                background-color: $white;
+                color: $black;
+                cursor: default;
+            }
+        }
+    }
+}

@@ -24,3 +24,5 @@ tmp
 build
 coverage
 docs
+
+.cache
