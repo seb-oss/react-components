@@ -12,7 +12,7 @@ export type OverlayProps = React.PropsWithChildren<{
     ref?: React.Ref<HTMLDivElement>;
 }>;
 
-const Overlay: React.FC<OverlayProps> = React.forwardRef((props: OverlayProps, ref: React.RefObject<HTMLDivElement>) => {
+export const Overlay: React.FC<OverlayProps> = React.forwardRef((props: OverlayProps, ref: React.RefObject<HTMLDivElement>) => {
     const overlayContentRef: React.MutableRefObject<HTMLDivElement> = React.useRef(null);
     const [placementWithCoords, setPlacementWithCoords] = React.useState<ElementPlacementWithCoord>(null);
     const [overlayPositionChecker, setOverlayPositionChecker] = React.useState<OverlayPositionChecker>(null);
@@ -94,5 +94,3 @@ const Overlay: React.FC<OverlayProps> = React.forwardRef((props: OverlayProps, r
         document.body
     );
 });
-
-export { Overlay };
