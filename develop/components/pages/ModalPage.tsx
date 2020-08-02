@@ -11,7 +11,7 @@ const initialState: ModalProps = {
     position: null,
     centered: false,
     size: null,
-    disableBackdropDismiss: false,
+    backdropDismiss: true,
     onDismiss: null,
 };
 
@@ -46,7 +46,7 @@ const ModalPage: React.FC = React.memo(() => {
                         <p>Modal</p>
                         <Button onClick={openModal}>Trigger Modal</Button>
                         <p>Modal without backdrop dismiss</p>
-                        <Button onClick={(e) => openModal(e, { disableBackdropDismiss: true })}>No backdrop dismiss</Button>
+                        <Button onClick={(e) => openModal(e, { backdropDismiss: false })}>No backdrop dismiss</Button>
                         <p>Modal Size</p>
                         <div className="d-flex">
                             <Button className="mr-5" onClick={(e) => openModal(e, { size: "lg" })}>
@@ -90,7 +90,7 @@ const ModalPage: React.FC = React.memo(() => {
                             toggle={dialogueToggle}
                             onDismiss={() => setDialogueToggle(false)}
                             header={<h3 className="m-0">Are you sure?</h3>}
-                            disableBackdropDismiss
+                            backdropDismiss={false}
                             body={
                                 <>
                                     <p>{dialogueBodyText}</p>
