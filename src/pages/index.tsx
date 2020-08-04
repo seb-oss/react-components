@@ -4,6 +4,7 @@ import { Helmet } from "react-helmet";
 import { Navbar } from "../components/Navbar";
 import { Footer } from "components/Footer";
 import { httpGet } from "utils/http";
+import { useDynamicForm } from "hooks/useDynamicForm";
 import { TechStack } from "components/TechStack";
 import AccessibilityIllustration from "../../static/illustrations/accessibility.svg";
 import AdjustmentsIllustration from "../../static/illustrations/adjustments.svg";
@@ -19,6 +20,29 @@ const designer: GithubContributor = {
 
 export default function Home() {
     const [contributors, setContributors] = React.useState<GithubContributor[]>([]);
+    const [renderForm, state] = useDynamicForm([
+        {
+            key: "section-1",
+            items: [
+                {
+                    key: "textbox",
+                    value: "hi",
+                    controlType: "Text",
+                },
+                {
+                    key: "radiogroup",
+                    controlType: "Radio",
+                    label: "Is this working?",
+                    options: [
+                        { value: "yes", key: "yes", label: "Yes" },
+                        { value: "no", key: "no", label: "No" },
+                    ],
+                },
+            ],
+        },
+    ]);
+
+    console.log(state); // NOTE: check the state of the form for every change you make
 
     React.useEffect(() => {
         httpGet<GithubContributor[]>("https://api.github.com/repos/sebgroup/ng-components/contributors").then((response) => {
@@ -35,6 +59,7 @@ export default function Home() {
             </Helmet>
             <Navbar />
             <main>
+                {renderForm()}
                 <section id="getting-started" className="jumbotron">
                     <div className="container">
                         <h1>React components</h1>

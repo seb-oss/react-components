@@ -1,9 +1,6 @@
 {
     "componentChunkName": "component---cache-dev-404-page-js",
     "path": "/dev-404-page/",
-    "result": {
-        "data": { "allSitePage": { "nodes": [{ "path": "/404/" }, { "path": "/docs/getting-started/" }, { "path": "/docs/" }, { "path": "/" }, { "path": "/404.html" }] } },
-        "pageContext": {}
-    },
+    "result": { "data": { "allSitePage": { "nodes": [{ "path": "/404/" }, { "path": "/" }, { "path": "/404.html" }] } }, "pageContext": {} },
     "staticQueryHashes": []
 }
