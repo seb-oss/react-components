@@ -7,7 +7,7 @@ import { CheckBoxProps } from "@sebgroup/react-components/CheckBox/CheckBox";
 import { TextBox } from "@sebgroup/react-components/TextBox";
 import { TextArea } from "@sebgroup/react-components/TextArea";
 import { Dropdown } from "@sebgroup/react-components/Dropdown";
-// import { Datepicker } from "@sebgroup/react-components/Datepicker"; // TODO: uncomment this when gatsby build issues are resolved
+import { Datepicker } from "@sebgroup/react-components/Datepicker";
 import { DropdownItem, DropdownChangeEvent } from "@sebgroup/react-components/Dropdown/Dropdown";
 
 export interface DynamicFormItem {
@@ -322,15 +322,15 @@ const DynamicFormItemComponent: React.FC<{
             break;
         }
 
-        // case "Datepicker": { // TODO: uncomment this when gatsby build issues are resolved
-        //     const { year = 0, month = 0, day = 0 } = props.state as DynamicFormDate;
-        //     const value: Date = new Date();
-        //     value.setDate(day);
-        //     value.setFullYear(year);
-        //     value.setMonth(month - 1);
-        //     formItem = <Datepicker {...commonProps} value={value} />;
-        //     break;
-        // }
+        case "Datepicker": {
+            const { year = 0, month = 0, day = 0 } = props.state as DynamicFormDate;
+            const value: Date = new Date();
+            value.setDate(day);
+            value.setFullYear(year);
+            value.setMonth(month - 1);
+            formItem = <Datepicker {...commonProps} value={value} />;
+            break;
+        }
 
         case "Option": {
             formItem = (
