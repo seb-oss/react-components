@@ -1,72 +1,109 @@
 import * as React from "react";
-import { Button } from "../../../src/Button/Button";
-import { getParameterByName } from "../../utils/queryString";
-const Highlight = (require("react-highlight")).default;
-const docMD = require("../../../src/Button/readme.md");
+import { Button, ButtonTheme, ButtonIconPosition, ButtonSizes } from "../../../src/Button/Button";
+import { Loader } from "../../../src/Loader/Loader";
+import { RadioGroup, RadioListModel } from "../../../src/RadioGroup/RadioGroup";
+import { CheckBox } from "../../../src/CheckBox/CheckBox";
+import Highlight from "react-highlight";
+const docMD: string = require("../../../src/Button/readme.md");
 
-export default class ButtonPage extends React.Component<any, any>  {
-    constructor(props: any) {
-        super(props);
+const mysvg: JSX.Element = (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+        <path d="M12.8 371.2L.2 485.3c-1.7 15.3 11.2 28.2 26.5 26.5l114.2-12.7 352.4-352.4c25-25 25-65.5 0-90.5l-37.5-37.5c-25-25-65.5-25-90.5 0L12.8 371.2zm113.3 97.4L33 478.9l10.3-93.1 271.9-271.9 82.7 82.7-271.8 272zm344.5-344.5L420.7 174 338 91.3l49.9-49.9c12.5-12.5 32.7-12.5 45.3 0l37.5 37.5c12.4 12.4 12.4 32.7-.1 45.2z" />
+    </svg>
+);
 
+const ButtonPage: React.FunctionComponent = () => {
+    const themeList: Array<RadioListModel<ButtonTheme>> = [
+        { label: "Primary", value: "primary" },
+        { label: "Primary (outlined)", value: "outline-primary" },
+        { label: "Secondary", value: "secondary" },
+        { label: "Danger", value: "danger" },
+        { label: "Ghost-dark", value: "ghost-dark" },
+        { label: "Ghost-light", value: "ghost-light" },
+        { label: "Link", value: "link" },
+    ];
+    const iconPositionList: Array<RadioListModel<ButtonIconPosition>> = [
+        { label: "Right", value: "right" },
+        { label: "Left", value: "left" },
+    ];
+    const sizeList: Array<RadioListModel<ButtonSizes>> = [
+        { label: "Small", value: "sm" },
+        { label: "Medium", value: "md" },
+        { label: "Large", value: "lg" },
+    ];
+    const [theme, setTheme] = React.useState<ButtonTheme>("primary");
+    const [iconPosition, setIconPosition] = React.useState<ButtonIconPosition>("right");
+    const [disabled, setDisabled] = React.useState<boolean>(false);
+    const [hasLoader, setHasLoader] = React.useState<boolean>(false);
+    const [hasIcon, setHasIcon] = React.useState<boolean>(false);
+    const [hasSize, setHasSize] = React.useState<boolean>(false);
+    const [size, setSize] = React.useState<ButtonSizes>("md");
+
+    function iconCheckboxChanged(e: React.ChangeEvent<HTMLInputElement>) {
+        setHasIcon(e.target.checked);
+        !e.target.checked && setIconPosition("right"); // Clear icon position
     }
 
-    render() {
-        const mode = getParameterByName(this.props.location.search, "mode");
-        const mysvg = <svg id="PIKTO_REGULAR" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 170 170"><title>regular_black</title><path d="M149.1,165h-6V132.3c0-18.8-14.2-34.8-32.5-36.8l-24,15.9a3,3,0,0,1-3.3,0L59.2,95.5C41,97.7,26.9,113.6,26.9,132.3V165h-6V132.3c0-22.5,16.7-40.9,38.8-42.9a3,3,0,0,1,1.9.5L85,105.3l23.2-15.4a3,3,0,0,1,1.9-.5c21.9,1.8,39,20.7,39,42.9Z" /><path d="M85,86.4A31.7,31.7,0,0,1,53.4,54.8V36.6a31.6,31.6,0,1,1,63.3,0V54.8A31.7,31.7,0,0,1,85,86.4Zm0-75.5A25.7,25.7,0,0,0,59.4,36.6V54.8a25.6,25.6,0,0,0,51.3,0V36.6A25.7,25.7,0,0,0,85,10.9Z" /></svg>;
+    function sizeCheckboxChanged(e: React.ChangeEvent<HTMLInputElement>) {
+        setHasSize(e.target.checked);
+        !e.target.checked && setSize("md"); // Reset size
+    }
 
-        return (
-            <div className={"route-template " + ((mode === "dl" || mode === "DL") ? "brief" : "")}>
-                <div className="info-holder">
+    return (
+        <div className="route-template container">
+            <div className="info-holder">
+                <div className="info">
+                    <div className="md-file">
+                        <Highlight innerHTML={true}>{docMD}</Highlight>
+                    </div>
+                </div>
 
-                    <div className="info">
-                        <div className="md-file">
-                            <Highlight innerHTML={true}>{docMD}</Highlight>
-                        </div>
+                <div className="info">
+                    <h2>Output</h2>
+                    <div className={"result p-3" + (theme === "ghost-light" ? " bg-dark" : "") + (theme === "ghost-dark" ? " bg-warning" : "")}>
+                        <Button
+                            title="Click me"
+                            label={theme}
+                            theme={theme}
+                            onClick={null}
+                            disabled={disabled}
+                            iconPosition={hasIcon ? iconPosition : null}
+                            icon={hasIcon && iconPosition ? mysvg : null}
+                            size={size}
+                        >
+                            {hasLoader && <Loader toggle={true} />}
+                        </Button>
                     </div>
 
-                    <div className="info">
-                        <h2>Output</h2>
-                        <p>Here are sample outputs</p>
-                        <div className="result">
-                            <Button
-                                title="Click me"
-                                label="Test Label"
-                                onClick={() => { alert("Button Clicked"); }}
-                            />
+                    <p>Options</p>
+                    <div className="row">
+                        <div className="col">
+                            <p>Themes</p>
+                            <RadioGroup name="theme" list={themeList} value={theme} onChange={(e) => setTheme(e.currentTarget.value as ButtonTheme)} condensed />
                         </div>
-
-                        <p>Here are sample outputs with custom svg icon on left</p>
-                        <div className="result">
-                            <Button
-                                label="Test Label"
-                                iconPosition={"left"}
-                                icon={mysvg}
-                                onClick={() => { alert("Button Clicked"); }}
-                            />
-                        </div>
-
-                        <p>Here are sample outputs with custom svg icon on right</p>
-                        <div className="result">
-                            <Button
-                                label="Test Label"
-                                iconPosition={"right"}
-                                icon={mysvg}
-                                onClick={() => { alert("Button Clicked"); }}
-                            />
-                        </div>
-
-                        <p>Here are sample outputs with theme</p>
-                        <div className="result">
-                            <Button
-                                label="Test Label"
-                                theme="anchor"
-                                onClick={() => { alert("Button Clicked"); }}
-                            />
+                        <div className="col">
+                            <p>Options</p>
+                            <CheckBox label="Disabled" name="disabled" checked={disabled} onChange={(e) => setDisabled(e.target.checked)} condensed />
+                            <CheckBox label="Loader" name="loader" checked={hasLoader} onChange={(e) => setHasLoader(e.target.checked)} condensed />
+                            <CheckBox label="Icon" name="icon" checked={hasIcon} onChange={iconCheckboxChanged} condensed />
+                            {hasIcon && (
+                                <RadioGroup
+                                    className="pl-4"
+                                    list={iconPositionList}
+                                    value={iconPosition}
+                                    condensed
+                                    name="icon-position"
+                                    onChange={(e) => setIconPosition(e.target.value as ButtonIconPosition)}
+                                />
+                            )}
+                            <CheckBox label="Size" name="size" checked={hasSize} onChange={sizeCheckboxChanged} condensed />
+                            {hasSize && <RadioGroup className="pl-4" list={sizeList} value={size} condensed name="icon-size" onChange={(e) => setSize(e.target.value as ButtonSizes)} />}
                         </div>
                     </div>
-
                 </div>
             </div>
-        );
-    }
-}
+        </div>
+    );
+};
+
+export default ButtonPage;

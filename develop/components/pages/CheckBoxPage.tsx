@@ -1,62 +1,62 @@
 import * as React from "react";
 import { CheckBox } from "../../../src/CheckBox/CheckBox";
-import { getParameterByName } from "../../utils/queryString";
-const Highlight = (require("react-highlight")).default;
-const docMD = require("../../../src/CheckBox/readme.md");
+import { Tabs } from "../../../src/Tabs/Tabs";
+import Highlight from "react-highlight";
+const docMD: string = require("../../../src/CheckBox/readme.md");
 
-export default class CheckBoxPage extends React.Component<any, any>  {
-    constructor(props: any) {
-        super(props);
-        this.state = {
-            checkbox1: true,
-            checkbox2: false,
-            checkbox3: true
-        };
-    }
+const CheckBoxPage: React.FunctionComponent = () => {
+    const [checkbox1, setCheckbox1] = React.useState<boolean>(true);
+    const [checkbox2, setCheckbox2] = React.useState<boolean>(false);
+    const [checkbox3, setCheckbox3] = React.useState<boolean>(true);
+    const [tabValue, setTabValue] = React.useState<number>(0);
 
-    render() {
-        const mode = getParameterByName(this.props.location.search, "mode");
-        return (
-            <div className={"route-template " + ((mode === "dl" || mode === "DL") ? "brief" : "")}>
-                <div className="info-holder">
+    const [input, setInput] = React.useState<string>("");
 
-                    <div className="info">
-                        <div className="md-file">
-                            <Highlight innerHTML={true}>{docMD}</Highlight>
-                        </div>
+    return (
+        <div className="route-template container">
+            <div className="info-holder">
+                <div className="info">
+                    <div className="md-file">
+                        <Highlight innerHTML={true}>{docMD}</Highlight>
                     </div>
-
-                    <div className="info">
-                        <h2>Output</h2>
-                        <p>Here are few checkboxes with different configurations:</p>
-                        <div className="result">
-                            <CheckBox
-                                name="checkbox-1"
-                                label="Checkbox 1"
-                                checked={this.state.checkbox1}
-                                onChange={(event) => { this.setState({ checkbox1: event.target.checked }); }}
-                            />
-                            <CheckBox
-                                name="checkbox-2"
-                                label="Checkbox 2"
-                                checked={this.state.checkbox2}
-                                onChange={(event) => { this.setState({ checkbox2: event.target.checked }); }}
-                                description="Some description"
-                            />
-                            <CheckBox
-                                name="checkbox-3"
-                                label="Checkbox 3"
-                                checked={this.state.checkbox3}
-                                onChange={(event) => { this.setState({ checkbox3: event.target.checked }); }}
-                                disabled={true}
-                                description="Disabled"
-                            />
-                        </div>
-                    </div>
-
                 </div>
 
+                <div className="info">
+                    <h2>Output</h2>
+                    <p>Here are few checkboxes with different configurations:</p>
+                    <div className={"result" + (tabValue === 2 ? " wide" : "")}>
+                        <Tabs list={[{ text: "Normal" }, { text: "Condensed" }, { text: "Inline" }]} activeTab={tabValue} onClick={setTabValue} />
+                        <CheckBox
+                            name="checkbox1"
+                            label="Checkbox 1"
+                            checked={checkbox1}
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCheckbox1(e.target.checked)}
+                            condensed={tabValue === 1}
+                            inline={tabValue === 2}
+                        />
+                        <CheckBox
+                            name="checkbox2"
+                            label="Checkbox 2"
+                            checked={checkbox2}
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCheckbox2(e.target.checked)}
+                            condensed={tabValue === 1}
+                            inline={tabValue === 2}
+                            description="Some description"
+                        />
+                        <CheckBox
+                            name="checkbox3"
+                            label="Disabled"
+                            checked={checkbox3}
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCheckbox3(e.target.checked)}
+                            condensed={tabValue === 1}
+                            inline={tabValue === 2}
+                            disabled={true}
+                        />
+                    </div>
+                </div>
             </div>
-        );
-    }
-}
+        </div>
+    );
+};
+
+export default CheckBoxPage;

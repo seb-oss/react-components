@@ -29,12 +29,16 @@ This React component supports customization and configurations. The component na
 ## Properties
 These are the current available properties:
 
-| Property   | Type                   | Descrition                                                      |
-| ---------- | ---------------------- | --------------------------------------------------------------- |
-| src        | `string`               | your image source, it can be string or required then pass value |
-| width      | `string`               | this is css width such as 100% or 300px                         |
-| height     | `string`               | this is css height such as 100% or 300px                        |
-| onClick?   | `(event: any) => void` | click action with event                                         |
-| onLoad?    | `(event: any) => void` | only works with `img` tag and returns when image is laoded      |
-| className? | `string`               | custom class                                                    |
-| useImgTag? | `boolean`              | this will switch between `div` and `img` tags. default is `div` |
+| Property         | Type                   | Description                                                     |
+| ---------------- | ---------------------- | --------------------------------------------------------------- |
+| alt?             | `string`               | Image `alt` attribute                                           |
+| ariaDescribedBy? | `string`               | Element aria-describedby attribute                              |
+| ariaLabel?       | `string`               | Element aria-label attribute                                    |
+| className?       | `string`               | custom class                                                    |
+| height           | `string`               | this is css height such as 100% or 300px                        |
+| id?              | `string`               | Element id                                                      |
+| onClick?         | `(event: any) => void` | click action with event                                         |
+| onLoad?          | `(event: any) => void` | only works with `img` tag and returns when image is laoded      |
+| src              | `string`               | your image source, it can be string or required then pass value |
+| useImgTag?       | `boolean`              | this will switch between `div` and `img` tags. default is `div` |
+| width            | `string`               | this is css width such as 100% or 300px                         |

@@ -1,57 +1,76 @@
 import * as React from "react";
+import { randomId } from "@sebgroup/frontend-tools/dist/randomId";
 import "./radio-group-style.scss";
 
-export interface RadioListModel {
-    value: any;
-    group: string;
-    label: string;
+export interface RadioListModel<T = any> {
     description?: string;
     disabled?: boolean;
+    label: string;
+    value: T;
 }
 
-export interface RadioGroupProps {
-    list: Array<RadioListModel>;
-    onChange: (value: any) => void;
-    value: any;
-    name?: string;
+export interface RadioGroupProps<T = any> {
     className?: string;
-    label?: string;
-    error?: string;
-    inline?: boolean;
+    condensed?: boolean;
     disableAll?: boolean;
+    id?: string;
+    inline?: boolean;
+    label?: string;
+    list: Array<RadioListModel<T>>;
+    name: string;
+    onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+    value: T;
 }
 
 export const RadioGroup: React.FunctionComponent<RadioGroupProps> = (props: RadioGroupProps): React.ReactElement<void> => {
-    let inputFieldClass: string = "input-field";
-    if (props.error) { inputFieldClass += " has-error"; }
-    if (props.inline) { inputFieldClass += " inline"; }
+    const [className, setClassName] = React.useState<string>("form-group custom-radio");
+    const [idList, setIdList] = React.useState<Array<string>>([]);
+
+    React.useEffect(() => {
+        let elementClassName: string = "form-group custom-radio";
+        elementClassName += props.inline ? " inline" : "";
+        elementClassName += props.condensed ? " condensed" : "";
+        elementClassName += props.className ? ` ${props.className}` : "";
+        setClassName(elementClassName);
+    }, [props.className, props.inline, props.condensed]);
+
+    React.useEffect(() => {
+        constructIds();
+    }, [props.list]);
+
+    function constructIds(): void {
+        const idListToSet: Array<string> = [];
+        props.list.map(() => idListToSet.push(randomId("radiogroup-")));
+        setIdList(idListToSet);
+    }
 
     return (
-        <div className={"form-group radio-holder" + (props.className ? ` ${props.className}` : "")}>
-            <div className={inputFieldClass}>
-                {props.label && <label className="radio-group-label" htmlFor={props.name}>{props.label}</label>}
+        <div className={className} id={props.id}>
+            <div className="input-field">
+                {props.label && <label className="radio-group-label">{props.label}</label>}
 
-                {props.list && props.list.map((item, index) => {
-                    const identifier: string = item.label.replace(" ", "_") + Math.floor(Math.random() * 100) + (new Date()).getTime();
-                    return (
-                        <div key={index} className="radio-item">
-                            <label className="radio-label" htmlFor={identifier}>{item.label}</label>
-                            <input
-                                className="radio-input"
-                                type="radio"
-                                value={item.value}
-                                name={item.group}
-                                id={identifier}
-                                checked={props.value === item.value}
-                                disabled={props.disableAll || item.disabled}
-                                onChange={(e) => { props.onChange(item.value); }}
-                            />
-                            <span className="checkmark" />
-                            {item.description && <span className="radio-description">{item.description}</span>}
-                        </div>
-                    );
-                })}
-                {props.error && <div className={"alert alert-danger"}>{props.error}</div>}
+                {props.list &&
+                    props.list.map((item: RadioListModel, index: number) => {
+                        return (
+                            <div key={index} className="custom-control">
+                                <input
+                                    className="custom-control-input"
+                                    type="radio"
+                                    value={item.value}
+                                    name={props.name}
+                                    id={idList[index]}
+                                    checked={props.value === item.value}
+                                    aria-labelledby={item.label}
+                                    disabled={props.disableAll || item.disabled}
+                                    onChange={props.onChange}
+                                />
+                                <label className="custom-control-label" htmlFor={idList[index]}>
+                                    {item.label}
+                                    {item.description && <span className="radio-description">{item.description}</span>}
+                                </label>
+                            </div>
+                        );
+                    })}
             </div>
         </div>
     );

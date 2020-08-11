@@ -1,26 +1,32 @@
 import * as React from "react";
-import { shallow } from "enzyme";
-import { Timeline, TimelineListItem } from "./Timeline";
+import { shallow, ShallowWrapper } from "enzyme";
+import { Timeline, TimelineListItem, TimelineProps } from "./Timeline";
 
 describe("Component: Timeline", () => {
     const timelineList: Array<TimelineListItem> = [
         { title: "title1", time: "time1" },
         { title: "title2", time: "time2" },
-        { title: "title3", time: "time3" }
+        { title: "title3", time: "time3" },
     ];
+    let wrapper: ShallowWrapper<TimelineProps>;
+
+    beforeEach(() => {
+        wrapper = shallow(<Timeline list={timelineList} />);
+    });
 
     it("Should render", () => {
-        const wrapper = shallow(<Timeline list={timelineList} />);
         expect(wrapper).toBeDefined();
     });
 
-    it("Should pass custom class", () => {
-        const wrapper = shallow(<Timeline list={timelineList} className="myTimeline" />);
-        expect(wrapper.hasClass("myTimeline")).toBeTruthy();
+    it("Should pass custom class and id", () => {
+        const className: string = "myTimelineClass";
+        const id: string = "myTimelineId";
+        wrapper.setProps({ className, id });
+        expect(wrapper.hasClass(className)).toBeTruthy();
+        expect(wrapper.find(`#${id}`).length).toBeTruthy();
     });
 
     it("Should render in horizontal if direction prop is set to `horizontal`", () => {
-        const wrapper = shallow(<Timeline list={timelineList} />);
         expect(wrapper.find(".timeline").hasClass("vertical"));
         wrapper.setProps({ direction: "horizontal" });
         expect(wrapper.find(".row").length).toBeGreaterThan(0);
@@ -74,5 +80,4 @@ describe("Component: Timeline", () => {
         expect(horizontalWrapper.find(".title-wrapper").at(4).find(".desc").length).toBe(1);
         expect(horizontalWrapper.find(".title-wrapper").at(4).find(".desc").text()).toEqual("desc5");
     });
-
 });

@@ -1,52 +1,56 @@
-
 /**
  * Read the variable `comp` passed with npm command.
  * @example
  * To test only the App component you
  * would run the following command
- * ```npm test --comp=App```
+ * `npm test App`
+ * Multiple components can be tested using
+ * `npm test Button RadioGroup`
  */
-const specific = process.env.npm_config_comp;
+const { argv } = process;
+const specific = argv.slice(5, argv.length); // Skipping test properties
+
+const collectCoverageFrom = [];
+const testMatch = [];
+
+if (specific.length) {
+    collectCoverageFrom.push(...extractSpecifics("src/**/%inject%.(ts|tsx|js|jsx)"));
+    testMatch.push(...extractSpecifics("**/%inject%.test.(ts|tsx|js|jsx)"));
+} else {
+    collectCoverageFrom.push("src/**/*.(ts|tsx|js|jsx)");
+    testMatch.push("**/*.test.(ts|tsx|js|jsx)");
+}
+
+collectCoverageFrom.push("!src/**/index.(ts|js)");
+
+function extractSpecifics(injectTo) {
+    return specific.map((item) => injectTo.replace("%inject%", item));
+}
 
 module.exports = {
-    setupTestFrameworkScriptFile: "<rootDir>/setupTests.js",
+    setupFilesAfterEnv: ["<rootDir>/setupTests.js"],
     testEnvironment: "jsdom",
-    testMatch: [
-        `**/${specific || "*"}.test.(ts|tsx|js|jsx)`,
-        `**/?(${specific || "*"}.)+(spec|test).(ts|tsx|js|jsx)`
-    ],
-    modulePaths: [
-        "<rootDir>/src",
-        "<rootDir>/node_modules"
-    ],
+    testMatch,
+    modulePaths: ["<rootDir>/src", "<rootDir>/node_modules"],
     globals: {
-        "NODE_ENV": "test"
+        NODE_ENV: "test",
     },
     verbose: true,
-    moduleFileExtensions: [
-        "ts",
-        "tsx",
-        "js",
-        "jsx",
-        "json"
-    ],
+    moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json"],
     transform: {
-        "^.+\\.tsx?$": "ts-jest"
+        "^.+\\.jsx?$": require.resolve("babel-jest"),
+        "^.+\\.tsx?$": "ts-jest",
     },
-    transformIgnorePatterns: ["/node_modules/(?!(lodash-es|react)/)"], // <-- this allows babel to load only the node modules I need (which is lodash-es) and ignore the rest
+    transformIgnorePatterns: ["<rootDir>/node_modules/(?!(react|@sebgroup/frontend-tools)/)"],
     testEnvironment: "node",
     moduleNameMapper: {
         "aurelia-(.*)": "<rootDir>/node_modules/$1",
-        "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$":
-            "<rootDir>/__mocks__/fileMock.js",
-        "\\.(css|less|scss)$": "<rootDir>/__mocks__/styleMock.js"
+        "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/__mocks__/fileMock.js",
+        "\\.(css|less|scss)$": "<rootDir>/__mocks__/styleMock.js",
     },
     // some coverage and results processing options
     collectCoverage: true,
-    collectCoverageFrom: [
-        `src/**/${specific || "*"}.(ts|tsx|js|jsx)`,
-        "!src/**/index.(ts|js)"
-    ],
+    collectCoverageFrom,
     coverageDirectory: "./coverage",
-    coverageReporters: ["json", "lcov", "text"]
+    coverageReporters: ["json", "lcov", "text"],
 };

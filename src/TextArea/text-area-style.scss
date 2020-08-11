@@ -1,30 +1,34 @@
-$red: #F03529;
-@mixin transition($props) {
-    -webkit-transition: $props;
-    -moz-transition: $props;
-    -o-transition: $props;
-    transition: $props;
-}
+@import "../../node_modules/@sebgroup/bootstrap/scss/variables";
 
 $transition-time: 200ms;
+
 .form-group.text-area {
-    >.input-field {
-        >label.custom-label:not(.form-check-label):not(.custom-checkbox):not(.custom-radio):not(.custom-control-label) {
-            display: block;
-            margin-bottom: 4px;
-            line-height: 1;
-            font-size: 12px;
-            font-weight: normal;
-        }
-        >textarea.form-control {
+    > .input-field {
+        > textarea.form-control {
+            color: $body-color;
+            border-color: $gray-500;
+            transition: border $transition-time / 2;
             &:not(.resizable) {
                 resize: none;
             }
-            &.error {
-                border-color: $red;
+            &:not(:disabled) {
+                &:hover {
+                    border-color: $blue;
+                    background-color: $white;
+                }
+                &:focus {
+                    border-color: $blue-darker;
+                    box-shadow: none;
+                    background-color: $white;
+                    &:active {
+                        border-color: $blue-darker;
+                        box-shadow: none;
+                        background-color: $white;
+                    }
+                }
             }
         }
-        >.alert {
+        > .alert {
             opacity: 0;
             margin: 0;
             padding: 0;
@@ -34,16 +38,21 @@ $transition-time: 200ms;
             border-radius: 0px;
             overflow: hidden;
             width: 100%;
-            @include transition((opacity $transition-time, padding $transition-time, max-height $transition-time*2));
+            transition: opacity $transition-time, padding $transition-time, max-height $transition-time * 2;
             &.alert-danger {
                 color: $red;
             }
         }
         &.has-error {
-            >textarea {
-                border: 1px solid $red;
+            > textarea.form-control {
+                border-bottom: 1px solid $red;
+                &:hover,
+                &:focus,
+                &:focus:active {
+                    border-bottom: 2px solid $red;
+                }
             }
-            >.alert {
+            > .alert {
                 opacity: 1;
                 padding-top: 2px;
                 max-height: 100px;

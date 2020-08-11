@@ -1,49 +1,69 @@
 import * as React from "react";
+import { randomId } from "@sebgroup/frontend-tools/dist/randomId";
 import "./radio-button-style.scss";
 
-export interface RadioButtonProps {
-    onChange: (value: any) => void;
-    value: any;
-    radioValue: any;
-    group: string;
-    name?: string;
-    description?: string;
+export interface RadioButtonProps<T = any> {
     className?: string;
-    label?: string;
-    error?: string;
-    inline?: boolean;
+    condensed?: boolean;
+    description?: string;
     disabled?: boolean;
-    reference?: React.RefObject<any>;
+    group?: string;
+    id?: string;
+    inline?: boolean;
+    label: string;
+    name: string;
+    onChange: (value: T, e?: React.ChangeEvent<HTMLInputElement>) => void;
+    radioValue: T;
+    reference?: React.RefObject<HTMLInputElement>;
+    topLabel?: string;
+    value: T;
 }
 
-export const RadioButton: React.FunctionComponent<RadioButtonProps> = (props: RadioButtonProps): React.ReactElement<void> => {
-    let inputFieldClass: string = "input-field";
-    if (props.error) { inputFieldClass += " has-error"; }
-    if (props.inline) { inputFieldClass += " inline"; }
+const RadioButton: React.FunctionComponent<RadioButtonProps> = (props: RadioButtonProps): React.ReactElement<void> => {
+    const [className, setClassName] = React.useState<string>("form-group custom-radio");
+    const [id, setId] = React.useState<string>("");
+
+    React.useEffect(() => setId(props.id || randomId("radiobtn-")), [props.id]);
+
+    React.useEffect(() => {
+        let elementClassName: string = "form-group custom-radio";
+        elementClassName += props.inline ? " inline" : "";
+        elementClassName += props.condensed ? " condensed" : "";
+        elementClassName += props.className ? ` ${props.className}` : "";
+        setClassName(elementClassName);
+    }, [props.className, props.inline, props.condensed]);
 
     return (
-        <div className={"form-group radio-holder" + (props.className ? ` ${props.className}` : "")}>
-            <div className={inputFieldClass}>
+        <div className={className}>
+            <div className="input-field">
+                {props.topLabel && (
+                    <label htmlFor={id} className="radio-toplabel">
+                        {props.topLabel}
+                    </label>
+                )}
 
-                <div className="radio-item">
-                    {props.label && <label className="radio-label" htmlFor={props.label}>{props.label}</label>}
+                <div className="custom-control">
                     <input
-                        className="radio-input"
+                        className="custom-control-input"
                         type="radio"
                         value={props.value}
-                        name={props.group}
-                        id={props.label}
+                        name={props.name}
+                        id={id}
                         checked={props.value === props.radioValue}
                         disabled={props.disabled}
-                        onChange={(e) => { props.onChange(props.radioValue); }}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                            props.onChange(props.radioValue, e);
+                        }}
                         ref={props.reference}
                     />
-
-                    <span className="checkmark" />
-                    {props.description && <span className="radio-description">{props.description}</span>}
+                    <label className="custom-control-label" htmlFor={id}>
+                        {props.label}
+                        {props.description && <span className="radio-description">{props.description}</span>}
+                    </label>
                 </div>
-                {props.error && <div className="alert alert-danger">{props.error}</div>}
             </div>
         </div>
     );
 };
+
+export { RadioButton };

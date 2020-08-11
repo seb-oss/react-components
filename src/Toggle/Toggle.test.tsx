@@ -1,34 +1,57 @@
 import * as React from "react";
-import { shallow } from "enzyme";
-import { Toggle } from "./Toggle";
+import { shallow, ShallowWrapper, ReactWrapper, mount } from "enzyme";
+import { Toggle, ToggleProps } from "./Toggle";
 
 describe("Component: Toggle ", () => {
-
-    const props = {
+    const props: ToggleProps = {
         value: true,
         onChange: jest.fn(),
-        name: "myToggle"
+        name: "myToggle",
     };
+    let wrapper: ShallowWrapper<ToggleProps>;
+
+    beforeEach(() => {
+        wrapper = shallow(<Toggle {...props} />);
+    });
 
     it("Should render", () => {
-        const wrapper = shallow(<Toggle {...props} />);
         expect(wrapper).toBeDefined();
     });
 
     it("Should pass custom class", () => {
-        const wrapper = shallow(<Toggle {...props} className="myToggle" />);
-        expect(wrapper.hasClass("myToggle")).toBeTruthy();
+        const className: string = "myToggleClass";
+        wrapper.setProps({ className });
+        expect(wrapper.hasClass(className)).toBeTruthy();
+    });
+
+    it("Should pass custom id", () => {
+        let mountedWrapper: ReactWrapper<ToggleProps>;
+        const id: string = "my-toggle-id";
+        mountedWrapper = mount(<Toggle {...props} id={id} />);
+        expect(mountedWrapper.find(`#${id}`).length).toBeTruthy();
+        mountedWrapper = mount(<Toggle {...props} />);
+        expect(mountedWrapper.find("input").getElement().props.id).toBeTruthy();
     });
 
     it("Should fire change event when changed", () => {
-        const wrapper = shallow(<Toggle {...props} />);
-        wrapper.find(".toggle").simulate("change", { target: { value: false } });
+        wrapper.find("input").simulate("change", { target: { value: false } });
+        wrapper.find("input").simulate("focus", {
+            preventDefault: () => {
+                console.log("Its preventing the default");
+            },
+            stopPropagation: () => {
+                console.log("We are stopping propagation ");
+            },
+        });
         expect(props.onChange).toBeCalled();
     });
 
-    it("Should render label", () => {
-        const wrapper = shallow(<Toggle {...props} label="label" />);
-        expect(wrapper.find(".toggle-label").length).toBe(1);
-        expect(wrapper.find(".toggle-label").text()).toEqual("label");
+    it("Should render label and name", () => {
+        const label: string = "my toggle label";
+        const name: string = "my-toggle-name";
+        wrapper.setProps({ label, name });
+        expect(wrapper.find(".custom-control-label").length).toBe(1);
+        expect(wrapper.find(".custom-control-label").text()).toEqual(label);
+        expect(wrapper.find("input").getElement().props.name).toEqual(name);
     });
 });

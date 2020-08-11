@@ -1,11 +1,7 @@
-$blue: #41B0EE;
-$blue-dark: #0092E1;
-$blue-darker: #007AC7;
-$gray-300: #dedede;
-$gray-600: #868686;
-$white: #fff;
+@import "../../node_modules/@sebgroup/bootstrap/scss/variables";
+
 $transition-time: 200ms;
-$default: 14px;
+
 .custom-step-tracker {
     position: relative;
     overflow: hidden;
@@ -37,7 +33,7 @@ $default: 14px;
                     .number {
                         color: $blue-darker;
                     }
-                    &~.step {
+                    & ~ .step {
                         background-color: $gray-300;
                         svg {
                             transform: translate(-50%, -50%) scale(0);
@@ -121,7 +117,7 @@ $default: 14px;
                     max-width: 100px;
                     white-space: normal;
                     margin: 0 auto;
-                    font-size: $default;
+                    font-size: $font-size-sm;
                 }
                 &.active {
                     .name {
@@ -163,7 +159,7 @@ $default: 14px;
                     .number {
                         color: $blue-darker;
                     }
-                    &~.step {
+                    & ~ .step {
                         background-color: $gray-300;
                         svg {
                             transform: translate(-50%, -50%) scale(0);
@@ -240,7 +236,7 @@ $default: 14px;
                 .name {
                     position: relative;
                     line-height: 100%;
-                    font-size: $default;
+                    font-size: $font-size-sm;
                 }
                 &.active {
                     .name {

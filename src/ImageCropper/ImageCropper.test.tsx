@@ -10,12 +10,18 @@ describe("Component: ImageCropper", () => {
             preview: ".image-preview",
             guides: false,
             responsive: true,
-            ready: () => { console.log("On ready"); }
+            ready: () => {
+                console.log("On ready");
+            },
         },
         className: "",
         alwaysAlignedCropper: false,
-        onCrop: (imageData: string) => { console.log("the image data is ", imageData); },
-        onCustomButtonClick: (e: React.MouseEvent<HTMLButtonElement>) => { console.log(" coustom bottom has been click"); },
+        onCrop: (imageData: string) => {
+            console.log("the image data is ", imageData);
+        },
+        onCustomButtonClick: (e: React.MouseEvent<HTMLButtonElement>) => {
+            console.log(" coustom bottom has been click");
+        },
         cropButtonText: "",
         customButtonText: "",
         cancelText: "",
@@ -48,9 +54,12 @@ describe("Component: ImageCropper", () => {
         wrapper.unmount();
     });
 
-    it("Should pass custom class", () => {
-        const wrapper = mount(<ImageCropper {...props} previewClassName="my-image-preview" />);
-        expect(wrapper.find(".my-image-preview").exists()).toBeTruthy();
+    it("Should pass custom class and id", () => {
+        const className: string = "myImageCropperClass";
+        const id: string = "myImageCropperId";
+        const wrapper = mount(<ImageCropper {...props} previewClassName={className} id={id} />);
+        expect(wrapper.find(`.${className}`).length).toBeTruthy();
+        expect(wrapper.find(`#${id}`).length).toBeTruthy();
         wrapper.unmount();
     });
 
@@ -121,11 +130,11 @@ describe("Component: ImageCropper", () => {
 
         // setCropBoxData function should be called when the cropBoxData props is change
         const mockSetCropBoxData = jest.spyOn(instance, "setCropBoxData");
-        wrapper.setProps({ cropBoxData: { top: 0, left: 0, height: 1, width: 3 }, });
+        wrapper.setProps({ cropBoxData: { top: 0, left: 0, height: 1, width: 3 } });
         expect(mockSetCropBoxData).toHaveBeenCalled();
         wrapper.unmount();
     });
-/*
+    /*
     it("loader should be loading when src in not provided", () => {
         props.toggle = true;
         const wrapper = mount(<ImageCropper {...props} />);
@@ -139,7 +148,7 @@ describe("Component: ImageCropper", () => {
             wrapper.unmount();
         });
     });*/
-/*
+    /*
     it("onCropClick function should be called on crop button click ", () => {
         props.toggle = true;
         props.previewSrc = "data:image/jpeg;base64,PHN2ZyKPC9zdmc+";
@@ -156,7 +165,7 @@ describe("Component: ImageCropper", () => {
             wrapper.unmount();
         }, 1000);
     });*/
-/*
+    /*
     it("dismissCropper function should be called on dismiss button click ", () => {
         props.toggle = true;
         props.previewSrc = "data:image/jpeg;base64,PHN2ZyKPC9zdmc+";
@@ -203,7 +212,7 @@ describe("Component: ImageCropper", () => {
         wrapper.unmount();
     });
 
-   /* it("stopProp function should be called on modal div click to stopPropagation", () => {
+    /* it("stopProp function should be called on modal div click to stopPropagation", () => {
         props.toggle = true;
         props.previewSrc = "data:image/jpeg;base64,PHN2ZyKPC9zdmc+";
         const wrapper = mount(<ImageCropper {...props} />);
@@ -222,7 +231,7 @@ describe("Component: ImageCropper", () => {
             wrapper.unmount();
         }, 1000);
     });*/
-/*
+    /*
     it("alignCropper method should be called on crop move when alwaysAlignedCropper is set to true ", () => {
         props.toggle = true;
         props.alwaysAlignedCropper = true;

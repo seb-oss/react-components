@@ -1,0 +1,319 @@
+@import "~@sebgroup/bootstrap/scss/core";
+
+$transition-time: 300ms;
+$icon-size: 18px;
+$dropdown-width: 100%;
+$dropdown-toggle-height: 44px;
+
+.custom-dropdown {
+    margin-bottom: 8px;
+    > .custom-dropdown-toggle {
+        background-color: $white;
+        height: $dropdown-toggle-height;
+        min-width: $dropdown-width;
+        padding: 0px;
+        border-color: $gray-500;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-left: 16px;
+
+        > .title {
+            font-weight: normal;
+            color: $body-color;
+        }
+
+        > .right-items {
+            display: flex;
+            > .dropdown-icon-holder {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                height: $dropdown-toggle-height;
+                width: $dropdown-toggle-height;
+
+                > svg {
+                    will-change: transform;
+                    transition: $transition-time;
+                    width: $icon-size;
+                    height: $icon-size;
+                    fill: $blue-dark;
+                    cursor: pointer;
+                }
+            }
+        }
+
+        &.open {
+            > .right-items > .dropdown-icon-holder {
+                &.chevron {
+                    > svg {
+                        transform: rotate(180deg);
+                    }
+                }
+            }
+        }
+
+        &:hover {
+            border-color: $blue;
+            background-color: $white;
+        }
+
+        &:focus {
+            border-color: $blue-darker;
+            box-shadow: none;
+            background-color: $white;
+            &:active {
+                color: $body-color;
+                border-color: $blue-darker;
+                box-shadow: none;
+                background-color: $white;
+            }
+        }
+
+        &.more {
+            background-color: inherit;
+            height: $dropdown-toggle-height;
+            min-width: $dropdown-toggle-height;
+            max-width: $dropdown-toggle-height;
+            padding: 0px;
+            border-color: transparent;
+            margin: 0px 0px 0px auto;
+            transition: background-color $transition-time/2;
+            > .right-items > .dropdown-icon-holder > svg {
+                height: calc(#{$dropdown-toggle-height} / 1.2);
+                width: calc(#{$dropdown-toggle-height} / 1.2);
+                transition: fill $transition-time/2;
+                &:focus {
+                    &:active {
+                        fill: $white;
+                    }
+                }
+            }
+
+            &:hover:not(.open) {
+                background-color: $blue;
+                > .right-items > .dropdown-icon-holder > svg {
+                    fill: $white;
+                }
+            }
+
+            &:focus {
+                border-color: $blue-darker;
+                &:active {
+                    background-color: $blue-darker;
+                }
+            }
+
+            &.open {
+                background-color: $blue-darker;
+                > .right-items > .dropdown-icon-holder > svg {
+                    fill: $white;
+                }
+            }
+        }
+    }
+
+    > .custom-dropdown-menu {
+        min-width: $dropdown-width;
+        border-radius: 4px;
+        border: 1px solid $blue-darker;
+        padding: 0px;
+        margin: 4px 0px 14px 0px;
+        outline: none;
+        max-height: 70vh;
+        overflow: auto;
+
+        > .dropdown-divider {
+            margin: 0px;
+
+            &.blue {
+                border-color: $blue-darker;
+            }
+        }
+
+        > .search-input {
+            height: $dropdown-toggle-height;
+            padding: 0px 0px 0px 16px;
+            border: none;
+            outline: none;
+        }
+
+        > .custom-dropdown-item {
+            display: flex;
+            padding-left: 16px;
+            background: $white;
+            color: $body-color;
+
+            &:focus {
+                outline: none;
+                background: initial;
+                color: initial;
+                border: initial;
+            }
+
+            &:hover {
+                background: initial;
+                color: initial;
+                border: initial;
+            }
+
+            .custom-control {
+                .custom-control-label,
+                .custom-control-input {
+                    cursor: pointer;
+                    user-select: none;
+                    &::before {
+                        border-color: $body-color;
+                        background-color: $white;
+                    }
+                    &::after {
+                        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3e%3cpath fill='%23fff' d='M6.564.75l-3.59 3.612-1.538-1.55L0 4.26 2.974 7.25 8 2.193z'/%3e%3c/svg%3e");
+                    }
+                }
+            }
+
+            &.highlighted {
+                background-color: $blue;
+                color: $white;
+                .custom-control {
+                    .custom-control-label {
+                        color: $white;
+                    }
+                }
+
+                &.selected {
+                    background-color: $blue-darker;
+                    color: $white;
+                    .custom-control {
+                        .custom-control-label,
+                        .custom-control-input {
+                            &::before {
+                                color: $white;
+                                border-color: $white;
+                            }
+                        }
+                    }
+                }
+            }
+
+            &.selected {
+                background-color: $white;
+                color: $blue-darker;
+                .custom-control {
+                    .custom-control-label,
+                    .custom-control-input {
+                        &::before {
+                            color: $white;
+                            border-color: $blue-darker;
+                            background-color: $blue-darker;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    &.disabled {
+        pointer-events: none;
+        > .dropdown-label {
+            color: $gray-500;
+        }
+
+        > .custom-dropdown-toggle {
+            border-color: $gray-500;
+            background-color: $gray-100;
+            cursor: default;
+
+            > .title {
+                color: $gray-500;
+            }
+
+            > .right-items > .dropdown-icon-holder > svg {
+                fill: $gray-500;
+                cursor: default;
+            }
+
+            &.more {
+                border-color: transparent;
+
+                &:hover {
+                    background-color: $gray-100;
+                    > .right-items > .dropdown-icon-holder > svg {
+                        fill: $gray-500;
+                        cursor: default;
+                    }
+                }
+            }
+        }
+    }
+
+    &.has-error {
+        > .custom-dropdown-toggle {
+            border-color: $red;
+        }
+    }
+}
+
+.alert.custom-alert {
+    padding: 0px 2px;
+    margin: 0;
+    &.alert-danger {
+        color: $red-dark;
+        background: none;
+        border: none;
+        border-radius: 0px;
+        width: 100%;
+    }
+}
+
+// Native version
+.custom-native-dropdown {
+    margin-bottom: 8px;
+    /* for Firefox */
+    -moz-appearance: none;
+    /* for Chrome */
+    -webkit-appearance: none;
+    &::-ms-expand {
+        display: none;
+    }
+
+    > .form-control {
+        &.disabled {
+            border-color: $gray-500;
+            color: $gray-500;
+            background-color: $white;
+        }
+    }
+
+    > .dropdown-label {
+        &.disabled {
+            color: $gray-500;
+        }
+    }
+
+    &.has-error {
+        .custom-native-dropdown {
+            border-color: $red;
+        }
+    }
+}
+
+/* clears the 'X' from Internet Explorer */
+input[type="search"]::-ms-clear {
+    display: none;
+    width: 0;
+    height: 0;
+}
+input[type="search"]::-ms-reveal {
+    display: none;
+    width: 0;
+    height: 0;
+}
+
+/* clears the 'X' from Chrome */
+input[type="search"]::-webkit-search-decoration,
+input[type="search"]::-webkit-search-cancel-button,
+input[type="search"]::-webkit-search-results-button,
+input[type="search"]::-webkit-search-results-decoration {
+    display: none;
+}

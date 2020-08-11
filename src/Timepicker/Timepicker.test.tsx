@@ -3,11 +3,10 @@ import { shallow, mount } from "enzyme";
 import { Timepicker, TimepickerDayperiodTypes, TimepickerValue } from "./Timepicker";
 
 describe("Component: Timepicker", () => {
-
     const props = {
         value: { hours: 6, minutes: 30, dayperiod: TimepickerDayperiodTypes.AM },
         onChange: jest.fn(),
-        name: "myTimepicker"
+        name: "myTimepicker",
     };
 
     it("Should render", () => {
@@ -15,9 +14,12 @@ describe("Component: Timepicker", () => {
         expect(wrapper).toBeDefined();
     });
 
-    it("Should pass custom class", () => {
-        const wrapper = shallow(<Timepicker {...props} className="myTimepicker" />);
-        expect(wrapper.hasClass("myTimepicker")).toBeTruthy();
+    it("Should pass custom class and id", () => {
+        const className: string = "myTimepickerClass";
+        const id: string = "myTimepickerId";
+        const wrapper = shallow(<Timepicker {...props} className={className} id={id} />);
+        expect(wrapper.hasClass(className)).toBeTruthy();
+        expect(wrapper.find(`#${id}`).length).toBeTruthy();
     });
 
     it("Should fire change event", () => {
@@ -120,5 +122,4 @@ describe("Component: Timepicker", () => {
         result = instance.handleChange("MINUTES", -5, props.value);
         expect(result.minutes).toEqual(0);
     });
-
 });

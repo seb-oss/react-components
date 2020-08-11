@@ -1,14 +1,6 @@
-$transparent-black: rgba(0, 0, 0, 0.4);
-$white: #fff;
-$green: #60cd18;
-$gray-300: #dedede;
+@import "../../node_modules/@sebgroup/bootstrap/scss/variables";
 
-@mixin animation($props) {
-    -webkit-animation: $props;
-    -moz-animation: $props;
-    -o-animation: $props;
-    animation: $props;
-}
+$transparent-black: rgba(0, 0, 0, 0.4);
 
 .loader-cropper {
     .loader-holder {
@@ -23,7 +15,7 @@ $gray-300: #dedede;
             border-radius: 50%;
             width: 80px;
             height: 80px;
-            @include animation(rotate 1s linear infinite);
+            animation: rotate 1s linear infinite;
             margin: 0 auto;
         }
     }

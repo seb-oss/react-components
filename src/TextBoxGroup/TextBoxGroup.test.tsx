@@ -4,11 +4,16 @@ import { TextBoxGroup, TextBoxGroupProps } from "./TextBoxGroup";
 
 describe("Component: TextBoxGroup", () => {
     let wrapper: ShallowWrapper<TextBoxGroupProps>;
-    let onChange: jest.Mock;
+    let mountedWrapper: ReactWrapper<TextBoxGroupProps>;
+    const props: TextBoxGroupProps = {
+        name: "myTextboxgroup",
+        value: "",
+        onChange: jest.fn(),
+    };
 
     beforeEach(() => {
-        onChange = jest.fn();
-        wrapper = shallow(<TextBoxGroup name="myTextboxgroup" value="" onChange={onChange} />);
+        wrapper = shallow(<TextBoxGroup {...props} />);
+        mountedWrapper = mount(<TextBoxGroup {...props} />);
     });
 
     it("Should render", () => {
@@ -16,14 +21,30 @@ describe("Component: TextBoxGroup", () => {
         expect(wrapper.hasClass("input-box-group")).toBeTruthy();
     });
 
+    it("Should pass down the id or random id to the TextBoxGroup component", () => {
+        const id: string = "my-TextBoxGroup-id";
+        mountedWrapper = mount(<TextBoxGroup {...props} id={id} />);
+        expect(mountedWrapper.find(`#${id}`).length).toBeTruthy();
+        mountedWrapper = mount(<TextBoxGroup {...props} label="test label" />);
+        expect(mountedWrapper.find("input").getElement().props.id).toBeTruthy();
+    });
+
+    it("Should pass down extra optional attributes to the component", () => {
+        wrapper.setProps({ pattern: "my-pattern", minLength: 2, maxLength: 4, required: true });
+        const componentProps = wrapper.find("input").getElement().props;
+        expect(componentProps.pattern).toEqual("my-pattern");
+        expect(componentProps.minLength).toEqual(2);
+        expect(componentProps.maxLength).toEqual(4);
+        expect(componentProps.required).toEqual(true);
+    });
+
     it("Should trigger onChange callback when change to input element is detected", () => {
         wrapper.find("input").simulate("change", { target: { value: "test" } });
-        expect(onChange).toBeCalledWith({ target: { value: "test" } });
+        expect(props.onChange).toBeCalledWith({ target: { value: "test" } });
     });
 
     describe("Testing optional events", () => {
         let mountedProps: TextBoxGroupProps;
-        let mountedWrapper: ReactWrapper<TextBoxGroupProps>;
 
         beforeAll(() => {
             mountedProps = {
@@ -34,7 +55,7 @@ describe("Component: TextBoxGroup", () => {
                 onKeyUp: jest.fn(),
                 onKeyPress: jest.fn(),
                 onFocus: jest.fn(),
-                onBlur: jest.fn()
+                onBlur: jest.fn(),
             };
             mountedWrapper = mount(<TextBoxGroup {...mountedProps} />);
             mountedWrapper.find(".form-control").simulate("keyDown", { key: "a", keyCode: 65 });
@@ -52,41 +73,62 @@ describe("Component: TextBoxGroup", () => {
     });
 
     it("Should pass custom class", () => {
-        wrapper.setProps({ className: "myTextboxGroup" });
-        expect(wrapper.hasClass("myTextboxGroup")).toBeTruthy();
+        const className: string = "myTextboxGroup";
+        wrapper.setProps({ className });
+        expect(wrapper.hasClass(className)).toBeTruthy();
     });
 
-    it("Should render label and error", () => {
-        wrapper.setProps({ label: "label", error: "error" });
+    it("Should render label", () => {
+        const label: string = "my label";
+        wrapper.setProps({ label });
         expect(wrapper.find("label").length).toBe(1);
-        expect(wrapper.find(".alert").length).toBe(1);
-        expect(wrapper.find("label").text()).toEqual("label");
-        expect(wrapper.find(".alert-danger").text()).toEqual("error");
-        expect(wrapper.find(".input-group").hasClass("has-error")).toBeTruthy();
+        expect(wrapper.find("label").text()).toEqual(label);
     });
 
-    it("Should enable autocomplete and autofocus when enabled", () => {
-        wrapper.setProps({ autoComplete: true, focus: true });
-        expect([true, "true", "on"].indexOf(wrapper.find("input").prop("autoComplete"))).not.toBe(-1);
-        expect([true, "true", "on"].indexOf(wrapper.find("input").prop("autoFocus"))).not.toBe(-1);
+    it("Should show error and success indicators, hide error message when `showErrorMessage` props is set to `false`", () => {
+        const error: string = "some error";
+        mountedWrapper = mount(<TextBoxGroup {...props} error={error} />);
+        expect(mountedWrapper.find(".input-group").hasClass("has-error")).toBeTruthy();
+        expect(mountedWrapper.find(".alert-danger").length).toBe(1);
+        expect(mountedWrapper.find(".alert-danger").text()).toEqual(error);
+        mountedWrapper = mount(<TextBoxGroup {...props} error={error} showErrorMessage={false} success />);
+        expect(mountedWrapper.find(".input-group").hasClass("has-error")).toBeFalsy();
+        expect(mountedWrapper.find(".input-group").hasClass("success")).toBeTruthy();
+        expect(mountedWrapper.find(".alert-danger").length).toBe(0);
+        mountedWrapper = mount(<TextBoxGroup {...props} error={error} showErrorMessage={false} />);
+        expect(mountedWrapper.find(".input-group").hasClass("has-error")).toBeTruthy();
+        expect(mountedWrapper.find(".alert-danger").length).toBe(0);
+        mountedWrapper = mount(<TextBoxGroup {...props} error={error} showErrorMessage={true} />);
+        expect(mountedWrapper.find(".input-group").hasClass("has-error")).toBeTruthy();
+        expect(mountedWrapper.find(".alert-danger").length).toBe(1);
+        mountedWrapper = mount(<TextBoxGroup {...props} error={error} showErrorMessage={null} />);
+        expect(mountedWrapper.find(".input-group").hasClass("has-error")).toBeTruthy();
+        expect(mountedWrapper.find(".alert-danger").length).toBe(1);
     });
 
-    it("Should render as disabled when disabled prop is set to true", () => {
-        wrapper.setProps({ disabled: true });
-        expect(wrapper.find(".input-group").hasClass("disabled")).toBeTruthy();
-        expect(wrapper.find("input").prop("disabled")).toEqual(true);
-    });
-
-    it("Should render as readonly when readonly prop is set to true", () => {
-        wrapper.setProps({ readonly: true });
-        expect(wrapper.find("input").prop("readOnly")).toEqual(true);
-    });
-
-    it("Should allow passing type, placeholder, and max to the input field", () => {
-        wrapper.setProps({ type: "password", placeHolder: "myPlaceholder", max: 5 });
-        expect(wrapper.find("input").prop("type")).toEqual("password");
-        expect(wrapper.find("input").prop("placeholder")).toEqual("myPlaceholder");
-        expect(wrapper.find("input").prop("maxLength")).toEqual(5);
+    describe("Testing optional properties", () => {
+        let inputProps: TextBoxGroupProps;
+        const optionals: Array<Partial<Pick<TextBoxGroupProps, keyof TextBoxGroupProps>>> = [
+            { name: "" },
+            { name: "my-textbox-name" },
+            { pattern: "my-pattern" },
+            { minLength: 2 },
+            { maxLength: 4 },
+            { required: true },
+            { autoComplete: "on" },
+            { type: "number" },
+            { disabled: true },
+            { readOnly: true },
+            { placeholder: "my placeholder" },
+        ];
+        optionals.map((optional: Pick<TextBoxGroupProps, keyof TextBoxGroupProps>) => {
+            const key: string = Object.keys(optional)[0];
+            test(key, () => {
+                wrapper.setProps({ ...optional });
+                inputProps = wrapper.find("input").getElement().props;
+                expect(inputProps[key]).toEqual(optional[key]);
+            });
+        });
     });
 
     describe("Test left append", () => {

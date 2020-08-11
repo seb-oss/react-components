@@ -2,23 +2,46 @@ import * as React from "react";
 import "./loader-style.scss";
 
 export interface LoaderProps {
-    toggle: boolean;
-    fullscreen?: boolean;
     className?: string;
+    fullscreen?: boolean;
+    id?: string;
+    size?: LoaderSize;
+    toggle: boolean;
 }
 
-export const Loader: React.FunctionComponent<LoaderProps> = React.memo((props: LoaderProps): React.ReactElement<void> => {
-    const fullscreen: boolean = props.fullscreen === undefined ? true : props.fullscreen;
-    let loaderWrapper: string = "loaderWrapper ";
-    if (fullscreen) { loaderWrapper += "fullscreen "; }
+export type LoaderSize = "lg" | "md" | "sm";
 
-    return (
-        <div className={loaderWrapper + (props.className ? props.className : "")}>
-            {props.toggle &&
-                <div className="loader-holder">
-                    <div className="loader" />
+export const Loader: React.FunctionComponent<LoaderProps> = React.memo(
+    (props: LoaderProps): React.ReactElement<void> => {
+        const [size, setSize] = React.useState<string>("");
+        const [className, setClassName] = React.useState<string>("seb-loader-wrapper");
+
+        React.useEffect(() => {
+            let classNameToSet: string = "seb-loader-wrapper";
+            classNameToSet += props.fullscreen !== undefined ? (props.fullscreen ? " fullscreen" : "") : "";
+            classNameToSet += props.className ? ` ${props.className}` : "";
+            setClassName(classNameToSet);
+        }, [props.className, props.fullscreen]);
+
+        React.useEffect(() => {
+            setSize(`loader-${props.size || "md"}`);
+        }, [props.size]);
+
+        return props.toggle ? (
+            <div className={className} id={props.id}>
+                <div className={"seb-loader" + (size ? ` ${size}` : "")}>
+                    <div className="seb-loader-container">
+                        <div className="seb-loader-rotator">
+                            <div className="seb-loader-left">
+                                <div className="seb-loader-circle" />
+                            </div>
+                            <div className="seb-loader-right">
+                                <div className="seb-loader-circle" />
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            }
-        </div>
-    );
-});
+            </div>
+        ) : null;
+    }
+);

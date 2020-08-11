@@ -28,17 +28,19 @@ This React component is based on `react-rating`. Supports customization and conf
 ## Properties
 These are the current available properties:
 
-| Property      | Type                      | Descrition                                   |
+| Property      | Type                      | Description                                  |
 | ------------- | ------------------------- | -------------------------------------------- |
-| initialValue? | `any`                     | intial value, string or number               |
-| onChange      | `(value: number) => void` | onchange event, will return the value        |
-| className?    | `string`                  | custom class                                 |
-| tooltipList?  | `Array<string>`           | array of strings which reperesent each start |
-| colors?       | `Array<string>`           | array of strings which reperesent each color |
-| iconHeight?   | `number`                  | height of icons                              |
-| iconWidth?    | `number`                  | width of icons                               |
-| useHollow?    | `boolean`                 | use empty icon                               |
-| readOnly?     | `boolean`                 | for viewing only, default false              |
+| className?    | `string`                  | Custom class                                 |
+| colors?       | `Array<string>`           | Array of strings which reperesent each color |
+| disabled?     | `string`                  | Disabled state                               |
+| iconHeight?   | `number`                  | Height of icons                              |
+| iconWidth?    | `number`                  | Width of icons                               |
+| id?           | `string`                  | Element id                                   |
+| initialValue? | `any`                     | Intial value, string or number               |
+| onChange?     | `(value: number) => void` | Onchange event, will return the value        |
+| readOnly?     | `boolean`                 | For viewing only, default false              |
+| tooltipList?  | `Array<string>`           | Array of strings which reperesent each start |
+| useHollow?    | `boolean`                 | Use empty icon                               |
 
 
 ## Reference

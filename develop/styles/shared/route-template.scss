@@ -89,6 +89,7 @@
                 }
             }
             >.result {
+                position: relative;
                 max-width: 300px;
                 code,
                 p {
@@ -102,36 +103,6 @@
                 &.chart {
                     height: 300px;
                     min-width: 600px;
-                }
-            }
-        }
-    }
-    &.brief {
-        position: fixed;
-        top: 0px;
-        left: 0px;
-        right: 0px;
-        bottom: 0px;
-        background: white;
-        z-index: 10;
-        overflow: auto;
-        .info-holder {
-            .info {
-                >h2,
-                p:first-child {
-                    display: none;
-                }
-                >.md-file {
-                    display: none;
-                    >div {
-                        >* {
-                            display: none;
-                        }
-                        #basic-use,
-                        #basic-use+pre {
-                            display: inherit;
-                        }
-                    }
                 }
             }
         }

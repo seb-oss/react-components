@@ -1,61 +1,68 @@
 import * as React from "react";
-import { shallow } from "enzyme";
-import { RadioGroup } from "./RadioGroup";
+import { shallow, ShallowWrapper, ReactWrapper, mount } from "enzyme";
+import { RadioGroup, RadioGroupProps } from "./RadioGroup";
 
 describe("Component: RadioGroup", () => {
-    const props = {
+    const props: RadioGroupProps<string> = {
         list: [
-            { value: "option1", group: "customgroup", label: "option1" },
-            { value: "option2", group: "customgroup", label: "option2", description: "desc" },
-            { value: "option3", group: "customgroup", label: "option3", disabled: true }
+            { value: "option1", label: "option1" },
+            { value: "option2", label: "option2", description: "desc" },
+            { value: "option3", label: "option3", disabled: true },
         ],
         onChange: jest.fn(),
         value: "male",
+        name: "gender",
     };
+    let wrapper: ShallowWrapper<RadioGroupProps>;
+    let mountedWrapper: ReactWrapper<RadioGroupProps>;
+
+    beforeEach(() => {
+        wrapper = shallow(<RadioGroup {...props} />);
+    });
 
     it("Should render", () => {
-        const wrapper = shallow(<RadioGroup {...props} />);
         expect(wrapper).toBeDefined();
     });
 
     it("Should pass custom class", () => {
-        const wrapper = shallow(<RadioGroup {...props} className="myRadioGroup" />);
-        expect(wrapper.hasClass("myRadioGroup")).toBeTruthy();
+        const className: string = "myRadioGroupClass";
+        const id: string = "myRadioGroupId";
+        mountedWrapper = mount(<RadioGroup {...props} className={className} id={id} />);
+        expect(mountedWrapper.hasClass(className)).toBeTruthy();
+        expect(mountedWrapper.find(`#${id}`).length).toBeTruthy();
     });
 
     it("Should fire change event when radio group value changes", () => {
-        const wrapper = shallow(<RadioGroup {...props} />);
-        wrapper.find("input").last().simulate("change", { target: { value: "test-value" } });
+        wrapper
+            .find("input")
+            .last()
+            .simulate("change", { target: { value: "test-value" } });
         expect(props.onChange).toHaveBeenCalled();
     });
 
     it("Should render and display group label, items' label and description, and group error", () => {
-        const wrapper = shallow(<RadioGroup {...props} error="error" label="label" />);
+        const label: string = "my label";
+        wrapper.setProps({ label });
         // Group Label
         expect(wrapper.find(".radio-group-label").length).toBe(1);
-        expect(wrapper.find(".radio-group-label").text()).toEqual("label");
+        expect(wrapper.find(".radio-group-label").text()).toEqual(label);
         // Item label and description
-        expect(wrapper.find(".radio-item").first().find(".radio-label").first().text()).toEqual("option1");
-        expect(wrapper.find(".radio-item").at(1).find(".radio-description").length).toBe(1);
-        expect(wrapper.find(".radio-item").at(1).find(".radio-description").first().text()).toEqual("desc");
-        // Error
-        expect(wrapper.find(".input-field").first().hasClass("has-error")).toBeTruthy();
-        expect(wrapper.find(".alert").length).toBe(1);
-        expect(wrapper.find(".alert-danger").text()).toEqual("error");
+        expect(wrapper.find(".custom-control").first().find(".custom-control-label").first().text()).toEqual(props.list[0].label);
+        expect(wrapper.find(".custom-control").at(1).find(".radio-description").length).toBe(1);
+        expect(wrapper.find(".custom-control").at(1).find(".radio-description").first().text()).toEqual(props.list[1].description);
     });
 
     it("Should render group items in inline mode", () => {
-        const wrapper = shallow(<RadioGroup {...props} inline={true} />);
-        expect(wrapper.find(".input-field").first().hasClass("inline")).toBeTruthy();
+        mountedWrapper = mount(<RadioGroup {...props} inline={true} condensed={true} />);
+        expect(mountedWrapper.find(".custom-radio").hasClass("inline")).toBeTruthy();
+        expect(mountedWrapper.find(".custom-radio").hasClass("condensed")).toBeTruthy();
     });
 
     it("Should render disabled inputs when disabled is passed in item or in disableAll prop", () => {
-        const wrapper = shallow(<RadioGroup {...props} />);
-        expect(wrapper.find(".radio-item").at(2).find(".radio-input").prop("disabled")).toBeTruthy();
+        expect(wrapper.find(".custom-control").at(2).find(".custom-control-input").prop("disabled")).toBeTruthy();
         wrapper.setProps({ disableAll: true });
-        expect(wrapper.find(".radio-item").at(0).find(".radio-input").prop("disabled")).toBeTruthy();
-        expect(wrapper.find(".radio-item").at(1).find(".radio-input").prop("disabled")).toBeTruthy();
-        expect(wrapper.find(".radio-item").at(2).find(".radio-input").prop("disabled")).toBeTruthy();
+        expect(wrapper.find(".custom-control").at(0).find(".custom-control-input").prop("disabled")).toBeTruthy();
+        expect(wrapper.find(".custom-control").at(1).find(".custom-control-input").prop("disabled")).toBeTruthy();
+        expect(wrapper.find(".custom-control").at(2).find(".custom-control-input").prop("disabled")).toBeTruthy();
     });
-
 });
