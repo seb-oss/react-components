@@ -84,6 +84,7 @@ $small: 12px;
         .notification-message {
             font-size: $small;
             padding-right: 10px;
+            word-break: break-word;
             @include user-select(none);
         }
     }
