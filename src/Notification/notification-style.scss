@@ -57,6 +57,7 @@ $small: 12px;
         .notification-message {
             font-size: $small;
             padding-right: 18px;
+            word-break: break-word;
             user-select: none;
         }
     }
