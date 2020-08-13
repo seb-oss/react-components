@@ -436,6 +436,7 @@ const Dropdown: React.FunctionComponent<DropdownProps> = (props: DropdownProps):
                     return (
                         <React.Fragment key={item.id}>
                             <button
+                                type="button"
                                 tabIndex={0}
                                 ref={listRefs[index]}
                                 className={`${item.className}${currentFocused === index ? " highlighted" : ""}`}
