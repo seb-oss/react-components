@@ -102,7 +102,7 @@ export const Pagination: React.FunctionComponent<PaginationProps> = React.memo(
                         <ul className={"pagination"}>
                             {props.value !== 1 && props.useFirstAndLast && (
                                 <li className="page-item" onClick={() => props.onChange(1)}>
-                                    <button className="page-link" title={props.firstText}>
+                                    <button className="page-link" title={props.firstText} type="button">
                                         <span className="nav-action">{props.useTextNav ? (props.firstText ? props.firstText : "First") : angleDoubleLeftIcon}</span>
                                         <span className="sr-only">{props.firstText || "First"}</span>
                                     </button>
@@ -110,7 +110,7 @@ export const Pagination: React.FunctionComponent<PaginationProps> = React.memo(
                             )}
                             {props.value !== 1 && (
                                 <li className="page-item" onClick={() => props.onChange(props.value - 1)}>
-                                    <button className="page-link" title={props.previousText}>
+                                    <button className="page-link" type="button" title={props.previousText}>
                                         <span className="nav-action">{props.useTextNav ? (props.previousText ? props.previousText : "Previous") : angleLeftIcon}</span>
                                         <span className="sr-only">{props.previousText || "Previous"}</span>
                                     </button>
@@ -119,7 +119,7 @@ export const Pagination: React.FunctionComponent<PaginationProps> = React.memo(
                             {list.map((num: number) => {
                                 return (
                                     <li className={"page-item" + (props.value === num ? " active" : "")} key={num} onClick={() => props.onChange(num)} value={num}>
-                                        <button className={"page-link" + (props.value === num ? " active" : "")}>
+                                        <button className={"page-link" + (props.value === num ? " active" : "")} type="button">
                                             <span className="nav-num">{num}</span>
                                             <span className="sr-only">{num}</span>
                                         </button>
@@ -129,7 +129,7 @@ export const Pagination: React.FunctionComponent<PaginationProps> = React.memo(
 
                             {props.value !== pagingSize && (
                                 <li className="page-item" onClick={() => props.onChange(props.value + 1)}>
-                                    <button className="page-link" title={props.nextText}>
+                                    <button className="page-link" title={props.nextText} type="button">
                                         <span className="nav-action">{props.useTextNav ? (props.nextText ? props.nextText : "Next") : angleRightIcon}</span>
                                         <span className="sr-only">{props.nextText || "Next"}</span>
                                     </button>
@@ -138,7 +138,7 @@ export const Pagination: React.FunctionComponent<PaginationProps> = React.memo(
 
                             {props.value !== pagingSize && props.useFirstAndLast && (
                                 <li className="page-item" onClick={() => props.onChange(pagingSize)}>
-                                    <button className="page-link" title={props.lastText}>
+                                    <button className="page-link" title={props.lastText} type="button">
                                         <span className="nav-action">{props.useTextNav ? (props.lastText ? props.lastText : "Last") : angleDoubleRightIcon}</span>
                                         <span className="sr-only">{props.lastText || "Last"}</span>
                                     </button>
