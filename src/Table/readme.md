@@ -34,9 +34,6 @@ These are the current available properties:
 | columns              | `Array<Column>`                   | Array of the table columns                                                                    |
 | data                 | `Array<object>`                   | Array of the objects that make of the rows                                                    |
 | searchProps?         | `SearcProps`                      | The search properties, use this if you wanht to enable searching. See below                   |
-| offset?              | `number`                          | number of rows in a page, this is used in pagination                                          |
-| currentpage?         | `number`                          | The current page, also use in pagination                                                      |
-| usePagination?       | `boolean`                         | This property along with the above two constitutes the pagination                             |
 | primaryActionButton? | `PrimaryActionButton`             | The primary button under action column                                                        |
 | actionLinks?         | `Array<ActionLinkItem>`           | The array list of the clickable links to be made available under action                       |
 | sortProps?           | `SortProps`                       | The sorting props, see the props below                                                        |
