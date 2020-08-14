@@ -49,13 +49,10 @@ declare interface NPMPackage {
     };
 }
 
-declare interface ApiSection {
+declare interface ApiSection<T = any> {
     name: string;
     description: string;
-    inputs?: Array<any>;
-    outputs?: Array<any>;
-    methods?: Array<APIOutputs>;
-    properties?: Array<APIInputs>;
+    inputs?: Array<T>;
 }
 
 declare interface APIInputs {

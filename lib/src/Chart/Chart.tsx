@@ -20,6 +20,9 @@ export interface ChartProps {
     options?: ExtendedChartOptions;
 }
 
+/**
+ * chart is chart
+ */
 export class Chart extends React.Component<ChartProps, any> {
     constructor(props) {
         super(props);

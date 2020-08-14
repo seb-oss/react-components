@@ -20,6 +20,7 @@ export type AccordionProps = JSX.IntrinsicElements["div"] & {
     defaultValue?: number;
 };
 
+/** Accordion desc */
 export const Accordion: React.FC<AccordionProps> = React.memo(({ list, alternative, onToggle, inverted, ...props }: AccordionProps) => {
     const [active, setActive] = React.useState<number>(Number(props.defaultValue));
     const [id, setId] = React.useState<string>(props.id);
