@@ -250,12 +250,12 @@ describe("Component: Modal", () => {
 
     describe("Testing trap focus", () => {
         let transitionEvent: Partial<React.TransitionEvent>;
+        const { getComputedStyle } = window;
 
         beforeEach(() => {
-            const { getComputedStyle } = window;
             transitionEvent = {
                 bubbles: true,
-                propertyName: "background-color",
+                propertyName: "outline-color",
                 currentTarget: container.querySelector(".modal-dialog"),
             };
         });
@@ -266,7 +266,7 @@ describe("Component: Modal", () => {
         });
 
         it("Should not do anything if toggle is set to false", () => {
-            window.getComputedStyle = jest.fn().mockReturnValue({ backgroundColor: "rgba(0,0,0,1)" });
+            window.getComputedStyle = jest.fn().mockReturnValue({ outlineColor: "rgba(0,0,0,1)" });
 
             act(() => {
                 render(
@@ -286,14 +286,14 @@ describe("Component: Modal", () => {
             });
 
             act(() => {
-                Simulate.transitionEnd(container.querySelector(".modal-dialog"), { bubbles: true, propertyName: "background-color" } as any);
+                Simulate.transitionEnd(container.querySelector(".modal-dialog"), { bubbles: true, propertyName: "outline-color" } as any);
             });
 
             expect(document.activeElement.tagName).not.toEqual("INPUT");
         });
 
         it("Should not alter the focus when transition happen with non background changes", () => {
-            window.getComputedStyle = jest.fn().mockReturnValue({ backgroundColor: "rgba(0,0,0,1)" });
+            window.getComputedStyle = jest.fn().mockReturnValue({ outlineColor: "rgba(0,0,0,1)" });
 
             act(() => {
                 render(
@@ -314,7 +314,7 @@ describe("Component: Modal", () => {
 
             act(() => {
                 Simulate.transitionEnd(container.querySelector(".modal-dialog"), { bubbles: true, propertyName: "border" } as any);
-                Simulate.transitionEnd(container.querySelector(".modal-dialog"), { bubbles: true, propertyName: "background-color" } as any);
+                Simulate.transitionEnd(container.querySelector(".modal-dialog"), { bubbles: true, propertyName: "outline-color" } as any);
             });
 
             expect(document.activeElement.id).toEqual("first");
@@ -338,7 +338,7 @@ describe("Component: Modal", () => {
                 );
             });
 
-            window.getComputedStyle = jest.fn().mockReturnValue({ backgroundColor: "rgba(0,0,0,0)" });
+            window.getComputedStyle = jest.fn().mockReturnValue({ outlineColor: "rgba(0,0,0,0)" });
 
             act(() => {
                 Simulate.transitionEnd(container.querySelector(".modal-dialog"), transitionEvent as any);
@@ -375,7 +375,7 @@ describe("Component: Modal", () => {
                 window.dispatchEvent(new KeyboardEvent("keydown", { bubbles: true, key: "Tab" }));
             });
 
-            window.getComputedStyle = jest.fn().mockReturnValue({ backgroundColor: "rgba(0,0,0,0)" });
+            window.getComputedStyle = jest.fn().mockReturnValue({ outlineColor: "rgba(0,0,0,0)" });
 
             act(() => {
                 Simulate.transitionEnd(container.querySelector(".modal-dialog"), transitionEvent as any);
@@ -408,7 +408,7 @@ describe("Component: Modal", () => {
 
             expect(document.activeElement.id).toEqual("first");
 
-            window.getComputedStyle = jest.fn().mockReturnValue({ backgroundColor: "rgba(0,0,0,0)" });
+            window.getComputedStyle = jest.fn().mockReturnValue({ outlineColor: "rgba(0,0,0,0)" });
 
             act(() => {
                 Simulate.transitionEnd(container.querySelector(".modal-dialog"), transitionEvent as any);
@@ -441,7 +441,7 @@ describe("Component: Modal", () => {
 
             expect(document.activeElement.id).toEqual("first");
 
-            window.getComputedStyle = jest.fn().mockReturnValue({ backgroundColor: "rgba(0,0,0,0)" });
+            window.getComputedStyle = jest.fn().mockReturnValue({ outlineColor: "rgba(0,0,0,0)" });
 
             act(() => {
                 Simulate.transitionEnd(container.querySelector(".modal-dialog"), transitionEvent as any);
@@ -474,7 +474,7 @@ describe("Component: Modal", () => {
 
             expect(document.activeElement.id).toEqual("");
 
-            window.getComputedStyle = jest.fn().mockReturnValue({ backgroundColor: "rgba(0,0,0,0)" });
+            window.getComputedStyle = jest.fn().mockReturnValue({ outlineColor: "rgba(0,0,0,0)" });
 
             act(() => {
                 Simulate.transitionEnd(container.querySelector(".modal-dialog"), transitionEvent as any);

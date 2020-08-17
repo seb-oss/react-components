@@ -70,9 +70,9 @@ export const Modal: React.FC<ModalProps> = React.memo(({ trapFocus = true, escap
         (e: React.TransitionEvent<HTMLDivElement>) => {
             const clean = (val: string) => val.replace(/[ ]/g, "");
 
-            if (e.propertyName === "background-color") {
-                const newBGColor: string = clean(window.getComputedStyle(e.currentTarget).backgroundColor);
-                if (props.toggle && newBGColor === "rgba(0,0,0,0)") {
+            if (e.propertyName === "outline-color") {
+                const newBorderColor: string = clean(window.getComputedStyle(e.currentTarget).outlineColor);
+                if (props.toggle && newBorderColor === "rgba(0,0,0,0)") {
                     const focusableElements: NodeListOf<HTMLElement> = e.currentTarget.querySelectorAll("input, button, a");
                     if (focusableElements.length) {
                         focusableElements[prevKeyCombination.current === "previous" ? focusableElements.length - 1 : 0].focus();
