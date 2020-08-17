@@ -39,77 +39,75 @@ export const Timeline: React.FunctionComponent<TimelineProps> = React.memo(
         const topList: Array<TimelineListItem> = preparedLists[0];
         const bottomList: Array<TimelineListItem> = preparedLists[1];
         return (
-            <div className={"form-group custom-timeline" + (props.className ? ` ${props.className}` : "")} id={props.id}>
-                <div className={`timeline ${direction}` + (props.onClick ? " clickable" : "")}>
-                    {direction === "vertical" &&
-                        props.list.map((item: TimelineListItem, i: number) => (
-                            <div className="item-holder" key={i}>
-                                <div className={i % 2 ? "direction-left" : "direction-right"}>
-                                    <div
-                                        className="title-wrapper"
-                                        onClick={() => {
-                                            props.onClick && props.onClick(i);
-                                        }}
-                                    >
-                                        <div className="title">{item.title}</div>
-                                        <div className="time-wrapper">
-                                            <span className="time">{item.time}</span>
-                                        </div>
-                                        {item.desc && <div className="desc">{item.desc}</div>}
+            <div className={`timeline ${direction}` + (props.onClick ? " clickable" : "") + (props.className ? ` ${props.className}` : "")} id={props.id}>
+                {direction === "vertical" &&
+                    props.list.map((item: TimelineListItem, i: number) => (
+                        <div className="item-holder" key={i}>
+                            <div className={i % 2 ? "direction-left" : "direction-right"}>
+                                <div
+                                    className="title-wrapper"
+                                    onClick={() => {
+                                        props.onClick && props.onClick(i);
+                                    }}
+                                >
+                                    <div className="title">{item.title}</div>
+                                    <div className="time-wrapper">
+                                        <span className="time">{item.time}</span>
                                     </div>
+                                    {item.desc && <div className="desc">{item.desc}</div>}
                                 </div>
                             </div>
-                        ))}
+                        </div>
+                    ))}
 
-                    {direction === "horizontal" &&
-                        [1, 2, 3].map((loop: number) => (
-                            <div className="row" key={loop}>
-                                {loop === 1 &&
-                                    topList.map((item: TimelineListItem, i) => (
-                                        <div className="item-holder" key={i} style={{ width: 100 / props.list.length + "%" }}>
-                                            {item && (
-                                                <div className="direction-top">
-                                                    <div
-                                                        className="title-wrapper"
-                                                        onClick={() => {
-                                                            props.onClick && props.onClick(i);
-                                                        }}
-                                                    >
-                                                        <div className="title">{item.title}</div>
-                                                        <div className="time-wrapper">
-                                                            <span className="time">{item.time}</span>
-                                                        </div>
-                                                        {item.desc && <div className="desc">{item.desc}</div>}
+                {direction === "horizontal" &&
+                    [1, 2, 3].map((loop: number) => (
+                        <div className="row no-gutters" key={loop}>
+                            {loop === 1 &&
+                                topList.map((item: TimelineListItem, i) => (
+                                    <div className="item-holder" key={i} style={{ width: 100 / props.list.length + "%" }}>
+                                        {item && (
+                                            <div className="direction-top">
+                                                <div
+                                                    className="title-wrapper"
+                                                    onClick={() => {
+                                                        props.onClick && props.onClick(i);
+                                                    }}
+                                                >
+                                                    <div className="title">{item.title}</div>
+                                                    <div className="time-wrapper">
+                                                        <span className="time">{item.time}</span>
                                                     </div>
+                                                    {item.desc && <div className="desc">{item.desc}</div>}
                                                 </div>
-                                            )}
-                                        </div>
-                                    ))}
-                                {loop === 2 && topList.map((item: any, i: number) => <div className="indicator-holder" key={i} style={{ width: 100 / props.list.length + "%" }} />)}
-                                {loop === 3 &&
-                                    bottomList.map((item: TimelineListItem, i) => (
-                                        <div className="item-holder" key={i} style={{ width: 100 / props.list.length + "%" }}>
-                                            {item && (
-                                                <div className="direction-bottom">
-                                                    <div
-                                                        className="title-wrapper"
-                                                        onClick={() => {
-                                                            props.onClick && props.onClick(i);
-                                                        }}
-                                                    >
-                                                        <div className="title">{item.title}</div>
-                                                        <div className="time-wrapper">
-                                                            <span className="time">{item.time}</span>
-                                                        </div>
-                                                        {item.desc && <div className="desc">{item.desc}</div>}
+                                            </div>
+                                        )}
+                                    </div>
+                                ))}
+                            {loop === 2 && topList.map((item: any, i: number) => <div className="indicator-holder" key={i} style={{ width: 100 / props.list.length + "%" }} />)}
+                            {loop === 3 &&
+                                bottomList.map((item: TimelineListItem, i) => (
+                                    <div className="item-holder" key={i} style={{ width: 100 / props.list.length + "%" }}>
+                                        {item && (
+                                            <div className="direction-bottom">
+                                                <div
+                                                    className="title-wrapper"
+                                                    onClick={() => {
+                                                        props.onClick && props.onClick(i);
+                                                    }}
+                                                >
+                                                    <div className="title">{item.title}</div>
+                                                    <div className="time-wrapper">
+                                                        <span className="time">{item.time}</span>
                                                     </div>
+                                                    {item.desc && <div className="desc">{item.desc}</div>}
                                                 </div>
-                                            )}
-                                        </div>
-                                    ))}
-                            </div>
-                        ))}
-                </div>
+                                            </div>
+                                        )}
+                                    </div>
+                                ))}
+                        </div>
+                    ))}
             </div>
         );
     }
