@@ -34,7 +34,7 @@ describe("Component: Modal", () => {
         expect(container.firstElementChild.classList.contains("modal-aside")).toBeFalsy();
     });
 
-    it("It should open in full screen", () => {
+    it("Should open in full screen", () => {
         act(() => {
             render(<Modal onDismiss={null} toggle fullscreen />, container);
         });
@@ -171,6 +171,317 @@ describe("Component: Modal", () => {
         });
         expect(container.querySelector(".modal").classList.contains("show")).toBeFalsy();
         expect(container.querySelector(".modal").classList.contains("hide")).toBeTruthy();
+    });
+
+    it("Should dismiss modal when escape key is registered", () => {
+        const onDismiss: jest.Mock = jest.fn();
+
+        act(() => {
+            render(<Modal toggle onDismiss={onDismiss} escapeToDismiss={true} />, container);
+        });
+        act(() => {
+            window.dispatchEvent(new KeyboardEvent("keyup", { bubbles: true, key: "Enter" }));
+        });
+        act(() => {
+            window.dispatchEvent(new KeyboardEvent("keyup", { bubbles: true, key: "Escape" }));
+        });
+
+        expect(onDismiss).toBeCalledTimes(1);
+    });
+
+    it("Should not dismiss modal when escape key is registered when escapeToDismiss is set to false", () => {
+        const onDismiss: jest.Mock = jest.fn();
+
+        act(() => {
+            render(<Modal toggle onDismiss={onDismiss} escapeToDismiss={false} />, container);
+        });
+        act(() => {
+            window.dispatchEvent(new KeyboardEvent("keyup", { bubbles: true, key: "Enter" }));
+        });
+        act(() => {
+            window.dispatchEvent(new KeyboardEvent("keyup", { bubbles: true, key: "Escape" }));
+        });
+
+        expect(onDismiss).not.toBeCalled();
+    });
+
+    it("Should not focus within the modal when trapFocus is set to false", () => {
+        act(() => {
+            render(
+                <Modal
+                    onDismiss={null}
+                    trapFocus={false}
+                    toggle
+                    body={
+                        <div>
+                            <input id="first" />
+                            <input id="second" />
+                            <input id="third" />
+                        </div>
+                    }
+                />,
+                container
+            );
+        });
+
+        expect(document.activeElement.tagName).not.toEqual("INPUT");
+    });
+
+    it("Should focus within the modal when trapFocus is set to true", () => {
+        act(() => {
+            render(
+                <Modal
+                    onDismiss={null}
+                    toggle
+                    body={
+                        <div>
+                            <input id="first" />
+                            <input id="second" />
+                            <input id="third" />
+                        </div>
+                    }
+                />,
+                container
+            );
+        });
+
+        expect(document.activeElement.tagName).toEqual("INPUT");
+    });
+
+    describe("Testing trap focus", () => {
+        let transitionEvent: Partial<React.TransitionEvent>;
+
+        beforeEach(() => {
+            const { getComputedStyle } = window;
+            transitionEvent = {
+                bubbles: true,
+                propertyName: "background-color",
+                currentTarget: container.querySelector(".modal-dialog"),
+            };
+        });
+
+        afterEach(() => {
+            window.getComputedStyle = getComputedStyle;
+            jest.clearAllMocks();
+        });
+
+        it("Should not do anything if toggle is set to false", () => {
+            window.getComputedStyle = jest.fn().mockReturnValue({ backgroundColor: "rgba(0,0,0,1)" });
+
+            act(() => {
+                render(
+                    <Modal
+                        onDismiss={null}
+                        toggle={false}
+                        body={
+                            <div>
+                                <input id="first" />
+                                <input id="second" />
+                                <input id="third" />
+                            </div>
+                        }
+                    />,
+                    container
+                );
+            });
+
+            act(() => {
+                Simulate.transitionEnd(container.querySelector(".modal-dialog"), { bubbles: true, propertyName: "background-color" } as any);
+            });
+
+            expect(document.activeElement.tagName).not.toEqual("INPUT");
+        });
+
+        it("Should not alter the focus when transition happen with non background changes", () => {
+            window.getComputedStyle = jest.fn().mockReturnValue({ backgroundColor: "rgba(0,0,0,1)" });
+
+            act(() => {
+                render(
+                    <Modal
+                        onDismiss={null}
+                        toggle
+                        body={
+                            <div>
+                                <input id="first" />
+                                <input id="second" />
+                                <input id="third" />
+                            </div>
+                        }
+                    />,
+                    container
+                );
+            });
+
+            act(() => {
+                Simulate.transitionEnd(container.querySelector(".modal-dialog"), { bubbles: true, propertyName: "border" } as any);
+                Simulate.transitionEnd(container.querySelector(".modal-dialog"), { bubbles: true, propertyName: "background-color" } as any);
+            });
+
+            expect(document.activeElement.id).toEqual("first");
+        });
+
+        it("Should alter the focus when transition happen with background changes", () => {
+            act(() => {
+                render(
+                    <Modal
+                        onDismiss={null}
+                        toggle
+                        body={
+                            <div>
+                                <input id="first" />
+                                <input id="second" />
+                                <input id="third" />
+                            </div>
+                        }
+                    />,
+                    container
+                );
+            });
+
+            window.getComputedStyle = jest.fn().mockReturnValue({ backgroundColor: "rgba(0,0,0,0)" });
+
+            act(() => {
+                Simulate.transitionEnd(container.querySelector(".modal-dialog"), transitionEvent as any);
+            });
+
+            expect(document.activeElement.id).toEqual("first");
+        });
+
+        it("Should focus on the first child when tab focus goes beyond the last", () => {
+            act(() => {
+                render(
+                    <Modal
+                        onDismiss={null}
+                        toggle
+                        body={
+                            <div>
+                                <input id="first" />
+                                <input id="second" />
+                                <input id="third" />
+                            </div>
+                        }
+                    />,
+                    container
+                );
+            });
+
+            act(() => {
+                (container.querySelector("#third") as HTMLElement).focus();
+            });
+
+            expect(document.activeElement.id).toEqual("third");
+
+            act(() => {
+                window.dispatchEvent(new KeyboardEvent("keydown", { bubbles: true, key: "Tab" }));
+            });
+
+            window.getComputedStyle = jest.fn().mockReturnValue({ backgroundColor: "rgba(0,0,0,0)" });
+
+            act(() => {
+                Simulate.transitionEnd(container.querySelector(".modal-dialog"), transitionEvent as any);
+            });
+
+            expect(document.activeElement.id).toEqual("first");
+        });
+
+        it("Should focus on the first child when tab focus goes beyond the last", () => {
+            act(() => {
+                render(
+                    <Modal
+                        onDismiss={null}
+                        toggle
+                        body={
+                            <div>
+                                <input id="first" />
+                                <input id="second" />
+                                <input id="third" />
+                            </div>
+                        }
+                    />,
+                    container
+                );
+            });
+
+            act(() => {
+                window.dispatchEvent(new KeyboardEvent("keydown", { bubbles: true, key: "Tab", shiftKey: true }));
+            });
+
+            expect(document.activeElement.id).toEqual("first");
+
+            window.getComputedStyle = jest.fn().mockReturnValue({ backgroundColor: "rgba(0,0,0,0)" });
+
+            act(() => {
+                Simulate.transitionEnd(container.querySelector(".modal-dialog"), transitionEvent as any);
+            });
+
+            expect(document.activeElement.id).toEqual("third");
+        });
+
+        it("Should not change focus when non-tab key is registered", () => {
+            act(() => {
+                render(
+                    <Modal
+                        onDismiss={null}
+                        toggle
+                        body={
+                            <div>
+                                <input id="first" />
+                                <input id="second" />
+                                <input id="third" />
+                            </div>
+                        }
+                    />,
+                    container
+                );
+            });
+
+            act(() => {
+                window.dispatchEvent(new KeyboardEvent("keydown", { bubbles: true, key: "Enter", shiftKey: true }));
+            });
+
+            expect(document.activeElement.id).toEqual("first");
+
+            window.getComputedStyle = jest.fn().mockReturnValue({ backgroundColor: "rgba(0,0,0,0)" });
+
+            act(() => {
+                Simulate.transitionEnd(container.querySelector(".modal-dialog"), transitionEvent as any);
+            });
+
+            expect(document.activeElement.id).toEqual("first");
+        });
+
+        it("Should not change focus when there are no focusable elements in the body", () => {
+            act(() => {
+                render(
+                    <Modal
+                        onDismiss={null}
+                        toggle
+                        body={
+                            <div>
+                                <p id="first">first</p>
+                                <p id="second">second</p>
+                                <p id="third">third</p>
+                            </div>
+                        }
+                    />,
+                    container
+                );
+            });
+
+            act(() => {
+                window.dispatchEvent(new KeyboardEvent("keydown", { bubbles: true, key: "Enter", shiftKey: true }));
+            });
+
+            expect(document.activeElement.id).toEqual("");
+
+            window.getComputedStyle = jest.fn().mockReturnValue({ backgroundColor: "rgba(0,0,0,0)" });
+
+            act(() => {
+                Simulate.transitionEnd(container.querySelector(".modal-dialog"), transitionEvent as any);
+            });
+
+            expect(document.activeElement.id).toEqual("");
+        });
     });
 });
 

@@ -18,9 +18,15 @@ div.seb.modal.modal-aside {
     > .modal-dialog {
         margin: 0;
         animation: none;
+        transition: background-color 10ms;
     }
     &.modal-centered {
         align-items: center;
+    }
+    &:focus-within {
+        > .modal-dialog {
+            background-color: rgba(0, 0, 0, 0.1);
+        }
     }
 }
 
