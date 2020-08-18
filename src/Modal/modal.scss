@@ -18,9 +18,19 @@ div.seb.modal.modal-aside {
     > .modal-dialog {
         margin: 0;
         animation: none;
+        outline: 1px solid;
+        /** This is used for focus trap */
+        outline-color: rgba(0, 0, 0, 0);
+        transition: outline-color 10ms;
     }
     &.modal-centered {
         align-items: center;
+    }
+    /** This is used for focus trap */
+    &:focus-within {
+        > .modal-dialog {
+            outline-color: rgba(0, 0, 0, 0.1);
+        }
     }
 }
 

@@ -2,6 +2,7 @@ import React from "react";
 import { Button } from "../../../src/Button/Button";
 import { Modal, ModalProps } from "../../../src/Modal/Modal";
 import Highlight from "react-highlight";
+import { RadioGroup, RadioListModel } from "../../../src/RadioGroup/RadioGroup";
 const docMD: string = require("../../../src/Modal/readme.md");
 
 const initialState: ModalProps = {
@@ -16,6 +17,7 @@ const initialState: ModalProps = {
 
 const ModalPage: React.FC = React.memo(() => {
     const [modalProps, setModalProps] = React.useState<ModalProps>({ ...initialState });
+    const [radioListSelected, setRadioListSelected] = React.useState<string>("second");
 
     const openModal = React.useCallback(
         (e: React.MouseEvent<HTMLButtonElement>, props: Partial<ModalProps> = {}) => {
@@ -69,7 +71,15 @@ const ModalPage: React.FC = React.memo(() => {
                             body={
                                 <div>
                                     <p>This is the body</p>
-                                    {modalProps.size && modalProps.position && <img src={"https://unsplash.it/900"} width="100%" />}
+                                    <input className="form-control" type="text" placeholder="focus is kept within" />
+                                    <RadioGroup
+                                        name="radioGroupName"
+                                        list={radioList}
+                                        value={radioListSelected}
+                                        condensed
+                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setRadioListSelected(e.target.value)}
+                                    />
+                                    {modalProps.size && modalProps.position && <img src={"http://via.placeholder.com/900x300"} width="100%" />}
                                 </div>
                             }
                             footer={<Button label="Close Modal" onClick={onDismiss} />}
@@ -82,5 +92,11 @@ const ModalPage: React.FC = React.memo(() => {
         </div>
     );
 });
+
+const radioList: Array<RadioListModel> = [
+    { value: "first", label: "Radio 1" },
+    { value: "second", label: "Radio 2" },
+    { value: "third", label: "Radio 3" },
+];
 
 export default ModalPage;
