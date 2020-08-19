@@ -24,7 +24,7 @@ export interface ChartProps {
  * chart is chart
  */
 export class Chart extends React.Component<ChartProps, any> {
-    constructor(props) {
+    constructor(props: ChartProps) {
         super(props);
     }
 

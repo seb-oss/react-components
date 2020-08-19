@@ -1,11 +1,15 @@
 import React from "react";
-import { ParsedAccessorDeclaration } from "utils/api-parser";
+import { ParsedPropertyDeclartion, ExtendedPropertyDeclaration } from "utils/api-parser";
 
 export interface DocsAPIProps {
-    list: Array<ParsedAccessorDeclaration>;
+    list: Array<ParsedPropertyDeclartion>;
 }
 
 const DocsAPI: React.FC<DocsAPIProps> = (props: DocsAPIProps) => {
+    const [defaultProp, setDefaultProp] = React.useState<ParsedPropertyDeclartion>(null);
+    React.useEffect(() => {
+        setDefaultProp(props.list.find((item: ParsedPropertyDeclartion) => item.isDefault));
+    }, [props.list]);
     return props.list?.length ? (
         <>
             <h3>Inputs</h3>
@@ -19,15 +23,17 @@ const DocsAPI: React.FC<DocsAPIProps> = (props: DocsAPIProps) => {
                         </tr>
                     </thead>
                     <tbody>
-                        {props.list.map((input: ParsedAccessorDeclaration, index: number) => (
-                            <tr key={index}>
-                                <td>{input.name}</td>
-                                <td>
-                                    <code>{input.type}</code>
-                                </td>
-                                <td dangerouslySetInnerHTML={{ __html: input.description }} />
-                            </tr>
-                        ))}
+                        {defaultProp?.properties
+                            ?.filter(({ isExtended }: ExtendedPropertyDeclaration) => !isExtended)
+                            .map((input: ExtendedPropertyDeclaration, index: number) => (
+                                <tr key={index}>
+                                    <td>{input.name}</td>
+                                    <td>
+                                        <code>{input.type}</code>
+                                    </td>
+                                    <td dangerouslySetInnerHTML={{ __html: input.description }} />
+                                </tr>
+                            ))}
                     </tbody>
                 </table>
             </div>

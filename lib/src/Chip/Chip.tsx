@@ -6,7 +6,7 @@ export type ChipProps = JSX.IntrinsicElements["div"] & {
     onClose: React.MouseEventHandler<HTMLDivElement>;
 };
 
-const Chip: React.FC<ChipProps> = ({ onClose, ...props }: ChipProps) => (
+export const Chip: React.FC<ChipProps> = ({ onClose, ...props }: ChipProps) => (
     <div {...props} className={classnames(["custom-chip", props.className])}>
         <div className="content">{props.children}</div>
         <div className="chip-close" onClick={onClose}>
@@ -14,5 +14,3 @@ const Chip: React.FC<ChipProps> = ({ onClose, ...props }: ChipProps) => (
         </div>
     </div>
 );
-
-export { Chip };

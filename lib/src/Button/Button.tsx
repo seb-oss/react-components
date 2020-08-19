@@ -13,7 +13,7 @@ export type ButtonProps = JSX.IntrinsicElements["button"] & {
     block?: boolean;
 };
 
-const Button: React.FC<ButtonProps> = React.memo(({ theme = "primary", size, block, ...props }: ButtonProps) => {
+export const Button: React.FC<ButtonProps> = React.memo(({ theme = "primary", size, block, ...props }: ButtonProps) => {
     const [className, setClassName] = React.useState<string>("btn btn-primary");
 
     React.useEffect(() => {
@@ -26,5 +26,3 @@ const Button: React.FC<ButtonProps> = React.memo(({ theme = "primary", size, blo
         </button>
     );
 });
-
-export { Button };

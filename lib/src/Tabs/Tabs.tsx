@@ -14,7 +14,7 @@ export interface TabsProps {
     onClick: (index: number) => any;
 }
 
-const Tabs: React.FC<TabsProps> = (props: TabsProps) => {
+export const Tabs: React.FC<TabsProps> = (props: TabsProps) => {
     const elementRefAnchors: Array<HTMLAnchorElement> = [];
 
     /**
@@ -86,5 +86,3 @@ const Tabs: React.FC<TabsProps> = (props: TabsProps) => {
         </div>
     );
 };
-
-export { Tabs };

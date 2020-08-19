@@ -96,7 +96,7 @@ export interface TableProps {
     theadTheme?: TableTheme;
 }
 
-const Table: React.FunctionComponent<TableProps> = React.memo(
+export const Table: React.FunctionComponent<TableProps> = React.memo(
     (props: TableProps): React.ReactElement<void> => {
         const [allItemsChecked, setAllRowsChecked] = React.useState<boolean>(false);
         const [currentTableRows, setCurrentTableRows] = React.useState<Array<TableRow>>([]);
@@ -724,5 +724,3 @@ const Table: React.FunctionComponent<TableProps> = React.memo(
         );
     }
 );
-
-export { Table };

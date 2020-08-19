@@ -52,7 +52,7 @@ declare interface NPMPackage {
 declare interface ApiSection<T = any> {
     name: string;
     description: string;
-    inputs?: Array<T>;
+    interfaces?: Array<T>;
 }
 
 declare interface APIInputs {
@@ -63,7 +63,7 @@ declare interface APIInputs {
     isStatic: boolean;
     name: string;
     start: number;
-    type: string;
+    type: string | Array<string>;
     visibility: any;
 }
 
@@ -88,7 +88,7 @@ declare interface APIInput {
     skip?: string;
     decorator?: string;
     name?: string;
-    type?: string;
+    type?: string | Array<string>;
     default?: string;
     alias?: string;
     accessor?: string;
@@ -96,6 +96,7 @@ declare interface APIInput {
     private?: string;
     parameter?: string;
     return?: string;
+    isExtended?: boolean;
 }
 
 declare interface ParsedAPI {

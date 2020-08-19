@@ -3,8 +3,10 @@ import Docs from "components/Docs";
 import { loremIpsum } from "lorem-ipsum";
 import { Accordion, AccordionItemProps } from "@sebgroup/react-components/Accordion";
 import { CheckBox } from "@sebgroup/react-components/CheckBox";
+
 const AccordionPage: React.FC = () => {
     const importString: string = require("!raw-loader!@sebgroup/react-components/Accordion/Accordion");
+    const importedFiles: Array<string> = [require("!raw-loader!@sebgroup/react-components/Accordion/AccordionItem")];
     const [inverted, setInverted] = React.useState<boolean>(false);
     const [alternative, setAlternative] = React.useState<boolean>(false);
     const activeIndex: number = 0;
@@ -51,7 +53,8 @@ const AccordionPage: React.FC = () => {
     const code: string = `<Accordion [list]="accordionList" />`;
     return (
         <Docs
-            importString={importString}
+            mainFile={importString}
+            importedFiles={importedFiles}
             example={<Accordion list={accordionList} inverted={inverted} alternative={alternative} />}
             code={code}
             controls={

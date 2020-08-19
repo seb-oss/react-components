@@ -49,7 +49,7 @@ type AppearanceStyleMap = {
     };
 };
 
-const Slider: React.FC<SliderProps> = (props: SliderProps) => {
+export const Slider: React.FC<SliderProps> = (props: SliderProps) => {
     const [min, setMin] = React.useState<number>(props.min || 0);
     const [max, setMax] = React.useState<number>(props.max || 100);
     const [size, setSize] = React.useState<number>(0);
@@ -221,5 +221,3 @@ const Slider: React.FC<SliderProps> = (props: SliderProps) => {
         </div>
     );
 };
-
-export { Slider };

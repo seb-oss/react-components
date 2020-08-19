@@ -42,7 +42,7 @@ export interface TimepickerProps {
     value: TimepickerValue;
 }
 
-class Timepicker extends React.Component<TimepickerProps> {
+export class Timepicker extends React.Component<TimepickerProps> {
     handleClick(context: TimerStepperContext, type: TimerStepperTypes, currentValue: TimepickerValue): TimepickerValue {
         const newValue: TimepickerValue = { ...currentValue };
         switch (context) {
@@ -199,5 +199,3 @@ class Timepicker extends React.Component<TimepickerProps> {
         );
     }
 }
-
-export { Timepicker };

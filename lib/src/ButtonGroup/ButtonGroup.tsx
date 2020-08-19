@@ -9,7 +9,7 @@ export type ButtonGroupProps = JSX.IntrinsicElements["div"] & {
 };
 
 /** Button group wrapper. Use this to group multiple buttons */
-const ButtonGroup: React.FC<ButtonGroupProps> = React.memo(({ vertical, size, ...props }: ButtonGroupProps) => {
+export const ButtonGroup: React.FC<ButtonGroupProps> = React.memo(({ vertical, size, ...props }: ButtonGroupProps) => {
     const [className, setClassName] = React.useState<string>("btn-group");
 
     React.useEffect(() => {
@@ -22,5 +22,3 @@ const ButtonGroup: React.FC<ButtonGroupProps> = React.memo(({ vertical, size, ..
         </div>
     );
 });
-
-export { ButtonGroup };

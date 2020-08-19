@@ -7,7 +7,8 @@ import DocsWrapper from "./DocsWrapper";
 import { DocsPlaygroundProps } from "./DocsPlaygroud";
 
 export interface DocsProps extends DocsPlaygroundProps {
-    importString: string;
+    mainFile: string;
+    importedFiles?: Array<string>;
     note?: React.ReactNode;
 }
 
@@ -18,9 +19,15 @@ const Docs: React.FC<DocsProps> = (props: DocsProps) => {
     const [activeTab, setActiveTab] = React.useState<number>(0);
 
     React.useEffect(() => {
-        new APIExtractService().initParse(props.importString).then(async (res) => {
-            setApis(await res[0]);
-        });
+        new APIExtractService()
+            .initParse(props.mainFile, props.importedFiles)
+            .then(async (res) => {
+                console.log(res[0]);
+                setApis(await res[0]);
+            })
+            .catch((test) => {
+                console.log(test);
+            });
     }, []);
     return (
         <Layout>
@@ -32,7 +39,7 @@ const Docs: React.FC<DocsProps> = (props: DocsProps) => {
                 <h1>{apis?.name}</h1>
                 <p>{apis?.description}</p>
                 <Tabs className="doc-page-tabs" list={props.note ? tabListWithNotes : tabList} activeTab={activeTab} onClick={(index: number) => setActiveTab(index)} />
-                <DocsWrapper activeTab={activeTab} inputs={apis?.inputs} code={props.code} example={props.example} controls={props.controls} />
+                <DocsWrapper activeTab={activeTab} interfaces={apis?.interfaces} code={props.code} example={props.example} controls={props.controls} />
             </div>
         </Layout>
     );
