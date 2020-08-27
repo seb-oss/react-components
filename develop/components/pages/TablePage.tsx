@@ -165,10 +165,7 @@ const TablePage: React.FunctionComponent = () => {
         []
     );
 
-    const smallData: Array<DataItem<TableDataProps>> = React.useMemo(
-        () => makeData<Array<DataItem<TableDataProps>>>([5, 5]),
-        []
-    );
+    const smallData: Array<DataItem<TableDataProps>> = React.useMemo(() => makeData<Array<DataItem<TableDataProps>>>([5, 5], true), []);
 
     const smallEditableData: Array<DataItem<TableDataProps>> = React.useMemo(
         () => makeData<Array<DataItem<TableDataProps>>>([5, 5]),
