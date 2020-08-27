@@ -1,5 +1,5 @@
 import React from "react";
-import { ActionLinkItem, PrimaryActionButton, TableRow } from "../Table";
+import { ActionLinkItem, PrimaryActionButton, TableRow, ActionButtonState } from "../Table";
 import { randomId } from "@sebgroup/frontend-tools/dist/randomId";
 
 const ellipsis: JSX.Element = (
@@ -14,6 +14,7 @@ interface ActionColumnProps {
     primaryActionButton?: PrimaryActionButton;
     selectedRow: TableRow;
     tableRef: React.RefObject<HTMLTableElement>;
+    actionButtonState: ActionButtonState;
 }
 
 export const ActionColumnUI: React.FunctionComponent<ActionColumnProps> = (props: ActionColumnProps) => {
@@ -37,10 +38,11 @@ export const ActionColumnUI: React.FunctionComponent<ActionColumnProps> = (props
 
     return (
         <div className="action-column">
-            {props.primaryActionButton && (
+            {props.primaryActionButton && props?.actionButtonState !== "hidden" && (
                 <button
                     id={btnPrimaryRandomIds}
                     type="button"
+                    disabled={props?.actionButtonState === "disabled"}
                     className={`btn btn-${props.primaryActionButton.buttonTheme ? props.primaryActionButton.buttonTheme : "outline-primary"} btn-${
                         props.primaryActionButton?.buttonSize ? props.primaryActionButton?.buttonSize : "sm"
                     }`}
