@@ -27,9 +27,7 @@ function newPerson(): object {
 const actionLinks: Array<ActionLinkItem> = [
     {
         label: "Edit",
-        onClick: (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>, selectedRow: TableRow) => {
-            console.log("The selectedrow is ", selectedRow);
-        },
+        onClick: (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>, selectedRow: TableRow) => {},
     },
 ];
 
