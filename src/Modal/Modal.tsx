@@ -55,7 +55,7 @@ export const Modal: React.FC<ModalProps> = React.memo(({ trapFocus = true, escap
      */
     const escapeKeyListener = React.useCallback(
         (e: KeyboardEvent): void => {
-            if (e.key.toLowerCase() === "escape" && escapeToDismiss) {
+            if (e?.key?.toLowerCase() === "escape" && escapeToDismiss) {
                 props.onDismiss && props.onDismiss();
             }
         },
@@ -68,7 +68,7 @@ export const Modal: React.FC<ModalProps> = React.memo(({ trapFocus = true, escap
      * @param e The window keyboard event
      */
     const keyCombinationListener = React.useCallback((e: KeyboardEvent): void => {
-        if (e.key.toLowerCase() === "tab") {
+        if (e?.key?.toLowerCase() === "tab") {
             prevKeyCombination.current = e.shiftKey === false ? "next" : "previous";
         }
     }, []);
@@ -83,7 +83,7 @@ export const Modal: React.FC<ModalProps> = React.memo(({ trapFocus = true, escap
             focusableElement && focusableElement.focus();
         }
         /** Un-focus from the element inside the modal when it's toggled off */
-        !props.toggle && (document.activeElement as HTMLElement).blur();
+        !props.toggle && (document.activeElement as HTMLElement)?.blur();
 
         return () => {
             window.removeEventListener("keydown", keyCombinationListener);
