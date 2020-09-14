@@ -37,6 +37,11 @@ const DatepickerPage: React.FunctionComponent = () => {
                         <Datepicker value={datepicker} onChange={setDatepicker} min={minDate} max={maxDate} />
                     </div>
 
+                    <p>Custom fallback</p>
+                    <div className="result">
+                        <Datepicker forceCustom value={datepicker3} onChange={setDatepicker3} min={minDate} max={maxDate} />
+                    </div>
+
                     <p>With custom locale</p>
                     <div className="result">
                         <Datepicker value={datepicker2} onChange={setDatepicker2} min={minDate} max={maxDate} localeCode="sv-se" />

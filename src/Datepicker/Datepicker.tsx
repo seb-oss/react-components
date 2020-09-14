@@ -1,11 +1,6 @@
 import * as React from "react";
 import "./date-picker-style.scss";
-
-// const calendarAltIcon: JSX.Element = (
-//     <svg name="calendar-alt" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-//         <path d="M400 64h-48V12c0-6.6-5.4-12-12-12h-8c-6.6 0-12 5.4-12 12v52H128V12c0-6.6-5.4-12-12-12h-8c-6.6 0-12 5.4-12 12v52H48C21.5 64 0 85.5 0 112v352c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V112c0-26.5-21.5-48-48-48zM48 96h352c8.8 0 16 7.2 16 16v48H32v-48c0-8.8 7.2-16 16-16zm352 384H48c-8.8 0-16-7.2-16-16V192h384v272c0 8.8-7.2 16-16 16zM148 320h-40c-6.6 0-12-5.4-12-12v-40c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v40c0 6.6-5.4 12-12 12zm96 0h-40c-6.6 0-12-5.4-12-12v-40c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v40c0 6.6-5.4 12-12 12zm96 0h-40c-6.6 0-12-5.4-12-12v-40c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v40c0 6.6-5.4 12-12 12zm-96 96h-40c-6.6 0-12-5.4-12-12v-40c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v40c0 6.6-5.4 12-12 12zm-96 0h-40c-6.6 0-12-5.4-12-12v-40c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v40c0 6.6-5.4 12-12 12zm192 0h-40c-6.6 0-12-5.4-12-12v-40c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v40c0 6.6-5.4 12-12 12z" />
-//     </svg>
-// );
+import { padNumber } from "./formatters";
 
 export interface DatepickerProps {
     /** the value of the datepicker as a Date object */
@@ -37,10 +32,42 @@ interface UnitNames {
 }
 
 export const Datepicker: React.FunctionComponent<DatepickerProps> = (props: DatepickerProps): React.ReactElement<void> => {
-    const { monthPicker, forceCustom, className, value, min, max, disabled, onChange } = props;
+    const { monthPicker, forceCustom, className, value, min, max, disabled, onChange, localeCode } = props;
+
+    const isValidDate = (d: Date): boolean => {
+        return !!(d && d instanceof Date && !isNaN(d.getTime()));
+    };
+
+    const getStringFromDate = (d: Date, monthPicker: boolean): string => {
+        if (isValidDate(d)) {
+            return d?.toISOString()?.substr(0, monthPicker ? 7 : 10) || "";
+        } else {
+            return "";
+        }
+    };
 
     const getInputRawValue = (value: Date, monthPicker: boolean): string => {
         return getStringFromDate(value, monthPicker);
+    };
+
+    const isDateInRange = (d: Date, min: Date, max: Date, success?: () => void, fail?: () => void): void => {
+        if (!min && !max) {
+            success && success();
+        } else if (min && d >= min) {
+            if (!max || (max && d <= max)) {
+                success && success();
+            } else {
+                fail && fail();
+            }
+        } else if (max && d <= max) {
+            if (!min || (min && d >= min)) {
+                success && success();
+            } else {
+                fail && fail();
+            }
+        } else {
+            fail && fail();
+        }
     };
 
     const initCustomDay = (value: Date, monthPicker: boolean): number => {
@@ -53,6 +80,89 @@ export const Datepicker: React.FunctionComponent<DatepickerProps> = (props: Date
     };
 
     const [customDay, setCustomDay] = React.useState<number>(initCustomDay(value, monthPicker));
+
+    const handleChangeCustomDay = (e: React.ChangeEvent<HTMLInputElement>): void => {
+        const v: number = e.target?.value ? Number(e.target.value) : null;
+        if (!monthPicker) {
+            setCustomDay(v);
+        }
+    };
+
+    const initCustomMonth = (value: Date, monthPicker: boolean): number => {
+        const inputRawValue: string = getInputRawValue(value, monthPicker);
+        if (!!inputRawValue) {
+            const value: number = monthPicker ? 1 : Number(inputRawValue.substr(5, 2));
+            return value;
+        }
+        return null;
+    };
+
+    const [customMonth, setCustomMonth] = React.useState<number>(initCustomMonth(value, monthPicker));
+
+    const handleChangeCustomMonth = (e: React.ChangeEvent<HTMLSelectElement>): void => {
+        const v: number = e.target?.value ? Number(e.target.value) : null;
+        setCustomMonth(v);
+    };
+
+    const initCustomYear = (value: Date, monthPicker: boolean): number => {
+        const inputRawValue: string = getInputRawValue(value, monthPicker);
+        if (!!inputRawValue) {
+            const value: number = monthPicker ? 1 : Number(inputRawValue.substr(0, 4));
+            return value;
+        }
+        return null;
+    };
+
+    const [customYear, setCustomYear] = React.useState<number>(initCustomYear(value, monthPicker));
+
+    const handleChangeCustomYear = (e: React.ChangeEvent<HTMLInputElement>): void => {
+        const v: number = e.target?.value ? Number(e.target.value) : null;
+        setCustomYear(v);
+    };
+
+    React.useEffect(() => {
+        console.log("omg");
+        const day: number = monthPicker ? 1 : customDay;
+        const month: number = customMonth;
+        const year: number = customYear;
+        const dateString: string = `${padNumber(year, true)}-${padNumber(month)}-${padNumber(day)}`;
+        const date: Date = new Date(dateString);
+        const m: number = date.getMonth() + 1;
+        if (date.getFullYear() === year && m === month && date.getDate() === day) {
+            isDateInRange(
+                date,
+                min,
+                max,
+                () => {
+                    onChange(date);
+                },
+                () => {
+                    onChange(new Date(""));
+                }
+            );
+        } else {
+            onChange(new Date(""));
+        }
+    }, [monthPicker, customDay, customMonth, customYear, min, max]);
+
+    // const getRelativeTimeFormat = (code: string): any => {
+    //     if ((Intl as any)["RelativeTimeFormat"]) {
+    //         return new (Intl as any).RelativeTimeFormat(code);
+    //     }
+    //     return null;
+    // }
+
+    const monthNames = () => {
+        const date: Date = new Date(2012, 0, 5);
+        const locale = new Intl.DateTimeFormat(localeCode, { month: "long" });
+
+        const monthNames: string[] = [unitNames.month];
+        [...Array(12)].map((_, i) => {
+            date.setMonth(i);
+            monthNames.push(locale.format(date));
+        });
+        return monthNames;
+    };
 
     const customPickerOrder: string[] = ["day", "month", "year"];
     const unitNames: UnitNames = {
@@ -71,18 +181,6 @@ export const Datepicker: React.FunctionComponent<DatepickerProps> = (props: Date
         return input.value !== notADateValue;
     };
 
-    const isValidDate = (d: Date): boolean => {
-        return !!(d && d instanceof Date && !isNaN(d.getTime()));
-    };
-
-    const getStringFromDate = (d: Date, monthPicker: boolean): string => {
-        if (isValidDate(d)) {
-            return d?.toISOString()?.substr(0, monthPicker ? 7 : 10) || "";
-        } else {
-            return "";
-        }
-    };
-
     const nativeClassNames = (value: Date, className: string): string => {
         return `form-control seb-datepicker-native${!isValidDate(value) ? "is-invalid" : ""}${!!className ? ` ${className}` : ""}`;
     };
@@ -93,31 +191,71 @@ export const Datepicker: React.FunctionComponent<DatepickerProps> = (props: Date
         onChange(value);
     };
 
-    const renderCustomDatepicker = (value: Date, monthPicker: boolean, customPickerOrder: string[], unitNames: UnitNames, disabled: boolean) => {
-        const renderUnits: React.ReactNodeArray = [];
-        for (let unit of customPickerOrder) {
-            let unitIndex = customPickerOrder.indexOf(unit);
+    const renderCustomDatepicker = (value: Date, monthPicker: boolean, customPickerOrder: string[], unitNames: UnitNames, disabled: boolean, monthNames: string[]) => {
+        console.log("hi");
+        return (
+            <div className={`input-group${!!className ? ` ${className}` : ""}`}>
+                {customPickerOrder?.map((unit: string, unitIndex: number) => {
+                    switch (unit) {
+                        case "day":
+                            return (
+                                <input
+                                    key={unitIndex}
+                                    style={{ display: monthPicker ? "none" : "inherit" }}
+                                    className={`form-control${!isValidDate(value) ? "is-invalid" : ""}`}
+                                    type="number"
+                                    min="1"
+                                    max="31"
+                                    placeholder={unitNames.day}
+                                    disabled={disabled}
+                                    value={customDay}
+                                    onChange={handleChangeCustomDay}
+                                />
+                            );
+                            break;
 
-            switch (unit) {
-                case "day":
-                    renderUnits.push(
-                        <input
-                            style={{ display: monthPicker ? "none" : "inherit" }}
-                            className={`form-control${!isValidDate(value) ? "is-invalid" : ""}`}
-                            type="number"
-                            min="1"
-                            max="31"
-                            placeholder={unitNames.day}
-                            disabled={disabled}
-                            value={customDay}
-                        />
-                    );
-                    break;
+                        case "month":
+                            return (
+                                <select
+                                    key={unitIndex}
+                                    className={`custom-select${!isValidDate(value) ? "is-invalid" : ""}${unitIndex === 0 ? " rounded-left" : ""}${
+                                        unitIndex === customPickerOrder.length - 1 ? "rounded-right" : ""
+                                    }`}
+                                    value={customMonth}
+                                    disabled={disabled}
+                                    onChange={handleChangeCustomMonth}
+                                >
+                                    {monthNames.map((month: string, i: number) => {
+                                        return (
+                                            <option key={i} disabled={disabled || i === 0} value={i}>
+                                                {month}
+                                            </option>
+                                        );
+                                    })}
+                                </select>
+                            );
 
-                default:
-                    break;
-            }
-        }
+                        case "year":
+                            return (
+                                <input
+                                    key={unitIndex}
+                                    style={{ display: monthPicker ? "none" : "inherit" }}
+                                    className={`form-control${!isValidDate(value) ? "is-invalid" : ""}`}
+                                    type="number"
+                                    min="1"
+                                    placeholder={unitNames.year}
+                                    disabled={disabled}
+                                    value={customYear}
+                                    onChange={handleChangeCustomYear}
+                                />
+                            );
+                            break;
+                        default:
+                            break;
+                    }
+                })}
+            </div>
+        );
     };
 
     if (monthPicker) {
@@ -150,5 +288,9 @@ export const Datepicker: React.FunctionComponent<DatepickerProps> = (props: Date
         }
     }
 
-    return <>fallback datepicker</>;
+    // return (
+    //     <>fallback</>
+    // )
+
+    return <>{renderCustomDatepicker(value, monthPicker, customPickerOrder, unitNames, disabled, monthNames())}</>;
 };
