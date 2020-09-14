@@ -28,40 +28,28 @@ const DatepickerPage: React.FunctionComponent = () => {
                     </div>
                 </div>
 
+                {/* <Datepicker value={datepicker} onChange={setDatepicker} /> */}
+
                 <div className="info">
                     <h2>Output</h2>
                     <p>Here are sample outputs</p>
                     <div className="result">
-                        <Datepicker name="datepicker" value={datepicker} onChange={setDatepicker} minDate={minDate} maxDate={maxDate} label="Datepicker label" />
+                        <Datepicker value={datepicker} onChange={setDatepicker} min={minDate} max={maxDate} />
                     </div>
 
                     <p>With custom locale</p>
                     <div className="result">
-                        <Datepicker name="datepicker" value={datepicker2} onChange={setDatepicker2} minDate={minDate} maxDate={maxDate} label="Swedish date" locale="sv-se" />
-                    </div>
-
-                    <p>With custom custom calendar icon and clearable</p>
-                    <div className="result">
-                        <Datepicker
-                            name="datepicker"
-                            value={datepicker3}
-                            onChange={setDatepicker3}
-                            minDate={minDate}
-                            maxDate={maxDate}
-                            calendarIcon={moreIcon}
-                            clearable={true}
-                            showLeadingZeros={false}
-                        />
+                        <Datepicker value={datepicker2} onChange={setDatepicker2} min={minDate} max={maxDate} localeCode="sv-se" />
                     </div>
 
                     <p>Month picker</p>
                     <div className="result">
-                        <Datepicker name="datepicker" maxDetail="year" value={datepicker4} onChange={setDatepicker4} minDate={minDate} maxDate={maxDate} clearable={true} />
+                        <Datepicker monthPicker value={datepicker4} onChange={setDatepicker4} min={minDate} max={maxDate} />
                     </div>
 
                     <p>Disabled</p>
                     <div className="result">
-                        <Datepicker name="datepicker" value={datepicker3} onChange={setDatepicker3} minDate={minDate} maxDate={maxDate} clearable={true} disabled={true} />
+                        <Datepicker value={datepicker3} onChange={setDatepicker3} min={minDate} max={maxDate} disabled={true} />
                     </div>
                 </div>
             </div>
