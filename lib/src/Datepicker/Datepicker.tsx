@@ -121,7 +121,6 @@ export const Datepicker: React.FunctionComponent<DatepickerProps> = (props: Date
     };
 
     React.useEffect(() => {
-        console.log("omg");
         const day: number = monthPicker ? 1 : customDay;
         const month: number = customMonth;
         const year: number = customYear;
@@ -169,7 +168,6 @@ export const Datepicker: React.FunctionComponent<DatepickerProps> = (props: Date
         return locale;
     };
 
-    // const customPickerOrder: string[] = ["day", "month", "year"];
     const unitNames: UnitNames = {
         month: "Month",
         day: "Day",
@@ -236,7 +234,6 @@ export const Datepicker: React.FunctionComponent<DatepickerProps> = (props: Date
     };
 
     const renderCustomDatepicker = (value: Date, monthPicker: boolean, customPickerOrder: string[], unitNames: UnitNames, disabled: boolean, monthNames: string[]) => {
-        console.log("hi");
         const order: string[] = monthPicker ? [...customPickerOrder.filter((x: string) => x !== "day")] : customPickerOrder;
         return (
             <div className={`input-group${!!className ? ` ${className}` : ""}`}>
