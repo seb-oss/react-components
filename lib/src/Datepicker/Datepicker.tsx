@@ -237,15 +237,15 @@ export const Datepicker: React.FunctionComponent<DatepickerProps> = (props: Date
 
     const renderCustomDatepicker = (value: Date, monthPicker: boolean, customPickerOrder: string[], unitNames: UnitNames, disabled: boolean, monthNames: string[]) => {
         console.log("hi");
+        const order: string[] = monthPicker ? [...customPickerOrder.filter((x: string) => x !== "day")] : customPickerOrder;
         return (
             <div className={`input-group${!!className ? ` ${className}` : ""}`}>
-                {customPickerOrder?.map((unit: string, unitIndex: number) => {
+                {order?.map((unit: string, unitIndex: number) => {
                     switch (unit) {
                         case "day":
                             return (
                                 <input
                                     key={unitIndex}
-                                    style={{ display: monthPicker ? "none" : "inherit" }}
                                     className={`form-control${!isValidDate(value) ? " is-invalid" : ""}`}
                                     type="number"
                                     min="1"
