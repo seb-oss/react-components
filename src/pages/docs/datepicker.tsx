@@ -23,6 +23,14 @@ const DatepickerPage: React.FC = () => {
                     description: "This picker is the automatic fallback on browsers that don't support html5 datepicker",
                     controlType: "Checkbox",
                 },
+                {
+                    key: "localeCode",
+                    rulerKey: "forceCustom",
+                    condition: true,
+                    label: "Locale code:",
+                    description: "Set a locale for the custom picker (defaults to system locale).",
+                    controlType: "Text",
+                },
             ],
         },
     ]);
@@ -30,7 +38,7 @@ const DatepickerPage: React.FC = () => {
     return (
         <Docs
             mainFile={importString}
-            example={<Datepicker value={exampleDate} onChange={setExampleDate} monthPicker={!!controls.monthPicker} forceCustom={!!controls.forceCustom} />}
+            example={<Datepicker value={exampleDate} onChange={setExampleDate} monthPicker={!!controls.monthPicker} forceCustom={!!controls.forceCustom} localeCode={controls.localeCode as string} />}
             code={code}
             controls={<div>{renderControls()}</div>}
         />

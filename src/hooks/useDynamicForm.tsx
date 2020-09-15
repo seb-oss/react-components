@@ -117,6 +117,8 @@ export function useDynamicForm(sections: DynamicFormSection[]): [() => JSX.Eleme
                     }
                 } else if (rulerState && typeof rulerState === "object" && !Array.isArray(rulerState) && (rulerState as DynamicFormOption)?.value === (condition as DynamicFormOption)?.value) {
                     return shouldRender(sectionKey, rulerKey);
+                } else if (rulerState && typeof rulerState === "boolean") {
+                    return shouldRender(sectionKey, rulerKey);
                 }
                 return false;
             }
@@ -276,7 +278,16 @@ const DynamicFormItemComponent: React.FC<{
             break;
         }
         case "Text": {
-            formItem = <TextBox {...commonProps} value={(props.state as string) || ""} />;
+            formItem = (
+                <>
+                    <TextBox {...commonProps} value={(props.state as string) || ""} />
+                    {props.item?.description ? (
+                        <p>
+                            <small>{props.item?.description}</small>
+                        </p>
+                    ) : null}
+                </>
+            );
             break;
         }
 
