@@ -1,0 +1,48 @@
+@import "~@sebgroup/bootstrap/scss/core";
+
+.rc.progress-feedback {
+    &.wrapper-indicator {
+        &:before {
+            content: none;
+        }
+        &:not(.progress-0) {
+            > .children {
+                border-radius: 4px;
+                border: 1px solid currentColor;
+            }
+            &.progress-10 {
+                .rc.checkbox {
+                    > .custom-checkbox {
+                        > .custom-control-label {
+                            &::before {
+                                border-color: $red-dark;
+                            }
+                        }
+                    }
+                }
+            }
+            &.progress-50 {
+                .rc.checkbox {
+                    > .custom-checkbox {
+                        > .custom-control-label {
+                            &::before {
+                                border-color: $yellow;
+                            }
+                        }
+                    }
+                }
+            }
+            &.progress-100 {
+                .rc.checkbox {
+                    > .custom-checkbox {
+                        > .custom-control-label {
+                            &::before {
+                                border-color: $green-darker;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

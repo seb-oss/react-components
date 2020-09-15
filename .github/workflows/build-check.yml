@@ -1,10 +1,7 @@
 name: Build
 
 on:
-  pull_request:
-    branches: 
-      - master
-      - develop
+  pull_request
 
 jobs:
   build_check:

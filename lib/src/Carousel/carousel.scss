@@ -1,0 +1,88 @@
+@import "~@sebgroup/bootstrap/scss/core";
+
+.rc.carousel {
+    .carousel-item {
+        &.carousel-item-next,
+        &.carousel-item-prev {
+            animation: appear $carousel-transition-duration forwards;
+        }
+
+        &.coming-next {
+            display: block;
+            z-index: -1;
+        }
+    }
+
+    /**
+     * TODO: This fixes the default `slide` transition, should be removed when it's fixed in Bootstrap
+     * See Pull request [#315](https://github.com/sebgroup/bootstrap/pull/315)
+     */
+    .carousel-item-next:not(.carousel-item-left),
+    .carousel-item-prev:not(.carousel-item-right),
+    .active.carousel-item-right,
+    .active.carousel-item-left {
+        z-index: 1;
+    }
+
+    /**
+      * TODO: This fixes the `fade` transition, should be removed when it's fixed in Bootstrap
+      * See Pull request [#315](https://github.com/sebgroup/bootstrap/pull/315)
+      */
+    &.carousel-fade {
+        .carousel-item {
+            &.carousel-item-next.carousel-item-left,
+            &.carousel-item-prev.carousel-item-right {
+                animation: fade-in $carousel-transition-duration forwards;
+            }
+            &.active {
+                &.carousel-item-right,
+                &.carousel-item-left {
+                    transition: none;
+                    animation: fade-out $carousel-transition-duration forwards;
+                }
+            }
+        }
+    }
+
+    @keyframes fade-in {
+        0% {
+            display: none;
+            opacity: 0;
+        }
+        1% {
+            display: block;
+            opacity: 0;
+        }
+        100% {
+            display: block;
+            opacity: 1;
+        }
+    }
+
+    @keyframes fade-out {
+        0% {
+            display: block;
+            opacity: 1;
+        }
+        99% {
+            display: block;
+            opacity: 0;
+        }
+        100% {
+            display: none;
+            opacity: 0;
+        }
+    }
+
+    @keyframes appear {
+        0% {
+            display: none;
+        }
+        1% {
+            display: block;
+        }
+        100% {
+            display: block;
+        }
+    }
+}
