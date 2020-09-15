@@ -3,7 +3,17 @@
     "path": "/dev-404-page/",
     "result": {
         "data": {
-            "allSitePage": { "nodes": [{ "path": "/404/" }, { "path": "/docs/accordion/" }, { "path": "/docs/getting-started/" }, { "path": "/docs/" }, { "path": "/" }, { "path": "/404.html" }] }
+            "allSitePage": {
+                "nodes": [
+                    { "path": "/404/" },
+                    { "path": "/docs/accordion/" },
+                    { "path": "/docs/datepicker/" },
+                    { "path": "/docs/getting-started/" },
+                    { "path": "/docs/" },
+                    { "path": "/" },
+                    { "path": "/404.html" }
+                ]
+            }
         },
         "pageContext": {}
     },

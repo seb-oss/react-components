@@ -14,6 +14,7 @@ export interface DynamicFormItem {
     key: string;
     value?: any;
     label?: string | null;
+    description?: string | null;
     required?: boolean;
     multi?: boolean;
     min?: any;
@@ -32,7 +33,6 @@ export interface DynamicFormSection {
     title?: string | null;
     key: string;
     order?: number;
-    multi?: boolean;
     items?: Array<DynamicFormItem> | null;
 }
 
@@ -47,13 +47,13 @@ export type DynamicFormDate = { day: number; month: number; year: number };
 
 type InputChange = React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | React.MouseEvent<HTMLButtonElement, MouseEvent> | DropdownChangeEvent | Date;
 
-type DynamicFormInternalStateValue = string | string[] | DynamicFormOption | DynamicFormOption[] | DynamicFormDate | null;
+type DynamicFormInternalStateValue = string | string[] | DynamicFormOption | DynamicFormOption[] | Date | boolean | null;
 
 interface DynamicFormInternalStateSection {
     [k: string]: DynamicFormInternalStateValue;
 }
 interface DynamicFormInternalState {
-    [k: string]: DynamicFormInternalStateSection | DynamicFormInternalStateSection[];
+    [k: string]: DynamicFormInternalStateSection;
 }
 type OnChangeFormSection = (section: DynamicFormSection) => OnChangeFormItem;
 type OnChangeFormItem = (item: DynamicFormItem) => OnChangeInput;
@@ -130,7 +130,7 @@ export function useDynamicForm(sections: DynamicFormSection[]): [() => JSX.Eleme
             // console.log(section, item, (e as any).target.value);
 
             // TODO: Add support for DynamicFormInternalStateSection as array
-            const sectionState: DynamicFormInternalStateSection | DynamicFormInternalStateSection[] = state && state.hasOwnProperty(section.key) ? state[section.key] : {};
+            const sectionState: DynamicFormInternalStateSection = state && state.hasOwnProperty(section.key) ? state[section.key] : {};
             const controlType: DynamicFormType = item?.controlType || "Text";
             let newValue: DynamicFormInternalStateValue = null;
 
@@ -139,8 +139,7 @@ export function useDynamicForm(sections: DynamicFormSection[]): [() => JSX.Eleme
                 case "TextArea":
                     newValue = (e as React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>).target.value;
                     break;
-                case "Option":
-                case "Checkbox": {
+                case "Option": {
                     let newOptions: DynamicFormOption[] = [...(((sectionState as DynamicFormInternalStateSection)[item.key] as DynamicFormOption[]) || [])];
                     // console.log("target: ", (e as any).target);
                     // console.log("newOptions: ", newOptions);
@@ -168,20 +167,26 @@ export function useDynamicForm(sections: DynamicFormSection[]): [() => JSX.Eleme
                     }
                     break;
                 }
-                case "Datepicker": {
-                    const targetDate: Date = e as Date;
-                    if (targetDate) {
-                        newValue = {
-                            year: targetDate.getFullYear(),
-                            month: targetDate.getMonth() + 1,
-                            day: targetDate.getDate(),
-                        } as DynamicFormDate;
-                    }
+                case "Checkbox": {
+                    const targetValue: boolean = (e as React.ChangeEvent<HTMLInputElement>).target.checked;
+                    newValue = targetValue;
                     break;
                 }
+                // case "Checkbox":
+                // case "Datepicker": {
+                //     newValue = e as any;
+                //     // if (targetDate) {
+                //     //     newValue = {
+                //     //         year: targetDate.getFullYear(),
+                //     //         month: targetDate.getMonth() + 1,
+                //     //         day: targetDate.getDate(),
+                //     //     } as DynamicFormDate;
+                //     // }
+                //     break;
+                // }
 
                 default: {
-                    newValue = e as DynamicFormItem | DynamicFormItem[];
+                    newValue = e as any;
                     break;
                 }
             }
@@ -213,7 +218,7 @@ const DynamicFormComponent: React.FC<{
         <>
             {props.sections?.map((section, i) => (
                 <React.Fragment key={i}>
-                    <h4>{section.title}</h4>
+                    {!!section?.title ? <h4>{section.title}</h4> : null}
                     <DynamicFormSectionComponent
                         key={i}
                         section={section}
@@ -229,28 +234,24 @@ const DynamicFormComponent: React.FC<{
 
 const DynamicFormSectionComponent: React.FC<{
     section: DynamicFormSection;
-    state: DynamicFormInternalStateSection | DynamicFormInternalStateSection[] | null;
+    state: DynamicFormInternalStateSection | null;
     onChange: OnChangeFormItem;
     shouldRender: ShouldRenderFormItem;
 }> = (props) => {
-    // TODO: Add support for array type state
     return (
         <>
-            <div className="form-group container">
-                {props.section?.items?.map((item, i) => {
-                    if (props.shouldRender(props.section.key, item.key)) {
-                        return (
-                            <DynamicFormItemComponent
-                                key={i}
-                                item={item}
-                                onChange={props.onChange(item)}
-                                state={props.state && props.state.hasOwnProperty(item.key) ? (props.state as DynamicFormInternalStateSection)[item.key] : null}
-                            />
-                        );
-                    }
-                })}
-            </div>
-            <hr />
+            {props.section?.items?.map((item, i) => {
+                if (props.shouldRender(props.section.key, item.key)) {
+                    return (
+                        <DynamicFormItemComponent
+                            key={i}
+                            item={item}
+                            onChange={props.onChange(item)}
+                            state={props.state && props.state.hasOwnProperty(item.key) ? (props.state as DynamicFormInternalStateSection)[item.key] : null}
+                        />
+                    );
+                }
+            })}
         </>
     );
 };
@@ -299,12 +300,30 @@ const DynamicFormItemComponent: React.FC<{
         }
 
         case "Checkbox": {
+            // const list: CheckBoxProps[] =
+            //     (props.item?.options as DynamicFormOption[])?.map((option: DynamicFormOption, i: number) => {
+            //         const checked: boolean = !!(props.state as DynamicFormOption[])?.find((o) => option.key === o.key)?.value;
+            //         return {
+            //             label: option.label || "",
+            //             checked,
+            //             id: option.key,
+            //             name: props.item?.key || "",
+            //             onChange: props.onChange,
+            //             disabled: !!option.disabled,
+            //         };
+            //     }) || [];
+            formItem = <CheckBox {...commonProps} description={props.item?.description} />;
+            break;
+        }
+
+        /*
+        case "Checkbox": {
             const list: CheckBoxProps[] =
                 (props.item?.options as DynamicFormOption[])?.map((option: DynamicFormOption, i: number) => {
                     const checked: boolean = !!(props.state as DynamicFormOption[])?.find((o) => option.key === o.key)?.value;
                     return {
                         label: option.label || "",
-                        checked,
+                        checked,s
                         id: option.key,
                         name: props.item?.key || "",
                         onChange: props.onChange,
@@ -321,14 +340,10 @@ const DynamicFormItemComponent: React.FC<{
             );
             break;
         }
+        */
 
         case "Datepicker": {
-            const { year = 0, month = 0, day = 0 } = props.state as DynamicFormDate;
-            const value: Date = new Date();
-            value.setDate(day);
-            value.setFullYear(year);
-            value.setMonth(month - 1);
-            formItem = <Datepicker {...commonProps} value={value} />;
+            formItem = <Datepicker onChange={props.onChange} value={props.state as Date} />;
             break;
         }
 
@@ -369,10 +384,5 @@ const DynamicFormItemComponent: React.FC<{
             break;
     }
 
-    return (
-        <>
-            {formItem}
-            <hr />
-        </>
-    );
+    return <>{formItem}</>;
 };
