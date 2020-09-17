@@ -48,8 +48,6 @@ const ButtonPage: React.FC = () => {
 <Button>Click me</Button>
     `;
 
-    console.log(controls);
-
     return (
         <Docs
             mainFile={importString}
