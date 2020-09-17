@@ -3,31 +3,30 @@ import { shallow, mount, ShallowWrapper, ReactWrapper } from "enzyme";
 import { Datepicker, DatepickerProps } from ".";
 
 describe("Component: Datepicker", () => {
-    // const props: DatepickerProps = {
-    //     name: "myDatepicker",
-    //     value: new Date(),
-    //     onChange: jest.fn(),
-    // };
-    // let wrapper: ShallowWrapper<DatepickerProps>;
-    // let mountedWrapper: ReactWrapper<DatepickerProps>;
-    // beforeEach(() => {
-    //     wrapper = shallow(<Datepicker {...props} />);
-    //     mountedWrapper = mount(<Datepicker {...props} />);
-    // });
-    // it("Should render", () => {
-    //     expect(wrapper).toBeDefined();
-    // });
+    const props: DatepickerProps = {
+        value: new Date(),
+        onChange: jest.fn(),
+    };
+    let wrapper: ShallowWrapper<DatepickerProps>;
+    let mountedWrapper: ReactWrapper<DatepickerProps>;
+    beforeEach(() => {
+        wrapper = shallow(<Datepicker {...props} />);
+        mountedWrapper = mount(<Datepicker {...props} />);
+    });
+    it("Should render", () => {
+        expect(wrapper).toBeDefined();
+    });
     // it("Should render and pass custom class", () => {
     //     const className: string = "myDatepickerClass";
     //     const id: string = "myDatepickerId";
     //     wrapper.setProps({ className, id });
     //     expect(wrapper.hasClass(className)).toBeTruthy();
     // });
-    // it("Should fire change event when component value is changed", () => {
-    //     mountedWrapper.find("input").first().simulate("change");
-    //     expect(props.onChange).toHaveBeenCalled();
-    //     mountedWrapper.unmount();
-    // });
+    it("Should fire change event when component value is changed", () => {
+        mountedWrapper.find("input").first().simulate("change");
+        expect(props.onChange).toHaveBeenCalled();
+        mountedWrapper.unmount();
+    });
     // it("Should render label and error", () => {
     //     const label: string = "label";
     //     const error: string = "error";
