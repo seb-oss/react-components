@@ -3,7 +3,6 @@ import React, { useState, ReactNode, useMemo, useCallback } from "react";
 import { RadioGroup } from "@sebgroup/react-components/RadioGroup";
 import { RadioListModel } from "@sebgroup/react-components/RadioGroup/RadioGroup";
 import { CheckBox } from "@sebgroup/react-components/CheckBox";
-import { CheckBoxProps } from "@sebgroup/react-components/CheckBox/CheckBox";
 import { TextBox } from "@sebgroup/react-components/TextBox";
 import { TextArea } from "@sebgroup/react-components/TextArea";
 import { Dropdown } from "@sebgroup/react-components/Dropdown";
@@ -60,7 +59,8 @@ type OnChangeFormItem = (item: DynamicFormItem) => OnChangeInput;
 type OnChangeInput = (e: InputChange) => void;
 type ShouldRenderFormItem = (sectionKey: string, itemKey: string) => boolean;
 
-export function useDynamicForm(sections: DynamicFormSection[]): [() => JSX.Element, DynamicFormInternalState] {
+export function useDynamicForm(sections: DynamicFormSection[]): [() => JSX.Element, any] {
+    // TODO: change return from `any` to DynamicFormInternalState when implemented multi sections
     const initialState: DynamicFormInternalState = {};
     sections?.map((section) => {
         initialState[section?.key] = {};
@@ -174,18 +174,6 @@ export function useDynamicForm(sections: DynamicFormSection[]): [() => JSX.Eleme
                     newValue = targetValue;
                     break;
                 }
-                // case "Checkbox":
-                // case "Datepicker": {
-                //     newValue = e as any;
-                //     // if (targetDate) {
-                //     //     newValue = {
-                //     //         year: targetDate.getFullYear(),
-                //     //         month: targetDate.getMonth() + 1,
-                //     //         day: targetDate.getDate(),
-                //     //     } as DynamicFormDate;
-                //     // }
-                //     break;
-                // }
 
                 default: {
                     newValue = e as any;
@@ -244,14 +232,7 @@ const DynamicFormSectionComponent: React.FC<{
         <>
             {props.section?.items?.map((item, i) => {
                 if (props.shouldRender(props.section.key, item.key)) {
-                    return (
-                        <DynamicFormItemComponent
-                            key={i}
-                            item={item}
-                            onChange={props.onChange(item)}
-                            state={props.state && props.state.hasOwnProperty(item.key) ? (props.state as DynamicFormInternalStateSection)[item.key] : null}
-                        />
-                    );
+                    return <DynamicFormItemComponent key={i} item={item} onChange={props.onChange(item)} state={props.state ? (props.state as DynamicFormInternalStateSection)[item.key] : null} />;
                 }
             })}
         </>
@@ -311,47 +292,9 @@ const DynamicFormItemComponent: React.FC<{
         }
 
         case "Checkbox": {
-            // const list: CheckBoxProps[] =
-            //     (props.item?.options as DynamicFormOption[])?.map((option: DynamicFormOption, i: number) => {
-            //         const checked: boolean = !!(props.state as DynamicFormOption[])?.find((o) => option.key === o.key)?.value;
-            //         return {
-            //             label: option.label || "",
-            //             checked,
-            //             id: option.key,
-            //             name: props.item?.key || "",
-            //             onChange: props.onChange,
-            //             disabled: !!option.disabled,
-            //         };
-            //     }) || [];
             formItem = <CheckBox {...commonProps} description={props.item?.description} />;
             break;
         }
-
-        /*
-        case "Checkbox": {
-            const list: CheckBoxProps[] =
-                (props.item?.options as DynamicFormOption[])?.map((option: DynamicFormOption, i: number) => {
-                    const checked: boolean = !!(props.state as DynamicFormOption[])?.find((o) => option.key === o.key)?.value;
-                    return {
-                        label: option.label || "",
-                        checked,s
-                        id: option.key,
-                        name: props.item?.key || "",
-                        onChange: props.onChange,
-                        disabled: !!option.disabled,
-                    };
-                }) || [];
-            formItem = (
-                <>
-                    <label>{props.item?.label}</label>
-                    {list.map((item, i) => (
-                        <CheckBox key={i} {...item} />
-                    ))}
-                </>
-            );
-            break;
-        }
-        */
 
         case "Datepicker": {
             formItem = <Datepicker onChange={props.onChange} value={props.state as Date} />;

@@ -7,6 +7,8 @@
                 "nodes": [
                     { "path": "/404/" },
                     { "path": "/docs/accordion/" },
+                    { "path": "/docs/breadcrumb/" },
+                    { "path": "/docs/button/" },
                     { "path": "/docs/datepicker/" },
                     { "path": "/docs/getting-started/" },
                     { "path": "/docs/" },
