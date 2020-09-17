@@ -60,7 +60,8 @@ type OnChangeFormItem = (item: DynamicFormItem) => OnChangeInput;
 type OnChangeInput = (e: InputChange) => void;
 type ShouldRenderFormItem = (sectionKey: string, itemKey: string) => boolean;
 
-export function useDynamicForm(sections: DynamicFormSection[]): [() => JSX.Element, DynamicFormInternalState] {
+export function useDynamicForm(sections: DynamicFormSection[]): [() => JSX.Element, any] {
+    // TODO: change this to DynamicFormInternalState when implemented multi sections
     const initialState: DynamicFormInternalState = {};
     sections?.map((section) => {
         initialState[section?.key] = {};
@@ -239,14 +240,7 @@ const DynamicFormSectionComponent: React.FC<{
             <div className="form-group container">
                 {props.section?.items?.map((item, i) => {
                     if (props.shouldRender(props.section.key, item.key)) {
-                        return (
-                            <DynamicFormItemComponent
-                                key={i}
-                                item={item}
-                                onChange={props.onChange(item)}
-                                state={props.state && props.state.hasOwnProperty(item.key) ? (props.state as DynamicFormInternalStateSection)[item.key] : null}
-                            />
-                        );
+                        return <DynamicFormItemComponent key={i} item={item} onChange={props.onChange(item)} state={props.state ? (props.state as DynamicFormInternalStateSection)[item.key] : null} />;
                     }
                 })}
             </div>

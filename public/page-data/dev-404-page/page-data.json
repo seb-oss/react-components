@@ -8,6 +8,7 @@
                     { "path": "/404/" },
                     { "path": "/docs/accordion/" },
                     { "path": "/docs/breadcrumb/" },
+                    { "path": "/docs/button/" },
                     { "path": "/docs/getting-started/" },
                     { "path": "/docs/" },
                     { "path": "/" },
