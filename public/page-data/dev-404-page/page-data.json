@@ -11,6 +11,7 @@
                     { "path": "/docs/button/" },
                     { "path": "/docs/getting-started/" },
                     { "path": "/docs/" },
+                    { "path": "/docs/textlabel/" },
                     { "path": "/docs/timeline/" },
                     { "path": "/docs/timepicker/" },
                     { "path": "/docs/timer/" },
