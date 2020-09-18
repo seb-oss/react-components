@@ -3,7 +3,6 @@ import React, { useState, ReactNode, useMemo, useCallback } from "react";
 import { RadioGroup } from "@sebgroup/react-components/RadioGroup";
 import { RadioListModel } from "@sebgroup/react-components/RadioGroup/RadioGroup";
 import { CheckBox } from "@sebgroup/react-components/CheckBox";
-import { CheckBoxProps } from "@sebgroup/react-components/CheckBox/CheckBox";
 import { TextBox } from "@sebgroup/react-components/TextBox";
 import { TextArea } from "@sebgroup/react-components/TextArea";
 import { Dropdown } from "@sebgroup/react-components/Dropdown";
@@ -14,6 +13,7 @@ export interface DynamicFormItem {
     key: string;
     value?: any;
     label?: string | null;
+    description?: string | null;
     required?: boolean;
     multi?: boolean;
     min?: any;
@@ -32,7 +32,6 @@ export interface DynamicFormSection {
     title?: string | null;
     key: string;
     order?: number;
-    multi?: boolean;
     items?: Array<DynamicFormItem> | null;
 }
 
@@ -47,13 +46,13 @@ export type DynamicFormDate = { day: number; month: number; year: number };
 
 type InputChange = React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | React.MouseEvent<HTMLButtonElement, MouseEvent> | DropdownChangeEvent | Date;
 
-type DynamicFormInternalStateValue = string | string[] | DynamicFormOption | DynamicFormOption[] | DynamicFormDate | null;
+type DynamicFormInternalStateValue = string | string[] | DynamicFormOption | DynamicFormOption[] | Date | boolean | null;
 
 interface DynamicFormInternalStateSection {
     [k: string]: DynamicFormInternalStateValue;
 }
 interface DynamicFormInternalState {
-    [k: string]: DynamicFormInternalStateSection | DynamicFormInternalStateSection[];
+    [k: string]: DynamicFormInternalStateSection;
 }
 type OnChangeFormSection = (section: DynamicFormSection) => OnChangeFormItem;
 type OnChangeFormItem = (item: DynamicFormItem) => OnChangeInput;
@@ -61,7 +60,7 @@ type OnChangeInput = (e: InputChange) => void;
 type ShouldRenderFormItem = (sectionKey: string, itemKey: string) => boolean;
 
 export function useDynamicForm(sections: DynamicFormSection[]): [() => JSX.Element, any] {
-    // TODO: change this to DynamicFormInternalState when implemented multi sections
+    // TODO: change return from `any` to DynamicFormInternalState when implemented multi sections
     const initialState: DynamicFormInternalState = {};
     sections?.map((section) => {
         initialState[section?.key] = {};
@@ -118,6 +117,8 @@ export function useDynamicForm(sections: DynamicFormSection[]): [() => JSX.Eleme
                     }
                 } else if (rulerState && typeof rulerState === "object" && !Array.isArray(rulerState) && (rulerState as DynamicFormOption)?.value === (condition as DynamicFormOption)?.value) {
                     return shouldRender(sectionKey, rulerKey);
+                } else if (rulerState && typeof rulerState === "boolean") {
+                    return shouldRender(sectionKey, rulerKey);
                 }
                 return false;
             }
@@ -131,7 +132,7 @@ export function useDynamicForm(sections: DynamicFormSection[]): [() => JSX.Eleme
             // console.log(section, item, (e as any).target.value);
 
             // TODO: Add support for DynamicFormInternalStateSection as array
-            const sectionState: DynamicFormInternalStateSection | DynamicFormInternalStateSection[] = state && state.hasOwnProperty(section.key) ? state[section.key] : {};
+            const sectionState: DynamicFormInternalStateSection = state && state.hasOwnProperty(section.key) ? state[section.key] : {};
             const controlType: DynamicFormType = item?.controlType || "Text";
             let newValue: DynamicFormInternalStateValue = null;
 
@@ -140,8 +141,7 @@ export function useDynamicForm(sections: DynamicFormSection[]): [() => JSX.Eleme
                 case "TextArea":
                     newValue = (e as React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>).target.value;
                     break;
-                case "Option":
-                case "Checkbox": {
+                case "Option": {
                     let newOptions: DynamicFormOption[] = [...(((sectionState as DynamicFormInternalStateSection)[item.key] as DynamicFormOption[]) || [])];
                     // console.log("target: ", (e as any).target);
                     // console.log("newOptions: ", newOptions);
@@ -169,20 +169,14 @@ export function useDynamicForm(sections: DynamicFormSection[]): [() => JSX.Eleme
                     }
                     break;
                 }
-                case "Datepicker": {
-                    const targetDate: Date = e as Date;
-                    if (targetDate) {
-                        newValue = {
-                            year: targetDate.getFullYear(),
-                            month: targetDate.getMonth() + 1,
-                            day: targetDate.getDate(),
-                        } as DynamicFormDate;
-                    }
+                case "Checkbox": {
+                    const targetValue: boolean = (e as React.ChangeEvent<HTMLInputElement>).target.checked;
+                    newValue = targetValue;
                     break;
                 }
 
                 default: {
-                    newValue = e as DynamicFormItem | DynamicFormItem[];
+                    newValue = e as any;
                     break;
                 }
             }
@@ -214,7 +208,7 @@ const DynamicFormComponent: React.FC<{
         <>
             {props.sections?.map((section, i) => (
                 <React.Fragment key={i}>
-                    <h4>{section.title}</h4>
+                    {!!section?.title ? <h4>{section.title}</h4> : null}
                     <DynamicFormSectionComponent
                         key={i}
                         section={section}
@@ -230,21 +224,17 @@ const DynamicFormComponent: React.FC<{
 
 const DynamicFormSectionComponent: React.FC<{
     section: DynamicFormSection;
-    state: DynamicFormInternalStateSection | DynamicFormInternalStateSection[] | null;
+    state: DynamicFormInternalStateSection | null;
     onChange: OnChangeFormItem;
     shouldRender: ShouldRenderFormItem;
 }> = (props) => {
-    // TODO: Add support for array type state
     return (
         <>
-            <div className="form-group container">
-                {props.section?.items?.map((item, i) => {
-                    if (props.shouldRender(props.section.key, item.key)) {
-                        return <DynamicFormItemComponent key={i} item={item} onChange={props.onChange(item)} state={props.state ? (props.state as DynamicFormInternalStateSection)[item.key] : null} />;
-                    }
-                })}
-            </div>
-            <hr />
+            {props.section?.items?.map((item, i) => {
+                if (props.shouldRender(props.section.key, item.key)) {
+                    return <DynamicFormItemComponent key={i} item={item} onChange={props.onChange(item)} state={props.state ? (props.state as DynamicFormInternalStateSection)[item.key] : null} />;
+                }
+            })}
         </>
     );
 };
@@ -269,7 +259,16 @@ const DynamicFormItemComponent: React.FC<{
             break;
         }
         case "Text": {
-            formItem = <TextBox {...commonProps} value={(props.state as string) || ""} />;
+            formItem = (
+                <>
+                    <TextBox {...commonProps} value={(props.state as string) || ""} />
+                    {props.item?.description ? (
+                        <p>
+                            <small>{props.item?.description}</small>
+                        </p>
+                    ) : null}
+                </>
+            );
             break;
         }
 
@@ -293,36 +292,12 @@ const DynamicFormItemComponent: React.FC<{
         }
 
         case "Checkbox": {
-            const list: CheckBoxProps[] =
-                (props.item?.options as DynamicFormOption[])?.map((option: DynamicFormOption, i: number) => {
-                    const checked: boolean = !!(props.state as DynamicFormOption[])?.find((o) => option.key === o.key)?.value;
-                    return {
-                        label: option.label || "",
-                        checked,
-                        id: option.key,
-                        name: props.item?.key || "",
-                        onChange: props.onChange,
-                        disabled: !!option.disabled,
-                    };
-                }) || [];
-            formItem = (
-                <>
-                    <label>{props.item?.label}</label>
-                    {list.map((item, i) => (
-                        <CheckBox key={i} {...item} />
-                    ))}
-                </>
-            );
+            formItem = <CheckBox {...commonProps} description={props.item?.description} />;
             break;
         }
 
         case "Datepicker": {
-            const { year = 0, month = 0, day = 0 } = props.state as DynamicFormDate;
-            const value: Date = new Date();
-            value.setDate(day);
-            value.setFullYear(year);
-            value.setMonth(month - 1);
-            formItem = <Datepicker {...commonProps} value={value} />;
+            formItem = <Datepicker onChange={props.onChange} value={props.state as Date} />;
             break;
         }
 
@@ -363,10 +338,5 @@ const DynamicFormItemComponent: React.FC<{
             break;
     }
 
-    return (
-        <>
-            {formItem}
-            <hr />
-        </>
-    );
+    return <>{formItem}</>;
 };
