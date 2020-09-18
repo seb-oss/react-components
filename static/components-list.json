@@ -186,7 +186,7 @@
     },
     {
         "name": "Video",
-        "path": "/docs/videos",
+        "path": "/docs/video",
         "filePath": "./src/Video/index.ts"
     }
 ]

@@ -11,6 +11,7 @@
                     { "path": "/docs/button/" },
                     { "path": "/docs/getting-started/" },
                     { "path": "/docs/" },
+                    { "path": "/docs/video/" },
                     { "path": "/" },
                     { "path": "/404.html" }
                 ]
