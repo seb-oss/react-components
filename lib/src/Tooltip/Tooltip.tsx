@@ -20,8 +20,11 @@ export type TooltipTheme = "default" | "light" | "primary" | "warning" | "succes
 export type TooltipPosition = ElementPosition;
 
 export interface TooltipProps {
+    /** Element class name */
     className?: string;
+    /** @deprecated A direct svg code or a component with svg */
     customSvg?: React.ReactNode;
+    /** Element id */
     id?: string;
     /** @deprecated use content instead */
     message?: string;
@@ -29,7 +32,9 @@ export interface TooltipProps {
     messageGroup?: Array<TooltipMessageGroupItem>;
     /** @deprecated use onVisibleChange instead */
     onClick?: (event?: React.MouseEvent<HTMLDivElement> | React.FocusEvent<HTMLElement> | React.TouchEvent<HTMLDivElement>) => void;
+    /** Css style positions: top/bottom/left/right */
     position?: TooltipPosition;
+    /** Based on SEB predefined colors */
     theme?: TooltipTheme;
     /** @deprecated use content instead */
     title?: string;
@@ -37,9 +42,13 @@ export interface TooltipProps {
     triggerOnHover?: boolean;
     /** @deprecated */
     width?: number;
+    /** Tooltip content */
     content?: string | React.ReactNode;
+    /** Tooltip trigger mode */
     trigger?: TooltipTrigger;
+    /** Force tooltip to be at certain position */
     disableAutoPosition?: boolean;
+    /** callback on tooltip visibility status change */
     onVisibleChange?: (event: React.MouseEvent<HTMLDivElement> | React.FocusEvent<HTMLElement> | React.TouchEvent<HTMLDivElement>, visible: boolean) => void;
 }
 interface TooltipState {
@@ -47,6 +56,7 @@ interface TooltipState {
     referenceId: string;
 }
 
+/** A text label that acts as a helper to a specific item */
 export class Tooltip extends React.Component<TooltipProps, TooltipState> {
     private containerRef: React.RefObject<HTMLDivElement> = React.createRef();
     private contentRef: React.RefObject<HTMLDivElement> = React.createRef();

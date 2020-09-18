@@ -5,7 +5,6 @@ import { DynamicFormOption, DynamicFormSection, useDynamicForm } from "hooks/use
 
 const AccordionPage: React.FC = () => {
     const defaultSrc: string = require("!file-loader!../../../static/videos/sample.mp4").default;
-    console.log(defaultSrc);
     const importString: string = require("!raw-loader!@sebgroup/react-components/Video/Video");
     const defaultHeight: string = "300px";
     const defaultWidth: string = "535px";
