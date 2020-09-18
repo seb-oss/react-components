@@ -3,7 +3,7 @@ import Docs from "components/Docs";
 import { Video } from "@sebgroup/react-components/Video";
 import { DynamicFormOption, DynamicFormSection, useDynamicForm } from "hooks/useDynamicForm";
 
-const AccordionPage: React.FC = () => {
+const VideoPage: React.FC = () => {
     const defaultSrc: string = require("!file-loader!../../../static/videos/sample.mp4").default;
     const importString: string = require("!raw-loader!@sebgroup/react-components/Video/Video");
     const defaultHeight: string = "300px";
@@ -105,4 +105,4 @@ const AccordionPage: React.FC = () => {
     );
 };
 
-export default AccordionPage;
+export default VideoPage;

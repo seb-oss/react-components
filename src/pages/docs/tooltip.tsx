@@ -4,7 +4,7 @@ import { Tooltip } from "@sebgroup/react-components/Tooltip";
 import { Notification } from "@sebgroup/react-components/Notification";
 import { DynamicFormOption, DynamicFormSection, useDynamicForm } from "hooks/useDynamicForm";
 
-const AccordionPage: React.FC = () => {
+const TooltipPage: React.FC = () => {
     const importString: string = require("!raw-loader!@sebgroup/react-components/Tooltip/Tooltip");
     const [notificationToggle, setNotifcationToggle] = React.useState<boolean>(false);
     const defaultPosition: DynamicFormOption = { label: "Top", value: "top", key: "top" };
@@ -83,10 +83,9 @@ const AccordionPage: React.FC = () => {
         },
     ];
     const [renderForm, { controls }] = useDynamicForm(fields);
-    const code: string = `<Video [src]="src"
-        [sourceType]="sourceType"
-        [width]="width"
-        [height]="height"
+    const code: string = `<Tooltip
+        content="Tooltip message could be long, therefore, controlling the position and width is important"
+        position="right"
     />`;
 
     /** check if key selected */
@@ -120,4 +119,4 @@ const AccordionPage: React.FC = () => {
     );
 };
 
-export default AccordionPage;
+export default TooltipPage;
