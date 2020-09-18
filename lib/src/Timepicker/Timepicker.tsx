@@ -18,31 +18,40 @@ export interface TimepickerValue {
     dayperiod: TimepickerDayperiodTypes;
 }
 
-export const enum TimepickerDayperiodTypes {
+export enum TimepickerDayperiodTypes {
     AM = "AM",
     PM = "PM",
 }
 
-const enum TimerStepperTypes {
+enum TimerStepperTypes {
     Increment = "INCREMENT",
     Decrement = "DECREMENT",
 }
 
-const enum TimerStepperContext {
+enum TimerStepperContext {
     Hours = "HOURS",
     Minutes = "MINUTES",
     Dayperiod = "DAYPERIOD",
 }
 
 export interface TimepickerProps {
+    /** Element classname */
     className?: string;
+    /** Element id */
     id?: string;
+    /** Element name */
     name: string;
+    /** Callback on value change */
     onChange: (value: TimepickerValue) => void;
+    /** Element value */
     value: TimepickerValue;
 }
 
+/** Time selector */
 export class Timepicker extends React.Component<TimepickerProps> {
+    constructor(props: TimepickerProps) {
+        super(props);
+    }
     handleClick(context: TimerStepperContext, type: TimerStepperTypes, currentValue: TimepickerValue): TimepickerValue {
         const newValue: TimepickerValue = { ...currentValue };
         switch (context) {

@@ -11,6 +11,7 @@
                     { "path": "/docs/button/" },
                     { "path": "/docs/getting-started/" },
                     { "path": "/docs/" },
+                    { "path": "/docs/timepicker/" },
                     { "path": "/docs/timer/" },
                     { "path": "/docs/toggle/" },
                     { "path": "/docs/tooltip/" },
