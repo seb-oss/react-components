@@ -10,10 +10,15 @@ export interface TimelineListItem {
 type TimelineDirection = "vertical" | "horizontal";
 
 export interface TimelineProps {
+    /** Element class */
     className?: string;
+    /** Direction of timeline: `horizontal` or `vertical` */
     direction?: TimelineDirection;
+    /** Element id */
     id?: string;
+    /** List of item in timeline */
     list: Array<TimelineListItem>;
+    /** on click callback on each item */
     onClick?: (index: number) => void;
 }
 
@@ -32,6 +37,7 @@ function prepareList(list: Array<TimelineListItem>): Array<any> {
     return [topList, bottomList];
 }
 
+/** Timeline is component to display of a list of events in chronological order */
 export const Timeline: React.FC<TimelineProps> = React.memo((props: TimelineProps) => {
     const direction: string = props.direction ? props.direction : "vertical";
     const preparedLists = prepareList(props.list);
