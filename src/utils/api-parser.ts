@@ -214,8 +214,11 @@ export class APIExtractService {
                 const declaration: VariableDeclaration | ClassDeclaration = current;
                 let defaultPropType: string;
                 if (declaration instanceof VariableDeclaration) {
+                    const propTypeArray: Array<string> = defaultFunctionPropTypeRegex.exec(declaration.type);
                     // get default props type from function component
-                    defaultPropType = defaultFunctionPropTypeRegex.exec(declaration.type)[1];
+                    if (propTypeArray?.length) {
+                        defaultPropType = propTypeArray[1];
+                    }
                 } else {
                     // get default props type from class component
                     defaultPropType = declaration.ctor.parameters[0].type;

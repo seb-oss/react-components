@@ -1,16 +1,20 @@
 import React from "react";
 
 export interface TimerProps {
+    /** Callback when timer ends */
     callback?: VoidFunction;
+    /** Element class name */
     className?: string;
+    /** Timer's duration in milliseconds */
     duration: number;
+    /** Element ID */
     id?: string;
 }
 
 interface TimerState {
     timer: string;
 }
-
+/** A timer is a component for measuring time intervals */
 export class Timer extends React.Component<TimerProps, TimerState> {
     private innerInterval: any;
     constructor(props: TimerProps) {

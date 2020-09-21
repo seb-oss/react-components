@@ -12,6 +12,13 @@
                     { "path": "/docs/datepicker/" },
                     { "path": "/docs/getting-started/" },
                     { "path": "/docs/" },
+                    { "path": "/docs/textlabel/" },
+                    { "path": "/docs/timeline/" },
+                    { "path": "/docs/timepicker/" },
+                    { "path": "/docs/timer/" },
+                    { "path": "/docs/toggle/" },
+                    { "path": "/docs/tooltip/" },
+                    { "path": "/docs/video/" },
                     { "path": "/" },
                     { "path": "/404.html" }
                 ]

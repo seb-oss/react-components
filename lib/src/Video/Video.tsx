@@ -4,20 +4,33 @@ import "./video-style.scss";
 export type VideoSourceType = "stream" | "local";
 
 export interface VideoProps {
+    /** Allow video to be played in full screen mode */
     allowFullScreen?: boolean;
+    /** Play video automatically */
     autoplay?: boolean;
+    /** Element class name */
     className?: string;
+    /** Element height */
     height: string;
+    /** Element ID */
     id?: string;
+    /** Loop video */
     loop?: boolean;
+    /** Element name */
     name: string;
+    /** Show video controls */
     showControls?: boolean;
+    /** Show video information */
     showInfo?: boolean;
+    /** Video source type */
     sourceType: VideoSourceType;
+    /** Element source */
     src: string;
+    /** Element width */
     width: string;
 }
 
+/** A video component is an Angular component for playing videos */
 export const Video: React.FC<VideoProps> = (props: VideoProps) => {
     return (
         <div className={"video-holder-component" + (props.className ? ` ${props.className}` : "")} id={props.id}>

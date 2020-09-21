@@ -11,12 +11,14 @@ const ButtonPage: React.FC = () => {
                 {
                     key: "buttonLabel",
                     label: "Button label",
+                    order: 10,
                     controlType: "Text",
                     value: "Click me!",
                 },
                 {
                     key: "size",
                     label: "Size",
+                    order: 30,
                     options: [
                         { key: "sm", label: "Small (sm)", value: "sm" },
                         { key: "md", label: "Medium (md)", value: "md" },
@@ -27,6 +29,7 @@ const ButtonPage: React.FC = () => {
                 {
                     key: "theme",
                     label: "Theme",
+                    order: 20,
                     options: [
                         { key: "primary", label: "primary", value: "primary" },
                         { key: "outline-primary", label: "outline-primary", value: "outline-primary" },
@@ -38,6 +41,21 @@ const ButtonPage: React.FC = () => {
                         { key: "link", label: "link", value: "link" },
                     ],
                     controlType: "Dropdown",
+                },
+                {
+                    key: "disabled",
+                    label: "Disabled",
+                    order: 40,
+                    controlType: "Checkbox",
+                    value: false,
+                },
+                {
+                    key: "block",
+                    label: "Block",
+                    description: "Sets the display of the button to block so it can take up the container width",
+                    order: 50,
+                    controlType: "Checkbox",
+                    value: false,
                 },
             ],
         },
@@ -53,8 +71,8 @@ const ButtonPage: React.FC = () => {
             mainFile={importString}
             importedFiles={importedFiles}
             example={
-                <div>
-                    <Button size={controls?.size?.value} theme={controls?.theme?.value}>
+                <div className="w-100 d-flex justify-content-center">
+                    <Button size={controls?.size?.value} theme={controls?.theme?.value} disabled={controls?.disabled} block={controls?.block}>
                         {controls.buttonLabel}
                     </Button>
                 </div>

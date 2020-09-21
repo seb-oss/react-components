@@ -4,11 +4,14 @@ import classnames from "classnames";
 import "./toggle.scss";
 
 export type ToggleProps = JSX.IntrinsicElements["input"] & {
+    /** Element label */
     label?: string;
+    /** to set if the toggle is inline with other element */
     inline?: boolean;
+    /** properties that related to div element */
     wrapperProps?: JSX.IntrinsicElements["div"];
 };
-
+/** A Slide toggle allows the user to change between two states */
 export const Toggle: React.FC<ToggleProps> = ({ wrapperProps, label, inline, ...props }: ToggleProps) => {
     const [id, setId] = React.useState<string>(props.id);
 
