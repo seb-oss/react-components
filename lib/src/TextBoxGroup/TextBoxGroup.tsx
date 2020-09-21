@@ -1,5 +1,5 @@
 import React from "react";
-import { randomId } from "@sebgroup/frontend-tools/dist/randomId";
+import { randomId } from "@sebgroup/frontend-tools";
 import "./text-box-group-style.scss";
 
 export interface TextBoxGroupProps {

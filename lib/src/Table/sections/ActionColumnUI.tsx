@@ -1,6 +1,6 @@
 import React from "react";
 import { ActionLinkItem, PrimaryActionButton, TableRow } from "../Table";
-import { randomId } from "@sebgroup/frontend-tools/dist/randomId";
+import { randomId } from "@sebgroup/frontend-tools";
 
 const ellipsis: JSX.Element = (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">

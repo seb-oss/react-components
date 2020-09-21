@@ -1,6 +1,6 @@
 import React from "react";
 import { ActionLinkItem, TableHeader, sortDirectionTypes, TableRow, RowTypes, PrimaryActionButton, FilterProps, TableTheme } from "../Table";
-import { randomId } from "@sebgroup/frontend-tools/dist/randomId";
+import { randomId } from "@sebgroup/frontend-tools";
 import { RowUI } from "./RowUI";
 import { sumCols } from "./helperFunctions";
 
