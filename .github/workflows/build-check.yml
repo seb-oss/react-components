@@ -15,7 +15,4 @@ jobs:
       - name: running unit tests
         run: npm test
       - name: building
-        run: |
-         | npm run build:production
-         | npm run clean:docs
-         | npm run build:docs
+        run: npm run build:production && npm run clean:docs && npm run build:docs
