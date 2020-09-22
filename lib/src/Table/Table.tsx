@@ -47,10 +47,13 @@ export interface TableRow {
     rowContentDetail?: React.ReactNode;
     isEditMode?: boolean;
 }
-export const enum sortDirectionTypes {
-    Ascending = "ASC",
-    Descending = "DESC",
-}
+
+export const sortDirectionTypes = {
+    Ascending: "ASC",
+    Descending: "DESC",
+};
+export type sortDirectionTypes = typeof sortDirectionTypes[keyof typeof sortDirectionTypes];
+
 export interface SearchProps {
     onSearch?: (rows: Array<TableRow>) => void;
     searchInColumns?: Array<string>;

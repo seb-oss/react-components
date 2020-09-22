@@ -13,6 +13,7 @@ export type OverlayProps = React.PropsWithChildren<{
 }>;
 
 export const Overlay: React.FC<OverlayProps> = React.forwardRef((props: OverlayProps, ref: React.RefObject<HTMLDivElement>) => {
+    const d: Document | null = typeof document !== "undefined" ? document : null;
     const overlayContentRef: React.MutableRefObject<HTMLDivElement> = React.useRef(null);
     const [placementWithCoords, setPlacementWithCoords] = React.useState<ElementPlacementWithCoord>(null);
     const [overlayPositionChecker, setOverlayPositionChecker] = React.useState<OverlayPositionChecker>(null);
@@ -80,17 +81,21 @@ export const Overlay: React.FC<OverlayProps> = React.forwardRef((props: OverlayP
         });
     }
 
-    return createPortal(
-        <div
-            className={`overlay-container${props.show ? " show" : ""} ${placementWithCoords ? placementWithCoords.position : props.position || "top"}`}
-            ref={overlayContentRef}
-            tabIndex={-1}
-            onBlur={props.show ? props.onBlur : null}
-            aria-hidden={!props.show}
-            style={placementWithCoords ? placementWithCoords.coord : {}}
-        >
-            {props.children}
-        </div>,
-        document.body
-    );
+    if (d) {
+        return createPortal(
+            <div
+                className={`overlay-container${props.show ? " show" : ""} ${placementWithCoords ? placementWithCoords.position : props.position || "top"}`}
+                ref={overlayContentRef}
+                tabIndex={-1}
+                onBlur={props.show ? props.onBlur : null}
+                aria-hidden={!props.show}
+                style={placementWithCoords ? placementWithCoords.coord : {}}
+            >
+                {props.children}
+            </div>,
+            d?.body
+        );
+    }
+
+    return null;
 });

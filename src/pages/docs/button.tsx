@@ -60,7 +60,7 @@ const ButtonPage: React.FC = () => {
             ],
         },
     ]);
-    const importString: string = require("!raw-loader!@sebgroup/react-components/button/Button");
+    const importString: string = require("!raw-loader!@sebgroup/react-components/Button/Button");
     const importedFiles: Array<string> = [];
     const code: string = `
 <Button>Click me</Button>

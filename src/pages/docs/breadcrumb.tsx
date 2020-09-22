@@ -13,7 +13,7 @@ const userIcon: React.ReactElement = (
 );
 
 const BreadcrumbPage: React.FC = () => {
-    const importString: string = require("!raw-loader!@sebgroup/react-components/breadcrumb/Breadcrumb");
+    const importString: string = require("!raw-loader!@sebgroup/react-components/Breadcrumb/Breadcrumb");
     const importedFiles: Array<string> = [require("!raw-loader!@sebgroup/react-components/Breadcrumb/BreadcrumbItem")];
     const code: string = `
 <Breadcrumb>

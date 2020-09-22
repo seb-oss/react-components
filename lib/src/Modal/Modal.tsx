@@ -93,7 +93,7 @@ export const Modal: React.FC<ModalProps> = React.memo(
 
         React.useEffect(() => {
             return () => {
-                window.removeEventListener("keyup", this.escapeKeyListener);
+                window.removeEventListener("keyup", escapeKeyListener);
             };
         }, []);
 

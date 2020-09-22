@@ -1,6 +1,6 @@
 import React from "react";
 import { ElementPosition } from "./placement";
-import { randomId } from "@sebgroup/frontend-tools/dist/randomId";
+import { randomId } from "@sebgroup/frontend-tools";
 import { Overlay } from "./Overlay";
 import "./tooltip-style.scss";
 
