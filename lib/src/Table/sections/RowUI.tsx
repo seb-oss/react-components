@@ -1,6 +1,6 @@
 import React from "react";
 import { TableRow, RowTypes, ActionLinkItem, TableHeader, PrimaryActionButton, Cell, ActionButtonState } from "../Table";
-import { randomId } from "@sebgroup/frontend-tools/dist/randomId";
+import { randomId } from "@sebgroup/frontend-tools";
 
 // components
 import { TextboxGroup } from "./TextboxGroup";

@@ -1,5 +1,5 @@
 import React from "react";
-import { randomId } from "@sebgroup/frontend-tools/dist/randomId";
+import { randomId } from "@sebgroup/frontend-tools";
 import "./text-area-style.scss";
 
 export interface TextAreaProps {

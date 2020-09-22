@@ -1,7 +1,7 @@
 import React from "react";
 import { Collapse } from "../Collapse/Collapse";
 import classnames from "classnames";
-import { randomId } from "@sebgroup/frontend-tools/dist/randomId";
+import { randomId } from "@sebgroup/frontend-tools";
 
 export type AccordionItemProps = JSX.IntrinsicElements["div"] & {
     /** The header of the accordion item */

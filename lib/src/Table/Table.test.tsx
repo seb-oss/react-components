@@ -3,7 +3,7 @@ import { act } from "react-dom/test-utils";
 import { unmountComponentAtNode, render } from "react-dom";
 import { Column, Table, TableRow, ActionLinkItem, DataItem, sortDirectionTypes, PrimaryActionButton, EditProps } from ".";
 import { Pagination } from "../Pagination";
-import makeData from "../../develop/__utils/makeData";
+import makeData from "../__utils/makeData";
 
 describe("Component: Table", () => {
     let container: HTMLDivElement = null;
