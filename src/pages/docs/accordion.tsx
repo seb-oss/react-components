@@ -51,6 +51,8 @@ const AccordionPage: React.FC = () => {
         []
     );
     const code: string = `<Accordion [list]="accordionList" />`;
+
+    console.log("THe imported files ", importedFiles);
     return (
         <Docs
             mainFile={importString}
