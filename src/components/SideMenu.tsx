@@ -22,7 +22,7 @@ function getStoredValue(): boolean {
     let value: boolean = true;
     if (typeof window !== "undefined") {
         try {
-            const lsValue: boolean | null = localStorage.getItem(SIDE_MENU_STORAGE_KEY);
+            const lsValue: string = localStorage.getItem(SIDE_MENU_STORAGE_KEY);
             value = lsValue !== null ? JSON.parse(lsValue) : true;
         } catch (e) {}
     }
