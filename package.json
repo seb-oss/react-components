@@ -25,7 +25,7 @@
 	"homepage": "https://sebgroup.github.io/react-components",
 	"scripts": {
 		"build:dev": "webpack-dev-server --dev",
-		"build:production": "webpack --prod",
+		"build:production": "webpack --config lib/webpack.config.js --prod",
 		"clean:dist": "rimraf ./dist",
 		"clean:test": "rimraf ./coverage",
 		"clean": "npm run clean:dist && npm run clean:test",
@@ -46,7 +46,7 @@
 		"commit": "git-cz",
 		"semantic-release": "semantic-release",
 		"sanitize": "package-lock-sanitizer && git add package-lock.json",
-		"generate:indexes": "ts-node lib/indexer.ts -e src -i __utils -s"
+		"generate:indexes": "ts-node lib/indexer.ts -e lib/src -i lib/src/__utils -s"
 	},
 	"dependencies": {
 		"@sebgroup/bootstrap": "^5.1.0",

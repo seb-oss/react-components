@@ -16,3 +16,5 @@ jobs:
         run: npm test
       - name: building
         run: npm run build:production
+        run: npm run clean:docs
+        run: npm run build:docs

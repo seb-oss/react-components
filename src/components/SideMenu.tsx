@@ -15,16 +15,15 @@ const SIDE_MENU_STORAGE_KEY = "SIDEMENU";
 const components: Array<ComponentsListItem> = comps.sort((a, b) => (a.name > b.name ? 1 : -1));
 
 function getStoredValue(): boolean {
-    const value: string = localStorage.getItem(SIDE_MENU_STORAGE_KEY);
+    const w: Window | null = typeof window !== "undefined" ? window : null;
+    const value: string = w === null ? "true" : w.localStorage.getItem(SIDE_MENU_STORAGE_KEY);
     return value === null ? true : JSON.parse(value);
 }
-
-const initialToggle: boolean = getStoredValue();
 
 export const SideMenu: React.FC = React.memo(() => {
     const [className, setClassName] = useState<string>("side-menu");
     const [prestine, setPrestine] = React.useState<boolean>(true);
-    const [toggle, setToggle] = React.useState<boolean>(initialToggle);
+    const [toggle, setToggle] = React.useState<boolean>(getStoredValue());
     const [isAnimating, setIsAnimating] = React.useState<boolean>(false);
     const [search, setSearch] = React.useState<string>("");
     const [highlighted, setHighlighted] = React.useState<number>(-1);
@@ -109,6 +108,7 @@ export const SideMenu: React.FC = React.memo(() => {
     };
 
     React.useEffect(() => {
+        const initialToggle: boolean = getStoredValue();
         setClassName(
             classnames("side-menu", {
                 opened: (initialToggle && prestine) || (toggle && !isAnimating),
@@ -118,7 +118,7 @@ export const SideMenu: React.FC = React.memo(() => {
                 mobile: isMobile,
             })
         );
-    }, [initialToggle, prestine, isMobile, isAnimating, toggle]);
+    }, [prestine, isMobile, isAnimating, toggle]);
 
     React.useEffect(() => {
         if (isMobile) {
