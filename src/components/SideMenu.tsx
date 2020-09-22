@@ -14,10 +14,19 @@ const SIDE_MENU_STORAGE_KEY = "SIDEMENU";
 
 const components: Array<ComponentsListItem> = comps.sort((a, b) => (a.name > b.name ? 1 : -1));
 
+/**
+ * Retrieves the value of the side menu toggle from local storage
+ * @returns The value of the side menu's toggle
+ */
 function getStoredValue(): boolean {
-    const w: Window | null = typeof window !== "undefined" ? window : null;
-    const value: string = w === null ? "true" : w.localStorage.getItem(SIDE_MENU_STORAGE_KEY);
-    return value === null ? true : JSON.parse(value);
+    let value: boolean = true;
+    if (typeof window !== "undefined") {
+        try {
+            const lsValue: boolean | null = localStorage.getItem(SIDE_MENU_STORAGE_KEY);
+            value = lsValue !== null ? JSON.parse(lsValue) : true;
+        } catch (e) {}
+    }
+    return value;
 }
 
 export const SideMenu: React.FC = React.memo(() => {
