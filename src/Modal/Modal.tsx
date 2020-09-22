@@ -24,7 +24,7 @@ export interface ModalProps {
 }
 
 export const Modal: React.FC<ModalProps> = React.memo(({ trapFocus = true, escapeToDismiss = true, ...props }: ModalProps) => {
-    const prestine: React.MutableRefObject<boolean> = React.useRef<boolean>(true);
+    const pristine: React.MutableRefObject<boolean> = React.useRef<boolean>(true);
     const [className, setClassName] = React.useState<string>("seb modal");
     const modalRef: React.MutableRefObject<HTMLDivElement> = React.useRef<HTMLDivElement>();
     /**
@@ -83,7 +83,9 @@ export const Modal: React.FC<ModalProps> = React.memo(({ trapFocus = true, escap
             focusableElement && focusableElement.focus();
         }
         /** Un-focus from the element inside the modal when it's toggled off */
-        !props.toggle && (document.activeElement as HTMLElement).blur();
+        if (!props.toggle && pristine.current && trapFocus) {
+            (document.activeElement as HTMLElement)?.blur();
+        }
 
         return () => {
             window.removeEventListener("keydown", keyCombinationListener);
@@ -118,7 +120,7 @@ export const Modal: React.FC<ModalProps> = React.memo(({ trapFocus = true, escap
 
     React.useEffect(() => {
         let classNames: string = "seb modal";
-        classNames += props.toggle ? " show" : prestine.current ? "" : " hide";
+        classNames += props.toggle ? " show" : pristine.current ? "" : " hide";
         classNames += props.centered ? " modal-centered" : "";
         classNames += !!props.position ? " modal-aside modal-aside-" + (props.position === "left" ? "left" : "right") : "";
         classNames += props.fullscreen ? " modal-fullscreen" : "";
@@ -127,7 +129,7 @@ export const Modal: React.FC<ModalProps> = React.memo(({ trapFocus = true, escap
     }, [props.toggle, props.centered, props.position, props.fullscreen, props.className]);
 
     React.useEffect(() => {
-        prestine.current = false;
+        pristine.current = false;
 
         escapeToDismiss && window[props.toggle ? "addEventListener" : "removeEventListener"]("keyup", escapeKeyListener);
         return () => {
