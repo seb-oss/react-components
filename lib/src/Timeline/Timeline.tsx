@@ -1,4 +1,4 @@
-import React from "react";
+import * as React from "react";
 import "./timeline-style.scss";
 
 export interface TimelineListItem {
@@ -10,15 +10,10 @@ export interface TimelineListItem {
 type TimelineDirection = "vertical" | "horizontal";
 
 export interface TimelineProps {
-    /** Element class */
     className?: string;
-    /** Direction of timeline: `horizontal` or `vertical` */
     direction?: TimelineDirection;
-    /** Element id */
     id?: string;
-    /** List of item in timeline */
     list: Array<TimelineListItem>;
-    /** on click callback on each item */
     onClick?: (index: number) => void;
 }
 
@@ -37,15 +32,14 @@ function prepareList(list: Array<TimelineListItem>): Array<any> {
     return [topList, bottomList];
 }
 
-/** Timeline is component to display of a list of events in chronological order */
-export const Timeline: React.FC<TimelineProps> = React.memo((props: TimelineProps) => {
-    const direction: string = props.direction ? props.direction : "vertical";
-    const preparedLists = prepareList(props.list);
-    const topList: Array<TimelineListItem> = preparedLists[0];
-    const bottomList: Array<TimelineListItem> = preparedLists[1];
-    return (
-        <div className={"form-group custom-timeline" + (props.className ? ` ${props.className}` : "")} id={props.id}>
-            <div className={`timeline ${direction}` + (props.onClick ? " clickable" : "")}>
+export const Timeline: React.FunctionComponent<TimelineProps> = React.memo(
+    (props: TimelineProps): React.ReactElement<void> => {
+        const direction: string = props.direction ? props.direction : "vertical";
+        const preparedLists = prepareList(props.list);
+        const topList: Array<TimelineListItem> = preparedLists[0];
+        const bottomList: Array<TimelineListItem> = preparedLists[1];
+        return (
+            <div className={`timeline ${direction}` + (props.onClick ? " clickable" : "") + (props.className ? ` ${props.className}` : "")} id={props.id}>
                 {direction === "vertical" &&
                     props.list.map((item: TimelineListItem, i: number) => (
                         <div className="item-holder" key={i}>
@@ -68,7 +62,7 @@ export const Timeline: React.FC<TimelineProps> = React.memo((props: TimelineProp
 
                 {direction === "horizontal" &&
                     [1, 2, 3].map((loop: number) => (
-                        <div className="row" key={loop}>
+                        <div className="row no-gutters" key={loop}>
                             {loop === 1 &&
                                 topList.map((item: TimelineListItem, i) => (
                                     <div className="item-holder" key={i} style={{ width: 100 / props.list.length + "%" }}>
@@ -115,6 +109,6 @@ export const Timeline: React.FC<TimelineProps> = React.memo((props: TimelineProp
                         </div>
                     ))}
             </div>
-        </div>
-    );
-});
+        );
+    }
+);
