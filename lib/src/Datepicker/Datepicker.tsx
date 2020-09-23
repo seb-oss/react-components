@@ -214,13 +214,17 @@ export const Datepicker: React.FunctionComponent<DatepickerProps> = (props: Date
     };
 
     const supportsInputOfType = (type: "date" | "month"): boolean => {
-        const input: HTMLInputElement = document.createElement("input");
-        input.setAttribute("type", type);
+        if (typeof document !== "undefined") {
+            const input: HTMLInputElement = document.createElement("input");
+            input.setAttribute("type", type);
 
-        const notADateValue: string = "not-a-date";
-        input.setAttribute("value", notADateValue);
+            const notADateValue: string = "not-a-date";
+            input.setAttribute("value", notADateValue);
 
-        return input.value !== notADateValue;
+            return input.value !== notADateValue;
+        }
+
+        return false;
     };
 
     const nativeClassNames = (value: Date, className: string): string => {
