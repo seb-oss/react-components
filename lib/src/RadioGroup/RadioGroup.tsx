@@ -1,5 +1,5 @@
 import React from "react";
-import { randomId } from "@sebgroup/frontend-tools/dist/randomId";
+import { randomId } from "@sebgroup/frontend-tools";
 import "./radio-group-style.scss";
 
 export interface RadioListModel<T = any> {

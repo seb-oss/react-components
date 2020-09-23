@@ -24,6 +24,7 @@ tmp
 build
 coverage
 docs
+public
 !/src/**/docs
 
 .cache
