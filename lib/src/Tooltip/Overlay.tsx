@@ -40,13 +40,11 @@ export const Overlay: React.FC<OverlayProps> = React.forwardRef((props: OverlayP
     React.useEffect(() => {
         if (props.show) {
             getWithinViewportPosition();
+            window.addEventListener("scroll", onScroll, true);
         } else {
             overlayContentRef.current.blur();
-        }
-        window.addEventListener("scroll", onScroll, true);
-        return function cleanup() {
             window.removeEventListener("scroll", onScroll, true);
-        };
+        }
     }, [props.show]);
 
     React.useEffect(() => {

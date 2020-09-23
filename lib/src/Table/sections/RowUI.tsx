@@ -1,5 +1,5 @@
 import React from "react";
-import { TableRow, RowTypes, ActionLinkItem, TableHeader, PrimaryActionButton, Cell } from "../Table";
+import { TableRow, RowTypes, ActionLinkItem, TableHeader, PrimaryActionButton, Cell, ActionButtonState } from "../Table";
 import { randomId } from "@sebgroup/frontend-tools";
 
 // components
@@ -36,6 +36,7 @@ interface RowUIProps {
     useRowCollapse: boolean;
     useRowSelection: boolean;
     useShowActionColumn: boolean;
+    actionButtonState: ActionButtonState;
 }
 
 export const RowUI: React.FunctionComponent<RowUIProps> = (props: RowUIProps) => {
@@ -127,6 +128,7 @@ export const RowUI: React.FunctionComponent<RowUIProps> = (props: RowUIProps) =>
                             primaryActionButton={props.primaryActionButton}
                             selectedRow={props.row}
                             tableRef={props.tableRef}
+                            actionButtonState={props?.actionButtonState}
                             onActionDropped={(event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
                                 props.onActionDropped && props.onActionDropped(event, props.row, props.type === "subRow" ? props.parentRowIndex : null);
                             }}

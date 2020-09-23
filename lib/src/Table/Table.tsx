@@ -8,6 +8,7 @@ export type DataItem<T = any> = T & TableRow;
 export type RowTypes = "row" | "subRow";
 export type EditMode = "save" | "cancel" | "edit";
 export type TableTheme = "light" | "dark";
+export type ActionButtonState = "disabled" | "hidden";
 
 export interface Column {
     label: string | React.ReactNode;
@@ -46,6 +47,8 @@ export interface TableRow {
     expanded?: boolean;
     rowContentDetail?: React.ReactNode;
     isEditMode?: boolean;
+    actionButtonState?: ActionButtonState;
+    actionLinks?: Array<ActionLinkItem>;
 }
 
 export const sortDirectionTypes = {
