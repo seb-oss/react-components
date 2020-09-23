@@ -1,5 +1,5 @@
 import React from "react";
-import { randomId } from "@sebgroup/frontend-tools/dist/randomId";
+import { randomId } from "@sebgroup/frontend-tools";
 import "./dropdown-style.scss";
 
 export interface DropdownItem<T = any> {
@@ -436,6 +436,7 @@ export const Dropdown: React.FC<DropdownProps> = (props: DropdownProps) => {
                     return (
                         <React.Fragment key={item.id}>
                             <button
+                                type="button"
                                 tabIndex={0}
                                 ref={listRefs[index]}
                                 className={`${item.className}${currentFocused === index ? " highlighted" : ""}`}

@@ -1,6 +1,6 @@
 import React from "react";
 import { ActionLinkItem, TableHeader, sortDirectionTypes, TableRow, RowTypes, PrimaryActionButton, FilterProps, TableTheme } from "../Table";
-import { randomId } from "@sebgroup/frontend-tools/dist/randomId";
+import { randomId } from "@sebgroup/frontend-tools";
 import { RowUI } from "./RowUI";
 import { sumCols } from "./helperFunctions";
 
@@ -106,11 +106,12 @@ export const TableUI: React.FunctionComponent<TableUIProps> = React.memo(
                                         tableRef={tableRef}
                                         onActionDropped={props.onActionDropped}
                                         onRowExpanded={props.onRowExpanded}
-                                        useShowActionColumn={props.useShowActionColumn}
+                                        useShowActionColumn={props.useShowActionColumn || !!row?.actionLinks?.length}
                                         rowsAreCollapsable={props.rowsAreCollapsable}
                                         onItemSelected={props.onItemSelected}
                                         primaryActionButton={props.primaryActionButton}
-                                        actionLinks={props.actionLinks}
+                                        actionLinks={row?.actionLinks || props.actionLinks}
+                                        actionButtonState={row?.actionButtonState}
                                         useRowSelection={props.useRowSelection}
                                         useRowCollapse={props.useRowCollapse}
                                         columns={props.columns}
@@ -127,11 +128,12 @@ export const TableUI: React.FunctionComponent<TableUIProps> = React.memo(
                                                     tableRef={tableRef}
                                                     onActionDropped={props.onActionDropped}
                                                     onRowExpanded={props.onRowExpanded}
-                                                    useShowActionColumn={props.useShowActionColumn}
+                                                    useShowActionColumn={props.useShowActionColumn || !!subRow?.actionLinks?.length}
                                                     rowsAreCollapsable={props.rowsAreCollapsable}
                                                     onItemSelected={props.onItemSelected}
                                                     primaryActionButton={props.primaryActionButton}
-                                                    actionLinks={props.actionLinks}
+                                                    actionLinks={subRow?.actionLinks || props.actionLinks}
+                                                    actionButtonState={subRow?.actionButtonState}
                                                     useRowSelection={props.useRowSelection}
                                                     onSubRowExpanded={props.onSubRowExpanded}
                                                     useRowCollapse={props.useRowCollapse}

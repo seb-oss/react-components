@@ -3,7 +3,7 @@ import { act } from "react-dom/test-utils";
 import { unmountComponentAtNode, render } from "react-dom";
 import { Column, Table, TableRow, ActionLinkItem, DataItem, sortDirectionTypes, PrimaryActionButton, EditProps } from ".";
 import { Pagination } from "../Pagination";
-import makeData from "../../develop/__utils/makeData";
+import makeData from "../__utils/makeData";
 
 describe("Component: Table", () => {
     let container: HTMLDivElement = null;
@@ -42,6 +42,7 @@ describe("Component: Table", () => {
 
     const data: Array<DataItem<any>> = makeData([30, 5]);
     const smallData: Array<DataItem<any>> = makeData([5, 5]);
+    const smallDataActionColumn: Array<DataItem<any>> = makeData([5, 5], true);
 
     beforeEach(() => {
         container = document.createElement("div");
@@ -362,6 +363,42 @@ describe("Component: Table", () => {
             render(<Table columns={columns} data={smallData} footer={<p>This is a paragraph. </p>} />, container);
         });
         expect(container.querySelector("tfoot tr")).toBeTruthy();
+    });
+
+    describe("Should allow passing optional action column to individual row ", () => {
+        let actionContainer: HTMLDivElement = null;
+
+        beforeEach(() => {
+            actionContainer = document.createElement("div");
+            document.body.appendChild(actionContainer);
+        });
+
+        afterEach(() => {
+            unmountComponentAtNode(actionContainer);
+            actionContainer.remove();
+            actionContainer = null;
+        });
+
+        it("row action columns", async () => {
+            await act(async () => {
+                const primaryActionButton: PrimaryActionButton = {
+                    label: "Buy",
+                    buttonSize: "sm",
+                    buttonTheme: "danger",
+                    onClick: jest.fn((e: React.MouseEvent<HTMLButtonElement>) => {}),
+                };
+
+                render(<Table columns={columns} data={smallDataActionColumn} primaryActionButton={primaryActionButton} />, actionContainer);
+            });
+
+            const openedActionColumnButtonString: string = "tbody tr.parent-row td .action-column button";
+
+            // select all the buttons, the first row button should be disable
+            expect((actionContainer?.querySelectorAll(openedActionColumnButtonString).item(0) as HTMLButtonElement).disabled).toBeTruthy();
+
+            // the second item should not be disable
+            expect((actionContainer?.querySelectorAll(openedActionColumnButtonString).item(1) as HTMLButtonElement).disabled).toBeFalsy();
+        });
     });
 
     describe("Should enable and handle custom actions : ", () => {

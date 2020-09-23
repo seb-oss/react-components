@@ -3,7 +3,7 @@ import { act } from "react-dom/test-utils";
 import { unmountComponentAtNode, render } from "react-dom";
 import { Accordion, AccordionItem, AccordionItemProps } from ".";
 import { loremIpsum } from "lorem-ipsum";
-import { deepCopy } from "@sebgroup/frontend-tools/dist/deepCopy";
+import { deepCopy } from "@sebgroup/frontend-tools";
 
 describe("Component: Accordion", () => {
     let container: HTMLDivElement = null;

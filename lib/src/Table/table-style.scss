@@ -105,7 +105,7 @@ table {
                         > .ellipsis-dropdown-holder {
                             position: relative;
                             display: inline-block;
-
+                            min-width: 20px;
                             .icon-holder {
                                 &:hover {
                                     background: $icon-active-color;
