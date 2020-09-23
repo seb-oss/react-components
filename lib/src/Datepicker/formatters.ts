@@ -10,6 +10,6 @@ export function toInteger(value: any): number {
     return parseInt(value, 10);
 }
 
-export function isNumber(...values): boolean {
-    return values.every((val) => isNumber(val));
+export function isNumber(...values: number[]): boolean {
+    return values.every((val) => !isNaN(toInteger(val)));
 }
