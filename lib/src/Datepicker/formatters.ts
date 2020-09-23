@@ -7,7 +7,7 @@ export function padNumber(value: number, isYear: boolean = false): string {
 }
 
 export function toInteger(value: any): number {
-    return parseInt(`${value}`, 10);
+    return parseInt(value, 10);
 }
 
 export function isNumber(value: any): value is number {
