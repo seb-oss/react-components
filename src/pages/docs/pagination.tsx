@@ -86,7 +86,7 @@ const PaginationPage: React.FC = (): React.ReactElement<void> => {
 
     const importString: string = React.useMemo(() => require("!raw-loader!@sebgroup/react-components/Pagination/Pagination"), []);
     const importedFiles: Array<string> = React.useMemo(() => [require("!raw-loader!@sebgroup/react-components/Pagination/Pagination")], []);
-    const code: string = React.useMemo(() => require("!raw-loader!./checkbox").default, []);
+    const code: string = React.useMemo(() => require("!raw-loader!./pagination").default, []);
 
     return (
         <Docs
