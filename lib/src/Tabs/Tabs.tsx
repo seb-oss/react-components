@@ -2,18 +2,25 @@ import React from "react";
 import "./tabs-style.scss";
 
 export interface TabsListItem {
+    /** list item text */
     text: string;
+    /** list item is disabled if set to true */
     disabled?: boolean;
 }
 
 export interface TabsProps {
+    /** index of focsued tab */
     activeTab: number;
+    /** Element class name */
     className?: string;
+    /** Element ID */
     id?: string;
+    /** List of tab list item */
     list: Array<TabsListItem>;
+    /** callback on tab item clicked */
     onClick: (index: number) => any;
 }
-
+/** Tabs organize and allow navigation between groups of content that are related and at the same level of hierarchy. */
 export const Tabs: React.FC<TabsProps> = (props: TabsProps) => {
     const elementRefAnchors: Array<HTMLAnchorElement> = [];
 

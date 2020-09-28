@@ -136,7 +136,7 @@
     },
     {
         "name": "Tabs",
-        "path": "/tabsdocs/",
+        "path": "/docs/tabs",
         "filePath": "./src/Tabs/index.ts"
     },
     {
