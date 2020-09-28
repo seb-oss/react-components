@@ -85,7 +85,7 @@ const DropdownPage: React.FC = (): React.ReactElement<void> => {
 
     const importString: string = React.useMemo(() => require("!raw-loader!@sebgroup/react-components/Dropdown/Dropdown"), []);
     const importedFiles: Array<string> = React.useMemo(() => [require("!raw-loader!@sebgroup/react-components/Dropdown/Dropdown")], []);
-    const code: string = React.useMemo(() => require("!raw-loader!./radiobutton").default, []);
+    const code: string = React.useMemo(() => require("!raw-loader!./dropdown").default, []);
 
     return (
         <Docs
