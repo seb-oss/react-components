@@ -26,8 +26,6 @@ const ProgressBarPage: React.FC = (): React.ReactElement<void> => {
     const importedFiles: Array<string> = React.useMemo(() => [require("!raw-loader!@sebgroup/react-components/ProgressBar/ProgressBar")], []);
     const code: string = React.useMemo(() => require("!raw-loader!./progressbar").default, []);
 
-    const incrementValue = React.useCallback(() => {}, [progress]);
-
     React.useEffect(() => {
         timer.current = setInterval((): void => {
             if (progress < 100) {
