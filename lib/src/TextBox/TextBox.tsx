@@ -3,33 +3,59 @@ import { randomId } from "@sebgroup/frontend-tools";
 import "./text-box-style.scss";
 
 export interface TextBoxProps {
+    /** Property sets to check if textbox is allowed to auto complete */
     autoComplete?: "on" | "off";
+    /** Element class name */
     className?: string;
+    /** Property sets whether textbox is disabled */
     disabled?: boolean;
+    /** Error message of textbox */
     error?: string;
+    /** Property sets whether textbox is focused */
     focus?: boolean;
+    /** Element ID */
     id?: string;
+    /** Element label */
     label?: string;
+    /** Maximum allowed length for input */
     maxLength?: number;
+    /** Minimum allowed length for input */
     minLength?: number;
+    /** Element name */
     name: string;
+    /** Callback when textbox is defocused */
     onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void;
+    /** Callback when textbox's value is changed */
     onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+    /** Callback when textbox is focused */
     onFocus?: (event: React.FocusEvent<HTMLInputElement>) => void;
+    /** Callback when key is pressed */
     onKeyDown?: (event: React.KeyboardEvent<HTMLInputElement>) => void;
+    /** Callback when a key that produces a character value is pressed down */
     onKeyPress?: (event: React.KeyboardEvent<HTMLInputElement>) => void;
+    /** Callback when key is released */
     onKeyUp?: (event: React.KeyboardEvent<HTMLInputElement>) => void;
+    /** Element pattern */
     pattern?: string;
+    /** Element placeholder */
     placeholder?: string;
+    /** Property sets whether textbox is readonly */
     readOnly?: boolean;
+    /** Component associates with input ref */
     reference?: React.RefObject<HTMLInputElement>;
+    /** Property sets whether textbox is required */
     required?: boolean;
+    /** Property sets whether textbox is set to success theme */
     success?: boolean;
+    /** Input type */
     type?: string;
+    /** Text box value */
     value: string | number;
+    /** Property sets whether error message should be shown */
     showErrorMessage?: boolean;
 }
 
+/** Textbox is a component that allows user to add or edit text */
 export const TextBox: React.FC<TextBoxProps> = (props: TextBoxProps) => {
     const [id, setId] = React.useState<string>(null);
     const [showErrorMessage, setShowErrorMessage] = React.useState<boolean>(true);

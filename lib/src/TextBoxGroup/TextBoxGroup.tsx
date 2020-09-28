@@ -70,7 +70,7 @@ export interface TextBoxGroupProps {
     /** Property sets whether error message should be shown */
     showErrorMessage?: boolean;
 }
-/** Textbox is a component that allows user to add or edit text */
+/** TextboxGroup is a component that allows user to add or edit text with extra text or icon port */
 export const TextBoxGroup: React.FC<TextBoxGroupProps> = (props: TextBoxGroupProps) => {
     const [id, setId] = React.useState<string>(null);
     const [showErrorMessage, setShowErrorMessage] = React.useState<boolean>(true);
