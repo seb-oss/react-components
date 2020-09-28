@@ -7,6 +7,7 @@ import { TextBox } from "@sebgroup/react-components/TextBox";
 import { TextArea } from "@sebgroup/react-components/TextArea";
 import { Dropdown } from "@sebgroup/react-components/Dropdown";
 import { Datepicker } from "@sebgroup/react-components/Datepicker";
+import { Stepper } from "@sebgroup/react-components/Stepper";
 import { DropdownItem, DropdownChangeEvent } from "@sebgroup/react-components/Dropdown/Dropdown";
 
 export interface DynamicFormItem {
@@ -26,7 +27,7 @@ export interface DynamicFormItem {
     controlType?: DynamicFormType;
 }
 
-export type DynamicFormType = "Hidden" | "Text" | "TextArea" | "Checkbox" | "Dropdown" | "Datepicker" | "Radio" | "Option" | "ErrorLabel";
+export type DynamicFormType = "Hidden" | "Text" | "TextArea" | "Checkbox" | "Dropdown" | "Datepicker" | "Radio" | "Option" | "ErrorLabel" | "Stepper";
 
 export interface DynamicFormSection {
     title?: string | null;
@@ -44,9 +45,9 @@ export interface DynamicFormOption {
 
 export type DynamicFormDate = { day: number; month: number; year: number };
 
-type InputChange = React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | React.MouseEvent<HTMLButtonElement, MouseEvent> | DropdownChangeEvent | Date;
+type InputChange = React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | React.MouseEvent<HTMLButtonElement, MouseEvent> | DropdownChangeEvent | Date | number;
 
-type DynamicFormInternalStateValue = string | string[] | DynamicFormOption | DynamicFormOption[] | Date | boolean | null;
+type DynamicFormInternalStateValue = string | string[] | DynamicFormOption | DynamicFormOption[] | Date | boolean | number | null;
 
 interface DynamicFormInternalStateSection {
     [k: string]: DynamicFormInternalStateValue;
@@ -297,7 +298,21 @@ const DynamicFormItemComponent: React.FC<{
         }
 
         case "Datepicker": {
-            formItem = <Datepicker onChange={props.onChange} value={props.state as Date} />;
+            formItem = <Datepicker {...commonProps} onChange={props.onChange} value={props.state as Date} />;
+            break;
+        }
+
+        case "Stepper": {
+            formItem = (
+                <Stepper
+                    label={props.item?.label}
+                    min={props.item?.min}
+                    max={props.item?.max}
+                    onIncrease={() => props.onChange((props.state as number) + 1)}
+                    onDecrease={() => props.onChange((props.state as number) - 1)}
+                    value={props.state as number}
+                />
+            );
             break;
         }
 
