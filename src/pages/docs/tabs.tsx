@@ -22,12 +22,23 @@ const TabsPage: React.FC = React.memo(() => {
             ],
         },
     ];
-    const [renderForm, { controls }] = useDynamicForm(fields);
+    const [renderForm, form, setForm] = useDynamicForm(fields);
     const code: string = `<Tabs list={[]} activeTab={0} onClick={null} />`;
 
     React.useEffect(() => {
-        setValue((controls as any)?.active);
-    }, [(controls as any)?.active]);
+        setValue((form.controls as any)?.active);
+    }, [(form.controls as any)?.active]);
+
+    React.useEffect(() => {
+        if (value !== form.controls.active) {
+            setForm({
+                ...form,
+                controls: {
+                    active: value,
+                },
+            });
+        }
+    }, [value]);
 
     return <Docs mainFile={importString} example={<Tabs list={tabList} activeTab={value} onClick={setValue} />} code={code} controls={renderForm()} />;
 });

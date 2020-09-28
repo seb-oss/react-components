@@ -60,7 +60,7 @@ type OnChangeFormItem = (item: DynamicFormItem) => OnChangeInput;
 type OnChangeInput = (e: InputChange) => void;
 type ShouldRenderFormItem = (sectionKey: string, itemKey: string) => boolean;
 
-export function useDynamicForm(sections: DynamicFormSection[]): [() => JSX.Element, any] {
+export function useDynamicForm(sections: DynamicFormSection[]): [() => JSX.Element, any, React.Dispatch<React.SetStateAction<DynamicFormInternalState>>] {
     // TODO: change return from `any` to DynamicFormInternalState when implemented multi sections
     const initialState: DynamicFormInternalState = {};
     sections?.map((section) => {
@@ -196,7 +196,7 @@ export function useDynamicForm(sections: DynamicFormSection[]): [() => JSX.Eleme
     );
     const renderForm = useCallback(() => <DynamicFormComponent sections={sections} state={state} onChange={onChange} shouldRender={shouldRender} />, [sections, state, onChange, shouldRender]);
 
-    return [renderForm, state];
+    return [renderForm, state, setState];
 }
 
 const DynamicFormComponent: React.FC<{

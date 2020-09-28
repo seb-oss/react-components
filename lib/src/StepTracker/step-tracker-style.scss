@@ -87,7 +87,6 @@ $transition-time: 200ms;
             width: 100%;
             position: absolute;
             top: 50%;
-            z-index: -1;
             background-color: $gray-300;
             transform: translateY(-50%);
             .progress {
@@ -213,7 +212,6 @@ $transition-time: 200ms;
             height: 100%;
             width: 4px;
             left: 50%;
-            z-index: -1;
             background-color: #dedede;
             transform: translateX(-50%);
             .progress {

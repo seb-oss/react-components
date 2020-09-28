@@ -11,16 +11,24 @@ export type StepTrackerLabelPosition = "right" | "left" | "bottom" | "top";
 export type StepTrackerLabelOrientation = "horizontal" | "vertical";
 
 export interface StepTrackerProps {
+    /** Element class name */
     className?: string;
+    /** Element ID */
     id?: string;
+    /** Position of label in step tracker */
     labelPosition?: StepTrackerLabelPosition;
+    /** list of item in step tracker */
     list: Array<string>;
+    /** callback when step tracker item clicked */
     onClick?: (index: number) => void;
+    /** To display step tracker vertically or horizontally */
     orientation?: StepTrackerLabelOrientation;
+    /** Current/ active step */
     step: number;
+    /** Use numbers for each step */
     useNumbers?: boolean;
 }
-
+/** Step trackers illustrate the steps in a multi step process */
 export const StepTracker: React.FC<StepTrackerProps> = React.memo((props: StepTrackerProps) => {
     let topLabel: boolean;
     let bottomLabel: boolean;
