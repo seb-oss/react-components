@@ -29,7 +29,7 @@ const NotificationPage: React.FC = () => {
     ];
     const defaultCheckboxControls: Array<DynamicFormOption> = [
         { label: "with title", value: "withTitle", key: "withTitle" },
-        { label: "dismissable", value: "dismissable", key: "loop" },
+        { label: "dismissable", value: "dismissable", key: "dismissable" },
         { label: "persist", value: "persist", key: "persist" },
         { label: "with actions", value: "withActions", key: "withActions" },
     ];
