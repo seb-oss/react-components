@@ -6,23 +6,38 @@ type NotificationPosition = "bottom-left" | "bottom-right" | "top-left" | "top-r
 type NotificationTheme = "purple" | "primary" | "danger" | "success" | "warning" | "inverted";
 
 export interface NotificationAction {
+    /** Action text */
     text: string;
+    /** Callback when action button clicked */
     action: VoidFunction;
 }
 
 export interface NotificationProps {
+    /** list of action buttons */
     actions?: Array<NotificationAction>;
+    /** Element class name */
     className?: string;
+    /** Property sets whether the notification is dismissable */
     dismissable?: boolean;
+    /** Interval for the notification to be dismissed */
     dismissTimeout?: number;
+    /** Notification content */
     message?: string;
+    /** Callback when notification is clicked */
     onClick?: (event?: React.MouseEvent<HTMLDivElement>) => void;
+    /** Callback when notification is dismissed */
     onDismiss: VoidFunction;
+    /** Persist notification until dismissed (default: false) */
     persist?: boolean;
+    /** Notification position, `bottom-left` | `bottom-right` | `top-left` | `top-right` | `top` | `bottom` */
     position?: NotificationPosition;
+    /** Notification style, `slide-in` | `bar` */
     style?: NotificationStyle;
+    /** Notification theme, `purple` | `primary` | `danger` | `success` | `warning` | `inverted` */
     theme?: NotificationTheme;
+    /** Notification title */
     title?: string;
+    /** Property sets whether the notification is toggled */
     toggle: boolean;
 }
 
@@ -31,7 +46,7 @@ const TimesIcon: JSX.Element = (
         <path d="M217.5 256l137.2-137.2c4.7-4.7 4.7-12.3 0-17l-8.5-8.5c-4.7-4.7-12.3-4.7-17 0L192 230.5 54.8 93.4c-4.7-4.7-12.3-4.7-17 0l-8.5 8.5c-4.7 4.7-4.7 12.3 0 17L166.5 256 29.4 393.2c-4.7 4.7-4.7 12.3 0 17l8.5 8.5c4.7 4.7 12.3 4.7 17 0L192 281.5l137.2 137.2c4.7 4.7 12.3 4.7 17 0l8.5-8.5c4.7-4.7 4.7-12.3 0-17L217.5 256z" />
     </svg>
 );
-
+/** An alert which pops up on the page to inform the user of an event which occured and optionally provide actions to perform. */
 export class Notification extends React.Component<NotificationProps> {
     timerRef: number = null;
     private defaultTimeout: number = 5000;
