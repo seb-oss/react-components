@@ -11,7 +11,7 @@ export type Indicator = {
 };
 
 export type FeedbackIndicatorProps = JSX.IntrinsicElements["div"] & Indicator;
-
+/** A helper component to display feedback for children content */
 export const FeedbackIndicator: React.FC<FeedbackIndicatorProps> = React.memo(({ type, message, children, ...props }: FeedbackIndicatorProps) => {
     const [indicatorValue, setIndicatorValue] = React.useState<number>(0);
 

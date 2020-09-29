@@ -23,7 +23,7 @@ const CollapsePage: React.FC = () => {
         },
     ];
     const [renderForm, { controls }] = useDynamicForm(fields);
-    const code: string = `<Collapse toggle={toggle} title="Collapse title" message="message" onDismiss={() => setToggle(false)} />`;
+    const code: string = `<Collapse toggle={toggle}>text</Collapse>`;
 
     /** check if key selected */
     const checkSelectedKey = (key: string) => {
