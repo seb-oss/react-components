@@ -36,7 +36,7 @@
     },
     {
         "name": "Chip",
-        "path": "/chipdocs/",
+        "path": "/docs/chipdocs",
         "filePath": "./src/Chip/index.ts"
     },
     {
