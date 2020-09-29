@@ -94,8 +94,8 @@ const SliderPage: React.FC = (): React.ReactElement<void> => {
         },
     ]);
 
-    const importString: string = React.useMemo(() => require("!raw-loader!@sebgroup/react-components/Slider"), []);
-    const importedFiles: Array<string> = React.useMemo(() => [require("!raw-loader!@sebgroup/react-components/Slider")], []);
+    const importString: string = React.useMemo(() => require("!raw-loader!@sebgroup/react-components/Slider/Slider"), []);
+    const importedFiles: Array<string> = React.useMemo(() => [require("!raw-loader!@sebgroup/react-components/Slider/Slider")], []);
     const code: string = React.useMemo(() => require("!raw-loader!./slider").default, []);
 
     return (
