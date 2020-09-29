@@ -1,7 +1,9 @@
 @import "~@sebgroup/bootstrap/scss/core";
 
 .rc.carousel {
+    width: 100%;
     .carousel-item {
+        text-align: center;
         &.carousel-item-next,
         &.carousel-item-prev {
             animation: appear $carousel-transition-duration forwards;
@@ -10,6 +12,15 @@
         &.coming-next {
             display: block;
             z-index: -1;
+        }
+
+        img {
+            user-drag: none;
+            user-select: none;
+            -moz-user-select: none;
+            -webkit-user-drag: none;
+            -webkit-user-select: none;
+            -ms-user-select: none;
         }
     }
 
