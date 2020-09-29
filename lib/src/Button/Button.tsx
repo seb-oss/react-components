@@ -12,7 +12,7 @@ export type ButtonProps = JSX.IntrinsicElements["button"] & {
     /** Fill the parent width */
     block?: boolean;
 };
-
+/** Buttons allow users to take action with a single tap. */
 export const Button: React.FC<ButtonProps> = React.memo(({ theme = "primary", size, block, ...props }: ButtonProps) => {
     const [className, setClassName] = React.useState<string>("btn btn-primary");
 

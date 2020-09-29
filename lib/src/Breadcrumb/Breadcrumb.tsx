@@ -12,7 +12,7 @@ export type BreadcrumbProps = JSX.IntrinsicElements["nav"] & {
 };
 
 type ItemsSource = "list" | "children";
-
+/** A breadcrumb is a secondary navigation showing the website hierarchy. */
 export const Breadcrumb: React.FC<BreadcrumbProps> = React.memo(({ onNavigate, list, light, ...props }: BreadcrumbProps) => {
     const [breadcrumbListClassName, setBreadcrumbListClassName] = React.useState<string>("seb breadcrumb");
 
