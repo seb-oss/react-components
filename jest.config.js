@@ -42,7 +42,6 @@ module.exports = {
         "^.+\\.tsx?$": "ts-jest",
     },
     transformIgnorePatterns: ["<rootDir>/node_modules/(?!(react|@sebgroup/frontend-tools)/)"],
-    testEnvironment: "node",
     moduleNameMapper: {
         "aurelia-(.*)": "<rootDir>/node_modules/$1",
         "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/__mocks__/fileMock.js",
