@@ -2,9 +2,19 @@ import React from "react";
 import Docs from "components/Docs";
 import { Pagination } from "@sebgroup/react-components/Pagination/Pagination";
 import { useDynamicForm } from "hooks/useDynamicForm";
+import { checkDynamicFormSelectedKey } from "utils/helpers";
 
 const PaginationPage: React.FC = (): React.ReactElement<void> => {
     const [paging, setPaging] = React.useState<number>(1);
+
+    const checkboxControls: Array<DynamicFormOption> = React.useMemo(
+        () => [
+            { label: "Use dot nav", value: "useDotNav", key: "useDotNav" },
+            { label: "Use first and last", value: "useFirstAndLast", key: "useFirstAndLast" },
+            { label: "Use text nav", value: "useTextNav", key: "useTextNav" },
+        ],
+        []
+    );
 
     const [renderControls, { controls }] = useDynamicForm([
         {
@@ -60,25 +70,10 @@ const PaginationPage: React.FC = (): React.ReactElement<void> => {
                     value: 4,
                 },
                 {
-                    key: "useDotNav",
-                    label: "Use dot nav",
-                    order: 70,
-                    controlType: "Checkbox",
-                    value: false,
-                },
-                {
-                    key: "useFirstAndLast",
-                    label: "Use first and last",
-                    order: 80,
-                    controlType: "Checkbox",
-                    value: false,
-                },
-                {
-                    key: "useTextNav",
-                    label: "Use text nav",
-                    order: 90,
-                    controlType: "Checkbox",
-                    value: false,
+                    label: "Configurable options",
+                    key: "checkboxes",
+                    controlType: "Option",
+                    options: checkboxControls,
                 },
             ],
         },
@@ -102,9 +97,9 @@ const PaginationPage: React.FC = (): React.ReactElement<void> => {
                         pagingLength={controls.pagingLength}
                         previousText={controls.previousText}
                         size={controls.size}
-                        useDotNav={controls.useDotNav}
-                        useFirstAndLast={controls.useFirstAndLast}
-                        useTextNav={controls.useTextNav}
+                        useDotNav={checkDynamicFormSelectedKey("useDotNav", controls)}
+                        useFirstAndLast={checkDynamicFormSelectedKey("useFirstAndLast", controls)}
+                        useTextNav={checkDynamicFormSelectedKey("useTextNav", controls)}
                         value={paging}
                         onChange={(value: number) => setPaging(value)}
                     />

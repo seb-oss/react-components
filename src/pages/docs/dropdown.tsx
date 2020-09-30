@@ -1,7 +1,8 @@
 import React from "react";
 import Docs from "components/Docs";
 import { Dropdown, DropdownItem } from "@sebgroup/react-components/Dropdown/Dropdown";
-import { useDynamicForm } from "hooks/useDynamicForm";
+import { DynamicFormOption, useDynamicForm } from "hooks/useDynamicForm";
+import { checkDynamicFormSelectedKey } from "utils/helpers";
 
 const DropdownPage: React.FC = (): React.ReactElement<void> => {
     const list: Array<DropdownItem> = React.useMemo(
@@ -17,54 +18,24 @@ const DropdownPage: React.FC = (): React.ReactElement<void> => {
         []
     );
 
+    const checkboxControls: Array<DynamicFormOption> = React.useMemo(
+        () => [
+            { label: "Multi", value: "multi", key: "multi" },
+            { label: "Disabled", value: "disabled", key: "disabled" },
+            { label: "More", value: "more", key: "more" },
+            { label: "Native", value: "native", key: "native" },
+            { label: "Searchable", value: "searchable", key: "searchable" },
+            { label: "Clearable", value: "clearable", key: "clearable" },
+        ],
+        []
+    );
+
     const [dropDownList1Selected, setDropdownList1Selected] = React.useState<Array<DropdownItem>>(null);
 
     const [renderControls, { controls }] = useDynamicForm([
         {
             key: "controls",
             items: [
-                {
-                    key: "multi",
-                    label: "Multi",
-                    order: 40,
-                    controlType: "Checkbox",
-                    value: false,
-                },
-                {
-                    key: "disabled",
-                    label: "Disable",
-                    order: 30,
-                    controlType: "Checkbox",
-                    value: false,
-                },
-                {
-                    key: "more",
-                    label: "More",
-                    order: 60,
-                    controlType: "Checkbox",
-                    value: false,
-                },
-                {
-                    key: "native",
-                    label: "Native",
-                    order: 20,
-                    controlType: "Checkbox",
-                    value: false,
-                },
-                {
-                    key: "searchable",
-                    label: "Searchable",
-                    order: 0,
-                    controlType: "Checkbox",
-                    value: "Label",
-                },
-                {
-                    key: "clearable",
-                    label: "Clearable",
-                    order: 70,
-                    controlType: "Checkbox",
-                    value: "",
-                },
                 {
                     key: "error",
                     label: "Error",
@@ -78,6 +49,12 @@ const DropdownPage: React.FC = (): React.ReactElement<void> => {
                     order: 10,
                     controlType: "Text",
                     value: "select",
+                },
+                {
+                    label: "Configurable options",
+                    key: "checkboxes",
+                    controlType: "Option",
+                    options: checkboxControls,
                 },
             ],
         },
@@ -100,6 +77,12 @@ const DropdownPage: React.FC = (): React.ReactElement<void> => {
                             list={list}
                             selectedValue={dropDownList1Selected}
                             onChange={(value: Array<DropdownItem>) => setDropdownList1Selected(value)}
+                            multi={checkDynamicFormSelectedKey("multi", controls)}
+                            disabled={checkDynamicFormSelectedKey("disabled", controls)}
+                            more={checkDynamicFormSelectedKey("more", controls)}
+                            native={checkDynamicFormSelectedKey("native", controls)}
+                            searchable={checkDynamicFormSelectedKey("searchable", controls)}
+                            clearable={checkDynamicFormSelectedKey("clearable", controls)}
                             {...controls}
                         />
                     </div>

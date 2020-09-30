@@ -2,10 +2,21 @@ import React from "react";
 import Docs from "components/Docs";
 import { Carousel, CarouselItemProps } from "../../../lib/src/Carousel";
 import { CarouselItem } from "../../../lib/src/Carousel/CarouselItem";
-import { useDynamicForm } from "hooks/useDynamicForm";
+import { DynamicFormOption, useDynamicForm } from "hooks/useDynamicForm";
+import { checkDynamicFormSelectedKey } from "utils/helpers";
 const images = [require("../../assets/images/cat-pet-animal-1.jpeg"), require("../../assets/images/cat-pet-animal-2.jpg"), require("../../assets/images/cat-pet-animal-3.jpg")];
 
 const CarouselPage: React.FC = (): React.ReactElement<void> => {
+    const checkboxControls: Array<DynamicFormOption> = React.useMemo(
+        () => [
+            { label: "Infinite", value: "infinite", key: "infinite" },
+            { label: "Auto play", value: "autoPlay", key: "autoPlay" },
+            { label: "Show indicators", value: "showIndicators", key: "showIndicators" },
+            { label: "Coming next", value: "comingNext", key: "comingNext" },
+        ],
+        []
+    );
+
     const [renderControls, { controls }] = useDynamicForm([
         {
             key: "controls",
@@ -32,32 +43,10 @@ const CarouselPage: React.FC = (): React.ReactElement<void> => {
                     value: 3000,
                 },
                 {
-                    key: "infinite",
-                    label: "Infinite",
-                    order: 40,
-                    controlType: "Checkbox",
-                    value: false,
-                },
-                {
-                    key: "autoPlay",
-                    label: "Auto play",
-                    order: 50,
-                    controlType: "Checkbox",
-                    value: false,
-                },
-                {
-                    key: "showIndicators",
-                    label: "Show indicators",
-                    order: 60,
-                    controlType: "Checkbox",
-                    value: false,
-                },
-                {
-                    key: "comingNext",
-                    label: "Coming next",
-                    order: 70,
-                    controlType: "Checkbox",
-                    value: false,
+                    label: "Configurable options",
+                    key: "checkboxes",
+                    controlType: "Option",
+                    options: checkboxControls,
                 },
             ],
         },
@@ -71,17 +60,17 @@ const CarouselPage: React.FC = (): React.ReactElement<void> => {
         () => [
             {
                 transitionDuration: controls.transitionDuration,
-                comingNext: controls.comingNext,
+                comingNext: checkDynamicFormSelectedKey("comingNext", controls),
                 translateX: controls.translateX,
             },
             {
                 transitionDuration: controls.transitionDuration,
-                comingNext: controls.comingNext,
+                comingNext: checkDynamicFormSelectedKey("comingNext", controls),
                 translateX: controls.translateX,
             },
             {
                 transitionDuration: controls.transitionDuration,
-                comingNext: controls.comingNext,
+                comingNext: checkDynamicFormSelectedKey("comingNext", controls),
                 translateX: controls.translateX,
             },
         ],
@@ -102,7 +91,12 @@ const CarouselPage: React.FC = (): React.ReactElement<void> => {
             importedFiles={importedFiles}
             example={
                 <div className="w-100 d-flex justify-content-center">
-                    <Carousel showIndicators={controls.showIndicators} autoplay={controls.autoPlay} autoplaySpeed={controls.autoPlaySpeed} infinite={controls.infinite}>
+                    <Carousel
+                        showIndicators={checkDynamicFormSelectedKey("showIndicators", controls)}
+                        autoplay={checkDynamicFormSelectedKey("autoPlay", controls)}
+                        autoplaySpeed={checkDynamicFormSelectedKey("autoPlaySpeed", controls)}
+                        infinite={checkDynamicFormSelectedKey("infinite", controls)}
+                    >
                         {renderCarouselItem}
                     </Carousel>
                 </div>

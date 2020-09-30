@@ -1,10 +1,20 @@
 import React from "react";
 import Docs from "components/Docs";
 import { ButtonGroup } from "../../../lib/src/ButtonGroup";
-import { useDynamicForm } from "hooks/useDynamicForm";
+import { DynamicFormOption, useDynamicForm } from "hooks/useDynamicForm";
 import { Button } from "@sebgroup/react-components/Button";
+import { checkDynamicFormSelectedKey } from "utils/helpers";
 
 const ButtonGroupPage: React.FC = (): React.ReactElement<void> => {
+    const checkboxControls: Array<DynamicFormOption> = React.useMemo(
+        () => [
+            { label: "Vertical", value: "vertical", key: "vertical" },
+            { label: "Disabled", value: "disabled", key: "disabled" },
+            { label: "Button toolbar", value: "toolbar", key: "toolbar" },
+        ],
+        []
+    );
+
     const [renderControls, { controls }] = useDynamicForm([
         {
             key: "controls",
@@ -17,25 +27,10 @@ const ButtonGroupPage: React.FC = (): React.ReactElement<void> => {
                     value: "Click me!",
                 },
                 {
-                    key: "vertical",
-                    label: "Vertical",
-                    order: 20,
-                    controlType: "Checkbox",
-                    value: false,
-                },
-                {
-                    key: "disabled",
-                    label: "Disabled",
-                    order: 40,
-                    controlType: "Checkbox",
-                    value: false,
-                },
-                {
-                    key: "toolbar",
-                    label: "Button toolbar",
-                    order: 50,
-                    controlType: "Checkbox",
-                    value: false,
+                    label: "Configurable options",
+                    key: "checkboxes",
+                    controlType: "Option",
+                    options: checkboxControls,
                 },
                 {
                     key: "size",
@@ -58,9 +53,9 @@ const ButtonGroupPage: React.FC = (): React.ReactElement<void> => {
 
     const renderButton: React.ReactNode = React.useMemo(() => {
         return (
-            <ButtonGroup size={controls?.size?.value} vertical={controls?.vertical} role="group">
+            <ButtonGroup size={controls?.size?.value} vertical={checkDynamicFormSelectedKey("vertical", controls)} role="group">
                 {[...new Array(3)].map((item: undefined, index: number) => (
-                    <Button key={`button-${index}`} disabled={controls.disabled}>
+                    <Button key={`button-${index}`} disabled={checkDynamicFormSelectedKey("disabled", controls)}>
                         {controls.buttonLabel}
                     </Button>
                 ))}
@@ -74,7 +69,7 @@ const ButtonGroupPage: React.FC = (): React.ReactElement<void> => {
             importedFiles={importedFiles}
             example={
                 <div className="w-100 d-flex justify-content-center">
-                    {controls?.toolbar ? (
+                    {checkDynamicFormSelectedKey("toolbar", controls) ? (
                         <div className="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
                             {[...new Array(2)].map((toolBar: undefined, index: number) => (
                                 <div className="m-2" key={`toolbar-${index}`}>
