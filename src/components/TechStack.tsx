@@ -16,7 +16,7 @@ export const TechStack: React.FC = React.memo(() => {
             <div className="col-md-4 col-12">
                 <div className="img">
                     <a href="https://reactjs.org/" target="_blank" rel="noreferrer noopener nofollow">
-                        <img className="img-fluid" src="/angular.png" alt="Angular" />
+                        <img className="img-fluid" src="/react.png" alt="React" />
                     </a>
                 </div>
                 <h3>React</h3>
