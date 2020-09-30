@@ -115,7 +115,7 @@ $accordion-min-height: 48px;
         }
         &.deg-180 {
             .header-wrapper > svg:last-of-type:not(:first-of-type) {
-                transform: rotate(-18deg0);
+                transform: rotate(-180deg);
             }
         }
         &.deg-180-counter {
