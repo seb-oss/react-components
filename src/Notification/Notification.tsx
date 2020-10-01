@@ -77,7 +77,7 @@ export class Notification extends React.Component<NotificationProps> {
                 <div className={`content-wrapper` + (this.props.onClick ? " clickable" : "")} onClick={this.props.onClick}>
                     {this.props.title && style === "style-slide-in" && <div className="notification-title">{this.props.title}</div>}
                     {this.props.message && <div className="notification-message">{this.props.message}</div>}
-                    {this.props.children && this.props.children}
+                    {this.props.children}
                     {style === "style-slide-in" && this.props.actions && this.props.actions.length && this.props.actions.length < 3 && (
                         <div className={"actions-wrapper" + (this.props.actions.length === 2 ? " partitioned" : "")}>
                             {this.props.actions.map((item: NotificationAction, i: number) => (
