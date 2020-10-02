@@ -105,11 +105,6 @@
         "filePath": "./src/RadioButton/index.ts"
     },
     {
-        "name": "RadioGroup",
-        "path": "/docs/radiogroup",
-        "filePath": "./src/RadioGroup/index.ts"
-    },
-    {
         "name": "Rating",
         "path": "/docs/rating",
         "filePath": "./src/Rating/index.ts"

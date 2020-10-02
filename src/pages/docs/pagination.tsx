@@ -1,7 +1,7 @@
 import React from "react";
 import Docs from "components/Docs";
 import { Pagination } from "@sebgroup/react-components/Pagination/Pagination";
-import { useDynamicForm } from "hooks/useDynamicForm";
+import { DynamicFormOption, useDynamicForm } from "hooks/useDynamicForm";
 import { checkDynamicFormSelectedKey } from "utils/helpers";
 
 const PaginationPage: React.FC = (): React.ReactElement<void> => {
