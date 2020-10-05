@@ -1,7 +1,7 @@
 {
 	"name": "@sebgroup/react-components",
 	"version": "0.0.0-semantically-released",
-	"description": "A set of React components based on SEB design",
+	"description": "A set of React components based on SEB design library guidelines for mobile and web React applications",
 	"license": "Apache-2.0",
 	"keywords": [
 		"react",

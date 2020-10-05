@@ -10,6 +10,7 @@ import AccessibilityIllustration from "../../static/illustrations/accessibility.
 import AdjustmentsIllustration from "../../static/illustrations/adjustments.svg";
 import DesignTeamIllustration from "../../static/illustrations/design-team.svg";
 import "../styles/home.scss";
+import { getCommonMetaTag, initMetaConfiguration } from "utils/meta.util";
 
 const designer: GithubContributor = {
     login: "boonying",
@@ -20,6 +21,7 @@ const designer: GithubContributor = {
 
 export default function Home() {
     const [contributors, setContributors] = React.useState<GithubContributor[]>([]);
+    const commonMetaTags: Array<MetaTag> = React.useMemo(() => getCommonMetaTag(), []);
 
     React.useEffect(() => {
         httpGet<GithubContributor[]>("https://api.github.com/repos/sebgroup/ng-components/contributors").then((response) => {
@@ -27,12 +29,16 @@ export default function Home() {
                 setContributors(response.data);
             }
         });
+        initMetaConfiguration();
     }, []);
 
     return (
         <div>
             <Helmet>
                 <title>SEB React Components</title>
+                {commonMetaTags.map((item: MetaTag, index: number) =>
+                    item.property ? <meta key={index} property={item.property} content={item.content} /> : <meta key={index} name={item.name} content={item.content} />
+                )}
             </Helmet>
             <Navbar />
             <main>

@@ -15,7 +15,7 @@ Type: Form Component
 ```
 
 ## Element Information 
-This Angular component is based on SEB Bootstrap style. Supports customization and configurations. The module name of this component is `Tabs` and the selector is `<Tabs/>`.
+This React component is based on SEB Bootstrap style. Supports customization and configurations. The module name of this component is `Tabs` and the selector is `<Tabs/>`.
 
 ## Basic use
 ```html
