@@ -177,15 +177,11 @@ const TablePage: React.FC = (): React.ReactElement<void> => {
                         primaryActionButton={enableActionButton ? primaryButton : null}
                         actionLinks={enableActionLinks ? actionLinks : null}
                         filterProps={enableFilter ? filterProps : null}
-                        sortProps={
-                            enableSorting
-                                ? {
-                                      onAfterSorting: (rows: Array<TableRow>, sortByColumn: TableHeader) => {
-                                          setPagingSize(rows.length);
-                                      },
-                                  }
-                                : null
-                        }
+                        sortProps={{
+                            onAfterSorting: (rows: Array<TableRow>, sortByColumn: TableHeader) => {
+                                setPagingSize(rows.length);
+                            },
+                        }}
                         onRowSelected={enableRowSelection ? (rows: Array<TableRow>) => {} : null}
                         onRowExpanded={enableSubRows ? (rows: Array<TableRow>) => {} : null}
                         footer={enablePagination ? <Pagination value={paginationValue} onChange={setPaginationValue} size={pagingSize} useFirstAndLast={true} /> : null}
