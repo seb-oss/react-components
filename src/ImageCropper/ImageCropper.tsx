@@ -136,386 +136,479 @@ interface ImageCropperProps {
     alwaysAlignedCropper?: boolean;
 }
 
-interface ImageCropperState {
-    cropResult: string;
-    isLoading: boolean;
-    isImageLoaded: boolean;
-    src: string;
-    toggle: boolean;
-    cropBoxData?: CropBoxData;
-    alignCropper: boolean;
-}
+export const ImageCropper: React.FunctionComponent<ImageCropperProps> = React.memo(
+    (props: ImageCropperProps): React.ReactElement<void> => {
+        let cropper: Cropper;
+        let image: React.RefObject<HTMLImageElement> = React.createRef();
 
-export class ImageCropper extends React.Component<ImageCropperProps, ImageCropperState> {
-    private cropper: Cropper;
-    private image: HTMLImageElement;
-    constructor(props: ImageCropperProps) {
-        super(props);
-        this.handleUploadImage = this.handleUploadImage.bind(this);
-        this.onCropClick = this.onCropClick.bind(this);
-        this.dismissCropper = this.dismissCropper.bind(this);
+        // states
+        const [isLoading, setIsLoading] = React.useState<boolean>(false);
+        const [isImageLoaded, setIsImageLoaded] = React.useState<boolean>(false);
+        const [toggle, setToggle] = React.useState<boolean>(false);
+        const [cropBoxData, setCropBoxData] = React.useState<CropBoxData>(null);
+        const [src, setSrc] = React.useState<string>("");
+        const [cropResult, setCropResult] = React.useState<string>("");
 
-        this.state = {
-            isLoading: false,
-            isImageLoaded: false,
-            alignCropper: props.alwaysAlignedCropper !== undefined ? props.alwaysAlignedCropper : true,
-            toggle: props.toggle || false,
-            src: props.previewSrc,
-            cropBoxData: props.cropBoxData && this.props.cropBoxData,
-            cropResult: props.previewSrc ? this.props.previewSrc : "",
-        };
-    }
+        const alignCropper: boolean = React.useMemo(() => (props.alwaysAlignedCropper !== undefined ? props.alwaysAlignedCropper : true), [props.alwaysAlignedCropper]);
 
-    /**
-     *
-     * @param e : cropmove and end canvas evenht
-     * performs corpper box calculations, align box position
-     */
-    alignCropBox(e) {
-        if (e.target && e.target.cropper) {
-            const cropper: any = e.target.cropper;
-            const cropBoxData: any = cropper.getCropBoxData();
-            const canvasData: any & { naturalWidth: number; naturalHeight: number } = { ...cropper.getCanvasData() };
-            if (cropBoxData.left < canvasData.left) {
-                const newCropBoxData = { ...this.state.cropBoxData, left: canvasData.left + 1 };
-                this.setState({ cropBoxData: newCropBoxData });
-            } else if (cropBoxData.left + cropBoxData.width > canvasData.left + canvasData.width) {
-                const newCropBoxData = { ...this.state.cropBoxData, left: canvasData.left + canvasData.width - cropBoxData.width - 1 };
-                this.setState({ cropBoxData: newCropBoxData });
+        /**
+         * Callbacks and events---------------------------------------------------------
+         */
+        const stopProp = React.useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+            e.stopPropagation();
+        }, []);
+
+        const dismissCropper = React.useCallback(() => {
+            setToggle(false);
+        }, []);
+
+        // Cropper properties updates===============================================
+        /**
+         * set drag mode
+         * @param mode
+         */
+        const setDragMode = React.useCallback((mode: Cropper.DragMode): Cropper => {
+            return cropper.setDragMode(mode);
+        }, []);
+
+        const setAspectRatio = React.useCallback(
+            (aspectRatio: number): Cropper => {
+                return cropper.setAspectRatio(aspectRatio);
+            },
+            [cropper]
+        );
+
+        /**
+         * get canvas equivalent of the cropped image
+         */
+        const getCroppedCanvas = React.useCallback(
+            (options: Cropper.GetCroppedCanvasOptions): HTMLCanvasElement => {
+                return cropper.getCroppedCanvas(options);
+            },
+            [cropper]
+        );
+
+        const getCropBoxData = React.useCallback((): Cropper.CropBoxData => {
+            return cropper.getCropBoxData();
+        }, [cropper]);
+
+        const setCanvasData = React.useCallback(
+            (data: Cropper.SetCanvasDataOptions): Cropper => {
+                return cropper.setCanvasData(data);
+            },
+            [cropper]
+        );
+
+        const getCanvasData = React.useCallback((): Cropper.CanvasData => {
+            return cropper.getCanvasData();
+        }, [cropper]);
+
+        const getImageData = React.useCallback((): Cropper.ImageData => {
+            return cropper.getImageData();
+        }, [cropper]);
+
+        const getContainerData = React.useCallback((): Cropper.ContainerData => {
+            return cropper.getContainerData();
+        }, [cropper]);
+
+        const setData = React.useCallback(
+            (data: Cropper.SetDataOptions): Cropper => {
+                return cropper.setData(data);
+            },
+            [cropper]
+        );
+
+        const getData = React.useCallback((rounded: boolean): Cropper.Data => {
+            return cropper.getData(rounded);
+        }, []);
+
+        const cropImage = React.useCallback((localImage: string, callBack: () => void) => {
+            if (props.onCrop) {
+                props.onCrop(localImage);
             }
-            if (cropBoxData.top + cropBoxData.height > canvasData.top + canvasData.height) {
-                const offset = cropBoxData.top + cropBoxData.height - (canvasData.top + canvasData.height);
-                const newCropBoxData = { ...this.state.cropBoxData, top: cropBoxData.top - offset, left: cropBoxData.left };
-                this.setState({ cropBoxData: newCropBoxData });
-            } else if (canvasData.top > cropBoxData.top) {
-                const newCropBoxData = { ...this.state.cropBoxData, top: canvasData.top, left: cropBoxData.left };
-                this.setState({ cropBoxData: newCropBoxData });
-            }
-        }
-    }
 
-    componentDidMount() {
-        const options: OptionProps = Object.keys(this.props.cropperConfigs || {})
-            .filter((propKey) => optionProps.indexOf(propKey) !== -1)
-            .reduce((prevOptions, propKey: keyof OptionProps) => ({ ...prevOptions, [propKey]: this.props.cropperConfigs[propKey] }), {});
-        const OptionalEvents = {
-            cropend: this.alignCropBox.bind(this),
-            cropmove: this.alignCropBox.bind(this),
-        };
-        const updatedOptions = this.state.alignCropper ? { ...options, ...OptionalEvents } : options;
-        const cropper = Cropper ? Cropper : require("cropperjs");
-        this.cropper = new cropper(this.image, updatedOptions);
-
-        if (this.props.previewSrc) {
-            this.cropper.reset().clear().replace(this.props.previewSrc);
-        }
-    }
-
-    handleUploadImage(e: any, cropResult?: string) {
-        e.preventDefault();
-        if (cropResult) {
-            this.setState({ src: cropResult.toString(), toggle: true });
-        } else {
-            let files;
-            if (e.dataTransfer) {
-                files = e.dataTransfer.files;
-            } else if (e.target) {
-                files = e.target.files;
-            }
-
-            const file = files[0];
-            // file type is only image.
-            if (/^image\//.test(file.type)) {
-                const reader = new FileReader();
-                reader.onload = () => {
-                    const result = reader.result as string;
-                    this.setState({ src: result, toggle: true, isLoading: true }, () => {
-                        setTimeout(() => {
-                            this.onResfreshCropper(result, () => {
-                                this.setState({ isLoading: false });
-                            });
-                        }, 100);
-                    });
-                };
-                reader.readAsDataURL(file);
-            } else {
-                throw new Error("You could only upload images.");
-            }
-        }
-    }
-
-    stopProp(e: React.MouseEvent<HTMLDivElement>) {
-        e.stopPropagation();
-    }
-
-    dismissCropper() {
-        this.setState({ toggle: false });
-    }
-
-    setDragMode(mode: Cropper.DragMode): Cropper {
-        return this.cropper.setDragMode(mode);
-    }
-
-    setAspectRatio(aspectRatio: number): Cropper {
-        return this.cropper.setAspectRatio(aspectRatio);
-    }
-
-    getCroppedCanvas(options: Cropper.GetCroppedCanvasOptions): HTMLCanvasElement {
-        return this.cropper.getCroppedCanvas(options);
-    }
-
-    setCropBoxData(data: Cropper.SetCropBoxDataOptions): Cropper {
-        return this.cropper.setCropBoxData(data);
-    }
-
-    getCropBoxData(): Cropper.CropBoxData {
-        return this.cropper.getCropBoxData();
-    }
-
-    setCanvasData(data: Cropper.SetCanvasDataOptions): Cropper {
-        return this.cropper.setCanvasData(data);
-    }
-
-    getCanvasData(): Cropper.CanvasData {
-        return this.cropper.getCanvasData();
-    }
-
-    getImageData(): Cropper.ImageData {
-        return this.cropper.getImageData();
-    }
-
-    getContainerData(): Cropper.ContainerData {
-        return this.cropper.getContainerData();
-    }
-
-    setData(data: Cropper.SetDataOptions): Cropper {
-        return this.cropper.setData(data);
-    }
-
-    getData(rounded: boolean): Cropper.Data {
-        return this.cropper.getData(rounded);
-    }
-
-    crop(image: string, callBack: () => void) {
-        if (this.props.onCrop) {
-            this.props.onCrop(image);
-        }
-        this.setState({ cropResult: image }, () => {
+            setCropResult(localImage);
             callBack();
-        });
-    }
+        }, []);
 
-    onResfreshCropper(image: string, callBack: () => void) {
-        this.cropper.reset().clear().replace(image);
+        const onResfreshCropper = React.useCallback((localImage: string, callBack: () => void) => {
+            cropper.reset().clear().replace(localImage);
 
-        return callBack();
-    }
+            return callBack();
+        }, []);
 
-    onCropClick(e: React.MouseEvent<HTMLButtonElement>): Cropper {
-        if (typeof this.cropper.getCroppedCanvas() === "undefined") {
-            return;
-        }
-        this.setState({ cropResult: "", isLoading: true }, () => {
-            setTimeout(() => {
-                this.crop(this.cropper.getCroppedCanvas().toDataURL(), () => {
-                    this.setState({ isLoading: false });
-                    this.dismissCropper();
-                });
-            }, 100);
-        });
-
-        e.preventDefault();
-    }
-
-    onReset(): Cropper {
-        this.setState({ cropResult: "", src: "" });
-        if (this.props.onCrop) {
-            this.props.onCrop(this.state.cropResult);
-        }
-
-        return this.cropper.reset();
-    }
-
-    move(offsetX: number, offsetY: number): Cropper {
-        return this.cropper.move(offsetX, offsetY);
-    }
-
-    onMoveTo(x: number, y?: number): Cropper {
-        return this.cropper.moveTo(x, y);
-    }
-
-    zoom(ratio: number): Cropper {
-        return this.cropper.zoom(ratio);
-    }
-
-    onZoomTo(ratio: number): Cropper {
-        return this.cropper.zoomTo(ratio);
-    }
-
-    rotate(degree: number): Cropper {
-        return this.cropper.rotate(degree);
-    }
-
-    onRotateTo(degree: number): Cropper {
-        return this.cropper.rotateTo(degree);
-    }
-
-    onEnable(): Cropper {
-        return this.cropper.enable();
-    }
-
-    disable(): Cropper {
-        return this.cropper.disable();
-    }
-
-    clear(): Cropper {
-        return this.cropper.clear();
-    }
-
-    replace(url: string, onlyColorChanged: boolean): Cropper {
-        return this.cropper.replace(url, onlyColorChanged);
-    }
-
-    scale(scaleX: number, scaleY: number): Cropper {
-        return this.cropper.scale(scaleX, scaleY);
-    }
-
-    setXScale(scaleX: number): Cropper {
-        return this.cropper.scaleX(scaleX);
-    }
-
-    setYScale(scaleY: number): Cropper {
-        return this.cropper.scaleY(scaleY);
-    }
-
-    componentDidUpdate(prevProps: ImageCropperProps, prevState: ImageCropperState) {
-        if (prevProps.previewSrc !== this.props.previewSrc) {
-            this.setState({ cropResult: this.props.previewSrc.trim() });
-            this.cropper.reset().clear().replace(this.props.previewSrc);
-        }
-        if (prevProps.alwaysAlignedCropper !== this.props.alwaysAlignedCropper) {
-            this.setState({ alignCropper: this.props.alwaysAlignedCropper });
-        }
-        if (prevProps.cropperConfigs.aspectRatio !== this.props.cropperConfigs.aspectRatio) {
-            this.setAspectRatio(this.props.cropperConfigs.aspectRatio);
-        }
-        if (prevProps.cropperConfigs.data !== this.props.cropperConfigs.data) {
-            this.setData(this.props.cropperConfigs.data);
-        }
-        if (prevProps.cropperConfigs.dragMode !== this.props.cropperConfigs.dragMode) {
-            this.setDragMode(this.props.cropperConfigs.dragMode);
-        }
-        if (prevProps.canvasData !== this.props.canvasData) {
-            this.setCanvasData(this.props.canvasData);
-        }
-        if (prevProps.cropBoxData !== this.props.cropBoxData) {
-            this.setCropBoxData(this.props.cropBoxData);
-        }
-        if (prevState.cropBoxData !== this.state.cropBoxData && this.state.alignCropper) {
-            this.setCropBoxData(this.state.cropBoxData);
-        }
-        if (prevProps.moveTo !== this.props.moveTo) {
-            if (this.props.moveTo.length > 1) {
-                this.onMoveTo(this.props.moveTo[0], this.props.moveTo[1]);
-            } else {
-                this.onMoveTo(this.props.moveTo[0]);
-            }
-        }
-        if (prevProps.zoomTo !== this.props.zoomTo) {
-            this.onZoomTo(this.props.zoomTo);
-        }
-        if (prevProps.rotateTo !== this.props.rotateTo) {
-            this.onRotateTo(this.props.rotateTo);
-        }
-        if (prevProps.scaleX !== this.props.scaleX) {
-            this.setXScale(this.props.scaleX);
-        }
-        if (prevProps.scaleY !== this.props.scaleY) {
-            this.setYScale(this.props.scaleY);
-        }
-        if (prevProps.enable !== this.props.enable) {
-            if (this.props.enable) {
-                this.onEnable();
-            } else {
-                this.disable();
-            }
-        }
-        if (prevProps.reset !== this.props.reset) {
-            if (this.props.reset) {
-                this.onReset();
-            }
-        }
-        if (prevProps.toggle !== this.props.toggle && this.props.toggle === false) {
-            this.dismissCropper();
-        }
-        if (prevProps.cropperConfigs !== this.props.cropperConfigs) {
-            Object.keys(this.props.cropperConfigs).forEach((propKey: keyof OptionProps) => {
-                let isDifferentVal = prevProps.cropperConfigs[propKey] !== this.props.cropperConfigs[propKey];
-                const isUnchangeableProps = unchangeableProps.indexOf(propKey) !== -1;
-
-                if (typeof prevProps.cropperConfigs[propKey] === "function" && typeof this.props.cropperConfigs[propKey] === "function") {
-                    isDifferentVal = prevProps.cropperConfigs[propKey].toString() !== this.props.cropperConfigs[propKey].toString();
+        const onCropClick = React.useCallback(
+            (e: React.MouseEvent<HTMLButtonElement>): Cropper => {
+                if (typeof cropper.getCroppedCanvas() === "undefined") {
+                    return;
                 }
 
-                if (isDifferentVal && isUnchangeableProps) {
+                setIsLoading(true);
+                cropImage("", () => {
+                    setTimeout(() => {
+                        cropImage(cropper.getCroppedCanvas().toDataURL(), () => {
+                            setIsLoading(false);
+                            dismissCropper();
+                        });
+                    });
+                });
+
+                e.preventDefault();
+            },
+            [cropImage, cropper]
+        );
+
+        const onReset = React.useCallback((): Cropper => {
+            setCropResult("");
+            setSrc("");
+            if (props.onCrop) {
+                props.onCrop(cropResult);
+            }
+
+            return cropper.reset();
+        }, [cropper]);
+
+        const move = React.useCallback(
+            (offsetX: number, offsetY: number): Cropper => {
+                return cropper.move(offsetX, offsetY);
+            },
+            [cropper]
+        );
+
+        const onMoveTo = React.useCallback(
+            (x: number, y?: number): Cropper => {
+                return cropper.moveTo(x, y);
+            },
+            [cropper]
+        );
+
+        const zoom = React.useCallback(
+            (ratio: number): Cropper => {
+                return cropper.zoom(ratio);
+            },
+            [cropper]
+        );
+
+        const onZoomTo = React.useCallback(
+            (ratio: number): Cropper => {
+                return cropper.zoomTo(ratio);
+            },
+            [cropper]
+        );
+
+        const rotate = React.useCallback(
+            (degree: number): Cropper => {
+                return cropper.rotate(degree);
+            },
+            [cropper]
+        );
+
+        const onRotateTo = React.useCallback((degree: number): Cropper => {
+            return cropper.rotateTo(degree);
+        }, []);
+
+        const onEnable = React.useCallback((): Cropper => {
+            return cropper.enable();
+        }, []);
+
+        const disable = React.useCallback((): Cropper => {
+            return cropper.disable();
+        }, [cropper]);
+
+        const clear = React.useCallback((): Cropper => {
+            return cropper.clear();
+        }, []);
+
+        const replace = React.useCallback((url: string, onlyColorChanged: boolean): Cropper => {
+            return cropper.replace(url, onlyColorChanged);
+        }, []);
+
+        const scale = React.useCallback(
+            (scaleX: number, scaleY: number): Cropper => {
+                return cropper.scale(scaleX, scaleY);
+            },
+            [cropper]
+        );
+
+        const setXScale = React.useCallback(
+            (scaleX: number): Cropper => {
+                return cropper.scaleX(scaleX);
+            },
+            [cropper]
+        );
+
+        const setYScale = React.useCallback(
+            (scaleY: number): Cropper => {
+                return cropper.scaleY(scaleY);
+            },
+            [cropper]
+        );
+
+        // custom callbacks/helpers ===============================================
+        /**
+         *
+         * @param e : cropmove and end canvas evenht
+         * performs corpper box calculations, align box position
+         */
+        const alignCropBox = React.useCallback(
+            (e) => {
+                if (e.target && e.target.cropper) {
+                    const cropper: Cropper = e.target.cropper;
+                    const localCropBoxData: CropBoxData = cropper.getCropBoxData();
+                    const canvasData: CanvasData = { ...cropper.getCanvasData() };
+                    if (localCropBoxData.left < canvasData.left) {
+                        const newCropBoxData = { ...localCropBoxData, left: canvasData.left + 1 };
+                        setCropBoxData(newCropBoxData);
+                    } else if (localCropBoxData.left + localCropBoxData.width > canvasData.left + canvasData.width) {
+                        const newCropBoxData = { ...localCropBoxData, left: canvasData.left + canvasData.width - localCropBoxData.width - 1 };
+                        setCropBoxData(newCropBoxData);
+                    }
+                    if (localCropBoxData.top + localCropBoxData.height > canvasData.top + canvasData.height) {
+                        const offset = localCropBoxData.top + localCropBoxData.height - (canvasData.top + canvasData.height);
+                        const newCropBoxData = { ...cropBoxData, top: localCropBoxData.top - offset, left: localCropBoxData.left };
+                        setCropBoxData(newCropBoxData);
+                    } else if (canvasData.top > localCropBoxData.top) {
+                        const newCropBoxData = { ...cropBoxData, top: canvasData.top, left: localCropBoxData.left };
+                        setCropBoxData(newCropBoxData);
+                    }
+                }
+            },
+            [cropBoxData]
+        );
+
+        // set image src and loader asycnronously
+        const setResultCallBack = React.useCallback((result: string, toggle: boolean, loading: boolean, callBack: () => void) => {
+            setSrc(result);
+            setToggle(toggle);
+            setIsLoading(loading);
+            callBack();
+        }, []);
+
+        // handle image upload or cropping
+        const handleUploadImage = React.useCallback(
+            (e: React.ChangeEvent<HTMLInputElement> & React.DragEvent<HTMLInputElement>, cropResult?: string) => {
+                e.preventDefault();
+                if (cropResult) {
+                    setSrc(cropResult.toString());
+                    setToggle(true);
+                } else {
+                    let files: FileList;
+                    if (e.dataTransfer) {
+                        files = e.dataTransfer.files;
+                    } else if (e.target) {
+                        files = e.target.files;
+                    }
+
+                    const file = files[0];
+                    // file type is only image.
+                    if (/^image\//.test(file.type)) {
+                        const reader = new FileReader();
+                        reader.onload = () => {
+                            const result = reader.result as string;
+                            setResultCallBack(result, true, true, () => {
+                                setTimeout(() => {
+                                    onResfreshCropper(result, () => {
+                                        setIsLoading(false);
+                                    });
+                                });
+                            });
+                        };
+                        reader.readAsDataURL(file);
+                    } else {
+                        throw new Error("You could only crop images.");
+                    }
+                }
+            },
+            [src]
+        );
+
+        /**
+         * Initialises cropperjs with options
+         */
+        React.useEffect(() => {
+            const options: OptionProps = Object.keys(props.cropperConfigs || {})
+                .filter((propKey) => optionProps.indexOf(propKey) !== -1)
+                .reduce((prevOptions, propKey: keyof OptionProps) => ({ ...prevOptions, [propKey]: props.cropperConfigs[propKey] }), {});
+            const OptionalEvents = {
+                cropend: alignCropBox,
+                cropmove: alignCropBox,
+            };
+            const updatedOptions = alignCropper ? { ...options, ...OptionalEvents } : options;
+            const newCropper = Cropper ? Cropper : require("cropperjs");
+            cropper = new newCropper(image?.current, updatedOptions);
+
+            if (props.previewSrc) {
+                cropper.reset().clear().replace(props.previewSrc);
+            }
+        }, []);
+
+        React.useEffect(() => {
+            setToggle(props.toggle || false);
+        }, [props.toggle]);
+
+        React.useEffect(() => {
+            if (props.cropBoxData) {
+                setCropBoxData(props.cropBoxData);
+            }
+        }, [props.cropBoxData]);
+
+        React.useEffect(() => {
+            setSrc(props.previewSrc || "");
+        }, [props.previewSrc]);
+
+        React.useEffect(() => {
+            if (props.previewSrc) {
+                setSrc(props.previewSrc?.trim());
+                cropper.reset().clear().replace(props.previewSrc);
+            }
+        }, [props.previewSrc]);
+
+        React.useEffect(() => {
+            if (props.cropperConfigs?.aspectRatio) {
+                setAspectRatio(props.cropperConfigs?.aspectRatio);
+            }
+        }, [props.cropperConfigs?.aspectRatio]);
+
+        React.useEffect(() => {
+            if (props.cropperConfigs?.data) {
+                setData(props.cropperConfigs?.data);
+            }
+        }, [props.cropperConfigs?.data]);
+
+        React.useEffect(() => {
+            if (props?.cropperConfigs?.dragMode) {
+                setDragMode(props.cropperConfigs?.dragMode);
+            }
+        }, [props.cropperConfigs?.dragMode]);
+
+        React.useEffect(() => {
+            if (props.canvasData) {
+                setCanvasData(props?.canvasData);
+            }
+        }, [props.canvasData]);
+
+        React.useEffect(() => {
+            if (props.cropBoxData) {
+                setCropBoxData(props?.cropBoxData);
+            }
+        }, [props.cropBoxData, alignCropper]);
+
+        React.useEffect(() => {
+            if (props.moveTo) {
+                if (props.moveTo.length > 1) {
+                    onMoveTo(props.moveTo[0], props.moveTo[1]);
+                } else {
+                    onMoveTo(props.moveTo[0]);
+                }
+            }
+        }, [props.moveTo]);
+
+        React.useEffect(() => {
+            if (props.zoomTo) {
+                onZoomTo(props.zoomTo);
+            }
+        }, [props.zoomTo]);
+
+        React.useEffect(() => {
+            if (props.rotateTo) {
+                onRotateTo(props.rotateTo);
+            }
+        }, [props.rotateTo]);
+
+        React.useEffect(() => {
+            if (props.scaleX) {
+                setXScale(props.scaleX);
+            }
+        }, [props.scaleX]);
+
+        React.useEffect(() => {
+            if (props.scaleX) {
+                setYScale(props.scaleY);
+            }
+        }, [props.scaleY]);
+
+        React.useEffect(() => {
+            if (props.enable) {
+                onEnable();
+            } else {
+                disable();
+            }
+        }, [props.enable]);
+
+        React.useEffect(() => {
+            if (props.reset) {
+                onReset();
+            }
+        }, [props.reset]);
+
+        React.useEffect(() => {
+            if (!props.toggle) {
+                dismissCropper();
+            }
+        }, [props.toggle]);
+
+        /**
+         * When the cropper is mounted, there are some properties that cropperjs doesn't allow dynamic changing,
+         *  restrict them there
+         */
+        React.useEffect(() => {
+            Object.keys(props.cropperConfigs).forEach((propKey: keyof OptionProps) => {
+                const isUnchangeableProps = unchangeableProps.indexOf(propKey) !== -1;
+                if (isUnchangeableProps && props[propKey]) {
                     throw new Error(`config: ${propKey} can't be change after rendering`);
                 }
             });
-        }
-    }
+        }, [props.cropperConfigs]);
 
-    render() {
         return (
             <React.Fragment>
-                <div className={"custom-cropper-dialogue" + (this.state.toggle ? " open-cropper-dialogue" : " close-cropper-dialogue")} id={this.props.id}>
+                <div className={"custom-cropper-dialogue" + (toggle ? " open-cropper-dialogue" : " close-cropper-dialogue")} id={props.id}>
                     <div className="cropper-dialogue-container">
-                        <div className={"cropper-dialogue " + (this.props.imageCropperClassName ? this.props.imageCropperClassName : "")} onClick={this.stopProp}>
+                        <div className={"cropper-dialogue " + (props.imageCropperClassName ? props.imageCropperClassName : "")} onClick={stopProp}>
                             <div className="custom-react-cropper">
-                                <Loader className="inner-loader" toggle={!this.state.isImageLoaded} fullscreen={false} />
+                                <Loader className="inner-loader" toggle={!isImageLoaded} fullscreen={false} />
                                 <img
-                                    crossOrigin={this.props.crossOrigin}
-                                    ref={(img) => {
-                                        this.image = img;
-                                    }}
-                                    src={this.state.src || "data:image/jpeg;base64,PHN2ZyKPC9zdmc+"}
-                                    alt={this.props.alt}
+                                    crossOrigin={props.crossOrigin}
+                                    ref={image}
+                                    src={src || "data:image/jpeg;base64,PHN2ZyKPC9zdmc+"}
+                                    alt={props.alt}
                                     style={{ opacity: 0, width: "100%" }}
                                     id="image"
-                                    onLoad={(e) => {
-                                        this.setState({ isImageLoaded: true });
+                                    onLoad={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+                                        setIsImageLoaded(true);
                                     }}
                                 />
                             </div>
 
                             <div className="cropper-dialogue-footer control-container d-flex flex-row">
                                 <div className="btn-delete">
-                                    {this.props.onCustomButtonClick && this.props.showCustomButton && (
-                                        <button type="button" className="btn btn-default custom-button" onClick={this.props.onCustomButtonClick}>
-                                            <span>{this.props.customButtonText || "Delete"}</span>
+                                    {props.onCustomButtonClick && props.showCustomButton && (
+                                        <button type="button" className="btn btn-default custom-button" onClick={props.onCustomButtonClick}>
+                                            <span>{props.customButtonText || "Delete"}</span>
                                         </button>
                                     )}
                                 </div>
                                 <div className="right-controls">
-                                    <button type="button" id="cancelBtn" className="btn btn-outline-secondary custom-button" onClick={this.dismissCropper}>
-                                        <span>{this.props.cancelText || "Dismiss"}</span>
+                                    <button type="button" id="cancelBtn" className="btn btn-outline-secondary custom-button" onClick={dismissCropper}>
+                                        <span>{props.cancelText || "Dismiss"}</span>
                                     </button>
-                                    <button type="button" id="cropBtn" className="btn btn-primary custom-button" onClick={this.onCropClick}>
-                                        <span>{this.props.cropButtonText || "Crop"}</span>
+                                    <button type="button" id="cropBtn" className="btn btn-primary custom-button" onClick={onCropClick}>
+                                        <span>{props.cropButtonText || "Crop"}</span>
                                     </button>
                                 </div>
                             </div>
                         </div>
-                        {<Loader toggle={this.state.isLoading} />}
+                        {<Loader toggle={isLoading} />}
                     </div>
                 </div>
                 <ImagePreview
-                    handleUploadImage={this.handleUploadImage}
-                    previewClassName={this.props.previewClassName}
-                    cropResult={this.state.cropResult}
-                    previewSrc={this.props.previewSrc}
-                    selectButtonText={this.props.selectButtonText}
+                    handleUploadImage={handleUploadImage}
+                    previewClassName={props.previewClassName}
+                    cropResult={cropResult}
+                    previewSrc={props.previewSrc}
+                    selectButtonText={props.selectButtonText}
                 />
             </React.Fragment>
         );
     }
-}
+);

@@ -4,43 +4,20 @@ import "./image-preview-style.scss";
 export interface ImagePreviewProps {
     cropResult?: string;
     previewSrc?: string;
-    handleUploadImage: (e: any, cropResult?: string) => void;
+    handleUploadImage: (e: React.ChangeEvent<HTMLInputElement> & React.DragEvent<HTMLInputElement>, cropResult?: string) => void;
     selectButtonText?: string;
     previewClassName?: string;
 }
-export interface ImagePreviewState {
-    cropDataResult: string;
-}
-export class ImagePreview extends React.Component<ImagePreviewProps, ImagePreviewState> {
-    fileInput: HTMLInputElement;
-    constructor(props: ImagePreviewProps) {
-        super(props);
-        this.state = {
-            cropDataResult: "",
-        };
-        this.onFileInputClick = this.onFileInputClick.bind(this);
-    }
 
-    componentDidMount() {
-        this.setState({ cropDataResult: this.props.previewSrc ? this.props.previewSrc : "" });
-    }
+export const ImagePreview: React.FunctionComponent<ImagePreviewProps> = (props: ImagePreviewProps): React.ReactElement<void> => {
+    let fileInput: React.RefObject<HTMLInputElement> = React.createRef();
 
-    componentDidUpdate(prevProps: ImagePreviewProps) {
-        if (prevProps.cropResult !== this.props.cropResult) {
-            this.setState({ cropDataResult: this.props.cropResult });
-        }
-    }
+    const [cropDataResult, setCropDataResult] = React.useState<string>(props.previewSrc || "");
 
-    onFileInputClick(e: React.MouseEvent<HTMLButtonElement>) {
-        const { previewSrc, handleUploadImage } = this.props;
-        if (previewSrc) {
-            handleUploadImage(e, previewSrc);
-        } else {
-            this.fileInput.click();
-        }
-    }
-
-    get defaultProfileSvg() {
+    /**
+     * Default image to show when there is no display
+     */
+    const defaultProfileSvg = React.useMemo(() => {
         return (
             <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 500 500" enableBackground="new 0 0 500 500;">
                 <rect className="st0" width="500" height="500" fill="#B2B3B3" />
@@ -60,34 +37,48 @@ export class ImagePreview extends React.Component<ImagePreviewProps, ImagePrevie
                 </g>
             </svg>
         );
-    }
+    }, []);
 
-    render() {
-        return (
-            <div className={"profile-image-container " + this.props.previewClassName}>
-                <div className="profile-image">
-                    {this.state.cropDataResult && <img src={this.state.cropDataResult} alt="cropped image" id="profile-image" />}
-                    {!this.state.cropDataResult && this.defaultProfileSvg}
-                </div>
-                <input
-                    ref={(file) => {
-                        this.fileInput = file;
-                    }}
-                    type="file"
-                    id="fileInput"
-                    name="profileImage"
-                    accept="image/*"
-                    onChange={this.props.handleUploadImage}
-                    onClick={(e: any) => {
-                        if (e.target && e.target.value) {
-                            e.target.value = null;
-                        }
-                    }}
-                />
-                <button type="button" className="btn btn-primary custom-button" onClick={this.onFileInputClick}>
-                    <span>{this.props.selectButtonText || "Select Image"}</span>
-                </button>
-            </div>
-        );
-    }
-}
+    /**
+     * handle file click or select file click
+     */
+    const onFileInputClick = React.useCallback(
+        (e: React.ChangeEvent<HTMLInputElement> & React.DragEvent<HTMLInputElement>) => {
+            const { previewSrc, handleUploadImage } = props;
+            if (previewSrc) {
+                handleUploadImage(e, previewSrc);
+            } else {
+                fileInput.current.click();
+            }
+        },
+        [fileInput]
+    );
+
+    React.useEffect(() => {
+        if (props.cropResult) {
+            setCropDataResult(props.cropResult);
+        }
+    }, [props.cropResult]);
+
+    return (
+        <div className={"profile-image-container " + props.previewClassName}>
+            <div className="profile-image">{cropDataResult ? <img src={cropDataResult} alt="cropped image" id="profile-image" /> : defaultProfileSvg}</div>
+            <input
+                ref={fileInput}
+                type="file"
+                id="fileInput"
+                name="profileImage"
+                accept="image/*"
+                onChange={props.handleUploadImage}
+                onClick={(e: React.MouseEvent<HTMLInputElement, MouseEvent>) => {
+                    if (e.target && (e.target as any).value) {
+                        e.target["value"] = null;
+                    }
+                }}
+            />
+            <button type="button" className="btn btn-primary custom-button" onClick={onFileInputClick}>
+                <span>{props.selectButtonText || "Select Image"}</span>
+            </button>
+        </div>
+    );
+};
