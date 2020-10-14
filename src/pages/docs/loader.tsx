@@ -85,10 +85,16 @@ const LoaderPage: React.FC = (): React.ReactElement<void> => {
                             {controls?.srText}
                         </Loader>
                     </div>
-
-                    <div className="result">
-                        <TextBoxGroup name="text-box-1" value={inlineText} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setInlineText(e.target.value)} rightIcon={<Loader toggle={true} />} />
-                    </div>
+                    {controls?.toggle && (
+                        <div className="result">
+                            <TextBoxGroup
+                                name="text-box-1"
+                                value={inlineText}
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setInlineText(e.target.value)}
+                                rightIcon={<Loader toggle={true} />}
+                            />
+                        </div>
+                    )}
                 </div>
             }
             code={code}
