@@ -4,66 +4,38 @@ import { Video } from "@sebgroup/react-components/Video";
 import { DynamicFormOption, DynamicFormSection, useDynamicForm } from "hooks/useDynamicForm";
 
 const VideoPage: React.FC = () => {
-    const defaultSrc: string = require("!file-loader!../../../static/videos/sample.mp4").default;
+    const defaultSrc: string = "https://www.youtube.com/embed/f19fctL72CY";
     const importString: string = require("!raw-loader!@sebgroup/react-components/Video/Video");
+    const referenceString: Array<string> = [require("!raw-loader!@sebgroup/react-components/Video/types-definition")];
     const defaultHeight: string = "300px";
     const defaultWidth: string = "535px";
-    const defaultSourceType: DynamicFormOption = { label: "Local", value: "local", key: "local" };
     const defaultCheckboxControls: Array<DynamicFormOption> = [
         { label: "allowFullScreen", value: "allowFullScreen", key: "allowFullScreen" },
         { label: "loop", value: "loop", key: "loop" },
         { label: "autoplay", value: "autoplay", key: "autoplay" },
         { label: "showControls", value: "showControls", key: "showControls" },
-        { label: "showInfo", value: "showInfo", key: "showInfo" },
+    ];
+    const checkboxControls: Array<DynamicFormOption> = [
+        ...defaultCheckboxControls,
+        { label: "hideBranding", value: "hideBranding", key: "hideBranding" },
+        { label: "showVideoAnnotations", value: "showVideoAnnotations", key: "showVideoAnnotations" },
     ];
     const fields: Array<DynamicFormSection> = [
         {
             key: "controls",
             items: [
-                {
-                    key: "srcType",
-                    value: defaultSourceType,
-                    label: "SourceType",
-                    options: [
-                        { label: "Local", value: "local", key: "local" },
-                        { label: "Stream", value: "stream", key: "stream" },
-                    ],
-                    controlType: "Dropdown",
-                },
-                {
-                    key: "src",
-                    value: defaultSrc,
-                    label: "Source",
-                    placeholder: "Source of video",
-                    controlType: "Text",
-                },
-                {
-                    key: "width",
-                    value: defaultWidth,
-                    label: "Width",
-                    placeholder: "Width of video",
-                    controlType: "Text",
-                },
-                {
-                    key: "height",
-                    value: defaultHeight,
-                    label: "Height",
-                    placeholder: "Height of video",
-                    controlType: "Text",
-                },
-                {
-                    label: "Optional configurations",
-                    key: "checkboxes",
-                    value: defaultCheckboxControls,
-                    controlType: "Option",
-                    options: defaultCheckboxControls,
-                },
+                { key: "src", value: defaultSrc, label: "Source", placeholder: "Source of video", controlType: "Text" },
+                { key: "width", value: defaultWidth, label: "Width", placeholder: "Width of video", controlType: "Text" },
+                { key: "height", value: defaultHeight, label: "Height", placeholder: "Height of video", controlType: "Text" },
+                { key: "language", value: null, label: "Language", placeholder: "Language of video player", controlType: "Text" },
+                { key: "startTime", value: null, label: "Start time of playback", placeholder: "Playback starts at", controlType: "Text" },
+                { key: "endTime", value: null, label: "End time of playback", placeholder: "Playback ends at", controlType: "Text" },
+                { label: "Optional configurations", key: "checkboxes", value: defaultCheckboxControls, controlType: "Option", options: checkboxControls },
             ],
         },
     ];
     const [renderForm, { controls }] = useDynamicForm(fields);
     const code: string = `<Video [src]="src"
-        [sourceType]="sourceType"
         [width]="width"
         [height]="height"
     />`;
@@ -76,18 +48,21 @@ const VideoPage: React.FC = () => {
     return (
         <Docs
             mainFile={importString}
+            importedFiles={referenceString}
             example={
                 <Video
                     name="myVideo"
-                    sourceType={(controls as any)?.srcType.value || defaultSourceType}
                     src={(controls as any)?.src || defaultSrc}
                     width={(controls as any)?.width || defaultWidth}
                     height={(controls as any)?.height || defaultHeight}
+                    language={(controls as any)?.language}
+                    startTime={(controls as any)?.startTime}
                     autoplay={checkSelectedKey("autoplay")}
                     allowFullScreen={checkSelectedKey("allowFullScreen")}
                     loop={checkSelectedKey("loop")}
                     showControls={checkSelectedKey("showControls")}
-                    showInfo={checkSelectedKey("showInfo")}
+                    hideBranding={checkSelectedKey("hideBranding")}
+                    showVideoAnnotations={checkSelectedKey("showVideoAnnotations")}
                 />
             }
             code={code}
