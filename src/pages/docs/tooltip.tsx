@@ -106,7 +106,7 @@ const TooltipPage: React.FC = () => {
                         disableAutoPosition={checkSelectedKey("disableAutoPosition")}
                         onVisibleChange={checkSelectedKey("isVisibleChanged") && (() => setNotifcationToggle(true))}
                     >
-                        {checkSelectedKey("isCustomReference") && <div>This is custom tooltip reference</div>}
+                        {checkSelectedKey("isCustomReference") && <abbr className="custom-tooltip text-help">This is custom tooltip reference</abbr>}
                     </Tooltip>
                 }
                 code={code}
