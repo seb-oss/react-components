@@ -77,7 +77,7 @@ export class ImagePreview extends React.Component<ImagePreviewProps, ImagePrevie
                     id="fileInput"
                     name="profileImage"
                     accept="image/*"
-                    onChange={this.props.handleUploadImage && this.props.handleUploadImage}
+                    onChange={this.props.handleUploadImage}
                     onClick={(e: any) => {
                         if (e.target && e.target.value) {
                             e.target.value = null;

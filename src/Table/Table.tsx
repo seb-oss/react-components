@@ -108,6 +108,11 @@ const Table: React.FunctionComponent<TableProps> = React.memo(
         const [tableRows, setTableRows] = React.useState<Array<TableRow>>([]);
         const [tableRowsImage, setTableRowsImage] = React.useState<Array<TableRow>>([]);
 
+        // memoized variables -------------------------------------------------------------------------
+        const showActionColumn: boolean = React.useMemo(() => {
+            const dataHasAction: boolean = currentTableRows?.some((row: TableRow) => row.actionLinks?.length);
+            return props.actionLinks?.length > 0 || !!props.primaryActionButton || dataHasAction;
+        }, [props.actionLinks, props.actionLinks, props.primaryActionButton, currentTableRows]);
         // events -------------------------------------------------------------------------------------
 
         /**
@@ -711,7 +716,7 @@ const Table: React.FunctionComponent<TableProps> = React.memo(
                     onRowExpanded={onRowExpanded}
                     onSubRowExpanded={onSubRowExpanded}
                     onActionDropped={onActionColumnDropped}
-                    useShowActionColumn={(props.actionLinks && props.actionLinks.length > 0) || !!props.primaryActionButton}
+                    useShowActionColumn={showActionColumn}
                     actionLinks={props.actionLinks}
                     primaryActionButton={props.primaryActionButton}
                     loading={!props.data}
