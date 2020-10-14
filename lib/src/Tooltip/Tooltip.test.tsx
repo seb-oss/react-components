@@ -1,5 +1,5 @@
 import React from "react";
-import { Tooltip, TooltipPosition, TooltipTheme, TooltipTrigger, TooltipMessageGroupItem } from ".";
+import { Tooltip, TooltipPosition, TooltipTheme, TooltipTrigger } from ".";
 import { unmountComponentAtNode, render } from "react-dom";
 import { act } from "react-dom/test-utils";
 
@@ -56,16 +56,6 @@ describe("Component: Tooltip", () => {
         expect(container.querySelector(".tooltip-container").id).toBe(id);
     });
 
-    it("Should render reference with custom svg if svg is passed", async () => {
-        const content: string = "test";
-        const svg: JSX.Element = <svg>{content}</svg>;
-        await act(async () => {
-            render(<Tooltip customSvg={svg} />, container);
-        });
-        expect(document.body.querySelectorAll(".default-content").length).toBe(1);
-        expect(document.body.querySelector(".default-content>svg").innerHTML).toEqual(content);
-    });
-
     it("Should render content", async () => {
         const content: string = "my tooltip";
         await act(async () => {
@@ -73,47 +63,6 @@ describe("Component: Tooltip", () => {
         });
         expect(document.body.querySelectorAll(".tooltip").length).toBe(1);
         expect(document.body.querySelector(".tooltip-inner").innerHTML).toEqual(content);
-    });
-
-    it("Should render message and default message if no message is passed", async () => {
-        const message: string = "my tooltip";
-        await act(async () => {
-            render(<Tooltip />, container);
-        });
-        expect(document.body.querySelectorAll(".tooltip").length).toBe(1);
-        expect(document.body.querySelector(".message-container>.message").innerHTML).toEqual("Tooltip is empty. Please pass a message.");
-        await act(async () => {
-            render(<Tooltip message={message} />, container);
-        });
-        expect(document.body.querySelectorAll(".tooltip").length).toBe(1);
-        expect(document.body.querySelector(".message-container>.message").innerHTML).toEqual(message);
-    });
-
-    it("Should render message with title", async () => {
-        const message: string = "my tooltip";
-        const title: string = "title";
-        await act(async () => {
-            render(<Tooltip message={message} title={title} />, container);
-        });
-        expect(document.body.querySelectorAll(".tooltip").length).toBe(1);
-        expect(document.body.querySelector(".message-container>.title").innerHTML).toEqual(title);
-    });
-
-    it("Should render message group", async () => {
-        const messageGroup: Array<TooltipMessageGroupItem> = [
-            {
-                title: "Tooltip title",
-                message: "tooltip 1",
-            },
-            {
-                message: "tooltip 2",
-            },
-        ];
-        await act(async () => {
-            render(<Tooltip messageGroup={messageGroup} />, container);
-        });
-        expect(document.body.querySelectorAll(".tooltip").length).toBe(1);
-        expect(document.body.querySelectorAll(".message-list-item").length).toEqual(messageGroup.length);
     });
 
     it("Should render node as message", async () => {
