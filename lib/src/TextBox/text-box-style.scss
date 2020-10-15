@@ -2,30 +2,132 @@
 
 $transition-time: 200ms;
 
-.form-group.input-box {
-    > .input-field {
-        > input.form-control {
+@mixin hint-theme($color) {
+    > .input-box-group-wrapper {
+        border-bottom: 2px solid $color;
+    }
+}
+
+.form-group.input-box-group {
+    position: relative;
+    > .input-group {
+        position: relative;
+        > .input-box-group-wrapper {
             color: $body-color;
-            border: 1px solid $gray-500;
             transition: border $transition-time / 2;
-            &:not(:disabled) {
-                &:hover {
-                    border-color: $blue;
-                    background-color: $white;
-                }
-                &:focus {
+            position: relative;
+            width: 100%;
+            height: 42px;
+            border: 1px solid $gray-500;
+            border-radius: 4px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            &:hover {
+                border-color: $blue;
+                background-color: $white;
+            }
+            &:focus-within {
+                border-color: $blue-darker;
+                box-shadow: none;
+                background-color: $white;
+                &:active {
                     border-color: $blue-darker;
                     box-shadow: none;
                     background-color: $white;
-                    &:active {
-                        border-color: $blue-darker;
-                        box-shadow: none;
-                        background-color: $white;
+                }
+            }
+            > .input-group-prepend,
+            > .input-group-append {
+                position: relative;
+                display: inline-flex;
+                align-items: center;
+                width: 40px;
+                height: 42px;
+                vertical-align: top;
+                margin: 0;
+                > .input-group-text {
+                    position: relative;
+                    border: 0;
+                    background: none;
+                    padding: 0;
+                    margin: 0 auto;
+                    width: 100%;
+                    height: 100%;
+                    justify-content: center;
+                    svg {
+                        width: 16px;
+                        height: 16px;
+                        fill: $black;
+                    }
+                }
+                &.clickable {
+                    cursor: pointer;
+                    > .input-group-text {
+                        color: $blue;
+                        svg {
+                            fill: $blue;
+                        }
+                        &:hover {
+                            color: $blue-dark;
+                        }
                     }
                 }
             }
+            > .input-group-prepend + input.form-control {
+                padding-left: 0;
+            }
+            > input.form-control {
+                display: inline-flex;
+                z-index: 1;
+                border: none;
+                border-radius: 0;
+                height: 42px;
+                &:focus {
+                    box-shadow: none;
+                }
+                &::-webkit-inner-spin-button,
+                &::-webkit-textfield-decoration-container {
+                    -webkit-appearance: none;
+                    -moz-appearance: none;
+                    appearance: none;
+                }
+                &:nth-child(2):not(:last-child),
+                &:first-child:not(:last-child) {
+                    padding-right: 0;
+                }
+            }
         }
-        > .alert {
+        &.warning {
+            @include hint-theme($yellow-darker);
+        }
+        &.danger {
+            @include hint-theme($red);
+        }
+        &.success {
+            @include hint-theme($green);
+        }
+        &.disabled {
+            .input-box-group-wrapper {
+                background-color: $gray-100;
+                border-color: $gray-500;
+                .input-group-prepend,
+                .input-group-append,
+                .form-control {
+                    color: $gray-500;
+                    background-color: $gray-100;
+                }
+                .input-group-prepend .input-group-text,
+                .form-control,
+                .input-group-append .input-group-text {
+                    svg {
+                        fill: $gray-500;
+                    }
+                    color: $gray-500;
+                }
+            }
+        }
+        > .progress-feedback {
             opacity: 0;
             margin: 0;
             padding: 0;
@@ -36,23 +138,9 @@ $transition-time: 200ms;
             overflow: hidden;
             width: 100%;
             transition: opacity $transition-time, padding $transition-time, max-height $transition-time * 2;
-            &.alert-danger {
-                color: $red;
-            }
-        }
-        &.has-error {
-            > input.form-control:not(:disabled) {
-                border-bottom: 2px inset $red;
-            }
-            > .alert {
+            &.show {
                 opacity: 1;
-                padding-top: 2px;
                 max-height: 100px;
-            }
-        }
-        &.success {
-            > input.form-control:not(:disabled) {
-                border-bottom: 2px inset $green;
             }
         }
     }

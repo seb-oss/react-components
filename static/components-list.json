@@ -145,11 +145,6 @@
         "filePath": "./src/TextBox/index.ts"
     },
     {
-        "name": "TextBoxGroup",
-        "path": "/docs/textboxgroup",
-        "filePath": "./src/TextBoxGroup/index.ts"
-    },
-    {
         "name": "TextLabel",
         "path": "/docs/textlabel",
         "filePath": "./src/TextLabel/index.ts"
