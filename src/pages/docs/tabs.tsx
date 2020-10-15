@@ -1,46 +1,66 @@
 import React from "react";
 import Docs from "components/Docs";
 import { DynamicFormSection, useDynamicForm } from "hooks/useDynamicForm";
-import { Tabs, TabsListItem } from "@sebgroup/react-components/Tabs";
+import { Tabs, TabItem } from "@sebgroup/react-components/Tabs";
 
 const TabsPage: React.FC = React.memo(() => {
     const importString: string = require("!raw-loader!@sebgroup/react-components/Tabs/Tabs");
-    const tabList: Array<TabsListItem> = [{ text: "First" }, { text: "Second" }, { text: "Third" }, { text: "Forth", disabled: true }];
-    const [value, setValue] = React.useState<number>(0);
+    const [active, setActive] = React.useState<number>(0);
+    const [usePills, setUsePills] = React.useState<boolean>(false);
     const fields: Array<DynamicFormSection> = [
         {
             key: "controls",
             items: [
                 {
                     key: "active",
-                    value: value,
+                    value: active,
                     min: 0,
                     max: 3,
                     label: "Active index",
                     controlType: "Stepper",
                 },
+                {
+                    key: "usePills",
+                    value: false,
+                    label: "Use pill style",
+                    controlType: "Checkbox",
+                },
             ],
         },
     ];
     const [renderForm, form, setForm] = useDynamicForm(fields);
-    const code: string = `<Tabs list={[]} activeTab={0} onClick={null} />`;
+    const code: string = `
+<Tabs value={value} onValueChange={setValue}>
+    <TabItem>First</TabItem>
+    <TabItem>Second</TabItem>
+    <TabItem>Third</TabItem>
+    <TabItem disabled>Fourth</TabItem>
+</Tabs>
+`;
+
+    React.useEffect(() => setActive(form.controls?.active), [form.controls?.active]);
 
     React.useEffect(() => {
-        setValue((form.controls as any)?.active);
-    }, [(form.controls as any)?.active]);
-
-    React.useEffect(() => {
-        if (value !== form.controls.active) {
-            setForm({
-                ...form,
-                controls: {
-                    active: value,
-                },
-            });
+        if (active !== form.controls.active) {
+            setForm({ ...form, controls: { active } });
         }
-    }, [value]);
+    }, [active]);
 
-    return <Docs mainFile={importString} example={<Tabs list={tabList} activeTab={value} onClick={setValue} />} code={code} controls={renderForm()} />;
+    return (
+        <Docs
+            mainFile={importString}
+            example={
+                <Tabs value={active} onValueChange={setActive} usePills={usePills}>
+                    <TabItem>First</TabItem>
+                    <TabItem>Second</TabItem>
+                    <TabItem>Third</TabItem>
+                    <TabItem disabled>Fourth</TabItem>
+                </Tabs>
+            }
+            code={code}
+            controls={renderForm()}
+        />
+    );
 });
 
 export default TabsPage;
