@@ -57,8 +57,10 @@ export const ImagePreview: React.FunctionComponent<ImagePreviewProps> = (props: 
     React.useEffect(() => {
         if (props.cropResult) {
             setCropDataResult(props.cropResult);
+        } else if (props.previewSrc) {
+            setCropDataResult(props.previewSrc);
         }
-    }, [props.cropResult]);
+    }, [props.cropResult, props.previewSrc]);
 
     return (
         <div className={"profile-image-container " + props.previewClassName}>
