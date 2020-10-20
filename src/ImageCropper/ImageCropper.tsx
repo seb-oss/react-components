@@ -106,7 +106,7 @@ export interface CropBoxData {
     height: number;
 }
 
-interface ImageCropperProps {
+export interface ImageCropperProps {
     toggle?: boolean;
     showCustomButton?: boolean;
     cropperConfigs: OptionProps;
@@ -246,7 +246,7 @@ export const ImageCropper: React.FunctionComponent<ImageCropperProps> = React.me
                 setIsLoading(true);
                 cropImage("", () => {
                     setTimeout(() => {
-                        cropImage(cropper.getCroppedCanvas().toDataURL(), () => {
+                        cropImage(cropper.getCroppedCanvas()?.toDataURL(), () => {
                             setIsLoading(false);
                             dismissCropper();
                         });
@@ -453,13 +453,9 @@ export const ImageCropper: React.FunctionComponent<ImageCropperProps> = React.me
         }, [props.cropBoxData]);
 
         React.useEffect(() => {
-            setSrc(props.previewSrc || "");
-        }, [props.previewSrc]);
-
-        React.useEffect(() => {
+            setSrc(props.previewSrc?.trim() || "");
             if (props.previewSrc) {
-                setSrc(props.previewSrc?.trim());
-                cropper.reset().clear().replace(props.previewSrc);
+                cropper?.reset().clear().replace(props.previewSrc);
             }
         }, [props.previewSrc]);
 
@@ -522,7 +518,7 @@ export const ImageCropper: React.FunctionComponent<ImageCropperProps> = React.me
         }, [props.scaleX]);
 
         React.useEffect(() => {
-            if (props.scaleX) {
+            if (props.scaleY) {
                 setYScale(props.scaleY);
             }
         }, [props.scaleY]);

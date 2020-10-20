@@ -52,24 +52,4 @@ describe("Component: ImagePreview", () => {
         mountedWrapper.find("button").simulate("click");
         expect(props.handleUploadImage).toHaveBeenCalled();
     });
-
-    // it("The value of `cropDataResult` state should change when the prop value of `cropResult` is changed", () => {
-    //     const cropResult: string = "result";
-    //     const mountedWrapper: ReactWrapper<ImagePreviewProps> = mount(<ImagePreview {...props} />);
-    //     expect(mountedWrapper.state("cropDataResult")).toEqual("");
-    //     mountedWrapper.setProps({ cropResult });
-    //     expect(mountedWrapper.state("cropDataResult")).toEqual(cropResult);
-    // });
-
-    // it("CroppedData should be cleared or initialised on first mount", (doneFn) => {
-    //     const previewSrc: string = "imageSource";
-    //     const mountedWrapper: ReactWrapper<ImagePreviewProps> = mount(<ImagePreview {...props} previewSrc={previewSrc} />);
-    //     expect(mountedWrapper.find(".profile-image").find("img").prop("src")).toEqual(previewSrc);
-    //     mountedWrapper.unmount();
-    //     mountedWrapper.setProps({ previewSrc: undefined });
-    //     mountedWrapper.mount();
-    //     expect(mountedWrapper.find(".profile-image").find("img").exists()).toBeFalsy();
-    //     expect(mountedWrapper.find(".profile-image").find("svg").exists()).toBeTruthy();
-    //     doneFn();
-    // });
 });
