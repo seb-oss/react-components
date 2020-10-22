@@ -1,0 +1,62 @@
+@import "~@sebgroup/bootstrap/scss/core";
+
+$toggle-max-width: 420px;
+$toggle-height: 72px;
+$toggle-item-padding: 24px;
+
+@mixin icon-color($color) {
+    > .svg-holder {
+        > svg {
+            fill: $color;
+        }
+    }
+}
+.rc.toggle-selector {
+    width: 100%;
+    max-width: $toggle-max-width;
+    .btn {
+        height: $toggle-height;
+        display: flex;
+        align-items: center;
+        overflow: hidden;
+        column-gap: $toggle-item-padding;
+        padding: 1rem $toggle-item-padding;
+        &:not(.disabled) {
+            border-color: $gray-400;
+            color: $gray-800;
+            &.checked {
+                border-color: $blue-darker;
+                color: $blue-darker;
+                border-width: 2px;
+                @include icon-color($blue-darker);
+            }
+            &:hover,
+            &:focus {
+                background-color: transparent;
+                color: $blue-dark;
+                border-color: $blue-dark;
+                @include icon-color($blue-dark);
+            }
+        }
+        &.disabled {
+            pointer-events: none;
+            background-color: $gray-300;
+            border: 0;
+            @include icon-color($gray-500);
+        }
+        > input {
+            display: none;
+        }
+        > .svg-holder {
+            flex: 0 0 40px;
+            > svg {
+                width: 100%;
+                height: auto;
+            }
+        }
+        > .label-container {
+            flex: 1;
+            white-space: normal;
+        }
+    }
+}

@@ -170,6 +170,11 @@
         "filePath": "./src/Toggle/index.ts"
     },
     {
+        "name": "ToggleSelector",
+        "path": "/docs/toggle-selector",
+        "filePath": "./src/ToggleSelector/index.ts"
+    },
+    {
         "name": "Tooltip",
         "path": "/docs/tooltip",
         "filePath": "./src/Tooltip/index.ts"
