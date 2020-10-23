@@ -1,79 +1,80 @@
 import React from "react";
 import classnames from "classnames";
+import ToggleSelectorItem, { SelectedToggleSelectorItemProps, ToggleSelectorItemComponent, ToggleSelectorItemProps } from "./ToggleSelectorItem";
 import "./toggle-selector.scss";
 
-export interface ToggleSelectorItem {
-    label: React.ReactNode;
-    icon?: React.ReactNode;
-    value: string;
-    disabled?: boolean;
-}
-
-export interface FormattedToggleSelectorItem extends ToggleSelectorItem {
-    checked: boolean;
-}
-
-export type ToggleSelectorProps = Omit<JSX.IntrinsicElements["input"], "value" | "list" | "onChange"> & {
-    list: Array<ToggleSelectorItem>;
-    /** Div wrapper props */
-    wrapperProps?: JSX.IntrinsicElements["div"];
-    value?: Array<ToggleSelectorItem> | ToggleSelectorItem;
-    onChange: (value: Array<ToggleSelectorItem> | ToggleSelectorItem) => void;
+export type ToggleSelectorProps = Omit<JSX.IntrinsicElements["div"], "onChange"> & {
+    children: React.ReactNode;
+    list?: Array<ToggleSelectorItemProps>;
     multiple?: boolean;
-    className?: string;
-    id?: string;
+    value: string | Array<string>;
+    name: string;
+    onChange: (value: string | Array<string>) => void;
 };
 
-export const ToggleSelector: React.FC<ToggleSelectorProps> = ({ list, multiple, className, id, wrapperProps, value, onChange, ...props }: ToggleSelectorProps) => {
-    const [formattedList, setFormattedList] = React.useState<Array<FormattedToggleSelectorItem>>([]);
+type ToggleSelector = React.FC<ToggleSelectorProps> & { ToggleSelectorItem: ToggleSelectorItemComponent };
 
-    const formatList = (newValue: ToggleSelectorItem | Array<ToggleSelectorItem>) => {
-        setFormattedList(
-            list.map((item: ToggleSelectorItem) => {
-                const checked: boolean = multiple
-                    ? (newValue as Array<ToggleSelectorItem>)?.some((valueItem: ToggleSelectorItem) => valueItem.value === item.value)
-                    : (newValue as ToggleSelectorItem).value === item.value;
-                return { ...item, checked };
-            })
-        );
+export const ToggleSelector: ToggleSelector = ({ className, list, multiple, value, onChange, ...props }: ToggleSelectorProps) => {
+    const [formattedValue, setFormattedValue] = React.useState<string | Array<string>>(value);
+
+    const updateValue = (valueList: string | Array<string>, selectedChildProps: ToggleSelectorItemProps, event: React.ChangeEvent<HTMLInputElement>) => {
+        const selectedValue: string = event.target.value;
+        const checked: boolean = event.target.checked;
+        const isSelectedValue: boolean = selectedChildProps?.value === selectedValue;
+        if (multiple && isSelectedValue) {
+            if (checked) {
+                valueList = [...(valueList as Array<string>), selectedValue];
+            } else {
+                const index: number = (valueList as Array<string>).findIndex((item: string) => item === selectedValue);
+                (valueList as Array<string>).splice(index, 1);
+            }
+        } else if (isSelectedValue) {
+            valueList = selectedValue;
+        }
+        return valueList;
     };
 
-    const onButtonClick = (selectedIndex: number) => {
-        let newValue: ToggleSelectorItem | Array<ToggleSelectorItem> = multiple ? [...(value as Array<ToggleSelectorItem>)] : { ...value };
-        const selectedValue: FormattedToggleSelectorItem = formattedList[selectedIndex];
-        if (selectedValue.disabled || props.disabled) {
-            return;
+    const formatList = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const selectedValue: string = event.target.value;
+        const checked: boolean = event.target.checked;
+        let newValue: string | Array<string> = multiple ? [...(value as Array<string>)] : null;
+        if (list) {
+            list.map((item: ToggleSelectorItemProps) => {
+                newValue = updateValue(newValue, item, event);
+            });
+        } else {
+            React.Children.map(props.children, (Child: React.ReactElement<ToggleSelectorItemProps>, i: number) => {
+                const childProps: ToggleSelectorItemProps = Child.props;
+                newValue = updateValue(newValue, childProps, event);
+            });
         }
-        if (multiple) {
-            newValue = formattedList
-                .filter((item: FormattedToggleSelectorItem) => {
-                    return item.value === selectedValue.value ? !selectedValue.checked : item.checked;
-                })
-                .map(({ label, value }: FormattedToggleSelectorItem) => ({ label, value }));
-        } else if ((value as ToggleSelectorItem).value !== selectedValue.value) {
-            newValue = { ...list[selectedIndex] };
-        }
-        formatList(newValue);
+        setFormattedValue(newValue);
         onChange(newValue);
     };
+    const onChildrenClick = (event: React.ChangeEvent<HTMLInputElement>) => {
+        console.log(event.target.checked);
+        formatList(event);
+    };
 
-    React.useEffect(() => {
-        formatList(value);
-    }, [list, value]);
-
+    // React.useEffect
     return (
-        <div className={classnames("rc toggle-selector", className)} id={id} {...wrapperProps}>
-            {formattedList?.map((item: FormattedToggleSelectorItem, index: number) => (
-                <button
-                    key={index}
-                    onClick={() => onButtonClick(index)}
-                    className={classnames("btn btn-outline-primary btn-block", { checked: item.checked, disabled: item.disabled || props.disabled })}
-                >
-                    <input id={item.value} type={multiple ? "checkbox" : "radio"} readOnly checked={item.checked} value={item.value} {...props} />
-                    {item.icon && <div className="svg-holder">{item.icon}</div>}
-                    <div className="label-container">{item.label}</div>
-                </button>
+        <div className={classnames("rc toggle-selector", className)} {...props}>
+            {list?.map((item: ToggleSelectorItemProps, i: number) => (
+                <ToggleSelectorItem key={i} {...item} onChange={onChildrenClick} />
             ))}
+            {React.Children.map(props.children, (Child: React.ReactElement<ToggleSelectorItemProps>, i: number) => {
+                const childValue: string = Child?.props?.value;
+                return React.isValidElement<ToggleSelectorItemProps>(Child)
+                    ? React.cloneElement<any>(Child, {
+                          onChange: onChildrenClick,
+                          multiple,
+                          name: props.name,
+                          checked: multiple ? formattedValue.indexOf(childValue) > -1 : formattedValue === childValue,
+                      })
+                    : Child;
+            })}
         </div>
     );
 };
+
+ToggleSelector.ToggleSelectorItem = ToggleSelectorItem;

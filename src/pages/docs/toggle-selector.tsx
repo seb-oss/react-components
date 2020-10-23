@@ -1,6 +1,6 @@
 import React from "react";
 import Docs from "components/Docs";
-import { ToggleSelector, ToggleSelectorItem } from "@sebgroup/react-components/ToggleSelector";
+import { ToggleSelector } from "@sebgroup/react-components/ToggleSelector";
 import { useDynamicForm } from "hooks/useDynamicForm";
 
 const userIcon: React.ReactElement = (
@@ -19,7 +19,7 @@ const ToggleSelectorPage: React.FC = (): React.ReactElement<void> => {
             items: [],
         },
     ]);
-    const list: Array<ToggleSelectorItem> = [
+    const list: Array<any> = [
         {
             label: "very longgg longg long aslfjlask jfldsjf lakjflajs kfjlaskjflksj lkfjlskjas jflaskjf laksdjf lsjdfljslfjlsdj flkasdj fd j kjflkdas jlfjslkjfls ksjlkfdjf ljskjflsjflskjf ",
             value: "test",
@@ -28,6 +28,7 @@ const ToggleSelectorPage: React.FC = (): React.ReactElement<void> => {
         { label: "test1", value: "test1" },
         { label: "test2", value: "test2", disabled: true, icon: userIcon },
     ];
+    const [value, setValue] = React.useState<string | Array<string>>(["test"]);
     const importString: string = React.useMemo(() => require("!raw-loader!@sebgroup/react-components/ToggleSelector/ToggleSelector"), []);
     const code: string = React.useMemo(() => "", []);
 
@@ -36,7 +37,13 @@ const ToggleSelectorPage: React.FC = (): React.ReactElement<void> => {
             mainFile={importString}
             example={
                 <div className="w-100">
-                    <ToggleSelector name="tests" list={list} value={[]} onChange={(e) => console.log(e)} multiple />
+                    <ToggleSelector value={value} onChange={setValue} name="toggle">
+                        {list.map((item: any, index: number) => (
+                            <ToggleSelector.ToggleSelectorItem key={index} label={item.label} value={item.value} icon={item.icon} />
+                        ))}
+                        <div>d</div>
+                        dd
+                    </ToggleSelector>
                 </div>
             }
             code={code}
