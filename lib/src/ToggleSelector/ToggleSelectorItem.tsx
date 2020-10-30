@@ -2,21 +2,21 @@ import React from "react";
 import classnames from "classnames";
 import { randomId } from "@sebgroup/frontend-tools";
 
-export type SelectedToggleSelectorItemProps = {
+export type ToggleSelectorItemProps = Omit<JSX.IntrinsicElements["input"], "type" | "value"> & {
     label: React.ReactNode;
     icon?: React.ReactNode;
     value: string;
-    checked?: boolean;
 };
-
-export type ToggleSelectorItemProps = Omit<JSX.IntrinsicElements["input"], "type" | "value"> & SelectedToggleSelectorItemProps;
 
 export type ToggleSelectorItemComponent = React.FC<ToggleSelectorItemProps>;
 
-const ToggleSelectorItem: ToggleSelectorItemComponent = ({ className, label, icon, ...props }: ToggleSelectorItemProps) => {
+export const ToggleSelectorItem: ToggleSelectorItemComponent = ({ className, label, icon, ...props }: ToggleSelectorItemProps) => {
     const [id, setId] = React.useState<string>(props.id);
 
-    const onKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    const onKeyDown = React.useCallback((event: React.KeyboardEvent<HTMLDivElement>) => {
+        if (props.disabled) {
+            return;
+        }
         switch (event.keyCode) {
             case 32:
             case 13:
@@ -25,10 +25,10 @@ const ToggleSelectorItem: ToggleSelectorItemComponent = ({ className, label, ico
             default:
                 break;
         }
-    };
+    }, []);
 
     /** Sets custom id if the user din't pass any */
-    React.useEffect(() => setId(props.id || randomId("accordion-")), [props.id]);
+    React.useEffect(() => setId(props.id || randomId("toggle-selector-")), [props.id]);
 
     return (
         <label className={classnames("rc toggle-selector-item", className)} htmlFor={id} tabIndex={-1}>
@@ -40,5 +40,3 @@ const ToggleSelectorItem: ToggleSelectorItemComponent = ({ className, label, ico
         </label>
     );
 };
-
-export default ToggleSelectorItem;

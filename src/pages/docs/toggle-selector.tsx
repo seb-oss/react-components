@@ -1,7 +1,7 @@
 import React from "react";
 import Docs from "components/Docs";
-import { ToggleSelector } from "@sebgroup/react-components/ToggleSelector";
-import { useDynamicForm } from "hooks/useDynamicForm";
+import { ToggleSelector, ToggleSelectorItem, ToggleSelectorItemProps } from "@sebgroup/react-components/ToggleSelector";
+import { DynamicFormOption, useDynamicForm } from "hooks/useDynamicForm";
 
 const userIcon: React.ReactElement = (
     <svg width="20px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 170 170">
@@ -11,39 +11,84 @@ const userIcon: React.ReactElement = (
 );
 
 const ToggleSelectorPage: React.FC = (): React.ReactElement<void> => {
-    const [radioListSelected, setRadioListSelected] = React.useState<string>("");
-
     const [renderControls, { controls }] = useDynamicForm([
         {
             key: "controls",
-            items: [],
+            items: [
+                {
+                    label: "Optional configurations",
+                    key: "checkboxes",
+                    controlType: "Option",
+                    options: [
+                        { label: "Multiple", value: "multiple", key: "multiple" },
+                        { label: "With icon", value: "hasIcon", key: "hasIcon" },
+                        { label: "Disabled", value: "disabled", key: "disabled" },
+                    ],
+                },
+            ],
         },
     ]);
-    const list: Array<any> = [
-        {
-            label: "very longgg longg long aslfjlask jfldsjf lakjflajs kfjlaskjflksj lkfjlskjas jflaskjf laksdjf lsjdfljslfjlsdj flkasdj fd j kjflkdas jlfjslkjfls ksjlkfdjf ljskjflsjflskjf ",
-            value: "test",
-            icon: userIcon,
-        },
-        { label: "test1", value: "test1" },
-        { label: "test2", value: "test2", disabled: true, icon: userIcon },
+    const list: Array<ToggleSelectorItemProps> = [
+        { label: "Bungalow", value: "bungalow", icon: userIcon },
+        { label: "Apartment", value: "apartment" },
+        { label: "Hotel", value: "hotel", disabled: true, icon: userIcon },
     ];
-    const [value, setValue] = React.useState<string | Array<string>>(["test"]);
+    const [value, setValue] = React.useState<string | Array<string>>("");
     const importString: string = React.useMemo(() => require("!raw-loader!@sebgroup/react-components/ToggleSelector/ToggleSelector"), []);
-    const code: string = React.useMemo(() => "", []);
+    const code: string = React.useMemo(
+        () => `
+    // render children using list of ToggleSelectorItem
+    <ToggleSelector
+        value={value}
+        onChange={onChange}
+        name="toggle"
+        list={list}
+    />
+    // render children using ToggleSelectorItem
+    <ToggleSelector
+        value={value}
+        onChange={onChange}
+        name="toggle"
+    >
+        {
+            list.map((item: any, index: number) => <ToggleSelectorItem
+                key={i}
+                onChange={onSelectorChange}
+                value={item.value}
+                name={props.name}
+                checked={formattedValue === item.value}
+            />)
+        }
+    </ToggleSelector>
+    `,
+        []
+    );
+
+    /** check if key selected */
+    const checkSelectedKey = (key: string) => {
+        return controls.checkboxes?.some((item: DynamicFormOption) => item.key === key);
+    };
 
     return (
         <Docs
             mainFile={importString}
             example={
                 <div className="w-100">
-                    <ToggleSelector value={value} onChange={setValue} name="toggle">
-                        {list.map((item: any, index: number) => (
-                            <ToggleSelector.ToggleSelectorItem key={index} label={item.label} value={item.value} icon={item.icon} />
-                        ))}
-                        <div>d</div>
-                        dd
-                    </ToggleSelector>
+                    <ToggleSelector
+                        value={value}
+                        onChange={setValue}
+                        name="toggle"
+                        disabled={checkSelectedKey("disabled")}
+                        multiple={checkSelectedKey("multiple")}
+                        list={
+                            checkSelectedKey("hasIcon")
+                                ? list
+                                : list.map((item: ToggleSelectorItemProps) => ({
+                                      ...item,
+                                      icon: null,
+                                  }))
+                        }
+                    />
                 </div>
             }
             code={code}
