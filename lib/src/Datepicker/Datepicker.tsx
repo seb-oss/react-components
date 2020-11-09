@@ -34,9 +34,9 @@ interface UnitNames {
 export const Datepicker: React.FunctionComponent<DatepickerProps> = (props: DatepickerProps): React.ReactElement<void> => {
     const { monthPicker, forceCustom, className, value, min, max, disabled, onChange, localeCode = "en" } = props;
 
-    const isValidDate = (d: Date): boolean => {
+    const isValidDate = React.useCallback((d: Date): boolean => {
         return !!(d && d instanceof Date && !isNaN(d.getTime()));
-    };
+    }, []);
 
     const getStringFromDate = (d: Date, monthPicker: boolean): string => {
         if (isValidDate(d)) {
