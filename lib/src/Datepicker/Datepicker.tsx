@@ -42,9 +42,9 @@ export const Datepicker: React.FunctionComponent<DatepickerProps> = (props: Date
         return isValidDate(d) ? d?.toISOString()?.substr(0, monthPicker ? 7 : 10) || "" : "";
     }, [isValidDate]);
 
-    const getInputRawValue = (value: Date, monthPicker: boolean): string => {
+    const getInputRawValue = React.useCallback((value: Date, monthPicker: boolean): string => {
         return getStringFromDate(value, monthPicker);
-    };
+    }, [getStringFromDate]);
 
     const isDateInRange = (d: Date, min: Date, max: Date, success?: () => void, fail?: () => void): void => {
         if (!min && !max) {
