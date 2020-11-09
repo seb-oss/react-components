@@ -38,13 +38,9 @@ export const Datepicker: React.FunctionComponent<DatepickerProps> = (props: Date
         return !!(d && d instanceof Date && !isNaN(d.getTime()));
     }, []);
 
-    const getStringFromDate = (d: Date, monthPicker: boolean): string => {
-        if (isValidDate(d)) {
-            return d?.toISOString()?.substr(0, monthPicker ? 7 : 10) || "";
-        } else {
-            return "";
-        }
-    };
+    const getStringFromDate = React.useCallback((d: Date, monthPicker: boolean): string => {
+        return isValidDate(d) ? d?.toISOString()?.substr(0, monthPicker ? 7 : 10) || "" : "";
+    }, [isValidDate]);
 
     const getInputRawValue = (value: Date, monthPicker: boolean): string => {
         return getStringFromDate(value, monthPicker);
