@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import "./date-picker-style.scss";
 import { padNumber } from "./formatters";
 
