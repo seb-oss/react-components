@@ -38,60 +38,73 @@ export const Datepicker: React.FunctionComponent<DatepickerProps> = (props: Date
         return !!(d && d instanceof Date && !isNaN(d.getTime()));
     }, []);
 
-    const getStringFromDate = React.useCallback((d: Date, monthPicker: boolean): string => {
-        return isValidDate(d) ? d?.toISOString()?.substr(0, monthPicker ? 7 : 10) || "" : "";
-    }, [isValidDate]);
+    const getStringFromDate = React.useCallback(
+        (d: Date, monthPicker: boolean): string => {
+            return isValidDate(d) ? d?.toISOString()?.substr(0, monthPicker ? 7 : 10) || "" : "";
+        },
+        [isValidDate]
+    );
 
-    const getInputRawValue = React.useCallback((value: Date, monthPicker: boolean): string => {
-        return getStringFromDate(value, monthPicker);
-    }, [getStringFromDate]);
+    const getInputRawValue = React.useCallback(
+        (value: Date, monthPicker: boolean): string => {
+            return getStringFromDate(value, monthPicker);
+        },
+        [getStringFromDate]
+    );
 
-    const isDateInRange = (d: Date, min: Date, max: Date, success?: () => void, fail?: () => void): void => {
-        if (!min && !max) {
-            success && success();
-        } else if (min && d >= min) {
-            if (!max || (max && d <= max)) {
-                success && success();
+    const isDateInRange = React.useCallback((d: Date, min: Date, max: Date): Promise<void> => {
+        return new Promise((resolve, reject) => {
+            if (!min && !max) {
+                resolve();
+            } else if (min && d >= min) {
+                if (!max || (max && d <= max)) {
+                    resolve();
+                } else {
+                    reject();
+                }
+            } else if (max && d <= max) {
+                if (!min || (min && d >= min)) {
+                    resolve();
+                } else {
+                    reject();
+                }
             } else {
-                fail && fail();
+                reject();
             }
-        } else if (max && d <= max) {
-            if (!min || (min && d >= min)) {
-                success && success();
-            } else {
-                fail && fail();
-            }
-        } else {
-            fail && fail();
-        }
-    };
+        });
+    }, []);
 
-    const initCustomDay = (value: Date, monthPicker: boolean): number => {
-        const inputRawValue: string = getInputRawValue(value, monthPicker);
-        if (!!inputRawValue) {
-            const value: number = monthPicker ? 1 : Number(inputRawValue.substr(8, 2));
-            return value;
-        }
-        return null;
-    };
+    const initCustomDay = React.useCallback(
+        (value: Date, monthPicker: boolean): number => {
+            const inputRawValue: string = getInputRawValue(value, monthPicker);
+            if (!!inputRawValue) {
+                const value: number = monthPicker ? 1 : Number(inputRawValue.substr(8, 2));
+                return value;
+            }
+            return null;
+        },
+        [getInputRawValue]
+    );
 
     const [customDay, setCustomDay] = React.useState<number>(initCustomDay(value, monthPicker));
 
     const handleChangeCustomDay = (e: React.ChangeEvent<HTMLInputElement>): void => {
-        const v: number = e.target?.value ? Number(e.target.value) : null;
         if (!monthPicker) {
-            setCustomDay(v);
+            setCustomDay(Number(e.target.value));
         }
     };
 
-    const initCustomMonth = (value: Date, monthPicker: boolean): number => {
-        const inputRawValue: string = getInputRawValue(value, monthPicker);
-        if (!!inputRawValue) {
-            const value: number = monthPicker ? 1 : Number(inputRawValue.substr(5, 2));
-            return value;
-        }
-        return null;
-    };
+    const initCustomMonth = React.useCallback(
+        (value: Date, monthPicker: boolean): number => {
+            const inputRawValue: string = getInputRawValue(value, monthPicker);
+            if (!!inputRawValue) {
+                const value: number = monthPicker ? 1 : Number(inputRawValue.substr(5, 2));
+                return value;
+            }
+            return null;
+        },
+        [getInputRawValue]
+    );
 
     const [customMonth, setCustomMonth] = React.useState<number>(initCustomMonth(value, monthPicker));
 
@@ -100,14 +113,17 @@ export const Datepicker: React.FunctionComponent<DatepickerProps> = (props: Date
         setCustomMonth(v);
     };
 
-    const initCustomYear = (value: Date, monthPicker: boolean): number => {
-        const inputRawValue: string = getInputRawValue(value, monthPicker);
-        if (!!inputRawValue) {
-            const value: number = monthPicker ? 1 : Number(inputRawValue.substr(0, 4));
-            return value;
-        }
-        return null;
-    };
+    const initCustomYear = React.useCallback(
+        (value: Date, monthPicker: boolean): number => {
+            const inputRawValue: string = getInputRawValue(value, monthPicker);
+            if (!!inputRawValue) {
+                const value: number = monthPicker ? 1 : Number(inputRawValue.substr(0, 4));
+                return value;
+            }
+            return null;
+        },
+        [getInputRawValue]
+    );
 
     const [customYear, setCustomYear] = React.useState<number>(initCustomYear(value, monthPicker));
 
@@ -124,23 +140,15 @@ export const Datepicker: React.FunctionComponent<DatepickerProps> = (props: Date
         const date: Date = new Date(dateString);
         const m: number = date.getMonth() + 1;
         if (date.getFullYear() === year && m === month && date.getDate() === day) {
-            isDateInRange(
-                date,
-                min,
-                max,
-                () => {
-                    onChange(date);
-                },
-                () => {
-                    onChange(new Date(""));
-                }
-            );
+            isDateInRange(date, min, max)
+                .then(() => onChange(date))
+                .catch(() => onChange(new Date("")));
         } else {
             onChange(new Date(""));
         }
     }, [monthPicker, customDay, customMonth, customYear, min, max]);
 
-    const getRelativeTimeFormat = (code: string): any => {
+    const getRelativeTimeFormat = React.useCallback((code: string): any => {
         if ((Intl as any)["RelativeTimeFormat"]) {
             try {
                 const rtf: any = new (Intl as any).RelativeTimeFormat(code);
@@ -152,9 +160,9 @@ export const Datepicker: React.FunctionComponent<DatepickerProps> = (props: Date
             }
         }
         return null;
-    };
+    }, []);
 
-    const getLocaleOrDefault = (localeCode: string): Intl.DateTimeFormat => {
+    const getLocaleOrDefault = React.useCallback((localeCode: string): Intl.DateTimeFormat => {
         let locale: Intl.DateTimeFormat;
         try {
             locale = new Intl.DateTimeFormat(localeCode, { month: "long" });
@@ -162,7 +170,7 @@ export const Datepicker: React.FunctionComponent<DatepickerProps> = (props: Date
             locale = new Intl.DateTimeFormat("en", { month: "long" });
         }
         return locale;
-    };
+    }, []);
 
     const unitNames: UnitNames = {
         month: "Month",
@@ -223,9 +231,12 @@ export const Datepicker: React.FunctionComponent<DatepickerProps> = (props: Date
         return false;
     };
 
-    const nativeClassNames = (value: Date, className: string): string => {
-        return `form-control seb-datepicker-native${!isValidDate(value) ? "is-invalid" : ""}${!!className ? ` ${className}` : ""}`;
-    };
+    const nativeClassNames = React.useCallback(
+        (value: Date, className: string): string => {
+            return `form-control seb-datepicker-native${!isValidDate(value) ? "is-invalid" : ""}${!!className ? ` ${className}` : ""}`;
+        },
+        [isValidDate]
+    );
 
     const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
         const { value: changeEventValue } = e.target;
@@ -323,8 +334,4 @@ export const Datepicker: React.FunctionComponent<DatepickerProps> = (props: Date
     } else {
         return <>{renderCustomDatepicker(value, monthPicker, customPickerOrder(), unitNames, disabled, monthNames())}</>;
     }
-
-    // return (
-    //     <>fallback</>
-    // )
 };
