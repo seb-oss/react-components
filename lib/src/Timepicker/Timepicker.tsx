@@ -1,4 +1,5 @@
 import React from "react";
+import classnames from "classnames";
 import "./time-picker-style.scss";
 
 const angleUpIcon: JSX.Element = (
@@ -130,7 +131,7 @@ export class Timepicker extends React.Component<TimepickerProps> {
 
     render() {
         return (
-            <div className={"custom-timepicker" + (this.props.className ? ` ${this.props.className}` : "")} id={this.props.id}>
+            <div className={classnames("custom-timepicker", this.props.className)} id={this.props.id}>
                 <div className="timepicker-hours">
                     <div
                         className="triangle-before"

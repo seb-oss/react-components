@@ -33,7 +33,7 @@ const DocsPlayground: React.FC<DocsPlaygroundProps> = React.memo((props: DocsPla
             {
                 [
                     <div className="example">{props.example}</div>,
-                    <CodeSnippet fillMode language={"html.handlebars"}>
+                    <CodeSnippet fillMode language={"jsx"}>
                         {props.code}
                     </CodeSnippet>,
                 ][activeTab]

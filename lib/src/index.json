@@ -30,7 +30,6 @@
         "Tabs": "./lib/src/Tabs/index.ts",
         "TextArea": "./lib/src/TextArea/index.ts",
         "TextBox": "./lib/src/TextBox/index.ts",
-        "TextBoxGroup": "./lib/src/TextBoxGroup/index.ts",
         "TextLabel": "./lib/src/TextLabel/index.ts",
         "Timeline": "./lib/src/Timeline/index.ts",
         "Timepicker": "./lib/src/Timepicker/index.ts",
@@ -159,10 +158,6 @@
         {
             "from": "./lib/src/TextBox/index.ts",
             "to": "./TextBox/index.js"
-        },
-        {
-            "from": "./lib/src/TextBoxGroup/index.ts",
-            "to": "./TextBoxGroup/index.js"
         },
         {
             "from": "./lib/src/TextLabel/index.ts",

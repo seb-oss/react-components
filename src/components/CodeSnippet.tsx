@@ -1,7 +1,7 @@
 import React from "react";
 import classnames from "classnames";
 import { Prism as Highlight } from "react-syntax-highlighter";
-import theme from "react-syntax-highlighter/dist/esm/styles/prism/atom-dark";
+import theme from "react-syntax-highlighter/dist/esm/styles/prism/cb";
 import FilesIcon from "../../static/icons/files.svg";
 import CheckIcon from "../../static/icons/check.svg";
 import "../styles/code-snippet.scss";

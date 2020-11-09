@@ -1,7 +1,7 @@
 @import "~@sebgroup/bootstrap/scss/variables";
 
 $arrow-size: 8px;
-$icon-size: 25px;
+$icon-size: 20px;
 $tooltip-distance: 4px;
 
 @mixin theme($background-color, $font-color) {
@@ -43,11 +43,21 @@ $tooltip-distance: 4px;
                 height: 100%;
                 pointer-events: none;
                 vertical-align: top;
+                fill: $blue-dark;
+            }
+            &:focus {
+                outline: none;
             }
         }
         &.cursor-pointer {
             cursor: pointer;
         }
+        &:focus {
+            outline: none;
+        }
+    }
+    &:focus {
+        outline: none;
     }
 }
 .overlay-container {

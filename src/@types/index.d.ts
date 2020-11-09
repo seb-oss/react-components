@@ -109,3 +109,35 @@ declare interface DocDropdownItem<T = any> {
 }
 
 declare type QuerySize = "xl" | "lg" | "md" | "sm" | "xs" | "never";
+
+declare interface MetaTag {
+    name?: string;
+    property?: string;
+    content: string;
+}
+
+declare interface MetaConfig {
+    keywords: string;
+    siteUrl: string;
+    description: string;
+    sitePreviewImageUrl: string;
+    title: string;
+    jsonLD: {
+        "@context": string;
+        "@type": "WebApplication";
+        name: string;
+        description: string;
+        url: string;
+        image: string;
+        screenshot: string;
+        applicationCategory: string;
+        operatingSystem: string;
+        author: {
+            "@type": string;
+            name: string;
+            description: string;
+            url: string;
+            logo: string;
+        };
+    };
+}

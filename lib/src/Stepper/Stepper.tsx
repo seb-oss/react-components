@@ -3,21 +3,35 @@ import { randomId } from "@sebgroup/frontend-tools";
 import "./stepper-style.scss";
 
 export interface StepperProps {
+    /** Element class name */
     className?: string;
+    /** Property sets whether textbox is disabled */
     disabled?: boolean;
+    /** Error message */
     error?: string;
+    /** Element ID */
     id?: string;
+    /** Element label */
     label?: string;
+    /** Maximum value of the range */
     max: number;
+    /** Minimum value of the range */
     min: number;
+    /** Element name */
     name?: string;
+    /** callback when element value is decreased */
     onDecrease: (event: React.MouseEvent<HTMLButtonElement>) => void;
+    /** callback when element value is increased */
     onIncrease: (event: React.MouseEvent<HTMLButtonElement>) => void;
+    /** Component associates with input ref */
     reference?: React.RefObject<any>;
+    /** Element value */
     value: number;
+    /** Warning message */
     warning?: string;
 }
 
+/** A stepper makes it easier to input values that are in a narrow range */
 export const Stepper: React.FC<StepperProps> = (props: StepperProps) => {
     const [id, setId] = React.useState<string>("");
     React.useEffect(() => {

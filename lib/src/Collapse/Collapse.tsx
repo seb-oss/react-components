@@ -7,6 +7,7 @@ export type CollapseProps = JSX.IntrinsicElements["div"] & {
     toggle?: boolean;
 };
 
+/** A helper component for collapsing any content placed inside of it */
 export const Collapse: React.FC<CollapseProps> = React.memo(({ toggle = false, ...props }: CollapseProps) => {
     const collapseRef: React.MutableRefObject<HTMLDivElement> = React.useRef<HTMLDivElement>();
     const [styles, setStyles] = React.useState<React.CSSProperties>({

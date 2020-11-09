@@ -13,7 +13,7 @@ export const Navbar: React.FC = React.memo(() => {
     return (
         <header>
             <nav className="navbar navbar-dark navbar-expand-md">
-                <div className="navbar-brand">SEB Angular Components</div>
+                <div className="navbar-brand">SEB React Components</div>
                 <button className="navbar-toggler" type="button" data-toggle="collapse" onClick={() => setToggle(!toggle)}>
                     <span className="navbar-toggler-icon"></span>
                 </button>

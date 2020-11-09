@@ -5,24 +5,40 @@ export type ModalPositionProp = "left" | "right" | null;
 export type ModalSizeProp = "modal-lg" | "modal-sm" | null;
 
 export interface ModalProps {
+    /** Accessibility for description */
     ariaDescribedby?: string;
+    /** Accessibility for label */
     ariaLabel?: string;
+    /** HTML element to be displayed on the body */
     body?: React.ReactNode;
+    /** Custom class */
     className?: string;
+    /** User cannot dismiss Dialog by clicking outside of it, default is `false` */
     disableBackdropDismiss?: boolean;
+    /** Escape key to dismiss modal if set to `true` */
     escapeToDismiss?: boolean;
+    /** Centers the modal in the middle of the screen. Default is `false` */
     centered?: boolean;
+    /** Size of modal `modal-lg` | `modal-sm` | `null` */
     size?: ModalSizeProp;
+    /** HTML element to be displayed on the footer */
     footer?: React.ReactNode;
+    /** Toggle fullscreen modal, default is `false` */
     fullscreen?: boolean;
+    /** HTML element to be displayed on the header */
     header?: React.ReactNode;
+    /** the id property of the modal */
     id?: string;
+    /** click event when modal is toggled */
     onDismiss: () => void;
+    /** Modal position. Available positions: `left`, `right` */
     position?: ModalPositionProp;
+    /** Modal toggle */
     toggle: boolean;
+    /** To only allow tab to focus within modal */
     trapFocus?: boolean;
 }
-
+/** The modal component provides a solid foundation for creating dialogs or slideout modals */
 export const Modal: React.FC<ModalProps> = React.memo(({ trapFocus = true, escapeToDismiss = true, ...props }: ModalProps) => {
     const pristine: React.MutableRefObject<boolean> = React.useRef<boolean>(true);
     const [className, setClassName] = React.useState<string>("seb modal");

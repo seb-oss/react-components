@@ -17,7 +17,7 @@ Type: Form Component
 
 ## Element Information
 
-This Angular component supports customization and configurations. The component name is `Stepper` and the selector is `<Stepper/>`.
+This React component supports customization and configurations. The component name is `Stepper` and the selector is `<Stepper/>`.
 
 ## Basic use
 

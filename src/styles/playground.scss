@@ -58,9 +58,21 @@
         grid-area: example;
         grid-column: 1;
         grid-row: 2;
+
+        > div {
+            .result {
+                display: flex;
+                justify-content: center;
+                position: relative;
+                max-width: 300px;
+                max-height: 500px;
+                min-height: 100px;
+                margin: 16px 0;
+            }
+        }
     }
 
-    > .code {
+    > .code-snippet {
         grid-area: example;
         border-bottom-left-radius: $border-radius;
         overflow: hidden;

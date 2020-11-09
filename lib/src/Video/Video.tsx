@@ -30,7 +30,7 @@ export interface VideoProps {
     width: string;
 }
 
-/** A video component is an Angular component for playing videos */
+/** A video component is an React component for playing videos */
 export const Video: React.FC<VideoProps> = (props: VideoProps) => {
     return (
         <div className={"video-holder-component" + (props.className ? ` ${props.className}` : "")} id={props.id}>

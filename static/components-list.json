@@ -36,7 +36,7 @@
     },
     {
         "name": "Chip",
-        "path": "/chipdocs/",
+        "path": "/docs/chipdocs",
         "filePath": "./src/Chip/index.ts"
     },
     {
@@ -105,11 +105,6 @@
         "filePath": "./src/RadioButton/index.ts"
     },
     {
-        "name": "RadioGroup",
-        "path": "/docs/radiogroup",
-        "filePath": "./src/RadioGroup/index.ts"
-    },
-    {
         "name": "Rating",
         "path": "/docs/rating",
         "filePath": "./src/Rating/index.ts"
@@ -136,7 +131,7 @@
     },
     {
         "name": "Tabs",
-        "path": "/tabsdocs/",
+        "path": "/docs/tabs",
         "filePath": "./src/Tabs/index.ts"
     },
     {
@@ -148,11 +143,6 @@
         "name": "TextBox",
         "path": "/docs/textbox",
         "filePath": "./src/TextBox/index.ts"
-    },
-    {
-        "name": "TextBoxGroup",
-        "path": "/docs/textboxgroup",
-        "filePath": "./src/TextBoxGroup/index.ts"
     },
     {
         "name": "TextLabel",

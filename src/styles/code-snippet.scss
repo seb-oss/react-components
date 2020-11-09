@@ -5,19 +5,15 @@
     position: relative;
     width: 100%;
     pre {
-        margin: 0;
+        margin: 0 !important;
         height: 100%;
+        width: 100%;
         overflow: hidden;
 
         &:not(.fill) {
             box-shadow: $shadow;
-            border-radius: $border-radius !important;
-            overflow: hidden !important;
+            border-radius: 0 !important;
             margin-bottom: 1rem;
-
-            & + div.snippet-icon {
-                border-top-right-radius: $border-radius;
-            }
         }
 
         code {
