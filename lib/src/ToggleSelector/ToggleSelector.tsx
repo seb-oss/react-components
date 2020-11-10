@@ -1,6 +1,7 @@
 import React from "react";
 import classnames from "classnames";
 import { ToggleSelectorItem, ToggleSelectorItemProps } from "./ToggleSelectorItem";
+import { FeedbackIndicator, IndicatorType } from "../FeedbackIndicator";
 import "./toggle-selector.scss";
 
 export type ToggleSelectorProps = Omit<JSX.IntrinsicElements["div"], "onChange"> & {
@@ -16,12 +17,18 @@ export type ToggleSelectorProps = Omit<JSX.IntrinsicElements["div"], "onChange">
     name: string;
     /** disable element */
     disabled?: boolean;
+    /** Theme of toggle seletor hint */
+    hintTheme?: IndicatorType;
+    /** hint message of toggle selector */
+    hint?: string;
+    /** icon position, default: `left` */
+    iconPosition?: "left" | "right";
     /** on toggle selector change */
     onChange: (value: string | Array<string>) => void;
 };
 
 /** A selector to display and select options in a flow. */
-export const ToggleSelector: React.FC<ToggleSelectorProps> = ({ className, list, multiple, value, onChange, ...props }: ToggleSelectorProps) => {
+export const ToggleSelector: React.FC<ToggleSelectorProps> = ({ className, list, multiple, value, onChange, hint, hintTheme, iconPosition, ...props }: ToggleSelectorProps) => {
     const [formattedValue, setFormattedValue] = React.useState<string | Array<string>>(value);
 
     /**
@@ -75,30 +82,34 @@ export const ToggleSelector: React.FC<ToggleSelectorProps> = ({ className, list,
 
     return (
         <div className={classnames("rc toggle-selector", className)} {...props}>
-            {list?.map((item: ToggleSelectorItemProps, i: number) => (
-                <ToggleSelectorItem
-                    key={i}
-                    onChange={onSelectorChange}
-                    value={item.value}
-                    multiple={multiple}
-                    name={props.name}
-                    disabled={props.disabled || item.disabled}
-                    checked={multiple ? formattedValue.indexOf(item.value) > -1 : formattedValue === item.value}
-                    {...item}
-                />
-            ))}
-            {React.Children.map(props.children, (Child: React.ReactElement<ToggleSelectorItemProps>) => {
-                const childValue: string = Child?.props?.value;
-                return React.isValidElement<ToggleSelectorItemProps>(Child)
-                    ? React.cloneElement<any>(Child, {
-                          onChange: onSelectorChange,
-                          multiple,
-                          name: props.name,
-                          disabled: props.disabled || Child?.props?.disabled,
-                          checked: multiple ? formattedValue.indexOf(childValue) > -1 : formattedValue === childValue,
-                      })
-                    : Child;
-            })}
+            <FeedbackIndicator className={classnames({ show: hint })} type={hintTheme} withoutBorder message={hint}>
+                {list?.map((item: ToggleSelectorItemProps, i: number) => (
+                    <ToggleSelectorItem
+                        key={i}
+                        onChange={onSelectorChange}
+                        value={item.value}
+                        multiple={multiple}
+                        name={props.name}
+                        className={classnames({ reverse: iconPosition === "right" })}
+                        disabled={props.disabled || item.disabled}
+                        checked={multiple ? formattedValue.indexOf(item.value) > -1 : formattedValue === item.value}
+                        {...item}
+                    />
+                ))}
+                {React.Children.map(props.children, (Child: React.ReactElement<ToggleSelectorItemProps>) => {
+                    const childValue: string = Child?.props?.value;
+                    return React.isValidElement<ToggleSelectorItemProps>(Child)
+                        ? React.cloneElement<any>(Child, {
+                              onChange: onSelectorChange,
+                              multiple,
+                              name: props.name,
+                              className: classnames(Child.props.className, { reverse: iconPosition === "right" }),
+                              disabled: props.disabled || Child?.props?.disabled,
+                              checked: multiple ? formattedValue.indexOf(childValue) > -1 : formattedValue === childValue,
+                          })
+                        : Child;
+                })}
+            </FeedbackIndicator>
         </div>
     );
 };

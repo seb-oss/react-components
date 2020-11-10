@@ -16,6 +16,37 @@ const ToggleSelectorPage: React.FC = (): React.ReactElement<void> => {
             key: "controls",
             items: [
                 {
+                    key: "hint",
+                    label: "Hint",
+                    order: 0,
+                    controlType: "Text",
+                    value: "",
+                },
+                {
+                    key: "hintTheme",
+                    value: { label: "Default", value: null, key: "default" },
+                    label: "Hint theme",
+                    placeholder: "Hint theme",
+                    options: [
+                        { label: "Default", value: null, key: "default" },
+                        { label: "Success", value: "success", key: "success" },
+                        { label: "Danger", value: "danger", key: "danger" },
+                        { label: "Warning", value: "warning", key: "warning" },
+                    ],
+                    controlType: "Dropdown",
+                },
+                {
+                    key: "iconPosition",
+                    value: { label: "Left", value: "left", key: "left" },
+                    label: "Icon position",
+                    placeholder: "Icon position",
+                    options: [
+                        { label: "Left", value: "left", key: "left" },
+                        { label: "Right", value: "right", key: "right" },
+                    ],
+                    controlType: "Dropdown",
+                },
+                {
                     label: "Optional configurations",
                     key: "checkboxes",
                     controlType: "Option",
@@ -30,7 +61,7 @@ const ToggleSelectorPage: React.FC = (): React.ReactElement<void> => {
     ]);
     const list: Array<ToggleSelectorItemProps> = [
         { label: "Bungalow", value: "bungalow", icon: userIcon },
-        { label: "Apartment", value: "apartment" },
+        { label: "Apartment", value: "apartment", icon: userIcon },
         { label: "Hotel", value: "hotel", disabled: true, icon: userIcon },
     ];
     const [value, setValue] = React.useState<string | Array<string>>("");
@@ -88,6 +119,9 @@ const ToggleSelectorPage: React.FC = (): React.ReactElement<void> => {
                                       icon: null,
                                   }))
                         }
+                        hint={(controls as any)?.hint}
+                        hintTheme={(controls as any)?.hintTheme?.value}
+                        iconPosition={(controls as any)?.iconPosition?.value}
                     />
                 </div>
             }

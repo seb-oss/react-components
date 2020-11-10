@@ -11,6 +11,15 @@ $toggle-item-padding: 24px;
         }
     }
 }
+@mixin border-color($color) {
+    .rc.toggle-selector-item {
+        .btn {
+            &:not(.disabled) {
+                border: 2px solid $color;
+            }
+        }
+    }
+}
 .rc.toggle-selector {
     width: 100%;
     max-width: $toggle-max-width;
@@ -26,7 +35,6 @@ $toggle-item-padding: 24px;
             overflow: hidden;
             column-gap: $toggle-item-padding;
             padding: 1rem $toggle-item-padding;
-            // pointer-events: none;
             &:not(.disabled) {
                 border-color: $gray-400;
                 color: $gray-800;
@@ -61,6 +69,22 @@ $toggle-item-padding: 24px;
                 flex: 1;
                 white-space: normal;
             }
+        }
+        &.reverse {
+            > .btn {
+                flex-direction: row-reverse;
+            }
+        }
+    }
+    > .progress-feedback.show {
+        &.progress-10 {
+            @include border-color($red-dark);
+        }
+        &.progress-50 {
+            @include border-color($yellow-darker);
+        }
+        &.progress-100 {
+            @include border-color($green-darker);
         }
     }
 }
