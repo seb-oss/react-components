@@ -1,5 +1,6 @@
 import React from "react";
-import TabItem, { TabItemProps } from "./Tab";
+import TabItem, { TabItemProps } from "./TabItem";
+import classnames from "classnames";
 import "./tabs-style.scss";
 
 export type TabsProps = Omit<JSX.IntrinsicElements["div"], "onClick"> & {
@@ -11,7 +12,7 @@ export type TabsProps = Omit<JSX.IntrinsicElements["div"], "onClick"> & {
     onClick: (index: number) => any;
 };
 /** Tabs organize and allow navigation between groups of content that are related and at the same level of hierarchy. */
-export const Tabs: React.FC<TabsProps> = ({ activeTab, list, ...props }: TabsProps) => {
+export const Tabs: React.FC<TabsProps> = ({ activeTab, list, onClick, ...props }: TabsProps) => {
     const elementRefAnchors: Array<HTMLAnchorElement> = [];
 
     /**
@@ -19,9 +20,9 @@ export const Tabs: React.FC<TabsProps> = ({ activeTab, list, ...props }: TabsPro
      * @param {React.MouseEvent<HTMLAnchorElement>} e Click event
      * @param {number} index The index of the tab clicked
      */
-    function onClick(e: React.MouseEvent<HTMLAnchorElement>, index: number): void {
-        if (props.onClick && !list[index].disabled) {
-            props.onClick(index);
+    function onTabClick(e: React.MouseEvent<HTMLAnchorElement>, index: number): void {
+        if (onClick && !list[index].disabled) {
+            onClick(index);
         }
     }
 
@@ -32,31 +33,29 @@ export const Tabs: React.FC<TabsProps> = ({ activeTab, list, ...props }: TabsPro
     function onKeyDown(e: React.KeyboardEvent<HTMLAnchorElement>, index: number): void {
         if (activeTab < list.length && activeTab >= 0) {
             const previousTabIsEnabled = list[activeTab - 1] && !list[activeTab - 1].disabled;
-            if ((e.key.toLowerCase() === "arrowleft" || e.key.toLowerCase() === "arrowdown") && previousTabIsEnabled && props.onClick) {
-                props.onClick(activeTab - 1);
-            } else if ((e.key.toLowerCase() === "arrowright" || e.key.toLowerCase() === "arrowup") && !list[activeTab + 1].disabled && props.onClick) {
-                props.onClick(activeTab + 1);
+            let selectedHtml: HTMLElement;
+            if ((e.key.toLowerCase() === "arrowleft" || e.key.toLowerCase() === "arrowdown") && previousTabIsEnabled && onClick) {
+                selectedHtml = elementRefAnchors[activeTab - 1];
+                onClick(activeTab - 1);
+            } else if ((e.key.toLowerCase() === "arrowright" || e.key.toLowerCase() === "arrowup") && !list[activeTab + 1].disabled && onClick) {
+                selectedHtml = elementRefAnchors[activeTab + 1];
+                onClick(activeTab + 1);
             } else if (e.key.toLowerCase() === "enter" || e.key === " " || e.key.toLowerCase() === "space") {
-                props.onClick(index);
+                selectedHtml = elementRefAnchors[activeTab];
+                onClick(index);
             }
+            selectedHtml?.focus();
         }
     }
 
-    React.useEffect(() => {
-        if (elementRefAnchors.length > 0) {
-            const selectedHtml: HTMLElement = elementRefAnchors[activeTab];
-            selectedHtml?.focus();
-        }
-    }, [activeTab]);
-
     return (
-        <div className={"custom-tabs" + (props.className ? ` ${props.className}` : "")} id={props.id}>
+        <div className={classnames("custom-tabs", props.className)} {...props}>
             <ul className="nav nav-tabs" role="tablist" aria-label="tabs">
                 {list?.map((item: TabItemProps, index: number) => (
                     <TabItem
                         {...item}
                         key={index}
-                        onClick={(e: React.MouseEvent<HTMLAnchorElement>) => onClick(e, index)}
+                        onClick={(e: React.MouseEvent<HTMLAnchorElement>) => onTabClick(e, index)}
                         onKeyDown={(e: React.KeyboardEvent<HTMLAnchorElement>) => onKeyDown(e, index)}
                         role="tab"
                         isActive={index === activeTab}
@@ -72,7 +71,7 @@ export const Tabs: React.FC<TabsProps> = ({ activeTab, list, ...props }: TabsPro
                               ref: (refElement: HTMLAnchorElement) => {
                                   elementRefAnchors[index] = refElement;
                               },
-                              onClick: (e: React.MouseEvent<HTMLAnchorElement>) => onClick(e, index),
+                              onClick: (e: React.MouseEvent<HTMLAnchorElement>) => onTabClick(e, index),
                               onKeyDown: (e: React.KeyboardEvent<HTMLAnchorElement>) => onKeyDown(e, index),
                           })
                         : Child;
