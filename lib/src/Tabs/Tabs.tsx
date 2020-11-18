@@ -7,7 +7,7 @@ export type TabsProps = Omit<JSX.IntrinsicElements["div"], "onClick"> & {
     /** index of focsued tab */
     activeTab: number;
     /** List of tab list item */
-    list: Array<TabItemProps>;
+    list?: Array<TabItemProps>;
     /** callback on tab item clicked */
     onClick: (index: number) => any;
 };
@@ -21,9 +21,7 @@ export const Tabs: React.FC<TabsProps> = ({ activeTab, list, onClick, ...props }
      * @param {number} index The index of the tab clicked
      */
     function onTabClick(e: React.MouseEvent<HTMLAnchorElement>, index: number): void {
-        if (onClick && !list[index].disabled) {
-            onClick(index);
-        }
+        onClick && onClick(index);
     }
 
     /**
@@ -31,17 +29,20 @@ export const Tabs: React.FC<TabsProps> = ({ activeTab, list, onClick, ...props }
      * @param {React.KeyboardEvent<HTMLAnchorElement>} e Key down event
      */
     function onKeyDown(e: React.KeyboardEvent<HTMLAnchorElement>, index: number): void {
-        if (activeTab < list.length && activeTab >= 0) {
-            const previousTabIsEnabled = list[activeTab - 1] && !list[activeTab - 1].disabled;
+        if (activeTab < elementRefAnchors.length && activeTab >= 0) {
             let selectedHtml: HTMLElement;
-            if ((e.key.toLowerCase() === "arrowleft" || e.key.toLowerCase() === "arrowdown") && previousTabIsEnabled && onClick) {
+            if ((e.key.toLowerCase() === "arrowleft" || e.key.toLowerCase() === "arrowdown") && activeTab > 0) {
                 selectedHtml = elementRefAnchors[activeTab - 1];
                 onClick(activeTab - 1);
-            } else if ((e.key.toLowerCase() === "arrowright" || e.key.toLowerCase() === "arrowup") && !list[activeTab + 1].disabled && onClick) {
+            } else if (
+                (e.key.toLowerCase() === "arrowright" || e.key.toLowerCase() === "arrowup") &&
+                elementRefAnchors[activeTab + 1] &&
+                elementRefAnchors[activeTab + 1].className.indexOf("disabled") === -1
+            ) {
                 selectedHtml = elementRefAnchors[activeTab + 1];
                 onClick(activeTab + 1);
             } else if (e.key.toLowerCase() === "enter" || e.key === " " || e.key.toLowerCase() === "space") {
-                selectedHtml = elementRefAnchors[activeTab];
+                selectedHtml = elementRefAnchors[index];
                 onClick(index);
             }
             selectedHtml?.focus();
@@ -71,8 +72,8 @@ export const Tabs: React.FC<TabsProps> = ({ activeTab, list, onClick, ...props }
                               ref: (refElement: HTMLAnchorElement) => {
                                   elementRefAnchors[index] = refElement;
                               },
-                              onClick: (e: React.MouseEvent<HTMLAnchorElement>) => onTabClick(e, index),
-                              onKeyDown: (e: React.KeyboardEvent<HTMLAnchorElement>) => onKeyDown(e, index),
+                              onClick: (e: React.MouseEvent<HTMLAnchorElement>) => (Child.props.disabled ? null : onTabClick(e, index)),
+                              onKeyDown: (e: React.KeyboardEvent<HTMLAnchorElement>) => (Child.props.disabled ? null : onKeyDown(e, index)),
                           })
                         : Child;
                 })}
