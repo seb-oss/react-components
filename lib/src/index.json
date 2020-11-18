@@ -5,7 +5,6 @@
         "Button": "./lib/src/Button/index.ts",
         "ButtonGroup": "./lib/src/ButtonGroup/index.ts",
         "Carousel": "./lib/src/Carousel/index.ts",
-        "Chart": "./lib/src/Chart/index.ts",
         "CheckBox": "./lib/src/CheckBox/index.ts",
         "Chip": "./lib/src/Chip/index.ts",
         "Collapse": "./lib/src/Collapse/index.ts",
@@ -58,10 +57,6 @@
         {
             "from": "./lib/src/Carousel/index.ts",
             "to": "./Carousel/index.js"
-        },
-        {
-            "from": "./lib/src/Chart/index.ts",
-            "to": "./Chart/index.js"
         },
         {
             "from": "./lib/src/CheckBox/index.ts",
