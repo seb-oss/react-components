@@ -1,22 +1,30 @@
 import React from "react";
 import Docs from "components/Docs";
-import { RadioButton } from "@sebgroup/react-components/RadioButton";
 import { DynamicFormOption, useDynamicForm } from "hooks/useDynamicForm";
+import { RadioButton, RadioButtonProps, RadioGroup } from "@sebgroup/react-components/RadioGroup";
+import { Stepper } from "@sebgroup/react-components/Stepper";
 
 const RadioButtonPage: React.FC = (): React.ReactElement<void> => {
-    const [selectedRadio, setSelectedRadio] = React.useState<number>();
+    const list: RadioButtonProps[] = [
+        { value: "1", label: "First", description: "with description" },
+        { value: "2", label: "Second" },
+        { value: "3", label: "Third (disabled)", disabled: true },
+        {
+            value: "4",
+            label: (
+                <>
+                    <code>4️⃣ Fourth (using custom template)</code> 😊
+                </>
+            ),
+        },
+        { value: "5", label: "Fifth" },
+    ];
+    const [selectedRadio, setSelectedRadio] = React.useState<string>();
 
     const [renderControls, { controls }] = useDynamicForm([
         {
             key: "controls",
             items: [
-                {
-                    key: "topLabel",
-                    label: "Top label",
-                    order: 10,
-                    controlType: "Text",
-                    value: "",
-                },
                 {
                     key: "label",
                     label: "Label",
@@ -24,12 +32,26 @@ const RadioButtonPage: React.FC = (): React.ReactElement<void> => {
                     controlType: "Text",
                     value: "Label",
                 },
+
                 {
-                    key: "description",
-                    label: "Description",
-                    order: 50,
-                    controlType: "Text",
+                    key: "hint",
                     value: "",
+                    label: "Hint",
+                    placeholder: "Hint",
+                    controlType: "Text",
+                },
+                {
+                    key: "hintTheme",
+                    value: { label: "Default", value: null, key: "default" },
+                    label: "Hint theme",
+                    placeholder: "Hint theme",
+                    options: [
+                        { label: "Default", value: null, key: "default" },
+                        { label: "Success", value: "success", key: "success" },
+                        { label: "Danger", value: "danger", key: "danger" },
+                        { label: "Warning", value: "warning", key: "warning" },
+                    ],
+                    controlType: "Dropdown",
                 },
                 {
                     label: "Optional configurations",
@@ -45,8 +67,8 @@ const RadioButtonPage: React.FC = (): React.ReactElement<void> => {
         },
     ]);
 
-    const importString: string = React.useMemo(() => require("!raw-loader!@sebgroup/react-components/RadioButton/RadioButton"), []);
-    const importedFiles: Array<string> = React.useMemo(() => [require("!raw-loader!@sebgroup/react-components/RadioButton/RadioButton")], []);
+    const importString: string = React.useMemo(() => require("!raw-loader!@sebgroup/react-components/RadioGroup/RadioGroup"), []);
+    const importedFiles: Array<string> = React.useMemo(() => [require("!raw-loader!@sebgroup/react-components/RadioGroup/RadioGroup")], []);
     const code: string = React.useMemo(() => require("!raw-loader!./radiobutton").default, []);
     /** check if key selected */
     const checkSelectedKey = (key: string) => {
@@ -58,19 +80,17 @@ const RadioButtonPage: React.FC = (): React.ReactElement<void> => {
             importedFiles={importedFiles}
             example={
                 <div className="w-100">
-                    {[1, 2, 3].map((number: number) => (
-                        <RadioButton
-                            value={number}
-                            name="test"
-                            {...controls}
-                            key={`radio-${number}`}
-                            checked={number === selectedRadio}
-                            onChange={(value: number) => setSelectedRadio(value)}
-                            inline={checkSelectedKey("inline")}
-                            condensed={checkSelectedKey("condensed")}
-                            disabled={checkSelectedKey("disabled")}
-                        />
-                    ))}
+                    <RadioGroup
+                        {...controls}
+                        list={list}
+                        value={selectedRadio}
+                        onChange={(ev: React.ChangeEvent<HTMLInputElement>) => setSelectedRadio(ev.target.value)}
+                        inline={checkSelectedKey("inline")}
+                        condensed={checkSelectedKey("condensed")}
+                        disabled={checkSelectedKey("disabled")}
+                        hint={(controls as any)?.hint}
+                        hintTheme={(controls as any)?.hintTheme?.value}
+                    />
                 </div>
             }
             code={code}

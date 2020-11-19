@@ -5,7 +5,17 @@ $form-element-height: 44px;
 $radio-size: 16px;
 $radio-padding-left: 40px;
 
-.form-group.custom-radio {
+@mixin checkbox-control-color($color) {
+    &:not(.disabled) {
+        > .custom-control-label {
+            &:before {
+                border-color: $color;
+            }
+        }
+    }
+}
+
+.rc.radio-group {
     > .input-field {
         .custom-control {
             position: relative;
@@ -14,6 +24,7 @@ $radio-padding-left: 40px;
             height: 100%;
             padding-left: 0;
             height: $form-element-height;
+            margin-bottom: 1rem;
             > .custom-control-label,
             > .custom-control-input {
                 user-select: none;
@@ -46,12 +57,8 @@ $radio-padding-left: 40px;
                 padding-right: 16px;
                 &:before,
                 &:after {
-                    left: 0.65rem;
-                    top: 0.85rem;
-                }
-                &:after {
-                    width: 1rem;
-                    height: 1rem;
+                    left: ($radio-padding-left / 2) - ($radio-size / 2);
+                    top: ($form-element-height / 2) - ($radio-size / 2);
                 }
                 > .radio-description {
                     color: $gray-600;
@@ -59,17 +66,29 @@ $radio-padding-left: 40px;
                     margin-left: 8px;
                 }
             }
+            &.success {
+                @include checkbox-control-color($green-darker);
+            }
+            &.danger {
+                @include checkbox-control-color($red-dark);
+            }
+            &.warning {
+                @include checkbox-control-color($yellow-darker);
+            }
         }
     }
     &.inline {
-        display: inline-block;
-        &:not(:first-child) {
-            > .custom-control {
-                margin-left: 15px;
+        > .input-field {
+            .custom-control {
+                display: inline-block;
             }
         }
     }
     &.condensed {
-        margin: 0;
+        > .input-field {
+            .custom-control {
+                margin: 0;
+            }
+        }
     }
 }

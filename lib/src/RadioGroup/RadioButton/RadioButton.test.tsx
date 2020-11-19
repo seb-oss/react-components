@@ -1,6 +1,6 @@
 import React from "react";
 import { shallow, ShallowWrapper, ReactWrapper, mount } from "enzyme";
-import { RadioButton, RadioButtonProps } from ".";
+import { RadioButton, RadioButtonProps } from "./RadioButton";
 
 describe("Component: RadioButton", () => {
     let wrapper: ShallowWrapper<RadioButtonProps>;
@@ -45,14 +45,11 @@ describe("Component: RadioButton", () => {
     it("Should render and display label and description", () => {
         const label: string = "my label";
         const description: string = "my description";
-        const topLabel: string = "my top label";
-        wrapper.setProps({ label, description, topLabel });
+        wrapper.setProps({ label, description });
         expect(wrapper.find(".custom-control-label").length).toBe(1);
         expect(wrapper.find(".custom-control-label").text().indexOf(label)).not.toEqual(-1);
         expect(wrapper.find(".radio-description").length).toBe(1);
         expect(wrapper.find(".radio-description").text()).toEqual(description);
-        expect(wrapper.find(".radio-toplabel").length).toBe(1);
-        expect(wrapper.find(".radio-toplabel").text()).toEqual(topLabel);
     });
 
     it("Should render inline and condensed when inline prop is set to true", () => {
