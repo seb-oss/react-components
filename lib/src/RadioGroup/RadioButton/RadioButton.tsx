@@ -3,11 +3,15 @@ import classnames from "classnames";
 import { randomId } from "@sebgroup/frontend-tools";
 
 export type RadioButtonProps<T = any> = Omit<JSX.IntrinsicElements["input"], "value"> & {
-    /** */
+    /** set to condensed theme */
     condensed?: boolean;
+    /** radio button description */
     description?: string;
+    /** inline radio button */
     inline?: boolean;
+    /** radio button label */
     label: React.ReactNode;
+    /** radio button value */
     value: T;
 };
 /** A radio button allows a user to select a single item from a predefined list of options. Radio buttons are common to use in forms, i.e when you apply for a loan and need to enter "Yes" or "No". */

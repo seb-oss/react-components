@@ -3,10 +3,12 @@ import classnames from "classnames";
 import "./progress-bar-style.scss";
 
 export type ProgressBarProps = JSX.IntrinsicElements["div"] & {
+    /** Show percentage of progress */
     showProgress?: boolean;
+    /** Progress value */
     value: number;
 };
-
+/** A visual representation of progress for loading content. */
 export const ProgressBar: React.FC<ProgressBarProps> = ({ showProgress, value, ...props }: ProgressBarProps) => {
     return (
         <div className={classnames("rc progress-bar", props.className)} {...props}>

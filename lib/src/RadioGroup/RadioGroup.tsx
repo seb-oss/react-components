@@ -6,16 +6,20 @@ import "./radio-group-style.scss";
 import { FeedbackIndicator, IndicatorType } from "../FeedbackIndicator";
 
 export type RadioGroupProps<T = any> = Omit<JSX.IntrinsicElements["input"], "list"> & {
+    /** Condensed radio group */
     condensed?: boolean;
+    /** Inline radio group */
     inline?: boolean;
+    /** Radio group label */
     label?: string;
+    /** Radio group list */
     list?: Array<RadioButtonProps<T>>;
     /** Hint message for stepper */
     hint?: string;
     /** Theme of text box hint */
     hintTheme?: IndicatorType;
 };
-
+/** A radio button allows a user to select a single item from a predefined list of options. Radio buttons are common to use in forms, i.e when you apply for a loan and need to enter "Yes" or "No". */
 export const RadioGroup: React.FC<RadioGroupProps> = ({ condensed, inline, label, list, children, className, id, hint, hintTheme = "danger", ...props }: RadioGroupProps) => {
     const [idList, setIdList] = React.useState<Array<string>>([]);
 

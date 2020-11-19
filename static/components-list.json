@@ -95,9 +95,9 @@
         "filePath": "./src/ProgressBar/index.ts"
     },
     {
-        "name": "RadioButton",
-        "path": "/docs/radiobutton",
-        "filePath": "./src/RadioButton/index.ts"
+        "name": "RadioGroup",
+        "path": "/docs/radiogroup",
+        "filePath": "./src/RadioGroup/index.ts"
     },
     {
         "name": "Rating",

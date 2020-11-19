@@ -1,8 +1,7 @@
 import React from "react";
 import Docs from "components/Docs";
 import { DynamicFormOption, useDynamicForm } from "hooks/useDynamicForm";
-import { RadioButton, RadioButtonProps, RadioGroup } from "@sebgroup/react-components/RadioGroup";
-import { Stepper } from "@sebgroup/react-components/Stepper";
+import { RadioButtonProps, RadioGroup } from "@sebgroup/react-components/RadioGroup";
 
 const RadioButtonPage: React.FC = (): React.ReactElement<void> => {
     const list: RadioButtonProps[] = [
@@ -69,7 +68,7 @@ const RadioButtonPage: React.FC = (): React.ReactElement<void> => {
 
     const importString: string = React.useMemo(() => require("!raw-loader!@sebgroup/react-components/RadioGroup/RadioGroup"), []);
     const importedFiles: Array<string> = React.useMemo(() => [require("!raw-loader!@sebgroup/react-components/RadioGroup/RadioGroup")], []);
-    const code: string = React.useMemo(() => require("!raw-loader!./radiobutton").default, []);
+    const code: string = React.useMemo(() => require("!raw-loader!./radiogroup").default, []);
     /** check if key selected */
     const checkSelectedKey = (key: string) => {
         return controls.checkboxes?.some((item: DynamicFormOption) => item.key === key);

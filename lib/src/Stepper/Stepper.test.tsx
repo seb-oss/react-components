@@ -1,6 +1,5 @@
 import React from "react";
-import { shallow, ReactWrapper, mount } from "enzyme";
-import { Stepper, StepperProps } from ".";
+import { Stepper } from ".";
 import { unmountComponentAtNode, render } from "react-dom";
 import { act, Simulate } from "react-dom/test-utils";
 
