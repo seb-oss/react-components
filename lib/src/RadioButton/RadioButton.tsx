@@ -1,44 +1,29 @@
 import React from "react";
+import classnames from "classnames";
 import { randomId } from "@sebgroup/frontend-tools";
 import "./radio-button-style.scss";
 
-export interface RadioButtonProps<T = any> {
-    className?: string;
+export type RadioButtonProps<T = any> = Omit<JSX.IntrinsicElements["input"], "value" | "onChange"> & {
     condensed?: boolean;
     description?: string;
-    disabled?: boolean;
-    group?: string;
-    id?: string;
     inline?: boolean;
     label: string;
-    name: string;
     onChange: (value: T, e?: React.ChangeEvent<HTMLInputElement>) => void;
-    radioValue: T;
-    reference?: React.RefObject<HTMLInputElement>;
     topLabel?: string;
     value: T;
-}
+};
 
-export const RadioButton: React.FC<RadioButtonProps> = (props: RadioButtonProps) => {
-    const [className, setClassName] = React.useState<string>("form-group custom-radio");
+export const RadioButton: React.FC<RadioButtonProps> = ({ condensed, description, inline, label, topLabel, onChange, className, ...props }: RadioButtonProps) => {
     const [id, setId] = React.useState<string>("");
 
     React.useEffect(() => setId(props.id || randomId("radiobtn-")), [props.id]);
 
-    React.useEffect(() => {
-        let elementClassName: string = "form-group custom-radio";
-        elementClassName += props.inline ? " inline" : "";
-        elementClassName += props.condensed ? " condensed" : "";
-        elementClassName += props.className ? ` ${props.className}` : "";
-        setClassName(elementClassName);
-    }, [props.className, props.inline, props.condensed]);
-
     return (
-        <div className={className}>
+        <div className={classnames("form-group custom-radio", className, { inline: inline, condensed: condensed })}>
             <div className="input-field">
-                {props.topLabel && (
+                {topLabel && (
                     <label htmlFor={id} className="radio-toplabel">
-                        {props.topLabel}
+                        {topLabel}
                     </label>
                 )}
 
@@ -46,19 +31,15 @@ export const RadioButton: React.FC<RadioButtonProps> = (props: RadioButtonProps)
                     <input
                         className="custom-control-input"
                         type="radio"
-                        value={props.value}
-                        name={props.name}
                         id={id}
-                        checked={props.value === props.radioValue}
-                        disabled={props.disabled}
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                            props.onChange(props.radioValue, e);
+                            onChange(props.value, e);
                         }}
-                        ref={props.reference}
+                        {...props}
                     />
                     <label className="custom-control-label" htmlFor={id}>
-                        {props.label}
-                        {props.description && <span className="radio-description">{props.description}</span>}
+                        {label}
+                        {description && <span className="radio-description">{description}</span>}
                     </label>
                 </div>
             </div>

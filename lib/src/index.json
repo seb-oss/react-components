@@ -119,10 +119,6 @@
             "to": "./RadioButton/index.js"
         },
         {
-            "from": "./lib/src/RadioGroup/index.ts",
-            "to": "./RadioGroup/index.js"
-        },
-        {
             "from": "./lib/src/Rating/index.ts",
             "to": "./Rating/index.js"
         },

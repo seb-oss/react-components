@@ -1,7 +1,7 @@
 import React, { useState, ReactNode, useMemo, useCallback } from "react";
 
-import { RadioGroup } from "@sebgroup/react-components/RadioGroup";
-import { RadioListModel } from "@sebgroup/react-components/RadioGroup/RadioGroup";
+// import { RadioGroup } from "@sebgroup/react-components/RadioGroup";
+// import { RadioListModel } from "@sebgroup/react-components/RadioGroup/RadioGroup";
 import { CheckBox } from "@sebgroup/react-components/CheckBox";
 import { TextBox } from "@sebgroup/react-components/TextBox";
 import { TextArea } from "@sebgroup/react-components/TextArea";
@@ -9,6 +9,7 @@ import { Dropdown } from "@sebgroup/react-components/Dropdown";
 import { Datepicker } from "@sebgroup/react-components/Datepicker";
 import { Stepper } from "@sebgroup/react-components/Stepper";
 import { DropdownItem, DropdownChangeEvent } from "@sebgroup/react-components/Dropdown/Dropdown";
+import { RadioButton, RadioButtonProps } from "@sebgroup/react-components/RadioButton";
 
 export interface DynamicFormItem {
     key: string;
@@ -45,7 +46,7 @@ export interface DynamicFormOption {
 
 export type DynamicFormDate = { day: number; month: number; year: number };
 
-type InputChange = React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | React.MouseEvent<HTMLButtonElement, MouseEvent> | DropdownChangeEvent | Date | number;
+type InputChange = React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | React.MouseEvent<HTMLButtonElement, MouseEvent> | DropdownChangeEvent | Date | number | string;
 
 type DynamicFormInternalStateValue = string | string[] | DynamicFormOption | DynamicFormOption[] | Date | boolean | number | null;
 
@@ -163,7 +164,7 @@ export function useDynamicForm(sections: DynamicFormSection[]): [() => JSX.Eleme
                     break;
                 }
                 case "Radio": {
-                    const targetValue: string = (e as React.ChangeEvent<HTMLInputElement>).target.value;
+                    const targetValue: string = e as string;
                     const targetOption: DynamicFormOption | undefined = item.options?.find((o) => o.value === targetValue);
                     if (targetOption) {
                         newValue = targetOption;
@@ -274,11 +275,22 @@ const DynamicFormItemComponent: React.FC<{
         }
 
         case "Radio": {
-            const list: RadioListModel[] =
-                props.item?.options?.map((option) => {
-                    return { label: option.label || "", value: option.value || "", disabled: !!option.disabled };
-                }) || [];
-            formItem = <RadioGroup condensed {...commonProps} value={(props.state as DynamicFormOption)?.value || ""} list={list} />;
+            formItem = (
+                <div className="input-field">
+                    {commonProps.label && <label className="radio-group-label">{commonProps.label}</label>}
+                    {props.item?.options.map((option: DynamicFormOption, index: number) => (
+                        <RadioButton
+                            condensed
+                            {...commonProps}
+                            value={option.value}
+                            checked={option.value === ((props.state as DynamicFormOption)?.value || "")}
+                            label={option.label}
+                            disabled={option.disabled}
+                            key={index}
+                        />
+                    ))}
+                </div>
+            );
             break;
         }
 

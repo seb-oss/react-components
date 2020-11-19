@@ -9,7 +9,6 @@ describe("Component: RadioButton", () => {
         label: "label",
         onChange: jest.fn(),
         name: "Gender",
-        radioValue: "male",
     };
 
     beforeEach(() => {
