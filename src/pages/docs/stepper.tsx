@@ -34,6 +34,26 @@ const StepTrackerPage: React.FC = React.memo(() => {
                         controlType: "Stepper",
                     },
                     {
+                        key: "hint",
+                        value: "",
+                        label: "Hint",
+                        placeholder: "Hint",
+                        controlType: "Text",
+                    },
+                    {
+                        key: "hintTheme",
+                        value: { label: "Default", value: null, key: "default" },
+                        label: "Hint theme",
+                        placeholder: "Hint theme",
+                        options: [
+                            { label: "Default", value: null, key: "default" },
+                            { label: "Success", value: "success", key: "success" },
+                            { label: "Danger", value: "danger", key: "danger" },
+                            { label: "Warning", value: "warning", key: "warning" },
+                        ],
+                        controlType: "Dropdown",
+                    },
+                    {
                         label: "Optional configurations",
                         key: "checkboxes",
                         controlType: "Option",
@@ -72,6 +92,8 @@ const StepTrackerPage: React.FC = React.memo(() => {
                     onDecrease={() => setValue(value - 1)}
                     disabled={checkSelectedKey("disabled")}
                     value={value}
+                    hint={(controls as any)?.hint}
+                    hintTheme={(controls as any)?.hintTheme?.value}
                 />
             }
             code={code}
