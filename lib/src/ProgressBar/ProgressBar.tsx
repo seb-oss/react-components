@@ -1,18 +1,17 @@
 import React from "react";
+import classnames from "classnames";
 import "./progress-bar-style.scss";
 
-export interface ProgressBarProps {
-    className?: string;
-    id?: string;
+export type ProgressBarProps = JSX.IntrinsicElements["div"] & {
     showProgress?: boolean;
     value: number;
-}
+};
 
-export const ProgressBar: React.FC<ProgressBarProps> = (props: ProgressBarProps) => {
+export const ProgressBar: React.FC<ProgressBarProps> = ({ showProgress, value, ...props }: ProgressBarProps) => {
     return (
-        <div className={"custom-progress" + (props.className ? ` ${props.className}` : "")} id={props.id}>
-            <div className={"custom-progress-bar" + (props.showProgress ? " show-progress" : "")} style={{ width: `${props.value}%` }} />
-            {props.showProgress && <div className={"custom-progress-text" + (props.value > 49 ? " white" : "")}>{props.value + "%"}</div>}
+        <div className={classnames("rc progress-bar", props.className)} {...props}>
+            <div className={classnames("custom-progress-bar", { "show-progress": showProgress })} style={{ width: `${value}%` }} />
+            {showProgress && <div className={classnames("custom-progress-text", { white: value > 49 })}>{value + "%"}</div>}
         </div>
     );
 };
