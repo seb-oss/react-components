@@ -25,8 +25,8 @@ export const RadioButton: React.FC<RadioButtonProps> = ({ condensed, description
             <input className="custom-control-input" type="radio" id={id} {...props} />
             <label className="custom-control-label" htmlFor={id}>
                 {label}
-                {description && <span className="radio-description">{description}</span>}
             </label>
+            {description && <div className="radio-description">{description}</div>}
         </div>
     );
 };
