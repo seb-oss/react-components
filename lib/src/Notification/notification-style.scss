@@ -32,7 +32,7 @@ $small: 12px;
     }
 }
 
-.custom-notification {
+.rc.custom-notification {
     position: fixed;
     display: block;
     z-index: 9999;
@@ -75,27 +75,27 @@ $small: 12px;
             height: 16px;
         }
     }
-    &.style-slide-in {
+    &.style-slide-in,
+    &.default {
         width: 300px;
-        &.bottom-left {
-            transform: translateX(-350px);
-            left: 20px;
-            bottom: 15px;
-        }
+        transform: translateX(-350px); // default set to bottom-left
+        left: 20px; // default set to bottom-left
+        bottom: 15px; // default set to bottom-;eft
         &.bottom-right {
             transform: translateX(350px);
+            left: unset;
             right: 20px;
-            bottom: 15px;
         }
         &.top-left {
-            transform: translateX(-350px);
-            left: 20px;
+            bottom: unset;
             top: 15px;
         }
         &.top-right {
             transform: translateX(350px);
             right: 20px;
             top: 15px;
+            left: unset;
+            bottom: unset;
         }
         &.open {
             transform: translateX(0);
@@ -137,15 +137,11 @@ $small: 12px;
                     }
                 }
                 &.partitioned {
+                    display: flex;
+                    flex-wrap: wrap;
+                    gap: 4px;
                     .action-wrapper {
-                        display: inline-block;
-                        width: 50%;
-                        &:first-child {
-                            padding-right: 2px;
-                        }
-                        &:last-child {
-                            padding-left: 2px;
-                        }
+                        flex: 0 1 calc(50% - 2px);
                     }
                 }
             }
@@ -155,11 +151,10 @@ $small: 12px;
         width: 100vw;
         left: 0;
         right: 0;
-        &.top {
-            top: 0;
-            transform: translateY(-150%);
-        }
+        top: 0; // default set to top
+        transform: translateY(-150%); // default set to top
         &.bottom {
+            top: unset;
             bottom: 0;
             transform: translateY(150%);
         }
@@ -215,18 +210,10 @@ $small: 12px;
             opacity: 0;
             width: 90%;
             right: auto;
-            &.bottom-left,
-            &.bottom-right,
-            &.top-right,
-            &.top-left {
-                left: 50%;
-            }
-            &.bottom-left,
-            &.bottom-right {
-                transform: translate(-50%, 150%);
-                bottom: 15px;
-                top: auto;
-            }
+            left: 50%;
+            transform: translate(-50%, 150%);
+            bottom: 15px;
+            top: auto;
             &.top-right,
             &.top-left {
                 transform: translate(-50%, -150%);
