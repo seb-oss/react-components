@@ -1,4 +1,4 @@
-import { randomId } from "@sebgroup/frontend-tools";
+import { randomId } from "@sebgroup/frontend-tools/dist/randomId";
 import * as React from "react";
 import "./image-preview-style.scss";
 
