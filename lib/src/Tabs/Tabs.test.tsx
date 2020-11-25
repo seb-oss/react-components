@@ -11,10 +11,10 @@ describe("Component: Tabs", () => {
     beforeEach(() => {
         props = {
             list: [
-                { text: "First", disabled: false },
-                { text: "Second", disabled: false },
-                { text: "Third", disabled: false },
-                { text: "Fourth", disabled: true },
+                { label: "First", disabled: false },
+                { label: "Second", disabled: false },
+                { label: "Third", disabled: false },
+                { label: "Fourth", disabled: true },
             ],
             activeTab: 0,
             onClick: jest.fn(),

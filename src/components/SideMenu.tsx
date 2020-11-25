@@ -7,7 +7,7 @@ import ExternalLinkIcon from "../../static/icons/external-link.svg";
 import { Link } from "gatsby";
 import { urls } from "@configs";
 import comps from "../../static/components-list.json";
-import { TextBoxGroup } from "@sebgroup/react-components/TextBoxGroup";
+import { TextBox } from "@sebgroup/react-components/TextBox";
 import "../styles/sidemenu.scss";
 
 const SIDE_MENU_STORAGE_KEY = "SIDEMENU";
@@ -186,7 +186,7 @@ export const SideMenu: React.FC = React.memo(() => {
                     Components <span className="badge badge-dark float-right rounded">{components?.length || 0}</span>
                 </h4>
 
-                <TextBoxGroup
+                <TextBox
                     id="searchTextBox"
                     className="sidemenu-search"
                     name="search"
@@ -199,7 +199,7 @@ export const SideMenu: React.FC = React.memo(() => {
                     }}
                     onKeyUp={searchNavigations}
                     placeholder="Search (Control+Shift+F)"
-                    rightIcon={<SearchIcon />}
+                    rightSlot={<SearchIcon />}
                 />
 
                 <nav className="components-list" ref={listRef}>

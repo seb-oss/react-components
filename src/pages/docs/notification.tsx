@@ -38,9 +38,9 @@ const NotificationPage: React.FC = () => {
             key: "controls",
             items: [
                 {
-                    key: "style",
+                    key: "type",
                     value: styleList[0],
-                    label: "Style",
+                    label: "Type",
                     options: styleList,
                     controlType: "Dropdown",
                 },
@@ -86,7 +86,7 @@ const NotificationPage: React.FC = () => {
                         toggle={toggle}
                         title={checkSelectedKey("withTitle") ? "Notification title" : null}
                         message="Notification message"
-                        style={(controls as any)?.style.value}
+                        type={(controls as any)?.type.value}
                         theme={(controls as any)?.theme.value}
                         position={(controls as any)?.position.value}
                         onDismiss={() => setToggle(false)}

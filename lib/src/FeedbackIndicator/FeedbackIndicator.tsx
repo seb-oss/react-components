@@ -8,11 +8,13 @@ export type Indicator = {
     type: IndicatorType;
     /** The indicator message. `children` can also be used instead. */
     message?: React.ReactNode;
+    /** To show indicator without border */
+    withoutBorder?: boolean;
 };
 
 export type FeedbackIndicatorProps = JSX.IntrinsicElements["div"] & Indicator;
 /** A helper component to display feedback for children content */
-export const FeedbackIndicator: React.FC<FeedbackIndicatorProps> = React.memo(({ type, message, children, ...props }: FeedbackIndicatorProps) => {
+export const FeedbackIndicator: React.FC<FeedbackIndicatorProps> = React.memo(({ type, message, children, withoutBorder, ...props }: FeedbackIndicatorProps) => {
     const [indicatorValue, setIndicatorValue] = React.useState<number>(0);
 
     React.useEffect(() => {
@@ -33,8 +35,8 @@ export const FeedbackIndicator: React.FC<FeedbackIndicatorProps> = React.memo(({
 
     return (
         <div {...props} className={classnames("rc", "progress-feedback", `progress-${indicatorValue}`, { "wrapper-indicator": children }, props.className)}>
-            {children && <div className="children">{children}</div>}
-            {!!indicatorValue && message}
+            {children && <div className={classnames("children", { "no-border": withoutBorder })}>{children}</div>}
+            {message}
         </div>
     );
 });

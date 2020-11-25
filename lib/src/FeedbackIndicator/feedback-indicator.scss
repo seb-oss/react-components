@@ -6,7 +6,7 @@
             content: none;
         }
         &:not(.progress-0) {
-            > .children {
+            > .children:not(.no-border) {
                 border-radius: 4px;
                 border: 1px solid currentColor;
             }
@@ -26,7 +26,7 @@
                     > .custom-checkbox {
                         > .custom-control-label {
                             &::before {
-                                border-color: $yellow;
+                                border-color: $yellow-darker;
                             }
                         }
                     }

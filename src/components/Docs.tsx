@@ -1,10 +1,11 @@
 import React from "react";
-import { Tabs, TabsListItem } from "@sebgroup/react-components/Tabs";
+import { Tabs } from "@sebgroup/react-components/Tabs";
 import Layout from "./Layout";
 import { Helmet } from "react-helmet";
 import { APIExtractService } from "utils/api-parser";
 import DocsWrapper from "./DocsWrapper";
 import { DocsPlaygroundProps } from "./DocsPlaygroud";
+import { TabItemProps } from "@sebgroup/react-components/Tabs/TabItem";
 
 export interface DocsProps extends DocsPlaygroundProps {
     mainFile: string;
@@ -13,8 +14,8 @@ export interface DocsProps extends DocsPlaygroundProps {
 }
 
 const Docs: React.FC<DocsProps> = (props: DocsProps) => {
-    const tabList: Array<TabsListItem> = [{ text: "Playground" }, { text: "APIs" }];
-    const tabListWithNotes: Array<TabsListItem> = [...tabList, { text: "Notes" }];
+    const tabList: Array<TabItemProps> = [{ label: "Playground" }, { label: "APIs" }];
+    const tabListWithNotes: Array<TabItemProps> = [...tabList, { label: "Notes" }];
     const [apis, setApis] = React.useState<ApiSection>(null);
     const [activeTab, setActiveTab] = React.useState<number>(0);
 

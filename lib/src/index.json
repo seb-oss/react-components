@@ -5,7 +5,6 @@
         "Button": "./lib/src/Button/index.ts",
         "ButtonGroup": "./lib/src/ButtonGroup/index.ts",
         "Carousel": "./lib/src/Carousel/index.ts",
-        "Chart": "./lib/src/Chart/index.ts",
         "CheckBox": "./lib/src/CheckBox/index.ts",
         "Chip": "./lib/src/Chip/index.ts",
         "Collapse": "./lib/src/Collapse/index.ts",
@@ -30,7 +29,6 @@
         "Tabs": "./lib/src/Tabs/index.ts",
         "TextArea": "./lib/src/TextArea/index.ts",
         "TextBox": "./lib/src/TextBox/index.ts",
-        "TextBoxGroup": "./lib/src/TextBoxGroup/index.ts",
         "TextLabel": "./lib/src/TextLabel/index.ts",
         "Timeline": "./lib/src/Timeline/index.ts",
         "Timepicker": "./lib/src/Timepicker/index.ts",
@@ -59,10 +57,6 @@
         {
             "from": "./lib/src/Carousel/index.ts",
             "to": "./Carousel/index.js"
-        },
-        {
-            "from": "./lib/src/Chart/index.ts",
-            "to": "./Chart/index.js"
         },
         {
             "from": "./lib/src/CheckBox/index.ts",
@@ -125,10 +119,6 @@
             "to": "./RadioButton/index.js"
         },
         {
-            "from": "./lib/src/RadioGroup/index.ts",
-            "to": "./RadioGroup/index.js"
-        },
-        {
             "from": "./lib/src/Rating/index.ts",
             "to": "./Rating/index.js"
         },
@@ -159,10 +149,6 @@
         {
             "from": "./lib/src/TextBox/index.ts",
             "to": "./TextBox/index.js"
-        },
-        {
-            "from": "./lib/src/TextBoxGroup/index.ts",
-            "to": "./TextBoxGroup/index.js"
         },
         {
             "from": "./lib/src/TextLabel/index.ts",
