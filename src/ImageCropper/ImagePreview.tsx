@@ -1,3 +1,4 @@
+import { randomId } from "@sebgroup/frontend-tools";
 import * as React from "react";
 import "./image-preview-style.scss";
 
@@ -11,7 +12,8 @@ export interface ImagePreviewProps {
 
 export const ImagePreview: React.FunctionComponent<ImagePreviewProps> = (props: ImagePreviewProps): React.ReactElement<void> => {
     let fileInput: React.RefObject<HTMLInputElement> = React.createRef();
-
+    const profileImageId = React.useMemo(() => randomId("profile-image"), []);
+    const fileInputId = React.useMemo(() => randomId("file-input"), []);
     const [cropDataResult, setCropDataResult] = React.useState<string>(props.previewSrc || "");
 
     /**
@@ -64,16 +66,16 @@ export const ImagePreview: React.FunctionComponent<ImagePreviewProps> = (props: 
 
     return (
         <div className={"profile-image-container " + props.previewClassName}>
-            <div className="profile-image">{cropDataResult ? <img src={cropDataResult} alt="cropped image" id="profile-image" /> : defaultProfileSvg}</div>
+            <div className="profile-image">{cropDataResult ? <img src={cropDataResult} alt="cropped image" id={profileImageId} /> : defaultProfileSvg}</div>
             <input
                 ref={fileInput}
                 type="file"
-                id="fileInput"
+                id={fileInputId}
                 name="profileImage"
                 accept="image/*"
                 onChange={props.handleUploadImage}
                 onClick={(e: React.MouseEvent<HTMLInputElement, MouseEvent>) => {
-                    if (e.target && (e.target as any).value) {
+                    if ((e.target as HTMLInputElement).value) {
                         e.target["value"] = null;
                     }
                 }}
