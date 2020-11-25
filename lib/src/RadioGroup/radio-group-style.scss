@@ -1,35 +1,40 @@
 @import "~@sebgroup/bootstrap/scss/variables";
 
 $transition-time: 200ms;
-$form-element-height: 44px;
+$form-element-height: 2.75rem;
 $radio-size: 16px;
 $radio-padding-left: 40px;
 
-.form-group.custom-radio {
+@mixin checkbox-control-color($color) {
+    &:not(.disabled) {
+        > .custom-control-label {
+            &:before {
+                border-color: $color;
+            }
+        }
+    }
+}
+
+.rc.radio-group {
     > .input-field {
+        .children {
+            padding: 0.5rem;
+        }
         .custom-control {
             position: relative;
             display: flex;
+            flex-direction: row;
             align-items: center;
-            height: 100%;
-            padding-left: 0;
-            height: $form-element-height;
+            flex-wrap: wrap;
+            min-height: $form-element-height;
             margin-bottom: 1rem;
             > .custom-control-label,
             > .custom-control-input {
                 user-select: none;
             }
             > .custom-control-input {
-                &:focus,
-                &:active {
-                    & + label {
-                        box-shadow: inset 0 0 0 0.1rem rgba(65, 176, 238, 0.5);
-                    }
-                }
-                &:disabled ~ .custom-control-label {
-                    > .radio-description {
-                        color: $gray-400;
-                    }
+                &:disabled ~ .radio-description {
+                    color: $gray-400;
                 }
                 &:not(:disabled) {
                     cursor: pointer;
@@ -39,35 +44,28 @@ $radio-padding-left: 40px;
                 }
             }
             > .custom-control-label {
-                height: 100%;
-                width: 100%;
-                display: flex;
-                align-items: center;
-                padding-left: $radio-padding-left;
                 padding-right: 16px;
-                &:before,
-                &:after {
-                    left: ($radio-padding-left / 2) - ($radio-size / 2);
-                    top: ($form-element-height / 2) - ($radio-size / 2);
-                }
-                &:after {
-                    top: 12px;
-                    left: 10px;
-                    width: 1.26rem;
-                    height: 1.26rem;
-                }
-                > .radio-description {
-                    color: $gray-600;
-                    display: inline-block;
-                    margin-left: 8px;
-                }
+            }
+            > .radio-description {
+                color: $gray-600;
+                flex: 0 0 100%;
+            }
+            &.success {
+                @include checkbox-control-color($green-darker);
+            }
+            &.danger {
+                @include checkbox-control-color($red-dark);
+            }
+            &.warning {
+                @include checkbox-control-color($yellow-darker);
             }
         }
     }
     &.inline {
         > .input-field {
-            > .custom-control {
+            .custom-control {
                 display: inline-block;
+                vertical-align: top;
             }
         }
     }

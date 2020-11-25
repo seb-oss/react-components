@@ -405,6 +405,11 @@ $slider-height-alternative: 32px;
             @include setTheme($purple-darker, $purple-dark);
         }
     }
+    > .progress-feedback {
+        &:before {
+            display: none;
+        }
+    }
 }
 
 // IE

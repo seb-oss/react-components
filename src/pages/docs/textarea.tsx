@@ -82,10 +82,10 @@ const TextAreaPage: React.FC = React.memo(() => {
                     placeholder={(controls as any)?.placeholder}
                     cols={(controls as any)?.columns}
                     rows={(controls as any)?.rows}
-                    max={(controls as any)?.max}
+                    maxLength={(controls as any)?.max}
                     onChange={(element: React.ChangeEvent<HTMLTextAreaElement>) => setValue(element.target.value)}
                     disabled={checkSelectedKey("disabled")}
-                    readonly={checkSelectedKey("readonly")}
+                    readOnly={checkSelectedKey("readonly")}
                     resizable={checkSelectedKey("resizable")}
                 />
             }

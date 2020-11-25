@@ -25,11 +25,6 @@
         "filePath": "./src/Carousel/index.ts"
     },
     {
-        "name": "Chart",
-        "path": "/docs/chart",
-        "filePath": "./src/Chart/index.ts"
-    },
-    {
         "name": "CheckBox",
         "path": "/docs/checkbox",
         "filePath": "./src/CheckBox/index.ts"
@@ -100,9 +95,9 @@
         "filePath": "./src/ProgressBar/index.ts"
     },
     {
-        "name": "RadioButton",
-        "path": "/docs/radiobutton",
-        "filePath": "./src/RadioButton/index.ts"
+        "name": "RadioGroup",
+        "path": "/docs/radiogroup",
+        "filePath": "./src/RadioGroup/index.ts"
     },
     {
         "name": "Rating",

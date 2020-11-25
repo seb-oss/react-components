@@ -2,10 +2,11 @@ import React from "react";
 import Docs from "components/Docs";
 import { DynamicFormOption, DynamicFormSection, useDynamicForm } from "hooks/useDynamicForm";
 import { StepTracker } from "@sebgroup/react-components/StepTracker";
+import StepLabel, { StepLabelProps } from "@sebgroup/react-components/StepTracker/StepLabel";
 
 const StepTrackerPage: React.FC = React.memo(() => {
     const importString: string = require("!raw-loader!@sebgroup/react-components/StepTracker/StepTracker");
-    const stepList: Array<string> = ["First", "Second", "Third", "Forth"];
+    const stepList: Array<StepLabelProps> = [{ label: "First" }, { label: "Second" }, { label: "Third" }, { label: "Forth" }];
     const orientationList: Array<DynamicFormOption> = [
         { label: "vertical", value: "vertical", key: "vertical" },
         { label: "horizontal", value: "horizontal", key: "horizontal" },
@@ -56,7 +57,7 @@ const StepTrackerPage: React.FC = React.memo(() => {
         [value]
     );
     const [renderForm, form, setForm] = useDynamicForm(fields);
-    const code: string = `<StepTracker list={[]} step={0} onClick={null} />`;
+    const code: string = `<StepTracker list={[{ label: "hello" }]} step={0} onClick={null} />`;
 
     /** check if key selected */
     const checkSelectedKey = (key: string) => {
@@ -84,13 +85,16 @@ const StepTrackerPage: React.FC = React.memo(() => {
             mainFile={importString}
             example={
                 <StepTracker
-                    list={stepList}
                     step={value}
                     onClick={setValue}
                     orientation={(form.controls as any)?.orientation?.value}
                     labelPosition={(form.controls as any)?.direction?.value}
                     useNumbers={checkSelectedKey("useNumbers")}
-                />
+                >
+                    {stepList.map((item, i) => (
+                        <StepLabel label={item.label} key={i} />
+                    ))}
+                </StepTracker>
             }
             code={code}
             controls={renderForm()}
