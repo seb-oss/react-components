@@ -29,14 +29,13 @@ describe("Component: ImagePreview", () => {
     });
 
     it("Button select image should trigger file upload on click", () => {
-        wrapper.find("#fileInput").simulate("change", { target: { value: "file" } });
+        wrapper.find("input").simulate("change", { target: { value: "file" } });
         expect(props.handleUploadImage).toBeCalled();
 
         wrapper.setProps({ previewSrc: "the source" });
         wrapper.find(".custom-button").simulate("click", { target: { value: "file" } });
         expect(props.handleUploadImage).toHaveBeenCalledTimes(2);
-        wrapper.find("#fileInput").simulate("click", { target: { value: "file" } });
-        wrapper.find("#fileInput").simulate("click", { target: null });
+        wrapper.find("input").simulate("click", { target: { value: "file" } });
     });
 
     it("Should call onFileInputClick when open file button is clicked", () => {
