@@ -56,8 +56,8 @@ export const Tabs: React.FC<TabsProps> = ({ activeTab, list, onClick, ...props }
                     <TabItem
                         {...item}
                         key={index}
-                        onClick={(e: React.MouseEvent<HTMLAnchorElement>) => onTabClick(e, index)}
-                        onKeyDown={(e: React.KeyboardEvent<HTMLAnchorElement>) => onKeyDown(e, index)}
+                        onClick={(e: React.MouseEvent<HTMLAnchorElement>) => (item.disabled ? null : onTabClick(e, index))}
+                        onKeyDown={(e: React.KeyboardEvent<HTMLAnchorElement>) => (item.disabled ? null : onKeyDown(e, index))}
                         role="tab"
                         isActive={index === activeTab}
                         ref={(refElement: HTMLAnchorElement) => {

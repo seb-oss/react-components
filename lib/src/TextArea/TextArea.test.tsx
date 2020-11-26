@@ -29,7 +29,6 @@ describe("Component: TextArea", () => {
         let mountedWrapper: ReactWrapper<TextAreaProps>;
         mountedWrapper = mount(<TextArea {...props} id={id} />);
         expect(mountedWrapper.find(`#${id}`).length).toBeTruthy();
-        mountedWrapper = mount(<TextArea {...props} label="test label" />);
         expect(mountedWrapper.find("textarea").getElement().props.id).toBeTruthy();
     });
 
@@ -50,7 +49,6 @@ describe("Component: TextArea", () => {
     });
 
     it("Should render textarea with resizable option", () => {
-        expect(wrapper.find("textarea").hasClass("resizable")).toBeTruthy();
         wrapper.setProps({ resizable: true });
         expect(wrapper.find("textarea").hasClass("resizable")).toBeTruthy();
         wrapper.setProps({ resizable: false });
