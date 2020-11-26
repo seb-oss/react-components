@@ -108,14 +108,13 @@ describe("Component: Tooltip", () => {
         expect(callback).toBeCalledTimes(1);
     });
 
-    it("Should be able to force show and force hide the tooltip from another component", async () => {
+    it("Should be able to force show the tooltip from another component", async () => {
         const content: string = "my tooltip";
         let myTooltip: Tooltip;
         let forceShowSpy: jest.SpyInstance;
         const toggleTooltip: VoidFunction = () => {
             const isToggled: boolean = document.body.querySelector(".overlay-container.show") !== null;
-            if (isToggled) {
-            } else {
+            if (!isToggled) {
                 myTooltip.forceShow();
             }
         };
@@ -138,9 +137,6 @@ describe("Component: Tooltip", () => {
             container.querySelector("button").dispatchEvent(new MouseEvent("click", { bubbles: true }));
         });
         expect(forceShowSpy).toBeCalledTimes(1);
-        await act(async () => {
-            container.querySelector("button").dispatchEvent(new MouseEvent("click", { bubbles: true }));
-        });
     });
 
     describe("Should trigger tooltip based on trigger mode", () => {
