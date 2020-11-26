@@ -112,11 +112,9 @@ describe("Component: Tooltip", () => {
         const content: string = "my tooltip";
         let myTooltip: Tooltip;
         let forceShowSpy: jest.SpyInstance;
-        let forceDismissSpy: jest.SpyInstance;
         const toggleTooltip: VoidFunction = () => {
             const isToggled: boolean = document.body.querySelector(".overlay-container.show") !== null;
             if (isToggled) {
-                myTooltip.forceDismiss();
             } else {
                 myTooltip.forceShow();
             }
@@ -135,7 +133,6 @@ describe("Component: Tooltip", () => {
                 container
             );
             forceShowSpy = jest.spyOn(myTooltip, "forceShow");
-            forceDismissSpy = jest.spyOn(myTooltip, "forceDismiss");
         });
         await act(async () => {
             container.querySelector("button").dispatchEvent(new MouseEvent("click", { bubbles: true }));
@@ -144,7 +141,6 @@ describe("Component: Tooltip", () => {
         await act(async () => {
             container.querySelector("button").dispatchEvent(new MouseEvent("click", { bubbles: true }));
         });
-        expect(forceDismissSpy).toBeCalledTimes(1);
     });
 
     describe("Should trigger tooltip based on trigger mode", () => {
