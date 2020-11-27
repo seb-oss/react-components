@@ -1,5 +1,7 @@
 import React from "react";
+import classnames from "classnames";
 import "./slider.scss";
+import { FeedbackIndicator, IndicatorType } from "../FeedbackIndicator";
 
 const angleLeftIcon: JSX.Element = (
     <svg name="angle-left" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 512">
@@ -20,27 +22,36 @@ export interface RangeSliderLabel {
     text: string;
 }
 
-export interface SliderProps {
+export type SliderProps = Omit<JSX.IntrinsicElements["input"], "value"> & {
+    /** set to always show tooltip */
     alwaysShowTooltip?: boolean;
-    className?: string;
-    disabled?: boolean;
-    error?: string;
-    id?: string;
+    /** field label */
     label?: string;
+    /** range slider labels */
     labels?: Array<RangeSliderLabel>;
+    /** maximum value for range */
     max?: number;
+    /** minimum value for range */
     min?: number;
-    name: string;
-    onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-    reference?: React.RefObject<any>;
+    /** set to show ticks */
     showTicks?: boolean;
+    /** step per increment or decrement */
     step?: number;
+    /** slider theme: `primary` | `inverted` | `success` | `danger` | `warning` | `purple` */
     theme?: SliderTheme;
+    /** set to show alternative theme */
     alternative?: boolean;
+    /** tooltip theme: `primary` | `inverted` | `success` | `danger` | `warning` | `purple` */
     tooltipTheme?: SliderTheme;
+    /** tooltip value */
     tooltipValue?: string;
+    /** field value */
     value: number;
-}
+    /** Hint message for stepper */
+    hint?: string;
+    /** Theme of text box hint */
+    hintTheme?: IndicatorType;
+};
 
 type AppearanceStyleMap = {
     [key in SliderAppearance]: {
@@ -49,9 +60,25 @@ type AppearanceStyleMap = {
     };
 };
 
-export const Slider: React.FC<SliderProps> = (props: SliderProps) => {
-    const [min, setMin] = React.useState<number>(props.min || 0);
-    const [max, setMax] = React.useState<number>(props.max || 100);
+/** The component allows for easy adjustments of a value and check the updated result immediately. */
+export const Slider: React.FC<SliderProps> = ({
+    alwaysShowTooltip,
+    label,
+    labels,
+    max,
+    min,
+    showTicks,
+    step,
+    theme = "primary",
+    alternative,
+    tooltipTheme = "inverted",
+    tooltipValue,
+    hint,
+    hintTheme,
+    ...props
+}: SliderProps) => {
+    const [minValue, setMinValue] = React.useState<number>(min || 0);
+    const [maxValue, setMaxValue] = React.useState<number>(max || 100);
     const [size, setSize] = React.useState<number>(0);
     const [labelsPositions, setLabelsPositions] = React.useState<Array<string>>([]);
     const [thumbPosition, setThumbPosition] = React.useState<number>(0);
@@ -60,31 +87,31 @@ export const Slider: React.FC<SliderProps> = (props: SliderProps) => {
         alternative: { width: "27px", offset: "56px" },
         normal: { width: "5px", offset: "24px" },
     };
-    const appearance: SliderAppearance = props.alternative ? "alternative" : "normal";
+    const appearance: SliderAppearance = alternative ? "alternative" : "normal";
 
     React.useEffect(() => {
         // Checking if the min or max are not numbers, null value or undefined
-        const minValue: number = typeof props.min !== "number" ? 0 : props.min;
-        const maxValue: number = typeof props.max !== "number" ? 100 : props.max;
-        setMin(minValue);
-        setMax(maxValue);
+        const minValue: number = typeof min !== "number" ? 0 : min;
+        const maxValue: number = typeof max !== "number" ? 100 : max;
+        setMinValue(minValue);
+        setMaxValue(maxValue);
         setSize(getSize(minValue, maxValue));
-    }, [props.min, props.max]);
+    }, [min, max]);
 
     React.useEffect(() => {
-        if (props.labels && props.labels.length) {
+        if (labels && labels.length) {
             const positions: Array<string> = [];
-            props.labels.map((label: RangeSliderLabel) => {
+            labels.map((label: RangeSliderLabel) => {
                 positions.push(getLabelPosition(label.position) + "%");
             });
             setLabelsPositions(positions);
         }
-    }, [props.labels, min, max]);
+    }, [labels, minValue, maxValue]);
 
     React.useEffect(() => {
         setThumbPosition(getPercentage());
         setActiveTrackStyles(getActiveTrackStyles());
-    }, [props.value, min, max, size, appearance]);
+    }, [props.value, minValue, maxValue, size, appearance]);
 
     /**
      * Finds the size between two numbers
@@ -97,7 +124,7 @@ export const Slider: React.FC<SliderProps> = (props: SliderProps) => {
             return maxValue - minValue;
         } else {
             // Will calculate the size anyway, but it will show a warning since the min is larger than the max
-            console.warn(`The max value of the slider should be larger than the min value (Max:${max}, Min: ${min}`);
+            console.warn(`The max value of the slider should be larger than the min value (Max:${maxValue}, Min: ${minValue}`);
             return minValue - maxValue;
         }
     }
@@ -107,12 +134,12 @@ export const Slider: React.FC<SliderProps> = (props: SliderProps) => {
      * @returns {number} The precentage
      */
     function getPercentage(): number {
-        if (props.value <= min) {
+        if (props.value <= minValue) {
             return 0;
-        } else if (props.value >= max) {
+        } else if (props.value >= maxValue) {
             return 100;
         } else {
-            const distanceFromMin: number = Math.abs(props.value - min);
+            const distanceFromMin: number = Math.abs(props.value - minValue);
             return size ? (distanceFromMin / size) * 100 : 0;
         }
     }
@@ -126,23 +153,23 @@ export const Slider: React.FC<SliderProps> = (props: SliderProps) => {
         let zeroPosition: number;
         const { width, offset }: AppearanceStyleMap[keyof AppearanceStyleMap] = appearanceSizesMap[appearance];
         const style: React.CSSProperties = {};
-        if (min >= 0) {
+        if (minValue >= 0) {
             zeroPosition = 0;
             style.left = `${zeroPosition}%`;
             style.width = `calc(${calculatedThumbPosition}% + ${width})`;
-        } else if (max <= 0) {
+        } else if (maxValue <= 0) {
             zeroPosition = 100;
             style.left = `calc(${zeroPosition}% + ${offset})`;
             style.width = `calc(${100 - calculatedThumbPosition}% + ${width})`;
             style.transform = "rotateY(180deg)";
         } else {
             if (props.value <= 0) {
-                zeroPosition = size ? Math.abs((min / size) * 100) : 0;
+                zeroPosition = size ? Math.abs((minValue / size) * 100) : 0;
                 style.left = `calc(${zeroPosition}% + ${width})`;
                 style.width = zeroPosition - calculatedThumbPosition + "%";
                 style.transform = "rotateY(180deg)";
             } else {
-                zeroPosition = size ? Math.abs(100 - (max / size) * 100) : 0;
+                zeroPosition = size ? Math.abs(100 - (maxValue / size) * 100) : 0;
                 style.left = `calc(${zeroPosition}% + ${width})`;
                 style.width = calculatedThumbPosition - zeroPosition + "%";
             }
@@ -156,12 +183,12 @@ export const Slider: React.FC<SliderProps> = (props: SliderProps) => {
      * @returns {number} The position of the label in percentage
      */
     function getLabelPosition(value: number): number {
-        if (value >= max) {
+        if (value >= maxValue) {
             return 100;
-        } else if (value <= min) {
+        } else if (value <= minValue) {
             return 0;
         }
-        return Math.abs(((value - min) / (max - min)) * 100);
+        return Math.abs(((value - minValue) / (maxValue - minValue)) * 100);
     }
 
     /**
@@ -173,33 +200,20 @@ export const Slider: React.FC<SliderProps> = (props: SliderProps) => {
      */
     function shouldEnableTransition(): boolean {
         const maxNumberOfStepsToAllowTransition: number = 30;
-        return size / props.step <= maxNumberOfStepsToAllowTransition;
+        return size / step <= maxNumberOfStepsToAllowTransition;
     }
 
     return (
-        <div className={"form-group custom-slider" + (props.className ? ` ${props.className}` : "") + (props.disabled ? " disabled" : "")}>
-            {props.label && <label className="custom-label">{props.label}</label>}
-            <div className={"input-field" + (props.labels && props.labels.length ? " has-labels" : "") + ` ${appearance}`}>
-                <input
-                    type="range"
-                    id={props.id}
-                    name={props.name}
-                    min={min}
-                    max={max}
-                    step={props.step}
-                    value={props.value}
-                    onChange={props.onChange}
-                    ref={props.reference}
-                    disabled={props.disabled}
-                />
-                <div className={"custom-slider-holder" + (props.theme ? ` ${props.theme}` : " primary")}>
-                    <div className={"custom-slider-track" + (shouldEnableTransition() ? " with-transitions" : "")}>
+        <div className={classnames("form-group custom-slider", props.className, { disabled: props.disabled })}>
+            {label && <label className="custom-label">{label}</label>}
+            <div className={classnames("input-field", appearance, { "has-labels": labels && labels.length })}>
+                <input type="range" min={minValue} max={maxValue} step={step} {...props} />
+                <div className={classnames("custom-slider-holder", theme)}>
+                    <div className={classnames("custom-slider-track", { "with-transitions": shouldEnableTransition() })}>
                         <div className="custom-slider-slider-before" />
                         <div className="custom-slider-slider-after" style={activeTrackStyles} />
                         <div className="custom-slider-thumb" style={{ left: thumbPosition + "%" }}>
-                            <div className={"custom-slider-preview" + (props.alwaysShowTooltip ? " always-show" : "") + (props.tooltipTheme ? ` ${props.tooltipTheme}` : " inverted")}>
-                                {props.tooltipValue || props.value}
-                            </div>
+                            <div className={classnames("custom-slider-preview", tooltipTheme, { "always-show": alwaysShowTooltip })}>{tooltipValue || props.value}</div>
                             {appearance === "alternative" ? (
                                 <>
                                     <span className="custom-slider-icon-left">{angleLeftIcon}</span>
@@ -207,9 +221,9 @@ export const Slider: React.FC<SliderProps> = (props: SliderProps) => {
                                 </>
                             ) : null}
                         </div>
-                        {props.labels && props.labels.length
-                            ? props.labels.map((label: RangeSliderLabel, i: number) => (
-                                  <div key={i} className={"custom-slider-label" + (props.showTicks ? " show-ticks" : "")} style={{ left: labelsPositions[i] }}>
+                        {labels && labels.length
+                            ? labels.map((label: RangeSliderLabel, i: number) => (
+                                  <div key={i} className={classnames("custom-slider-label", { "show-ticks": showTicks })} style={{ left: labelsPositions[i] }}>
                                       <span>{label.text}</span>
                                   </div>
                               ))
@@ -217,7 +231,7 @@ export const Slider: React.FC<SliderProps> = (props: SliderProps) => {
                     </div>
                 </div>
             </div>
-            {props.error && <div className="alert alert-danger">{props.error}</div>}
+            <FeedbackIndicator className={classnames({ show: !!hint })} type={hintTheme} withoutBorder message={hint} />
         </div>
     );
 };

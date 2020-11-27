@@ -1,7 +1,5 @@
 import React, { useState, ReactNode, useMemo, useCallback } from "react";
 
-import { RadioGroup } from "@sebgroup/react-components/RadioGroup";
-import { RadioListModel } from "@sebgroup/react-components/RadioGroup/RadioGroup";
 import { CheckBox } from "@sebgroup/react-components/CheckBox";
 import { TextBox } from "@sebgroup/react-components/TextBox";
 import { TextArea } from "@sebgroup/react-components/TextArea";
@@ -9,6 +7,7 @@ import { Dropdown } from "@sebgroup/react-components/Dropdown";
 import { Datepicker } from "@sebgroup/react-components/Datepicker";
 import { Stepper } from "@sebgroup/react-components/Stepper";
 import { DropdownItem, DropdownChangeEvent } from "@sebgroup/react-components/Dropdown/Dropdown";
+import { RadioButtonProps, RadioGroup } from "@sebgroup/react-components/RadioGroup";
 
 export interface DynamicFormItem {
     key: string;
@@ -274,7 +273,7 @@ const DynamicFormItemComponent: React.FC<{
         }
 
         case "Radio": {
-            const list: RadioListModel[] =
+            const list: RadioButtonProps[] =
                 props.item?.options?.map((option) => {
                     return { label: option.label || "", value: option.value || "", disabled: !!option.disabled };
                 }) || [];

@@ -1,76 +1,75 @@
 import React from "react";
+import classnames from "classnames";
 import { randomId } from "@sebgroup/frontend-tools";
+import { RadioButton, RadioButtonProps } from "./RadioButton/RadioButton";
 import "./radio-group-style.scss";
+import { FeedbackIndicator, IndicatorType } from "../FeedbackIndicator";
 
-export interface RadioListModel<T = any> {
-    description?: string;
-    disabled?: boolean;
-    label: string;
-    value: T;
-}
-
-export interface RadioGroupProps<T = any> {
-    className?: string;
+export type RadioGroupProps<T = any> = Omit<JSX.IntrinsicElements["input"], "list"> & {
+    /** Condensed radio group */
     condensed?: boolean;
-    disableAll?: boolean;
-    id?: string;
+    /** Inline radio group */
     inline?: boolean;
+    /** Radio group label */
     label?: string;
-    list: Array<RadioListModel<T>>;
-    name: string;
-    onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-    value: T;
-}
-
-export const RadioGroup: React.FC<RadioGroupProps> = (props: RadioGroupProps) => {
-    const [className, setClassName] = React.useState<string>("form-group custom-radio");
+    /** Radio group list */
+    list?: Array<RadioButtonProps<T>>;
+    /** Hint message for stepper */
+    hint?: string;
+    /** Theme of text box hint */
+    hintTheme?: IndicatorType;
+};
+/** A radio button allows a user to select a single item from a predefined list of options. Radio buttons are common to use in forms, i.e when you apply for a loan and need to enter "Yes" or "No". */
+export const RadioGroup: React.FC<RadioGroupProps> = ({ condensed, inline, label, list, children, className, id, hint, hintTheme = "danger", ...props }: RadioGroupProps) => {
     const [idList, setIdList] = React.useState<Array<string>>([]);
 
     React.useEffect(() => {
-        let elementClassName: string = "form-group custom-radio";
-        elementClassName += props.inline ? " inline" : "";
-        elementClassName += props.condensed ? " condensed" : "";
-        elementClassName += props.className ? ` ${props.className}` : "";
-        setClassName(elementClassName);
-    }, [props.className, props.inline, props.condensed]);
-
-    React.useEffect(() => {
         constructIds();
-    }, [props.list]);
+    }, [list]);
 
     function constructIds(): void {
         const idListToSet: Array<string> = [];
-        props.list.map(() => idListToSet.push(randomId("radiogroup-")));
+        (list ? list : React.Children.toArray(children))?.map(() => idListToSet.push(randomId("radiogroup-")));
         setIdList(idListToSet);
     }
 
     return (
-        <div className={className} id={props.id}>
+        <div className={classnames("rc radio-group", className, { inline: inline, condensed: condensed })} id={id}>
             <div className="input-field">
-                {props.label && <label className="radio-group-label">{props.label}</label>}
-
-                {props.list &&
-                    props.list.map((item: RadioListModel, index: number) => {
+                {label && <label className="radio-group-label">{label}</label>}
+                <FeedbackIndicator type={hintTheme} message={hint}>
+                    {list?.map((item: RadioButtonProps, index: number) => {
+                        const isDisabled: boolean = props.disabled || item.disabled;
                         return (
-                            <div key={index} className="custom-control">
-                                <input
-                                    className="custom-control-input"
-                                    type="radio"
-                                    value={item.value}
-                                    name={props.name}
-                                    id={idList[index]}
-                                    checked={props.value === item.value}
-                                    aria-labelledby={item.label}
-                                    disabled={props.disableAll || item.disabled}
-                                    onChange={props.onChange}
-                                />
-                                <label className="custom-control-label" htmlFor={idList[index]}>
-                                    {item.label}
-                                    {item.description && <span className="radio-description">{item.description}</span>}
-                                </label>
-                            </div>
+                            <RadioButton
+                                key={index}
+                                {...props}
+                                {...item}
+                                className={classnames(item.className, { [hintTheme]: !!hint, disabled: isDisabled })}
+                                id={item.id || idList[index]}
+                                checked={props.value === item.value}
+                                inline={inline}
+                                condensed={condensed}
+                                disabled={isDisabled}
+                            />
                         );
                     })}
+                    {React.Children.map(children, (Child: React.ReactElement<RadioButtonProps>, index: number) => {
+                        const disabled: boolean = props.disabled || Child.props.disabled;
+                        return React.isValidElement<React.FC<RadioButtonProps>>(Child)
+                            ? React.cloneElement<any>(Child, {
+                                  ...props,
+                                  ...Child.props,
+                                  className: classnames(Child.props.className, { [hintTheme]: !!hint, disabled: disabled }),
+                                  id: Child.props.id || idList[index],
+                                  checked: props.value === Child.props.value,
+                                  inline,
+                                  condensed,
+                                  disabled,
+                              })
+                            : Child;
+                    })}
+                </FeedbackIndicator>
             </div>
         </div>
     );

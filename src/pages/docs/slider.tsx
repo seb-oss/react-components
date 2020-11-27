@@ -1,7 +1,7 @@
 import React from "react";
 import Docs from "components/Docs";
 import { Slider } from "@sebgroup/react-components/Slider";
-import { useDynamicForm } from "hooks/useDynamicForm";
+import { DynamicFormOption, useDynamicForm } from "hooks/useDynamicForm";
 
 const SliderPage: React.FC = (): React.ReactElement<void> => {
     const [value, setValue] = React.useState<number>(1);
@@ -13,49 +13,24 @@ const SliderPage: React.FC = (): React.ReactElement<void> => {
                 {
                     key: "min",
                     label: "Min",
-                    order: 30,
                     controlType: "Text",
                     value: 1,
                 },
                 {
                     key: "max",
                     label: "Max",
-                    order: 10,
                     controlType: "Text",
                     value: 100,
                 },
                 {
                     key: "step",
                     label: "Step",
-                    order: 20,
                     controlType: "Text",
                     value: 1,
                 },
                 {
-                    key: "showTicks",
-                    label: "Show ticks",
-                    order: 40,
-                    controlType: "Checkbox",
-                    value: false,
-                },
-                {
-                    key: "alwaysShowTooltip",
-                    label: "Always show tooltip",
-                    order: 60,
-                    controlType: "Checkbox",
-                    value: false,
-                },
-                {
-                    key: "disabled",
-                    label: "Disabled",
-                    order: 70,
-                    controlType: "Checkbox",
-                    value: false,
-                },
-                {
                     key: "tooltipTheme",
                     label: "Tooltip theme",
-                    order: 80,
                     options: [
                         { key: "danger", label: "Danger", value: "danger" },
                         { key: "inverted", label: "Inverted", value: "inverted" },
@@ -64,12 +39,12 @@ const SliderPage: React.FC = (): React.ReactElement<void> => {
                         { key: "success", label: "Success", value: "success" },
                         { key: "warning", label: "Warning", value: "warning" },
                     ],
-                    controlType: "Radio",
+                    value: { key: "primary", label: "Primary", value: "primary" },
+                    controlType: "Dropdown",
                 },
                 {
                     key: "theme",
                     label: "Theme",
-                    order: 90,
                     options: [
                         { key: "danger", label: "Danger", value: "danger" },
                         { key: "inverted", label: "Inverted", value: "inverted" },
@@ -78,17 +53,28 @@ const SliderPage: React.FC = (): React.ReactElement<void> => {
                         { key: "success", label: "Success", value: "success" },
                         { key: "warning", label: "Warning", value: "warning" },
                     ],
-                    controlType: "Radio",
+                    value: { key: "primary", label: "Primary", value: "primary" },
+                    controlType: "Dropdown",
                 },
                 {
                     key: "alternative",
                     label: "Appearance",
-                    order: 100,
                     options: [
                         { key: "normal", label: "Normal(new default)", value: "normal" },
                         { key: "normal", label: "Alternative(old default)", value: "alternative" },
                     ],
-                    controlType: "Radio",
+                    value: { key: "normal", label: "Normal(new default)", value: "normal" },
+                    controlType: "Dropdown",
+                },
+                {
+                    label: "Optional configurations",
+                    key: "checkboxes",
+                    controlType: "Option",
+                    options: [
+                        { label: "Show ticks", value: "showTicks", key: "showTicks" },
+                        { label: "Always show tooltip", value: "alwaysShowTooltip", key: "alwaysShowTooltip" },
+                        { label: "disabled", value: "disabled", key: "disabled" },
+                    ],
                 },
             ],
         },
@@ -97,6 +83,11 @@ const SliderPage: React.FC = (): React.ReactElement<void> => {
     const importString: string = React.useMemo(() => require("!raw-loader!@sebgroup/react-components/Slider/Slider"), []);
     const importedFiles: Array<string> = React.useMemo(() => [require("!raw-loader!@sebgroup/react-components/Slider/Slider")], []);
     const code: string = React.useMemo(() => require("!raw-loader!./slider").default, []);
+
+    /** check if key selected */
+    const checkSelectedKey = (key: string) => {
+        return controls.checkboxes?.some((item: DynamicFormOption) => item.key === key);
+    };
 
     return (
         <Docs
@@ -113,6 +104,9 @@ const SliderPage: React.FC = (): React.ReactElement<void> => {
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                             setValue(Number(e.target.value));
                         }}
+                        showTicks={checkSelectedKey("showTicks")}
+                        alwaysShowTooltip={checkSelectedKey("alwaysShowTooltip")}
+                        disabled={checkSelectedKey("disabled")}
                     />
                 </div>
             }
