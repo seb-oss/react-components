@@ -1,28 +1,34 @@
 import React from "react";
 import "./date-picker-style.scss";
 import { padNumber } from "./formatters";
+import classnames from "classnames";
 
-export interface DatepickerProps {
+interface OverriddenNativeProps extends React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> {
+    value: any;
+    min?: any;
+    max?: any;
+    onChange: any;
+}
+
+export interface DatepickerProps extends OverriddenNativeProps {
     /** the value of the datepicker as a Date object */
     value: Date;
     /** On Change handler with the latest Date value */
     onChange: (value: Date) => void;
-    /** Element placeholder */
-    placeholder?: string;
-    /** Element class name */
-    className?: string;
     /** Property sets whether a datepicker is a month picker  */
     monthPicker?: boolean;
     /** Property sets whether SEB styled datepicker will be rendered despite the browser used */
     forceCustom?: boolean;
-    /** Property sets whether datepicker is disabled */
-    disabled?: boolean;
     /** Minimum range of date that can be selected */
     min?: Date;
     /** Maximum range of date that can be selected */
     max?: Date;
     /** Locale of datepicker */
     localeCode?: string;
+    /** Div wrapper props. NOTE: customPicker ONLY! */
+    wrapperProps?: JSX.IntrinsicElements["div"];
+    /** Props for the select element of month picker. NOTE: customPicker ONLY! */
+    customPickerSelectProps?: JSX.IntrinsicElements["select"];
 }
 
 interface UnitNames {
@@ -31,9 +37,20 @@ interface UnitNames {
     year: string;
 }
 
-export const Datepicker: React.FunctionComponent<DatepickerProps> = (props: DatepickerProps): React.ReactElement<void> => {
-    const { monthPicker, forceCustom, className, value, min, max, disabled, onChange, localeCode = "en" } = props;
-
+export const Datepicker: React.FunctionComponent<DatepickerProps> = ({
+    monthPicker,
+    forceCustom,
+    className,
+    value,
+    min,
+    max,
+    disabled,
+    onChange,
+    localeCode = "en",
+    wrapperProps,
+    customPickerSelectProps,
+    ...props
+}: DatepickerProps): React.ReactElement<void> => {
     const isValidDate = React.useCallback((d: Date): boolean => {
         return !!(d && d instanceof Date && !isNaN(d.getTime()));
     }, []);
@@ -233,7 +250,7 @@ export const Datepicker: React.FunctionComponent<DatepickerProps> = (props: Date
 
     const nativeClassNames = React.useCallback(
         (value: Date, className: string): string => {
-            return `form-control seb-datepicker-native${!isValidDate(value) ? "is-invalid" : ""}${!!className ? ` ${className}` : ""}`;
+            return classnames("form-control", "seb-datepicker-native", { "is-invalid": !isValidDate(value) }, className);
         },
         [isValidDate]
     );
@@ -247,14 +264,15 @@ export const Datepicker: React.FunctionComponent<DatepickerProps> = (props: Date
     const renderCustomDatepicker = (value: Date, monthPicker: boolean, customPickerOrder: string[], unitNames: UnitNames, disabled: boolean, monthNames: string[]) => {
         const order: string[] = monthPicker ? [...customPickerOrder.filter((x: string) => x !== "day")] : customPickerOrder;
         return (
-            <div className={`input-group${!!className ? ` ${className}` : ""}`}>
+            <div {...wrapperProps} className={classnames("input-group", "seb-datepicker-custom", wrapperProps?.className)}>
                 {order?.map((unit: string, unitIndex: number) => {
                     switch (unit) {
                         case "day":
                             return (
                                 <input
+                                    {...props}
                                     key={unitIndex}
-                                    className={`form-control${!isValidDate(value) ? " is-invalid" : ""}`}
+                                    className={classnames("form-control", "seb-datepicker-custom-day", { "is-invalid": !isValidDate(value) }, className)}
                                     type="number"
                                     min="1"
                                     max="31"
@@ -268,10 +286,16 @@ export const Datepicker: React.FunctionComponent<DatepickerProps> = (props: Date
                         case "month":
                             return (
                                 <select
+                                    {...customPickerSelectProps}
                                     key={unitIndex}
-                                    className={`custom-select${!isValidDate(value) ? " is-invalid" : ""}${unitIndex === 0 ? " rounded-left" : ""}${
-                                        unitIndex === customPickerOrder.length - 1 ? " rounded-right" : ""
-                                    }`}
+                                    className={classnames(
+                                        "custom-select",
+                                        "seb-datepicker-custom-month",
+                                        { "is-invalid": !isValidDate(value) },
+                                        { "rounded-left": unitIndex === 0 },
+                                        { "rounded-right": unitIndex === customPickerOrder.length - 1 },
+                                        customPickerSelectProps?.className
+                                    )}
                                     value={customMonth}
                                     disabled={disabled}
                                     onChange={handleChangeCustomMonth}
@@ -289,8 +313,9 @@ export const Datepicker: React.FunctionComponent<DatepickerProps> = (props: Date
                         case "year":
                             return (
                                 <input
+                                    {...props}
                                     key={unitIndex}
-                                    className={`form-control${!isValidDate(value) ? " is-invalid" : ""}`}
+                                    className={classnames("form-control", "seb-datepicker-custom-year", { "is-invalid": !isValidDate(value) }, className)}
                                     type="number"
                                     min="1"
                                     placeholder={unitNames.year}
@@ -310,6 +335,7 @@ export const Datepicker: React.FunctionComponent<DatepickerProps> = (props: Date
     if (monthPicker && !forceCustom && supportsInputOfType("month")) {
         return (
             <input
+                {...props}
                 type="month"
                 className={nativeClassNames(value, className)}
                 min={getStringFromDate(min, monthPicker)}
@@ -322,6 +348,7 @@ export const Datepicker: React.FunctionComponent<DatepickerProps> = (props: Date
     } else if (!forceCustom && supportsInputOfType("date")) {
         return (
             <input
+                {...props}
                 type="date"
                 className={nativeClassNames(value, className)}
                 min={getStringFromDate(min, monthPicker)}
