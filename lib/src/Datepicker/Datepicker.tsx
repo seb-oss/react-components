@@ -159,9 +159,9 @@ export const Datepicker: React.FunctionComponent<DatepickerProps> = ({
         if (date.getFullYear() === year && m === month && date.getDate() === day) {
             isDateInRange(date, min, max)
                 .then(() => onChange(date))
-                .catch(() => onChange(new Date("")));
+                .catch(() => onChange(null));
         } else {
-            onChange(new Date(""));
+            onChange(null);
         }
     }, [monthPicker, customDay, customMonth, customYear, min, max]);
 
