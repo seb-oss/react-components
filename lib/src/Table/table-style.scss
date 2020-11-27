@@ -65,11 +65,16 @@ table {
                 }
 
                 td {
+                    &.collapse-cell,
+                    &.checkbox-cell {
+                        width: 5%;
+                    }
                     .icon-holder {
                         cursor: pointer;
                         height: $icon-size;
-                        display: flex;
-                        align-items: center;
+                        widt
+                        //display: flex;
+                        //align-items: center;
 
                         &:hover {
                             svg {

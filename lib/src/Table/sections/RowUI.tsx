@@ -1,128 +1,88 @@
 import React from "react";
-import { TableRow, RowTypes, ActionLinkItem, TableHeader, PrimaryActionButton, Cell, ActionButtonState } from "../Table";
+import classnames from "classnames";
+import { TableRow, RowTypes, ActionLinkItem, TableHeader, PrimaryActionButton, ActionButtonState } from "../Table";
 import { randomId } from "@sebgroup/frontend-tools";
 
 // components
 import { TextboxGroup } from "./TextboxGroup";
 import { ActionColumnUI } from "./ActionColumnUI";
 import { sumCols } from "./helperFunctions";
+import TableCell, { InputCell, TableCellProps } from "./TableCell";
 
-const angleDown: JSX.Element = (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512">
-        <path d="M119.5 326.9L3.5 209.1c-4.7-4.7-4.7-12.3 0-17l7.1-7.1c4.7-4.7 12.3-4.7 17 0L128 287.3l100.4-102.2c4.7-4.7 12.3-4.7 17 0l7.1 7.1c4.7 4.7 4.7 12.3 0 17L136.5 327c-4.7 4.6-12.3 4.6-17-.1z" />
-    </svg>
-);
-const angleRightIcon: JSX.Element = (
-    <svg name="angle-right" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 512">
-        <path d="M166.9 264.5l-117.8 116c-4.7 4.7-12.3 4.7-17 0l-7.1-7.1c-4.7-4.7-4.7-12.3 0-17L127.3 256 25.1 155.6c-4.7-4.7-4.7-12.3 0-17l7.1-7.1c4.7-4.7 12.3-4.7 17 0l117.8 116c4.6 4.7 4.6 12.3-.1 17z" />
-    </svg>
-);
-
-interface RowUIProps {
+export type RowUIProps = JSX.IntrinsicElements["tr"] & {
     actionLinks?: Array<ActionLinkItem>;
     columns: Array<TableHeader>;
     onActionDropped: (event: React.MouseEvent<HTMLDivElement, MouseEvent>, row: TableRow, rowIndex?: number) => void;
     onItemSelected?: (e: React.ChangeEvent<HTMLInputElement>, row: TableRow, type: RowTypes, rowIndex?: number) => void;
-    onRowExpanded?: (e: React.MouseEvent<HTMLDivElement, MouseEvent>, row: TableRow) => void;
-    onSubRowExpanded?: (e: React.MouseEvent<HTMLDivElement, MouseEvent>, row: TableRow, rowIndex: number) => void;
-    onChange?: (e: React.ChangeEvent<HTMLInputElement>, row: TableRow) => void;
+    onRowExpanded?: (e: React.MouseEvent<HTMLDivElement, MouseEvent>, row: TableRow, rowIndex?: number) => void;
+    onChange?: (e: React.ChangeEvent<HTMLInputElement>, row: TableRow, rowIndex?: number) => void;
     parentRowIndex?: number;
-    parentRowIsExpanded?: boolean;
+    isHidden?: boolean;
     primaryActionButton?: PrimaryActionButton;
     row: TableRow;
     rowsAreCollapsable: boolean;
     tableRef: React.RefObject<HTMLTableElement>;
     type: RowTypes;
+    rowLevel?: number;
     useRowCollapse: boolean;
-    useRowSelection: boolean;
+    enableRowSelection: boolean;
     useShowActionColumn: boolean;
     actionButtonState: ActionButtonState;
-}
+};
 
-export const RowUI: React.FunctionComponent<RowUIProps> = (props: RowUIProps) => {
+export const RowUI: React.FunctionComponent<RowUIProps> = ({ rowLevel = 1, ...props }: RowUIProps) => {
     const [checkRowRandomIds] = React.useState<string>(randomId("chk-"));
+    const hasCollapsibleRow = React.useMemo(() => (props.row.subRows.length > 0 || props.row.rowContentDetail) && props.rowsAreCollapsable, [props.row, props.rowsAreCollapsable]);
 
     return (
         <React.Fragment>
-            <tr
-                className={(props.type === "row" ? "parent-row" : "sub-row") + (props.row.expanded ? " expanded" : "")}
-                style={{ display: props.type === "subRow" ? (props.parentRowIsExpanded ? "table-row" : "none") : "table-row" }}
-            >
-                {props.useRowSelection ? (
-                    <td className="row-selections-column">
-                        <div className="custom-control custom-checkbox">
-                            <input
-                                type="checkbox"
-                                className="custom-control-input"
-                                id={checkRowRandomIds}
-                                checked={props.row.selected}
-                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                                    if (props.type === "row") {
-                                        props.onItemSelected && props.onItemSelected(e, props.row, props.type);
-                                    } else {
-                                        props.onItemSelected(e, props.row, "subRow", props.parentRowIndex);
-                                    }
-                                }}
-                                name={`chk` + (props.type === "subRow" ? `${props.parentRowIndex}-${props.row.rowIndex}` : props.row.rowIndex)}
-                            />
-                            <label className="custom-control-label" htmlFor={checkRowRandomIds} />
-                        </div>
-                        {(props.row.subRows.length > 0 || props.row.rowContentDetail) && props.rowsAreCollapsable && (
-                            <div
-                                className={"icon-holder" + (props.row.expanded ? " active" : "")}
-                                role="link"
-                                onClick={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-                                    if (props.type === "row") {
-                                        props.onRowExpanded(e, props.row);
-                                    } else {
-                                        props.onSubRowExpanded(e, props.row, props.parentRowIndex);
-                                    }
-                                }}
-                            >
-                                {props.row.expanded ? angleDown : angleRightIcon}
-                            </div>
-                        )}
-                    </td>
-                ) : (
-                    (props.row.subRows.length > 0 || props.row.rowContentDetail) &&
-                    props.rowsAreCollapsable && (
-                        <td>
-                            <div
-                                className={"icon-holder" + (props.row.expanded ? " active" : "")}
-                                role="link"
-                                onClick={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-                                    if (props.type === "row") {
-                                        props.onRowExpanded && props.onRowExpanded(e, props.row);
-                                    } else {
-                                        props.onSubRowExpanded(e, props.row, props.parentRowIndex);
-                                    }
-                                }}
-                            >
-                                {props.row.expanded ? angleDown : angleRightIcon}
-                            </div>
-                        </td>
-                    )
+            <tr className={props.row.expanded ? " expanded" : ""} style={{ display: props.isHidden ? "none" : "table-row" }}>
+                {hasCollapsibleRow && (
+                    <TableCell
+                        wrapperProps={{ style: { paddingLeft: `${rowLevel * 20}px` }, className: "collapse-cell" }}
+                        isCollapsed={props.row.expanded}
+                        type={"collapse"}
+                        onCellActionTrigger={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+                            props.onRowExpanded && props.onRowExpanded(e, props.row, props.parentRowIndex);
+                        }}
+                    />
                 )}
-                {props.row.cells.map((cell: Cell, cellIndex: number) => {
-                    return !cell.hidden ? (
-                        <td key={`${props.type}-${cellIndex}`}>
-                            {props.row?.isEditMode && cell.canEdit ? (
-                                <TextboxGroup
-                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                                        props.onChange(e, props.row);
-                                    }}
-                                    name={cell.id?.toString()}
-                                    type={"text"}
-                                    value={String(cell.value)}
-                                />
-                            ) : (
-                                cell.value
-                            )}
-                        </td>
-                    ) : null;
+                {props.enableRowSelection && (
+                    <TableCell
+                        wrapperProps={{ style: hasCollapsibleRow ? null : { paddingLeft: `${rowLevel * 20}px` }, className: "checkbox-cell" }}
+                        type={"checkbox"}
+                        name={`chk` + (props.type === "subRow" ? `${props.parentRowIndex}-${props.row.rowIndex}` : props.row.rowIndex)}
+                        id={checkRowRandomIds}
+                        onCellActionTrigger={(e: React.ChangeEvent<HTMLInputElement>) => {
+                            if (props.type === "row") {
+                                console.log(e);
+                                props.onItemSelected && props.onItemSelected(e, props.row, props.type);
+                            } else {
+                                props.onItemSelected(e, props.row, "subRow", props.parentRowIndex);
+                            }
+                        }}
+                        checked={props.row.selected}
+                    />
+                )}
+                {props.row.cells.map((cell: TableCellProps, cellIndex: number) => {
+                    return cell.hidden ? null : (
+                        <TableCell
+                            wrapperProps={{ style: props.enableRowSelection || hasCollapsibleRow || cellIndex > 0 ? null : { paddingLeft: `${rowLevel * 20}px` } }}
+                            key={`${props.type}-${cellIndex}`}
+                            type={props.row.isEditMode && cell.isEditable ? "input" : "default"}
+                            onCellActionTrigger={
+                                props.row.isEditMode && cell.isEditable
+                                    ? (e: React.ChangeEvent<HTMLInputElement>) => {
+                                          props.onChange(e, props.row);
+                                      }
+                                    : null
+                            }
+                            {...cell}
+                        />
+                    );
                 })}
                 {props.useShowActionColumn && (
-                    <td>
+                    <TableCell type={"default"}>
                         <ActionColumnUI
                             actionLinks={props.actionLinks}
                             primaryActionButton={props.primaryActionButton}
@@ -133,14 +93,50 @@ export const RowUI: React.FunctionComponent<RowUIProps> = (props: RowUIProps) =>
                                 props.onActionDropped && props.onActionDropped(event, props.row, props.type === "subRow" ? props.parentRowIndex : null);
                             }}
                         />
-                    </td>
+                    </TableCell>
                 )}
             </tr>
-            {props.type === "subRow" && (
-                <tr className="sub-description-row" style={{ display: props.row.expanded ? "table-row" : "none" }}>
-                    <td colSpan={sumCols(props.columns.length, props.useRowSelection || props.useRowCollapse, props.useShowActionColumn, false)}>
+            {props.row.subRows?.map((subRow: TableRow) => {
+                return (
+                    <React.Fragment key={`sub-row-${subRow.rowIndex}`}>
+                        <RowUI
+                            row={subRow}
+                            rowLevel={rowLevel + 1}
+                            type="subRow"
+                            tableRef={props.tableRef}
+                            onActionDropped={props.onActionDropped}
+                            onRowExpanded={(e, r) => props.onRowExpanded(e, r, props.row.rowIndex)}
+                            useShowActionColumn={props.useShowActionColumn || !!subRow?.actionLinks?.length}
+                            rowsAreCollapsable={props.rowsAreCollapsable}
+                            onItemSelected={props.onItemSelected}
+                            primaryActionButton={props.primaryActionButton}
+                            actionLinks={subRow?.actionLinks || props.actionLinks}
+                            actionButtonState={subRow?.actionButtonState}
+                            enableRowSelection={props.enableRowSelection}
+                            useRowCollapse={props.useRowCollapse}
+                            columns={props.columns}
+                            isHidden={!props.row.expanded}
+                            parentRowIndex={props.row.rowIndex}
+                            onChange={
+                                ((e: React.ChangeEvent<HTMLInputElement>, updatedSubRow: TableRow) => {
+                                    props.onChange(e, updatedSubRow, props.row.rowIndex);
+                                }) as any
+                            }
+                        />
+                    </React.Fragment>
+                );
+            })}
+            {props.row.rowContentDetail && (
+                <tr className="description-row" style={{ display: props.row.expanded ? "table-row" : "none" }}>
+                    <TableCell
+                        type={"default"}
+                        wrapperProps={{
+                            style: { paddingLeft: `${rowLevel * 20}px` },
+                            colSpan: sumCols(props.columns?.length, props.enableRowSelection || props.useRowCollapse, props.useShowActionColumn, false),
+                        }}
+                    >
                         <div className="description">{props.row.rowContentDetail}</div>
-                    </td>
+                    </TableCell>
                 </tr>
             )}
         </React.Fragment>

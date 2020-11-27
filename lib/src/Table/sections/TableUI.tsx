@@ -54,8 +54,9 @@ export const TableUI: React.FunctionComponent<TableUIProps> = React.memo(
                 <table className={"table" + (props.className ? ` ${props.className}` : "") + (props.theme ? ` table-${props.theme}` : "")} ref={tableRef}>
                     <thead className={props.theadTheme ? `thead-${props.theadTheme}` : ""}>
                         <tr>
+                            {props.rowsAreCollapsable && <th></th>}
                             {props.useRowSelection ? (
-                                <th>
+                                <th style={props.rowsAreCollapsable ? null : { paddingLeft: `20px` }}>
                                     <div className="custom-control custom-checkbox">
                                         <input
                                             type="checkbox"
@@ -112,47 +113,15 @@ export const TableUI: React.FunctionComponent<TableUIProps> = React.memo(
                                         primaryActionButton={props.primaryActionButton}
                                         actionLinks={row?.actionLinks || props.actionLinks}
                                         actionButtonState={row?.actionButtonState}
-                                        useRowSelection={props.useRowSelection}
+                                        enableRowSelection={props.useRowSelection}
                                         useRowCollapse={props.useRowCollapse}
                                         columns={props.columns}
-                                        onChange={(e: React.ChangeEvent<HTMLInputElement>, updatedRow: TableRow) => {
-                                            props.onChange(e, updatedRow);
-                                        }}
+                                        onChange={
+                                            ((e: React.ChangeEvent<HTMLInputElement>, updatedRow: TableRow) => {
+                                                props.onChange(e, updatedRow);
+                                            }) as any
+                                        }
                                     />
-                                    {row.subRows?.map((subRow: TableRow) => {
-                                        return (
-                                            <React.Fragment key={`sub-row-${subRow.rowIndex}`}>
-                                                <RowUI
-                                                    row={subRow}
-                                                    type="subRow"
-                                                    tableRef={tableRef}
-                                                    onActionDropped={props.onActionDropped}
-                                                    onRowExpanded={props.onRowExpanded}
-                                                    useShowActionColumn={props.useShowActionColumn || !!subRow?.actionLinks?.length}
-                                                    rowsAreCollapsable={props.rowsAreCollapsable}
-                                                    onItemSelected={props.onItemSelected}
-                                                    primaryActionButton={props.primaryActionButton}
-                                                    actionLinks={subRow?.actionLinks || props.actionLinks}
-                                                    actionButtonState={subRow?.actionButtonState}
-                                                    useRowSelection={props.useRowSelection}
-                                                    onSubRowExpanded={props.onSubRowExpanded}
-                                                    useRowCollapse={props.useRowCollapse}
-                                                    columns={props.columns}
-                                                    parentRowIsExpanded={row.expanded}
-                                                    parentRowIndex={row.rowIndex}
-                                                    onChange={(e: React.ChangeEvent<HTMLInputElement>, updatedSubRow: TableRow) => {
-                                                        props.onChange(e, updatedSubRow, row.rowIndex);
-                                                    }}
-                                                />
-                                            </React.Fragment>
-                                        );
-                                    })}
-
-                                    <tr className="description-row" style={{ display: row.expanded ? "table-row" : "none" }}>
-                                        <td colSpan={sumCols(props.columns?.length, props.useRowSelection || props.useRowCollapse, props.useShowActionColumn, false)}>
-                                            <div className="description">{row.rowContentDetail}</div>
-                                        </td>
-                                    </tr>
                                 </React.Fragment>
                             );
                         })}

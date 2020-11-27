@@ -3,6 +3,7 @@ import "./table-style.scss";
 
 import { TableUI } from "./sections/TableUI";
 import { sortArray, searchTextInArray, filterArray } from "./sections/helperFunctions";
+import { TableCellProps } from "./sections/TableCell";
 
 export type DataItem<T = any> = T & TableRow;
 export type RowTypes = "row" | "subRow";
@@ -31,16 +32,9 @@ export interface TableHeader extends Column {
     isSortedDesc?: boolean;
     filters?: Array<string>;
 }
-export interface Cell {
-    id: string | number;
-    accessor: string;
-    value: string | number | boolean;
-    canEdit?: boolean;
-    hidden?: boolean;
-}
 export interface TableRow {
     rowIndex: number;
-    cells: Array<Cell>;
+    cells: Array<TableCellProps>;
     selected?: boolean;
     actionsDropdownDropped?: boolean;
     subRows?: Array<TableRow>;
@@ -83,7 +77,7 @@ export interface EditProps {
     blackListedAccessors?: Array<string>;
 }
 
-export interface TableProps {
+export type TableProps = JSX.IntrinsicElements["table"] & {
     actionLinks?: Array<ActionLinkItem>;
     className?: string;
     columns: Array<Column>;
@@ -100,7 +94,7 @@ export interface TableProps {
     editProps?: EditProps;
     theme?: TableTheme;
     theadTheme?: TableTheme;
-}
+};
 
 export const Table: React.FunctionComponent<TableProps> = React.memo(
     (props: TableProps): React.ReactElement<void> => {
@@ -370,7 +364,12 @@ export const Table: React.FunctionComponent<TableProps> = React.memo(
          * @param row The selected row
          */
         const onRowExpanded = React.useCallback(
-            (e: React.MouseEvent<HTMLDivElement, MouseEvent>, row: TableRow): void => {
+            (e: React.MouseEvent<HTMLDivElement, MouseEvent>, row: TableRow, rowIndex?: number): void => {
+                if (rowIndex > -1) {
+                    console.log(rowIndex);
+                    onSubRowExpanded(e, row, rowIndex);
+                    return;
+                }
                 const updatedOriginalRows: Array<TableRow> = tableRows?.map((originalRow: TableRow) => {
                     if (originalRow.rowIndex === row.rowIndex) {
                         return {
@@ -410,7 +409,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo(
                 setTableRowsImage(updatedOriginalRows);
                 props.onRowExpanded(expandedRowList);
             },
-            [tableRows, currentTableRows, props.onRowExpanded]
+            [tableRows, currentTableRows, props.onRowExpanded, onSubRowExpanded]
         );
 
         const onTextChange = React.useCallback(
@@ -425,7 +424,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo(
                                         return {
                                             ...subRow,
                                             [e.target.name]: e.target.value,
-                                            cells: subRow.cells?.map((cell: Cell) => {
+                                            cells: subRow.cells?.map((cell: TableCellProps) => {
                                                 if (cell.accessor === e.target.name) {
                                                     return { ...cell, value: e.target.value };
                                                 }
@@ -443,7 +442,7 @@ export const Table: React.FunctionComponent<TableProps> = React.memo(
                         return {
                             ...updatedRow,
                             [e.target.name]: e.target.value,
-                            cells: updatedRow.cells?.map((cell: Cell) => {
+                            cells: updatedRow.cells?.map((cell: TableCellProps) => {
                                 if (cell.accessor === e.target.name) {
                                     return { ...cell, value: e.target.value };
                                 }
@@ -470,13 +469,14 @@ export const Table: React.FunctionComponent<TableProps> = React.memo(
                 const isBlackListedForEdit: (a: string) => boolean = (accessor: string): boolean => ["id", ...(props.editProps?.blackListedAccessors || [])].indexOf(accessor) > -1;
                 const isHiddenColumn: (a: string) => boolean = (accessor: string): boolean => props.columns?.some((column: Column) => column.accessor === accessor && column?.isHidden);
                 const updatedRows: Array<TableRow> = rows?.map((row: TableRow, index: number) => {
-                    const updatedCells: Array<Cell> = props.columns?.map(
-                        (column: Column): Cell => {
+                    const updatedCells: Array<TableCellProps> = props.columns?.map(
+                        (column: Column): TableCellProps => {
                             return {
+                                type: "default",
                                 id: column.accessor,
                                 accessor: column?.accessor,
                                 value: row[column?.accessor],
-                                canEdit: !isBlackListedForEdit(column?.accessor),
+                                isEditable: !isBlackListedForEdit(column?.accessor),
                                 hidden: isHiddenColumn(column?.accessor),
                             };
                         }

@@ -1,6 +1,6 @@
 import React from "react";
 
-interface TextboxGroupProps {
+export interface TextboxGroupProps {
     type: string;
     onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
     name: string;
