@@ -15,7 +15,7 @@ export type TooltipTrigger = "hover" | "click" | "focus";
 export type TooltipTheme = "default" | "light" | "primary" | "warning" | "success" | "danger" | "purple";
 export type TooltipPosition = ElementPosition;
 
-export type TooltipProps = JSX.IntrinsicElements["div"] & {
+export type TooltipProps = Omit<JSX.IntrinsicElements["div"], "ref"> & {
     /** Css style positions: top/bottom/left/right */
     position?: TooltipPosition;
     /** Based on SEB predefined colors */
@@ -48,16 +48,6 @@ export class Tooltip extends React.Component<TooltipProps, TooltipState> {
             visible: false,
             referenceId: randomId("tooltip-ref"),
         };
-
-        this.forceDismiss = this.forceDismiss.bind(this);
-    }
-
-    /**
-     * Forces the tooltip to dismiss
-     * @param {React.MouseEvent<HTMLDivElement>} e Mouse event
-     */
-    forceDismiss(e?: React.MouseEvent<HTMLDivElement>) {
-        console.log("forceDismiss is deprecating. Tooltip will be hidden if it lost focus");
     }
 
     /**
@@ -92,9 +82,9 @@ export class Tooltip extends React.Component<TooltipProps, TooltipState> {
     onFocusEvent = (e: React.FocusEvent<HTMLDivElement>) => this.props.trigger === "focus" && this.onTooltipToggle(e, true);
 
     render() {
-        const { position, theme, content, trigger, disableAutoPosition, onVisibleChange, tooltipWrapperProps, ...props } = this.props;
+        const { position, theme, content, trigger, disableAutoPosition, onVisibleChange, tooltipWrapperProps, className, ...props } = this.props;
         return (
-            <div className={classnames("tooltip-container", props.className)} {...props}>
+            <div className={classnames("tooltip-container", className)} {...props}>
                 <div
                     id={this.state.referenceId}
                     ref={this.containerRef}
@@ -147,13 +137,9 @@ type TooltipContentContainerProps = JSX.IntrinsicElements["div"] &
         show: boolean;
         tooltipReference: () => HTMLDivElement;
         onContentBlur: (event: React.FocusEvent<HTMLDivElement>) => void;
-        ref?: React.Ref<HTMLDivElement>;
     };
 const TooltipContentContainer: React.FC<TooltipContentContainerProps> = React.forwardRef(
-    (
-        { show, tooltipReference, onContentBlur, ref, theme = "default", position, content, disableAutoPosition, ...props }: TooltipContentContainerProps,
-        forwardedRef: React.RefObject<HTMLDivElement>
-    ) => {
+    ({ show, tooltipReference, onContentBlur, theme = "default", position, content, disableAutoPosition, ...props }: TooltipContentContainerProps, forwardedRef: React.RefObject<HTMLDivElement>) => {
         return (
             <Overlay ref={forwardedRef} show={show} onBlur={onContentBlur} position={position} disableAutoPosition={disableAutoPosition} overlayReference={tooltipReference}>
                 <div className={classnames(`tooltip`, theme, { show: show }, props.className)} role="tooltip" {...props}>

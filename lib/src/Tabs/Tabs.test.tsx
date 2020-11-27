@@ -7,6 +7,7 @@ type keyboardTestUnit = { key: string; registeredAt: number; expectedToChange: n
 describe("Component: Tabs", () => {
     let props: TabsProps;
     let wrapper: ShallowWrapper<TabsProps>;
+    let mountedWrapper: ReactWrapper<TabsProps>;
 
     beforeEach(() => {
         props = {
@@ -20,6 +21,7 @@ describe("Component: Tabs", () => {
             onClick: jest.fn(),
         };
         wrapper = shallow(<Tabs {...props} />);
+        mountedWrapper = mount(<Tabs {...props} />);
     });
 
     it("Should render", () => {
@@ -34,19 +36,19 @@ describe("Component: Tabs", () => {
     });
 
     it("Should fire click event if passed", () => {
-        wrapper.find(".nav-link").last().simulate("click");
-        expect(props.onClick).toHaveBeenCalledTimes(0);
-        wrapper.find(".nav-link").at(1).simulate("click");
+        mountedWrapper.find(".nav-link").last().simulate("click");
+        expect(props.onClick).not.toHaveBeenCalled();
+        mountedWrapper.find(".nav-link").at(1).simulate("click");
         expect(props.onClick).toBeCalled();
     });
 
     it("Should render a tab as disabled if passed", () => {
-        expect(wrapper.find(".nav-link").last().hasClass("disabled")).toBeTruthy();
+        expect(mountedWrapper.find(".nav-link").last().hasClass("disabled")).toBeTruthy();
     });
 
     it("Should call componentDidUpdate change localActive when active change ", () => {
-        wrapper.setProps({ activeTab: 2 });
-        expect(wrapper.find(".nav-link").at(2).hasClass("active")).toBeTruthy();
+        mountedWrapper.setProps({ activeTab: 2 });
+        expect(mountedWrapper.find(".nav-link").at(2).hasClass("active")).toBeTruthy();
     });
 
     describe("Should change active tab when controlled with arrows and select buttons", () => {

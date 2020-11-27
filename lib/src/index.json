@@ -19,7 +19,6 @@
         "Notification": "./lib/src/Notification/index.ts",
         "Pagination": "./lib/src/Pagination/index.ts",
         "ProgressBar": "./lib/src/ProgressBar/index.ts",
-        "RadioButton": "./lib/src/RadioButton/index.ts",
         "RadioGroup": "./lib/src/RadioGroup/index.ts",
         "Rating": "./lib/src/Rating/index.ts",
         "Slider": "./lib/src/Slider/index.ts",
@@ -115,8 +114,8 @@
             "to": "./ProgressBar/index.js"
         },
         {
-            "from": "./lib/src/RadioButton/index.ts",
-            "to": "./RadioButton/index.js"
+            "from": "./lib/src/RadioGroup/index.ts",
+            "to": "./RadioGroup/index.js"
         },
         {
             "from": "./lib/src/Rating/index.ts",
