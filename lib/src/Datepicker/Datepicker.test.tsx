@@ -1,66 +1,99 @@
-import React, { ReactElement } from "react";
-import { shallow, mount, ShallowWrapper, ReactWrapper } from "enzyme";
+import React from "react";
+import { act, Simulate } from "react-dom/test-utils";
+import { unmountComponentAtNode, render } from "react-dom";
 import { Datepicker, DatepickerProps } from ".";
 
 describe("Component: Datepicker", () => {
+    let container: HTMLDivElement = null;
+
     const props: DatepickerProps = {
         value: new Date(),
         onChange: jest.fn(),
     };
-    let wrapper: ShallowWrapper<DatepickerProps>;
-    let mountedWrapper: ReactWrapper<DatepickerProps>;
+
     beforeEach(() => {
-        wrapper = shallow(<Datepicker {...props} />);
-        mountedWrapper = mount(<Datepicker {...props} />);
+        container = document.createElement("div");
+        document.body.appendChild(container);
     });
+
+    afterEach(() => {
+        unmountComponentAtNode(container);
+        container.remove();
+        container = null;
+    });
+
     it("Should render", () => {
-        expect(wrapper).toBeDefined();
+        act(() => {
+            render(<Datepicker {...props} />, container);
+        });
+        expect(container).toBeDefined();
     });
 
     it("Should render and pass custom class", () => {
         const className: string = "myDatepickerClass";
-        wrapper.setProps({ className });
-        expect(wrapper.hasClass(className)).toBeTruthy();
+        act(() => {
+            render(<Datepicker {...{ ...props, className }} />, container);
+        });
+        expect(container).toBeDefined();
+        expect(container.querySelectorAll(`.${className}`).length).toEqual(1);
     });
 
     it("Should pass any other native html prop", () => {
-        const autoFocus: boolean = true;
-        mountedWrapper.setProps({ autoFocus });
-        expect(mountedWrapper.find(`input[type="date"]`).getElement().props.autoFocus).toEqual(autoFocus);
-        mountedWrapper.setProps({ forceCustom: true, autoFocus });
-        const [dayPicker, yearPicker]: Array<ReactElement> = mountedWrapper.find(`div.input-group > input[type="number"]`).getElements();
+        const id: string = "my-id";
+
+        act(() => {
+            render(<Datepicker {...{ ...props, id }} />, container);
+        });
+        expect(container).toBeDefined();
+
+        expect(container.firstElementChild);
+        expect(container.firstElementChild.classList.contains("seb-datepicker-native")).toBeTruthy();
+        expect(container.firstElementChild.id).toEqual(id);
+
+        act(() => {
+            render(<Datepicker {...{ ...props, id, forceCustom: true }} />, container);
+        });
+
+        const [dayPicker]: NodeListOf<HTMLElement> = container.querySelectorAll<HTMLElement>(`div.input-group > input[type="number"]`);
         expect(dayPicker).toBeTruthy();
-        expect(dayPicker.props.autoFocus).toEqual(autoFocus);
-        expect(yearPicker).toBeTruthy();
-        expect(yearPicker.props.autoFocus).toEqual(autoFocus);
+        expect(dayPicker.id).toEqual(id);
     });
 
     it("Should pass wrapper and select props for custom datepicker and ignore for native picker", () => {
-        const forceCustom: boolean = true;
         const wrapperProps: DatepickerProps["wrapperProps"] = { className: "test123" };
         const customPickerSelectProps: DatepickerProps["customPickerSelectProps"] = { className: "selectTest123" };
-        wrapper.setProps({ forceCustom, wrapperProps, customPickerSelectProps });
+        act(() => {
+            render(<Datepicker {...{ ...props, forceCustom: true, wrapperProps, customPickerSelectProps }} />, container);
+        });
 
         const wrapperSelector: string = `div.input-group.${wrapperProps.className}`;
         const selectElementSelector: string = `div.input-group.${wrapperProps.className}>select.custom-select.${customPickerSelectProps.className}`;
-        expect(wrapper.find(wrapperSelector).length).toBeTruthy();
-        expect(wrapper.find(selectElementSelector).length).toBeTruthy();
 
-        wrapper.setProps({ forceCustom: false, wrapperProps, customPickerSelectProps });
-        expect(wrapper.find(wrapperSelector).length).toBeFalsy();
-        expect(wrapper.find(selectElementSelector).length).toBeFalsy();
+        expect(container.querySelectorAll<HTMLElement>(wrapperSelector).length).toBeTruthy();
+        expect(container.querySelectorAll<HTMLElement>(selectElementSelector).length).toBeTruthy();
+
+        act(() => {
+            render(<Datepicker {...{ ...props, forceCustom: false, wrapperProps, customPickerSelectProps }} />, container);
+        });
+
+        expect(container.querySelectorAll<HTMLElement>(wrapperSelector).length).toBeFalsy();
+        expect(container.querySelectorAll<HTMLElement>(selectElementSelector).length).toBeFalsy();
     });
 
     it("Should fire change event when component value is changed", () => {
-        mountedWrapper.find("input").first().simulate("change");
+        act(() => {
+            render(<Datepicker {...props} />, container);
+        });
+
+        Simulate.change(container.querySelector<HTMLInputElement>("input"));
         expect(props.onChange).toHaveBeenCalled();
-        mountedWrapper.unmount();
     });
 
     it("Should enable disabled when disabled prop is set to true", () => {
-        mountedWrapper.setProps({ disabled: true });
-        expect(mountedWrapper.find("input").first().prop("disabled")).toBe(true);
-        mountedWrapper.unmount();
+        act(() => {
+            render(<Datepicker {...props} disabled />, container);
+        });
+        expect(container.firstElementChild.hasAttribute("disabled")).toBe(true);
     });
 
     it("Should render with custom locale", () => {
@@ -68,7 +101,10 @@ describe("Component: Datepicker", () => {
         const value: Date = new Date();
         const [year, month, day] = [2015, 11, 25];
         value.setFullYear(year, month, day);
-        mountedWrapper.setProps({ localeCode, value });
-        expect(mountedWrapper.find(`input[type="date"]`).getElement().props.value).toEqual(`${year}-${month + 1}-${day}`);
+        act(() => {
+            render(<Datepicker {...{ ...props, localeCode, value }} />, container);
+        });
+
+        expect(container.querySelector<HTMLInputElement>("input").value).toEqual(`${year}-${month + 1}-${day}`);
     });
 });
