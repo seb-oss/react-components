@@ -1,83 +1,128 @@
 import React from "react";
-import { shallow, ShallowWrapper } from "enzyme";
-import { Timeline, TimelineListItem, TimelineProps } from ".";
+import { unmountComponentAtNode, render } from "react-dom";
+import { act, Simulate } from "react-dom/test-utils";
+import { Timeline, TimelineItemProps, TimelineProps } from ".";
+import TimelineItem from "./TimelineItem";
+
+interface TimelineClickTestCase {
+    statement: string;
+    props: TimelineProps;
+}
+interface TimelineItemTestCase {
+    statement: string;
+    render: () => void;
+}
 
 describe("Component: Timeline", () => {
-    const timelineList: Array<TimelineListItem> = [
+    const timelineList: Array<TimelineItemProps> = [
         { title: "title1", time: "time1" },
         { title: "title2", time: "time2" },
         { title: "title3", time: "time3" },
+        { title: "title4", time: "time4", desc: "desc4" },
+        { title: "title5", time: "time5", desc: "desc5" },
     ];
-    let wrapper: ShallowWrapper<TimelineProps>;
+    const props: TimelineProps = {
+        list: timelineList,
+        onClick: jest.fn(),
+    };
+    let container: HTMLDivElement = null;
 
     beforeEach(() => {
-        wrapper = shallow(<Timeline list={timelineList} />);
+        container = document.createElement("div");
+        document.body.appendChild(container);
+    });
+
+    afterEach(() => {
+        unmountComponentAtNode(container);
+        container.remove();
+        container = null;
     });
 
     it("Should render", () => {
-        expect(wrapper).toBeDefined();
+        act(() => {
+            render(<Timeline {...props} />, container);
+        });
+        expect(container.querySelector(`.timeline`)).not.toBeNull();
     });
 
-    it("Should pass custom class and id", () => {
-        const className: string = "myTimelineClass";
-        const id: string = "myTimelineId";
-        wrapper.setProps({ className, id });
-        expect(wrapper.hasClass(className)).toBeTruthy();
-        expect(wrapper.find(`#${id}`).length).toBeTruthy();
+    it("Should pass a custom class and id", () => {
+        const className: string = "mySteptrackerClass";
+        const id: string = "mySteptrackerId";
+        act(() => {
+            render(<Timeline {...props} className={className} id={id} />, container);
+        });
+        expect(container.querySelector(`.${className}`)).not.toBeNull();
+        expect(container.querySelector(`#${id}`)).not.toBeNull();
     });
 
     it("Should render in horizontal if direction prop is set to `horizontal`", () => {
-        expect(wrapper.find(".timeline").hasClass("vertical"));
-        wrapper.setProps({ direction: "horizontal" });
-        expect(wrapper.find(".row").length).toBeGreaterThan(0);
-        expect(wrapper.find(".timeline").hasClass("horizontal"));
+        act(() => {
+            render(<Timeline {...props} />, container);
+        });
+        expect(container.querySelector(`.timeline`).classList).toContain("vertical");
+        act(() => {
+            render(<Timeline {...props} direction="horizontal" />, container);
+        });
+        expect(container.querySelector(`.timeline`).classList).toContain("horizontal");
     });
 
-    it("Should fire click event if onClick is passed", () => {
-        // Vertical
-        const verticalClick = jest.fn();
-        const verticalWrapper = shallow(<Timeline list={timelineList} />);
-        verticalWrapper.find(".title-wrapper").first().simulate("click");
-        verticalWrapper.setProps({ onClick: verticalClick });
-        verticalWrapper.find(".title-wrapper").first().simulate("click");
-        expect(verticalClick).toBeCalled();
-        // Horizontal
-        const horizontalClick = jest.fn();
-        const horizontalWrapper = shallow(<Timeline list={timelineList} direction="horizontal" />);
-        horizontalWrapper.find(".title-wrapper").first().simulate("click");
-        horizontalWrapper.find(".title-wrapper").at(1).simulate("click");
-        horizontalWrapper.setProps({ onClick: horizontalClick });
-        horizontalWrapper.find(".title-wrapper").first().simulate("click");
-        horizontalWrapper.find(".title-wrapper").at(1).simulate("click");
-        expect(horizontalClick).toHaveBeenCalledTimes(2);
-    });
-
-    it("Should render timeline item title, time and description", () => {
-        const newTimelineList: Array<TimelineListItem> = [
-            { title: "title1", time: "time1" },
-            { title: "title2", time: "time2" },
-            { title: "title3", time: "time3" },
-            { title: "title4", time: "time4", desc: "desc4" },
-            { title: "title5", time: "time5", desc: "desc5" },
+    describe("Should fire click event if onClick is passed", () => {
+        const testCases: Array<TimelineClickTestCase> = [
+            { statement: "on vertical", props: { ...props } },
+            { statement: "on horizontal", props: { ...props, direction: "horizontal" } },
         ];
+        testCases.map((item: TimelineClickTestCase) => {
+            it(item.statement, () => {
+                act(() => {
+                    render(<Timeline {...item.props} />, container);
+                });
+                act(() => {
+                    Simulate.click(container.querySelector(".title-wrapper"));
+                });
+                expect(item.props.onClick).toBeCalled();
+            });
+        });
+    });
 
-        // Vertical
-        const verticalWrapper = shallow(<Timeline list={timelineList} />);
-        expect(verticalWrapper.find(".title-wrapper").at(2).find(".title").text()).toEqual("title3");
-        expect(verticalWrapper.find(".title-wrapper").at(2).find(".time").text()).toEqual("time3");
-        verticalWrapper.setProps({ list: newTimelineList });
-        expect(verticalWrapper.find(".title-wrapper").at(3).find(".desc").length).toBe(1);
-        expect(verticalWrapper.find(".title-wrapper").at(3).find(".desc").text()).toEqual("desc4");
-        expect(verticalWrapper.find(".title-wrapper").at(4).find(".desc").length).toBe(1);
-        expect(verticalWrapper.find(".title-wrapper").at(4).find(".desc").text()).toEqual("desc5");
-        // Horizontal
-        const horizontalWrapper = shallow(<Timeline list={timelineList} direction="horizontal" />);
-        expect(horizontalWrapper.find(".title-wrapper").at(2).find(".title").text()).toEqual("title3");
-        expect(horizontalWrapper.find(".title-wrapper").at(2).find(".time").text()).toEqual("time3");
-        horizontalWrapper.setProps({ list: newTimelineList }).update();
-        expect(horizontalWrapper.find(".title-wrapper").at(1).find(".desc").length).toBe(1);
-        expect(horizontalWrapper.find(".title-wrapper").at(1).find(".desc").text()).toEqual("desc4");
-        expect(horizontalWrapper.find(".title-wrapper").at(4).find(".desc").length).toBe(1);
-        expect(horizontalWrapper.find(".title-wrapper").at(4).find(".desc").text()).toEqual("desc5");
+    describe("Should render timeline item title, time and description with differen render method", () => {
+        const testCases: Array<TimelineItemTestCase> = [
+            {
+                statement: "render using list",
+                render: () => {
+                    render(<Timeline {...props} />, container);
+                },
+            },
+            {
+                statement: "render using component",
+                render: () => {
+                    render(
+                        <Timeline>
+                            {timelineList.map((item: TimelineItemProps, i: number) => (
+                                <TimelineItem key={i} {...item} />
+                            ))}
+                        </Timeline>,
+                        container
+                    );
+                },
+            },
+        ];
+        testCases.map((item: TimelineItemTestCase) => {
+            it(item.statement, () => {
+                act(() => {
+                    item.render();
+                });
+                timelineList.map((listItem: TimelineItemProps, index: number) => {
+                    const node: Element = container.querySelectorAll(".title-wrapper")[index];
+                    expect(node.querySelector(".title").textContent).toBe(listItem.title);
+                    expect(node.querySelector(".time").textContent).toBe(listItem.time);
+                    if (listItem.desc) {
+                        expect(node.querySelector(".desc")).not.toBeNull();
+                        expect(node.querySelector(".desc").textContent).toBe(listItem.desc);
+                    } else {
+                        expect(node.querySelector(".desc")).toBeNull();
+                    }
+                });
+            });
+        });
     });
 });
