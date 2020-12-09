@@ -1,166 +1,186 @@
 import React from "react";
-import { shallow, mount, ShallowWrapper, ReactWrapper } from "enzyme";
+import { unmountComponentAtNode, render } from "react-dom";
+import { act, Simulate } from "react-dom/test-utils";
 import { Notification, NotificationProps, NotificationAction } from ".";
 
 describe("Component: Notification", () => {
-    let wrapper: ShallowWrapper<NotificationProps>;
-    let onDismiss: jest.Mock;
+    let container: HTMLDivElement = null;
+    let onDismiss: jest.Mock = jest.fn();
+    const actions: Array<NotificationAction> = [
+        { text: "action1", action: jest.fn() },
+        { text: "action2", action: jest.fn() },
+        { text: "action3", action: jest.fn() },
+    ];
+    const props: NotificationProps = {
+        toggle: false,
+        onDismiss,
+    };
 
     beforeEach(() => {
-        onDismiss = jest.fn();
-        wrapper = shallow(<Notification toggle={false} onDismiss={onDismiss} />);
+        container = document.createElement("div");
+        document.body.appendChild(container);
     });
 
-    it("Should render", () => expect(wrapper).toBeDefined());
+    afterEach(() => {
+        unmountComponentAtNode(container);
+        container.remove();
+        container = null;
+        jest.clearAllMocks();
+    });
+
+    it("Should render", () => {
+        act(() => {
+            render(<Notification {...props} />, container);
+        });
+        expect(container.querySelector(".rc.custom-notification")).not.toBeNull();
+    });
 
     describe("Should render with defaults", () => {
         test("slide-in style should render with bottom-left position and purple theme", () => {
-            expect(wrapper.hasClass("style-slide-in")).toBeTruthy();
-            expect(wrapper.hasClass("bottom-left")).toBeTruthy();
-            expect(wrapper.hasClass("theme-purple")).toBeTruthy();
+            act(() => {
+                render(<Notification {...props} />, container);
+            });
+            expect(container.querySelector(".style-slide-in")).not.toBeNull();
+            expect(container.querySelector(".bottom-left")).not.toBeNull();
+            expect(container.querySelector(".theme-purple")).not.toBeNull();
         });
 
-        test("bar style should render with top position and purple theme", () => {
-            wrapper.setProps({ style: "bar" });
-            expect(wrapper.hasClass("style-bar")).toBeTruthy();
-            expect(wrapper.hasClass("top")).toBeTruthy();
-            expect(wrapper.hasClass("theme-purple")).toBeTruthy();
+        test("bar style should render purple theme", () => {
+            act(() => {
+                render(<Notification {...props} type="bar" />, container);
+            });
+            expect(container.querySelector(".style-bar")).not.toBeNull();
+            expect(container.querySelector(".theme-purple")).not.toBeNull();
         });
 
-        it("Should dismiss when the default timer is done", async (done: jest.DoneCallback) => {
-            expect.assertions(2);
-            wrapper.setProps({ toggle: true, dismissTimeout: 500, onDismiss: () => wrapper.setProps({ toggle: false }) });
-            expect(wrapper.hasClass("open")).toBeTruthy();
-            await setTimeout(() => {
-                expect(wrapper.hasClass("open")).toBeFalsy();
-                done();
-            }, 600);
+        it("Should dismiss when the default timer is done", async () => {
+            jest.useFakeTimers();
+            act(() => {
+                render(<Notification {...props} toggle dismissTimeout={500} />, container);
+            });
+            expect(container.querySelector(".open")).not.toBeNull();
+            jest.runAllTimers();
+            expect(onDismiss).toBeCalled();
         });
 
-        it("Should render with defaults if style or position props passed is not supported", () => {
-            wrapper.setProps({ style: "bingo" as any, position: "top-right" });
-            expect(wrapper.hasClass("style-slide-in")).toBeTruthy();
-            expect(wrapper.hasClass("top-right")).toBeTruthy();
-            wrapper.setProps({ style: "slide-in", position: "top-left" });
-            expect(wrapper.hasClass("style-slide-in")).toBeTruthy();
-            expect(wrapper.hasClass("top-left")).toBeTruthy();
-            wrapper.setProps({ position: "bingo" as any });
-            expect(wrapper.hasClass("bottom-left")).toBeTruthy();
+        it("Should render with defaults if type is not supported", () => {
+            act(() => {
+                render(<Notification {...props} type={"bingo" as any} />, container);
+            });
+            expect(container.querySelector(".default")).not.toBeNull();
         });
     });
 
     it("Should render different variations of style, position and theme", () => {
-        wrapper.setProps({ style: "bar", theme: "primary", position: "bottom" });
-        expect(wrapper.hasClass("style-bar")).toBeTruthy();
-        expect(wrapper.hasClass("theme-primary")).toBeTruthy();
-        expect(wrapper.hasClass("bottom")).toBeTruthy();
+        act(() => {
+            render(<Notification {...props} type="bar" theme="primary" position="bottom" />, container);
+        });
+        expect(container.querySelector(".style-bar")).not.toBeNull();
+        expect(container.querySelector(".theme-primary")).not.toBeNull();
+        expect(container.querySelector(".bottom")).not.toBeNull();
     });
 
     it("Should pass custom class", () => {
-        wrapper.setProps({ className: "myNotification" });
-        expect(wrapper.hasClass("myNotification")).toBeTruthy();
+        const className: string = "myNotification";
+        act(() => {
+            render(<Notification {...props} className={className} />, container);
+        });
+        expect(container.querySelector(`.${className}`)).not.toBeNull();
     });
 
     it("Should render title and message", () => {
-        wrapper.setProps({ title: "title", message: "message" });
-        expect(wrapper.find(".notification-title").length).not.toBe(0);
-        expect(wrapper.find(".notification-title").text()).toEqual("title");
-        expect(wrapper.find(".notification-message").length).not.toBe(0);
-        expect(wrapper.find(".notification-message").text()).toEqual("message");
+        const title: string = "title";
+        const message: string = "message";
+        act(() => {
+            render(<Notification {...props} title={title} message={message} />, container);
+        });
+        expect(container.querySelector(".notification-title")).not.toBeNull();
+        expect(container.querySelector(".notification-title").innerHTML).toBe(title);
+        expect(container.querySelector(".notification-message")).not.toBeNull();
+        expect(container.querySelector(".notification-message").innerHTML).toBe(message);
     });
 
     it("Should allow dismissing with close button", () => {
-        wrapper.setProps({ dismissable: true });
-        expect(wrapper.find(".dismiss-btn")).toBeTruthy();
-        wrapper.find(".dismiss-btn").simulate("click");
+        act(() => {
+            render(<Notification {...props} dismissable />, container);
+        });
+        expect(container.querySelector(".dismiss-btn")).not.toBeNull();
+        Simulate.click(container.querySelector(".dismiss-btn"));
         expect(onDismiss).toBeCalled();
     });
 
     it("Should call onClick when notification is clicked", () => {
         const onClick: jest.Mock = jest.fn();
-        wrapper.setProps({ onClick: onClick });
-        wrapper.find(".content-wrapper").simulate("click");
-        expect(wrapper.find(".content-wrapper").hasClass("clickable")).toBeTruthy();
+        act(() => {
+            render(<Notification {...props} onClick={onClick} />, container);
+        });
+        Simulate.click(container.querySelector(".content-wrapper"));
+        expect(container.querySelector(".content-wrapper").classList).toContain("clickable");
         expect(onClick).toBeCalled();
     });
 
     it("Should render child element when passed", () => {
-        const newWrapper: ShallowWrapper<NotificationProps> = shallow(
-            <Notification toggle={true} onDismiss={jest.fn()}>
-                <div className="testing">test</div>
-            </Notification>
-        );
-        expect(newWrapper.find(".testing").length).not.toBe(0);
+        act(() => {
+            render(
+                <Notification {...props}>
+                    <div className="testing">test</div>
+                </Notification>,
+                container
+            );
+        });
+        expect(container.querySelector(".testing")).not.toBeNull();
     });
 
     describe("Should render actions when passed", () => {
-        it("Should not render actions if more than two actions are passed", () => {
-            const actions: Array<NotificationAction> = [
-                { text: "action1", action: jest.fn() },
-                { text: "action2", action: jest.fn() },
-                { text: "action3", action: jest.fn() },
-            ];
-            wrapper.setProps({ actions: actions });
-            expect(wrapper.find(".actions-wrapper").length).toBe(0);
+        it("Should render actions", () => {
+            act(() => {
+                render(<Notification {...props} actions={actions} />, container);
+            });
+            expect(container.querySelector(".actions-wrapper")).not.toBeNull();
         });
 
         it("Should not render actions if the style is set to bar", () => {
-            wrapper.setProps({ style: "bar", actions: [{ text: "actions1", action: jest.fn() }] });
-            expect(wrapper.find(".actions-wrapper").length).toBe(0);
+            act(() => {
+                render(<Notification {...props} type="bar" actions={actions} />, container);
+            });
+            expect(container.querySelector(".actions-wrapper")).toBeNull();
         });
 
         it("Should render one action taking the whole width", () => {
-            wrapper.setProps({ actions: [{ text: "action1", action: jest.fn() }] });
-            expect(wrapper.find(".actions-wrapper").length).not.toBe(0);
-            expect(wrapper.find(".actions-wrapper").hasClass("partitioned")).toBeFalsy();
+            act(() => {
+                render(<Notification {...props} actions={[actions[0]]} />, container);
+            });
+            expect(container.querySelector(".actions-wrapper")).not.toBeNull();
+            expect(container.querySelector(".actions-wrapper").classList).not.toContain("partitioned");
         });
 
         it("Should render two actions with equal width", () => {
-            const actions: Array<NotificationAction> = [
-                { text: "action1", action: jest.fn() },
-                { text: "action2", action: jest.fn() },
-            ];
-            wrapper.setProps({ actions: actions });
-            expect(wrapper.find(".actions-wrapper").length).not.toBe(0);
-            expect(wrapper.find(".actions-wrapper").hasClass("partitioned")).toBeTruthy();
+            act(() => {
+                render(<Notification {...props} actions={actions} />, container);
+            });
+            expect(container.querySelector(".actions-wrapper")).not.toBeNull();
+            expect(container.querySelector(".actions-wrapper").classList).toContain("partitioned");
         });
 
         it("Should render actions with correct label and action callback should be called when clicked", () => {
-            const actions: Array<NotificationAction> = [
-                { text: "action1", action: jest.fn() },
-                { text: "action2", action: jest.fn() },
-            ];
-            wrapper.setProps({ actions: actions });
-            expect(wrapper.find(".action-wrapper").first().find("button").text()).toEqual(actions[0].text);
-            expect(wrapper.find(".action-wrapper").at(1).find("button").text()).toEqual(actions[1].text);
-            wrapper.find(".action-wrapper").first().find("button").simulate("click");
-            wrapper.find(".action-wrapper").at(1).find("button").simulate("click");
-            expect(actions[0].action).toBeCalled();
-            expect(actions[1].action).toBeCalled();
+            act(() => {
+                render(<Notification {...props} actions={actions} />, container);
+            });
+            actions.map((item: NotificationAction, index: number) => {
+                expect(container.querySelectorAll(".action-wrapper")[index].querySelector("button").innerHTML).toBe(item.text);
+                Simulate.click(container.querySelectorAll(".action-wrapper")[index].querySelector("button"));
+                expect(item.action).toBeCalled();
+            });
         });
     });
 
-    it("Should not start timer if persist prop is set to true", async (done: jest.DoneCallback) => {
-        expect.assertions(2);
-        wrapper.setProps({ persist: true, dismissTimeout: 500 });
-        wrapper.setProps({ toggle: true });
-        expect(wrapper.hasClass("open")).toBeTruthy();
-
-        await setTimeout(() => {
-            expect(wrapper.hasClass("open")).toBeTruthy();
-            done();
-        }, 600);
-    });
-
-    it("Should clear timers when it unmounts", async (done: jest.DoneCallback) => {
-        const newWrapper: ReactWrapper<NotificationProps> = mount(<Notification toggle={false} onDismiss={jest.fn()} />);
-        // The timer is instantiated When the component is mounted
-        newWrapper.setProps({ toggle: true }, () => expect((newWrapper.instance() as Notification).timerRef).not.toBeNull());
-        const timeoutRef = await setTimeout(() => {
-            newWrapper.instance().componentWillUnmount();
-            expect((newWrapper.instance() as Notification).timerRef).toBeNull();
-            done();
-            clearTimeout(timeoutRef);
-        }, 500);
+    it("Should not start timer if persist prop is set to true", () => {
+        jest.useFakeTimers();
+        act(() => {
+            render(<Notification {...props} toggle dismissTimeout={500} persist />, container);
+        });
+        expect(container.querySelector(".open")).not.toBeNull();
+        jest.runAllTimers();
+        expect(onDismiss).not.toBeCalled();
     });
 });

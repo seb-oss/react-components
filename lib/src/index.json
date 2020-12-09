@@ -5,7 +5,6 @@
         "Button": "./lib/src/Button/index.ts",
         "ButtonGroup": "./lib/src/ButtonGroup/index.ts",
         "Carousel": "./lib/src/Carousel/index.ts",
-        "Chart": "./lib/src/Chart/index.ts",
         "CheckBox": "./lib/src/CheckBox/index.ts",
         "Chip": "./lib/src/Chip/index.ts",
         "Collapse": "./lib/src/Collapse/index.ts",
@@ -20,7 +19,6 @@
         "Notification": "./lib/src/Notification/index.ts",
         "Pagination": "./lib/src/Pagination/index.ts",
         "ProgressBar": "./lib/src/ProgressBar/index.ts",
-        "RadioButton": "./lib/src/RadioButton/index.ts",
         "RadioGroup": "./lib/src/RadioGroup/index.ts",
         "Rating": "./lib/src/Rating/index.ts",
         "Slider": "./lib/src/Slider/index.ts",
@@ -58,10 +56,6 @@
         {
             "from": "./lib/src/Carousel/index.ts",
             "to": "./Carousel/index.js"
-        },
-        {
-            "from": "./lib/src/Chart/index.ts",
-            "to": "./Chart/index.js"
         },
         {
             "from": "./lib/src/CheckBox/index.ts",
@@ -118,10 +112,6 @@
         {
             "from": "./lib/src/ProgressBar/index.ts",
             "to": "./ProgressBar/index.js"
-        },
-        {
-            "from": "./lib/src/RadioButton/index.ts",
-            "to": "./RadioButton/index.js"
         },
         {
             "from": "./lib/src/RadioGroup/index.ts",

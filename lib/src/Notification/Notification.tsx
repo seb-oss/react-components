@@ -1,4 +1,5 @@
 import React from "react";
+import classnames from "classnames";
 import "./notification-style.scss";
 
 type NotificationStyle = "slide-in" | "bar";
@@ -12,19 +13,15 @@ export interface NotificationAction {
     action: VoidFunction;
 }
 
-export interface NotificationProps {
+export type NotificationProps = Omit<JSX.IntrinsicElements["div"], "ref"> & {
     /** list of action buttons */
     actions?: Array<NotificationAction>;
-    /** Element class name */
-    className?: string;
     /** Property sets whether the notification is dismissable */
     dismissable?: boolean;
     /** Interval for the notification to be dismissed */
     dismissTimeout?: number;
     /** Notification content */
-    message?: string;
-    /** Callback when notification is clicked */
-    onClick?: (event?: React.MouseEvent<HTMLDivElement>) => void;
+    message?: React.ReactNode;
     /** Callback when notification is dismissed */
     onDismiss: VoidFunction;
     /** Persist notification until dismissed (default: false) */
@@ -32,14 +29,14 @@ export interface NotificationProps {
     /** Notification position, `bottom-left` | `bottom-right` | `top-left` | `top-right` | `top` | `bottom` */
     position?: NotificationPosition;
     /** Notification style, `slide-in` | `bar` */
-    style?: NotificationStyle;
+    type?: NotificationStyle;
     /** Notification theme, `purple` | `primary` | `danger` | `success` | `warning` | `inverted` */
     theme?: NotificationTheme;
     /** Notification title */
     title?: string;
     /** Property sets whether the notification is toggled */
     toggle: boolean;
-}
+};
 
 const TimesIcon: JSX.Element = (
     <svg name="times" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512">
@@ -77,25 +74,42 @@ export class Notification extends React.Component<NotificationProps> {
     }
 
     render(): React.ReactNode {
-        const style: string = this.getStyleClass(this.props.style);
+        const {
+            theme = "purple",
+            type = "slide-in",
+            position = "bottom-left",
+            className,
+            style,
+            message,
+            actions,
+            id,
+            title,
+            persist,
+            toggle,
+            dismissable,
+            onDismiss,
+            dismissTimeout,
+            ...props
+        } = this.props;
+        const availableTypes: Array<NotificationStyle> = ["bar", "slide-in"];
         return (
             <div
-                className={
-                    "custom-notification" +
-                    ` ${style}` +
-                    ` ${this.getThemeClass(this.props.theme)}` +
-                    ` ${this.getPositionClass(this.props.position, this.props.style)}` +
-                    (this.props.toggle ? " open" : "") +
-                    (this.props.className ? ` ${this.props.className}` : "")
-                }
+                className={classnames("rc custom-notification", className, position, {
+                    open: toggle,
+                    [`theme-${theme}`]: theme,
+                    [`style-${type}`]: availableTypes.indexOf(type) > -1,
+                    default: availableTypes.indexOf(type) === -1,
+                })}
+                style={style}
+                id={id}
             >
-                <div className={`content-wrapper` + (this.props.onClick ? " clickable" : "")} onClick={this.props.onClick}>
-                    {this.props.title && style === "style-slide-in" && <div className="notification-title">{this.props.title}</div>}
-                    {this.props.message && <div className="notification-message">{this.props.message}</div>}
-                    {this.props.children && this.props.children}
-                    {style === "style-slide-in" && this.props.actions && this.props.actions.length && this.props.actions.length < 3 && (
-                        <div className={"actions-wrapper" + (this.props.actions.length === 2 ? " partitioned" : "")}>
-                            {this.props.actions.map((item: NotificationAction, i: number) => (
+                <div className={classnames(`content-wrapper`, { clickable: props.onClick })} {...props}>
+                    {title && type === "slide-in" && <div className="notification-title">{title}</div>}
+                    {message && <div className="notification-message">{message}</div>}
+                    {props.children}
+                    {type === "slide-in" && actions && actions.length && (
+                        <div className={classnames("actions-wrapper", { partitioned: actions.length > 1 })}>
+                            {actions.map((item: NotificationAction, i: number) => (
                                 <div key={i} className="action-wrapper">
                                     <button className="btn btn-sm btn-secondary notification-action" onClick={item.action}>
                                         {item.text}
@@ -105,7 +119,7 @@ export class Notification extends React.Component<NotificationProps> {
                         </div>
                     )}
                 </div>
-                {this.props.dismissable && (
+                {dismissable && (
                     <div className="dismiss-btn" onClick={this.dismiss}>
                         {TimesIcon}
                     </div>
@@ -134,71 +148,5 @@ export class Notification extends React.Component<NotificationProps> {
             clearTimeout(this.timerRef);
             this.timerRef = null;
         }
-    }
-
-    /**
-     * Get the style class based on the theme passed through the props
-     * @param {string} style The style passed through the props
-     * @returns {string} The style class
-     */
-    private getStyleClass(style: string): string {
-        let styleClass: string = "style-";
-        if (style && ["slide-in", "bar"].indexOf(style) !== -1) {
-            styleClass += style;
-        } else {
-            styleClass += "slide-in";
-        }
-        return styleClass;
-    }
-
-    /**
-     * Get the theme class based on the theme passed though the props
-     * @param {string} theme The theme passed through the props
-     * @returns {string} The theme class
-     */
-    private getThemeClass(theme: string): string {
-        let themeClass: string = "theme-";
-        if (theme && ["purple", "primary", "danger", "success", "warning", "inverted"].indexOf(theme) !== -1) {
-            themeClass += theme;
-        } else {
-            themeClass += "purple";
-        }
-        return themeClass;
-    }
-
-    /**
-     * Get the position class based on the position and style passed through the props
-     * @param {string} position The position passed through the props
-     * @param {string} style The style passed through the props
-     * @returns {string} The position class
-     */
-    private getPositionClass(position: string, style: string): string {
-        let positionClass: string;
-        if (style && ["slide-in", "bar"].indexOf(style) !== -1) {
-            switch (style) {
-                case "slide-in":
-                    if (position && ["bottom-left", "bottom-right", "top-left", "top-right"].indexOf(position) !== -1) {
-                        positionClass = position;
-                    } else {
-                        positionClass = "bottom-left";
-                    }
-                    break;
-                case "bar":
-                    if (position && ["top", "bottom"].indexOf(position) !== -1) {
-                        positionClass = position;
-                    } else {
-                        positionClass = "top";
-                    }
-                    break;
-            }
-        } else {
-            // Should default back to `slide-in`
-            if (position && ["bottom-left", "bottom-right", "top-left", "top-right"].indexOf(position) !== -1) {
-                positionClass = position;
-            } else {
-                positionClass = "bottom-left";
-            }
-        }
-        return positionClass;
     }
 }

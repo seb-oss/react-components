@@ -49,7 +49,7 @@ const ButtonGroupPage: React.FC = (): React.ReactElement<void> => {
 
     const importString: string = React.useMemo(() => require("!raw-loader!../../../lib/src/ButtonGroup/ButtonGroup"), []);
     const importedFiles: Array<string> = React.useMemo(() => [require("!raw-loader!../../../lib/src/ButtonGroup/ButtonGroup")], []);
-    const code: string = React.useMemo(() => require("!raw-loader!./buttonGroup").default, []);
+    const code: string = React.useMemo(() => require("!raw-loader!./buttongroup").default, []);
 
     const renderButton: React.ReactNode = React.useMemo(() => {
         return (

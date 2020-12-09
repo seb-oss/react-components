@@ -1,16 +1,12 @@
 import React from "react";
 import classnames from "classnames";
 
-export interface TimerProps {
+export type TimerProps = JSX.IntrinsicElements["div"] & {
     /** Callback when timer ends */
     callback?: VoidFunction;
-    /** Element class name */
-    className?: string;
     /** Timer's duration in milliseconds */
     duration: number;
-    /** Element ID */
-    id?: string;
-}
+};
 
 interface TimerState {
     timer: string;
@@ -79,8 +75,9 @@ export class Timer extends React.Component<TimerProps, TimerState> {
     }
 
     render(): React.ReactNode {
+        const { callback, duration, ...props } = this.props;
         return (
-            <div className={classnames("custom-timer", this.props.className)} id={this.props.id}>
+            <div className={classnames("custom-timer", props.className)} {...props}>
                 {this.state.timer}
             </div>
         );

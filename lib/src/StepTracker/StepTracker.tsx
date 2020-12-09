@@ -1,5 +1,7 @@
 import React from "react";
+import classnames from "classnames";
 import "./step-tracker-style.scss";
+import StepLabel, { StepLabelProps } from "./StepLabel";
 
 const checkIcon: JSX.Element = (
     <svg name="check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
@@ -10,15 +12,11 @@ const checkIcon: JSX.Element = (
 export type StepTrackerLabelPosition = "right" | "left" | "bottom" | "top";
 export type StepTrackerLabelOrientation = "horizontal" | "vertical";
 
-export interface StepTrackerProps {
-    /** Element class name */
-    className?: string;
-    /** Element ID */
-    id?: string;
+export type StepTrackerProps = Omit<JSX.IntrinsicElements["div"], "onClick"> & {
     /** Position of label in step tracker */
     labelPosition?: StepTrackerLabelPosition;
     /** list of item in step tracker */
-    list: Array<string>;
+    list?: Array<StepLabelProps>;
     /** callback when step tracker item clicked */
     onClick?: (index: number) => void;
     /** To display step tracker vertically or horizontally */
@@ -27,155 +25,66 @@ export interface StepTrackerProps {
     step: number;
     /** Use numbers for each step */
     useNumbers?: boolean;
-}
+};
 /** Step trackers illustrate the steps in a multi step process */
-export const StepTracker: React.FC<StepTrackerProps> = React.memo((props: StepTrackerProps) => {
-    let topLabel: boolean;
-    let bottomLabel: boolean;
-    let rightLabel: boolean;
-    let leftLabel: boolean;
-    let orientation: string;
-    let labelPosition: string;
+export const StepTracker: React.FC<StepTrackerProps> = React.memo(({ labelPosition = "bottom", list, onClick, orientation = "horizontal", step, useNumbers, ...props }: StepTrackerProps) => {
+    const [isVertical, setIsVertical] = React.useState<boolean>(orientation === "vertical");
+    const [stepList, setStepList] = React.useState<Array<number>>([]);
 
-    if (["horizontal", "vertical"].indexOf(props.orientation) === -1) {
-        orientation = "horizontal";
-    } else {
-        orientation = props.orientation;
-    }
-    if (orientation === "horizontal") {
-        if (["top", "bottom"].indexOf(props.labelPosition) === -1) {
-            labelPosition = "bottom";
-        } else {
-            labelPosition = props.labelPosition;
-        }
-        if (labelPosition === "top") {
-            topLabel = true;
-            bottomLabel = false;
-            rightLabel = false;
-            leftLabel = false;
-        }
-        if (labelPosition === "bottom") {
-            topLabel = false;
-            bottomLabel = true;
-            rightLabel = false;
-            leftLabel = false;
-        }
-    }
-    if (orientation === "vertical") {
-        if (["left", "right"].indexOf(props.labelPosition) === -1) {
-            labelPosition = "right";
-        } else {
-            labelPosition = props.labelPosition;
-        }
-        if (labelPosition === "left") {
-            topLabel = false;
-            bottomLabel = false;
-            rightLabel = false;
-            leftLabel = true;
-        }
-        if (labelPosition === "right") {
-            topLabel = false;
-            bottomLabel = false;
-            rightLabel = true;
-            leftLabel = false;
-        }
-    }
+    const getProgress = React.useCallback(
+        (pos: number): string => {
+            return (100 / (stepList.length - 1)) * pos + "%";
+        },
+        [stepList]
+    );
 
-    let wrapperClass: string = "custom-step-tracker";
-    if (props.onClick) {
-        wrapperClass += " clickable";
-    }
-    wrapperClass += ` ${orientation}`;
-    wrapperClass += ` label-${labelPosition}`;
-    if (props.className) {
-        wrapperClass += ` ${props.className}`;
-    }
+    const getStyles = React.useCallback(
+        (key: keyof React.CSSProperties, pos: number): React.CSSProperties => {
+            return { [key]: getProgress(pos) };
+        },
+        [getProgress]
+    );
 
-    function getProgress(pos: number): string {
-        return (100 / (props.list.length - 1)) * pos + "%";
-    }
+    React.useEffect(() => {
+        setIsVertical(orientation === "vertical");
+    }, [orientation]);
+
+    React.useEffect(() => {
+        setStepList((list ? list : React.Children.toArray(props.children)).map((value: null, i: number) => i));
+    }, [props.children, list]);
 
     return (
-        <div className={wrapperClass} id={props.id}>
-            {topLabel && (
-                <div className="text-wrapper">
-                    {props.list.map((item: string, i: number) => (
-                        <div className={"text" + (props.step === i ? " active" : "")} style={{ width: getProgress(1) }} key={i}>
-                            <div className="name">{item}</div>
-                        </div>
-                    ))}
+        <div className={classnames("rc step-tracker", orientation, labelPosition, props.className, { clickable: onClick })} {...props}>
+            <div className="step-wrapper">
+                <div className="line">
+                    <div className="progress" style={getStyles(isVertical ? "height" : "width", step)} />
                 </div>
-            )}
-
-            {leftLabel && (
-                <div className="text-wrapper">
-                    {props.list.map((item: string, i: number) => (
-                        <div className={"text" + (props.step === i ? " active" : "")} key={i}>
-                            <div className="name">{item}</div>
-                        </div>
-                    ))}
-                </div>
-            )}
-
-            {orientation === "horizontal" && (
-                <div className="step-wrapper">
-                    <div className="line">
-                        <div className="progress" style={{ width: getProgress(props.step) }} />
+                {stepList.map((i: number) => (
+                    <div
+                        className={"step" + (step === i ? " active" : "") + (useNumbers ? " numbered" : "")}
+                        style={getStyles(isVertical ? "top" : "left", i)}
+                        onClick={() => onClick && onClick(i)}
+                        key={i}
+                    >
+                        <div className="step-border" />
+                        {checkIcon}
+                        <div className="number">{i + 1}</div>
                     </div>
-                    {props.list.map((item: string, i: number) => (
-                        <div
-                            className={"step" + (props.step === i ? " active" : "") + (props.useNumbers ? " numbered" : "")}
-                            style={{ left: getProgress(i) }}
-                            onClick={() => props.onClick && props.onClick(i)}
-                            key={i}
-                        >
-                            <div className="step-border" />
-                            {checkIcon}
-                            <div className="number">{i + 1}</div>
-                        </div>
-                    ))}
-                </div>
-            )}
-
-            {orientation === "vertical" && (
-                <div className="step-wrapper">
-                    <div className="line">
-                        <div className="progress" style={{ height: getProgress(props.step) }} />
-                    </div>
-                    {props.list.map((item: string, i: number) => (
-                        <div
-                            className={"step" + (props.step === i ? " active" : "") + (props.useNumbers ? " numbered" : "")}
-                            style={{ top: getProgress(i) }}
-                            onClick={() => props.onClick && props.onClick(i)}
-                            key={i}
-                        >
-                            <div className="step-border" />
-                            {checkIcon}
-                            <div className="number">{i + 1}</div>
-                        </div>
-                    ))}
-                </div>
-            )}
-
-            {bottomLabel && (
-                <div className="text-wrapper">
-                    {props.list.map((item: string, i: number) => (
-                        <div className={"text" + (props.step === i ? " active" : "")} style={{ width: getProgress(1) }} key={i}>
-                            <div className="name">{item}</div>
-                        </div>
-                    ))}
-                </div>
-            )}
-
-            {rightLabel && (
-                <div className="text-wrapper">
-                    {props.list.map((item: string, i: number) => (
-                        <div className={"text" + (props.step === i ? " active" : "")} key={i}>
-                            <div className="name">{item}</div>
-                        </div>
-                    ))}
-                </div>
-            )}
+                ))}
+            </div>
+            <div className="text-wrapper">
+                {list?.map((item: StepLabelProps, i: number) => (
+                    <StepLabel key={i} isActive={step === i} style={isVertical ? null : getStyles("width", 1)} {...item} />
+                ))}
+                {React.Children.map(props.children, (Child: React.ReactElement<StepLabelProps>, i: number) =>
+                    React.isValidElement<React.FC<StepLabelProps>>(Child)
+                        ? React.cloneElement<any>(Child, {
+                              isActive: step === i,
+                              style: isVertical ? null : getStyles("width", 1),
+                          })
+                        : Child
+                )}
+            </div>
         </div>
     );
 });
