@@ -112,7 +112,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
     });
 
     const isMobile = (): boolean => {
-        if (!!window && !!window["navigator"] && !!window.navigator["userAgent"]) {
+        if (typeof window !== "undefined" && !!window["navigator"] && !!window.navigator["userAgent"]) {
             return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(window?.navigator?.userAgent) || false;
         } else {
             return false;
