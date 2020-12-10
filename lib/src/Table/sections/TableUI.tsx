@@ -1,7 +1,7 @@
 import React from "react";
 import { ActionLinkItem, TableHeader, sortDirectionTypes, TableRow, RowTypes, PrimaryActionButton, FilterProps, TableTheme } from "../Table";
 import { randomId } from "@sebgroup/frontend-tools";
-import { RowUI } from "./RowUI";
+import { onItemSelectedType, RowUI } from "./RowUI";
 import { sumCols } from "./helperFunctions";
 
 const defaultSort: JSX.Element = (
@@ -26,7 +26,7 @@ interface TableUIProps {
     loading: boolean;
     onActionDropped: (event: React.MouseEvent<HTMLDivElement, MouseEvent>, row: TableRow, rowIndex?: number) => void;
     onAllItemsSelected?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-    onItemSelected?: (e: React.ChangeEvent<HTMLInputElement>, row: TableRow, type: RowTypes, rowIndex?: number) => void;
+    onItemSelected?: onItemSelectedType;
     onRowExpanded?: (e: React.MouseEvent<HTMLDivElement, MouseEvent>, row: TableRow) => void;
     onSort?: (accessor: string, sortDirection: sortDirectionTypes) => void;
     onSubRowExpanded?: (e: React.MouseEvent<HTMLDivElement, MouseEvent>, row: TableRow, rowIndex: number) => void;
@@ -103,12 +103,11 @@ export const TableUI: React.FunctionComponent<TableUIProps> = React.memo(
                                 <React.Fragment key={row.rowIndex}>
                                     <RowUI
                                         row={row}
-                                        type="row"
                                         tableRef={tableRef}
                                         onActionDropped={props.onActionDropped}
                                         onRowExpanded={props.onRowExpanded}
                                         useShowActionColumn={props.useShowActionColumn || !!row?.actionLinks?.length}
-                                        rowsAreCollapsable={props.rowsAreCollapsable}
+                                        isCollapsable={props.rowsAreCollapsable}
                                         onItemSelected={props.onItemSelected}
                                         primaryActionButton={props.primaryActionButton}
                                         actionLinks={row?.actionLinks || props.actionLinks}

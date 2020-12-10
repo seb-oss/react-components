@@ -34,6 +34,10 @@ const TablePage: React.FC = (): React.ReactElement<void> => {
                 label: "Age",
                 accessor: "age",
             },
+            {
+                label: "checked",
+                accessor: "_isChecked",
+            },
         ],
         []
     );

@@ -3,7 +3,7 @@
 $icon-color: $gray-500;
 $icon-active-color: $blue-dark;
 $chip-height: 32px;
-$icon-size: 16px;
+$icon-size: 12px;
 $row-height: 40px;
 $transition-time: 200ms;
 $filter-gray: #e6e6e6;
@@ -15,7 +15,6 @@ table {
                 > th {
                     &.sortable {
                         cursor: pointer;
-
                         &:hover {
                             color: $icon-active-color;
                         }
@@ -69,27 +68,24 @@ table {
                     &.checkbox-cell {
                         width: 5%;
                     }
+                    ._default-cell {
+                        display: flex;
+                        align-items: center;
+                        max-width: 88px;
+                        > .custom-checkbox,
+                        > .icon-holder {
+                            flex: 1;
+                        }
+                    }
                     .icon-holder {
                         cursor: pointer;
-                        height: $icon-size;
-                        widt
-                        //display: flex;
-                        //align-items: center;
-
-                        &:hover {
-                            svg {
-                                fill: $icon-active-color;
-                            }
-                        }
+                        width: $icon-size;
 
                         svg {
-                            height: $icon-size;
-                            fill: $icon-color;
-                        }
-
-                        &.active {
-                            svg {
-                                fill: $icon-active-color;
+                            width: $icon-size;
+                            fill: $gray-800;
+                            &[name="angle-right"] {
+                                width: 9px;
                             }
                         }
                     }
@@ -178,8 +174,8 @@ table {
                 &.sub-row {
                     td {
                         > div {
-                            &:first-child {
-                                margin-left: 20px;
+                            &._default-cell {
+                                justify-content: flex-end;
                             }
                         }
                     }

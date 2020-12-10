@@ -1,4 +1,4 @@
-import { TableRow, sortDirectionTypes, TableHeader, Cell } from "../Table";
+import { TableRow, sortDirectionTypes, TableHeader } from "../Table";
 
 /**
  * sum the total of columns or cols in a row
@@ -31,12 +31,12 @@ export function sumCols(colsLength: number, useSelection?: boolean, useShowActio
  * @param sortDirection the sort direction
  * @return Array of tableRow
  */
-export function sortArray(items: Array<TableRow> = [], columnName: string, sortDirection: sortDirectionTypes): Array<TableRow> {
+export function sortArray(items: Array<TableRow> = [], columnName: string, sortDirection: "asc" | "desc"): Array<TableRow> {
     const languages: Readonly<Array<string>> = window.navigator?.languages || ["sw", "en"];
 
     const sortedItems: Array<any> = [...items].sort((firstItem: TableRow, secondItem: TableRow) => {
         let result: number = 0;
-        if (sortDirection === sortDirectionTypes.Ascending) {
+        if (sortDirection === "asc") {
             if (isNaN(secondItem[columnName]) && isNaN(firstItem[columnName])) {
                 result = String(firstItem[columnName]).localeCompare(String(secondItem[columnName]), languages as Array<string>, { sensitivity: "base", ignorePunctuation: true });
             } else {
@@ -63,7 +63,7 @@ export function filterArray(items: Array<TableRow>, columns: Array<TableHeader>)
     return [...items].filter((row: TableRow) => {
         return columns.some((column: TableHeader) => {
             return column.filters?.some((filterValue: string) => {
-                const currentColumn: Cell = row?.cells.find((cell: Cell) => cell?.accessor === column?.accessor);
+                const currentColumn: any = row?.cells.find((cell: any) => cell?.accessor === column?.accessor);
                 return currentColumn.value === filterValue;
             });
         });
