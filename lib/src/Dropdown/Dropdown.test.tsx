@@ -2,7 +2,6 @@ import React from "react";
 import { Dropdown, DropdownProps, DropdownItem } from ".";
 import { unmountComponentAtNode, render } from "react-dom";
 import { act } from "react-dom/test-utils";
-import { DropdownValue } from "./Dropdown";
 
 type CustomPlaceholderTestCase = {
     statement: string;
@@ -11,7 +10,7 @@ type CustomPlaceholderTestCase = {
 };
 
 function setUserAgent(mobile: boolean): void {
-    Object.defineProperty(window.navigator, "userAgent", function () {
+    Object.defineProperty(window?.navigator, "userAgent", function () {
         return mobile ? "iPhone" : "Chrome";
     });
 }
