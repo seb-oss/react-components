@@ -111,10 +111,13 @@ export const Dropdown: React.FC<DropdownProps> = ({
         };
     });
 
-    const isMobile = (): boolean =>
-        React.useMemo(() => {
+    const isMobile = (): boolean => {
+        if (!!window && !!window["navigator"] && !!window.navigator["userAgent"]) {
             return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(window?.navigator?.userAgent) || false;
-        }, [window?.navigator?.userAgent]);
+        } else {
+            return false;
+        }
+    };
 
     const handleClickOutside = (event): void => {
         if (dropdownToggleRef.current && !dropdownToggleRef.current.contains(event.target) && dropdownMenuRef.current && !dropdownMenuRef.current.contains(event.target)) {
