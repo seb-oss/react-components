@@ -23,7 +23,6 @@ const DropdownPage: React.FC = (): React.ReactElement<void> => {
             { label: "Multi", value: "multi", key: "multi" },
             { label: "Disabled", value: "disabled", key: "disabled" },
             { label: "More", value: "more", key: "more" },
-            { label: "Native", value: "native", key: "native" },
             { label: "Searchable", value: "searchable", key: "searchable" },
             { label: "Clearable", value: "clearable", key: "clearable" },
         ],
@@ -85,7 +84,6 @@ const DropdownPage: React.FC = (): React.ReactElement<void> => {
                             multiple={checkDynamicFormSelectedKey("multi", controls)}
                             disabled={checkDynamicFormSelectedKey("disabled", controls)}
                             more={checkDynamicFormSelectedKey("more", controls)}
-                            forceNative={checkDynamicFormSelectedKey("native", controls)}
                             searchable={checkDynamicFormSelectedKey("searchable", controls)}
                             clearable={checkDynamicFormSelectedKey("clearable", controls)}
                             {...controls}

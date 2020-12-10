@@ -45,9 +45,8 @@ export interface DropdownProps extends OverriddenNativeProps {
     multi?: boolean;
     /** @deprecated use `value` instead @type DropdownValue */
     selectedValue?: DropdownItem | DropdownItem[];
-    /** @deprecated The component will automatically switch to native for mobile devices, use `forceNative` to always use native instead */
+    /** @deprecated The component will automatically switch to native for mobile devices */
     native?: boolean;
-    forceNative?: boolean;
     placeholder?: string;
     searchable?: boolean;
     placeholders?: DropdownPlaceholders;
@@ -80,10 +79,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
     label,
     list,
     more,
-    multi,
-    multiple = multi,
-    native,
-    forceNative = native,
+    multiple,
     onChange,
     placeholder,
     searchable,
@@ -114,6 +110,11 @@ export const Dropdown: React.FC<DropdownProps> = ({
             document.removeEventListener("mousedown", handleClickOutside);
         };
     });
+
+    const isMobile = (): boolean =>
+        React.useMemo(() => {
+            return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        }, [navigator.userAgent]);
 
     const handleClickOutside = (event): void => {
         if (dropdownToggleRef.current && !dropdownToggleRef.current.contains(event.target) && dropdownMenuRef.current && !dropdownMenuRef.current.contains(event.target)) {
@@ -397,11 +398,11 @@ export const Dropdown: React.FC<DropdownProps> = ({
                 disabled={shouldDisable}
                 className={classnames(`form-control custom-select custom-native-dropdown`, { disabled: shouldDisable }, props?.className)}
                 id={id}
-                hidden={!native}
+                hidden={!isMobile()}
                 onChange={(e) => onChange(multiple ? Array.from(e.target.selectedOptions, (option) => option.value) : e.target.value)}
             >
                 {list.map((item: DropdownItem, i: number) => (
-                    <option hidden={!native} key={i} value={item.value}>
+                    <option hidden={!isMobile()} key={i} value={item.value}>
                         {item.label}
                     </option>
                 ))}
@@ -417,7 +418,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
                 aria-expanded={open}
                 tabIndex={shouldDisable ? -1 : 0}
                 onClick={shouldDisable ? null : handleClickToggle}
-                hidden={native}
+                hidden={isMobile()}
             >
                 {!more ? (
                     <>
@@ -445,7 +446,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
                 tabIndex={0}
                 ref={dropdownMenuRef}
                 className={`dropdown-menu custom-dropdown-menu${open ? " show" : ""}${more ? " dropdown-menu-right" : ""}`}
-                hidden={native}
+                hidden={isMobile()}
             >
                 {searchable && (
                     <>
@@ -454,7 +455,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
                             type="search"
                             className="search-input"
                             name="search-input"
-                            placeholder={placeholders?.searchText || searchPlaceholder || "Search ..."}
+                            placeholder={placeholders?.searchText || "Search ..."}
                             value={searchText}
                             onChange={handleOnChangeSearch}
                         />

@@ -10,6 +10,12 @@ type CustomPlaceholderTestCase = {
     expectCallback: VoidFunction;
 };
 
+function setUserAgent(mobile: boolean): void {
+    Object.defineProperty(window.navigator, "userAgent", function () {
+        return mobile ? "iPhone" : "Chrome";
+    });
+}
+
 describe("Component: Dropdown", () => {
     let container: HTMLDivElement = null;
     let DEFAULT_PROPS: DropdownProps = null;
@@ -32,6 +38,7 @@ describe("Component: Dropdown", () => {
     });
 
     afterEach(() => {
+        setUserAgent(false);
         unmountComponentAtNode(container);
         container.remove();
         container = null;
@@ -73,8 +80,9 @@ describe("Component: Dropdown", () => {
         expect(target.classList.contains(props.className)).toBeTruthy();
         expect(target.getAttribute("id")).toContain(props.id);
 
+        setUserAgent(true);
         act(() => {
-            render(<Dropdown {...props} forceNative />, container);
+            render(<Dropdown {...props} />, container);
         });
 
         const target2: Element = container.querySelector(".custom-dropdown-toggle");
@@ -97,8 +105,9 @@ describe("Component: Dropdown", () => {
         expect(target).toBeTruthy();
         expect(target.innerHTML).toBe(props.label);
 
+        setUserAgent(true);
         act(() => {
-            render(<Dropdown {...props} forceNative />, container);
+            render(<Dropdown {...props} />, container);
         });
 
         expect(target).toBeTruthy();
@@ -203,8 +212,9 @@ describe("Component: Dropdown", () => {
 
         expect(container.querySelector(".title").innerHTML).toBe(DEFAULT_PROPS.list[0].label);
 
+        setUserAgent(true);
         act(() => {
-            render(<Dropdown {...props} forceNative />, container);
+            render(<Dropdown {...props} />, container);
         });
 
         expect(container.querySelector("select").value).toBe(DEFAULT_PROPS.list[0].value);
@@ -334,17 +344,16 @@ describe("Component: Dropdown", () => {
     it("Should enable search when searchable prop set to true", () => {
         const props: DropdownProps = {
             ...DEFAULT_PROPS,
-            forceNative: true,
+            searchable: true,
         };
 
         act(() => {
             render(<Dropdown {...props} />, container);
         });
 
-        const target: Element = container.querySelector(".form-control");
+        const target: Element = container.querySelector(".search-input");
         expect(target).toBeTruthy();
         expect(target.classList.contains("disabled")).toBeFalsy();
-        expect(target.querySelectorAll("option").length).toBe(DEFAULT_PROPS.list.length);
     });
 
     it("Should display error is error prop set", () => {
@@ -361,8 +370,9 @@ describe("Component: Dropdown", () => {
         expect(alert).toBeTruthy();
         expect(alert.innerHTML).toBe(props.error);
 
+        setUserAgent(true);
         act(() => {
-            render(<Dropdown {...props} forceNative />, container);
+            render(<Dropdown {...props} />, container);
         });
 
         expect(alert).toBeTruthy();
@@ -384,8 +394,9 @@ describe("Component: Dropdown", () => {
         expect(target.classList.contains("disabled")).toBeTruthy();
         expect(target.querySelector(".custom-dropdown-toggle").classList.contains("disabled")).toBeTruthy();
 
+        setUserAgent(true);
         act(() => {
-            render(<Dropdown {...props} forceNative label="my-label" />, container);
+            render(<Dropdown {...props} label="my-label" />, container);
         });
 
         const nativeTarget: Element = container.querySelector("select");
@@ -890,17 +901,6 @@ describe("Component: Dropdown", () => {
             },
             expectCallback: () => {
                 expect(container.querySelector(".title").innerHTML).toBe(customText);
-            },
-        },
-        {
-            statement: "*Deprecated: Custom search text by setting searchPlaceholder",
-            props: {
-                ...defaultProps,
-                searchable: true,
-                searchPlaceholder: customText,
-            },
-            expectCallback: () => {
-                expect(container.querySelector(".search-input").getAttribute("placeholder")).toBe(customText);
             },
         },
         {
