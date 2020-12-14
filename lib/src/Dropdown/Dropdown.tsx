@@ -394,134 +394,137 @@ export const Dropdown: React.FC<DropdownProps> = ({
         <div {...wrapperProps} className={classnames("dropdown custom-dropdown", { disabled: shouldDisable }, { "has-error": error }, wrapperProps?.className)}>
             {label && <label className={classnames("dropdown-label", { disabled: shouldDisable })}>{label}</label>}
 
-            <select
-                {...props}
-                value={value || ""}
-                multiple={multiple}
-                disabled={shouldDisable}
-                className={classnames(`form-control custom-select custom-native-dropdown`, { disabled: shouldDisable }, props?.className)}
-                id={id}
-                hidden={!isMobile()}
-                onChange={(e) => onChange(multiple ? Array.from(e.target.selectedOptions, (option) => option.value) : e.target.value)}
-            >
-                {list.map((item: DropdownItem, i: number) => (
-                    <option hidden={!isMobile()} key={i} value={item.value}>
-                        {item.label}
-                    </option>
-                ))}
-            </select>
+            {isMobile() && (
+                <select
+                    {...props}
+                    value={value || ""}
+                    multiple={multiple}
+                    disabled={shouldDisable}
+                    className={classnames(`form-control custom-select custom-native-dropdown`, { disabled: shouldDisable }, props?.className)}
+                    id={id}
+                    onChange={(e) => onChange(multiple ? Array.from(e.target.selectedOptions, (option) => option.value) : e.target.value)}
+                >
+                    {list.map((item: DropdownItem, i: number) => (
+                        <option key={i} value={item.value}>
+                            {item.label}
+                        </option>
+                    ))}
+                </select>
+            )}
 
-            <div
-                onKeyDown={shouldDisable ? null : handleKeyDownToggle}
-                ref={dropdownToggleRef}
-                className={classnames(`btn btn-secondary custom-dropdown-toggle`, { open }, { more }, { "mx-right": more }, { disabled: shouldDisable }, props?.className)}
-                id={id}
-                aria-label={`Dropdown toggle: ${getTitleLabel()}`}
-                aria-haspopup={true}
-                aria-expanded={open}
-                tabIndex={shouldDisable ? -1 : 0}
-                onClick={shouldDisable ? null : handleClickToggle}
-                hidden={isMobile()}
-            >
-                {!more ? (
-                    <>
-                        <div className="title">{getTitleLabel()}</div>
+            {!isMobile() && (
+                <div
+                    onKeyDown={shouldDisable ? null : handleKeyDownToggle}
+                    ref={dropdownToggleRef}
+                    className={classnames(`btn btn-secondary custom-dropdown-toggle`, { open }, { more }, { "mx-right": more }, { disabled: shouldDisable }, props?.className)}
+                    id={id}
+                    aria-label={`Dropdown toggle: ${getTitleLabel()}`}
+                    aria-haspopup={true}
+                    aria-expanded={open}
+                    tabIndex={shouldDisable ? -1 : 0}
+                    onClick={shouldDisable ? null : handleClickToggle}
+                >
+                    {!more ? (
+                        <>
+                            <div className="title">{getTitleLabel()}</div>
 
-                        <div className="right-items">
-                            {(clearable || multiple) && selectedList.length > 0 ? (
-                                <div className="dropdown-icon-holder" onClick={shouldDisable ? null : handleClickClear}>
-                                    {timesIcon}
-                                </div>
-                            ) : null}
-                            <div className="dropdown-icon-holder chevron">{chevronDownIcon}</div>
-                        </div>
-                    </>
-                ) : (
-                    <div className="right-items">
-                        <div className="dropdown-icon-holder">{moreIcon}</div>
-                    </div>
-                )}
-            </div>
-
-            <div
-                aria-labelledby={id}
-                onKeyDown={handleKeyDownMenu}
-                tabIndex={0}
-                ref={dropdownMenuRef}
-                className={`dropdown-menu custom-dropdown-menu${open ? " show" : ""}${more ? " dropdown-menu-right" : ""}`}
-                hidden={isMobile()}
-            >
-                {searchable && (
-                    <>
-                        <input
-                            ref={searchRef}
-                            type="search"
-                            className="search-input"
-                            name="search-input"
-                            placeholder={placeholders?.searchText || "Search ..."}
-                            value={searchText}
-                            onChange={handleOnChangeSearch}
-                        />
-                        <div className="dropdown-divider blue" />
-                    </>
-                )}
-
-                {displayList.map((item: DisplayDropdownItem, index: number) => {
-                    return (
-                        <React.Fragment key={item.id}>
-                            <button
-                                type="button"
-                                tabIndex={0}
-                                ref={listRefs[index]}
-                                className={`${item.className}${currentFocused === index ? " highlighted" : ""}`}
-                                onMouseMove={() => {
-                                    if (currentFocused !== index) {
-                                        setCurrentFocused(index);
-                                    }
-                                    if (shouldFocus === true) {
-                                        setShouldFocus(false);
-                                    }
-                                }}
-                                onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
-                                    e.preventDefault();
-                                    if (shouldFocus === false) {
-                                        setShouldFocus(true);
-                                    }
-                                    if (multiple && searchText.length === 0 && index === 0) {
-                                        handleSelectAll();
-                                    } else {
-                                        dropdownItemSelected(item.dropdownItem);
-                                    }
-                                }}
-                            >
-                                {multiple ? (
-                                    <div tabIndex={-1} className="custom-control">
-                                        <input tabIndex={-1} type="checkbox" className="custom-control-input" id={item.id} name={item.id} defaultChecked={item.selected} />
-                                        {item.dropdownItem.label && (
-                                            <label tabIndex={-1} className="custom-control-label" htmlFor={item.id}>
-                                                {item.dropdownItem.label}
-                                            </label>
-                                        )}
+                            <div className="right-items">
+                                {(clearable || multiple) && selectedList.length > 0 ? (
+                                    <div className="dropdown-icon-holder" onClick={shouldDisable ? null : handleClickClear}>
+                                        {timesIcon}
                                     </div>
-                                ) : (
-                                    item.dropdownItem.label && (
-                                        <div tabIndex={-1} className="label">
-                                            {item.dropdownItem.label}
-                                        </div>
-                                    )
-                                )}
-                            </button>
-                            {multiple && searchText.length === 0 && index === 0 && <div className="dropdown-divider" />}
-                        </React.Fragment>
-                    );
-                })}
+                                ) : null}
+                                <div className="dropdown-icon-holder chevron">{chevronDownIcon}</div>
+                            </div>
+                        </>
+                    ) : (
+                        <div className="right-items">
+                            <div className="dropdown-icon-holder">{moreIcon}</div>
+                        </div>
+                    )}
+                </div>
+            )}
 
-                {displayList.length === 0 && (
-                    <a className={`dropdown-item custom-dropdown-item disabled`}>
-                        <div className="label">{placeholders?.noResultText || "No results"}</div>
-                    </a>
-                )}
-            </div>
+            {!isMobile() && (
+                <div
+                    aria-labelledby={id}
+                    onKeyDown={handleKeyDownMenu}
+                    tabIndex={0}
+                    ref={dropdownMenuRef}
+                    className={`dropdown-menu custom-dropdown-menu${open ? " show" : ""}${more ? " dropdown-menu-right" : ""}`}
+                >
+                    {searchable && (
+                        <>
+                            <input
+                                ref={searchRef}
+                                type="search"
+                                className="search-input"
+                                name="search-input"
+                                placeholder={placeholders?.searchText || "Search ..."}
+                                value={searchText}
+                                onChange={handleOnChangeSearch}
+                            />
+                            <div className="dropdown-divider blue" />
+                        </>
+                    )}
+
+                    {displayList.map((item: DisplayDropdownItem, index: number) => {
+                        return (
+                            <React.Fragment key={item.id}>
+                                <button
+                                    type="button"
+                                    tabIndex={0}
+                                    ref={listRefs[index]}
+                                    className={`${item.className}${currentFocused === index ? " highlighted" : ""}`}
+                                    onMouseMove={() => {
+                                        if (currentFocused !== index) {
+                                            setCurrentFocused(index);
+                                        }
+                                        if (shouldFocus === true) {
+                                            setShouldFocus(false);
+                                        }
+                                    }}
+                                    onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+                                        e.preventDefault();
+                                        if (shouldFocus === false) {
+                                            setShouldFocus(true);
+                                        }
+                                        if (multiple && searchText.length === 0 && index === 0) {
+                                            handleSelectAll();
+                                        } else {
+                                            dropdownItemSelected(item.dropdownItem);
+                                        }
+                                    }}
+                                >
+                                    {multiple ? (
+                                        <div tabIndex={-1} className="custom-control">
+                                            <input tabIndex={-1} type="checkbox" className="custom-control-input" id={item.id} name={item.id} defaultChecked={item.selected} />
+                                            {item.dropdownItem.label && (
+                                                <label tabIndex={-1} className="custom-control-label" htmlFor={item.id}>
+                                                    {item.dropdownItem.label}
+                                                </label>
+                                            )}
+                                        </div>
+                                    ) : (
+                                        item.dropdownItem.label && (
+                                            <div tabIndex={-1} className="label">
+                                                {item.dropdownItem.label}
+                                            </div>
+                                        )
+                                    )}
+                                </button>
+                                {multiple && searchText.length === 0 && index === 0 && <div className="dropdown-divider" />}
+                            </React.Fragment>
+                        );
+                    })}
+
+                    {displayList.length === 0 && (
+                        <a className={`dropdown-item custom-dropdown-item disabled`}>
+                            <div className="label">{placeholders?.noResultText || "No results"}</div>
+                        </a>
+                    )}
+                </div>
+            )}
             {error && <div className="alert alert-danger custom-alert">{error}</div>}
         </div>
     );
