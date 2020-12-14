@@ -10,9 +10,7 @@ type CustomPlaceholderTestCase = {
 };
 
 function setUserAgent(mobile: boolean): void {
-    Object.defineProperty(window?.navigator, "userAgent", function () {
-        return mobile ? "iPhone" : "Chrome";
-    });
+    (window?.navigator as any).userAgent = mobile ? "iPhone" : "Chrome";
 }
 
 describe("Component: Dropdown", () => {
@@ -70,6 +68,7 @@ describe("Component: Dropdown", () => {
             id: "my-custom-id",
         };
 
+        setUserAgent(true);
         act(() => {
             render(<Dropdown {...props} />, container);
         });
@@ -79,7 +78,7 @@ describe("Component: Dropdown", () => {
         expect(target.classList.contains(props.className)).toBeTruthy();
         expect(target.getAttribute("id")).toContain(props.id);
 
-        setUserAgent(true);
+        setUserAgent(false);
         act(() => {
             render(<Dropdown {...props} />, container);
         });
