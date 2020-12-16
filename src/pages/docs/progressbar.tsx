@@ -24,7 +24,7 @@ const ProgressBarPage: React.FC = (): React.ReactElement<void> => {
 
     const importString: string = React.useMemo(() => require("!raw-loader!@sebgroup/react-components/ProgressBar/ProgressBar"), []);
     const importedFiles: Array<string> = React.useMemo(() => [require("!raw-loader!@sebgroup/react-components/ProgressBar/ProgressBar")], []);
-    const code: string = React.useMemo(() => require("!raw-loader!./progressbar").default, []);
+    const code: string = `<ProgressBar value={progress} />`;
 
     React.useEffect(() => {
         timer.current = setInterval((): void => {

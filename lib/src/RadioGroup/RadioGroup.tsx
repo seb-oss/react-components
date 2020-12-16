@@ -2,7 +2,7 @@ import React from "react";
 import classnames from "classnames";
 import { randomId } from "@sebgroup/frontend-tools";
 import { RadioButton, RadioButtonProps } from "./RadioButton/RadioButton";
-import "./radio-group-style.scss";
+import "./radiogroup.scss";
 import { FeedbackIndicator, IndicatorType } from "../FeedbackIndicator";
 
 export type RadioGroupProps<T = any> = Omit<JSX.IntrinsicElements["input"], "list"> & {

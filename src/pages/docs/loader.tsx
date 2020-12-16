@@ -65,7 +65,7 @@ const LoaderPage: React.FC = (): React.ReactElement<void> => {
 
     const importString: string = React.useMemo(() => require("!raw-loader!../../../lib/src/Loader/Loader"), []);
     const importedFiles: Array<string> = React.useMemo(() => [require("!raw-loader!../../../lib/src/Loader/Loader")], []);
-    const code: string = React.useMemo(() => require("!raw-loader!./loader").default, []);
+    const code: string = `<Loader toggle={toggle} />`;
 
     return (
         <Docs

@@ -5,14 +5,12 @@ import { loremIpsum } from "lorem-ipsum";
 import { Button } from "@sebgroup/react-components/Button";
 
 const ChipPage: React.FC = (): React.ReactElement<void> => {
-    const generateWord = React.useCallback(() => loremIpsum({ units: "words", count: 1 }), []);
-    const [chips, setChips] = React.useState<Array<string>>([generateWord()]);
+    const [chips, setChips] = React.useState<Array<string>>([loremIpsum({ units: "word" })]);
 
     const importString: string = React.useMemo(() => require("!raw-loader!@sebgroup/react-components/Chip/Chip"), []);
     const importedFiles: Array<string> = React.useMemo(() => [require("!raw-loader!@sebgroup/react-components/Chip/Chip")], []);
-    const code: string = React.useMemo(() => require("!raw-loader!./chipdocs").default, []);
+    const code: string = `<Chip onClose={handleClose}>I'm a chip</Chip>`;
 
-    //callback/events----------------------
     const closeChip: (index: number) => void = React.useCallback(
         (index: number) => {
             const newChips: Array<string> = [...chips.slice(0, index), ...chips.slice(index + 1)];
@@ -21,9 +19,7 @@ const ChipPage: React.FC = (): React.ReactElement<void> => {
         [chips, setChips]
     );
 
-    const addChip: VoidFunction = React.useCallback(() => {
-        setChips([...chips, generateWord()]);
-    }, [chips, setChips]);
+    const addChip: VoidFunction = React.useCallback(() => setChips([...chips, loremIpsum({ units: "word" })]), [chips]);
 
     return (
         <Docs
@@ -40,9 +36,9 @@ const ChipPage: React.FC = (): React.ReactElement<void> => {
             }
             code={code}
             controls={
-                <React.Fragment>
+                <>
                     <Button onClick={addChip}>Insert Chip</Button>
-                </React.Fragment>
+                </>
             }
         />
     );
