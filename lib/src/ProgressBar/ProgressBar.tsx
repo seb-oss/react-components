@@ -1,6 +1,6 @@
 import React from "react";
 import classnames from "classnames";
-import "./progress-bar-style.scss";
+import "./progressbar.scss";
 
 export type ProgressBarProps = JSX.IntrinsicElements["div"] & {
     /** Show percentage of progress */

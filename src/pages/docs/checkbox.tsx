@@ -71,7 +71,7 @@ const CheckboxPage: React.FC = (): React.ReactElement<void> => {
 
     const importString: string = React.useMemo(() => require("!raw-loader!../../../lib/src/CheckBox/CheckBox"), []);
     const importedFiles: Array<string> = React.useMemo(() => [require("!raw-loader!../../../lib/src/CheckBox/CheckBox")], []);
-    const code: string = React.useMemo(() => require("!raw-loader!./checkbox").default, []);
+    const code: string = `<Checkbox checked={checked} onChange={e => setChecked(e.target.checked)}/>`;
 
     return (
         <Docs

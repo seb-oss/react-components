@@ -49,7 +49,7 @@ const ImagePage: React.FC = (): React.ReactElement<void> => {
 
     const importString: string = React.useMemo(() => require("!raw-loader!../../../lib/src/Image/Img"), []);
     const importedFiles: Array<string> = React.useMemo(() => [require("!raw-loader!../../../lib/src/Image/Img")], []);
-    const code: string = React.useMemo(() => require("!raw-loader!./divimage").default, []);
+    const code: string = `<Img src={imageSrc} />`;
 
     return (
         <Docs
