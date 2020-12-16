@@ -1,7 +1,5 @@
 @import "~@sebgroup/bootstrap/scss/variables";
 
-$transition-time: 200ms;
-
 .rc .pagination {
     align-items: center;
 
@@ -9,7 +7,7 @@ $transition-time: 200ms;
         .page-item {
             border-radius: 100%;
             overflow: hidden;
-            transition: transform $transition-time linear;
+            transition: transform 200ms linear;
             border: 1px solid $blue;
 
             &:not(:last-of-type) {

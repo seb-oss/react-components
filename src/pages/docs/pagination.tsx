@@ -14,11 +14,9 @@ const PaginationPage: React.FC = (): React.ReactElement<void> => {
 
     const importString: string = React.useMemo(() => require("!raw-loader!@sebgroup/react-components/Pagination/Pagination"), []);
     const importedFiles: Array<string> = React.useMemo(() => [require("!raw-loader!@sebgroup/react-components/Pagination/Pagination")], []);
-    const code: string = `
-<Pagination value={page} onPageChange={setPage}>
-    <NumberedPages end={10} />
-</Pagination>
-`;
+    const code: string = `<Pagination value={page} onPageChange={setPage}>
+    {[...Array(10)].map((_: undefined, i: number) => <Page href={\'"pages/\${i + 1}"\'}>{i + 1}</Page>)}
+</Pagination>`;
     const PaginationSizes: DynamicFormOption[] = [
         { key: "sm", label: "Small", value: "sm" },
         { key: "md", label: "Medium", value: "md" },
