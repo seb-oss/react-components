@@ -1,164 +1,154 @@
-import * as React from "react";
-import "./pagination-style.scss";
+import React from "react";
+import classnames from "classnames";
+import { Page } from ".";
+import { PageProps } from "./Page";
+import "./pagination.scss";
 
-const angleDoubleLeftIcon: JSX.Element = (
-    <svg name="angle-double-left" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
-        <path d="M153.1 247.5l117.8-116c4.7-4.7 12.3-4.7 17 0l7.1 7.1c4.7 4.7 4.7 12.3 0 17L192.7 256l102.2 100.4c4.7 4.7 4.7 12.3 0 17l-7.1 7.1c-4.7 4.7-12.3 4.7-17 0L153 264.5c-4.6-4.7-4.6-12.3.1-17zm-128 17l117.8 116c4.7 4.7 12.3 4.7 17 0l7.1-7.1c4.7-4.7 4.7-12.3 0-17L64.7 256l102.2-100.4c4.7-4.7 4.7-12.3 0-17l-7.1-7.1c-4.7-4.7-12.3-4.7-17 0L25 247.5c-4.6 4.7-4.6 12.3.1 17z" />
+const ChevronLeftIcon: JSX.Element = (
+    <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+        <path fillRule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
     </svg>
 );
-const angleLeftIcon: JSX.Element = (
-    <svg name="angle-left" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 512">
-        <path d="M25.1 247.5l117.8-116c4.7-4.7 12.3-4.7 17 0l7.1 7.1c4.7 4.7 4.7 12.3 0 17L64.7 256l102.2 100.4c4.7 4.7 4.7 12.3 0 17l-7.1 7.1c-4.7 4.7-12.3 4.7-17 0L25 264.5c-4.6-4.7-4.6-12.3.1-17z" />
-    </svg>
-);
-const angleRightIcon: JSX.Element = (
-    <svg name="angle-right" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 512">
-        <path d="M166.9 264.5l-117.8 116c-4.7 4.7-12.3 4.7-17 0l-7.1-7.1c-4.7-4.7-4.7-12.3 0-17L127.3 256 25.1 155.6c-4.7-4.7-4.7-12.3 0-17l7.1-7.1c4.7-4.7 12.3-4.7 17 0l117.8 116c4.6 4.7 4.6 12.3-.1 17z" />
-    </svg>
-);
-const angleDoubleRightIcon: JSX.Element = (
-    <svg name="angle-double-right" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
-        <path d="M166.9 264.5l-117.8 116c-4.7 4.7-12.3 4.7-17 0l-7.1-7.1c-4.7-4.7-4.7-12.3 0-17L127.3 256 25.1 155.6c-4.7-4.7-4.7-12.3 0-17l7.1-7.1c4.7-4.7 12.3-4.7 17 0l117.8 116c4.6 4.7 4.6 12.3-.1 17zm128-17l-117.8-116c-4.7-4.7-12.3-4.7-17 0l-7.1 7.1c-4.7 4.7-4.7 12.3 0 17L255.3 256 153.1 356.4c-4.7 4.7-4.7 12.3 0 17l7.1 7.1c4.7 4.7 12.3 4.7 17 0l117.8-116c4.6-4.7 4.6-12.3-.1-17z" />
+const ChevronDoubleLeftIcon: JSX.Element = (
+    <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+        <path fillRule="evenodd" d="M8.354 1.646a.5.5 0 0 1 0 .708L2.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
+        <path fillRule="evenodd" d="M12.354 1.646a.5.5 0 0 1 0 .708L6.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
     </svg>
 );
 
-export interface PaginationProps {
-    className?: string;
-    firstText?: string;
-    id?: string;
-    lastText?: string;
-    nextText?: string;
-    offset?: number;
-    pagingLength?: number;
-    onChange?: (value: number) => void;
-    previousText?: string;
-    size: number;
-    useDotNav?: boolean;
-    useFirstAndLast?: boolean;
-    useTextNav?: boolean;
-    value: number;
+export interface CustomNavs {
+    next?: React.ReactNode;
+    previous?: React.ReactNode;
+    last?: React.ReactNode;
+    first?: React.ReactNode;
 }
 
+export type PaginationProps = JSX.IntrinsicElements["nav"] & {
+    /** Override navigation buttons */
+    navs?: CustomNavs;
+    /** The maximum number of pagination buttons to show. Default is 10 */
+    offset?: number;
+    /** On value change handler */
+    onPageChange?: (index: number) => void;
+    /** The size of the buttons. Available sizes: "sm", "md", "lg". Default is "md" */
+    size?: "sm" | "md" | "lg";
+    /** Use dot-navigation */
+    useDotNav?: boolean;
+    /** Shows first and last buttons  */
+    showFirstAndLast?: boolean;
+    /** The current value (page) */
+    value?: number;
+};
+
 export const Pagination: React.FunctionComponent<PaginationProps> = React.memo(
-    (props: PaginationProps): React.ReactElement<void> => {
-        const [list, setList] = React.useState<Array<number>>([]);
-        const [dotnavList, setDotnavList] = React.useState<Array<number>>([]);
-        const [pagingSize, setPagingSize] = React.useState<number>(0);
+    ({ navs = {}, offset = 5, onPageChange, size = "md", useDotNav, showFirstAndLast: useFirstAndLast, value = 0, ...props }: PaginationProps) => {
+        const total: number = React.Children.count(props.children);
+        const indexOfLastItem: number = total - 1;
+        const internalValue: number = value < 0 ? 0 : value > indexOfLastItem ? indexOfLastItem : value;
+        const disablePrev: boolean = total < 2 || internalValue === 0;
+        const disableNext: boolean = total < 2 || internalValue === indexOfLastItem;
 
-        React.useEffect(() => {
-            const initialOffset: number = props.offset ? props.offset : 10;
-            setPagingSize(Math.ceil(props.size / initialOffset));
-        }, [props.offset, props.size]);
+        const renderPages = (): React.ReactElement[] => {
+            const childrenArray: React.ReactElement[] = React.Children.map(props.children, (Child: React.ReactElement<PageProps>, i: number) =>
+                React.isValidElement<PageProps>(Child)
+                    ? React.cloneElement<any>(Child, {
+                          "data-active": internalValue === i,
+                          "data-index-number": i,
+                          key: i,
+                          onClick: (e: React.MouseEvent<HTMLLIElement>) => {
+                              onPageChange(parseInt(e.currentTarget.dataset.indexNumber, 10));
+                          },
+                      })
+                    : Child
+            );
 
-        React.useEffect(() => {
-            const intialLength: number = props.pagingLength ? props.pagingLength : 5;
-            generateList(props.value, intialLength);
-        }, [pagingSize, props.pagingLength, props.value]);
+            if (offset) {
+                /** The distance between the current value and the offset from the left. Example: ...👉|3|4|👈|(5)|6|7|... */
+                const offsetToValue: number = internalValue - Math.floor(offset / 2);
+                /** The distance between the current value and the offset from the right. Example: ...|3|4|(5)|👉|6|7|👈... */
+                const valueToOffset: number = internalValue + Math.floor(offset / 2);
 
-        /**
-         * Generates an array of the pages that needs to be displayed
-         * It depends on the size, offset, and the current value
-         * @param {number} value The current value. The current page.
-         * @param {number} length The length of the pagination, number of pages to be displayed.
-         * @returns {Array<number>} An array of the pages that needs to be displayed
-         */
-        function generateList(value: number, length: number): void {
-            const genList: Array<number> = [];
-            // generate the array
-            for (let i = 1; i <= pagingSize; i++) {
-                genList.push(i);
-            }
+                // [(1) 2 3 4 5] 6 7 8 9 10
 
-            // the median value is what you use to obtain the centre of the page or equilibrium
-            const medianValue: number = Math.ceil(length / 2);
-            let start: number = 0;
-            let end: number = pagingSize;
+                let offsetFrom: number = offsetToValue;
+                let offsetTo: number = valueToOffset;
 
-            /**
-             * If The expected length is lessthan the size of the page, Do the
-             * conversion/calculations.
-             * 1. If the current value is less than the first centre, then its in the first page. Set start equal the size of the page - the length.
-             * 2. if the current value subtract the median or the centre value is greater than minus 1, set start to value - the medianValue.
-             * 3. the end is always start of the page plus the length regardless.
-             */
-
-            if (length < pagingSize) {
-                if (pagingSize - value < medianValue) {
-                    start = pagingSize - length;
-                } else if (value - medianValue > -1) {
-                    start = value - medianValue;
+                if (offsetToValue < 0) {
+                    offsetTo += 0 - offsetToValue;
+                    offsetTo = offsetTo > indexOfLastItem ? indexOfLastItem : offsetTo;
+                }
+                if (valueToOffset > indexOfLastItem) {
+                    offsetFrom -= valueToOffset - indexOfLastItem;
+                    offsetFrom = offsetFrom < 0 ? 0 : offsetFrom;
                 }
 
-                end = start + length;
+                console.table({ offsetFrom, offsetTo, offsetToValue, valueToOffset });
+
+                let filteredArray: React.ReactElement[] = childrenArray.filter((_: any, i: number) => i >= offsetFrom && i <= offsetTo);
+
+                if (!useDotNav) {
+                    if (parseInt(filteredArray[0]?.props["data-index-number"], 10) > 0) {
+                        filteredArray = [
+                            <Page className="pre-ellipsis" key="pre-ellipsis" data-disabled href={props.children[0]?.props?.href}>
+                                ...
+                            </Page>,
+                            ...filteredArray,
+                        ];
+                    }
+                    if (parseInt(filteredArray[filteredArray.length - 1]?.props["data-index-number"], 10) < indexOfLastItem) {
+                        filteredArray.push(
+                            <Page className="post-ellipsis" key="post-ellipsis" data-index-number={indexOfLastItem} data-disabled>
+                                ...
+                            </Page>
+                        );
+                    }
+                }
+                return filteredArray;
+            } else {
+                return childrenArray;
             }
-            setDotnavList(genList);
-            setList(genList.slice(start, end));
-        }
+        };
+
+        const filteredPages = renderPages();
+
+        const showFirst: boolean = (useFirstAndLast && !useDotNav) || (useDotNav && !disablePrev && filteredPages[0].props["data-index-number"] != 0);
+        const showLast: boolean = (useFirstAndLast && !useDotNav) || (useDotNav && !disableNext && filteredPages[filteredPages.length - 1].props["data-index-number"] != indexOfLastItem);
+        const disableFirst: boolean = disablePrev || filteredPages[0].key !== "pre-ellipsis";
+        const disableLast: boolean = disableNext || filteredPages[filteredPages.length - 1].key !== "post-ellipsis";
 
         return (
-            <div className={"pagination-wrapper" + (props.className ? ` ${props.className}` : "")} id={props.id}>
-                <nav className="custom-pagination">
-                    {!props.useDotNav && (
-                        <ul className={"pagination"}>
-                            {props.value !== 1 && props.useFirstAndLast && (
-                                <li className="page-item" onClick={() => props.onChange(1)}>
-                                    <button className="page-link" title={props.firstText} type="button">
-                                        <span className="nav-action">{props.useTextNav ? (props.firstText ? props.firstText : "First") : angleDoubleLeftIcon}</span>
-                                        <span className="sr-only">{props.firstText || "First"}</span>
-                                    </button>
-                                </li>
-                            )}
-                            {props.value !== 1 && (
-                                <li className="page-item" onClick={() => props.onChange(props.value - 1)}>
-                                    <button className="page-link" type="button" title={props.previousText}>
-                                        <span className="nav-action">{props.useTextNav ? (props.previousText ? props.previousText : "Previous") : angleLeftIcon}</span>
-                                        <span className="sr-only">{props.previousText || "Previous"}</span>
-                                    </button>
-                                </li>
-                            )}
-                            {list.map((num: number) => {
-                                return (
-                                    <li className={"page-item" + (props.value === num ? " active" : "")} key={num} onClick={() => props.onChange(num)} value={num}>
-                                        <button className={"page-link" + (props.value === num ? " active" : "")} type="button">
-                                            <span className="nav-num">{num}</span>
-                                            <span className="sr-only">{num}</span>
-                                        </button>
-                                    </li>
-                                );
-                            })}
-
-                            {props.value !== pagingSize && (
-                                <li className="page-item" onClick={() => props.onChange(props.value + 1)}>
-                                    <button className="page-link" title={props.nextText} type="button">
-                                        <span className="nav-action">{props.useTextNav ? (props.nextText ? props.nextText : "Next") : angleRightIcon}</span>
-                                        <span className="sr-only">{props.nextText || "Next"}</span>
-                                    </button>
-                                </li>
-                            )}
-
-                            {props.value !== pagingSize && props.useFirstAndLast && (
-                                <li className="page-item" onClick={() => props.onChange(pagingSize)}>
-                                    <button className="page-link" title={props.lastText} type="button">
-                                        <span className="nav-action">{props.useTextNav ? (props.lastText ? props.lastText : "Last") : angleDoubleRightIcon}</span>
-                                        <span className="sr-only">{props.lastText || "Last"}</span>
-                                    </button>
-                                </li>
-                            )}
-                        </ul>
+            <nav {...props} className={classnames("rc", props.className)}>
+                <ul className={classnames("pagination", { [`pagination-${size}`]: size, dotnav: useDotNav })}>
+                    {showFirst && (
+                        <Page className="first-nav" onClick={() => !disableFirst && onPageChange(0)} data-disabled={disableFirst} href={props.children[0]?.props?.href}>
+                            {navs?.first || ChevronDoubleLeftIcon}
+                        </Page>
                     )}
-                    {props.useDotNav && (
-                        <ul className={"pagination dotnav"}>
-                            {dotnavList.map((num: number) => {
-                                return (
-                                    <li className="page-item" key={num} onClick={() => props.onChange(num)} value={num}>
-                                        <span className={"page-dot-link" + (props.value === num ? " active" : "")} />
-                                    </li>
-                                );
-                            })}
-                        </ul>
+                    {!useDotNav && (
+                        <Page
+                            className="previous-nav"
+                            onClick={() => !disablePrev && onPageChange(internalValue - 1)}
+                            data-disabled={disablePrev}
+                            href={props.children[internalValue - 1]?.props?.href}
+                        >
+                            {navs?.previous || ChevronLeftIcon}
+                        </Page>
                     )}
-                </nav>
-            </div>
+
+                    {filteredPages}
+
+                    {!useDotNav && (
+                        <Page className="next-nav" onClick={() => !disableNext && onPageChange(internalValue + 1)} data-disabled={disableNext} href={props.children[internalValue + 1]?.props?.href}>
+                            {navs?.next || React.cloneElement(ChevronLeftIcon, { transform: "rotate(180)" })}
+                        </Page>
+                    )}
+                    {showLast && (
+                        <Page className="last-nav" onClick={() => !disableLast && onPageChange(indexOfLastItem)} data-disabled={disableLast} href={props.children[indexOfLastItem]?.props?.href}>
+                            {navs?.last || React.cloneElement(ChevronDoubleLeftIcon, { transform: "rotate(180)" })}
+                        </Page>
+                    )}
+                </ul>
+            </nav>
         );
     }
 );
