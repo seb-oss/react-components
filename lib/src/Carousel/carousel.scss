@@ -9,11 +9,6 @@
             animation: appear $carousel-transition-duration forwards;
         }
 
-        &.coming-next {
-            display: block;
-            z-index: -1;
-        }
-
         img {
             user-drag: none;
             user-select: none;
