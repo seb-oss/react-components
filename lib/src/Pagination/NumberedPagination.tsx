@@ -16,13 +16,11 @@ export const NumberedPagination: React.FC<NumberedPagesProps> = React.memo(({ st
     React.useEffect(() => {
         const arr: number[] = [];
 
-        if (typeof start === "number" && typeof end === "number") {
-            for (let i: number = start || 1; i <= end; i++) {
-                arr.push(i);
-            }
-
-            setPages(arr);
+        for (let i: number = start; i <= end; i++) {
+            arr.push(i);
         }
+
+        setPages(arr);
     }, [start, end]);
 
     return (

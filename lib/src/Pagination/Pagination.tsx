@@ -1,7 +1,6 @@
 import React from "react";
 import classnames from "classnames";
-import { Page } from ".";
-import { PageProps } from "./Page";
+import { Page, PageProps } from ".";
 import "./pagination.scss";
 
 const ChevronLeftIcon: JSX.Element = (
@@ -50,18 +49,19 @@ export const Pagination: React.FunctionComponent<PaginationProps> = React.memo(
         const disableNext: boolean = total < 2 || value === indexOfLastItem;
 
         const renderPages = (): React.ReactElement[] => {
-            const childrenArray: React.ReactElement[] = React.Children.map(props.children, (Child: React.ReactElement<PageProps>, i: number) =>
-                React.isValidElement<PageProps>(Child)
-                    ? React.cloneElement<any>(Child, {
-                          "data-active": value === i,
-                          "data-index-number": i,
-                          key: i,
-                          onClick: (e: React.MouseEvent<HTMLLIElement>) => {
-                              onPageChange(parseInt(e.currentTarget.dataset.indexNumber, 10));
-                          },
-                      })
-                    : Child
-            );
+            const childrenArray: React.ReactElement[] =
+                React.Children.map(props.children, (Child: React.ReactElement<PageProps>, i: number) =>
+                    React.isValidElement<PageProps>(Child)
+                        ? React.cloneElement<any>(Child, {
+                              "data-active": value === i,
+                              "data-index-number": i,
+                              key: i,
+                              onClick: (e: React.MouseEvent<HTMLLIElement>) => {
+                                  onPageChange && onPageChange(parseInt(e.currentTarget.dataset.indexNumber, 10));
+                              },
+                          })
+                        : Child
+                ) || [];
 
             if (offset) {
                 /** The distance between the current value and the offset from the left. Example: ...👉|3|4|👈|(5)|6|7|... */
@@ -116,28 +116,37 @@ export const Pagination: React.FunctionComponent<PaginationProps> = React.memo(
         return (
             <nav {...props} className={classnames("rc", props.className)}>
                 <ul className={classnames("pagination", { [`pagination-${size}`]: size, dotnav: useDotNav })}>
-                    {showFirst && (
-                        <Page className="first-nav" onClick={() => !disableFirst && onPageChange(0)} data-disabled={disableFirst} href={props.children[0]?.props?.href}>
-                            {navs?.first || ChevronDoubleLeftIcon}
-                        </Page>
-                    )}
-                    {!useDotNav && (
-                        <Page className="previous-nav" onClick={() => !disablePrev && onPageChange(value - 1)} data-disabled={disablePrev} href={props.children[value - 1]?.props?.href}>
-                            {navs?.previous || ChevronLeftIcon}
-                        </Page>
-                    )}
+                    {props.children && (
+                        <>
+                            {showFirst && (
+                                <Page className="first-nav" onClick={() => !disableFirst && onPageChange(0)} data-disabled={disableFirst} href={props.children[0]?.props?.href}>
+                                    {navs?.first || ChevronDoubleLeftIcon}
+                                </Page>
+                            )}
+                            {!useDotNav && (
+                                <Page className="previous-nav" onClick={() => !disablePrev && onPageChange(value - 1)} data-disabled={disablePrev} href={props.children[value - 1]?.props?.href}>
+                                    {navs?.previous || ChevronLeftIcon}
+                                </Page>
+                            )}
 
-                    {filteredPages}
+                            {filteredPages}
 
-                    {!useDotNav && (
-                        <Page className="next-nav" onClick={() => !disableNext && onPageChange(value + 1)} data-disabled={disableNext} href={props.children[value + 1]?.props?.href}>
-                            {navs?.next || React.cloneElement(ChevronLeftIcon, { transform: "rotate(180)" })}
-                        </Page>
-                    )}
-                    {showLast && (
-                        <Page className="last-nav" onClick={() => !disableLast && onPageChange(indexOfLastItem)} data-disabled={disableLast} href={props.children[indexOfLastItem]?.props?.href}>
-                            {navs?.last || React.cloneElement(ChevronDoubleLeftIcon, { transform: "rotate(180)" })}
-                        </Page>
+                            {!useDotNav && (
+                                <Page className="next-nav" onClick={() => !disableNext && onPageChange(value + 1)} data-disabled={disableNext} href={props.children[value + 1]?.props?.href}>
+                                    {navs?.next || React.cloneElement(ChevronLeftIcon, { transform: "rotate(180)" })}
+                                </Page>
+                            )}
+                            {showLast && (
+                                <Page
+                                    className="last-nav"
+                                    onClick={() => !disableLast && onPageChange(indexOfLastItem)}
+                                    data-disabled={disableLast}
+                                    href={props.children[indexOfLastItem]?.props?.href}
+                                >
+                                    {navs?.last || React.cloneElement(ChevronDoubleLeftIcon, { transform: "rotate(180)" })}
+                                </Page>
+                            )}
+                        </>
                     )}
                 </ul>
             </nav>
