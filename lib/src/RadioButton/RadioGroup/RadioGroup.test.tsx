@@ -2,7 +2,7 @@ import React from "react";
 import { unmountComponentAtNode, render } from "react-dom";
 import { act, Simulate } from "react-dom/test-utils";
 import { RadioGroup, RadioGroupProps } from "./RadioGroup";
-import { RadioButtonProps } from "./RadioButton/RadioButton";
+import { RadioButtonProps } from "../RadioButton";
 
 describe("Component: RadioGroup", () => {
     let container: HTMLDivElement = null;
