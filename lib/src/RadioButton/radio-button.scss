@@ -1,0 +1,11 @@
+.rc.custom-radio {
+    margin-bottom: 1rem;
+    min-height: 2.75rem;
+    &.inline {
+        display: inline-block;
+        vertical-align: top;
+    }
+    &.condensed {
+        margin: 0;
+    }
+}

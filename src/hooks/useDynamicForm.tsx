@@ -7,7 +7,7 @@ import { Dropdown } from "@sebgroup/react-components/Dropdown";
 import { Datepicker } from "@sebgroup/react-components/Datepicker";
 import { Stepper } from "@sebgroup/react-components/Stepper";
 import { DropdownItem, DropdownChangeEvent } from "@sebgroup/react-components/Dropdown/Dropdown";
-import { RadioButtonProps, RadioGroup } from "@sebgroup/react-components/RadioGroup";
+import { RadioButtonProps, RadioGroup } from "@sebgroup/react-components/RadioButton";
 
 export interface DynamicFormItem {
     key: string;

@@ -20,7 +20,6 @@
         "Pagination": "./lib/src/Pagination/index.ts",
         "ProgressBar": "./lib/src/ProgressBar/index.ts",
         "RadioButton": "./lib/src/RadioButton/index.ts",
-        "RadioGroup": "./lib/src/RadioGroup/index.ts",
         "Rating": "./lib/src/Rating/index.ts",
         "Slider": "./lib/src/Slider/index.ts",
         "Stepper": "./lib/src/Stepper/index.ts",
