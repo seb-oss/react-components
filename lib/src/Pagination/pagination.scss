@@ -3,6 +3,10 @@
 .rc .pagination {
     align-items: center;
 
+    .h-flipped {
+        transform: rotate(180deg);
+    }
+
     &.dotnav {
         .page-item {
             border-radius: 100%;

@@ -133,7 +133,7 @@ export const Pagination: React.FunctionComponent<PaginationProps> = React.memo(
 
                             {!useDotNav && (
                                 <Page className="next-nav" onClick={() => !disableNext && onPageChange(value + 1)} data-disabled={disableNext} href={props.children[value + 1]?.props?.href}>
-                                    {navs?.next || React.cloneElement(ChevronLeftIcon, { transform: "rotate(180)" })}
+                                    {navs?.next || React.cloneElement(ChevronLeftIcon, { className: "h-flipped" })}
                                 </Page>
                             )}
                             {showLast && (
@@ -143,7 +143,7 @@ export const Pagination: React.FunctionComponent<PaginationProps> = React.memo(
                                     data-disabled={disableLast}
                                     href={props.children[indexOfLastItem]?.props?.href}
                                 >
-                                    {navs?.last || React.cloneElement(ChevronDoubleLeftIcon, { transform: "rotate(180)" })}
+                                    {navs?.last || React.cloneElement(ChevronDoubleLeftIcon, { className: "h-flipped" })}
                                 </Page>
                             )}
                         </>
