@@ -48,11 +48,9 @@ const RadioButtonPage: React.FC = (): React.ReactElement<void> => {
 
     const importString: string = React.useMemo(() => require("!raw-loader!@sebgroup/react-components/RadioButton/RadioButton"), []);
     const importedFiles: Array<string> = React.useMemo(() => [require("!raw-loader!@sebgroup/react-components/RadioButton/RadioGroup/RadioGroup")], []);
-    const code: string = React.useMemo(() => require("!raw-loader!./radiobutton").default, []);
-    /** check if key selected */
-    const checkSelectedKey = (key: string) => {
-        return controls.checkboxes?.some((item: DynamicFormOption) => item.key === key);
-    };
+    const code: string = `<RadioButton label={label} value={selectedValue} onChange={e => setSelectedValue(e.target.value)} />`;
+
+    const checkSelectedKey = (key: string) => controls.checkboxes?.some((item: DynamicFormOption) => item.key === key);
 
     React.useEffect(() => {
         setRadioList(
@@ -62,6 +60,7 @@ const RadioButtonPage: React.FC = (): React.ReactElement<void> => {
             }))
         );
     }, [controls]);
+
     return (
         <Docs
             mainFile={importString}
@@ -83,7 +82,7 @@ const RadioButtonPage: React.FC = (): React.ReactElement<void> => {
                         label="Render list using radio group"
                         list={radioList}
                         value={selectedRadio}
-                        onChange={(ev: React.ChangeEvent<HTMLInputElement>) => setSelectedRadio(ev.target.value)}
+                        onChange={(e) => setSelectedRadio(e.target.value)}
                         inline={checkSelectedKey("inline")}
                         condensed={checkSelectedKey("condensed")}
                         disabled={checkSelectedKey("disabled")}

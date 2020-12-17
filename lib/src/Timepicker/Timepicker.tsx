@@ -1,6 +1,6 @@
 import React from "react";
 import classnames from "classnames";
-import "./time-picker-style.scss";
+import "./timepicker.scss";
 
 const angleUpIcon: JSX.Element = (
     <svg name="angle-up" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512">

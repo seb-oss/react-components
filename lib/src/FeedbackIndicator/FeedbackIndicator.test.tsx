@@ -25,8 +25,7 @@ describe("Component: CheckBox", () => {
             render(<FeedbackIndicator type={null} message={text} />, container);
         });
         expect(container.firstElementChild).not.toBeNull();
-        expect(container.firstElementChild.textContent).toEqual("");
-
+        expect(container.firstElementChild.classList.contains(`progress-${0}`)).toBeTruthy();
         act(() => {
             render(<FeedbackIndicator type="danger" message={text} />, container);
         });

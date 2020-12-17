@@ -1,6 +1,6 @@
 import React from "react";
 import classnames from "classnames";
-import "./div-image.scss";
+import "./divimage.scss";
 
 type DivAttributes = JSX.IntrinsicElements["div"];
 type ImgAttributes = JSX.IntrinsicElements["img"];

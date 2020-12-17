@@ -1,0 +1,79 @@
+@import "~@sebgroup/bootstrap/scss/variables";
+
+$transition-time: 200ms;
+$form-element-height: 2.75rem;
+$radio-size: 16px;
+$radio-padding-left: 40px;
+
+@mixin checkbox-control-color($color) {
+    &:not(.disabled) {
+        > .custom-control-label {
+            &:before {
+                border-color: $color;
+            }
+        }
+    }
+}
+
+.rc.radio-group {
+    > .input-field {
+        .children {
+            padding: 0.5rem;
+        }
+        .custom-control {
+            position: relative;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            flex-wrap: wrap;
+            min-height: $form-element-height;
+            margin-bottom: 1rem;
+            > .custom-control-label,
+            > .custom-control-input {
+                user-select: none;
+            }
+            > .custom-control-input {
+                &:disabled ~ .radio-description {
+                    color: $gray-400;
+                }
+                &:not(:disabled) {
+                    cursor: pointer;
+                    & ~ .custom-control-label {
+                        cursor: pointer;
+                    }
+                }
+            }
+            > .custom-control-label {
+                padding-right: 16px;
+            }
+            > .radio-description {
+                color: $gray-600;
+                flex: 0 0 100%;
+            }
+            &.success {
+                @include checkbox-control-color($green-darker);
+            }
+            &.danger {
+                @include checkbox-control-color($red-dark);
+            }
+            &.warning {
+                @include checkbox-control-color($yellow-darker);
+            }
+        }
+    }
+    &.inline {
+        > .input-field {
+            .custom-control {
+                display: inline-block;
+                vertical-align: top;
+            }
+        }
+    }
+    &.condensed {
+        > .input-field {
+            .custom-control {
+                margin: 0;
+            }
+        }
+    }
+}

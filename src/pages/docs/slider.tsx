@@ -82,7 +82,7 @@ const SliderPage: React.FC = (): React.ReactElement<void> => {
 
     const importString: string = React.useMemo(() => require("!raw-loader!@sebgroup/react-components/Slider/Slider"), []);
     const importedFiles: Array<string> = React.useMemo(() => [require("!raw-loader!@sebgroup/react-components/Slider/Slider")], []);
-    const code: string = React.useMemo(() => require("!raw-loader!./slider").default, []);
+    const code: string = `<Slider value={value} onChange={e => setValue(parseInt(e.target.value))} />`;
 
     /** check if key selected */
     const checkSelectedKey = (key: string) => {
