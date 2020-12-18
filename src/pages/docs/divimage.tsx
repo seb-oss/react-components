@@ -56,7 +56,7 @@ const DivImagePage: React.FC = (): React.ReactElement<void> => {
 
     const importString: string = React.useMemo(() => require("!raw-loader!../../../lib/src/DivImage/DivImage"), []);
     const importedFiles: Array<string> = React.useMemo(() => [require("!raw-loader!../../../lib/src/DivImage/DivImage")], []);
-    const code: string = React.useMemo(() => require("!raw-loader!./divimage").default, []);
+    const code: string = `<DivImage src={imageSrc} />`;
 
     return (
         <Docs

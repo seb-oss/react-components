@@ -78,9 +78,9 @@ $small: 12px;
     &.style-slide-in,
     &.default {
         width: 300px;
-        transform: translateX(-350px); // default set to bottom-left
-        left: 20px; // default set to bottom-left
-        bottom: 15px; // default set to bottom-;eft
+        transform: translateX(-350px); /** default set to bottom-left */
+        left: 20px; /** default set to bottom-left */
+        bottom: 15px; /** default set to bottom-left */
         &.bottom-right {
             transform: translateX(350px);
             left: unset;
@@ -151,8 +151,8 @@ $small: 12px;
         width: 100vw;
         left: 0;
         right: 0;
-        top: 0; // default set to top
-        transform: translateY(-150%); // default set to top
+        top: 0; /** default set to top */
+        transform: translateY(-150%); /** default set to top */
         &.bottom {
             top: unset;
             bottom: 0;

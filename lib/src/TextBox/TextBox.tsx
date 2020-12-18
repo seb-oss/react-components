@@ -1,7 +1,7 @@
 import React from "react";
 import { randomId } from "@sebgroup/frontend-tools";
 import classnames from "classnames";
-import "./text-box-style.scss";
+import "./textbox.scss";
 import { FeedbackIndicator, IndicatorType } from "../FeedbackIndicator";
 
 export type TextBoxProps = JSX.IntrinsicElements["input"] & {
