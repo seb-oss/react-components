@@ -127,7 +127,6 @@
 		"raw-loader": "^4.0.0",
 		"react-loadable": "^5.5.0",
 		"react-test-renderer": "^16.13.1",
-		"resize-observer-polyfill": "^1.5.1",
 		"sass": "^1.25.0",
 		"sass-loader": "^8.0.2",
 		"semantic-release": "^17.0.2",
