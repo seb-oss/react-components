@@ -1,7 +1,7 @@
 import React from "react";
 import classnames from "classnames";
 import { randomId } from "@sebgroup/frontend-tools";
-import "./stepper-style.scss";
+import "./stepper.scss";
 import { FeedbackIndicator, IndicatorType } from "../FeedbackIndicator";
 
 export type StepperProps = JSX.IntrinsicElements["input"] & {

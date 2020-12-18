@@ -3,7 +3,7 @@ import { ElementPosition } from "./placement";
 import { randomId } from "@sebgroup/frontend-tools";
 import { Overlay } from "./Overlay";
 import classnames from "classnames";
-import "./tooltip-style.scss";
+import "./tooltip.scss";
 
 const InfoCircleIcon: JSX.Element = (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">

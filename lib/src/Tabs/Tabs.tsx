@@ -1,7 +1,7 @@
 import React from "react";
 import TabItem, { TabItemProps } from "./TabItem";
 import classnames from "classnames";
-import "./tabs-style.scss";
+import "./tabs.scss";
 
 export type TabsProps = Omit<JSX.IntrinsicElements["div"], "onClick"> & {
     /** index of focsued tab */
