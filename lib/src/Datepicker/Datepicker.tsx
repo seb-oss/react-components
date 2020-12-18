@@ -1,7 +1,7 @@
 import React from "react";
-import "./date-picker-style.scss";
 import { padNumber } from "./formatters";
 import classnames from "classnames";
+import "./datepicker.scss";
 
 interface OverriddenNativeProps extends React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> {
     value: any;

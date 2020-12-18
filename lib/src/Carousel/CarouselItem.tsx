@@ -11,14 +11,12 @@ export type CarouselItemProps = JSX.IntrinsicElements["div"] & {
     afterTransition?: (e: AfterSlideEvent) => void;
     /** Translate distance when swipe. (Managed by Carousel) */
     translateX?: number;
-    /** Marking the carousel item as coming next during swipe gesture. (Managed by Carousel) */
-    comingNext?: boolean;
 };
 
 export type TransitionDirection = "right" | "left";
 export type AfterSlideEvent = React.AnimationEvent<HTMLDivElement> | React.TransitionEvent<HTMLDivElement>;
 
-export const CarouselItem: React.FC<CarouselItemProps> = React.memo(({ nav, transitionDuration, afterTransition, translateX, comingNext, ...props }: CarouselItemProps) => {
+export const CarouselItem: React.FC<CarouselItemProps> = React.memo(({ nav, transitionDuration, afterTransition, translateX, ...props }: CarouselItemProps) => {
     const [className, setClassName] = React.useState<string>("carousel-item");
     const [style, setStyle] = React.useState<React.CSSProperties>({});
 
@@ -43,12 +41,11 @@ export const CarouselItem: React.FC<CarouselItemProps> = React.memo(({ nav, tran
     );
 
     /** Handles transitioning a slide in or out */
-    const transitionInOrOut = React.useCallback(() => {
+    React.useEffect(() => {
         const direction: TransitionDirection = nav === "next" ? "left" : "right";
         setClassName(classnames("carousel-item", `carousel-item-${direction}`, { [`carousel-item-${nav}`]: props.defaultChecked }, { active: !props.defaultChecked }, props.className));
     }, [nav, props.defaultChecked, props.className]);
 
-    React.useEffect(() => transitionInOrOut(), [props.defaultChecked]);
     React.useEffect(() => setClassName(classnames("carousel-item", { active: props.defaultChecked }, props.className)), []);
     React.useEffect(() => {
         const animationDuration: string = (transitionDuration || defaultTransitionDuration) + "ms";
@@ -61,7 +58,7 @@ export const CarouselItem: React.FC<CarouselItemProps> = React.memo(({ nav, tran
     }, [transitionDuration, props.defaultChecked, translateX]);
 
     return (
-        <div {...props} className={classnames(className, { "coming-next": comingNext })} style={style} onTransitionEnd={afterSlidehandler} onAnimationEnd={afterSlidehandler}>
+        <div {...props} className={className} style={style} onTransitionEnd={afterSlidehandler} onAnimationEnd={afterSlidehandler}>
             {props.children}
         </div>
     );

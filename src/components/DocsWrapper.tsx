@@ -10,7 +10,7 @@ export interface DocsWrapperProps extends DocsPlaygroundProps {
 }
 
 const DocsWrapper: React.FC<DocsWrapperProps> = (props: DocsWrapperProps) => {
-    return [<DocsPlayground example={props.example} code={props.code} controls={props.controls} />, <DocsAPI list={props.interfaces} />, <div className="note">{props.code}</div>][props.activeTab];
+    return [<DocsPlayground example={props.example} code={props.code} controls={props.controls} />, <DocsAPI list={props.interfaces} />, <div className="note">{props.note}</div>][props.activeTab];
 };
 
 export default DocsWrapper;

@@ -1,6 +1,6 @@
 import React from "react";
 import classnames from "classnames";
-import "./step-tracker-style.scss";
+import "./steptracker.scss";
 import StepLabel, { StepLabelProps } from "./StepLabel";
 
 const checkIcon: JSX.Element = (

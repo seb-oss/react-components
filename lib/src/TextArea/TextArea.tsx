@@ -1,7 +1,7 @@
 import React from "react";
 import { randomId } from "@sebgroup/frontend-tools";
 import classnames from "classnames";
-import "./text-area-style.scss";
+import "./textarea.scss";
 
 export type TextAreaProps = JSX.IntrinsicElements["textarea"] & {
     /** Error message related to element */
