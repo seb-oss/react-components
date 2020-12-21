@@ -1,0 +1,158 @@
+@import "~@sebgroup/bootstrap/scss/core";
+
+$timeline-item-shadow: 1px 3px 15px -3px rgba(black, 0.3);
+$triangle-background: $gray-100 0%, $gray-100 1%, $gray-100 53%, transparent 53%, transparent 100%;
+
+.timeline-item {
+    display: flex;
+    &.clickable .content-wrapper {
+        cursor: pointer;
+        &:hover {
+            border: 1px solid $blue;
+        }
+    }
+
+    .content-wrapper {
+        border: 1px solid $gray-300;
+        border-radius: 4px;
+        box-shadow: $timeline-item-shadow;
+        background-color: $gray-100;
+        padding: 5px 10px;
+        text-align: start;
+        position: relative;
+        transition: border-color 200ms;
+
+        .title {
+            position: relative;
+            border-radius: 5px;
+            font-weight: 600;
+        }
+        .time-wrapper {
+            line-height: 1em;
+            font-size: 0.75rem;
+            vertical-align: middle;
+            .time {
+                display: inline-block;
+                padding: 4px 0;
+            }
+        }
+        .desc {
+            margin-top: 10px;
+            font-size: 0.75rem;
+            font-style: italic;
+            line-height: 1.5em;
+        }
+    }
+}
+
+// Triangle and round indicators
+.rc.timeline {
+    .timeline-item {
+        &.clickable {
+            .content-wrapper {
+                &:hover {
+                    &:after {
+                        border-right: 1px solid $blue;
+                        border-bottom: 1px solid $blue;
+                    }
+                }
+            }
+        }
+        .content-wrapper {
+            // Triangle
+            &::after {
+                content: "";
+                position: absolute;
+                width: 20px;
+                height: 20px;
+                transition: border 200ms;
+                background: linear-gradient(-45deg, $triangle-background);
+                box-shadow: 1px 2px 4px -2px rgba(black, 0.3);
+                border-right: 1px solid $gray-300;
+                border-bottom: 1px solid $gray-300;
+            }
+            // Circle indicator
+            &::before {
+                content: "";
+                position: absolute;
+                display: block;
+                width: 18px;
+                height: 18px;
+                background: $white;
+                border-radius: 10px;
+                border: 4px solid $blue-darker;
+                z-index: 2;
+            }
+        }
+    }
+
+    &.vertical {
+        .timeline-item {
+            &:nth-of-type(odd) {
+                .content-wrapper {
+                    &:after {
+                        top: 9px;
+                        transform: rotate(-45deg);
+                        left: auto;
+                        right: -10px;
+                    }
+                    &:before {
+                        top: 20px;
+                        right: -34px;
+                        margin-top: -10px;
+                    }
+                }
+            }
+            &:nth-of-type(even) {
+                .content-wrapper {
+                    &:after {
+                        top: 9px;
+                        transform: rotate(135deg);
+                        left: -11px;
+                    }
+                    &:before {
+                        top: 20px;
+                        left: -34px;
+                        margin-top: -10px;
+                    }
+                }
+            }
+        }
+    }
+    &.horizontal {
+        .timeline-item {
+            &:nth-of-type(odd) {
+                .content-wrapper {
+                    &:after {
+                        left: 50%;
+                        bottom: -10px;
+                        transform: translateX(-50%) rotate(45deg);
+                    }
+                    &:before {
+                        bottom: -34px;
+                        left: 50%;
+                        transform: translateX(-50%);
+                        margin: 0 auto;
+                        margin-top: -10px;
+                    }
+                }
+            }
+            &:nth-of-type(even) {
+                .content-wrapper {
+                    &:after {
+                        left: 50%;
+                        top: -10px;
+                        transform: translateX(-50%) rotate(225deg);
+                    }
+                    &:before {
+                        top: -24px;
+                        left: 50%;
+                        transform: translateX(-50%);
+                        margin: 0 auto;
+                        margin-top: -10px;
+                    }
+                }
+            }
+        }
+    }
+}
