@@ -1,6 +1,6 @@
 import React from "react";
 import classnames from "classnames";
-import "./notification-style.scss";
+import "./notification.scss";
 
 type NotificationStyle = "slide-in" | "bar";
 type NotificationPosition = "bottom-left" | "bottom-right" | "top-left" | "top-right" | "top" | "bottom";

@@ -1,5 +1,5 @@
 import React from "react";
-import "./text-label-style.scss";
+import "./textlabel.scss";
 import classnames from "classnames";
 
 export type TextLabelProps = JSX.IntrinsicElements["div"] & {
