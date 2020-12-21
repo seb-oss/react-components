@@ -2,10 +2,6 @@ import React from "react";
 import classnames from "classnames";
 import "./timeline-item.scss";
 
-export type VerticalTimelineItemPosition = "left" | "right";
-export type HorizontalTimelineItemPosition = "top" | "bottom";
-export type TimelineDirection = "vertical" | "horizontal";
-
 export type TimelineItemProps = JSX.IntrinsicElements["div"] & {
     /** The header of the timeline item */
     header: React.ReactNode;
@@ -13,8 +9,8 @@ export type TimelineItemProps = JSX.IntrinsicElements["div"] & {
     time: string;
 };
 
-const TimelineItem: React.FC<TimelineItemProps> = React.memo(({ header, time, ...props }: TimelineItemProps) => (
-    <div {...props} className={classnames("rc timeline-item", { clickable: props.onClick })}>
+export const TimelineItem: React.FC<TimelineItemProps> = React.memo(({ header, time, ...props }: TimelineItemProps) => (
+    <div {...props} className={classnames("rc", "timeline-item", { clickable: props.onClick }, props.className)}>
         <div className="content-wrapper">
             <div className="title">{header}</div>
             <div className="time-wrapper">
@@ -26,5 +22,3 @@ const TimelineItem: React.FC<TimelineItemProps> = React.memo(({ header, time, ..
         </div>
     </div>
 ));
-
-export default TimelineItem;

@@ -1,8 +1,7 @@
 import React from "react";
 import { unmountComponentAtNode, render } from "react-dom";
 import { act, Simulate } from "react-dom/test-utils";
-import { Timeline, TimelineItemProps, TimelineProps } from ".";
-import TimelineItem from "./TimelineItem";
+import { Timeline, TimelineDirection, TimelineProps, TimelineItem } from ".";
 
 interface TimelineClickTestCase {
     statement: string;
@@ -14,17 +13,6 @@ interface TimelineItemTestCase {
 }
 
 describe("Component: Timeline", () => {
-    const timelineList: Array<TimelineItemProps> = [
-        { title: "title1", time: "time1" },
-        { title: "title2", time: "time2" },
-        { title: "title3", time: "time3" },
-        { title: "title4", time: "time4", desc: "desc4" },
-        { title: "title5", time: "time5", desc: "desc5" },
-    ];
-    const props: TimelineProps = {
-        list: timelineList,
-        onClick: jest.fn(),
-    };
     let container: HTMLDivElement = null;
 
     beforeEach(() => {
@@ -40,88 +28,64 @@ describe("Component: Timeline", () => {
 
     it("Should render", () => {
         act(() => {
-            render(<Timeline {...props} />, container);
+            render(<Timeline />, container);
         });
+
         expect(container.querySelector(`.timeline`)).not.toBeNull();
+        expect(container.firstElementChild.classList.contains("rc")).toBeTruthy();
+        expect(container.firstElementChild.classList.contains("timeline")).toBeTruthy();
+        // Default
+        expect(container.firstElementChild.classList.contains("vertical")).toBeTruthy();
+        expect(container.querySelector("aside")).toBeNull();
     });
 
-    it("Should pass a custom class and id", () => {
-        const className: string = "mySteptrackerClass";
-        const id: string = "mySteptrackerId";
+    it("Should render children correctly", () => {
         act(() => {
-            render(<Timeline {...props} className={className} id={id} />, container);
+            render(
+                <Timeline>
+                    <TimelineItem header="Header1" time="Time1">
+                        Content1
+                    </TimelineItem>
+                    <TimelineItem header="Header2" time="Time2">
+                        Content1
+                    </TimelineItem>
+                    <TimelineItem header="Header3" time="Time3">
+                        Content1
+                    </TimelineItem>
+                </Timeline>,
+                container
+            );
         });
-        expect(container.querySelector(`.${className}`)).not.toBeNull();
-        expect(container.querySelector(`#${id}`)).not.toBeNull();
+
+        // 3 items, 3 placeholders, 1 bar
+        expect(container.querySelectorAll(".timeline-item")).toHaveLength(3);
+        expect(container.querySelectorAll(".timeline-placeholder")).toHaveLength(3);
+        expect(container.querySelectorAll(".timeline-bar")).toHaveLength(1);
     });
 
-    it("Should render in horizontal if direction prop is set to `horizontal`", () => {
+    it("Should filter out invalid elements", () => {
         act(() => {
-            render(<Timeline {...props} />, container);
+            render(
+                <Timeline>
+                    <TimelineItem header="header" time="time" />
+                    invalid
+                    <TimelineItem header="header" time="time" />
+                </Timeline>,
+                container
+            );
         });
-        expect(container.querySelector(`.timeline`).classList).toContain("vertical");
-        act(() => {
-            render(<Timeline {...props} direction="horizontal" />, container);
-        });
-        expect(container.querySelector(`.timeline`).classList).toContain("horizontal");
+
+        expect(container.innerHTML).not.toContain("invalid");
     });
 
-    describe("Should fire click event if onClick is passed", () => {
-        const testCases: Array<TimelineClickTestCase> = [
-            { statement: "on vertical", props: { ...props } },
-            { statement: "on horizontal", props: { ...props, direction: "horizontal" } },
-        ];
-        testCases.map((item: TimelineClickTestCase) => {
-            it(item.statement, () => {
+    describe("It should render in both vertical and horizontal directions", () => {
+        (["vertical", "horizontal"] as TimelineDirection[]).forEach((direction: TimelineDirection) => {
+            test(direction, () => {
                 act(() => {
-                    render(<Timeline {...item.props} />, container);
+                    render(<Timeline direction={direction} />, container);
                 });
-                act(() => {
-                    Simulate.click(container.querySelector(".title-wrapper"));
-                });
-                expect(item.props.onClick).toBeCalled();
-            });
-        });
-    });
 
-    describe("Should render timeline item title, time and description with differen render method", () => {
-        const testCases: Array<TimelineItemTestCase> = [
-            {
-                statement: "render using list",
-                render: () => {
-                    render(<Timeline {...props} />, container);
-                },
-            },
-            {
-                statement: "render using component",
-                render: () => {
-                    render(
-                        <Timeline>
-                            {timelineList.map((item: TimelineItemProps, i: number) => (
-                                <TimelineItem key={i} {...item} />
-                            ))}
-                        </Timeline>,
-                        container
-                    );
-                },
-            },
-        ];
-        testCases.map((item: TimelineItemTestCase) => {
-            it(item.statement, () => {
-                act(() => {
-                    item.render();
-                });
-                timelineList.map((listItem: TimelineItemProps, index: number) => {
-                    const node: Element = container.querySelectorAll(".title-wrapper")[index];
-                    expect(node.querySelector(".title").textContent).toBe(listItem.title);
-                    expect(node.querySelector(".time").textContent).toBe(listItem.time);
-                    if (listItem.desc) {
-                        expect(node.querySelector(".desc")).not.toBeNull();
-                        expect(node.querySelector(".desc").textContent).toBe(listItem.desc);
-                    } else {
-                        expect(node.querySelector(".desc")).toBeNull();
-                    }
-                });
+                expect(container.firstElementChild.classList.contains(direction)).toBeTruthy();
             });
         });
     });

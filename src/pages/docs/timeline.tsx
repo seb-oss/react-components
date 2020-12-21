@@ -1,8 +1,7 @@
 import React from "react";
 import Docs from "components/Docs";
-import { Timeline } from "@sebgroup/react-components/Timeline";
+import { Timeline, TimelineItem } from "@sebgroup/react-components/Timeline";
 import { DynamicFormOption, useDynamicForm } from "hooks/useDynamicForm";
-import TimelineItem from "@sebgroup/react-components/Timeline/TimelineItem";
 import { loremIpsum } from "lorem-ipsum";
 
 const contents = [...Array(3)].map(() => loremIpsum({ units: "paragraph" }));
