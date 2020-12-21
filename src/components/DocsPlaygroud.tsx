@@ -9,7 +9,7 @@ export interface DocsPlaygroundProps {
     controls?: React.ReactNode;
 }
 
-const DocsPlayground: React.FC<DocsPlaygroundProps> = React.memo((props: DocsPlaygroundProps) => {
+const DocsPlayground: React.FC<DocsPlaygroundProps> = (props: DocsPlaygroundProps) => {
     const navs: string[] = ["Component", "Code"];
     const [activeTab, setActiveTab] = React.useState<number>(0);
 
@@ -42,6 +42,6 @@ const DocsPlayground: React.FC<DocsPlaygroundProps> = React.memo((props: DocsPla
             <div className="controls">{props.controls}</div>
         </div>
     );
-});
+};
 
 export default DocsPlayground;

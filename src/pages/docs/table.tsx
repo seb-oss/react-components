@@ -3,10 +3,10 @@ import Docs from "components/Docs";
 import { Column, DataItem, Table, TableRow, TableHeader, PrimaryActionButton, ActionLinkItem, FilterProps, FilterItem } from "../../../lib/src/Table/Table";
 import { DynamicFormOption, useDynamicForm } from "hooks/useDynamicForm";
 import makeData from "utils/makeData";
-import { Pagination } from "@sebgroup/react-components/Pagination/Pagination";
 import { Dropdown, DropdownItem } from "@sebgroup/react-components/Dropdown";
 import { checkDynamicFormSelectedKey } from "utils/helpers";
 import { TextBox } from "@sebgroup/react-components/TextBox";
+import { NumberedPagination } from "@sebgroup/react-components/Pagination";
 
 interface TableDataProps {
     firstName: string;
@@ -15,7 +15,7 @@ interface TableDataProps {
 }
 
 const TablePage: React.FC = (): React.ReactElement<void> => {
-    const [paginationValue, setPaginationValue] = React.useState<number>(1);
+    const [paginationValue, setPaginationValue] = React.useState<number>(0);
     const [pagingSize, setPagingSize] = React.useState<number>(0);
     const [searchText, setSearchText] = React.useState<string>("");
     const [dropDownListSelected, setDropdownListSelected] = React.useState<Array<DropdownItem>>([]);
@@ -161,7 +161,7 @@ const TablePage: React.FC = (): React.ReactElement<void> => {
                         columns={columns}
                         data={data}
                         offset={enablePagination ? 10 : null}
-                        currentpage={enablePagination ? paginationValue : null}
+                        currentpage={enablePagination ? paginationValue + 1 : null}
                         searchProps={
                             enableSearch
                                 ? {
@@ -184,7 +184,7 @@ const TablePage: React.FC = (): React.ReactElement<void> => {
                         }}
                         onRowSelected={enableRowSelection ? (rows: Array<TableRow>) => {} : null}
                         onRowExpanded={enableSubRows ? (rows: Array<TableRow>) => {} : null}
-                        footer={enablePagination ? <Pagination value={paginationValue} onChange={setPaginationValue} size={pagingSize} useFirstAndLast={true} /> : null}
+                        footer={enablePagination ? <NumberedPagination value={paginationValue} onPageChange={setPaginationValue} end={Math.ceil(pagingSize / 10)} showFirstAndLast /> : null}
                     />
                 </div>
             }
