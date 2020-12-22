@@ -201,7 +201,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
                     selected = true;
                 }
             } else {
-                if (value !== undefined && Array.isArray(value) && (value as Array<DropdownItem>)?.find((el: any) => el === e.value)) {
+                if (value !== undefined && Array.isArray(value) && (value as string[])?.find((el: any) => el === e.value)) {
                     selected = true;
                 }
             }
