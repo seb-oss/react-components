@@ -42,7 +42,6 @@ const StepTrackerPage: React.FC = React.memo(() => {
                     },
                     {
                         key: "hintTheme",
-                        value: { label: "Default", value: null, key: "default" },
                         label: "Hint theme",
                         placeholder: "Hint theme",
                         options: [
@@ -93,7 +92,7 @@ const StepTrackerPage: React.FC = React.memo(() => {
                     disabled={checkSelectedKey("disabled")}
                     value={value}
                     hint={(controls as any)?.hint}
-                    hintTheme={(controls as any)?.hintTheme?.value}
+                    hintTheme={(controls as any)?.hintTheme}
                 />
             }
             code={code}
