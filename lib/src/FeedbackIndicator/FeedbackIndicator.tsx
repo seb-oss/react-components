@@ -8,11 +8,13 @@ export type Indicator = {
     type: IndicatorType;
     /** The indicator message. `children` can also be used instead. */
     message?: React.ReactNode;
-    /** To show indicator without border */
-    withoutBorder?: boolean;
 };
 
-export type FeedbackIndicatorProps = JSX.IntrinsicElements["div"] & Indicator;
+export type FeedbackIndicatorProps = JSX.IntrinsicElements["div"] &
+    Indicator & {
+        /** To show indicator without border */
+        withoutBorder?: boolean;
+    };
 /** A helper component to display feedback for children content */
 export const FeedbackIndicator: React.FC<FeedbackIndicatorProps> = React.memo(({ type, message, children, withoutBorder, ...props }: FeedbackIndicatorProps) => {
     const [indicatorValue, setIndicatorValue] = React.useState<number>(0);

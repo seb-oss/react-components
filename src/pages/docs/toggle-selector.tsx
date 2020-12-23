@@ -1,129 +1,87 @@
 import React from "react";
 import Docs from "components/Docs";
-import { ToggleSelector, ToggleSelectorItem, ToggleSelectorItemProps } from "@sebgroup/react-components/ToggleSelector";
+import { ToggleSelector, ToggleSelectorItem } from "@sebgroup/react-components/ToggleSelector";
 import { DynamicFormOption, useDynamicForm } from "hooks/useDynamicForm";
+import { IndicatorType } from "@sebgroup/react-components/FeedbackIndicator";
+import LaughingIcon from "../../../static/icons/emoji-laughing-fill.svg";
+import DizzyIcon from "../../../static/icons/emoji-dizzy-fill.svg";
+import SmileUpsideDownIcon from "../../../static/icons/emoji-smile-upside-down-fill.svg";
 
-const userIcon: React.ReactElement = (
-    <svg width="20px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 170 170">
-        <path d="M149.1,165h-6V132.3c0-18.8-14.2-34.8-32.5-36.8l-24,15.9a3,3,0,0,1-3.3,0L59.2,95.5C41,97.7,26.9,113.6,26.9,132.3V165h-6V132.3c0-22.5,16.7-40.9,38.8-42.9a3,3,0,0,1,1.9.5L85,105.3l23.2-15.4a3,3,0,0,1,1.9-.5c21.9,1.8,39,20.7,39,42.9Z" />
-        <path d="M85,86.4A31.7,31.7,0,0,1,53.4,54.8V36.6a31.6,31.6,0,1,1,63.3,0V54.8A31.7,31.7,0,0,1,85,86.4Zm0-75.5A25.7,25.7,0,0,0,59.4,36.6V54.8a25.6,25.6,0,0,0,51.3,0V36.6A25.7,25.7,0,0,0,85,10.9Z" />
-    </svg>
-);
+const indicatorList: Array<DynamicFormOption<IndicatorType>> = [
+    { label: "None", value: undefined, key: "none" },
+    { label: "Danger", value: "danger", key: "danger" },
+    { label: "Success", value: "success", key: "success" },
+    { label: "Warning", value: "warning", key: "warning" },
+];
+
+const importString: string = require("!raw-loader!@sebgroup/react-components/ToggleSelector/ToggleSelector");
+const code: string = `<ToggleSelector name="choices" value={value} onChange={setValue}>
+    <ToggleSelectorItem>Yes</ToggleSelectorItem>
+    <ToggleSelectorItem>No</ToggleSelectorItem>
+    <ToggleSelectorItem>Maybe</ToggleSelectorItem>
+</ToggleSelector>`;
 
 const ToggleSelectorPage: React.FC = (): React.ReactElement<void> => {
+    const [singleValue, setSingleValue] = React.useState<number>();
+    const [multipleValues, setMultipleValues] = React.useState<number[]>();
+
     const [renderControls, { controls }] = useDynamicForm([
         {
             key: "controls",
             items: [
                 {
-                    key: "hint",
-                    label: "Hint",
-                    order: 0,
-                    controlType: "Text",
-                    value: "",
+                    key: "multiple",
+                    label: "Multiple",
+                    controlType: "Checkbox",
                 },
                 {
-                    key: "hintTheme",
-                    value: { label: "Default", value: null, key: "default" },
-                    label: "Hint theme",
-                    placeholder: "Hint theme",
-                    options: [
-                        { label: "Default", value: null, key: "default" },
-                        { label: "Success", value: "success", key: "success" },
-                        { label: "Danger", value: "danger", key: "danger" },
-                        { label: "Warning", value: "warning", key: "warning" },
-                    ],
+                    key: "disabled",
+                    label: "Disable all",
+                    description: "You can disable individual buttons or disable all toggles",
+                    controlType: "Checkbox",
+                },
+                {
+                    key: "indicator",
+                    label: "Indicator",
+                    description: "You can enable feedback indicators (e.g. danger for errors)",
+                    options: indicatorList,
                     controlType: "Dropdown",
                 },
                 {
-                    key: "iconPosition",
-                    value: { label: "Left", value: "left", key: "left" },
-                    label: "Icon position",
-                    placeholder: "Icon position",
-                    options: [
-                        { label: "Left", value: "left", key: "left" },
-                        { label: "Right", value: "right", key: "right" },
-                    ],
-                    controlType: "Dropdown",
-                },
-                {
-                    label: "Optional configurations",
-                    key: "checkboxes",
-                    controlType: "Option",
-                    options: [
-                        { label: "Multiple", value: "multiple", key: "multiple" },
-                        { label: "With icon", value: "hasIcon", key: "hasIcon" },
-                        { label: "Disabled", value: "disabled", key: "disabled" },
-                    ],
+                    key: "icons",
+                    label: "With icons as children",
+                    controlType: "Checkbox",
                 },
             ],
         },
     ]);
-    const list: Array<ToggleSelectorItemProps> = [
-        { label: "Bungalow", value: "bungalow", icon: userIcon },
-        { label: "Apartment", value: "apartment", icon: userIcon },
-        { label: "Hotel", value: "hotel", disabled: true, icon: userIcon },
-    ];
-    const [value, setValue] = React.useState<string | Array<string>>("");
-    const importString: string = React.useMemo(() => require("!raw-loader!@sebgroup/react-components/ToggleSelector/ToggleSelector"), []);
-    const code: string = React.useMemo(
-        () => `
-    // render children using list of ToggleSelectorItem
-    <ToggleSelector
-        value={value}
-        onChange={onChange}
-        name="toggle"
-        list={list}
-    />
-    // render children using ToggleSelectorItem
-    <ToggleSelector
-        value={value}
-        onChange={onChange}
-        name="toggle"
-    >
-        {
-            list.map((item: any, index: number) => <ToggleSelectorItem
-                key={i}
-                onChange={onSelectorChange}
-                value={item.value}
-                name={props.name}
-                checked={formattedValue === item.value}
-            />)
-        }
-    </ToggleSelector>
-    `,
-        []
-    );
-
-    /** check if key selected */
-    const checkSelectedKey = (key: string) => {
-        return controls.checkboxes?.some((item: DynamicFormOption) => item.key === key);
-    };
 
     return (
         <Docs
             mainFile={importString}
             example={
-                <div className="w-100">
-                    <ToggleSelector
-                        value={value}
-                        onChange={setValue}
-                        name="toggle"
-                        disabled={checkSelectedKey("disabled")}
-                        multiple={checkSelectedKey("multiple")}
-                        list={
-                            checkSelectedKey("hasIcon")
-                                ? list
-                                : list.map((item: ToggleSelectorItemProps) => ({
-                                      ...item,
-                                      icon: null,
-                                  }))
-                        }
-                        hint={(controls as any)?.hint}
-                        hintTheme={(controls as any)?.hintTheme?.value}
-                        iconPosition={(controls as any)?.iconPosition?.value}
-                    />
-                </div>
+                <ToggleSelector
+                    className="m-auto"
+                    name="choices"
+                    value={controls?.multiple ? multipleValues : (singleValue as any)}
+                    onChange={(e: number | number[]) => (controls?.multiple ? setMultipleValues(e as number[]) : setSingleValue(e as number))}
+                    multiple={controls?.multiple}
+                    disabled={controls?.disabled}
+                    indicator={controls?.indicator ? { type: controls.indicator, message: "Indicator message" } : null}
+                >
+                    <ToggleSelectorItem>
+                        {controls?.icons && <LaughingIcon width="2em" height="2em" />}
+                        <span className="mx-auto">Yes</span>
+                    </ToggleSelectorItem>
+                    <ToggleSelectorItem>
+                        {controls?.icons && <DizzyIcon width="2em" height="2em" />}
+                        <span className="mx-auto">No</span>
+                    </ToggleSelectorItem>
+                    <ToggleSelectorItem>
+                        {controls?.icons && <SmileUpsideDownIcon width="2em" height="2em" />}
+                        <span className="mx-auto">Maybe</span>
+                    </ToggleSelectorItem>
+                </ToggleSelector>
             }
             code={code}
             controls={renderControls()}

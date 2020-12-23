@@ -75,7 +75,7 @@ $dropdown-toggle-height: 44px;
             > .right-items > .dropdown-icon-holder {
                 &.chevron {
                     > svg {
-                        transform: rotate(180deg);
+                        transform: rotateX(180deg);
                     }
                 }
             }

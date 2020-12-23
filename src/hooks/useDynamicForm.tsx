@@ -6,12 +6,12 @@ import { TextArea } from "@sebgroup/react-components/TextArea";
 import { Dropdown } from "@sebgroup/react-components/Dropdown";
 import { Datepicker } from "@sebgroup/react-components/Datepicker";
 import { Stepper } from "@sebgroup/react-components/Stepper";
-import { DropdownItem, DropdownChangeEvent } from "@sebgroup/react-components/Dropdown/Dropdown";
+import { DropdownItem } from "@sebgroup/react-components/Dropdown";
 import { RadioButtonProps, RadioGroup } from "@sebgroup/react-components/RadioButton";
 
-export interface DynamicFormItem {
+export interface DynamicFormItem<T = any> {
     key: string;
-    value?: any;
+    value?: T;
     label?: string | null;
     description?: string | null;
     required?: boolean;
@@ -35,8 +35,8 @@ export interface DynamicFormSection {
     items?: Array<DynamicFormItem> | null;
 }
 
-export interface DynamicFormOption {
-    value?: any;
+export interface DynamicFormOption<T = any> {
+    value?: T;
     label?: string | null;
     key: string;
     disabled?: boolean | null;
@@ -44,7 +44,7 @@ export interface DynamicFormOption {
 
 export type DynamicFormDate = { day: number; month: number; year: number };
 
-type InputChange = React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | React.MouseEvent<HTMLButtonElement, MouseEvent> | DropdownChangeEvent | Date | number;
+type InputChange = React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | React.MouseEvent<HTMLButtonElement, MouseEvent> | Date | number;
 
 type DynamicFormInternalStateValue = string | string[] | DynamicFormOption | DynamicFormOption[] | Date | boolean | number | null;
 
@@ -287,7 +287,7 @@ const DynamicFormItemComponent: React.FC<{
                     return { label: option.label || "", value: option.value || "", disabled: !!option.disabled };
                 }) || [];
 
-            formItem = <Dropdown {...commonProps} multi={props.item?.multi} selectedValue={props.state as DropdownItem | DropdownItem[]} list={list} />;
+            formItem = <Dropdown {...commonProps} multi={props.item?.multi} selectedValue={list.find((item) => item.value === props.state)} list={list} />;
             break;
         }
 

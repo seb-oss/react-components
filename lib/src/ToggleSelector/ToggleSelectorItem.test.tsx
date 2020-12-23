@@ -9,8 +9,6 @@ describe("Component: ToggleSelectorItem", () => {
         name: "toggle",
         onChange: jest.fn(),
         value: "bungalow",
-        label: "Bungalow",
-        icon: <svg />,
     };
 
     beforeEach(() => {
