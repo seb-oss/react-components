@@ -2,6 +2,7 @@ import React from "react";
 import classnames from "classnames";
 import { ToggleSelectorItemProps } from "./ToggleSelectorItem";
 import { FeedbackIndicator, Indicator } from "../FeedbackIndicator";
+import { randomId } from "@sebgroup/frontend-tools";
 import "./toggle-selector.scss";
 
 interface ToggleSelectorSingleProps {
@@ -27,8 +28,6 @@ type NativeDivProps = Omit<JSX.IntrinsicElements["div"], "onChange">;
 
 export type ToggleSelectorProps = NativeDivProps &
     ToggleSelectorValueProps & {
-        /** field name */
-        name: string;
         /** disable element */
         disabled?: boolean;
         /** Form indicator */
@@ -37,18 +36,22 @@ export type ToggleSelectorProps = NativeDivProps &
 
 /** A selector to display and select options in a flow. */
 export const ToggleSelector: React.FC<ToggleSelectorProps> = ({ multiple, value, onChange, indicator, ...props }: ToggleSelectorProps) => {
+    const [name] = React.useState<string>(randomId("ts-"));
+
     const handleChange = React.useCallback(
         (e: React.ChangeEvent<HTMLInputElement>, childOnChange: React.ChangeEventHandler<HTMLInputElement>) => {
-            if (multiple) {
-                const values: number[] = (value as number[]) || [];
-                const index: number = parseInt(e.target.dataset.indexNumber);
-                if (values.includes(index)) {
-                    onChange(values.filter((item) => item !== index) as any);
+            if (onChange) {
+                if (multiple) {
+                    const values: number[] = (value as number[]) || [];
+                    const index: number = parseInt(e.target.dataset.indexNumber);
+                    if (values.includes(index)) {
+                        onChange(values.filter((item) => item !== index) as any);
+                    } else {
+                        onChange([...values, index].sort() as any);
+                    }
                 } else {
-                    onChange([...values, index].sort() as any);
+                    onChange(parseInt(e.target.dataset.indexNumber) as any);
                 }
-            } else {
-                onChange(parseInt(e.target.dataset.indexNumber) as any);
             }
             childOnChange && childOnChange(e);
         },
@@ -63,7 +66,7 @@ export const ToggleSelector: React.FC<ToggleSelectorProps> = ({ multiple, value,
                         return React.isValidElement<ToggleSelectorItemProps>(Child)
                             ? React.cloneElement<ToggleSelectorItemProps & { [k: string]: any }>(Child as any, {
                                   onChange: (e) => handleChange(e, Child.props?.onChange),
-                                  name: props.name,
+                                  name: multiple ? null : name,
                                   disabled: props.disabled || Child.props?.disabled,
                                   type: multiple ? "checkbox" : "radio",
                                   checked: multiple ? (Array.isArray(value) ? value.includes(index) : false) : (value as number) === index,

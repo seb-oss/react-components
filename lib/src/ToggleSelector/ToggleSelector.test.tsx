@@ -2,20 +2,10 @@ import React from "react";
 import { act, Simulate } from "react-dom/test-utils";
 import { unmountComponentAtNode, render } from "react-dom";
 import { ToggleSelector, ToggleSelectorProps } from ".";
-import { ToggleSelectorItemProps } from "./ToggleSelectorItem";
+import { ToggleSelectorItem, ToggleSelectorItemProps } from "./ToggleSelectorItem";
 
 describe("Component: ToggleSelector", () => {
     let container: HTMLDivElement = null;
-    const props: ToggleSelectorProps = {
-        name: "toggle",
-        onChange: jest.fn(),
-        value: null,
-        list: [
-            { label: "Bungalow", value: "bungalow", icon: <svg /> },
-            { label: "Apartment", value: "apartment" },
-            { label: "Hotel", value: "hotel", disabled: true, icon: <svg /> },
-        ],
-    };
 
     beforeEach(() => {
         container = document.createElement("div");
@@ -31,97 +21,172 @@ describe("Component: ToggleSelector", () => {
 
     it("Should render simple toggle selector", () => {
         act(() => {
-            render(<ToggleSelector {...props} />, container);
+            render(<ToggleSelector />, container);
         });
-        expect(container.querySelector(".rc.toggle-selector")).not.toBeNull();
+
+        expect(container.firstElementChild.classList.contains("rc")).toBeTruthy();
+        expect(container.firstElementChild.classList.contains("toggle-selector")).toBeTruthy();
     });
 
-    it("Should disable whole selector", () => {
+    it("Should allow passing a custom className", () => {
+        const className: string = "myClassName";
+
         act(() => {
-            render(<ToggleSelector {...props} disabled />, container);
+            render(<ToggleSelector className={className} />, container);
         });
-        expect(container.querySelector(".rc.toggle-selector").querySelectorAll(".disabled").length).toBe(props.list.length);
+
+        expect(container.firstElementChild.classList.contains(className)).toBeTruthy();
     });
 
-    it("Should able to disable selector item individually", () => {
+    it("Should render children correctly", () => {
         act(() => {
-            render(<ToggleSelector {...props} />, container);
+            render(
+                <ToggleSelector>
+                    <ToggleSelectorItem>Yes</ToggleSelectorItem>
+                    <ToggleSelectorItem>No</ToggleSelectorItem>
+                </ToggleSelector>,
+                container
+            );
         });
-        const disabledItemLength: number = props.list.filter(({ disabled }: ToggleSelectorItemProps) => disabled).length;
-        expect(container.querySelector(".rc.toggle-selector").querySelectorAll(".disabled").length).toBe(disabledItemLength);
+
+        let inputs = container.querySelectorAll("input");
+
+        expect(inputs).toHaveLength(2);
+        // Taking one as an example
+        expect(inputs.item(0).name).not.toBe("");
+        expect(inputs.item(0).type).toEqual("radio");
+        expect(inputs.item(0).getAttribute("data-index-number")).toEqual("0");
+
+        act(() => {
+            render(
+                <ToggleSelector multiple>
+                    <ToggleSelectorItem>Yes</ToggleSelectorItem>
+                    <ToggleSelectorItem>No</ToggleSelectorItem>
+                </ToggleSelector>,
+                container
+            );
+        });
+
+        inputs = container.querySelectorAll("input");
+
+        expect(inputs.item(0).name).toBe("");
+        expect(inputs.item(0).type).toEqual("checkbox");
     });
 
-    it("Should not trigger any changes when item is disabled", () => {
-        act(() => {
-            render(<ToggleSelector {...props} disabled />, container);
+    it("Should reflect value correctly", () => {
+        interface ValueTestCase {
+            multiple: boolean;
+            expected: [boolean, boolean];
+            value: number | number[];
+        }
+
+        const cases: ValueTestCase[] = [
+            { multiple: false, expected: [true, false], value: 0 },
+            { multiple: false, expected: [false, true], value: 1 },
+            { multiple: false, expected: [false, false], value: null },
+            { multiple: true, expected: [true, false], value: [0] },
+            { multiple: true, expected: [false, true], value: [1] },
+            { multiple: true, expected: [true, true], value: [0, 1] },
+            { multiple: true, expected: [true, true], value: [0, 1] },
+            { multiple: true, expected: [false, false], value: "invalid" as any },
+            { multiple: true, expected: [false, false], value: null },
+        ];
+
+        let inputs: NodeListOf<HTMLInputElement>;
+
+        cases.forEach((testCase: ValueTestCase) => {
+            act(() => {
+                render(
+                    <ToggleSelector value={testCase.value as any} multiple={testCase.multiple}>
+                        <ToggleSelectorItem>Yes</ToggleSelectorItem>
+                        <ToggleSelectorItem>No</ToggleSelectorItem>
+                    </ToggleSelector>,
+                    container
+                );
+            });
+
+            inputs = container.querySelectorAll("input");
+
+            expect(inputs.item(0).checked).toBe(testCase.expected[0]);
+            expect(inputs.item(1).checked).toBe(testCase.expected[1]);
         });
-        act(() => {
-            Simulate.click(container.querySelector(".rc.toggle-selector").querySelectorAll(".disabled")[0]);
-        });
-        expect(props.onChange).not.toBeCalled();
     });
 
-    it("Should trigger onChange when item is selected", () => {
-        act(() => {
-            render(<ToggleSelector {...props} />, container);
+    it("Should handle change correctly", () => {
+        interface ChangeTestCase {
+            multiple: boolean;
+            value: number | number[];
+            calledWith: number | number[];
+            changeOn: number;
+        }
+
+        const testCases: ChangeTestCase[] = [
+            { multiple: false, value: null, changeOn: 0, calledWith: 0 },
+            { multiple: false, value: 0, changeOn: 1, calledWith: 1 },
+            { multiple: false, value: 1, changeOn: 0, calledWith: 0 },
+            { multiple: true, value: null, changeOn: 0, calledWith: [0] },
+            { multiple: true, value: [0], changeOn: 0, calledWith: [] },
+            { multiple: true, value: [0], changeOn: 1, calledWith: [0, 1] },
+            { multiple: true, value: [1], changeOn: 0, calledWith: [0, 1] },
+            { multiple: true, value: [0, 1], changeOn: 0, calledWith: [1] },
+        ];
+
+        const onChange: jest.Mock = jest.fn();
+
+        testCases.forEach((testCase: ChangeTestCase) => {
+            onChange.mockReset();
+
+            act(() => {
+                render(
+                    <ToggleSelector value={testCase.value as any} onChange={onChange} multiple={testCase.multiple}>
+                        <ToggleSelectorItem>Yes</ToggleSelectorItem>
+                        <ToggleSelectorItem>No</ToggleSelectorItem>
+                    </ToggleSelector>,
+                    container
+                );
+            });
+
+            act(() => {
+                Simulate.change(container.querySelectorAll("input").item(testCase.changeOn));
+                expect(onChange).toBeCalledWith(testCase.calledWith);
+            });
         });
-        act(() => {
-            const inputField: HTMLInputElement = container.querySelector(".rc.toggle-selector-item").querySelector(`input[name="${props.name}"]`);
-            inputField.checked = true;
-            Simulate.change(inputField);
-        });
-        expect(props.onChange).toBeCalled();
     });
 
-    it("Should able to select multiple item", () => {
-        const newProps: ToggleSelectorProps = {
-            ...props,
-            value: props.list.filter(({ disabled }: ToggleSelectorItemProps) => !disabled).map(({ value }: ToggleSelectorItemProps) => value),
-            multiple: true,
-        };
+    it("Should pass on change event to individual items when an event handler is passed", () => {
+        const onChange: jest.Mock = jest.fn();
+
         act(() => {
-            render(<ToggleSelector {...newProps} />, container);
+            render(
+                <ToggleSelector>
+                    <ToggleSelectorItem onChange={onChange}>Yes</ToggleSelectorItem>
+                    <ToggleSelectorItem>No</ToggleSelectorItem>
+                </ToggleSelector>,
+                container
+            );
         });
-        expect(container.querySelector(".rc.toggle-selector").querySelectorAll(".checked").length).toBe(newProps.value.length);
+
+        act(() => {
+            Simulate.change(container.querySelector("input"));
+        });
+
+        expect(onChange).toBeCalled();
     });
 
-    it("Should trigger onChange when item is selected in multiple mode", () => {
-        const newProps: ToggleSelectorProps = {
-            ...props,
-            value: props.list.filter(({ disabled }: ToggleSelectorItemProps) => !disabled).map(({ value }: ToggleSelectorItemProps) => value),
-            multiple: true,
-        };
-        let finalValue: Array<string> = [];
-        act(() => {
-            render(<ToggleSelector {...newProps} />, container);
-        });
-        act(() => {
-            const inputField: HTMLInputElement = container.querySelector(".rc.toggle-selector-item").querySelector(`input[name="${props.name}"]`);
-            inputField.checked = !inputField.checked;
-            Simulate.change(inputField);
-        });
-        container.querySelectorAll(".rc.toggle-selector-item").forEach((item) => {
-            const inputField: HTMLInputElement = item.querySelector(`input[name="${props.name}"]`);
-            if (inputField.checked) {
-                finalValue.push(inputField.value);
-            }
-        });
-        expect(props.onChange).toBeCalledWith(finalValue);
-    });
+    it("Should allow non elements to render as children", () => {
+        const content: string = "my content";
 
-    it("Should trigger onChange when item is selected using enter or spacebar", () => {
         act(() => {
-            render(<ToggleSelector {...props} />, container);
+            render(
+                <ToggleSelector>
+                    <ToggleSelectorItem>Yes</ToggleSelectorItem>
+                    {content}
+                    <ToggleSelectorItem>No</ToggleSelectorItem>
+                </ToggleSelector>,
+                container
+            );
         });
-        act(() => {
-            const buttonField: HTMLInputElement = container.querySelector(".rc.toggle-selector-item > .btn");
-            Simulate.keyDown(buttonField, { keyCode: 32 });
-        });
-        expect(props.onChange).toBeCalled();
-        act(() => {
-            const buttonField: HTMLInputElement = container.querySelector(".rc.toggle-selector-item > .btn");
-            Simulate.keyDown(buttonField, { keyCode: 13 });
-        });
-        expect(props.onChange).toBeCalled();
+
+        expect(container.innerHTML).toContain(content);
     });
 });

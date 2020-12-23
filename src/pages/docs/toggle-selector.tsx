@@ -62,7 +62,6 @@ const ToggleSelectorPage: React.FC = (): React.ReactElement<void> => {
             example={
                 <ToggleSelector
                     className="m-auto"
-                    name="choices"
                     value={controls?.multiple ? multipleValues : (singleValue as any)}
                     onChange={(e: number | number[]) => (controls?.multiple ? setMultipleValues(e as number[]) : setSingleValue(e as number))}
                     multiple={controls?.multiple}

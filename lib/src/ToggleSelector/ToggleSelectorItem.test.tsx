@@ -1,15 +1,10 @@
 import React from "react";
-import { act, Simulate } from "react-dom/test-utils";
+import { act } from "react-dom/test-utils";
 import { unmountComponentAtNode, render } from "react-dom";
-import { ToggleSelectorItem, ToggleSelectorItemProps } from "./ToggleSelectorItem";
+import { ToggleSelectorItem } from "./ToggleSelectorItem";
 
 describe("Component: ToggleSelectorItem", () => {
     let container: HTMLDivElement = null;
-    const props: ToggleSelectorItemProps = {
-        name: "toggle",
-        onChange: jest.fn(),
-        value: "bungalow",
-    };
 
     beforeEach(() => {
         container = document.createElement("div");
@@ -25,53 +20,35 @@ describe("Component: ToggleSelectorItem", () => {
 
     it("Should render simple toggle selector", () => {
         act(() => {
-            render(<ToggleSelectorItem {...props} />, container);
+            render(<ToggleSelectorItem />, container);
         });
-        expect(container.querySelector(".rc.toggle-selector-item")).not.toBeNull();
+
+        expect(container.firstElementChild.classList.contains("rc")).toBeTruthy();
+        expect(container.firstElementChild.classList.contains("toggle-selector-item")).toBeTruthy();
+        expect(container.querySelector("input")).not.toBeNull();
+        expect(container.querySelector("label")).not.toBeNull();
+        expect(container.querySelector("input").id).not.toBe("");
+        expect(container.querySelector("label").getAttribute("for")).not.toBe("");
     });
 
-    it("Should disable whole selector", () => {
+    it("Should allow passing a custom id", () => {
+        const id: string = "myId";
+
         act(() => {
-            render(<ToggleSelectorItem {...props} disabled />, container);
+            render(<ToggleSelectorItem id={id} />, container);
         });
-        expect(container.querySelector(".disabled")).not.toBeNull();
+
+        expect(container.querySelector("input").id).toEqual(id);
+        expect(container.querySelector("label").getAttribute("for")).toEqual(id);
     });
 
-    it("Should not trigger any changes when item is disabled", () => {
-        act(() => {
-            render(<ToggleSelectorItem {...props} disabled />, container);
-        });
-        act(() => {
-            Simulate.click(container.querySelector(".rc.toggle-selector-item").querySelectorAll(".disabled")[0]);
-        });
-        expect(props.onChange).not.toBeCalled();
-    });
+    it("Should render children correctly", () => {
+        const content: string = "My content";
 
-    it("Should trigger onChange when item is selected", () => {
         act(() => {
-            render(<ToggleSelectorItem {...props} />, container);
+            render(<ToggleSelectorItem>{content}</ToggleSelectorItem>, container);
         });
-        act(() => {
-            const inputField: HTMLInputElement = container.querySelector(".rc.toggle-selector-item").querySelector(`input[name="${props.name}"]`);
-            inputField.checked = true;
-            Simulate.change(inputField);
-        });
-        expect(props.onChange).toBeCalled();
-    });
 
-    it("Should trigger onChange when item is selected using enter or spacebar", () => {
-        act(() => {
-            render(<ToggleSelectorItem {...props} />, container);
-        });
-        act(() => {
-            const buttonField: HTMLInputElement = container.querySelector(".rc.toggle-selector-item > .btn");
-            Simulate.keyDown(buttonField, { keyCode: 32 });
-        });
-        expect(props.onChange).toBeCalled();
-        act(() => {
-            const buttonField: HTMLInputElement = container.querySelector(".rc.toggle-selector-item > .btn");
-            Simulate.keyDown(buttonField, { keyCode: 13 });
-        });
-        expect(props.onChange).toBeCalled();
+        expect(container.querySelector("label").textContent).toEqual(content);
     });
 });
