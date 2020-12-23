@@ -146,10 +146,9 @@ describe("Component: ToggleSelector", () => {
                 );
             });
 
-            act(() => {
-                Simulate.change(container.querySelectorAll("input").item(testCase.changeOn));
-                expect(onChange).toBeCalledWith(testCase.calledWith);
-            });
+            act(() => Simulate.change(container.querySelectorAll("input").item(testCase.changeOn)));
+
+            expect(onChange).toBeCalledWith(testCase.calledWith);
         });
     });
 
@@ -166,9 +165,7 @@ describe("Component: ToggleSelector", () => {
             );
         });
 
-        act(() => {
-            Simulate.change(container.querySelector("input"));
-        });
+        act(() => Simulate.change(container.querySelector("input")));
 
         expect(onChange).toBeCalled();
     });
