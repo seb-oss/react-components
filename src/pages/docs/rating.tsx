@@ -4,56 +4,62 @@ import { Rating } from "@sebgroup/react-components/Rating";
 import { useDynamicForm } from "hooks/useDynamicForm";
 
 const RatingPage: React.FC = (): React.ReactElement<void> => {
+    const [value, setValue] = React.useState<number>(1);
     const [renderControls, { controls }] = useDynamicForm([
         {
             key: "controls",
             items: [
                 {
+                    key: "max",
+                    label: "Max",
+                    controlType: "Text",
+                    value: 5,
+                },
+                {
+                    key: "min",
+                    label: "Min",
+                    controlType: "Text",
+                    value: 1,
+                },
+                {
+                    key: "step",
+                    label: "Step",
+                    controlType: "Text",
+                    value: 1,
+                },
+                {
                     key: "initialValue",
-                    label: "Initial value",
-                    order: 30,
+                    label: "Initial Value",
                     controlType: "Text",
                     value: 1,
                 },
                 {
                     key: "iconHeight",
                     label: "Icon height",
-                    order: 10,
                     controlType: "Text",
-                    value: 20,
+                    value: 30,
                 },
                 {
                     key: "iconWidth",
                     label: "Icon width",
-                    order: 20,
                     controlType: "Text",
-                    value: 20,
+                    value: 40,
                 },
                 {
                     key: "readOnly",
                     label: "Read only",
-                    order: 40,
-                    controlType: "Checkbox",
-                    value: false,
-                },
-                {
-                    key: "useHollow",
-                    label: "Use hollow",
-                    order: 60,
                     controlType: "Checkbox",
                     value: false,
                 },
                 {
                     key: "disabled",
                     label: "Disabled",
-                    order: 70,
                     controlType: "Checkbox",
                     value: false,
                 },
                 {
                     key: "colors",
                     label: "Colors",
-                    order: 80,
                     options: [
                         { key: "default", label: "Default color", value: null },
                         { key: "greyandblack", label: "Grey & Black", value: "greyandblack" },
@@ -81,7 +87,22 @@ const RatingPage: React.FC = (): React.ReactElement<void> => {
 
     const importString: string = React.useMemo(() => require("!raw-loader!@sebgroup/react-components/Rating/Rating"), []);
     const importedFiles: Array<string> = React.useMemo(() => [require("!raw-loader!@sebgroup/react-components/Rating/Rating")], []);
-    const code: string = React.useMemo(() => require("!raw-loader!./divimage").default, []);
+    const code: string = `
+        <Rating 
+            initialValue={number}
+            useHollow={boolean}
+            readOnly={boolean}
+            disabled={boolean}
+            iconHeight={number}
+            iconWidth={number}
+            colors={Array<string>}
+        />`;
+
+    const heartSVG = (
+        <svg xmlns="http://www.w3.org/2000/svg">
+            <path fillRule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z" />
+        </svg>
+    );
 
     return (
         <Docs
@@ -90,13 +111,21 @@ const RatingPage: React.FC = (): React.ReactElement<void> => {
             example={
                 <div className="w-100 d-flex justify-content-center">
                     <Rating
-                        initialValue={controls.initialValue}
-                        useHollow={controls.useHollow}
+                        id="some-id"
+                        className="custom-class"
                         readOnly={controls.readOnly}
                         disabled={controls.disabled}
-                        iconHeight={controls.icoHeight}
+                        iconHeight={controls.iconHeight}
                         iconWidth={controls.iconWidth}
+                        max={controls.max}
+                        min={controls.min}
+                        step={controls.step}
                         colors={colors}
+                        initialValue={controls.initialValue}
+                        value={value}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                            setValue(Number(e.target.value));
+                        }}
                     />
                 </div>
             }

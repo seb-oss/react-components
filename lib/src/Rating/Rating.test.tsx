@@ -1,87 +1,236 @@
 import React from "react";
-import { shallow, mount, ShallowWrapper, ReactWrapper } from "enzyme";
-import { Rating, RatingProps } from ".";
-import { SVGStarHollow } from "./RatingStar";
-
-const initialColors: [string, string] = ["#A9A9A9", "#FFC500"];
-const disabledColors: [string, string] = ["#dddddd", "#bfbfbf"];
+import { act, Simulate } from "react-dom/test-utils";
+import { unmountComponentAtNode, render } from "react-dom";
+import { Rating, RatingProps } from "./Rating";
 
 describe("Component: Rating", () => {
-    let wrapper: ShallowWrapper<RatingProps>;
-    let mountedWrapper: ReactWrapper<RatingProps>;
+    let container: HTMLDivElement = null;
+
+    const props: RatingProps = {
+        initialValue: 1,
+        max: 5,
+        min: 1,
+    };
 
     beforeEach(() => {
-        mountedWrapper && mountedWrapper.unmount();
-        wrapper = shallow(<Rating />);
-        mountedWrapper = mount(<Rating />);
+        container = document.createElement("div");
+        document.body.appendChild(container);
+    });
+
+    afterEach(() => {
+        unmountComponentAtNode(container);
+        container.remove();
+        container = null;
     });
 
     it("Should render", () => {
-        expect(wrapper).toBeDefined();
+        act(() => {
+            render(<Rating {...props} />, container);
+        });
+        expect(container).toBeDefined();
     });
 
-    it("Should pass custom class and id", () => {
-        const className: string = "myRatingClass";
-        const id: string = "myRatingId";
-        wrapper.setProps({ className, id });
-        expect(wrapper.hasClass(className)).toBeTruthy();
-        expect(wrapper.find(`#${id}`).length).toBeTruthy();
+    it("Should render and pass custom class", () => {
+        const className: string = "myCustomClass";
+        act(() => {
+            render(<Rating {...{ ...props, className }} />, container);
+        });
+        expect(container).toBeDefined();
+        expect(container.querySelectorAll(`.${className}`).length).toEqual(2);
     });
 
-    it("Should render hollow stars when passed", () => {
-        mountedWrapper.setProps({ initialValue: 3 });
-        // Filled star
-        expect(mountedWrapper.find("svg").first().hasClass("custom-svg-star")).toBeTruthy();
-        expect(mountedWrapper.find("svg").last().hasClass("custom-svg-star")).toBeTruthy();
-        // Hollow star
-        mountedWrapper.setProps({ useHollow: true });
-        expect(mountedWrapper.find("svg").first().hasClass("custom-svg-star-hollow")).toBeTruthy();
-        expect(mountedWrapper.find("svg").last().hasClass("custom-svg-star")).toBeTruthy();
+    it("Should pass any other native html prop", () => {
+        const id: string = "my-id";
+
+        act(() => {
+            render(<Rating {...{ ...props, id }} />, container);
+        });
+        expect(container).toBeDefined();
+
+        expect(container.firstElementChild);
+        expect(container.querySelector("input").id).toEqual(id);
     });
 
-    it("Should render with default colors if colors passed incorrectly", () => {
-        mountedWrapper.setProps({ initialValue: 3, colors: ["#0F0"] as any });
-        expect(mountedWrapper.find("svg").first().find(".star-fill").first().prop("fill")).toEqual(initialColors[0]);
-        expect(mountedWrapper.find("svg").last().find(".star-fill").first().prop("fill")).toEqual(initialColors[1]);
-        mountedWrapper.setProps({ useHollow: true });
-        expect(mountedWrapper.find("svg").first().find(".star-fill").first().prop("fill")).toEqual(initialColors[0]);
-        expect(mountedWrapper.find("svg").last().find(".star-fill").first().prop("fill")).toEqual(initialColors[1]);
+    it("Should contain 5 svgs", () => {
+        act(() => {
+            render(<Rating {...props} />, container);
+        });
+        expect(container.querySelector(".rating-icons").children.length).toEqual(5);
+
+        act(() => {
+            render(<Rating {...{ ...props, max: 2 }} />, container);
+        });
+        expect(container.querySelector(".rating-icons").children.length).toEqual(2);
     });
 
-    it("Should accept custom colors only when an array of two colors are passed", () => {
-        const colors: [string, string] = ["#0F0", "#F00"];
-        mountedWrapper.setProps({ initialValue: 3, colors });
-        expect(mountedWrapper.find("svg").first().find(".star-fill").first().prop("fill")).toEqual(colors[0]);
-        expect(mountedWrapper.find("svg").last().find(".star-fill").first().prop("fill")).toEqual(colors[1]);
-        mountedWrapper.setProps({ useHollow: true });
-        expect(mountedWrapper.find("svg").first().find(".star-fill").first().prop("fill")).toEqual(colors[0]);
-        expect(mountedWrapper.find("svg").last().find(".star-fill").first().prop("fill")).toEqual(colors[1]);
-    });
-
-    it("Should fire change event when passed", () => {
+    it("should not be clicked if props.readyOnly is true", () => {
+        const readOnly: boolean = true;
         const onChange: jest.Mock = jest.fn();
-        mountedWrapper.setProps({ onChange });
-        mountedWrapper.children().first().children().first().children().first().children().first().children().last().simulate("click");
+        act(() => {
+            render(<Rating {...{ ...props, readOnly }} onChange={onChange} />, container);
+        });
+        const inputElement: HTMLInputElement = container.querySelector(".rating input");
+        Simulate.change(inputElement, { clientX: 657 });
+        expect(onChange).not.toBeCalled();
+    });
+
+    it("should contain correct colors if passed", () => {
+        act(() => {
+            render(<Rating {...{ ...props }} />, container);
+        });
+
+        expect(container.querySelector("svg #full_grad").querySelector("stop").getAttribute("stop-color")).toEqual("#FFC500");
+
+        const colors: [string, string] = ["black", "white"];
+        act(() => {
+            render(<Rating {...{ ...props, colors }} />, container);
+        });
+
+        expect(container.querySelector("svg #full_grad").querySelector("stop").getAttribute("stop-color")).toEqual(colors[1]);
+        expect(container.querySelector("svg #no_grad").querySelector("stop").getAttribute("stop-color")).toEqual(colors[0]);
+    });
+
+    const ratingColorTestCases: Array<any> = [
+        {
+            boundingClientRect: { left: 0, width: 200 },
+            clientX: 0,
+            hoveredIndex: 0,
+            expectedColors: {
+                noGrad: 5,
+                fullGrad: 0,
+                dynamicGrad: 0,
+            },
+        },
+        {
+            boundingClientRect: { left: 555, width: 200 },
+            clientX: 657,
+            hoveredIndex: 2,
+            expectedColors: {
+                noGrad: 2,
+                fullGrad: 2,
+                dynamicGrad: 1,
+            },
+        },
+        {
+            boundingClientRect: { left: 200, width: 200 },
+            clientX: 657,
+            hoveredIndex: 5,
+            expectedColors: {
+                noGrad: 0,
+                fullGrad: 5,
+                dynamicGrad: 0,
+            },
+        },
+    ];
+
+    for (const testCase of ratingColorTestCases) {
+        test(`should render ${testCase.expectedColors.noGrad} filled with #no_grad and ${testCase.expectedColors.fullGrad} filled with #full_grad and ${testCase.expectedColors.dynamicGrad} filled with #dynamic_grad`, () => {
+            const getBoundingClientRectMock = jest.fn(() => testCase.boundingClientRect);
+            act(() => {
+                render(<Rating {...props} />, container);
+            });
+            const inputElement: HTMLInputElement = container.querySelector(".rating input");
+            (inputElement.getBoundingClientRect as any) = jest.fn(() => {
+                return getBoundingClientRectMock();
+            });
+            Simulate.mouseEnter(inputElement, { clientX: testCase.clientX });
+            const component = container.querySelector(".rating");
+            expect(component.querySelectorAll(`[fill="url(#dynamic_grad${testCase.hoveredIndex})"]`).length).toEqual(testCase.expectedColors.dynamicGrad);
+            expect(component.querySelectorAll('[fill="url(#no_grad)"]').length).toEqual(testCase.expectedColors.noGrad);
+            expect(component.querySelectorAll('[fill="url(#full_grad)"]').length).toEqual(testCase.expectedColors.fullGrad);
+        });
+    }
+
+    it("should change svgs colors when mouseEnter and match the value when mouseLeave", () => {
+        act(() => {
+            render(<Rating {...props} />, container);
+        });
+        const component = container.querySelector(".rating");
+        expect(component.querySelectorAll('[fill="url(#no_grad)"]').length).toEqual(5);
+        expect(component.querySelectorAll('[fill="url(#full_grad)"]').length).toEqual(0);
+        const getBoundingClientRect = jest.fn(() => {
+            return { left: 555, width: 200 };
+        });
+        const inputElement: HTMLInputElement = container.querySelector(".rating input");
+        (inputElement.getBoundingClientRect as any) = jest.fn(() => {
+            return getBoundingClientRect();
+        });
+        Simulate.mouseEnter(inputElement, { clientX: 657 });
+
+        expect(component.querySelectorAll(`[fill="url(#dynamic_grad2)"]`).length).toEqual(1);
+        expect(component.querySelectorAll('[fill="url(#no_grad)"]').length).toEqual(2);
+        expect(component.querySelectorAll('[fill="url(#full_grad)"]').length).toEqual(2);
+
+        Simulate.mouseLeave(inputElement);
+        expect(component.querySelectorAll('[fill="url(#no_grad)"]').length).toEqual(5);
+        expect(component.querySelectorAll('[fill="url(#full_grad)"]').length).toEqual(0);
+    });
+
+    it("should change svgs colors when mouseEnter and keep the same colors after clicking and mouseLeave", () => {
+        let value: string = "1";
+        const onChange: jest.Mock = jest.fn();
+        act(() => {
+            render(<Rating {...props} onChange={onChange} value={value} step={1} />, container);
+        });
+        const getBoundingClientRect = jest.fn(() => {
+            return { left: 200, width: 200 };
+        });
+        const inputElement: HTMLInputElement = container.querySelector(".rating input");
+        (inputElement.getBoundingClientRect as any) = jest.fn(() => {
+            return getBoundingClientRect();
+        });
+        Simulate.change(inputElement, { clientX: 657 });
         expect(onChange).toBeCalled();
     });
 
-    it("Should enable tooltip when passed", () => {
-        const tooltipList: Array<string> = ["1", "2", "3", "4", "5"];
-        mountedWrapper.setProps({ tooltipList, initialValue: 3 });
-        expect(mountedWrapper.find("svg").at(1).find("title").length).toBe(1);
-        expect(mountedWrapper.find("svg").at(1).find("title").first().text()).toEqual("1");
-
-        const starWrapper: ShallowWrapper<RatingProps> = shallow(<SVGStarHollow width={25} height={25} fill="#F00" title="title" />);
-        expect(starWrapper.find("title").length).toBe(1);
-        expect(starWrapper.find("title").first().text()).toEqual("title");
+    it("Should have a custom svg if passed as prop", () => {
+        expect(container.querySelector("svg #custom-svg")).toBeFalsy();
+        const customSVG = (
+            <svg id="custom-svg" xmlns="http://www.w3.org/2000/svg">
+                <path fillRule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z" />
+            </svg>
+        );
+        act(() => {
+            render(<Rating {...props} customSVG={customSVG} />, container);
+        });
+        expect(container).toBeDefined();
+        expect(container.querySelector("svg #custom-svg")).toBeTruthy();
     });
 
-    it("Should be disabled when disabled prop is set to true", () => {
-        mountedWrapper.setProps({ initialValue: 3, disabled: true });
-        expect(mountedWrapper.find("svg").first().find(".star-fill").first().prop("fill")).toEqual(disabledColors[0]);
-        expect(mountedWrapper.find("svg").last().find(".star-fill").first().prop("fill")).toEqual(disabledColors[1]);
-        mountedWrapper.setProps({ useHollow: true });
-        expect(mountedWrapper.find("svg").first().find(".star-fill").first().prop("fill")).toEqual(disabledColors[0]);
-        expect(mountedWrapper.find("svg").last().find(".star-fill").first().prop("fill")).toEqual(disabledColors[1]);
+    it("should display only full colors if step = 1", () => {
+        act(() => {
+            render(<Rating {...props} step={1} />, container);
+        });
+        const getBoundingClientRect = jest.fn(() => {
+            return { left: 555, width: 200 };
+        });
+        const inputElement: HTMLInputElement = container.querySelector(".rating input");
+        (inputElement.getBoundingClientRect as any) = jest.fn(() => {
+            return getBoundingClientRect();
+        });
+        Simulate.mouseEnter(inputElement, { clientX: 657 });
+        const component = container.querySelector(".rating");
+        expect(component.querySelectorAll(`[fill="url(#dynamic_grad2)"]`).length).toEqual(0);
+        expect(component.querySelectorAll('[fill="url(#no_grad)"]').length).toEqual(2);
+        expect(component.querySelectorAll('[fill="url(#full_grad)"]').length).toEqual(3);
+    });
+
+    it("should display only full colors if step = 0.5", () => {
+        act(() => {
+            render(<Rating {...props} step={0.5} min={0.5} />, container);
+        });
+        const getBoundingClientRect = jest.fn(() => {
+            return { left: 512, width: 200 };
+        });
+        const inputElement: HTMLInputElement = container.querySelector(".rating input");
+        (inputElement.getBoundingClientRect as any) = jest.fn(() => {
+            return getBoundingClientRect();
+        });
+        Simulate.mouseEnter(inputElement, { clientX: 605 });
+        const component = container.querySelector(".rating");
+
+        expect(component.querySelectorAll(`[fill="url(#half_grad)"]`).length).toEqual(1);
+        expect(component.querySelectorAll('[fill="url(#no_grad)"]').length).toEqual(2);
+        expect(component.querySelectorAll('[fill="url(#full_grad)"]').length).toEqual(2);
     });
 });
