@@ -1,5 +1,17 @@
 @import "~@sebgroup/bootstrap/scss/core";
 
+@mixin style-checkbox($color) {
+    .rc.checkbox > .custom-checkbox > .custom-control-label::before {
+        border-color: $color;
+    }
+}
+
+@mixin style-toggle-selector($color) {
+    .rc.toggle-selector-item > input:not(:disabled) + label {
+        border-color: $color;
+    }
+}
+
 .rc.progress-feedback {
     &.wrapper-indicator {
         &:before {
@@ -11,37 +23,16 @@
                 border: 1px solid currentColor;
             }
             &.progress-10 {
-                .rc.checkbox {
-                    > .custom-checkbox {
-                        > .custom-control-label {
-                            &::before {
-                                border-color: $red-dark;
-                            }
-                        }
-                    }
-                }
+                @include style-checkbox($red-dark);
+                @include style-toggle-selector($red-dark);
             }
             &.progress-50 {
-                .rc.checkbox {
-                    > .custom-checkbox {
-                        > .custom-control-label {
-                            &::before {
-                                border-color: $yellow-darker;
-                            }
-                        }
-                    }
-                }
+                @include style-checkbox($yellow-darker);
+                @include style-toggle-selector($yellow-darker);
             }
             &.progress-100 {
-                .rc.checkbox {
-                    > .custom-checkbox {
-                        > .custom-control-label {
-                            &::before {
-                                border-color: $green-darker;
-                            }
-                        }
-                    }
-                }
+                @include style-checkbox($green-darker);
+                @include style-toggle-selector($green-darker);
             }
         }
     }
