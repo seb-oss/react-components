@@ -106,6 +106,13 @@ export const SideMenu: React.FC = React.memo(() => {
         }
     };
 
+    React.useEffect(() => {
+        if (listRef !== undefined && typeof window !== "undefined" && !!window["document"] && !!window.document["querySelector"]) {
+            const target: HTMLElement = listRef.current.querySelector(".sidemenu-content > nav.components-list > .list-item.active");
+            target?.scrollIntoView({ block: "center", inline: "nearest", behavior: "auto" });
+        }
+    }, [listRef]);
+
     const onToggle = () => {
         const newToggle: boolean = !toggle;
         setToggle(newToggle);

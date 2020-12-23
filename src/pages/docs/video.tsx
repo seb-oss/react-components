@@ -22,7 +22,7 @@ const VideoPage: React.FC = () => {
             items: [
                 {
                     key: "srcType",
-                    value: defaultSourceType,
+                    value: defaultSourceType.value,
                     label: "SourceType",
                     options: [
                         { label: "Local", value: "local", key: "local" },
@@ -79,7 +79,7 @@ const VideoPage: React.FC = () => {
             example={
                 <Video
                     name="myVideo"
-                    sourceType={(controls as any)?.srcType.value || defaultSourceType}
+                    sourceType={(controls as any)?.srcType}
                     src={(controls as any)?.src || defaultSrc}
                     width={(controls as any)?.width || defaultWidth}
                     height={(controls as any)?.height || defaultHeight}

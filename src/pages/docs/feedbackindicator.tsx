@@ -25,7 +25,7 @@ const FeedbackIndicatorPage: React.FC = () => {
                 },
                 {
                     key: "type",
-                    value: typeList[0],
+                    value: typeList[0].value,
                     label: "Type",
                     options: typeList,
                     controlType: "Dropdown",
@@ -40,7 +40,7 @@ const FeedbackIndicatorPage: React.FC = () => {
         <Docs
             mainFile={importString}
             example={
-                <FeedbackIndicator type={(controls as any)?.type.value} message={(controls as any)?.message}>
+                <FeedbackIndicator type={(controls as any)?.type} message={(controls as any)?.message}>
                     <div>content children</div>
                 </FeedbackIndicator>
             }

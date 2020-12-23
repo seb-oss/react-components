@@ -29,7 +29,7 @@ const TooltipPage: React.FC = () => {
             items: [
                 {
                     key: "position",
-                    value: defaultPosition,
+                    value: defaultPosition.value,
                     label: "Position",
                     options: [
                         { label: "Top", value: "top", key: "top" },
@@ -49,7 +49,7 @@ const TooltipPage: React.FC = () => {
                 },
                 {
                     key: "theme",
-                    value: defaultTheme,
+                    value: defaultTheme.value,
                     label: "Theme",
                     options: [
                         { label: "Primary", value: "primary", key: "primary" },
@@ -64,7 +64,7 @@ const TooltipPage: React.FC = () => {
                 },
                 {
                     key: "trigger",
-                    value: defaultTriggerMethod,
+                    value: defaultTriggerMethod.value,
                     label: "Trigger method",
                     options: [
                         { label: "Click", value: "click", key: "click" },
@@ -100,9 +100,9 @@ const TooltipPage: React.FC = () => {
                 example={
                     <Tooltip
                         content={checkSelectedKey("isCustomContent") ? nodeTooltipContent : defaultTooltipContent}
-                        position={(controls as any)?.position?.value || defaultPosition.value}
-                        theme={(controls as any)?.theme.value || defaultTheme.value}
-                        trigger={(controls as any)?.trigger.value || defaultTriggerMethod.value}
+                        position={(controls as any)?.position}
+                        theme={(controls as any)?.theme}
+                        trigger={(controls as any)?.trigger}
                         disableAutoPosition={checkSelectedKey("disableAutoPosition")}
                         onVisibleChange={checkSelectedKey("isVisibleChanged") && (() => setNotifcationToggle(true))}
                     >
