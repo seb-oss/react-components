@@ -219,7 +219,7 @@ describe("Component: Table", () => {
         });
 
         await act(async () => {
-            render(<Table columns={columns} data={smallData} onRowSelected={onRowSelected} />, container);
+            render(<Table columns={columns} data={smallData} onRowSelect={onRowSelected} />, container);
         });
 
         await act(async () => {
@@ -294,23 +294,23 @@ describe("Component: Table", () => {
 
         it("Should render and handle edit and save  ", async () => {
             await act(async () => {
-                render(<Table columns={columns} data={updatedSelectedRows} onRowSelected={onRowSelected} editProps={editProps} />, textContainer);
+                render(<Table columns={columns} data={updatedSelectedRows} onRowSelect={onRowSelected} editProps={editProps} />, textContainer);
             });
 
             expect(textContainer.querySelectorAll(selector).length).toEqual(0);
 
             await act(async () => {
-                render(<Table columns={columns} data={updatedSelectedRows} onRowSelected={onRowSelected} />, textContainer);
+                render(<Table columns={columns} data={updatedSelectedRows} onRowSelect={onRowSelected} />, textContainer);
             });
 
             await act(async () => {
-                render(<Table columns={columns} data={updatedSelectedRows} onRowSelected={onRowSelected} editProps={{ ...editProps, mode: "edit" }} />, textContainer);
+                render(<Table columns={columns} data={updatedSelectedRows} onRowSelect={onRowSelected} editProps={{ ...editProps, mode: "edit" }} />, textContainer);
             });
 
             expect(textContainer.querySelectorAll(selector).length).toBeGreaterThan(0);
 
             await act(async () => {
-                render(<Table columns={columns} data={updatedSelectedRows} onRowSelected={onRowSelected} editProps={{ ...editProps, mode: "save" }} />, textContainer);
+                render(<Table columns={columns} data={updatedSelectedRows} onRowSelect={onRowSelected} editProps={{ ...editProps, mode: "save" }} />, textContainer);
             });
 
             expect(textContainer.querySelectorAll(selector).length).toEqual(0);
@@ -322,10 +322,7 @@ describe("Component: Table", () => {
             // now repeat the process, for cancel
             results = [];
             await act(async () => {
-                render(
-                    <Table columns={columns} data={updatedSelectedRows} onRowSelected={onRowSelected} editProps={{ ...editProps, blackListedAccessors: ["firstName", "lastName"] }} />,
-                    textContainer
-                );
+                render(<Table columns={columns} data={updatedSelectedRows} onRowSelect={onRowSelected} editProps={{ ...editProps, blackListedAccessors: ["firstName", "lastName"] }} />, textContainer);
             });
 
             expect(textContainer.querySelectorAll(selector).length).toEqual(0);
@@ -334,7 +331,7 @@ describe("Component: Table", () => {
 
             await act(async () => {
                 render(
-                    <Table columns={columns} data={updatedSelectedRows} onRowSelected={onRowSelected} editProps={{ ...editProps, mode: "edit", blackListedAccessors: ["firstName", "lastName"] }} />,
+                    <Table columns={columns} data={updatedSelectedRows} onRowSelect={onRowSelected} editProps={{ ...editProps, mode: "edit", blackListedAccessors: ["firstName", "lastName"] }} />,
                     textContainer
                 );
             });
@@ -345,7 +342,7 @@ describe("Component: Table", () => {
             expect(textContainer.querySelectorAll(selector).length).toEqual((columns.length - 3) * updatedSelectedRows.length);
 
             await act(async () => {
-                render(<Table columns={columns} data={updatedSelectedRows} onRowSelected={onRowSelected} editProps={{ ...editProps, mode: "cancel" }} />, textContainer);
+                render(<Table columns={columns} data={updatedSelectedRows} onRowSelect={onRowSelected} editProps={{ ...editProps, mode: "cancel" }} />, textContainer);
             });
 
             expect(textContainer.querySelectorAll(selector).length).toEqual(0);

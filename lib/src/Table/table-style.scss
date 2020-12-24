@@ -200,5 +200,13 @@ table {
                 }
             }
         }
+        th,
+        td {
+            > .rc.checkbox {
+                > .custom-checkbox {
+                    padding: 0 0 0 1.5rem;
+                }
+            }
+        }
     }
 }

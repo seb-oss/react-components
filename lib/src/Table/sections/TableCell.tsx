@@ -1,12 +1,12 @@
 import React from "react";
-import { TextboxGroup, TextboxGroupProps } from "./TextboxGroup";
+// import { TextboxGroup, TextboxGroupProps } from "./TextboxGroup";
 
 type CollapseCell = {
     type: "collapse";
     isCollapsed: boolean;
 };
 
-export type InputCell = TextboxGroupProps & {
+export type InputCell = {
     type: "input";
     isEditable?: boolean;
 };
@@ -53,38 +53,49 @@ const angleRightIcon: JSX.Element = (
     </svg>
 );
 
-export type TableCellProps<T extends CellType = "default"> = (CollapseCell | InputCell | CheckboxCell | DefaultCell) & {
-    type?: T;
-    id?: string;
-    wrapperProps?: JSX.IntrinsicElements["td"];
-    accessor?: string;
-    hidden?: boolean;
-    onCellActionTrigger?: any;
-    isEditable?: boolean;
+// export type TableCellProps<T extends CellType = "default"> = (CollapseCell | InputCell | CheckboxCell | DefaultCell) & {
+//     type?: T;
+//     id?: string;
+//     wrapperProps?: JSX.IntrinsicElements["td"];
+//     accessor?: string;
+//     hidden?: boolean;
+//     onCellActionTrigger?: any;
+//     isEditable?: boolean;
+// };
+export type TableCellProps<T = any> = JSX.IntrinsicElements["td"] & {
+    accessor?: keyof T;
+    value?: T;
+    render?: (rowValue: T) => React.ReactNode;
 };
-function TableCell<T extends CellType>({ accessor, hidden, onCellActionTrigger, type, wrapperProps, ...props }: TableCellProps<T>) {
-    const getContent = () => {
-        switch (type) {
-            case "input":
-                return <TextboxGroup {...(props as InputCell)} />;
-            case "collapse":
-                return (
-                    <div className={"icon-holder" + ((props as CollapseCell).isCollapsed ? " active" : "")} role="link" onClick={onCellActionTrigger as CellMouseEvent}>
-                        {(props as CollapseCell).isCollapsed ? angleDown : angleRightIcon}
-                    </div>
-                );
-            case "checkbox":
-                return (
-                    <div className="custom-control custom-checkbox">
-                        <input type="checkbox" className="custom-control-input" onChange={onCellActionTrigger as InputChangeEvent} {...(props as CheckboxCell)} />
-                        <label className="custom-control-label" htmlFor={(props as CheckboxCell).id} />
-                    </div>
-                );
-            default:
-                return (props as DefaultCell).value || (props as DefaultCell).children;
-        }
-    };
-    return <td {...wrapperProps}>{hidden ? null : getContent()}</td>;
-}
+// function TableCell<T extends CellType>({ accessor, hidden, onCellActionTrigger, type, wrapperProps, ...props }: TableCellProps<T>) {
+//     const getContent = () => {
+//         switch (type) {
+//             case "input":
+//                 return <TextboxGroup {...(props as InputCell)} />;
+//             case "collapse":
+//                 return (
+//                     <div className={"icon-holder" + ((props as CollapseCell).isCollapsed ? " active" : "")} role="link" onClick={onCellActionTrigger as CellMouseEvent}>
+//                         {(props as CollapseCell).isCollapsed ? angleDown : angleRightIcon}
+//                     </div>
+//                 );
+//             case "checkbox":
+//                 return (
+//                     <div className="custom-control custom-checkbox">
+//                         <input type="checkbox" className="custom-control-input" onChange={onCellActionTrigger as InputChangeEvent} {...(props as CheckboxCell)} />
+//                         <label className="custom-control-label" htmlFor={(props as CheckboxCell).id} />
+//                     </div>
+//                 );
+//             default:
+//                 return (props as DefaultCell).value || (props as DefaultCell).children;
+//         }
+//     };
+//     return <td {...wrapperProps}>{hidden ? null : getContent()}</td>;
+// }
+
+const TableCell: React.FC<TableCellProps> = ({ accessor, render, value, ...props }: TableCellProps) => {
+    return <td {...props}>{!!render ? render(value) : props.children}</td>;
+};
+
+TableCell.displayName = "TableCell";
 
 export default TableCell;
