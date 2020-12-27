@@ -120,6 +120,7 @@ const RatingPage: React.FC = (): React.ReactElement<void> => {
                         max={controls.max}
                         min={controls.min}
                         step={controls.step}
+                        svgname="hello"
                         colors={colors}
                         customSVG={heartSVG}
                         initialValue={controls.initialValue}

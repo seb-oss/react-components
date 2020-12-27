@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import classnames from "classnames";
 import { SVGComponent } from "./SVGComponent";
 import "./rating.scss";
+import { title } from "process";
 
 export type RatingProps = JSX.IntrinsicElements["input"] & {
     initialValue?: number;
@@ -9,6 +10,7 @@ export type RatingProps = JSX.IntrinsicElements["input"] & {
     /** Div wrapper props */
     wrapperProps?: JSX.IntrinsicElements["div"];
     customSVG?: JSX.IntrinsicElements["svg"];
+    svgname?: string;
 };
 
 /**
@@ -70,7 +72,17 @@ export const Rating: React.FC<RatingProps> = ({ initialValue = 1, colors, custom
         <div {...wrapperProps} className={classnames("rc", "rating", wrapperProps?.className)}>
             <div className="rating-icons">
                 {Array.apply(null, { length: props.max }).map((e: number, i: number) => (
-                    <SVGComponent colors={getColors()} key={i} index={i} value={displayValue} customSVG={customSVG} step={Number(props.step)} width={props.width} height={props.height} />
+                    <SVGComponent
+                        colors={getColors()}
+                        key={i}
+                        index={i}
+                        value={displayValue}
+                        customSVG={customSVG}
+                        step={Number(props.step)}
+                        width={props.width}
+                        height={props.height}
+                        name={props.svgname}
+                    />
                 ))}
             </div>
             <input

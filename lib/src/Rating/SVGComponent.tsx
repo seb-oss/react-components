@@ -54,6 +54,7 @@ export const SVGComponent: React.FC<SVGProps> = ({ colors, index, value, customS
 
     return (
         <svg {...props} viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">
+            {props.name && <title>{props.name}</title>}
             <defs>
                 <linearGradient id={`dynamic_grad${index}`}>
                     <stop offset={`${activePercentage - 1}%`} style={{ stopColor: colors[1] }} />
