@@ -32,11 +32,21 @@ describe("Component: Rating", () => {
 
     it("Should render and pass custom class", () => {
         const className: string = "myCustomClass";
+
+        act(() => {
+            render(<Rating wrapperProps={{ className }} />, container);
+        });
+
+        expect(container).toBeDefined();
+
+        expect(container.querySelector(`.${className}`)).toBeTruthy();
+        expect(container.querySelectorAll(`.${className}`).length).toEqual(1);
+
         act(() => {
             render(<Rating {...{ ...props, className }} />, container);
         });
-        expect(container).toBeDefined();
-        expect(container.querySelectorAll(`.${className}`).length).toEqual(2);
+
+        expect(container.querySelectorAll(`input.${className}`).length).toEqual(1);
     });
 
     it("Should pass any other native html prop", () => {
@@ -70,7 +80,9 @@ describe("Component: Rating", () => {
             render(<Rating {...{ ...props, readOnly }} onChange={onChange} />, container);
         });
         const inputElement: HTMLInputElement = container.querySelector(".rating input");
-        Simulate.change(inputElement, { clientX: 657 });
+        act(() => {
+            Simulate.change(inputElement, { clientX: 657 });
+        });
         expect(onChange).not.toBeCalled();
     });
 
@@ -133,7 +145,9 @@ describe("Component: Rating", () => {
             (inputElement.getBoundingClientRect as any) = jest.fn(() => {
                 return getBoundingClientRectMock();
             });
-            Simulate.mouseEnter(inputElement, { clientX: testCase.clientX });
+            act(() => {
+                Simulate.mouseEnter(inputElement, { clientX: testCase.clientX });
+            });
             const component = container.querySelector(".rating");
             expect(component.querySelectorAll(`[fill="url(#dynamic_grad${testCase.hoveredIndex})"]`).length).toEqual(testCase.expectedColors.dynamicGrad);
             expect(component.querySelectorAll('[fill="url(#no_grad)"]').length).toEqual(testCase.expectedColors.noGrad);
@@ -155,13 +169,18 @@ describe("Component: Rating", () => {
         (inputElement.getBoundingClientRect as any) = jest.fn(() => {
             return getBoundingClientRect();
         });
-        Simulate.mouseEnter(inputElement, { clientX: 657 });
+        act(() => {
+            Simulate.mouseEnter(inputElement, { clientX: 657 });
+        });
 
         expect(component.querySelectorAll(`[fill="url(#dynamic_grad2)"]`).length).toEqual(1);
         expect(component.querySelectorAll('[fill="url(#no_grad)"]').length).toEqual(2);
         expect(component.querySelectorAll('[fill="url(#full_grad)"]').length).toEqual(2);
 
-        Simulate.mouseLeave(inputElement);
+        act(() => {
+            Simulate.mouseLeave(inputElement);
+        });
+
         expect(component.querySelectorAll('[fill="url(#no_grad)"]').length).toEqual(5);
         expect(component.querySelectorAll('[fill="url(#full_grad)"]').length).toEqual(0);
     });
@@ -179,7 +198,10 @@ describe("Component: Rating", () => {
         (inputElement.getBoundingClientRect as any) = jest.fn(() => {
             return getBoundingClientRect();
         });
-        Simulate.change(inputElement, { clientX: 657 });
+        act(() => {
+            Simulate.change(inputElement, { clientX: 657 });
+        });
+
         expect(onChange).toBeCalled();
     });
 
@@ -208,7 +230,10 @@ describe("Component: Rating", () => {
         (inputElement.getBoundingClientRect as any) = jest.fn(() => {
             return getBoundingClientRect();
         });
-        Simulate.mouseEnter(inputElement, { clientX: 657 });
+        act(() => {
+            Simulate.mouseEnter(inputElement, { clientX: 657 });
+        });
+
         const component = container.querySelector(".rating");
         expect(component.querySelectorAll(`[fill="url(#dynamic_grad2)"]`).length).toEqual(0);
         expect(component.querySelectorAll('[fill="url(#no_grad)"]').length).toEqual(2);
@@ -226,7 +251,10 @@ describe("Component: Rating", () => {
         (inputElement.getBoundingClientRect as any) = jest.fn(() => {
             return getBoundingClientRect();
         });
-        Simulate.mouseEnter(inputElement, { clientX: 605 });
+        act(() => {
+            Simulate.mouseEnter(inputElement, { clientX: 605 });
+        });
+
         const component = container.querySelector(".rating");
 
         expect(component.querySelectorAll(`[fill="url(#half_grad)"]`).length).toEqual(1);

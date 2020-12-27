@@ -34,13 +34,13 @@ const RatingPage: React.FC = (): React.ReactElement<void> => {
                     value: 1,
                 },
                 {
-                    key: "iconHeight",
+                    key: "height",
                     label: "Icon height",
                     controlType: "Text",
                     value: 30,
                 },
                 {
-                    key: "iconWidth",
+                    key: "width",
                     label: "Icon width",
                     controlType: "Text",
                     value: 40,
@@ -115,12 +115,13 @@ const RatingPage: React.FC = (): React.ReactElement<void> => {
                         className="custom-class"
                         readOnly={controls.readOnly}
                         disabled={controls.disabled}
-                        iconHeight={controls.iconHeight}
-                        iconWidth={controls.iconWidth}
+                        height={controls.height}
+                        width={controls.width}
                         max={controls.max}
                         min={controls.min}
                         step={controls.step}
                         colors={colors}
+                        customSVG={heartSVG}
                         initialValue={controls.initialValue}
                         value={value}
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {

@@ -6,9 +6,8 @@ import "./rating.scss";
 export type RatingProps = JSX.IntrinsicElements["input"] & {
     initialValue?: number;
     colors?: [string, string];
-    iconHeight?: number;
-    iconWidth?: number;
-    className?: string;
+    /** Div wrapper props */
+    wrapperProps?: JSX.IntrinsicElements["div"];
     customSVG?: JSX.IntrinsicElements["svg"];
 };
 
@@ -19,18 +18,13 @@ export type RatingProps = JSX.IntrinsicElements["input"] & {
 const initialColors: [string, string] = ["#A9A9A9", "#FFC500"];
 const disabledColors: [string, string] = ["#dddddd", "#bfbfbf"];
 
-export const Rating: React.FC<RatingProps> = ({ initialValue = 1, colors, iconHeight = 30, iconWidth = 40, customSVG, ...props }: RatingProps) => {
+export const Rating: React.FC<RatingProps> = ({ initialValue = 1, colors, customSVG, wrapperProps, ...props }: RatingProps) => {
     const [displayValue, setDisplayValue] = useState<number>(Number(props.value));
-    const [max, setMax] = useState<number>(5);
     const [min, setMin] = useState<number>(0);
 
     useEffect(() => {
         setDisplayValue(Number(props.value));
     }, [props.value]);
-
-    useEffect(() => {
-        setMax(Number(props.max));
-    }, [props.max]);
 
     useEffect(() => {
         setMin(Number(props.min));
@@ -62,7 +56,7 @@ export const Rating: React.FC<RatingProps> = ({ initialValue = 1, colors, iconHe
 
     const calculateDisplayValue = (e: React.MouseEvent<HTMLInputElement>): number => {
         const position: number = calculateHoverPercentage(e);
-        return Number(max) * Number(parseFloat(String(position)).toFixed(2));
+        return Number(props.max) * Number(parseFloat(String(position)).toFixed(2));
     };
 
     const calculateHoverPercentage = (event: React.MouseEvent): number => {
@@ -73,10 +67,10 @@ export const Rating: React.FC<RatingProps> = ({ initialValue = 1, colors, iconHe
     };
 
     return (
-        <div className={classnames("rc", "rating", props.className)}>
+        <div {...wrapperProps} className={classnames("rc", "rating", wrapperProps?.className)}>
             <div className="rating-icons">
-                {Array.apply(null, { length: max }).map((e: number, i: number) => (
-                    <SVGComponent {...props} colors={getColors()} width={iconWidth} height={iconHeight} key={i} index={i} value={displayValue} customSVG={customSVG} step={Number(props.step)} />
+                {Array.apply(null, { length: props.max }).map((e: number, i: number) => (
+                    <SVGComponent colors={getColors()} key={i} index={i} value={displayValue} customSVG={customSVG} step={Number(props.step)} width={props.width} height={props.height} />
                 ))}
             </div>
             <input
