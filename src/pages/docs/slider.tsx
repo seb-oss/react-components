@@ -39,7 +39,7 @@ const SliderPage: React.FC = (): React.ReactElement<void> => {
                         { key: "success", label: "Success", value: "success" },
                         { key: "warning", label: "Warning", value: "warning" },
                     ],
-                    value: { key: "primary", label: "Primary", value: "primary" },
+                    value: "primary",
                     controlType: "Dropdown",
                 },
                 {
@@ -53,7 +53,7 @@ const SliderPage: React.FC = (): React.ReactElement<void> => {
                         { key: "success", label: "Success", value: "success" },
                         { key: "warning", label: "Warning", value: "warning" },
                     ],
-                    value: { key: "primary", label: "Primary", value: "primary" },
+                    value: "primary",
                     controlType: "Dropdown",
                 },
                 {
@@ -63,7 +63,7 @@ const SliderPage: React.FC = (): React.ReactElement<void> => {
                         { key: "normal", label: "Normal(new default)", value: "normal" },
                         { key: "normal", label: "Alternative(old default)", value: "alternative" },
                     ],
-                    value: { key: "normal", label: "Normal(new default)", value: "normal" },
+                    value: "normal",
                     controlType: "Dropdown",
                 },
                 {
@@ -98,9 +98,9 @@ const SliderPage: React.FC = (): React.ReactElement<void> => {
                     <Slider
                         {...controls}
                         value={value}
-                        theme={controls?.theme?.value}
-                        tooltipTheme={controls?.tooltipTheme?.value}
-                        alternative={controls?.alternative?.value === "alternative"}
+                        theme={controls?.theme}
+                        tooltipTheme={controls?.tooltipTheme}
+                        alternative={controls?.alternative === "alternative"}
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                             setValue(Number(e.target.value));
                         }}

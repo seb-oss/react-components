@@ -25,14 +25,14 @@ const StepTrackerPage: React.FC = React.memo(() => {
                 items: [
                     {
                         key: "orientation",
-                        value: orientationList[0],
+                        value: orientationList[0].value,
                         label: "Orientation",
                         options: orientationList,
                         controlType: "Dropdown",
                     },
                     {
                         key: "direction",
-                        value: directionlist[0],
+                        value: directionlist[0].value,
                         label: "Direction",
                         options: directionlist,
                         controlType: "Dropdown",
@@ -87,8 +87,8 @@ const StepTrackerPage: React.FC = React.memo(() => {
                 <StepTracker
                     step={value}
                     onClick={setValue}
-                    orientation={(form.controls as any)?.orientation?.value}
-                    labelPosition={(form.controls as any)?.direction?.value}
+                    orientation={(form.controls as any)?.orientation}
+                    labelPosition={(form.controls as any)?.direction}
                     useNumbers={checkSelectedKey("useNumbers")}
                 >
                     {stepList.map((item, i) => (

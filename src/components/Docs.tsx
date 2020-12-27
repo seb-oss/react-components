@@ -26,8 +26,6 @@ const Docs: React.FC<DocsProps> = (props: DocsProps) => {
             .catch(console.error);
     }, []);
 
-    console.log(apis);
-
     return (
         <Layout>
             <Helmet>

@@ -6,12 +6,13 @@ import { TextArea } from "@sebgroup/react-components/TextArea";
 import { Dropdown } from "@sebgroup/react-components/Dropdown";
 import { Datepicker } from "@sebgroup/react-components/Datepicker";
 import { Stepper } from "@sebgroup/react-components/Stepper";
-import { DropdownItem, DropdownChangeEvent } from "@sebgroup/react-components/Dropdown/Dropdown";
-import { RadioButtonProps, RadioGroup } from "@sebgroup/react-components/RadioGroup";
+import { DropdownProps } from "@sebgroup/react-components/Dropdown/Dropdown";
+import { RadioButtonProps, RadioGroup } from "@sebgroup/react-components/RadioButton";
 
+type DynamicFormInternalStateValue = string | string[] | DynamicFormOption | DynamicFormOption[] | Date | boolean | number | null;
 export interface DynamicFormItem {
     key: string;
-    value?: any;
+    value?: DynamicFormInternalStateValue;
     label?: string | null;
     description?: string | null;
     required?: boolean;
@@ -22,7 +23,7 @@ export interface DynamicFormItem {
     placeholder?: string | null;
     options?: Array<DynamicFormOption> | null;
     rulerKey?: string | null;
-    condition?: any;
+    condition?: DynamicFormInternalStateValue;
     controlType?: DynamicFormType;
 }
 
@@ -35,19 +36,14 @@ export interface DynamicFormSection {
     items?: Array<DynamicFormItem> | null;
 }
 
-export interface DynamicFormOption {
-    value?: any;
+export interface DynamicFormOption<T = any> {
+    value?: T;
     label?: string | null;
     key: string;
     disabled?: boolean | null;
 }
 
-export type DynamicFormDate = { day: number; month: number; year: number };
-
-type InputChange = React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | React.MouseEvent<HTMLButtonElement, MouseEvent> | DropdownChangeEvent | Date | number;
-
-type DynamicFormInternalStateValue = string | string[] | DynamicFormOption | DynamicFormOption[] | Date | boolean | number | null;
-
+type InputChange = React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | React.MouseEvent<HTMLButtonElement, MouseEvent> | DropdownProps["onChange"] | Date | number;
 interface DynamicFormInternalStateSection {
     [k: string]: DynamicFormInternalStateValue;
 }
@@ -97,14 +93,16 @@ export function useDynamicForm(sections: DynamicFormSection[]): [() => JSX.Eleme
                     return false;
                 }
 
-                if (typeof rulerState === "string" && rulerState === (condition as any)) {
+                if (typeof rulerState === "string" && rulerState === condition) {
                     return shouldRender(sectionKey, rulerKey);
                 } else if (rulerState && condition && typeof condition === "object" && Array.isArray(condition)) {
-                    for (const conditionItem of condition as Array<any>) {
+                    for (const conditionItem of condition as any[]) {
                         if (conditionItem) {
                             if (typeof rulerState === "object" && Array.isArray(rulerState)) {
-                                for (const rulerValueItem of rulerState as Array<any>) {
-                                    if (rulerValueItem && rulerValueItem.value === conditionItem.value && rulerValueItem.key === conditionItem.key) {
+                                for (const rulerValueItem of rulerState) {
+                                    if (rulerValueItem && typeof rulerValueItem === "object" && rulerValueItem.value === conditionItem.value && rulerValueItem.key === conditionItem.key) {
+                                        return shouldRender(sectionKey, rulerKey);
+                                    } else if (rulerValueItem && typeof rulerValueItem === "string" && rulerValueItem === conditionItem) {
                                         return shouldRender(sectionKey, rulerKey);
                                     }
                                 }
@@ -282,12 +280,12 @@ const DynamicFormItemComponent: React.FC<{
         }
 
         case "Dropdown": {
-            const list: DropdownItem[] =
+            const list: DropdownProps["list"] =
                 props.item?.options?.map((option) => {
                     return { label: option.label || "", value: option.value || "", disabled: !!option.disabled };
                 }) || [];
 
-            formItem = <Dropdown {...commonProps} multi={props.item?.multi} selectedValue={props.state as DropdownItem | DropdownItem[]} list={list} />;
+            formItem = <Dropdown {...commonProps} multi={props.item?.multi} value={props.state as string | string[]} list={list} />;
             break;
         }
 

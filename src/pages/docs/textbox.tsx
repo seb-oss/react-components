@@ -36,7 +36,6 @@ const TextBoxPage: React.FC = React.memo(() => {
                 },
                 {
                     key: "hintTheme",
-                    value: { label: "Default", value: null, key: "default" },
                     label: "Hint theme",
                     placeholder: "Hint theme",
                     options: [
@@ -49,14 +48,14 @@ const TextBoxPage: React.FC = React.memo(() => {
                 },
                 {
                     key: "leftport",
-                    value: defaultPortOption,
+                    value: defaultPortOption.value,
                     label: "Left icon or text?",
                     options: [defaultPortOption, iconOption, textOption],
                     controlType: "Dropdown",
                 },
                 {
                     key: "rightport",
-                    value: defaultPortOption,
+                    value: defaultPortOption.value,
                     label: "Right icon or text?",
                     options: [defaultPortOption, iconOption, textOption],
                     controlType: "Dropdown",
@@ -110,9 +109,9 @@ const TextBoxPage: React.FC = React.memo(() => {
                     label={(controls as any)?.label}
                     placeholder={(controls as any)?.placeholder}
                     hint={(controls as any)?.hint}
-                    hintTheme={(controls as any)?.hintTheme?.value}
-                    leftSlot={(controls as any)?.leftport?.value === iconOption.value ? <SearchIcon /> : (controls as any)?.leftport?.value === textOption.value ? "Kr" : null}
-                    rightSlot={(controls as any)?.rightport?.value === iconOption.value ? <SearchIcon /> : (controls as any)?.rightport?.value === textOption.value ? "Kr" : null}
+                    hintTheme={(controls as any)?.hintTheme}
+                    leftSlot={(controls as any)?.leftport === iconOption.value ? <SearchIcon /> : (controls as any)?.leftport === textOption.value ? "Kr" : null}
+                    rightSlot={(controls as any)?.rightport === iconOption.value ? <SearchIcon /> : (controls as any)?.rightport === textOption.value ? "Kr" : null}
                     minLength={(controls as any)?.min}
                     maxLength={(controls as any)?.max}
                     onChange={(element: React.ChangeEvent<HTMLInputElement>) => setValue(element.target.value)}

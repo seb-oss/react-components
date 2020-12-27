@@ -1,0 +1,8 @@
+@import "~@sebgroup/bootstrap/scss/core";
+
+$toggle-max-width: 420px;
+
+.rc.toggle-selector {
+    width: 100%;
+    max-width: $toggle-max-width;
+}

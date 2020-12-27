@@ -23,14 +23,13 @@ const DropdownPage: React.FC = (): React.ReactElement<void> => {
             { label: "Multi", value: "multi", key: "multi" },
             { label: "Disabled", value: "disabled", key: "disabled" },
             { label: "More", value: "more", key: "more" },
-            { label: "Native", value: "native", key: "native" },
             { label: "Searchable", value: "searchable", key: "searchable" },
             { label: "Clearable", value: "clearable", key: "clearable" },
         ],
         []
     );
 
-    const [dropDownList1Selected, setDropdownList1Selected] = React.useState<Array<DropdownItem>>(null);
+    const [dropDownList1Selected, setDropdownList1Selected] = React.useState<string | string[]>();
 
     const [renderControls, { controls }] = useDynamicForm([
         {
@@ -39,16 +38,20 @@ const DropdownPage: React.FC = (): React.ReactElement<void> => {
                 {
                     key: "error",
                     label: "Error",
-                    order: 80,
                     controlType: "Text",
                     value: "",
                 },
                 {
+                    key: "label",
+                    label: "Label",
+                    controlType: "Text",
+                    value: "Dropdown label",
+                },
+                {
                     key: "placeholder",
                     label: "Placeholder",
-                    order: 10,
                     controlType: "Text",
-                    value: "select",
+                    value: "Select country",
                 },
                 {
                     label: "Configurable options",
@@ -72,15 +75,15 @@ const DropdownPage: React.FC = (): React.ReactElement<void> => {
                 <div className="row" style={{ width: "100%" }}>
                     <div className="col-6">
                         <Dropdown
-                            label="Multi-select"
                             name="dropDownList2"
                             list={list}
-                            selectedValue={dropDownList1Selected}
-                            onChange={(value: Array<DropdownItem>) => setDropdownList1Selected(value)}
-                            multi={checkDynamicFormSelectedKey("multi", controls)}
+                            value={dropDownList1Selected}
+                            onChange={(value: string | string[]) => {
+                                setDropdownList1Selected(value);
+                            }}
+                            multiple={checkDynamicFormSelectedKey("multi", controls)}
                             disabled={checkDynamicFormSelectedKey("disabled", controls)}
                             more={checkDynamicFormSelectedKey("more", controls)}
-                            native={checkDynamicFormSelectedKey("native", controls)}
                             searchable={checkDynamicFormSelectedKey("searchable", controls)}
                             clearable={checkDynamicFormSelectedKey("clearable", controls)}
                             {...controls}
