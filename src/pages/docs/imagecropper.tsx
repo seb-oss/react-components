@@ -16,9 +16,30 @@ const ImageCropperPage: React.FC = () => {
                 {
                     key: "size",
                     label: "Size",
-                    description: "The size of the image cropper picker",
+                    description: "The size of the image cropper picker in pixels",
                     controlType: "Text",
                     value: 200,
+                },
+                {
+                    key: "selectText",
+                    label: "Select text",
+                    description: "The text used for selecting an image",
+                    controlType: "Text",
+                    value: "",
+                },
+                {
+                    key: "cropText",
+                    label: "Crop text",
+                    description: "The text used for crop action",
+                    controlType: "Text",
+                    value: "",
+                },
+                {
+                    key: "cancelText",
+                    label: "Cancel text",
+                    description: "The text used to cancel the crop",
+                    controlType: "Text",
+                    value: "",
                 },
             ],
         },
@@ -30,7 +51,12 @@ const ImageCropperPage: React.FC = () => {
             importedFiles={importedFiles}
             example={
                 <div className="d-flex flex-column align-items-center mx-auto">
-                    <ImageCropper value={image} onChange={setImage} size={parseInt(controls.size) || 200} />
+                    <ImageCropper
+                        value={image}
+                        onChange={setImage}
+                        size={parseInt(controls?.size) || 200}
+                        text={{ select: controls?.selectText, crop: controls?.cropText, cancel: controls?.cancelText }}
+                    />
                 </div>
             }
             code={code}

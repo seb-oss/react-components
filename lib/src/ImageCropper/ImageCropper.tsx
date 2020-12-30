@@ -2,9 +2,15 @@ import React from "react";
 import classnames from "classnames";
 import { Modal } from "../Modal";
 import { ResizeHandle } from "./ResizeHandle";
+import { ImagePicker } from "./ImagePicker";
 import { moveHandler, readImage, resizeHandler, Position, addListener, crop } from "./utils";
-import { ImagePlaceholderIcon } from "./ImagePlaceholderIcon";
 import "./image-cropper.scss";
+
+interface ImageCropperText {
+    select?: string;
+    cancel?: string;
+    crop?: string;
+}
 
 export type ImageCropperProps = Omit<JSX.IntrinsicElements["div"], "onChange"> & {
     /** The image value as string */
@@ -13,6 +19,8 @@ export type ImageCropperProps = Omit<JSX.IntrinsicElements["div"], "onChange"> &
     onChange?: (image: string) => void;
     /** The size of the image cropper picker */
     size?: number;
+    /** Texts used in the image cropper */
+    text?: ImageCropperText;
 };
 
 export interface ClipRect {
@@ -22,7 +30,7 @@ export interface ClipRect {
     left: number;
 }
 
-export const ImageCropper: React.FC<ImageCropperProps> = React.memo(({ onChange, value, size = 200, ...props }: ImageCropperProps) => {
+export const ImageCropper: React.FC<ImageCropperProps> = React.memo(({ onChange, value, size = 200, text, ...props }: ImageCropperProps) => {
     const fileRef: React.MutableRefObject<HTMLInputElement> = React.useRef<HTMLInputElement>();
     const imgRef: React.MutableRefObject<HTMLImageElement> = React.useRef<HTMLImageElement>();
     const [modalToggle, setModalToggle] = React.useState<boolean>(false);
@@ -82,26 +90,17 @@ export const ImageCropper: React.FC<ImageCropperProps> = React.memo(({ onChange,
         <div {...props} className={classnames("rc", "image-cropper", props.className)}>
             <input type="file" accept="image/*" ref={fileRef} onInput={handleInput} hidden />
 
-            <div className="image-preview" style={{ width: size, height: size }}>
-                <div className="preview">
-                    {croppedImgSrc ? <img src={croppedImgSrc} width="100%" /> : <ImagePlaceholderIcon />}
-                    <button
-                        type="button"
-                        className="select"
-                        onClick={() => {
-                            fileRef.current.value = fileRef.current.files = null;
-                            fileRef.current?.click();
-                        }}
-                    >
-                        {props.children || "Select Image"}
-                    </button>
-                    {croppedImgSrc && (
-                        <button type="button" className="reset" onClick={reset}>
-                            &#x2715;
-                        </button>
-                    )}
-                </div>
-            </div>
+            <ImagePicker
+                image={croppedImgSrc}
+                size={size}
+                onReset={reset}
+                onSelect={() => {
+                    fileRef.current.value = fileRef.current.files = null;
+                    fileRef.current?.click();
+                }}
+            >
+                {text?.select}
+            </ImagePicker>
 
             <Modal
                 toggle={modalToggle}
@@ -130,10 +129,10 @@ export const ImageCropper: React.FC<ImageCropperProps> = React.memo(({ onChange,
                 footer={
                     <div>
                         <button className="btn btn-outline-primary" onClick={() => setModalToggle(false)} type="button">
-                            Cancel
+                            {text?.cancel || "Cancel"}
                         </button>
                         <button className="btn btn-primary ml-3" onClick={handleCrop} type="button">
-                            Crop
+                            {text?.crop || "Crop"}
                         </button>
                     </div>
                 }
