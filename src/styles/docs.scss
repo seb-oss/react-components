@@ -20,5 +20,10 @@
         overflow: hidden;
         margin-bottom: 1rem;
     }
+
+    table.apis {
+        margin: 0;
+    }
+
     @import "playground";
 }

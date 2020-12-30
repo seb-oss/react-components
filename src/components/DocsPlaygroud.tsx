@@ -29,7 +29,7 @@ const DocsPlayground: React.FC<DocsPlaygroundProps> = (props: DocsPlaygroundProp
                 ))}
             </nav>
 
-            <h4 className="apis-title">Try it out</h4>
+            {props.controls && <h4 className="apis-title">Try these props</h4>}
             {
                 [
                     <div className="example">{props.example}</div>,
@@ -39,7 +39,7 @@ const DocsPlayground: React.FC<DocsPlaygroundProps> = (props: DocsPlaygroundProp
                 ][activeTab]
             }
 
-            <div className="controls">{props.controls}</div>
+            {props.controls && <div className="controls">{props.controls}</div>}
         </div>
     );
 };

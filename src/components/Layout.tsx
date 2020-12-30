@@ -1,14 +1,15 @@
 import React from "react";
 import { SideMenu } from "./SideMenu";
 import { Footer } from "./Footer";
+import classnames from "classnames";
 import "../styles/docs-wrapper.scss";
 
-const Layout: React.FC = React.memo((props) => {
+const Layout: React.FC<JSX.IntrinsicElements["div"]> = React.memo(({ children, ...props }) => {
     return (
-        <div className="docs-wrapper">
+        <div {...props} className={classnames("docs-wrapper", props.className)}>
             <SideMenu />
             <div className="content-wrapper">
-                {props.children}
+                {children}
                 <Footer />
             </div>
         </div>

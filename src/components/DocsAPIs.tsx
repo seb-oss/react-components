@@ -14,7 +14,7 @@ const DocsAPI: React.FC<DocsAPIProps> = (props: DocsAPIProps) => {
         <>
             <h3>Inputs</h3>
             <div className="card">
-                <table className="table table-striped">
+                <table className="apis table table-striped">
                     <thead className="thead-dark">
                         <tr>
                             <th>Inputs</th>

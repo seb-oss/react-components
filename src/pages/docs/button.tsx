@@ -55,7 +55,7 @@ const ButtonPage: React.FC = () => {
                     description: "Sets the display of the button to block so it can take up the container width",
                     order: 50,
                     controlType: "Checkbox",
-                    value: false,
+                    value: true,
                 },
             ],
         },

@@ -114,13 +114,15 @@ export const SideMenu: React.FC = React.memo(() => {
     }, [listRef]);
 
     const onToggle = () => {
-        const newToggle: boolean = !toggle;
-        setToggle(newToggle);
         setIsAnimating(true);
         if (prestine) {
             setPrestine(false);
         }
-        localStorage.setItem(SIDE_MENU_STORAGE_KEY, String(newToggle));
+
+        setToggle((old: boolean) => {
+            localStorage.setItem(SIDE_MENU_STORAGE_KEY, String(!old));
+            return !old;
+        });
     };
 
     React.useEffect(() => {
@@ -153,6 +155,24 @@ export const SideMenu: React.FC = React.memo(() => {
             }
         }
     }, [isMobile]);
+
+    React.useEffect(() => {
+        const handler = (e: KeyboardEvent) => {
+            if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === "f") {
+                const search = document.getElementById("searchTextBox");
+                search.scrollIntoView({ behavior: "smooth", block: "center", inline: "center" });
+                search.focus();
+            } else if (e.ctrlKey && e.shiftKey && ["`", "~"].some((i) => i === e.key)) {
+                onToggle();
+            }
+        };
+
+        document.addEventListener("keypress", handler);
+
+        return () => {
+            document.removeEventListener("keypress", handler);
+        };
+    }, []);
 
     return (
         <aside className={className}>
