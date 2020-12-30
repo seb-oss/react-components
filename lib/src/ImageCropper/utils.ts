@@ -219,13 +219,14 @@ export function crop(url: string, x: number, y: number, width: number, height: n
 
         inputImage.onload = () => {
             const canvas: HTMLCanvasElement = document.createElement("canvas");
-            canvas.width = canvas.height = 300;
+            const maxDrawnSize: number = Math.min(imgContainer.width, imgContainer.height);
+            canvas.width = canvas.height = maxDrawnSize;
 
             const scaleX: number = inputImage.width / imgContainer.width;
             const scaleY: number = inputImage.height / imgContainer.height;
 
             const ctx: CanvasRenderingContext2D = canvas.getContext("2d");
-            ctx.drawImage(inputImage, x * scaleX, y * scaleY, width * scaleX, height * scaleY, 0, 0, 300, 300);
+            ctx.drawImage(inputImage, x * scaleX, y * scaleY, width * scaleX, height * scaleY, 0, 0, maxDrawnSize, maxDrawnSize);
             resolve(canvas.toDataURL());
         };
 
