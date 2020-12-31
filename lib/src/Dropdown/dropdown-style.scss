@@ -7,6 +7,34 @@ $dropdown-toggle-height: 44px;
 
 .custom-dropdown {
     margin-bottom: 8px;
+    /* for Firefox */
+    -moz-appearance: none;
+    /* for Chrome */
+    -webkit-appearance: none;
+    &::-ms-expand {
+        display: none;
+    }
+
+    /* clears the 'X' from Internet Explorer */
+    input[type="search"]::-ms-clear {
+        display: none;
+        width: 0;
+        height: 0;
+    }
+    input[type="search"]::-ms-reveal {
+        display: none;
+        width: 0;
+        height: 0;
+    }
+
+    /* clears the 'X' from Chrome */
+    input[type="search"]::-webkit-search-decoration,
+    input[type="search"]::-webkit-search-cancel-button,
+    input[type="search"]::-webkit-search-results-button,
+    input[type="search"]::-webkit-search-results-decoration {
+        display: none;
+    }
+
     > .custom-dropdown-toggle {
         background-color: $white;
         height: $dropdown-toggle-height;
@@ -47,7 +75,7 @@ $dropdown-toggle-height: 44px;
             > .right-items > .dropdown-icon-holder {
                 &.chevron {
                     > svg {
-                        transform: rotate(180deg);
+                        transform: rotateX(180deg);
                     }
                 }
             }
@@ -219,6 +247,12 @@ $dropdown-toggle-height: 44px;
             color: $gray-500;
         }
 
+        > .form-control {
+            border-color: $gray-500;
+            color: $gray-500;
+            background-color: $white;
+        }
+
         > .custom-dropdown-toggle {
             border-color: $gray-500;
             background-color: $gray-100;
@@ -251,69 +285,21 @@ $dropdown-toggle-height: 44px;
         > .custom-dropdown-toggle {
             border-color: $red;
         }
-    }
-}
 
-.alert.custom-alert {
-    padding: 0px 2px;
-    margin: 0;
-    &.alert-danger {
-        color: $red-dark;
-        background: none;
-        border: none;
-        border-radius: 0px;
-        width: 100%;
-    }
-}
-
-// Native version
-.custom-native-dropdown {
-    margin-bottom: 8px;
-    /* for Firefox */
-    -moz-appearance: none;
-    /* for Chrome */
-    -webkit-appearance: none;
-    &::-ms-expand {
-        display: none;
-    }
-
-    > .form-control {
-        &.disabled {
-            border-color: $gray-500;
-            color: $gray-500;
-            background-color: $white;
-        }
-    }
-
-    > .dropdown-label {
-        &.disabled {
-            color: $gray-500;
-        }
-    }
-
-    &.has-error {
         .custom-native-dropdown {
             border-color: $red;
         }
     }
-}
 
-/* clears the 'X' from Internet Explorer */
-input[type="search"]::-ms-clear {
-    display: none;
-    width: 0;
-    height: 0;
-}
-input[type="search"]::-ms-reveal {
-    display: none;
-    width: 0;
-    height: 0;
-}
-
-/* clears the 'X' from Chrome */
-input[type="search"]::-webkit-search-decoration,
-input[type="search"]::-webkit-search-cancel-button,
-input[type="search"]::-webkit-search-results-button,
-input[type="search"]::-webkit-search-results-decoration {
-    display: none;
+    .alert.custom-alert {
+        padding: 0px 2px;
+        margin: 0;
+        &.alert-danger {
+            color: $red-dark;
+            background: none;
+            border: none;
+            border-radius: 0px;
+            width: 100%;
+        }
+    }
 }

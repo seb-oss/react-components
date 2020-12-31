@@ -31,6 +31,7 @@ const VideoPage: React.FC = () => {
                 { key: "startTime", value: null, label: "Start time of playback", placeholder: "Playback starts at", controlType: "Text" },
                 { key: "endTime", value: null, label: "End time of playback", placeholder: "Playback ends at", controlType: "Text" },
                 { label: "Optional configurations", key: "checkboxes", value: defaultCheckboxControls, controlType: "Option", options: checkboxControls },
+
             ],
         },
     ];

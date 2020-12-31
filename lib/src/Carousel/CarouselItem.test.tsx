@@ -76,13 +76,6 @@ describe("Component: Carousel", () => {
         expect(container.firstElementChild.getAttribute("style")).toContain(`animation-duration: ${transitionDuration}ms;`);
     });
 
-    it("Should pass coming-next class name when it's set to true", () => {
-        act(() => {
-            render(<CarouselItem comingNext />, container);
-        });
-        expect(container.firstElementChild.classList.contains("coming-next")).toBeTruthy();
-    });
-
     it("Should render translate value passed when swiping", () => {
         const swipeDistance: number = 200;
         act(() => {

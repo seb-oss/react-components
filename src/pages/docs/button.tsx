@@ -70,7 +70,7 @@ const ButtonPage: React.FC = () => {
             importedFiles={importedFiles}
             example={
                 <div className="w-100 d-flex justify-content-center">
-                    <Button size={controls?.size?.value} theme={controls?.theme?.value} disabled={controls?.disabled} block={controls?.block}>
+                    <Button size={controls?.size?.value} theme={controls?.theme} disabled={controls?.disabled} block={controls?.block}>
                         {controls.buttonLabel}
                     </Button>
                 </div>

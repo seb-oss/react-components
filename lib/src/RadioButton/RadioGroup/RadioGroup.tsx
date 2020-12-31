@@ -1,9 +1,9 @@
 import React from "react";
 import classnames from "classnames";
 import { randomId } from "@sebgroup/frontend-tools";
-import { RadioButton, RadioButtonProps } from "./RadioButton/RadioButton";
-import "./radiogroup.scss";
-import { FeedbackIndicator, IndicatorType } from "../FeedbackIndicator";
+import { IndicatorType, FeedbackIndicator } from "../../FeedbackIndicator";
+import { RadioButtonProps, RadioButton } from "../RadioButton";
+import "./radio-group.scss";
 
 export type RadioGroupProps<T = any> = Omit<JSX.IntrinsicElements["input"], "list"> & {
     /** Condensed radio group */
@@ -20,7 +20,7 @@ export type RadioGroupProps<T = any> = Omit<JSX.IntrinsicElements["input"], "lis
     hintTheme?: IndicatorType;
 };
 /** A radio button allows a user to select a single item from a predefined list of options. Radio buttons are common to use in forms, i.e when you apply for a loan and need to enter "Yes" or "No". */
-export const RadioGroup: React.FC<RadioGroupProps> = ({ condensed, inline, label, list, children, className, id, hint, hintTheme = "danger", ...props }: RadioGroupProps) => {
+export const RadioGroup: React.FC<RadioGroupProps> = ({ condensed, inline, label, list, children, className, id, hint, hintTheme, ...props }: RadioGroupProps) => {
     const [idList, setIdList] = React.useState<Array<string>>([]);
 
     React.useEffect(() => {

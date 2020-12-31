@@ -4,7 +4,6 @@ import { Helmet } from "react-helmet";
 import { Navbar } from "../components/Navbar";
 import { Footer } from "components/Footer";
 import { httpGet } from "utils/http";
-import { useDynamicForm } from "hooks/useDynamicForm";
 import { TechStack } from "components/TechStack";
 import AccessibilityIllustration from "../../static/illustrations/accessibility.svg";
 import AdjustmentsIllustration from "../../static/illustrations/adjustments.svg";

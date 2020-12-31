@@ -31,7 +31,7 @@
     },
     {
         "name": "Chip",
-        "path": "/docs/chipdocs",
+        "path": "/docs/chip",
         "filePath": "./src/Chip/index.ts"
     },
     {
@@ -95,9 +95,9 @@
         "filePath": "./src/ProgressBar/index.ts"
     },
     {
-        "name": "RadioGroup",
-        "path": "/docs/radiogroup",
-        "filePath": "./src/RadioGroup/index.ts"
+        "name": "RadioButton",
+        "path": "/docs/radiobutton",
+        "filePath": "./src/RadioButton/index.ts"
     },
     {
         "name": "Rating",
@@ -163,6 +163,11 @@
         "name": "Toggle",
         "path": "/docs/toggle",
         "filePath": "./src/Toggle/index.ts"
+    },
+    {
+        "name": "ToggleSelector",
+        "path": "/docs/toggle-selector",
+        "filePath": "./src/ToggleSelector/index.ts"
     },
     {
         "name": "Tooltip",

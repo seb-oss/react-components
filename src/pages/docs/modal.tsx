@@ -30,7 +30,7 @@ const NotificationPage: React.FC = () => {
             items: [
                 {
                     key: "size",
-                    value: modalSizeList[0],
+                    value: modalSizeList[0].value,
                     label: "Size",
                     options: modalSizeList,
                     controlType: "Dropdown",
@@ -80,8 +80,8 @@ const NotificationPage: React.FC = () => {
                     <Modal
                         toggle={toggle}
                         fullscreen={checkSelectedKey("fullscreen")}
-                        position={(controls as any)?.position.value === "default" ? null : (controls as any)?.position.value}
-                        size={(controls as any)?.size.value === "default" ? null : (controls as any)?.size.value}
+                        position={(controls as any)?.position === "default" ? null : (controls as any)?.position}
+                        size={(controls as any)?.size === "default" ? null : (controls as any)?.size}
                         disableBackdropDismiss={checkSelectedKey("disablebackdropdismiss")}
                         escapeToDismiss={checkSelectedKey("escapeToDismiss")}
                         centered={checkSelectedKey("centered")}

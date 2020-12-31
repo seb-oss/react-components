@@ -1,9 +1,9 @@
 import React from "react";
-import { navigateTo } from "gatsby";
+import { navigate } from "gatsby";
 
 const Docs: React.FC = React.memo(() => {
     React.useEffect(() => {
-        navigateTo("/docs/getting-started");
+        navigate("/docs/getting-started");
     }, []);
     return null;
 });

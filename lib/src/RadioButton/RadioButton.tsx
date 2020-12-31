@@ -2,6 +2,8 @@ import React from "react";
 import classnames from "classnames";
 import { randomId } from "@sebgroup/frontend-tools";
 
+import "./radio-button.scss";
+
 export type RadioButtonProps<T = any> = Omit<JSX.IntrinsicElements["input"], "value"> & {
     /** set to condensed theme */
     condensed?: boolean;

@@ -22,14 +22,10 @@ const Docs: React.FC<DocsProps> = (props: DocsProps) => {
     React.useEffect(() => {
         new APIExtractService()
             .initParse(props.mainFile, props.importedFiles)
-            .then(async (res) => {
-                console.log(res[0]);
-                setApis(await res[0]);
-            })
-            .catch((test) => {
-                console.log(test);
-            });
+            .then(async (res) => setApis(await res[0]))
+            .catch(console.error);
     }, []);
+
     return (
         <Layout>
             <Helmet>
@@ -40,7 +36,7 @@ const Docs: React.FC<DocsProps> = (props: DocsProps) => {
                 <h1>{apis?.name}</h1>
                 <p>{apis?.description}</p>
                 <Tabs className="doc-page-tabs" list={props.note ? tabListWithNotes : tabList} activeTab={activeTab} onClick={(index: number) => setActiveTab(index)} />
-                <DocsWrapper activeTab={activeTab} interfaces={apis?.interfaces} code={props.code} example={props.example} controls={props.controls} />
+                <DocsWrapper activeTab={activeTab} interfaces={apis?.interfaces} code={props.code} example={props.example} controls={props.controls} note={props.note} />
             </div>
         </Layout>
     );
