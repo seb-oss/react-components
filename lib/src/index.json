@@ -22,8 +22,8 @@
         "RadioButton": "./lib/src/RadioButton/index.ts",
         "Rating": "./lib/src/Rating/index.ts",
         "Slider": "./lib/src/Slider/index.ts",
-        "Stepper": "./lib/src/Stepper/index.ts",
         "StepTracker": "./lib/src/StepTracker/index.ts",
+        "Stepper": "./lib/src/Stepper/index.ts",
         "Table": "./lib/src/Table/index.ts",
         "Tabs": "./lib/src/Tabs/index.ts",
         "TextArea": "./lib/src/TextArea/index.ts",
@@ -33,6 +33,7 @@
         "Timepicker": "./lib/src/Timepicker/index.ts",
         "Timer": "./lib/src/Timer/index.ts",
         "Toggle": "./lib/src/Toggle/index.ts",
+        "ToggleSelector": "./lib/src/ToggleSelector/index.ts",
         "Tooltip": "./lib/src/Tooltip/index.ts",
         "Video": "./lib/src/Video/index.ts"
     },
@@ -126,12 +127,12 @@
             "to": "./Slider/index.js"
         },
         {
-            "from": "./lib/src/Stepper/index.ts",
-            "to": "./Stepper/index.js"
-        },
-        {
             "from": "./lib/src/StepTracker/index.ts",
             "to": "./StepTracker/index.js"
+        },
+        {
+            "from": "./lib/src/Stepper/index.ts",
+            "to": "./Stepper/index.js"
         },
         {
             "from": "./lib/src/Table/index.ts",

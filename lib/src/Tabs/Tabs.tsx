@@ -5,11 +5,11 @@ import "./tabs.scss";
 
 export type TabsProps = Omit<JSX.IntrinsicElements["div"], "onClick"> & {
     /** index of focsued tab */
-    activeTab: number;
+    activeTab?: number;
     /** List of tab list item */
     list?: Array<TabItemProps>;
     /** callback on tab item clicked */
-    onClick: (index: number) => any;
+    onClick?: (index: number) => any;
 };
 /** Tabs organize and allow navigation between groups of content that are related and at the same level of hierarchy. */
 export const Tabs: React.FC<TabsProps> = ({ activeTab, list, onClick, ...props }: TabsProps) => {

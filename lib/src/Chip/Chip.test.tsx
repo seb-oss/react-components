@@ -23,7 +23,7 @@ describe("Component: Chip", () => {
         act(() => {
             render(<Chip onClose={onClose}>Test</Chip>, container);
         });
-        expect(container).not.toBeNull();
+        expect(container).toBeDefined();
         expect(container.querySelector(".content").textContent).toEqual("Test");
     });
 

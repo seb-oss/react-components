@@ -115,7 +115,7 @@ export function resizeHandler(event: MouseEvent | TouchEvent, position: Position
                     top: oldPos.top - movementX,
                 };
                 shouldUpdate = change.right <= img.clientWidth && change.top >= 0;
-                shouldUpdate &&= change.bottom - change.top >= 20 && change.right - change.left >= 20;
+                shouldUpdate = shouldUpdate && change.bottom - change.top >= 20 && change.right - change.left >= 20;
                 return shouldUpdate ? change : oldPos;
             });
             break;
@@ -127,7 +127,7 @@ export function resizeHandler(event: MouseEvent | TouchEvent, position: Position
                     top: oldPos.top + movementX,
                 };
                 shouldUpdate = change.left >= 0 && change.top >= 0;
-                shouldUpdate &&= change.bottom - change.top >= 20 && change.right - change.left >= 20;
+                shouldUpdate = shouldUpdate && change.bottom - change.top >= 20 && change.right - change.left >= 20;
                 return shouldUpdate ? change : oldPos;
             });
             break;
@@ -139,7 +139,7 @@ export function resizeHandler(event: MouseEvent | TouchEvent, position: Position
                     left: oldPos.left - movementY,
                 };
                 shouldUpdate = change.left >= 0 && change.bottom <= img.clientHeight;
-                shouldUpdate &&= change.bottom - change.top >= 20 && change.right - change.left >= 20;
+                shouldUpdate = shouldUpdate && change.bottom - change.top >= 20 && change.right - change.left >= 20;
                 return shouldUpdate ? change : oldPos;
             });
             break;
@@ -151,7 +151,7 @@ export function resizeHandler(event: MouseEvent | TouchEvent, position: Position
                     right: oldPos.right + movementY,
                 };
                 shouldUpdate = change.right <= img.clientWidth && change.bottom <= img.clientHeight;
-                shouldUpdate &&= change.bottom - change.top >= 20 && change.right - change.left >= 20;
+                shouldUpdate = shouldUpdate && change.bottom - change.top >= 20 && change.right - change.left >= 20;
                 return shouldUpdate ? change : oldPos;
             });
             break;
