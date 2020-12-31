@@ -5,7 +5,7 @@ export type TimerProps = JSX.IntrinsicElements["div"] & {
     /** Callback when timer ends */
     callback?: VoidFunction;
     /** Timer's duration in milliseconds */
-    duration: number;
+    duration?: number;
 };
 
 interface TimerState {

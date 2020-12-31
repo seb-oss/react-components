@@ -3,7 +3,7 @@ import { randomId } from "@sebgroup/frontend-tools";
 import classnames from "classnames";
 import "./textarea.scss";
 
-export type TextAreaProps = JSX.IntrinsicElements["textarea"] & {
+export type TextareaProps = JSX.IntrinsicElements["textarea"] & {
     /** Error message related to element */
     error?: string;
     /** Element label */
@@ -12,7 +12,7 @@ export type TextAreaProps = JSX.IntrinsicElements["textarea"] & {
     resizable?: boolean;
 };
 /** Textarea is a component that allows user to add or edit text in multiline */
-export const TextArea: React.FC<TextAreaProps> = ({ error, label, resizable, className, ...props }: TextAreaProps) => {
+export const Textarea: React.FC<TextareaProps> = ({ error, label, resizable, className, ...props }: TextareaProps) => {
     const [id, setId] = React.useState<string>();
 
     React.useEffect(() => {

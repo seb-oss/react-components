@@ -74,7 +74,7 @@ describe("Component: Overlay", () => {
         expect(document.body.querySelector(".overlay-container:focus")).toBeFalsy();
         const updatedProps: OverlayProps = { ...newProps, show: true };
         await act(async () => {
-            render(
+            await render(
                 <div>
                     <div className="ref">ref</div>
                     <Overlay {...updatedProps}>overlay</Overlay>
@@ -83,7 +83,7 @@ describe("Component: Overlay", () => {
             );
         });
         await act(async () => {
-            render(
+            await render(
                 <div>
                     <div className="ref">ref</div>
                     <Overlay {...newProps}>overlay</Overlay>
@@ -94,7 +94,7 @@ describe("Component: Overlay", () => {
         expect(document.body.querySelector(".overlay-container:focus")).toBeFalsy();
         const updatedProps2: OverlayProps = { ...newProps, show: true };
         await act(async () => {
-            render(
+            await render(
                 <div>
                     <div className="ref">ref</div>
                     <Overlay {...updatedProps2}>overlay</Overlay>

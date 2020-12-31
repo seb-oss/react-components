@@ -5,7 +5,7 @@ import { DynamicFormOption, useDynamicForm } from "hooks/useDynamicForm";
 import makeData from "utils/makeData";
 import { Dropdown, DropdownItem } from "@sebgroup/react-components/Dropdown";
 import { checkDynamicFormSelectedKey } from "utils/helpers";
-import { TextBox } from "@sebgroup/react-components/TextBox";
+import { Textbox } from "@sebgroup/react-components/Textbox";
 import { NumberedPagination } from "@sebgroup/react-components/Pagination";
 
 interface TableDataProps {
@@ -197,14 +197,15 @@ const TablePage: React.FC = (): React.ReactElement<void> => {
                                 list={nameDropDownList}
                                 label="filter by first name"
                                 selectedValue={dropDownListSelected}
-                                onChange={(value: Array<DropdownItem>) => setDropdownListSelected(value)}
+                                // TODO: Find a way to fix this
+                                // onChange={(value: Array<DropdownItem>) => setDropdownListSelected(value)}
                                 multi={true}
                             />
                         </div>
                     )}
                     {enableSearch && (
                         <div className="filter-holder">
-                            <TextBox name="textInput2" label="Search last name" placeholder="Search by last name" value={searchText} onChange={handleTextChange} />
+                            <Textbox name="textInput2" label="Search last name" placeholder="Search by last name" value={searchText} onChange={handleTextChange} />
                         </div>
                     )}
                     {renderControls()}

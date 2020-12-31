@@ -1,10 +1,10 @@
 import React from "react";
 import Docs from "components/Docs";
-import { TextArea } from "@sebgroup/react-components/TextArea";
+import { Textarea } from "@sebgroup/react-components/Textarea";
 import { DynamicFormOption, DynamicFormSection, useDynamicForm } from "hooks/useDynamicForm";
 
-const TextAreaPage: React.FC = React.memo(() => {
-    const importString: string = require("!raw-loader!@sebgroup/react-components/TextArea/TextArea");
+const TextareaPage: React.FC = React.memo(() => {
+    const importString: string = require("!raw-loader!@sebgroup/react-components/Textarea/Textarea");
     const checkboxControls: Array<DynamicFormOption> = [
         { label: "Disabled", value: "disabled", key: "disabled" },
         { label: "Readonly", value: "readonly", key: "readonly" },
@@ -64,7 +64,7 @@ const TextAreaPage: React.FC = React.memo(() => {
     ];
     const [renderForm, { controls }] = useDynamicForm(fields);
     const [value, setValue] = React.useState<string>("");
-    const code: string = `<TextArea value="Some text value" label="Some text label" />`;
+    const code: string = `<Textarea value="Some text value" label="Some text label" />`;
 
     /** check if key selected */
     const checkSelectedKey = (key: string) => {
@@ -75,7 +75,7 @@ const TextAreaPage: React.FC = React.memo(() => {
         <Docs
             mainFile={importString}
             example={
-                <TextArea
+                <Textarea
                     name="test"
                     value={value}
                     label={(controls as any)?.label}
@@ -95,4 +95,4 @@ const TextAreaPage: React.FC = React.memo(() => {
     );
 });
 
-export default TextAreaPage;
+export default TextareaPage;

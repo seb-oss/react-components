@@ -1,11 +1,11 @@
 import React from "react";
 import Docs from "components/Docs";
 import SearchIcon from "../../../static/icons/search.svg";
-import { TextBox } from "@sebgroup/react-components/TextBox";
+import { Textbox } from "@sebgroup/react-components/Textbox";
 import { DynamicFormOption, DynamicFormSection, useDynamicForm } from "hooks/useDynamicForm";
 
-const TextBoxPage: React.FC = React.memo(() => {
-    const importString: string = require("!raw-loader!@sebgroup/react-components/TextBox/TextBox");
+const TextboxPage: React.FC = React.memo(() => {
+    const importString: string = require("!raw-loader!@sebgroup/react-components/Textbox/Textbox");
     const defaultPortOption: DynamicFormOption = { label: "None", value: "none", key: "none" };
     const textOption: DynamicFormOption = { label: "Text", value: "text", key: "text" };
     const iconOption: DynamicFormOption = { label: "Icon", value: "icon", key: "icon" };
@@ -92,7 +92,7 @@ const TextBoxPage: React.FC = React.memo(() => {
     ];
     const [renderForm, { controls }] = useDynamicForm(fields);
     const [value, setValue] = React.useState<string>("");
-    const code: string = `<TextBox value="Some text value" label="Some text label" />`;
+    const code: string = `<Textbox value="Some text value" label="Some text label" />`;
 
     /** check if key selected */
     const checkSelectedKey = (key: string) => {
@@ -103,7 +103,7 @@ const TextBoxPage: React.FC = React.memo(() => {
         <Docs
             mainFile={importString}
             example={
-                <TextBox
+                <Textbox
                     name="test"
                     value={value}
                     label={(controls as any)?.label}
@@ -125,4 +125,4 @@ const TextBoxPage: React.FC = React.memo(() => {
     );
 });
 
-export default TextBoxPage;
+export default TextboxPage;

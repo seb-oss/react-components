@@ -130,14 +130,14 @@
         "filePath": "./src/Tabs/index.ts"
     },
     {
-        "name": "TextArea",
+        "name": "Textarea",
         "path": "/docs/textarea",
-        "filePath": "./src/TextArea/index.ts"
+        "filePath": "./src/Textarea/index.ts"
     },
     {
-        "name": "TextBox",
+        "name": "Textbox",
         "path": "/docs/textbox",
-        "filePath": "./src/TextBox/index.ts"
+        "filePath": "./src/Textbox/index.ts"
     },
     {
         "name": "TextLabel",

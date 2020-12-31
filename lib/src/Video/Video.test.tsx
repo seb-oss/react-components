@@ -1,7 +1,6 @@
 import React from "react";
 import { act } from "react-dom/test-utils";
 import { unmountComponentAtNode, render } from "react-dom";
-import { mount, ReactWrapper, shallow, ShallowWrapper } from "enzyme";
 import { Video } from ".";
 import { VideoProps } from "./types-definition";
 
@@ -13,8 +12,6 @@ describe("Component: Video ", () => {
         height: "250",
         name: "myVideo",
     };
-    let wrapper: ShallowWrapper<VideoProps>;
-    let mountedWrapper: ReactWrapper<VideoProps>;
 
     beforeEach(() => {
         container = document.createElement("div");

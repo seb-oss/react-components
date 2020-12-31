@@ -7,7 +7,7 @@ import ExternalLinkIcon from "../../static/icons/external-link.svg";
 import { Link } from "gatsby";
 import { urls } from "@configs";
 import comps from "../../static/components-list.json";
-import { TextBox } from "@sebgroup/react-components/TextBox";
+import { Textbox } from "@sebgroup/react-components/Textbox";
 import "../styles/sidemenu.scss";
 
 const SIDE_MENU_STORAGE_KEY = "SIDEMENU";
@@ -57,7 +57,7 @@ export const SideMenu: React.FC = React.memo(() => {
         switch (e.key?.toLowerCase()) {
             case "escape":
                 if (search === "" && highlighted === -1) {
-                    document.getElementById("searchTextBox").blur();
+                    document.getElementById("searchTextbox").blur();
                 } else {
                     setHighlighted(-1);
                     setSearch("");
@@ -159,7 +159,7 @@ export const SideMenu: React.FC = React.memo(() => {
     React.useEffect(() => {
         const handler = (e: KeyboardEvent) => {
             if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === "f") {
-                const search = document.getElementById("searchTextBox");
+                const search = document.getElementById("searchTextbox");
                 search.scrollIntoView({ behavior: "smooth", block: "center", inline: "center" });
                 search.focus();
             } else if (e.ctrlKey && e.shiftKey && ["`", "~"].some((i) => i === e.key)) {
@@ -213,8 +213,8 @@ export const SideMenu: React.FC = React.memo(() => {
                     Components <span className="badge badge-dark float-right rounded">{components?.length || 0}</span>
                 </h4>
 
-                <TextBox
-                    id="searchTextBox"
+                <Textbox
+                    id="searchTextbox"
                     className="sidemenu-search"
                     name="search"
                     type="text"

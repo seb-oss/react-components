@@ -3,7 +3,7 @@ import { unmountComponentAtNode, render } from "react-dom";
 import { Tabs } from ".";
 import { act } from "react-dom/test-utils";
 
-describe("Component: Chip", () => {
+describe("Component: Tabs", () => {
     let container: HTMLDivElement = null;
 
     beforeEach(() => {

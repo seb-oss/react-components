@@ -1,10 +1,10 @@
 import React from "react";
 import { randomId } from "@sebgroup/frontend-tools";
 import classnames from "classnames";
-import "./textbox.scss";
 import { FeedbackIndicator, IndicatorType } from "../FeedbackIndicator";
+import "./textbox.scss";
 
-export type TextBoxProps = JSX.IntrinsicElements["input"] & {
+export type TextboxProps = JSX.IntrinsicElements["input"] & {
     /** hint message of textbox */
     hint?: string;
     /** Element label */
@@ -27,7 +27,7 @@ export type TextBoxProps = JSX.IntrinsicElements["input"] & {
     hintTheme?: IndicatorType;
 };
 /** Textbox is a component that allows user to add or edit text with extra text or icon port */
-export const TextBox: React.FC<TextBoxProps> = ({ hintTheme, leftSlot, leftSlotTitle, onLeftClick, rightSlot, rightSlotTitle, onRightClick, id, ...props }: TextBoxProps) => {
+export const Textbox: React.FC<TextboxProps> = ({ hintTheme, leftSlot, leftSlotTitle, onLeftClick, rightSlot, rightSlotTitle, onRightClick, id, ...props }: TextboxProps) => {
     const [customId, setCustomId] = React.useState<string>(null);
 
     React.useEffect(() => {

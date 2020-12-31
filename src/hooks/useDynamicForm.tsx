@@ -1,8 +1,8 @@
 import React, { useState, ReactNode, useMemo, useCallback } from "react";
 
 import { CheckBox } from "@sebgroup/react-components/CheckBox";
-import { TextBox } from "@sebgroup/react-components/TextBox";
-import { TextArea } from "@sebgroup/react-components/TextArea";
+import { Textbox } from "@sebgroup/react-components/Textbox";
+import { Textarea } from "@sebgroup/react-components/Textarea";
 import { Dropdown } from "@sebgroup/react-components/Dropdown";
 import { Datepicker } from "@sebgroup/react-components/Datepicker";
 import { Stepper } from "@sebgroup/react-components/Stepper";
@@ -27,7 +27,7 @@ export interface DynamicFormItem {
     controlType?: DynamicFormType;
 }
 
-export type DynamicFormType = "Hidden" | "Text" | "TextArea" | "Checkbox" | "Dropdown" | "Datepicker" | "Radio" | "Option" | "ErrorLabel" | "Stepper";
+export type DynamicFormType = "Hidden" | "Text" | "Textarea" | "Checkbox" | "Dropdown" | "Datepicker" | "Radio" | "Option" | "ErrorLabel" | "Stepper";
 
 export interface DynamicFormSection {
     title?: string | null;
@@ -136,7 +136,7 @@ export function useDynamicForm(sections: DynamicFormSection[]): [() => JSX.Eleme
 
             switch (controlType) {
                 case "Text":
-                case "TextArea":
+                case "Textarea":
                     newValue = (e as React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>).target.value;
                     break;
                 case "Option": {
@@ -252,14 +252,14 @@ const DynamicFormItemComponent: React.FC<{
     let formItem: ReactNode;
 
     switch (controlType) {
-        case "TextArea": {
-            formItem = <TextArea {...commonProps} value={(props.state as string) || ""} />;
+        case "Textarea": {
+            formItem = <Textarea {...commonProps} value={(props.state as string) || ""} />;
             break;
         }
         case "Text": {
             formItem = (
                 <>
-                    <TextBox {...commonProps} value={(props.state as string) || ""} />
+                    <Textbox {...commonProps} value={(props.state as string) || ""} />
                     {props.item?.description ? (
                         <p>
                             <small>{props.item?.description}</small>

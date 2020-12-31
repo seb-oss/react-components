@@ -29,11 +29,11 @@ export interface DropdownPlaceholders {
 }
 
 interface OverriddenNativeProps extends React.DetailedHTMLProps<React.SelectHTMLAttributes<HTMLSelectElement>, HTMLSelectElement> {
-    onChange: any;
+    onChange?: any;
 }
 
 export interface DropdownProps extends OverriddenNativeProps {
-    onChange: (value: DropdownValue) => void;
+    onChange?: (value: DropdownValue) => void;
     className?: string;
     clearable?: boolean;
     disabled?: boolean;
@@ -151,9 +151,9 @@ export const Dropdown: React.FC<DropdownProps> = ({
         if (value) {
             if (multiple && !Array.isArray(value)) {
                 const val: string = value as string;
-                onChange(val ? [val] : "");
+                onChange && onChange(val ? [val] : "");
             } else if (!multiple && Array.isArray(value) && value.length) {
-                onChange(value[0]);
+                onChange && onChange(value[0]);
             }
         }
     }, [multiple, value]);
@@ -320,7 +320,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
 
     /** Function containing the clear button logic */
     const handleClear = (): void => {
-        onChange("");
+        onChange && onChange("");
         setOpen(false);
     };
 
@@ -336,7 +336,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
     const dropdownItemSelected = (item: DropdownItem): void => {
         if (!multiple) {
             const newItem: DropdownItem = { ...item };
-            onChange(newItem.value);
+            onChange && onChange(newItem.value);
             setOpen(false);
         } else {
             const index: number = selectedList.findIndex((e: DropdownItem) => e.value === item.value);
@@ -346,7 +346,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
             } else {
                 newList = (value as readonly string[])?.filter((v: any) => v !== item.value) || [];
             }
-            onChange([...newList]);
+            onChange && onChange([...newList]);
         }
     };
 
@@ -358,9 +358,9 @@ export const Dropdown: React.FC<DropdownProps> = ({
     /** Function containing the select all button logic */
     const handleSelectAll = (): void => {
         if (allSelected) {
-            onChange([]);
+            onChange && onChange([]);
         } else {
-            onChange(list.map((e: DropdownItem) => e.value as string));
+            onChange && onChange(list.map((e: DropdownItem) => e.value as string));
         }
     };
 
@@ -402,7 +402,9 @@ export const Dropdown: React.FC<DropdownProps> = ({
                     disabled={shouldDisable}
                     className={classnames(`form-control custom-select custom-native-dropdown`, { disabled: shouldDisable }, props?.className)}
                     id={id}
-                    onChange={(e) => onChange(multiple ? Array.from(e.target.selectedOptions, (option) => option.value) : e.target.value)}
+                    onChange={(e) => {
+                        onChange && onChange(multiple ? Array.from(e.target.selectedOptions, (option) => option.value) : e.target.value);
+                    }}
                 >
                     {list.map((item: DropdownItem, i: number) => (
                         <option key={i} value={item.value}>

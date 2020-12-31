@@ -26,9 +26,9 @@
         "Stepper": "./lib/src/Stepper/index.ts",
         "Table": "./lib/src/Table/index.ts",
         "Tabs": "./lib/src/Tabs/index.ts",
-        "TextArea": "./lib/src/TextArea/index.ts",
-        "TextBox": "./lib/src/TextBox/index.ts",
         "TextLabel": "./lib/src/TextLabel/index.ts",
+        "Textarea": "./lib/src/Textarea/index.ts",
+        "Textbox": "./lib/src/Textbox/index.ts",
         "Timeline": "./lib/src/Timeline/index.ts",
         "Timepicker": "./lib/src/Timepicker/index.ts",
         "Timer": "./lib/src/Timer/index.ts",
@@ -143,16 +143,16 @@
             "to": "./Tabs/index.js"
         },
         {
-            "from": "./lib/src/TextArea/index.ts",
-            "to": "./TextArea/index.js"
-        },
-        {
-            "from": "./lib/src/TextBox/index.ts",
-            "to": "./TextBox/index.js"
-        },
-        {
             "from": "./lib/src/TextLabel/index.ts",
             "to": "./TextLabel/index.js"
+        },
+        {
+            "from": "./lib/src/Textarea/index.ts",
+            "to": "./Textarea/index.js"
+        },
+        {
+            "from": "./lib/src/Textbox/index.ts",
+            "to": "./Textbox/index.js"
         },
         {
             "from": "./lib/src/Timeline/index.ts",

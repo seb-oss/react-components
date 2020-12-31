@@ -2,7 +2,7 @@ import Docs from "components/Docs";
 import React from "react";
 
 import { Loader } from "../../../lib/src/Loader";
-import { TextBox } from "../../../lib/src/TextBox";
+import { Textbox } from "../../../lib/src/Textbox";
 
 import { useDynamicForm } from "hooks/useDynamicForm";
 
@@ -87,7 +87,7 @@ const LoaderPage: React.FC = (): React.ReactElement<void> => {
                     </div>
                     {controls?.toggle && (
                         <div className="result">
-                            <TextBox name="text-box-1" value={inlineText} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setInlineText(e.target.value)} rightSlot={<Loader toggle={true} />} />
+                            <Textbox name="text-box-1" value={inlineText} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setInlineText(e.target.value)} rightSlot={<Loader toggle={true} />} />
                         </div>
                     )}
                 </div>

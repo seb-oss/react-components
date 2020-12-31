@@ -1,9 +1,9 @@
 import React from "react";
 import { unmountComponentAtNode, render } from "react-dom";
-import { TextArea } from ".";
+import { Textbox } from ".";
 import { act } from "react-dom/test-utils";
 
-describe("Component: Textarea", () => {
+describe("Component: Textbox", () => {
     let container: HTMLDivElement = null;
 
     beforeEach(() => {
@@ -19,7 +19,7 @@ describe("Component: Textarea", () => {
 
     it("Should render", () => {
         act(() => {
-            render(<TextArea />, container);
+            render(<Textbox />, container);
         });
         expect(container).toBeDefined();
     });
