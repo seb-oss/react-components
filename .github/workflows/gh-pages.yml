@@ -15,7 +15,7 @@ jobs:
       uses: actions/setup-node@v1
 
     - name: Installing dependencies
-      run: npm install
+      run: npm ci
 
     - name: Generating docs
       run: npm run build
