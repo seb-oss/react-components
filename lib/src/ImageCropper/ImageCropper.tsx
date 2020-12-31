@@ -77,7 +77,7 @@ export const ImageCropper: React.FC<ImageCropperProps> = React.memo(({ onChange,
         setCroppedImgSrc(null);
         setImgSrc(null);
         fileRef.current.value = fileRef.current.files = null;
-        props.onReset && props.onReset(null);
+        onChange && onChange(null);
     }, [props.onReset]);
 
     React.useEffect(() => setCroppedImgSrc(value), [value]);
@@ -105,7 +105,6 @@ export const ImageCropper: React.FC<ImageCropperProps> = React.memo(({ onChange,
             <Modal
                 toggle={modalToggle}
                 size="modal-lg"
-                onDismiss={() => setModalToggle(false)}
                 className="image-cropper-modal"
                 disableBackdropDismiss
                 escapeToDismiss={false}
@@ -128,7 +127,7 @@ export const ImageCropper: React.FC<ImageCropperProps> = React.memo(({ onChange,
                 }
                 footer={
                     <div>
-                        <button className="btn btn-outline-primary" onClick={() => setModalToggle(false)} type="button">
+                        <button className="btn btn-outline-primary cancel" onClick={() => setModalToggle(false)} type="button">
                             {text?.cancel || "Cancel"}
                         </button>
                         <button className="btn btn-primary ml-3" onClick={handleCrop} type="button">

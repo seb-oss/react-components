@@ -2,12 +2,12 @@ import { ClipRect } from "./ImageCropper";
 
 /**
  * Read image from input type file
- * @param e The for event triggered by selecting an image
+ * @param event The for event triggered by selecting an image
  * @returns A promise that resolves with the image as data URI string
  */
-export function readImage(e: React.FormEvent<HTMLInputElement>): Promise<string> {
+export function readImage(event: React.FormEvent<HTMLInputElement>): Promise<string> {
     return new Promise((resolve, reject) => {
-        const input: HTMLInputElement = e.target as any;
+        const input: HTMLInputElement = event.target as any;
 
         if (input.value) {
             if (input.files && input.files[0]) {
@@ -15,10 +15,6 @@ export function readImage(e: React.FormEvent<HTMLInputElement>): Promise<string>
 
                 reader.onload = (event: ProgressEvent<FileReader>) => {
                     resolve(event.target.result.toString());
-                };
-
-                reader.onerror = (event: ProgressEvent<FileReader>) => {
-                    reject(event.target.error);
                 };
 
                 reader.readAsDataURL(input.files[0]);
@@ -43,21 +39,21 @@ let prevMovement: Coordinates = { x: 0, y: 0 };
 
 /**
  * Gets the X and Y distance that the cursor has travelled
- * @param e The mouse movement event
+ * @param event The mouse movement event
  * Returns an object of x and y movements
  */
-export function getMovement(e: MouseEvent | TouchEvent): Movement {
-    let screenX: number;
-    let screenY: number;
+export function getMovement(event: MouseEvent | TouchEvent): Movement {
+    let screenX: number = prevMovement.x;
+    let screenY: number = prevMovement.y;
 
-    if (e.type.includes("touch")) {
-        const touchEvent: TouchEvent = e as TouchEvent;
+    if (event.type.includes("touch")) {
+        const touchEvent: TouchEvent = event as TouchEvent;
         if (touchEvent.touches && touchEvent.touches[0]) {
             screenX = touchEvent.touches[0].screenX;
             screenY = touchEvent.touches[0].screenY;
         }
     } else {
-        const mouseEvent: MouseEvent = e as MouseEvent;
+        const mouseEvent: MouseEvent = event as MouseEvent;
         screenX = mouseEvent.screenX;
         screenY = mouseEvent.screenY;
     }

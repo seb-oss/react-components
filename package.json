@@ -89,6 +89,7 @@
 		"babel-jest": "^26.3.0",
 		"babel-polyfill": "^6.26.0",
 		"babel-preset-gatsby": "^0.5.10",
+		"canvas": "^2.6.1",
 		"case-sensitive-paths-webpack-plugin": "^2.3.0",
 		"commitizen": "^4.2.1",
 		"copy-webpack-plugin": "^6.0.1",

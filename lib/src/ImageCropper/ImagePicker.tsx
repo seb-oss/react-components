@@ -1,6 +1,6 @@
 import React from "react";
 
-type ImagePickerProps = React.PropsWithChildren<{
+export type ImagePickerProps = React.PropsWithChildren<{
     size: number;
     image: string;
     onReset: () => void;
