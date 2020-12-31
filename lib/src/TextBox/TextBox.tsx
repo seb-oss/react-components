@@ -5,7 +5,7 @@ import "./textbox.scss";
 import { FeedbackIndicator, IndicatorType } from "../FeedbackIndicator";
 
 export type TextBoxProps = JSX.IntrinsicElements["input"] & {
-    /** Error message of textbox */
+    /** hint message of textbox */
     hint?: string;
     /** Element label */
     label?: string;

@@ -36,8 +36,8 @@ export interface DynamicFormSection {
     items?: Array<DynamicFormItem> | null;
 }
 
-export interface DynamicFormOption {
-    value?: any;
+export interface DynamicFormOption<T = any> {
+    value?: T;
     label?: string | null;
     key: string;
     disabled?: boolean | null;

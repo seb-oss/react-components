@@ -15,14 +15,15 @@
     > .doc-page-tabs {
         margin-bottom: 2rem;
     }
-    > .card {
+    .apis {
+        table {
+            margin: 0;
+        }
+    }
+    .card {
         border-radius: $border-radius;
         overflow: hidden;
         margin-bottom: 1rem;
-    }
-
-    table.apis {
-        margin: 0;
     }
 
     @import "playground";

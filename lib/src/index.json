@@ -170,6 +170,10 @@
             "to": "./Toggle/index.js"
         },
         {
+            "from": "./lib/src/ToggleSelector/index.ts",
+            "to": "./ToggleSelector/index.js"
+        },
+        {
             "from": "./lib/src/Tooltip/index.ts",
             "to": "./Tooltip/index.js"
         },
