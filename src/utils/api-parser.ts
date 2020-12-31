@@ -224,8 +224,8 @@ export class APIExtractService {
                     defaultPropType = declaration.ctor.parameters[0].type;
                 }
                 const parsedInterfaces: ParsedTypeInterface = this.parseTypesInterfaces(parsedType, defaultPropType);
-                const parsedImportedInterfaces: Array<ParsedTypeInterface> = importedTypes.reduce((importedTypeArray: Array<ParsedTypeInterface>, item: Array<ParsedTypeInterface>) => {
-                    return [...importedTypeArray, ...item];
+                const parsedImportedInterfaces: Array<ParsedTypeInterface> = importedTypes.reduce((importedTypeArray: Array<ParsedTypeInterface>, item: Array<ParsedPropertyDeclartion>) => {
+                    return [...importedTypeArray, ...item.map((importedArray: ParsedPropertyDeclartion) => ({ ...importedArray, isDefault: importedArray.name === defaultPropType }))];
                 }, []);
                 const section: ApiSection = {
                     description: description ? APIExtractService.parseComment(description.comment?.trim()) : "",
