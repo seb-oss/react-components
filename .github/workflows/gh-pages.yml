@@ -18,11 +18,11 @@ jobs:
       run: npm install
 
     - name: Generating docs
-      run: npm run docs
+      run: npm run build
 
     - name: GitHub Pages
       uses: crazy-max/ghaction-github-pages@v1
       with:
-        build_dir: docs
+        build_dir: public
       env:
         GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}

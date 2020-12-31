@@ -14,7 +14,5 @@ jobs:
           node-version: 12.x
       - name: installing dependencies
         run: npm install
-      - name: running unit tests
-        run: npm test
-      - name: building
-        run: npm run build:production && npm run clean:docs && npm run build:docs
+      - name: testing and building
+        run: npm run build
