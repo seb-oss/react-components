@@ -84,12 +84,14 @@ export const TableUI: React.FunctionComponent<TableUIProps> = React.memo(
                                             }
                                         }}
                                     >
-                                        <span className="th-label">{header.label}</span>
-                                        {props.sortable && header.canSort && (
-                                            <span role="link" className={"icon-holder" + (header.isSorted ? (header.isSortedDesc ? " desc" : " asc") : "")} id={header.accessor}>
-                                                {defaultSort}
-                                            </span>
-                                        )}
+                                        <div className="sort-holder">
+                                            <span className="th-label">{header.label}</span>
+                                            {props.sortable && header.canSort && (
+                                                <span role="link" className={"icon-holder" + (header.isSorted ? (header.isSortedDesc ? " desc" : " asc") : "")} id={header.accessor}>
+                                                    {defaultSort}
+                                                </span>
+                                            )}
+                                        </div>
                                     </th>
                                 ) : null;
                             })}
@@ -106,7 +108,7 @@ export const TableUI: React.FunctionComponent<TableUIProps> = React.memo(
                                         tableRef={tableRef}
                                         onActionDropped={props.onActionDropped}
                                         onRowExpanded={props.onRowExpanded}
-                                        useShowActionColumn={props.useShowActionColumn || !!row?.actionLinks?.length}
+                                        useShowActionColumn={props.useShowActionColumn}
                                         rowsAreCollapsable={props.rowsAreCollapsable}
                                         onItemSelected={props.onItemSelected}
                                         primaryActionButton={props.primaryActionButton}
@@ -128,7 +130,7 @@ export const TableUI: React.FunctionComponent<TableUIProps> = React.memo(
                                                     tableRef={tableRef}
                                                     onActionDropped={props.onActionDropped}
                                                     onRowExpanded={props.onRowExpanded}
-                                                    useShowActionColumn={props.useShowActionColumn || !!subRow?.actionLinks?.length}
+                                                    useShowActionColumn={props.useShowActionColumn}
                                                     rowsAreCollapsable={props.rowsAreCollapsable}
                                                     onItemSelected={props.onItemSelected}
                                                     primaryActionButton={props.primaryActionButton}
