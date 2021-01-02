@@ -5,7 +5,7 @@
     "scripts": {
         "prebuild": "rimraf dist/*",
         "build": "webpack",
-        "postbuild": "rimraf dist/**/*.test.d.ts",
+        "postbuild": "rimraf dist/**/*.test.d.ts && node scripts/post-build.js",
         "pretest": "rimraf coverage/*",
         "test": "jest --forceExit --detectOpenHandles --no-cache"
     },

@@ -27,7 +27,10 @@
         "format:check": "pretty-quick --check --verbose",
         "coveralls": "cat ./coverage/lcov.info | coveralls",
         "commit": "git-cz",
-        "sanitize": "package-lock-sanitizer && git add package-lock.json",
+        "commit-chore": "npm run sanitize && npm run generate-indexes && npm run format:staged",
+        "postcommit-chore": "git add package-lock.json lib/src/index.json",
+        "sanitize": "package-lock-sanitizer",
+        "generate-indexes": "node ./lib/scripts/indexer.js",
         "release": "semantic-release"
     },
     "repository": {
@@ -80,7 +83,7 @@
     "husky": {
         "hooks": {
             "commit-msg": "commitlint --edit",
-            "pre-commit": "npm run sanitize && npm run format:staged"
+            "pre-commit": "npm run commit-chore"
         }
     },
     "release": {
