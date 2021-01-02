@@ -5,6 +5,7 @@
     "scripts": {
         "prebuild": "rimraf dist/*",
         "build": "webpack",
+        "postbuild": "rimraf dist/**/*.test.d.ts",
         "pretest": "rimraf coverage/*",
         "test": "jest --forceExit --detectOpenHandles --no-cache"
     },
@@ -16,8 +17,9 @@
         "regenerator-runtime": "^0.13.7"
     },
     "devDependencies": {
+        "@babel/preset-env": "^7.12.11",
         "@types/jest": "^26.0.19",
-        "autoprefixer": "^10.1.0",
+        "babel-jest": "^26.6.3",
         "canvas": "^2.6.1",
         "case-sensitive-paths-webpack-plugin": "^2.3.0",
         "copy-webpack-plugin": "^7.0.0",

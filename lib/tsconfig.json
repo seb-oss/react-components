@@ -1,14 +1,14 @@
 {
     "compilerOptions": {
-        "outDir": "./dist",
-        "rootDir": ".",
+        "outDir": "dist",
+        "rootDir": "src",
         "module": "esnext",
-        "moduleResolution": "node",
-        "target": "es5",
-        "lib": ["es2015", "es6", "es7", "dom"],
+        "moduleResolution": "Node",
+        "target": "ES5",
+        "lib": ["ES2015", "ES6", "ES2017", "DOM"],
         "jsx": "react",
-        "allowJs": true,
         "declaration": true,
+        "declarationDir": "dist",
         "sourceMap": true,
         "importHelpers": true,
         "noImplicitReturns": false,
@@ -19,5 +19,6 @@
         "allowSyntheticDefaultImports": true,
         "resolveJsonModule": true
     },
+    "exclude": ["coverage", "dist"],
     "types": ["typePatches"]
 }
