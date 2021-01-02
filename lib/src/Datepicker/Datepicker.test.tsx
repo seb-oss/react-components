@@ -54,7 +54,7 @@ describe("Component: Datepicker", () => {
             render(<Datepicker {...{ ...props, id, forceCustom: true }} />, container);
         });
 
-        const [dayPicker]: NodeListOf<HTMLElement> = container.querySelectorAll<HTMLElement>(`div.input-group > input[type="number"]`);
+        const dayPicker: HTMLInputElement = container.querySelector<HTMLInputElement>(`div.input-group > input[type="number"]`);
         expect(dayPicker).toBeTruthy();
         expect(dayPicker.id).toEqual(id);
     });

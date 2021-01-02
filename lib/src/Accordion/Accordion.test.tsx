@@ -2,20 +2,19 @@ import React from "react";
 import { act } from "react-dom/test-utils";
 import { unmountComponentAtNode, render } from "react-dom";
 import { Accordion, AccordionItem, AccordionItemProps } from ".";
-import { loremIpsum } from "lorem-ipsum";
 import { deepCopy } from "@sebgroup/frontend-tools";
 
 describe("Component: Accordion", () => {
     let container: HTMLDivElement = null;
     const accordionList: Array<AccordionItemProps> = [
         {
-            header: loremIpsum({ units: "word" }),
-            children: loremIpsum({ units: "sentence" }),
+            header: "nobis",
+            children: "Sit quod ipsam porro veritatis.",
         },
         {
-            header: loremIpsum({ units: "word" }),
-            subHeader: loremIpsum({ units: "word" }),
-            children: <p>{loremIpsum({ units: "paragraph" })}</p>,
+            header: "illum",
+            subHeader: "sed",
+            children: <p>Natus reiciendis est impedit rerum. Et illo minima exercitationem. Tempora vitae eum qui nemo enim.</p>,
         },
     ];
 

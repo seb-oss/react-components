@@ -1,157 +1,104 @@
 {
-	"name": "@sebgroup/react-components",
-	"version": "0.0.0-semantically-released",
-	"description": "A set of React components based on SEB design library guidelines for mobile and web React applications",
-	"license": "Apache-2.0",
-	"keywords": [
-		"react",
-		"components",
-		"javascript",
-		"typescript",
-		"frontend",
-		"ui"
-	],
-	"publishConfig": {
-		"registry": "https://registry.npmjs.org/",
-		"access": "public"
-	},
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/sebgroup/react-components"
-	},
-	"bugs": {
-		"url": "https://github.com/sebgroup/react-components/issues"
-	},
-	"homepage": "https://sebgroup.github.io/react-components",
-	"scripts": {
-		"prebuild:lib": "rimraf ./lib/dist",
-		"build:lib": "webpack --config lib/webpack.config.js",
-		"prebuild:docs": "gatsby clean",
-		"build:docs": "gatsby build",
-		"prebuild": "npm run format:check && npm run test",
-		"build": "npm run build:lib && npm run build:docs",
-		"postbuild": "cp package.json ./lib/dist/ && cp README.md ./lib/dist/",
-		"start": "gatsby develop -p 3000",
-		"serve:docs": "gatsby serve",
-		"pretest": "rimraf ./coverage/* && rimraf ./lib/coverage/*",
-		"test": "jest --config ./lib/jest.config.js --forceExit --detectOpenHandles --no-cache",
-		"coveralls": "cat ./coverage/lcov.info | coveralls",
-		"format:all": "pretty-quick",
-		"format:staged": "pretty-quick --staged",
-		"format:check": "pretty-quick --check",
-		"sanitize": "package-lock-sanitizer && git add package-lock.json",
-		"generate:indexes": "ts-node lib/indexer.ts -e lib/src -i lib/src/__utils -s",
-		"commit": "git-cz",
-		"semantic-release": "semantic-release"
-	},
-	"dependencies": {
-		"@sebgroup/bootstrap": "^5.1.0",
-		"@sebgroup/frontend-tools": "^2.0.2",
-		"classnames": "^2.2.6",
-		"gatsby": "^2.29.3",
-		"gatsby-plugin-postcss": "^3.4.0",
-		"gatsby-plugin-react-helmet": "^3.3.10",
-		"gatsby-plugin-react-svg": "^3.0.0",
-		"gatsby-plugin-sass": "^2.3.12",
-		"gatsby-plugin-tsconfig-paths": "^1.0.2",
-		"react": "^17.0.1",
-		"react-dom": "^17.0.1",
-		"react-helmet": "^6.1.0",
-		"react-router": "^5.1.2",
-		"react-router-dom": "^5.1.2",
-		"react-syntax-highlighter": "^15.4.3",
-		"typescript-parser-es5": "^1.0.0"
-	},
-	"devDependencies": {
-		"@babel/preset-env": "^7.9.0",
-		"@commitlint/cli": "^11.0.0",
-		"@commitlint/config-conventional": "^11.0.0",
-		"@semantic-release/changelog": "^5.0.1",
-		"@svgr/webpack": "^5.5.0",
-		"@types/classnames": "^2.2.10",
-		"@types/jest": "^26.0.0",
-		"@types/node": "^14.14.17",
-		"@types/react": "^17.0.0",
-		"@types/react-dom": "^17.0.0",
-		"@types/react-helmet": "^6.0.0",
-		"@types/react-highlight": "^0.12.2",
-		"@types/react-router": "^5.1.9",
-		"@types/react-router-dom": "^5.1.7",
-		"@types/react-syntax-highlighter": "^13.5.0",
-		"@types/systemjs": "^6.1.0",
-		"autoprefixer": "^9.8.6",
-		"babel-core": "^6.26.3",
-		"babel-jest": "^26.3.0",
-		"babel-polyfill": "^6.26.0",
-		"babel-preset-gatsby": "^0.9.1",
-		"canvas": "^2.6.1",
-		"case-sensitive-paths-webpack-plugin": "^2.3.0",
-		"commitizen": "^4.2.1",
-		"copy-webpack-plugin": "^7.0.0",
-		"coveralls": "^3.0.9",
-		"css-loader": "^5.0.1",
-		"cz-conventional-changelog": "^3.1.0",
-		"fibers": "^5.0.0",
-		"file-loader": "^6.0.0",
-		"html-loader": "^1.0.0",
-		"html-webpack-plugin": "^4.2.0",
-		"husky": "^4.2.5",
-		"identity-obj-proxy": "^3.0.0",
-		"jest": "^26.4.2",
-		"jsdom": "^16.1.0",
-		"jsdom-global": "^3.0.2",
-		"lorem-ipsum": "^2.0.3",
-		"package-lock-sanitizer": "^1.0.1",
-		"postcss-loader": "^4.1.0",
-		"prettier": "^2.0.3",
-		"pretty-quick": "^3.1.0",
-		"raf": "^3.4.1",
-		"raw-loader": "^4.0.0",
-		"react-test-renderer": "^17.0.1",
-		"sass": "^1.32.0",
-		"sass-loader": "^10.1.0",
-		"semantic-release": "^17.3.1",
-		"style-loader": "^2.0.0",
-		"ts-jest": "^26.0.0",
-		"ts-loader": "^8.0.13",
-		"ts-node": "^9.1.1",
-		"tslib": "^2.0.0",
-		"typescript": "^4.1.3",
-		"webpack": "^5.11.1",
-		"webpack-cli": "^4.3.0",
-		"webpack-dev-server": "^3.11.1"
-	},
-	"config": {
-		"commitizen": {
-			"path": "./node_modules/cz-conventional-changelog"
-		}
-	},
-	"commitlint": {
-		"extends": [
-			"@commitlint/config-conventional"
-		]
-	},
-	"husky": {
-		"hooks": {
-			"commit-msg": "commitlint --edit",
-			"pre-commit": "npm run sanitize && npm run format:staged && npm run generate:indexes"
-		}
-	},
-	"release": {
-		"pkgRoot": "lib/dist",
-		"plugins": [
-			"@semantic-release/commit-analyzer",
-			"@semantic-release/release-notes-generator",
-			"@semantic-release/changelog",
-			"@semantic-release/npm",
-			"@semantic-release/github"
-		]
-	},
-	"engines": {
-		"node": ">=10.0.0",
-		"npm": ">=6.0.0"
-	},
-	"browserslist": [
-		"cover 99.5%"
-	]
+    "name": "@sebgroup/react-components",
+    "version": "0.0.0-semantically-released",
+    "description": "A set of React components based on SEB design library guidelines for mobile and web React applications",
+    "license": "Apache-2.0",
+    "keywords": [
+        "react",
+        "components",
+        "javascript",
+        "typescript",
+        "frontend",
+        "ui"
+    ],
+    "directories": {
+        "doc": "docs",
+        "lib": "lib"
+    },
+    "scripts": {
+        "test": "npm test --prefix ./lib",
+        "start": "npm start --prefix ./docs",
+        "build:docs": "npm run build --prefix ./docs",
+        "build:lib": "npm run build --prefix ./lib",
+        "build": "npm run build:lib && npm run build:docs",
+        "format:all": "pretty-quick --write \"{,*/**/}*.{js,jsx, ts, tsx,json}\"",
+        "format:staged": "pretty-quick --staged --verbose",
+        "format:check": "pretty-quick --check --verbose",
+        "coveralls": "cat ./coverage/lcov.info | coveralls",
+        "commit": "git-cz",
+        "sanitize": "package-lock-sanitizer && git add package-lock.json",
+        "release": "semantic-release"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/sebgroup/react-components.git"
+    },
+    "bugs": {
+        "url": "https://github.com/sebgroup/react-components/issues"
+    },
+    "homepage": "https://sebgroup.github.io/react-components",
+    "dependencies": {
+        "@sebgroup/bootstrap": "^5.4.0",
+        "@sebgroup/frontend-tools": "^2.0.2",
+        "classnames": "^2.2.6",
+        "react": "^17.0.1",
+        "react-dom": "^17.0.1",
+        "typescript": "^4.1.3"
+    },
+    "devDependencies": {
+        "@commitlint/cli": "^11.0.0",
+        "@commitlint/config-conventional": "^11.0.0",
+        "@types/classnames": "^2.2.11",
+        "@types/node": "^14.14.17",
+        "@types/react": "^17.0.0",
+        "@types/react-dom": "^17.0.0",
+        "commitizen": "^4.2.2",
+        "coveralls": "^3.1.0",
+        "cz-conventional-changelog": "^3.3.0",
+        "husky": "^4.3.6",
+        "package-lock-sanitizer": "^1.0.1",
+        "prettier": "^2.2.1",
+        "pretty-quick": "^3.1.0",
+        "rimraf": "^3.0.2",
+        "sass": "^1.32.0",
+        "semantic-release": "^17.3.1",
+        "tslib": "^2.0.3"
+    },
+    "config": {
+        "commitizen": {
+            "path": "./node_modules/cz-conventional-changelog"
+        }
+    },
+    "commitlint": {
+        "extends": [
+            "@commitlint/config-conventional"
+        ]
+    },
+    "husky": {
+        "hooks": {
+            "commit-msg": "commitlint --edit",
+            "pre-commit": "npm run sanitize && npm run format:staged"
+        }
+    },
+    "release": {
+        "pkgRoot": "lib/dist",
+        "plugins": [
+            "@semantic-release/commit-analyzer",
+            "@semantic-release/release-notes-generator",
+            "@semantic-release/changelog",
+            "@semantic-release/npm",
+            "@semantic-release/github"
+        ]
+    },
+    "publishConfig": {
+        "registry": "https://registry.npmjs.org/",
+        "access": "public"
+    },
+    "engines": {
+        "node": ">=10.0.0",
+        "npm": ">=6.0.0"
+    },
+    "browserslist": [
+        "cover 99.5%"
+    ]
 }

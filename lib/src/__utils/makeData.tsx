@@ -1,5 +1,4 @@
 import React from "react";
-import { loremIpsum } from "lorem-ipsum";
 import { randomId } from "@sebgroup/frontend-tools";
 import { ActionLinkItem, TableRow } from "../Table/Table";
 
@@ -15,8 +14,8 @@ function newPerson(): object {
     const statusChance: number = Math.random();
     return {
         id: parseInt(randomId("").substr(8, 4), 10),
-        firstName: loremIpsum({ units: "words", count: 1 }),
-        lastName: loremIpsum({ units: "words", count: 1 }),
+        firstName: "John",
+        lastName: "Doe",
         age: Math.floor(Math.random() * 30),
         visits: Math.floor(Math.random() * 100),
         progress: Math.floor(Math.random() * 100),
@@ -31,6 +30,8 @@ const actionLinks: Array<ActionLinkItem> = [
     },
 ];
 
+const paragraph: string = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec bibendum eros ipsum, vitae bibendum quam mattis id. Etiam in finibus lacus.`;
+
 export default function makeData<T>(lens: Array<number>, useRowActionColumn?: boolean): T {
     const makeDataLevel: Function = (depth: number = 0): object | Function => {
         const len: number = lens[depth];
@@ -40,7 +41,7 @@ export default function makeData<T>(lens: Array<number>, useRowActionColumn?: bo
                 subRows: lens[depth + 1] ? makeDataLevel(depth + 1) : undefined,
                 actionLinks: useRowActionColumn ? (d % 2 === 0 ? actionLinks : null) : null,
                 actionButtonState: useRowActionColumn ? (d % 2 === 0 ? "disabled" : null) : null,
-                rowContentDetail: <p className="details">{loremIpsum({ units: "sentences", count: 2 })}</p>,
+                rowContentDetail: <p className="details">{paragraph}</p>,
             };
         });
     };

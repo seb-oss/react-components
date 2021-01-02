@@ -1,0 +1,34 @@
+{
+    "name": "react-components-docs",
+    "version": "1.0.0",
+    "description": "The documentation for SEB's React components",
+    "keywords": [
+        "gatsby",
+        "react"
+    ],
+    "scripts": {
+        "start": "gatsby develop -p 3000",
+        "prebuild": "npm run clean",
+        "build": "gatsby build",
+        "serve": "gatsby serve",
+        "clean": "gatsby clean"
+    },
+    "license": "Apache-2.0",
+    "dependencies": {
+        "browser-typescript-parser": "^2.6.7",
+        "gatsby": "^2.26.1",
+        "gatsby-plugin-manifest": "^2.9.1",
+        "gatsby-plugin-offline": "^3.7.1",
+        "gatsby-plugin-react-helmet": "^3.7.0",
+        "gatsby-plugin-react-svg": "^3.0.0",
+        "gatsby-plugin-sass": "^2.8.0",
+        "gatsby-plugin-sitemap": "^2.9.0",
+        "gatsby-plugin-tsconfig-paths": "^1.0.2",
+        "lorem-ipsum": "^2.0.3",
+        "react-helmet": "^6.1.0",
+        "react-syntax-highlighter": "^15.4.3"
+    },
+    "devDependencies": {
+        "@types/react-helmet": "^6.1.0"
+    }
+}
