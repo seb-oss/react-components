@@ -1,184 +1,185 @@
 {
     "paths": {
-        "Accordion": "./lib/src/Accordion/index.ts",
-        "Breadcrumb": "./lib/src/Breadcrumb/index.ts",
-        "Button": "./lib/src/Button/index.ts",
-        "ButtonGroup": "./lib/src/ButtonGroup/index.ts",
-        "Carousel": "./lib/src/Carousel/index.ts",
-        "CheckBox": "./lib/src/CheckBox/index.ts",
-        "Chip": "./lib/src/Chip/index.ts",
-        "Collapse": "./lib/src/Collapse/index.ts",
-        "Datepicker": "./lib/src/Datepicker/index.ts",
-        "DivImage": "./lib/src/DivImage/index.ts",
-        "Dropdown": "./lib/src/Dropdown/index.ts",
-        "FeedbackIndicator": "./lib/src/FeedbackIndicator/index.ts",
-        "Image": "./lib/src/Image/index.ts",
-        "ImageCropper": "./lib/src/ImageCropper/index.ts",
-        "Loader": "./lib/src/Loader/index.ts",
-        "Modal": "./lib/src/Modal/index.ts",
-        "Notification": "./lib/src/Notification/index.ts",
-        "Pagination": "./lib/src/Pagination/index.ts",
-        "ProgressBar": "./lib/src/ProgressBar/index.ts",
-        "RadioButton": "./lib/src/RadioButton/index.ts",
-        "Rating": "./lib/src/Rating/index.ts",
-        "Slider": "./lib/src/Slider/index.ts",
-        "Stepper": "./lib/src/Stepper/index.ts",
-        "StepTracker": "./lib/src/StepTracker/index.ts",
-        "Table": "./lib/src/Table/index.ts",
-        "Tabs": "./lib/src/Tabs/index.ts",
-        "TextArea": "./lib/src/TextArea/index.ts",
-        "TextBox": "./lib/src/TextBox/index.ts",
-        "TextLabel": "./lib/src/TextLabel/index.ts",
-        "Timeline": "./lib/src/Timeline/index.ts",
-        "Timepicker": "./lib/src/Timepicker/index.ts",
-        "Timer": "./lib/src/Timer/index.ts",
-        "Toggle": "./lib/src/Toggle/index.ts",
-        "Tooltip": "./lib/src/Tooltip/index.ts",
-        "Video": "./lib/src/Video/index.ts"
+        "Accordion": "./src/Accordion/index.ts",
+        "Breadcrumb": "./src/Breadcrumb/index.ts",
+        "Button": "./src/Button/index.ts",
+        "ButtonGroup": "./src/ButtonGroup/index.ts",
+        "Carousel": "./src/Carousel/index.ts",
+        "CheckBox": "./src/CheckBox/index.ts",
+        "Chip": "./src/Chip/index.ts",
+        "Collapse": "./src/Collapse/index.ts",
+        "Datepicker": "./src/Datepicker/index.ts",
+        "DivImage": "./src/DivImage/index.ts",
+        "Dropdown": "./src/Dropdown/index.ts",
+        "FeedbackIndicator": "./src/FeedbackIndicator/index.ts",
+        "Image": "./src/Image/index.ts",
+        "ImageCropper": "./src/ImageCropper/index.ts",
+        "Loader": "./src/Loader/index.ts",
+        "Modal": "./src/Modal/index.ts",
+        "Notification": "./src/Notification/index.ts",
+        "Pagination": "./src/Pagination/index.ts",
+        "ProgressBar": "./src/ProgressBar/index.ts",
+        "RadioButton": "./src/RadioButton/index.ts",
+        "Rating": "./src/Rating/index.ts",
+        "Slider": "./src/Slider/index.ts",
+        "StepTracker": "./src/StepTracker/index.ts",
+        "Stepper": "./src/Stepper/index.ts",
+        "Table": "./src/Table/index.ts",
+        "Tabs": "./src/Tabs/index.ts",
+        "TextLabel": "./src/TextLabel/index.ts",
+        "Textarea": "./src/Textarea/index.ts",
+        "Textbox": "./src/Textbox/index.ts",
+        "Timeline": "./src/Timeline/index.ts",
+        "Timepicker": "./src/Timepicker/index.ts",
+        "Timer": "./src/Timer/index.ts",
+        "Toggle": "./src/Toggle/index.ts",
+        "ToggleSelector": "./src/ToggleSelector/index.ts",
+        "Tooltip": "./src/Tooltip/index.ts",
+        "Video": "./src/Video/index.ts"
     },
     "indexes": [
         {
-            "from": "./lib/src/Accordion/index.ts",
+            "from": "./src/Accordion/index.ts",
             "to": "./Accordion/index.js"
         },
         {
-            "from": "./lib/src/Breadcrumb/index.ts",
+            "from": "./src/Breadcrumb/index.ts",
             "to": "./Breadcrumb/index.js"
         },
         {
-            "from": "./lib/src/Button/index.ts",
+            "from": "./src/Button/index.ts",
             "to": "./Button/index.js"
         },
         {
-            "from": "./lib/src/ButtonGroup/index.ts",
+            "from": "./src/ButtonGroup/index.ts",
             "to": "./ButtonGroup/index.js"
         },
         {
-            "from": "./lib/src/Carousel/index.ts",
+            "from": "./src/Carousel/index.ts",
             "to": "./Carousel/index.js"
         },
         {
-            "from": "./lib/src/CheckBox/index.ts",
+            "from": "./src/CheckBox/index.ts",
             "to": "./CheckBox/index.js"
         },
         {
-            "from": "./lib/src/Chip/index.ts",
+            "from": "./src/Chip/index.ts",
             "to": "./Chip/index.js"
         },
         {
-            "from": "./lib/src/Collapse/index.ts",
+            "from": "./src/Collapse/index.ts",
             "to": "./Collapse/index.js"
         },
         {
-            "from": "./lib/src/Datepicker/index.ts",
+            "from": "./src/Datepicker/index.ts",
             "to": "./Datepicker/index.js"
         },
         {
-            "from": "./lib/src/DivImage/index.ts",
+            "from": "./src/DivImage/index.ts",
             "to": "./DivImage/index.js"
         },
         {
-            "from": "./lib/src/Dropdown/index.ts",
+            "from": "./src/Dropdown/index.ts",
             "to": "./Dropdown/index.js"
         },
         {
-            "from": "./lib/src/FeedbackIndicator/index.ts",
+            "from": "./src/FeedbackIndicator/index.ts",
             "to": "./FeedbackIndicator/index.js"
         },
         {
-            "from": "./lib/src/Image/index.ts",
+            "from": "./src/Image/index.ts",
             "to": "./Image/index.js"
         },
         {
-            "from": "./lib/src/ImageCropper/index.ts",
+            "from": "./src/ImageCropper/index.ts",
             "to": "./ImageCropper/index.js"
         },
         {
-            "from": "./lib/src/Loader/index.ts",
+            "from": "./src/Loader/index.ts",
             "to": "./Loader/index.js"
         },
         {
-            "from": "./lib/src/Modal/index.ts",
+            "from": "./src/Modal/index.ts",
             "to": "./Modal/index.js"
         },
         {
-            "from": "./lib/src/Notification/index.ts",
+            "from": "./src/Notification/index.ts",
             "to": "./Notification/index.js"
         },
         {
-            "from": "./lib/src/Pagination/index.ts",
+            "from": "./src/Pagination/index.ts",
             "to": "./Pagination/index.js"
         },
         {
-            "from": "./lib/src/ProgressBar/index.ts",
+            "from": "./src/ProgressBar/index.ts",
             "to": "./ProgressBar/index.js"
         },
         {
-            "from": "./lib/src/RadioButton/index.ts",
+            "from": "./src/RadioButton/index.ts",
             "to": "./RadioButton/index.js"
         },
         {
-            "from": "./lib/src/Rating/index.ts",
+            "from": "./src/Rating/index.ts",
             "to": "./Rating/index.js"
         },
         {
-            "from": "./lib/src/Slider/index.ts",
+            "from": "./src/Slider/index.ts",
             "to": "./Slider/index.js"
         },
         {
-            "from": "./lib/src/Stepper/index.ts",
-            "to": "./Stepper/index.js"
-        },
-        {
-            "from": "./lib/src/StepTracker/index.ts",
+            "from": "./src/StepTracker/index.ts",
             "to": "./StepTracker/index.js"
         },
         {
-            "from": "./lib/src/Table/index.ts",
+            "from": "./src/Stepper/index.ts",
+            "to": "./Stepper/index.js"
+        },
+        {
+            "from": "./src/Table/index.ts",
             "to": "./Table/index.js"
         },
         {
-            "from": "./lib/src/Tabs/index.ts",
+            "from": "./src/Tabs/index.ts",
             "to": "./Tabs/index.js"
         },
         {
-            "from": "./lib/src/TextArea/index.ts",
-            "to": "./TextArea/index.js"
-        },
-        {
-            "from": "./lib/src/TextBox/index.ts",
-            "to": "./TextBox/index.js"
-        },
-        {
-            "from": "./lib/src/TextLabel/index.ts",
+            "from": "./src/TextLabel/index.ts",
             "to": "./TextLabel/index.js"
         },
         {
-            "from": "./lib/src/Timeline/index.ts",
+            "from": "./src/Textarea/index.ts",
+            "to": "./Textarea/index.js"
+        },
+        {
+            "from": "./src/Textbox/index.ts",
+            "to": "./Textbox/index.js"
+        },
+        {
+            "from": "./src/Timeline/index.ts",
             "to": "./Timeline/index.js"
         },
         {
-            "from": "./lib/src/Timepicker/index.ts",
+            "from": "./src/Timepicker/index.ts",
             "to": "./Timepicker/index.js"
         },
         {
-            "from": "./lib/src/Timer/index.ts",
+            "from": "./src/Timer/index.ts",
             "to": "./Timer/index.js"
         },
         {
-            "from": "./lib/src/Toggle/index.ts",
+            "from": "./src/Toggle/index.ts",
             "to": "./Toggle/index.js"
         },
         {
-            "from": "./lib/src/ToggleSelector/index.ts",
+            "from": "./src/ToggleSelector/index.ts",
             "to": "./ToggleSelector/index.js"
         },
         {
-            "from": "./lib/src/Tooltip/index.ts",
+            "from": "./src/Tooltip/index.ts",
             "to": "./Tooltip/index.js"
         },
         {
-            "from": "./lib/src/Video/index.ts",
+            "from": "./src/Video/index.ts",
             "to": "./Video/index.js"
         }
     ]

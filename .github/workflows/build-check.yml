@@ -1,11 +1,10 @@
 name: Build
 
-on:
-  pull_request
+on: pull_request
 
 jobs:
   build_check:
-    runs-on: [ubuntu-latest]
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - name: Setup node
@@ -13,8 +12,6 @@ jobs:
         with:
           node-version: 12.x
       - name: installing dependencies
-        run: npm install
-      - name: running unit tests
-        run: npm test
-      - name: building
-        run: npm run build:production && npm run clean:docs && npm run build:docs
+        run: npm ci
+      - name: testing and building
+        run: npm run build

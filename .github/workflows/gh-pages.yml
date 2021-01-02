@@ -2,27 +2,27 @@ name: Github Pages
 
 on:
   push:
-    branches: [ master ]
+    branches: [master]
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
-    - name: Setup Node.js environment
-      uses: actions/setup-node@v1
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v1
 
-    - name: Installing dependencies
-      run: npm install
+      - name: Installing dependencies
+        run: npm ci
 
-    - name: Generating docs
-      run: npm run docs
+      - name: Generating docs
+        run: npm run build:docs
 
-    - name: GitHub Pages
-      uses: crazy-max/ghaction-github-pages@v1
-      with:
-        build_dir: docs
-      env:
-        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+      - name: GitHub Pages
+        uses: crazy-max/ghaction-github-pages@v1
+        with:
+          build_dir: docs/public
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}

@@ -30,7 +30,7 @@ export interface ModalProps {
     /** the id property of the modal */
     id?: string;
     /** click event when modal is toggled */
-    onDismiss: () => void;
+    onDismiss?: () => void;
     /** Modal position. Available positions: `left`, `right` */
     position?: ModalPositionProp;
     /** Modal toggle */
