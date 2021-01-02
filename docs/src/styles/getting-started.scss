@@ -1,0 +1,11 @@
+@import "./variables";
+
+.container {
+    > .code-snippet {
+        margin-bottom: 1rem;
+        > pre {
+            border-radius: $border-radius !important;
+            overflow-y: hidden !important;
+        }
+    }
+}

@@ -1,0 +1,204 @@
+@import "~@sebgroup/bootstrap/scss/variables";
+
+$transition-time: 200ms;
+
+.rc.step-tracker {
+    position: relative;
+    overflow: hidden;
+    margin: 0 auto;
+    display: inline-flex;
+    .step-wrapper {
+        position: relative;
+        .step {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: $blue-dark;
+            border-radius: 50%;
+            overflow: hidden;
+            transition: all $transition-time;
+            &.active {
+                background-color: $gray-300;
+                .step-border {
+                    border: 2px solid $blue-dark;
+                }
+                svg {
+                    transform: translate(-50%, -50%) scale(0);
+                }
+                .number {
+                    color: $blue-darker;
+                }
+                & ~ .step {
+                    background-color: $gray-300;
+                    svg {
+                        transform: translate(-50%, -50%) scale(0);
+                    }
+                    .number {
+                        color: $blue-darker;
+                    }
+                }
+            }
+            &.numbered {
+                svg {
+                    transform: translate(-50%, -50%) scale(0);
+                }
+                .number {
+                    display: inline-block;
+                }
+            }
+            .step-border {
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                border-radius: 50%;
+                transition: all $transition-time/2;
+            }
+            svg {
+                position: absolute;
+                width: 13px;
+                height: 13px;
+                left: 50%;
+                top: 50%;
+                fill: $white;
+                transform: translate(-50%, -50%) scale(1);
+                transition: all $transition-time/2 $transition-time;
+            }
+            .number {
+                user-select: none;
+                display: none;
+                position: absolute;
+                font-size: 11px;
+                font-weight: bold;
+                left: 7px;
+                top: 2px;
+                color: $white;
+            }
+        }
+        .line {
+            position: absolute;
+            background-color: $gray-300;
+            .progress {
+                background: $blue;
+                position: relative;
+                display: block;
+                height: 4px;
+                transition: $transition-time;
+            }
+        }
+    }
+
+    .text-wrapper {
+        position: relative;
+        flex: 1;
+        > .text {
+            position: relative;
+            .name {
+                position: relative;
+                line-height: 100%;
+                font-size: $font-size-sm;
+            }
+            &.active {
+                .name {
+                    color: $blue-darker;
+                }
+            }
+        }
+    }
+    &.horizontal {
+        padding: 0 50px;
+        flex-direction: column;
+        width: 100%;
+        &.top {
+            flex-direction: column-reverse;
+        }
+        .step-wrapper {
+            height: 20px;
+            width: 100%;
+            .step {
+                transform: translateX(-50%);
+            }
+        }
+        .line {
+            height: 4px;
+            width: 100%;
+            top: 50%;
+            transform: translateY(-50%);
+            .progress {
+                background: $blue;
+                position: relative;
+                display: block;
+                height: 4px;
+                transition: $transition-time;
+            }
+        }
+        .text-wrapper {
+            position: relative;
+            width: 100%;
+            white-space: nowrap;
+            overflow-y: visible;
+            margin: 0.5rem 0;
+            display: table;
+            .text {
+                display: inline-block;
+                text-align: center;
+                transform: translateX(-50%);
+                vertical-align: top;
+                .name {
+                    max-width: 100px;
+                    white-space: normal;
+                    margin: 0 auto;
+                }
+            }
+        }
+    }
+    &.vertical {
+        padding: 1rem;
+        .step-wrapper {
+            flex: 1;
+            width: 30px;
+            text-align: center;
+            .step {
+                left: 50%;
+                transform: translate(-50%, -50%);
+            }
+        }
+        .line {
+            height: 100%;
+            width: 4px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        .text-wrapper {
+            margin: -0.5rem 0;
+            .text {
+                position: relative;
+                text-align: left;
+                &:not(:last-child) {
+                    margin-bottom: 50px;
+                }
+            }
+        }
+        &.left {
+            flex-direction: row-reverse;
+            .text-wrapper {
+                .text {
+                    text-align: right;
+                }
+            }
+        }
+    }
+    &.clickable {
+        .step-wrapper {
+            .step {
+                &:not(.active) {
+                    &:hover {
+                        cursor: pointer;
+                        background-color: $blue;
+                    }
+                }
+            }
+        }
+    }
+}

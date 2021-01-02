@@ -1,0 +1,111 @@
+@import "~@sebgroup/bootstrap/scss/core";
+@import "~@sebgroup/bootstrap/scss/styles/spinners";
+
+@mixin setLoaderSize($size) {
+    > svg {
+        width: $size;
+        height: $size;
+    }
+}
+
+$offset: 200;
+$duration: 1.5s;
+$duration-sq: 1.2s;
+$loader-xs: 1rem;
+$loader-sm: 2.125rem;
+$loader-md: 4.063rem;
+$loader-lg: 6.25rem;
+
+.rc.loader {
+    color: $green;
+    &:not(.loader-cover):not(.loader-fullscreen) {
+        display: inline-flex;
+        vertical-align: middle;
+    }
+    &.loader-cover,
+    &.loader-fullscreen {
+        left: 0;
+        right: 0;
+        bottom: 0;
+        top: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        z-index: $zindex-tooltip + 10;
+    }
+    &.loader-cover {
+        position: absolute;
+    }
+    &.loader-fullscreen {
+        position: fixed;
+    }
+    &.loader-backdrop {
+        background-color: rgba($black, 0.55);
+    }
+    &.loader-xs {
+        @include setLoaderSize($loader-xs);
+    }
+    &.loader-sm {
+        @include setLoaderSize($loader-sm);
+    }
+    &.loader-md {
+        @include setLoaderSize($loader-md);
+    }
+    &.loader-lg {
+        @include setLoaderSize($loader-lg);
+    }
+    &.loader-spinner {
+        > svg {
+            animation: spin $duration linear infinite forwards;
+            > circle {
+                stroke-dasharray: $offset;
+                stroke-dashoffset: 0;
+                transform-origin: center;
+                stroke: currentColor;
+                will-change: transform, stroke;
+                transform: translate3d(0, 0, 0);
+                animation: dash-grow $duration ease-in-out infinite forwards;
+                stroke-width: 6;
+                stroke-linecap: round;
+            }
+        }
+    }
+    &.loader-square {
+        > svg {
+            animation: sk-rotateplane $duration-sq ease-in-out infinite forwards;
+            > rect {
+                fill: currentColor;
+            }
+        }
+    }
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes dash-grow {
+    0% {
+        stroke-dashoffset: $offset;
+        transform: rotate(90deg);
+    }
+    50% {
+        stroke-dashoffset: $offset/4;
+        transform: rotate(135deg);
+    }
+    100% {
+        stroke-dashoffset: $offset;
+        transform: rotate(450deg);
+    }
+}
+
+/* Loader inside other components should inherit their color */
+.rc .rc.loader {
+    color: inherit;
+}

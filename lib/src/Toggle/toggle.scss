@@ -1,0 +1,35 @@
+@import "~@sebgroup/bootstrap/scss/variables";
+
+.rc.custom-control.custom-slide-toggle {
+    margin-top: 10px;
+    margin-bottom: 10px;
+
+    &.inline {
+        display: inline-block;
+        &:not(:last-child) {
+            margin-right: 40px;
+        }
+    }
+
+    > .custom-control-input {
+        &:disabled:not(:checked) {
+            & + label.custom-control-label {
+                &:before {
+                    background-color: $gray-300;
+                }
+            }
+        }
+        &:checked:disabled {
+            & + label.custom-control-label {
+                &:before {
+                    background-color: $gray-500;
+                }
+            }
+        }
+        &:not(:disabled) {
+            & + label.custom-control-label {
+                cursor: pointer;
+            }
+        }
+    }
+}
