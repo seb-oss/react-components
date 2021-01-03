@@ -156,6 +156,7 @@ aside.side-menu {
                 text-decoration: none;
                 border-right: 3px solid transparent;
                 transition: color $base-transition-time linear;
+                direction: ltr;
                 &:hover,
                 &:focus,
                 &.highlighted {

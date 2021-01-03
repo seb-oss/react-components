@@ -200,12 +200,15 @@ export const SideMenu: React.FC = React.memo(() => {
                         Getting Started
                     </Link>
                     <a href={urls.releases} target="_blank" rel="noreferrer noopener nofollow" className="list-item">
-                        <ExternalLinkIcon className="align-icon-with-text" />
                         Release notes
+                        <ExternalLinkIcon className="align-icon-with-text" />
                     </a>
                     <a href={urls.issues} target="_blank" rel="noreferrer noopener nofollow" className="list-item">
-                        <ExternalLinkIcon className="align-icon-with-text" />
                         Issues
+                        <ExternalLinkIcon className="align-icon-with-text" />
+                    </a>
+                    <a href={urls.v4} className="list-item">
+                        Earlier version?
                     </a>
                 </nav>
                 <hr />

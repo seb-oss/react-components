@@ -20,7 +20,8 @@
             margin: 0;
         }
     }
-    .card {
+    > .card,
+    .apis > .card {
         border-radius: $border-radius;
         overflow: hidden;
         margin-bottom: 1rem;

@@ -1,6 +1,6 @@
 import React from "react";
 import { randomId } from "@sebgroup/frontend-tools";
-import "./dropdown-style.scss";
+import "./dropdown.scss";
 import classnames from "classnames";
 
 export type DropdownValue = React.DetailedHTMLProps<React.SelectHTMLAttributes<HTMLSelectElement>, HTMLSelectElement>["value"];

@@ -3,6 +3,7 @@ declare interface NavsURLs {
     github: string;
     contribute: string;
     issues: string;
+    v4: string;
 }
 
 declare module "*.svg" {

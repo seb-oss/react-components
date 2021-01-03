@@ -11,3 +11,6 @@ test/
 coverage/
 node_modules/
 dist/
+docs/public/
+docs/static/
+

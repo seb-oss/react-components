@@ -1,51 +1,58 @@
 import React from "react";
 import Docs from "@common/Docs";
 import { Breadcrumb, BreadcrumbItem } from "@sebgroup/react-components/Breadcrumb";
+import classnames from "classnames";
+import { useDynamicForm } from "@hooks/useDynamicForm";
 
-const userIcon: React.ReactElement = (
-    <div className="d-flex align-items-center">
-        <svg width="20px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 170 170">
-            <path d="M149.1,165h-6V132.3c0-18.8-14.2-34.8-32.5-36.8l-24,15.9a3,3,0,0,1-3.3,0L59.2,95.5C41,97.7,26.9,113.6,26.9,132.3V165h-6V132.3c0-22.5,16.7-40.9,38.8-42.9a3,3,0,0,1,1.9.5L85,105.3l23.2-15.4a3,3,0,0,1,1.9-.5c21.9,1.8,39,20.7,39,42.9Z" />
-            <path d="M85,86.4A31.7,31.7,0,0,1,53.4,54.8V36.6a31.6,31.6,0,1,1,63.3,0V54.8A31.7,31.7,0,0,1,85,86.4Zm0-75.5A25.7,25.7,0,0,0,59.4,36.6V54.8a25.6,25.6,0,0,0,51.3,0V36.6A25.7,25.7,0,0,0,85,10.9Z" />
-        </svg>
-        <span className="ml-1"> Account </span>
-    </div>
+const homeIcon: JSX.Element = (
+    <svg xmlns="http://www.w3.org/2000/svg" width="1.3em" fill="currentColor" viewBox="0 0 16 16" style={{ verticalAlign: "baseline" }}>
+        <path d="M6.5 14.5v-3.505c0-.245.25-.495.5-.495h2c.25 0 .5.25.5.5v3.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5z" />
+    </svg>
 );
 
 const BreadcrumbPage: React.FC = () => {
     const importString: string = require("!raw-loader!@sebgroup/react-components/Breadcrumb/Breadcrumb");
     const importedFiles: Array<string> = [require("!raw-loader!@sebgroup/react-components/Breadcrumb/BreadcrumbItem")];
-    const code: string = `<Breadcrumb>
-    {
-        ["Home", "Articles", "react-components", "about"]
-            .map((title: string, key) =>
-                <BreadcrumbItem key={key}>{title}</BreadcrumbItem>)
-    }
+    const [renderControls, { controls }] = useDynamicForm([
+        {
+            key: "controls",
+            items: [
+                {
+                    key: "light",
+                    label: "Light",
+                    description: "Enable light mode",
+                    controlType: "Checkbox",
+                },
+            ],
+        },
+    ]);
+    const code: string = `<Breadcrumb onNavigate={(e) => e.preventDefault(); /** Or do something else */}>
+    <BreadcrumbItem>Home</BreadcrumbItem>
+    <BreadcrumbItem>Users</BreadcrumbItem>
+    <BreadcrumbItem>Edit</BreadcrumbItem>
 </Breadcrumb>`;
 
-    // const breadcrumbList: Array<BreadcrumbItemProps> = [<BreadcrumbItem>Hello</BreadcrumbItem>, "Articles", "react-components", "about"];
     return (
         <Docs
             mainFile={importString}
             importedFiles={importedFiles}
             example={
-                <div>
-                    <Breadcrumb>
-                        {["Home", "Articles", "react-components", "about"].map((title: string, key) => (
-                            <BreadcrumbItem onClick={() => alert(`Clicked on ${title}`)} key={key}>
-                                {title}
-                            </BreadcrumbItem>
-                        ))}
-                    </Breadcrumb>
-
-                    <Breadcrumb>
-                        <BreadcrumbItem onClick={() => alert(`Clicked on user account with custom icon`)}>{userIcon}</BreadcrumbItem>
-                        <BreadcrumbItem>Details</BreadcrumbItem>
+                <div className={classnames("p-2", { "bg-dark": controls.light })}>
+                    <Breadcrumb
+                        onNavigate={(e) => {
+                            e.preventDefault();
+                            alert(`'${e.currentTarget.title}' clicked`);
+                        }}
+                        light={controls.light}
+                    >
+                        <BreadcrumbItem title="Home">{homeIcon}</BreadcrumbItem>
+                        <BreadcrumbItem title="Users">Users</BreadcrumbItem>
+                        <BreadcrumbItem title="Edit">Edit</BreadcrumbItem>
                     </Breadcrumb>
                 </div>
             }
             code={code}
-            controls={<div></div>}
+            controls={renderControls()}
         />
     );
 };

@@ -2,7 +2,7 @@ import React from "react";
 import classnames from "classnames";
 import { VideoProps, Mapper, YoutubeAPI, VimeoAPI, MapperItem } from "./types-definition";
 import { vimeoKeysMapper, youtubeKeysMapper } from "./api-mapper";
-import "./video-style.scss";
+import "./video.scss";
 
 /** A video component is an React component for playing videos */
 export const Video: React.FC<VideoProps> = (props: VideoProps) => {

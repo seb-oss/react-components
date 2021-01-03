@@ -5,6 +5,7 @@ export const urls: NavsURLs = {
     github: "https://github.com/sebgroup/ng-components/",
     contribute: "https://github.com/sebgroup/ng-components/blob/alpha/CONTRIBUTING.md",
     issues: "https://github.com/sebgroup/ng-components/issues",
+    v4: "/v4/index.html",
 };
 
 const imageUrl: string = `${pkg.homepage}/site-preview.png`;

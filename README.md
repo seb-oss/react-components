@@ -18,9 +18,9 @@ This is a set of react components some of which are based on SEB's bootstrap. Th
 
 This version of components has been developed with:
 
--   React `^16.12`
--   Typescript `^3.7`
--   SEB Bootstrap `^5.1`
+-   React
+-   Typescript
+-   SEB Bootstrap
 
 ## Installation
 

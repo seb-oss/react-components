@@ -13,17 +13,10 @@ export type AccordionItemProps = JSX.IntrinsicElements["div"] & {
 };
 
 export const AccordionItem: React.FC<AccordionItemProps> = React.memo(({ header, subHeader, onToggle, ...props }: AccordionItemProps) => {
-    const [cardClassName, setCardClassName] = React.useState<string>("card");
-    const [collapseClassName, setCollapseClassName] = React.useState<string>("collapse");
     const [uniqueId] = React.useState<string>(randomId("accordion-item-"));
 
-    React.useEffect(() => {
-        setCardClassName(classnames(["card", { collapsed: !props.defaultChecked }, props.className]));
-        setCollapseClassName(classnames(["collapse", { collapsed: !props.defaultChecked }]));
-    }, [props.defaultChecked, props.className]);
-
     return (
-        <div className={cardClassName} {...props}>
+        <div className={classnames("rc", "card", { collapsed: !props.defaultChecked }, props.className)} {...props}>
             <div className="card-header" id={uniqueId + "-header"}>
                 <button
                     className="btn btn-link"
@@ -39,7 +32,12 @@ export const AccordionItem: React.FC<AccordionItemProps> = React.memo(({ header,
                     {subHeader && <h6>{subHeader}</h6>}
                 </button>
             </div>
-            <div id={uniqueId} className={collapseClassName} aria-labelledby={uniqueId + "--header"} data-parent={props["data-parent-id"] ? `#${props["data-parent-id"]}` : null}>
+            <div
+                id={uniqueId}
+                className={classnames("collapse", { collapsed: !props.defaultChecked })}
+                aria-labelledby={uniqueId + "--header"}
+                data-parent={props["data-parent-id"] ? `#${props["data-parent-id"]}` : null}
+            >
                 <Collapse className="card-body" toggle={props.defaultChecked}>
                     <div className="content">{props.children}</div>
                 </Collapse>
