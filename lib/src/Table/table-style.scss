@@ -18,10 +18,15 @@ table {
                         &:hover {
                             color: $icon-active-color;
                         }
+
+                        .sort-holder {
+                            display: flex;
+                            align-items: center;
+                        }
                     }
 
                     .icon-holder {
-                        vertical-align: middle;
+                        vertical-align: baseline;
                         position: relative;
                         margin-left: 5px;
                         height: $icon-size;
@@ -115,6 +120,7 @@ table {
                         position: relative;
                         display: flex;
                         align-items: center;
+                        justify-content: flex-end;
 
                         button {
                             min-height: $icon-size;

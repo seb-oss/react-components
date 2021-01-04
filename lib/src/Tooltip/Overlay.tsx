@@ -65,9 +65,7 @@ export const Overlay: React.FC<OverlayProps> = React.forwardRef((props: OverlayP
             if (referenceDomRect.bottom < 0 || referenceDomRect.right < 0 || referenceDomRect.left > window.innerWidth || referenceDomRect.top > window.innerHeight) {
                 overlayContentRef?.current?.blur();
             }
-            overlayPositionChecker.getPosition(props.position || "top").then((position: ElementPlacementWithCoord) => {
-                setPlacementWithCoords(position);
-            });
+            overlayPositionChecker.getPosition(props.position || "top").then(setPlacementWithCoords);
         }
     }
 

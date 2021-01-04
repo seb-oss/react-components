@@ -1,10 +1,16 @@
+# Files
 *.md
 *.yml
-__mocks__
-coverage
-node_modules
-dist
-.github
-.vscode
 package.json
 package-lock.json
+
+# Directories
+.github/
+.vscode/
+test/
+coverage/
+node_modules/
+dist/
+docs/public/
+docs/static/
+

@@ -1,0 +1,40 @@
+{
+    "name": "react-components-lib",
+    "version": "1.0.0",
+    "description": "The components library containing SEB's React components",
+    "scripts": {
+        "prebuild": "rimraf dist/*",
+        "build": "webpack",
+        "postbuild": "rimraf dist/**/*.test.d.ts && node scripts/post-build.js",
+        "pretest": "rimraf coverage/*",
+        "test": "jest --forceExit --detectOpenHandles --no-cache"
+    },
+    "keywords": [
+        "react"
+    ],
+    "license": "Apache-2.0",
+    "dependencies": {
+        "regenerator-runtime": "^0.13.7"
+    },
+    "devDependencies": {
+        "@babel/preset-env": "^7.12.11",
+        "@types/jest": "^26.0.19",
+        "babel-jest": "^26.6.3",
+        "canvas": "^2.6.1",
+        "case-sensitive-paths-webpack-plugin": "^2.3.0",
+        "copy-webpack-plugin": "^7.0.0",
+        "css-loader": "^5.0.1",
+        "file-loader": "^6.2.0",
+        "identity-obj-proxy": "^3.0.0",
+        "jest": "^26.6.3",
+        "postcss-loader": "^4.1.0",
+        "raf": "^3.4.1",
+        "raw-loader": "^4.0.2",
+        "sass-loader": "^10.1.0",
+        "style-loader": "^2.0.0",
+        "ts-jest": "^26.4.4",
+        "ts-loader": "^8.0.13",
+        "webpack": "^5.11.1",
+        "webpack-cli": "^4.3.1"
+    }
+}

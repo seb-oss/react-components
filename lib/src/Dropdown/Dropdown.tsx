@@ -1,9 +1,12 @@
 import React from "react";
 import { randomId } from "@sebgroup/frontend-tools";
-import "./dropdown-style.scss";
+import "./dropdown.scss";
+import classnames from "classnames";
 
-export interface DropdownItem<T = any> {
-    value: T;
+export type DropdownValue = React.DetailedHTMLProps<React.SelectHTMLAttributes<HTMLSelectElement>, HTMLSelectElement>["value"];
+
+export interface DropdownItem {
+    value: string;
     label: string;
 }
 
@@ -17,8 +20,6 @@ interface DisplayDropdownItem extends UniqueDropdownItem {
     className: string;
 }
 
-export type DropdownChangeEvent = DropdownItem | Array<DropdownItem> | React.ChangeEvent<HTMLSelectElement>;
-
 export interface DropdownPlaceholders {
     searchText?: string;
     selectAllOptionText?: string;
@@ -27,25 +28,32 @@ export interface DropdownPlaceholders {
     noResultText?: string;
 }
 
-export interface DropdownProps {
+interface OverriddenNativeProps extends React.DetailedHTMLProps<React.SelectHTMLAttributes<HTMLSelectElement>, HTMLSelectElement> {
+    onChange?: any;
+}
+
+export interface DropdownProps extends OverriddenNativeProps {
+    onChange?: (value: DropdownValue) => void;
     className?: string;
     clearable?: boolean;
     disabled?: boolean;
     error?: string;
-    id?: string;
     label?: string;
     list: Array<DropdownItem>;
     more?: boolean;
+    /** @deprecated use `multiple` instead */
     multi?: boolean;
-    name?: string;
+    /** @deprecated use `value` instead @type DropdownValue */
+    selectedValue?: DropdownItem | DropdownItem[];
+    /** @deprecated The component will automatically switch to native for mobile devices */
     native?: boolean;
-    onChange: (event: DropdownChangeEvent) => void;
     placeholder?: string;
     searchable?: boolean;
     placeholders?: DropdownPlaceholders;
     /** @deprecated use placedholdersConfig.searchText instead */
     searchPlaceholder?: string;
-    selectedValue: DropdownItem | Array<DropdownItem>;
+    /** Div wrapper props. */
+    wrapperProps?: JSX.IntrinsicElements["div"];
 }
 
 const chevronDownIcon: JSX.Element = (
@@ -64,7 +72,23 @@ const moreIcon: JSX.Element = (
     </svg>
 );
 
-export const Dropdown: React.FC<DropdownProps> = (props: DropdownProps) => {
+export const Dropdown: React.FC<DropdownProps> = ({
+    clearable,
+    disabled,
+    error,
+    label,
+    list,
+    more,
+    multiple,
+    onChange,
+    placeholder,
+    searchable,
+    placeholders,
+    searchPlaceholder,
+    value,
+    wrapperProps,
+    ...props
+}: DropdownProps) => {
     const selectedDisplayLength: number = 2;
     // COMPONENT INTERNAL STATE INIT ================================
     const [open, setOpen] = React.useState<boolean>(false);
@@ -86,6 +110,14 @@ export const Dropdown: React.FC<DropdownProps> = (props: DropdownProps) => {
             document.removeEventListener("mousedown", handleClickOutside);
         };
     });
+
+    const isMobile = (): boolean => {
+        if (typeof window !== "undefined" && !!window["navigator"] && !!window.navigator["userAgent"]) {
+            return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(window?.navigator?.userAgent) || false;
+        } else {
+            return false;
+        }
+    };
 
     const handleClickOutside = (event): void => {
         if (dropdownToggleRef.current && !dropdownToggleRef.current.contains(event.target) && dropdownMenuRef.current && !dropdownMenuRef.current.contains(event.target)) {
@@ -112,8 +144,19 @@ export const Dropdown: React.FC<DropdownProps> = (props: DropdownProps) => {
     }, [currentFocused, shouldFocus]);
 
     React.useEffect(() => {
-        setId(randomId("dd-"));
-    }, []);
+        setId(randomId(`dd-${props.id ? props.id : ""}`));
+    }, [props.id]);
+
+    React.useEffect(() => {
+        if (value) {
+            if (multiple && !Array.isArray(value)) {
+                const val: string = value as string;
+                onChange && onChange(val ? [val] : "");
+            } else if (!multiple && Array.isArray(value) && value.length) {
+                onChange && onChange(value[0]);
+            }
+        }
+    }, [multiple, value]);
 
     const handleFocus = (): void => {
         const focusSuccess: boolean = focusCurrentItem();
@@ -140,25 +183,25 @@ export const Dropdown: React.FC<DropdownProps> = (props: DropdownProps) => {
 
     // EXTRA CONFIG ================================
     // Don't display anything if cannot evaluate the list
-    const isListAnArray: boolean = Array.isArray(props.list);
-    if (!props.list || !isListAnArray) {
-        console.warn("Failed to load the dropdown component. Invalid list provided.", props.list);
+    const isListAnArray: boolean = Array.isArray(list);
+    if (!list || !isListAnArray) {
+        console.warn("Failed to load the dropdown component. Invalid list provided.", list);
         return null;
     }
 
     /** array of dropdown item elements with a unique id, the original dropdownItem and calculated selected property */
-    const uniqueList: Array<UniqueDropdownItem> = props.list
+    const uniqueList: Array<UniqueDropdownItem> = list
         .filter((e: DropdownItem) => e && e.hasOwnProperty("value") && e.hasOwnProperty("label"))
         .map((e: DropdownItem, i: number) => {
             const uniqueListId: string = `${e.value}-${i}`;
             let selected: boolean = false;
 
-            if (!props.multi) {
-                if ((props.selectedValue as DropdownItem) && e.value === (props.selectedValue as DropdownItem).value) {
+            if (!multiple) {
+                if (value !== undefined && e.value === value) {
                     selected = true;
                 }
             } else {
-                if ((props.selectedValue as Array<DropdownItem>) && (props.selectedValue as Array<DropdownItem>).find((el: DropdownItem) => el.value === e.value)) {
+                if (value !== undefined && Array.isArray(value) && (value as string[])?.find((el: any) => el === e.value)) {
                     selected = true;
                 }
             }
@@ -170,7 +213,7 @@ export const Dropdown: React.FC<DropdownProps> = (props: DropdownProps) => {
         .map((e: UniqueDropdownItem) => {
             return {
                 ...e,
-                className: `dropdown-item custom-dropdown-item${props.multi ? " multi" : ""}${e.selected ? " selected" : ""}`,
+                className: `dropdown-item custom-dropdown-item${multiple ? " multi" : ""}${e.selected ? " selected" : ""}`,
             };
         })
         .filter((e: UniqueDropdownItem) => e.dropdownItem.label.toLowerCase().includes(searchText.toLowerCase())); // filtering based on current search term
@@ -180,12 +223,12 @@ export const Dropdown: React.FC<DropdownProps> = (props: DropdownProps) => {
     const allSelected: boolean = selectedList.length === uniqueList.length;
 
     // adding the select all row on top of the list for multi select option
-    if (props.multi && props.list.length > 1 && searchText.length === 0) {
+    if (multiple && list.length > 1 && searchText.length === 0) {
         displayList.unshift({
             id: "select-all",
             dropdownItem: {
                 value: "select-all",
-                label: props.placeholders?.selectAllOptionText || "Select All",
+                label: placeholders?.selectAllOptionText || "Select All",
             },
             selected: allSelected,
             className: `dropdown-item select-all custom-dropdown-item multi${allSelected ? " selected" : ""}`,
@@ -194,7 +237,7 @@ export const Dropdown: React.FC<DropdownProps> = (props: DropdownProps) => {
 
     // MISC ================================
     // show the component as disabled is disabled prop is true OR the list is empty
-    const shouldDisable: boolean = props.disabled || !uniqueList.length;
+    const shouldDisable: boolean = disabled || !uniqueList.length;
     /** list of refs for each element in the displayList array */
     const listRefs: Array<React.RefObject<HTMLButtonElement>> = displayList.map(() => React.createRef<HTMLButtonElement>());
 
@@ -232,7 +275,7 @@ export const Dropdown: React.FC<DropdownProps> = (props: DropdownProps) => {
                 case "enter":
                     event.preventDefault();
                     if (currentFocused !== -1) {
-                        if (props.multi && searchText.length === 0 && currentFocused === 0) {
+                        if (multiple && searchText.length === 0 && currentFocused === 0) {
                             handleSelectAll();
                         } else {
                             dropdownItemSelected(displayList[currentFocused].dropdownItem);
@@ -277,7 +320,7 @@ export const Dropdown: React.FC<DropdownProps> = (props: DropdownProps) => {
 
     /** Function containing the clear button logic */
     const handleClear = (): void => {
-        props.onChange(null);
+        onChange && onChange("");
         setOpen(false);
     };
 
@@ -291,21 +334,19 @@ export const Dropdown: React.FC<DropdownProps> = (props: DropdownProps) => {
 
     /** Function containing the select dropdown item logic */
     const dropdownItemSelected = (item: DropdownItem): void => {
-        if (!props.multi) {
+        if (!multiple) {
             const newItem: DropdownItem = { ...item };
-            props.onChange(newItem);
+            onChange && onChange(newItem.value);
             setOpen(false);
         } else {
-            const currentList: Array<DropdownItem> = (props.selectedValue as Array<DropdownItem>) ? (props.selectedValue as Array<DropdownItem>) : [];
-            const index: number = currentList.findIndex((e: DropdownItem) => e.value === item.value);
+            const index: number = selectedList.findIndex((e: DropdownItem) => e.value === item.value);
+            let newList: any[] = [];
             if (index === -1) {
-                const newItem: DropdownItem = { ...item };
-                const newList: Array<DropdownItem> = [...currentList, newItem];
-                props.onChange(newList);
+                newList = [...((value as readonly string[]) || []), item.value];
             } else {
-                const newList: Array<DropdownItem> = currentList.filter((e: DropdownItem) => e.value !== item.value);
-                props.onChange(newList);
+                newList = (value as readonly string[])?.filter((v: any) => v !== item.value) || [];
             }
+            onChange && onChange([...newList]);
         }
     };
 
@@ -317,22 +358,22 @@ export const Dropdown: React.FC<DropdownProps> = (props: DropdownProps) => {
     /** Function containing the select all button logic */
     const handleSelectAll = (): void => {
         if (allSelected) {
-            props.onChange([]);
+            onChange && onChange([]);
         } else {
-            props.onChange(props.list);
+            onChange && onChange(list.map((e: DropdownItem) => e.value as string));
         }
     };
 
     // HELPERS ================================
     /** Returns the appropriate title for different situations and component types */
-    const getTitleLabel = () => {
+    const getTitleLabel = (): string => {
         if (uniqueList && uniqueList.length === 0) {
-            return props.placeholders?.emptyText || "Empty";
+            return placeholders?.emptyText || "Empty";
         }
         if (selectedList && selectedList.length > 0) {
-            if (props.multi) {
+            if (multiple) {
                 if (allSelected) {
-                    return props.placeholders?.selectAllText || `All selected (${selectedList.length})`;
+                    return placeholders?.selectAllText || `All selected (${selectedList.length})`;
                 }
                 if (selectedList.length === 1) {
                     return selectedList[0].label;
@@ -343,152 +384,150 @@ export const Dropdown: React.FC<DropdownProps> = (props: DropdownProps) => {
                     .join(", ");
                 return `${displayText}${selectedList.length > selectedDisplayLength ? `... (+${selectedList.slice(selectedDisplayLength).length})` : ""}`;
             }
-            return (props.selectedValue as DropdownItem).label;
+            return value !== undefined ? list.filter((e: DropdownItem) => e.value === value)[0]?.label : null;
         }
 
-        return props.placeholder && props.placeholder.length ? props.placeholder : "Select ...";
+        return placeholder && placeholder.length ? placeholder : "Select ...";
     };
 
-    // Display the custom dropdown with native elements if prop is set to native
-    if (props.native) {
-        return (
-            <div className={`custom-native-dropdown` + (props.error ? " has-error" : "")}>
-                {props.label && <label className={`dropdown-label ${shouldDisable ? " disabled" : ""}`}>{props.label}</label>}
+    return (
+        <div {...wrapperProps} className={classnames("dropdown custom-dropdown", { disabled: shouldDisable }, { "has-error": error }, wrapperProps?.className)}>
+            {label && <label className={classnames("dropdown-label", { disabled: shouldDisable })}>{label}</label>}
+
+            {isMobile() && (
                 <select
+                    {...props}
+                    value={value || ""}
+                    multiple={multiple}
                     disabled={shouldDisable}
-                    className={`form-control custom-select custom-native-dropdown${shouldDisable ? " disabled" : ""}${props.className ? ` ${props.className}` : ""}`}
-                    name={props.name}
-                    value={props.selectedValue ? (props.selectedValue as DropdownItem).value : ""}
-                    onChange={props.onChange}
-                    id={props.id}
-                    placeholder={props.placeholder || null}
-                    multiple={!!props.multi}
+                    className={classnames(`form-control custom-select custom-native-dropdown`, { disabled: shouldDisable }, props?.className)}
+                    id={id}
+                    onChange={(e) => {
+                        onChange && onChange(multiple ? Array.from(e.target.selectedOptions, (option) => option.value) : e.target.value);
+                    }}
                 >
-                    {props.list.map((item: DropdownItem) => (
-                        <option key={item.value} value={item.value}>
+                    {list.map((item: DropdownItem, i: number) => (
+                        <option key={i} value={item.value}>
                             {item.label}
                         </option>
                     ))}
                 </select>
-                {props.error && <div className="alert alert-danger custom-alert">{props.error}</div>}
-            </div>
-        );
-    }
+            )}
 
-    return (
-        <div className={`dropdown custom-dropdown${shouldDisable ? " disabled" : ""}${props.error ? " has-error" : ""}${props.className ? " " + props.className : ""}`} id={props.id}>
-            {props.label && <label className="dropdown-label">{props.label}</label>}
+            {!isMobile() && (
+                <div
+                    onKeyDown={shouldDisable ? null : handleKeyDownToggle}
+                    ref={dropdownToggleRef}
+                    className={classnames(`btn btn-secondary custom-dropdown-toggle`, { open }, { more }, { "mx-right": more }, { disabled: shouldDisable }, props?.className)}
+                    id={id}
+                    aria-label={`Dropdown toggle: ${getTitleLabel()}`}
+                    aria-haspopup={true}
+                    aria-expanded={open}
+                    tabIndex={shouldDisable ? -1 : 0}
+                    onClick={shouldDisable ? null : handleClickToggle}
+                >
+                    {!more ? (
+                        <>
+                            <div className="title">{getTitleLabel()}</div>
 
-            <div
-                onKeyDown={shouldDisable ? null : handleKeyDownToggle}
-                ref={dropdownToggleRef}
-                className={`btn btn-secondary custom-dropdown-toggle${open ? " open" : ""}${props.more ? " more mx-right" : ""}${shouldDisable ? " disabled" : ""}`}
-                id={id}
-                aria-label={`Dropdown toggle: ${getTitleLabel()}`}
-                aria-haspopup={true}
-                aria-expanded={open}
-                tabIndex={shouldDisable ? -1 : 0}
-                onClick={shouldDisable ? null : handleClickToggle}
-            >
-                {!props.more ? (
-                    <>
-                        <div className="title">{getTitleLabel()}</div>
-
-                        <div className="right-items">
-                            {(props.clearable || props.multi) && selectedList.length > 0 ? (
-                                <div className="dropdown-icon-holder" onClick={shouldDisable ? null : handleClickClear}>
-                                    {timesIcon}
-                                </div>
-                            ) : null}
-                            <div className="dropdown-icon-holder chevron">{chevronDownIcon}</div>
-                        </div>
-                    </>
-                ) : (
-                    <div className="right-items">
-                        <div className="dropdown-icon-holder">{moreIcon}</div>
-                    </div>
-                )}
-            </div>
-
-            <div
-                aria-labelledby={id}
-                onKeyDown={handleKeyDownMenu}
-                tabIndex={0}
-                ref={dropdownMenuRef}
-                className={`dropdown-menu custom-dropdown-menu${open ? " show" : ""}${props.more ? " dropdown-menu-right" : ""}`}
-            >
-                {props.searchable && (
-                    <>
-                        <input
-                            ref={searchRef}
-                            type="search"
-                            className="search-input"
-                            name="search-input"
-                            placeholder={props.placeholders?.searchText || props.searchPlaceholder || "Search ..."}
-                            value={searchText}
-                            onChange={handleOnChangeSearch}
-                        />
-                        <div className="dropdown-divider blue" />
-                    </>
-                )}
-
-                {displayList.map((item: DisplayDropdownItem, index: number) => {
-                    return (
-                        <React.Fragment key={item.id}>
-                            <button
-                                type="button"
-                                tabIndex={0}
-                                ref={listRefs[index]}
-                                className={`${item.className}${currentFocused === index ? " highlighted" : ""}`}
-                                onMouseMove={() => {
-                                    if (currentFocused !== index) {
-                                        setCurrentFocused(index);
-                                    }
-                                    if (shouldFocus === true) {
-                                        setShouldFocus(false);
-                                    }
-                                }}
-                                onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
-                                    e.preventDefault();
-                                    if (shouldFocus === false) {
-                                        setShouldFocus(true);
-                                    }
-                                    if (props.multi && searchText.length === 0 && index === 0) {
-                                        handleSelectAll();
-                                    } else {
-                                        dropdownItemSelected(item.dropdownItem);
-                                    }
-                                }}
-                            >
-                                {props.multi ? (
-                                    <div tabIndex={-1} className="custom-control">
-                                        <input tabIndex={-1} type="checkbox" className="custom-control-input" id={item.id} name={item.id} defaultChecked={item.selected} />
-                                        {item.dropdownItem.label && (
-                                            <label tabIndex={-1} className="custom-control-label" htmlFor={item.id}>
-                                                {item.dropdownItem.label}
-                                            </label>
-                                        )}
+                            <div className="right-items">
+                                {(clearable || multiple) && selectedList.length > 0 ? (
+                                    <div className="dropdown-icon-holder" onClick={shouldDisable ? null : handleClickClear}>
+                                        {timesIcon}
                                     </div>
-                                ) : (
-                                    item.dropdownItem.label && (
-                                        <div tabIndex={-1} className="label">
-                                            {item.dropdownItem.label}
-                                        </div>
-                                    )
-                                )}
-                            </button>
-                            {props.multi && searchText.length === 0 && index === 0 && <div className="dropdown-divider" />}
-                        </React.Fragment>
-                    );
-                })}
+                                ) : null}
+                                <div className="dropdown-icon-holder chevron">{chevronDownIcon}</div>
+                            </div>
+                        </>
+                    ) : (
+                        <div className="right-items">
+                            <div className="dropdown-icon-holder">{moreIcon}</div>
+                        </div>
+                    )}
+                </div>
+            )}
 
-                {displayList.length === 0 && (
-                    <a className={`dropdown-item custom-dropdown-item disabled`}>
-                        <div className="label">{props.placeholders?.noResultText || "No results"}</div>
-                    </a>
-                )}
-            </div>
-            {props.error && <div className="alert alert-danger custom-alert">{props.error}</div>}
+            {!isMobile() && (
+                <div
+                    aria-labelledby={id}
+                    onKeyDown={handleKeyDownMenu}
+                    tabIndex={0}
+                    ref={dropdownMenuRef}
+                    className={`dropdown-menu custom-dropdown-menu${open ? " show" : ""}${more ? " dropdown-menu-right" : ""}`}
+                >
+                    {searchable && (
+                        <>
+                            <input
+                                ref={searchRef}
+                                type="search"
+                                className="search-input"
+                                name="search-input"
+                                placeholder={placeholders?.searchText || "Search ..."}
+                                value={searchText}
+                                onChange={handleOnChangeSearch}
+                            />
+                            <div className="dropdown-divider blue" />
+                        </>
+                    )}
+
+                    {displayList.map((item: DisplayDropdownItem, index: number) => {
+                        return (
+                            <React.Fragment key={item.id}>
+                                <button
+                                    type="button"
+                                    tabIndex={0}
+                                    ref={listRefs[index]}
+                                    className={`${item.className}${currentFocused === index ? " highlighted" : ""}`}
+                                    onMouseMove={() => {
+                                        if (currentFocused !== index) {
+                                            setCurrentFocused(index);
+                                        }
+                                        if (shouldFocus === true) {
+                                            setShouldFocus(false);
+                                        }
+                                    }}
+                                    onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+                                        e.preventDefault();
+                                        if (shouldFocus === false) {
+                                            setShouldFocus(true);
+                                        }
+                                        if (multiple && searchText.length === 0 && index === 0) {
+                                            handleSelectAll();
+                                        } else {
+                                            dropdownItemSelected(item.dropdownItem);
+                                        }
+                                    }}
+                                >
+                                    {multiple ? (
+                                        <div tabIndex={-1} className="custom-control">
+                                            <input tabIndex={-1} type="checkbox" className="custom-control-input" id={item.id} name={item.id} defaultChecked={item.selected} />
+                                            {item.dropdownItem.label && (
+                                                <label tabIndex={-1} className="custom-control-label" htmlFor={item.id}>
+                                                    {item.dropdownItem.label}
+                                                </label>
+                                            )}
+                                        </div>
+                                    ) : (
+                                        item.dropdownItem.label && (
+                                            <div tabIndex={-1} className="label">
+                                                {item.dropdownItem.label}
+                                            </div>
+                                        )
+                                    )}
+                                </button>
+                                {multiple && searchText.length === 0 && index === 0 && <div className="dropdown-divider" />}
+                            </React.Fragment>
+                        );
+                    })}
+
+                    {displayList.length === 0 && (
+                        <a className={`dropdown-item custom-dropdown-item disabled`}>
+                            <div className="label">{placeholders?.noResultText || "No results"}</div>
+                        </a>
+                    )}
+                </div>
+            )}
+            {error && <div className="alert alert-danger custom-alert">{error}</div>}
         </div>
     );
 };

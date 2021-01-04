@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+        "jsx": "react",
+        "esModuleInterop": true,
+        "baseUrl": "./",
+        "paths": {
+            "@sebgroup/react-components/*": ["../lib/src/*"],
+            "@common/*": ["src/components/*"],
+            "@hooks/*": ["src/hooks/*"],
+            "@utils/*": ["src/utils/*"],
+            "@configs": ["src/configs.ts"],
+            "@pkg": ["../package.json"]
+        }
+    }
+}

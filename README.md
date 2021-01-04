@@ -18,9 +18,9 @@ This is a set of react components some of which are based on SEB's bootstrap. Th
 
 This version of components has been developed with:
 
--   React `^16.12`
--   Typescript `^3.7`
--   SEB Bootstrap `^5.1`
+-   React
+-   Typescript
+-   SEB Bootstrap
 
 ## Installation
 
@@ -43,7 +43,7 @@ For `Visual Studio Code` users, please install the [recommended plugins](.vscode
 
 ## Development
 
-This project uses `prettier` for a more consistent (less annoying) coding. We are using 4 different builds for this project. The `src` folder is where the actual components exist with all their necessary dependencies. and `develop` folder is where we develop and test those components. Unit tests are based on `jest` and `enzyme`.
+This project uses `prettier` for a more consistent (less annoying) coding. We are using 4 different builds for this project. The `src` folder is where the actual components exist with all their necessary dependencies. and `develop` folder is where we develop and test those components.
 
 1. Development: `npm start`
 2. Check formatting rules, Compile components and Create Docs folder: `npm run build`

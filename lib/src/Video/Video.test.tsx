@@ -1,54 +1,53 @@
 import React from "react";
-import { shallow, ShallowWrapper } from "enzyme";
-import { Video, VideoProps, VideoSourceType } from ".";
+import { act } from "react-dom/test-utils";
+import { unmountComponentAtNode, render } from "react-dom";
+import { Video } from ".";
+import { VideoProps } from "./types-definition";
 
 describe("Component: Video ", () => {
+    let container: HTMLDivElement = null;
     const props: VideoProps = {
         src: "sourcepath",
         width: "500",
         height: "250",
         name: "myVideo",
-        sourceType: "local",
     };
-    let wrapper: ShallowWrapper<VideoProps>;
 
     beforeEach(() => {
-        wrapper = shallow(<Video {...props} />);
+        container = document.createElement("div");
+        document.body.appendChild(container);
     });
 
-    it("Should render", () => {
-        expect(wrapper).toBeDefined();
+    afterEach(() => {
+        unmountComponentAtNode(container);
+        container.remove();
+        container = null;
+    });
+
+    it("Should render correctly", () => {
+        act(() => {
+            render(<Video {...props} />, container);
+        });
+        expect(container.firstElementChild.classList.contains("rc")).toBeTruthy();
+        expect(container.firstElementChild.classList.contains("video-holder-component")).toBeTruthy();
     });
 
     it("Should pass custom class and id", () => {
         const className: string = "myTVideoClass";
         const id: string = "myTVideoId";
-        wrapper.setProps({ className, id });
-        expect(wrapper.hasClass(className)).toBeTruthy();
-        expect(wrapper.find(`#${id}`).length).toBeTruthy();
+        act(() => {
+            render(<Video {...props} className={className} id={id} />, container);
+        });
+        expect(container.firstElementChild.id).toEqual(id);
+        expect(container.firstElementChild.classList.contains(className)).toBeTruthy();
     });
 
-    it("Should render embed video when sourceType is set to `stream`", () => {
-        const sourceType: VideoSourceType = "stream";
-        wrapper.setProps({ sourceType });
-        expect(wrapper.find("iframe").length).toBe(1);
-    });
-
-    it("Should enable autoplay, loop, showControls and showInfo when passed", () => {
-        const wrapperLocal = shallow(<Video {...props} autoplay={true} loop={true} showControls={true} showInfo={true} />);
-        expect(wrapperLocal.find("video").prop("autoPlay")).toEqual(true);
-        expect(wrapperLocal.find("video").prop("loop")).toEqual(true);
-        expect(wrapperLocal.find("video").prop("controls")).toEqual(true);
-        const wrapperStream = shallow(<Video {...{ ...props, sourceType: "stream" }} autoplay={true} loop={true} showControls={true} showInfo={true} />);
-        expect(wrapperStream.find("iframe").prop("src").indexOf("autoplay=1")).toBeGreaterThan(-1);
-        expect(wrapperStream.find("iframe").prop("src").indexOf("loop=1")).toBeGreaterThan(-1);
-        expect(wrapperStream.find("iframe").prop("src").indexOf("controls=1")).toBeGreaterThan(-1);
-        expect(wrapperStream.find("iframe").prop("src").indexOf("&amp;showinfo=1&amp;title=1&amp;byline=1&amp;portrait=1")).toBeGreaterThan(-1);
-    });
-
-    // Prevent being blocked by some browsers
-    it("Should render local video as muted when autoplay is enabled", () => {
-        const wrapper = shallow(<Video {...props} autoplay={true} />);
-        expect(wrapper.find("video").prop("muted")).toEqual(true);
+    it("Should enable autoplay, loop, showControls when passed", () => {
+        act(() => {
+            render(<Video {...props} autoplay loop showControls />, container);
+        });
+        expect(container.querySelector("iframe").getAttribute("src").indexOf("autoplay=1")).toBeGreaterThan(-1);
+        expect(container.querySelector("iframe").getAttribute("src").indexOf("loop=1")).toBeGreaterThan(-1);
+        expect(container.querySelector("iframe").getAttribute("src").indexOf("controls=1")).toBeGreaterThan(-1);
     });
 });

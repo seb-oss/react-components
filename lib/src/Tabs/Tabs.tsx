@@ -1,15 +1,15 @@
 import React from "react";
 import TabItem, { TabItemProps } from "./TabItem";
 import classnames from "classnames";
-import "./tabs-style.scss";
+import "./tabs.scss";
 
 export type TabsProps = Omit<JSX.IntrinsicElements["div"], "onClick"> & {
     /** index of focsued tab */
-    activeTab: number;
+    activeTab?: number;
     /** List of tab list item */
     list?: Array<TabItemProps>;
     /** callback on tab item clicked */
-    onClick: (index: number) => any;
+    onClick?: (index: number) => any;
 };
 /** Tabs organize and allow navigation between groups of content that are related and at the same level of hierarchy. */
 export const Tabs: React.FC<TabsProps> = ({ activeTab, list, onClick, ...props }: TabsProps) => {
@@ -56,8 +56,8 @@ export const Tabs: React.FC<TabsProps> = ({ activeTab, list, onClick, ...props }
                     <TabItem
                         {...item}
                         key={index}
-                        onClick={(e: React.MouseEvent<HTMLAnchorElement>) => onTabClick(e, index)}
-                        onKeyDown={(e: React.KeyboardEvent<HTMLAnchorElement>) => onKeyDown(e, index)}
+                        onClick={(e: React.MouseEvent<HTMLAnchorElement>) => (item.disabled ? null : onTabClick(e, index))}
+                        onKeyDown={(e: React.KeyboardEvent<HTMLAnchorElement>) => (item.disabled ? null : onKeyDown(e, index))}
                         role="tab"
                         isActive={index === activeTab}
                         ref={(refElement: HTMLAnchorElement) => {

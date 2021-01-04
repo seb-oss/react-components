@@ -1,274 +1,158 @@
 import React from "react";
-import { mount } from "enzyme";
-import { ImageCropper } from ".";
+import { unmountComponentAtNode, render } from "react-dom";
+import { ImageCropper, ImageCropperProps } from ".";
+import { act, Simulate } from "react-dom/test-utils";
+
+const image: string = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=";
+
+jest.mock("./utils");
+
+import { moveHandler, readImage, resizeHandler, Position, addListener, crop } from "./utils";
+
+(readImage as jest.Mock).mockReturnValue(Promise.resolve(image));
+(addListener as jest.Mock).mockImplementation((ev, cb) => cb());
+(resizeHandler as jest.Mock).mockImplementation();
+(crop as jest.Mock).mockReturnValue(Promise.resolve(image));
 
 describe("Component: ImageCropper", () => {
-    const props = {
-        toggle: false,
-        cropperConfigs: {
-            aspectRatio: 1.67,
-            preview: ".image-preview",
-            guides: false,
-            responsive: true,
-            ready: () => {
-                console.log("On ready");
-            },
-        },
-        className: "",
-        alwaysAlignedCropper: false,
-        onCrop: (imageData: string) => {
-            console.log("the image data is ", imageData);
-        },
-        onCustomButtonClick: (e: React.MouseEvent<HTMLButtonElement>) => {
-            console.log(" coustom bottom has been click");
-        },
-        cropButtonText: "",
-        customButtonText: "",
-        cancelText: "",
-        selectButtonText: "",
-        previewClassName: "",
-        imageCropperClassName: "",
-        // cropper options
-        previewSrc: "",
-        alt: null,
-        crossOrigin: null,
-        enable: false,
-        rotateTo: 0,
-        scaleX: 0,
-        scaleY: 0,
-        zoomTo: 0,
-        moveTo: [1, 0],
-        reset: false,
-        cropBoxData: null,
-        canvasData: null,
-        showCustomButton: false,
-    };
+    let container: HTMLDivElement = null;
 
-    function timeout(ms) {
-        return new Promise((resolve) => setTimeout(resolve, ms));
-    }
-
-    it("Should render", () => {
-        const wrapper = mount(<ImageCropper {...props} />);
-        expect(wrapper).toBeDefined();
-        wrapper.unmount();
+    beforeEach(() => {
+        container = document.createElement("div");
+        document.body.appendChild(container);
     });
 
-    it("Should pass custom class and id", () => {
-        const className: string = "myImageCropperClass";
-        const id: string = "myImageCropperId";
-        const wrapper = mount(<ImageCropper {...props} previewClassName={className} id={id} />);
-        expect(wrapper.find(`.${className}`).length).toBeTruthy();
-        expect(wrapper.find(`#${id}`).length).toBeTruthy();
-        wrapper.unmount();
+    afterEach(() => {
+        unmountComponentAtNode(container);
+        container.remove();
+        container = null;
+
+        jest.clearAllMocks();
     });
 
-    it("Should hide cropper when toggle is true", () => {
-        let wrapper = mount(<ImageCropper {...props} />);
-        expect(wrapper.find(".open-cropper-dialogue").length).toBe(0);
-        expect(wrapper.find(".open-cropper-dialogue").exists()).toBeFalsy();
-
-        props.toggle = true;
-
-        wrapper = mount(<ImageCropper {...props} />);
-
-        expect(wrapper.find(".open-cropper-dialogue").exists()).toBeTruthy();
-        wrapper.unmount();
-    });
-
-    it("Should perform changes and call relevance functions when method change", () => {
-        props.toggle = true;
-        props.previewSrc = "data:image/jpeg;base64,PHN2ZyKPC9zdmc+";
-        const wrapper = mount(<ImageCropper {...props} />);
-        const instance: any = wrapper.instance();
-        const mockDismissCropper = jest.spyOn(instance, "dismissCropper");
-        // dismisFunction should be called when toggle is false
-        wrapper.setProps({ toggle: true });
-        expect(mockDismissCropper).not.toHaveBeenCalled();
-        wrapper.setProps({ toggle: false });
-        expect(mockDismissCropper).toHaveBeenCalled();
-
-        // onReset function should be called when the reset props is change
-        const mockOnReset = jest.spyOn(instance, "onReset");
-        wrapper.setProps({ reset: false });
-        expect(mockOnReset).not.toHaveBeenCalled();
-        wrapper.setProps({ reset: true });
-        expect(mockOnReset).toHaveBeenCalled();
-
-        // onEnable and disable functions should be called when the enable props is change
-        const mockOnEnable = jest.spyOn(instance, "onEnable");
-        const mockOnDisAble = jest.spyOn(instance, "disable");
-        wrapper.setProps({ enable: false });
-        expect(mockOnEnable).not.toHaveBeenCalled();
-        expect(mockOnDisAble).not.toHaveBeenCalled();
-
-        wrapper.setProps({ enable: true });
-        expect(mockOnEnable).toHaveBeenCalled();
-
-        wrapper.setProps({ enable: false });
-        expect(mockOnDisAble).toHaveBeenCalled();
-
-        // setYScale function should be called when the scaleY props is change
-        const mockSetScaleY = jest.spyOn(instance, "setYScale");
-        wrapper.setProps({ scaleY: 3 });
-        expect(mockSetScaleY).toHaveBeenCalled();
-
-        // setXScale function should be called when the scaleX props is change
-        const mockSetScaleX = jest.spyOn(instance, "setXScale");
-        wrapper.setProps({ scaleX: 3 });
-        expect(mockSetScaleX).toHaveBeenCalled();
-
-        // onRotateTo function should be called when the roateTo props is change
-        const mockOnRotateTo = jest.spyOn(instance, "onRotateTo");
-        wrapper.setProps({ rotateTo: 3 });
-        expect(mockOnRotateTo).toHaveBeenCalled();
-
-        // onMoveTo function should be called when the onMoveTo props is change
-        const mockOnMoveTo = jest.spyOn(instance, "onMoveTo");
-        wrapper.setProps({ moveTo: [0, 3] });
-        expect(mockOnMoveTo).toHaveBeenCalled();
-
-        // setCropBoxData function should be called when the cropBoxData props is change
-        const mockSetCropBoxData = jest.spyOn(instance, "setCropBoxData");
-        wrapper.setProps({ cropBoxData: { top: 0, left: 0, height: 1, width: 3 } });
-        expect(mockSetCropBoxData).toHaveBeenCalled();
-        wrapper.unmount();
-    });
-    /*
-    it("loader should be loading when src in not provided", () => {
-        props.toggle = true;
-        const wrapper = mount(<ImageCropper {...props} />);
-
-        expect(wrapper.find(".loader-holder").exists()).toBeTruthy();
-
-        props.previewSrc = "data:image/jpeg;base64,PHN2ZyKPC9zdmc+";
-
-        timeout(500).then(() => {
-            expect(wrapper.find(".loader-holder").exists()).toBeFalsy();
-            wrapper.unmount();
+    it("Should render correctly", () => {
+        act(() => {
+            render(<ImageCropper />, container);
         });
-    });*/
-    /*
-    it("onCropClick function should be called on crop button click ", () => {
-        props.toggle = true;
-        props.previewSrc = "data:image/jpeg;base64,PHN2ZyKPC9zdmc+";
-        const wrapper = mount(<ImageCropper {...props} />);
-        const instance: any = wrapper.instance();
 
-        const mockCropClick = spyOn(instance, "onCropClick").and.callThrough();
+        expect(container).toBeDefined();
+        expect(container.firstElementChild.classList.contains("rc")).toBeTruthy();
+        expect(container.firstElementChild.classList.contains("image-cropper")).toBeTruthy();
 
-        const cropBtnEl = wrapper.find("#cropBtn");
+        const input: HTMLInputElement = container.querySelector("input");
+        expect(input).not.toBeNull();
+        expect(input.type).toEqual("file");
+        expect(input.accept).toEqual("image/*");
+        expect(input.hidden).toBeTruthy();
 
-        cropBtnEl.simulate("click");
-        setTimeout(() => {
-            expect(mockCropClick).toHaveBeenCalled();
-            wrapper.unmount();
-        }, 1000);
-    });*/
-    /*
-    it("dismissCropper function should be called on dismiss button click ", () => {
-        props.toggle = true;
-        props.previewSrc = "data:image/jpeg;base64,PHN2ZyKPC9zdmc+";
-        const wrapper = mount(<ImageCropper {...props} />);
-        const instance: any = wrapper.instance();
-
-        const mockDismissClick = spyOn(instance, "dismissCropper").and.callThrough();
-
-        const dismissBtnEl = wrapper.find("#cancelBtn");
-
-        dismissBtnEl.simulate("click");
-        setTimeout(() => {
-            expect(mockDismissClick).toHaveBeenCalled();
-            wrapper.unmount();
-        }, 1000);
-    });
-*/
-    it("custom or delete button should only be available when the callback and the showCustomButtons are provided ", () => {
-        props.toggle = true;
-        props.previewSrc = "data:image/jpeg;base64,PHN2ZyKPC9zdmc+";
-        const wrapper = mount(<ImageCropper {...props} />);
-
-        expect(wrapper.find(".btn-delete > button").exists()).toBeFalsy();
-
-        wrapper.setProps({ showCustomButton: true, onCustomButtonClick: jest.fn() });
-
-        expect(wrapper.find(".btn-delete > button").exists()).toBeTruthy();
-
-        wrapper.unmount();
+        expect(container.querySelector(".image-preview")).not.toBeNull();
     });
 
-    it("should call onCustomButtonClick when customBtn is clicked ", () => {
-        props.toggle = true;
-        const action = jest.fn();
-        props.previewSrc = "data:image/jpeg;base64,PHN2ZyKPC9zdmc+";
-        props.onCustomButtonClick = action;
-        props.showCustomButton = true;
-        const wrapper = mount(<ImageCropper {...props} />);
+    it("Should allow passing custom clasName", () => {
+        const className: string = "myClassName";
 
-        wrapper.find(".btn-delete > button").simulate("click");
+        act(() => {
+            render(<ImageCropper className={className} />, container);
+        });
 
-        expect(action).toHaveBeenCalled();
-
-        wrapper.unmount();
+        expect(container.firstElementChild.classList.contains(className)).toBeTruthy();
     });
 
-    /* it("stopProp function should be called on modal div click to stopPropagation", () => {
-        props.toggle = true;
-        props.previewSrc = "data:image/jpeg;base64,PHN2ZyKPC9zdmc+";
-        const wrapper = mount(<ImageCropper {...props} />);
-        const instance: any = wrapper.instance();
+    it("Should trigger input click and clears the value when the picker button is clicked", () => {
+        act(() => {
+            render(<ImageCropper />, container);
+        });
 
-        expect(wrapper.props().toggle).toBeTruthy();
+        const input: HTMLInputElement = container.querySelector("input");
 
-        const mockCropDivClick = spyOn(instance, "stopProp").and.callThrough();
+        let clickSpy = jest.spyOn(input, "click");
+        let setValueSpy = jest.spyOn(input, "value", "set");
+        let setFilesSpy = jest.spyOn(input, "files", "set");
 
-        const cropperModalDiv = wrapper.find(".cropper-dialogue");
+        act(() => Simulate.click(container.querySelector("button.select")));
 
-        cropperModalDiv.simulate("click");
-        setTimeout(() => {
-            expect(mockCropDivClick).toHaveBeenCalled();
-            expect(wrapper.props().toggle).toBeFalsy();
-            wrapper.unmount();
-        }, 1000);
-    });*/
-    /*
-    it("alignCropper method should be called on crop move when alwaysAlignedCropper is set to true ", () => {
-        props.toggle = true;
-        props.alwaysAlignedCropper = true;
-        props.previewSrc = "data:image/jpeg;base64,PHN2ZyKPC9zdmc+";
-        const wrapper = mount(<ImageCropper {...props} />);
+        expect(clickSpy).toBeCalled();
+        expect(setValueSpy).toBeCalledWith(null);
+        expect(setFilesSpy).toBeCalledWith(null);
+    });
 
-        const cropMoveSpy = spyOn(wrapper.instance() as any, "alignCropBox").and.callThrough();
-        wrapper.setProps({ moveTo: 50 });
+    it("Should toggle the modal when the user selects an image in the file input", async () => {
+        act(() => {
+            render(<ImageCropper />, container);
+        });
 
-        setTimeout(() => {
-            expect(cropMoveSpy).toHaveBeenCalled();
-            wrapper.unmount();
-        }, 1000);
-    });*/
+        await act(async () => await Simulate.input(container.querySelector("input")));
 
-    // it(" should throw error when one of the unchangeable properties changed", () => {
-    //     // setAspectRatio and other unchangeable properties should be throw exception because aspectRatio is part of unchangeable props after rendering
-    //     try {
-    //         const wrapper = mount(<ImageCropper {...props} />);
-    //         const instance: any = wrapper.instance();
-    //         const setAspectRatioMock = jest.spyOn(instance, "setAspectRatio");
-    //         wrapper.setProps({ cropperConfigs: { aspectRatio: 1.90 } });
-    //         expect(setAspectRatioMock).toThrowError();
+        expect(readImage).toBeCalled();
+        expect(container.querySelector(".modal.show")).not.toBeNull();
 
-    //         // setData function should be called when the data props is change
-    //         const mockSetData = jest.spyOn(instance, "setData");
-    //         wrapper.setProps({ data: { y: 0, x: 0, height: 1, width: 3 }, });
-    //         expect(mockSetData).toThrowError();
+        act(() => Simulate.click(container.querySelector(".btn-outline-primary")));
 
-    //         // setDragMode function should be called when the setDragMode props is change
-    //         const mockSetDragMode = jest.spyOn(instance, "setDragMode");
-    //         wrapper.setProps({ dragMode: "move" });
-    //         expect(mockSetDragMode).toThrowError();
-    //         wrapper.unmount();
+        expect(container.querySelector(".modal.show")).toBeNull();
+    });
 
-    //     } catch (err) {
-    //         // console.error(err);
-    //     }
-    // });
+    it("Should handle cropbox movement", async () => {
+        act(() => {
+            render(<ImageCropper />, container);
+        });
+
+        await act(async () => await Simulate.mouseDown(container.querySelector(".crop-box")));
+
+        expect(addListener).toBeCalled();
+        expect(moveHandler).toBeCalled();
+    });
+
+    it("Should handle cropbox resize", async () => {
+        act(() => {
+            render(<ImageCropper />, container);
+        });
+
+        await act(async () => await Simulate.touchStart(container.querySelector(".handle")));
+
+        expect(addListener).toBeCalled();
+        expect(resizeHandler).toBeCalled();
+    });
+
+    it("Should handle cropping an image", async () => {
+        const onChange: jest.Mock = jest.fn();
+
+        act(() => {
+            render(<ImageCropper onChange={onChange} />, container);
+        });
+
+        await act(async () => await Simulate.click(container.querySelector(".modal .modal-footer .btn-primary")));
+
+        expect(crop).toBeCalled();
+        expect(onChange).toBeCalled();
+    });
+
+    it("Should handle resetting when the reset button is clicked", () => {
+        const onChange: jest.Mock = jest.fn();
+
+        act(() => {
+            render(<ImageCropper value={image} onChange={onChange} />, container);
+        });
+
+        const input: HTMLInputElement = container.querySelector("input[type=file]");
+
+        let setValueSpy = jest.spyOn(input, "value", "set");
+        let setFilesSpy = jest.spyOn(input, "files", "set");
+
+        act(() => Simulate.click(container.querySelector("button.reset")));
+
+        container.querySelectorAll<HTMLImageElement>("img").forEach((img) => expect(img.src).toBeFalsy());
+
+        expect(setValueSpy).toBeCalledWith(null);
+        expect(setFilesSpy).toBeCalledWith(null);
+        expect(onChange).toBeCalledWith(null);
+    });
+
+    it("Should render all buttons with type set to 'button'", () => {
+        // This is to avoid submitting a form if this component is part of a form
+        act(() => {
+            render(<ImageCropper />, container);
+        });
+
+        container.querySelectorAll<HTMLButtonElement>("button").forEach((btn) => expect(btn.type).toEqual("button"));
+    });
 });

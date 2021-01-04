@@ -85,12 +85,14 @@ export const TableUI: React.FunctionComponent<TableUIProps> = React.memo(
                                             }
                                         }}
                                     >
-                                        <span className="th-label">{header.label}</span>
-                                        {props.sortable && header.canSort && (
-                                            <span role="link" className={"icon-holder" + (header.isSorted ? (header.isSortedDesc ? " desc" : " asc") : "")} id={header.accessor}>
-                                                {defaultSort}
-                                            </span>
-                                        )}
+                                        <div className="sort-holder">
+                                            <span className="th-label">{header.label}</span>
+                                            {props.sortable && header.canSort && (
+                                                <span role="link" className={"icon-holder" + (header.isSorted ? (header.isSortedDesc ? " desc" : " asc") : "")} id={header.accessor}>
+                                                    {defaultSort}
+                                                </span>
+                                            )}
+                                        </div>
                                     </th>
                                 ) : null;
                             })}
@@ -106,8 +108,8 @@ export const TableUI: React.FunctionComponent<TableUIProps> = React.memo(
                                         tableRef={tableRef}
                                         onActionDropped={props.onActionDropped}
                                         onRowExpanded={props.onRowExpanded}
-                                        useShowActionColumn={props.useShowActionColumn || !!row?.actionLinks?.length}
-                                        isCollapsable={props.rowsAreCollapsable}
+                                        useShowActionColumn={props.useShowActionColumn}
+                                        rowsAreCollapsable={props.rowsAreCollapsable}
                                         onItemSelected={props.onItemSelected}
                                         primaryActionButton={props.primaryActionButton}
                                         actionLinks={row?.actionLinks || props.actionLinks}
@@ -121,6 +123,40 @@ export const TableUI: React.FunctionComponent<TableUIProps> = React.memo(
                                             }) as any
                                         }
                                     />
+                                    {row.subRows?.map((subRow: TableRow) => {
+                                        return (
+                                            <React.Fragment key={`sub-row-${subRow.rowIndex}`}>
+                                                <RowUI
+                                                    row={subRow}
+                                                    type="subRow"
+                                                    tableRef={tableRef}
+                                                    onActionDropped={props.onActionDropped}
+                                                    onRowExpanded={props.onRowExpanded}
+                                                    useShowActionColumn={props.useShowActionColumn}
+                                                    rowsAreCollapsable={props.rowsAreCollapsable}
+                                                    onItemSelected={props.onItemSelected}
+                                                    primaryActionButton={props.primaryActionButton}
+                                                    actionLinks={subRow?.actionLinks || props.actionLinks}
+                                                    actionButtonState={subRow?.actionButtonState}
+                                                    useRowSelection={props.useRowSelection}
+                                                    onSubRowExpanded={props.onSubRowExpanded}
+                                                    useRowCollapse={props.useRowCollapse}
+                                                    columns={props.columns}
+                                                    parentRowIsExpanded={row.expanded}
+                                                    parentRowIndex={row.rowIndex}
+                                                    onChange={(e: React.ChangeEvent<HTMLInputElement>, updatedSubRow: TableRow) => {
+                                                        props.onChange(e, updatedSubRow, row.rowIndex);
+                                                    }}
+                                                />
+                                            </React.Fragment>
+                                        );
+                                    })}
+
+                                    <tr className="description-row" style={{ display: row.expanded ? "table-row" : "none" }}>
+                                        <td colSpan={sumCols(props.columns?.length, props.useRowSelection || props.useRowCollapse, props.useShowActionColumn, false)}>
+                                            <div className="description">{row.rowContentDetail}</div>
+                                        </td>
+                                    </tr>
                                 </React.Fragment>
                             );
                         })}

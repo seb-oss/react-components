@@ -2,7 +2,7 @@ import React from "react";
 import { act } from "react-dom/test-utils";
 import { unmountComponentAtNode, render } from "react-dom";
 import { Column, Table, TableRow, ActionLinkItem, DataItem, sortDirectionTypes, PrimaryActionButton, EditProps } from ".";
-import { Pagination } from "../Pagination";
+import { NumberedPagination } from "../Pagination";
 import makeData from "../__utils/makeData";
 
 describe("Component: Table", () => {
@@ -153,7 +153,7 @@ describe("Component: Table", () => {
                     data={data}
                     offset={pageSize}
                     currentpage={paginationValue}
-                    footer={<Pagination value={paginationValue} onChange={setPage} size={pageSize} useFirstAndLast={true} />}
+                    footer={<NumberedPagination value={paginationValue} onPageChange={setPage} end={pageSize} showFirstAndLast />}
                 />,
                 container
             );

@@ -1,32 +1,26 @@
 import React from "react";
-import { shallow, ShallowWrapper } from "enzyme";
-import { ProgressBar, ProgressBarProps } from ".";
+import { unmountComponentAtNode, render } from "react-dom";
+import { ProgressBar } from ".";
+import { act } from "react-dom/test-utils";
 
 describe("Component: ProgressBar", () => {
-    let wrapper: ShallowWrapper<ProgressBarProps>;
+    let container: HTMLDivElement = null;
 
     beforeEach(() => {
-        wrapper = shallow(<ProgressBar value={50} />);
+        container = document.createElement("div");
+        document.body.appendChild(container);
+    });
+
+    afterEach(() => {
+        unmountComponentAtNode(container);
+        container.remove();
+        container = null;
     });
 
     it("Should render", () => {
-        expect(wrapper).toBeDefined();
-    });
-
-    it("Should pass custom class and id", () => {
-        const className: string = "myProgressbarClass";
-        const id: string = "myProgressbarId";
-        wrapper.setProps({ className, id });
-        expect(wrapper.hasClass(className)).toBeTruthy();
-        expect(wrapper.find(`#${id}`).length).toBeTruthy();
-    });
-
-    it("Should render progress value in text with correct value in percen format", () => {
-        wrapper.setProps({ value: 20, showProgress: true });
-        expect(wrapper.find(".custom-progress-bar").first().hasClass("show-progress")).toBeTruthy();
-        expect(wrapper.find(".custom-progress-text").length).toBe(1);
-        expect(wrapper.find(".custom-progress-text").first().text()).toEqual("20%");
-        wrapper.setProps({ value: 60 });
-        expect(wrapper.find(".custom-progress-text").first().hasClass("white")).toBeTruthy();
+        act(() => {
+            render(<ProgressBar />, container);
+        });
+        expect(container).toBeDefined();
     });
 });

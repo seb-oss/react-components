@@ -6,9 +6,7 @@ npm-debug.log
 .idea/
 
 # VS Code - everything but the prettier config files
-.vscode/*
-!.vscode/extensions.json
-!.vscode/settings.json
+.vscode/
 .history/
 
 # Windows
@@ -23,8 +21,6 @@ dist
 tmp
 build
 coverage
-docs
 public
-!/src/**/docs
 
 .cache
