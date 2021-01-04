@@ -1,13 +1,7 @@
 import React from "react";
 import "./table-style.scss";
 
-import { TableUI } from "./sections/TableUI";
-import { sortArray, searchTextInArray, filterArray, sumCols } from "./sections/helperFunctions";
-import TableCell, { TableCellProps } from "./sections/TableCell";
-import TableRow from "./sections/TableRow";
-import useTable, { TableColumn, TableRowProps } from "./useTable";
-import TableHeaderCell, { TableHeaderCellProps } from "./sections/TableHeaderCell";
-import { TableHeaderProps } from "./sections/TableHeader";
+import { TableColumn } from "./useTable";
 import { TableContext } from "./TableContextProvider";
 
 export type DataItem<T = any> = T;
