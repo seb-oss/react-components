@@ -46,9 +46,10 @@ export type TableProps = JSX.IntrinsicElements["table"] & {
 
 export const Table: React.FunctionComponent<TableProps> = React.memo(
     ({ onRowSelect, onRowExpand, ...props }: TableProps): React.ReactElement<void> => {
-        const [test, setTest] = React.useState({ sortedColumn: [] });
+        const [tableState, setTableState] = React.useState({ expandedRows: [], sortedColumn: [] });
+        const onRowCollapse = (isExpanded: boolean, rowKey: any) => {};
         return (
-            <TableContext.Provider value={{ ...test, onSort: setTest, onRowSelect, onRowExpand }}>
+            <TableContext.Provider value={{ tableState, onSort: null, onRowSelect, onRowExpand, setTableState }}>
                 <table className="table" {...props} />
             </TableContext.Provider>
         );

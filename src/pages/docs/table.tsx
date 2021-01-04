@@ -43,7 +43,7 @@ const TablePage: React.FC = (): React.ReactElement<void> => {
             },
             {
                 label: "checked",
-                accessor: "_isChecked",
+                accessor: "checked",
             },
         ],
         []
@@ -107,7 +107,7 @@ const TablePage: React.FC = (): React.ReactElement<void> => {
         () => makeData<Array<DataItem<TableDataProps>>>([enablePagination ? 100 : 10, 5]),
         [enablePagination]
     );
-    const [data, setData] = React.useState<Array<DataItem<TableDataProps>>>([...defaultData, { ...defaultData[0], checked: true } as any]);
+    const [data, setData] = React.useState<Array<DataItem<TableDataProps>>>([...defaultData]);
 
     const nameDropDownList: Array<DropdownItem> = React.useMemo(
         () =>
@@ -179,7 +179,20 @@ const TablePage: React.FC = (): React.ReactElement<void> => {
                                   }
                                 : null
                         }
-                        onRowExpand={enableSubRows ? (rows: Array<any>) => {} : null}
+                        onRowExpand={
+                            enableSubRows
+                                ? (isExpanded: boolean, uniqueKey: string) => {
+                                      setData(
+                                          data.map((item: any) => {
+                                              if (item.firstName === uniqueKey) {
+                                                  item.expanded = isExpanded;
+                                              }
+                                              return item;
+                                          })
+                                      );
+                                  }
+                                : null
+                        }
                     >
                         <TableHeader>
                             <TableRow>
@@ -193,7 +206,7 @@ const TablePage: React.FC = (): React.ReactElement<void> => {
                         <TableBody>
                             {data.map((row, rowIndex) => (
                                 <React.Fragment key={`row-${rowIndex}`}>
-                                    <TableRow uniqueKey={row.firstName} checked={(row as any).checked}>
+                                    <TableRow uniqueKey={row.firstName} checked={(row as any).checked} isExpanded={(row as any).expanded}>
                                         {columns.map((item, index) => {
                                             return (
                                                 <TableCell {...item} key={index}>

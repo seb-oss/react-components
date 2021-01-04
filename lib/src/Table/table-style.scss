@@ -57,16 +57,31 @@ table {
 
         tbody {
             tr {
-                &:first-child {
-                    td {
-                        border-top: none;
+                &.collapsible {
+                    ~ .sub-row {
+                        display: none;
                     }
+                    &.expanded {
+                        ~ .sub-row.show {
+                            display: table-row;
+                        }
+                    }
+                    // &:not(.expanded) {
+                    //     ~.sub-row {
+                    //         display: none;
+                    //     }
+                    // }
                 }
+                // &:first-child {
+                //     td {
+                //         border-top: none;
+                //     }
+                // }
 
                 td {
-                    &.collapse-cell,
-                    &.checkbox-cell {
-                        width: 5%;
+                    &.collapse-control,
+                    &.select-control {
+                        width: 15px;
                     }
                     ._default-cell {
                         display: flex;
@@ -77,15 +92,21 @@ table {
                             flex: 1;
                         }
                     }
-                    .icon-holder {
-                        cursor: pointer;
-                        width: $icon-size;
+                    &.collapse-control {
+                        > .btn {
+                            padding: 0;
+                            background: transparent;
+                            > .icon-holder {
+                                cursor: pointer;
+                                width: $icon-size;
 
-                        svg {
-                            width: $icon-size;
-                            fill: $gray-800;
-                            &[name="angle-right"] {
-                                width: 9px;
+                                svg {
+                                    width: $icon-size;
+                                    fill: $gray-800;
+                                    &[name="angle-right"] {
+                                        width: 9px;
+                                    }
+                                }
                             }
                         }
                     }

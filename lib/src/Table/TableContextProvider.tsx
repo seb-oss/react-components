@@ -1,14 +1,24 @@
 import React from "react";
 
-type TableContextType = {
+interface TableState {
     sortedColumn: Array<any>;
+    expandedRows: Array<string>;
+}
+
+type TableContextType = {
+    tableState: TableState;
+    setTableState: (newState: TableState) => void;
     onRowSelect: (event: React.ChangeEvent<HTMLInputElement>, rowKey: string) => void;
     onRowExpand: (isExpanded: boolean, rowKey: string) => void;
     onSort: any;
 };
 
 const defaultContext: TableContextType = {
-    sortedColumn: [],
+    tableState: {
+        sortedColumn: [],
+        expandedRows: [],
+    },
+    setTableState: null,
     onRowSelect: null,
     onRowExpand: null,
     onSort: null,

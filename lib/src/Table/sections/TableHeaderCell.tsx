@@ -13,9 +13,9 @@ const TableHeaderCell: React.FC<TableHeaderCellProps> = ({ accessor, isRowSelect
     const context = React.useContext(TableContext);
 
     const onHeaderSort = () => {
-        const array = context.sortedColumn;
-        array.push(accessor);
-        context.onSort({ ...context, sortedColumn: array });
+        // const array = context.sortedColumn;
+        // array.push(accessor);
+        // context.onSort({ ...context, sortedColumn: array });
     };
 
     return (

@@ -5,21 +5,20 @@ import { TableRowProps } from "./TableRow";
 
 export type TableHeaderProps = JSX.IntrinsicElements["thead"] & {
     columns?: Array<TableHeaderProps>;
-    onSort?: (accessor: string, sortDirection: string) => void;
 };
 
-const TableHeader: React.FC<TableHeaderProps> = ({ columns, onSort, ...props }: TableHeaderProps) => {
+const TableHeader: React.FC<TableHeaderProps> = ({ columns, ...props }: TableHeaderProps) => {
     const context = React.useContext(TableContext);
     return (
         <thead {...props}>
             {React.Children.count(props.children) === 1 && React.isValidElement<TableRowProps>(props.children)
-                ? React.cloneElement<any>(props.children, { selectAllIndicator: true, index: -1, isCollapsible: false })
+                ? React.cloneElement<any>(props.children, { isHeaderRow: true, index: -1 })
                 : React.Children.map(props.children, (Child: React.ReactElement<any>, i: number) => {
                       return React.isValidElement<TableRowProps>(Child)
                           ? React.cloneElement<any>(Child, {
                                 index: i,
-                                hideSelect: !Child.props.selectAllIndicator,
-                                isCollapsible: false,
+                                isHeaderRow: true,
+                                hideSelect: !Child.props.isHeaderRow,
                             })
                           : Child;
                   })}
