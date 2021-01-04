@@ -1,7 +1,6 @@
 import React from "react";
 import Docs from "@common/Docs";
 import { Breadcrumb, BreadcrumbItem } from "@sebgroup/react-components/Breadcrumb";
-import classnames from "classnames";
 import { useDynamicForm } from "@hooks/useDynamicForm";
 
 const homeIcon: JSX.Element = (
@@ -10,9 +9,15 @@ const homeIcon: JSX.Element = (
     </svg>
 );
 
+const importString: string = require("!raw-loader!@sebgroup/react-components/Breadcrumb/Breadcrumb");
+const importedFiles: Array<string> = [require("!raw-loader!@sebgroup/react-components/Breadcrumb/BreadcrumbItem")];
+const code: string = `<Breadcrumb onNavigate={(e) => e.preventDefault(); /** Or do something else */}>
+    <BreadcrumbItem>Home</BreadcrumbItem>
+    <BreadcrumbItem>Users</BreadcrumbItem>
+    <BreadcrumbItem>Edit</BreadcrumbItem>
+</Breadcrumb>`;
+
 const BreadcrumbPage: React.FC = () => {
-    const importString: string = require("!raw-loader!@sebgroup/react-components/Breadcrumb/Breadcrumb");
-    const importedFiles: Array<string> = [require("!raw-loader!@sebgroup/react-components/Breadcrumb/BreadcrumbItem")];
     const [renderControls, { controls }] = useDynamicForm([
         {
             key: "controls",
@@ -26,30 +31,24 @@ const BreadcrumbPage: React.FC = () => {
             ],
         },
     ]);
-    const code: string = `<Breadcrumb onNavigate={(e) => e.preventDefault(); /** Or do something else */}>
-    <BreadcrumbItem>Home</BreadcrumbItem>
-    <BreadcrumbItem>Users</BreadcrumbItem>
-    <BreadcrumbItem>Edit</BreadcrumbItem>
-</Breadcrumb>`;
 
     return (
         <Docs
+            exampleTheme={controls.light ? "dark" : null}
             mainFile={importString}
             importedFiles={importedFiles}
             example={
-                <div className={classnames("p-2", { "bg-dark": controls.light })}>
-                    <Breadcrumb
-                        onNavigate={(e) => {
-                            e.preventDefault();
-                            alert(`'${e.currentTarget.title}' clicked`);
-                        }}
-                        light={controls.light}
-                    >
-                        <BreadcrumbItem title="Home">{homeIcon}</BreadcrumbItem>
-                        <BreadcrumbItem title="Users">Users</BreadcrumbItem>
-                        <BreadcrumbItem title="Edit">Edit</BreadcrumbItem>
-                    </Breadcrumb>
-                </div>
+                <Breadcrumb
+                    onNavigate={(e) => {
+                        e.preventDefault();
+                        alert(`'${e.currentTarget.title}' clicked`);
+                    }}
+                    light={controls.light}
+                >
+                    <BreadcrumbItem title="Home">{homeIcon}</BreadcrumbItem>
+                    <BreadcrumbItem title="Users">Users</BreadcrumbItem>
+                    <BreadcrumbItem title="Edit">Edit</BreadcrumbItem>
+                </Breadcrumb>
             }
             code={code}
             controls={renderControls()}

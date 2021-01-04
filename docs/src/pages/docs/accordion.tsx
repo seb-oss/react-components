@@ -1,12 +1,19 @@
 import React from "react";
 import Docs from "@common/Docs";
-import { loremIpsum } from "lorem-ipsum";
-import { Accordion, AccordionItem, AccordionItemProps } from "@sebgroup/react-components/Accordion";
+import { Accordion, AccordionItem } from "@sebgroup/react-components/Accordion";
 import { useDynamicForm } from "@hooks/useDynamicForm";
+import { Button } from "@sebgroup/react-components/Button";
+import { Textbox } from "@sebgroup/react-components/Textbox";
+
+const importString: string = require("!raw-loader!@sebgroup/react-components/Accordion/Accordion");
+const importedFiles: Array<string> = [require("!raw-loader!@sebgroup/react-components/Accordion/AccordionItem")];
+const code: string = `<Accordion>
+    <AccordionItem header="First">First content</AccordionItem>
+    <AccordionItem header="Second">Second content</AccordionItem>
+    <AccordionItem header="Third">Third content</AccordionItem>
+</Accordion>`;
 
 const AccordionPage: React.FC = () => {
-    const importString: string = require("!raw-loader!@sebgroup/react-components/Accordion/Accordion");
-    const importedFiles: Array<string> = [require("!raw-loader!@sebgroup/react-components/Accordion/AccordionItem")];
     const [renderControls, { controls }] = useDynamicForm([
         {
             key: "controls",
@@ -26,21 +33,35 @@ const AccordionPage: React.FC = () => {
             ],
         },
     ]);
-    const code: string = `<Accordion>
-    <AccordionItem header="First">First content</AccordionItem>
-    <AccordionItem header="Second">Second content</AccordionItem>
-    <AccordionItem header="Third">Third content</AccordionItem>
-</Accordion>`;
 
     return (
         <Docs
             mainFile={importString}
             importedFiles={importedFiles}
             example={
-                <Accordion className="w-100" inverted={controls.inverted} alternative={controls.alternative} defaultValue={2}>
-                    {accordionList.map((item) => (
-                        <AccordionItem {...item} />
-                    ))}
+                <Accordion className="w-100" inverted={controls.inverted} alternative={controls.alternative} defaultValue={0}>
+                    <AccordionItem header="A simple accordion item">
+                        <p>Illum amet voluptas minus aut esse totam blanditiis. Et corporis vel aspernatur dicta fugit et est placeat. Beatae dolor nisi aut minus placeat et at accusantium.</p>
+                    </AccordionItem>
+                    <AccordionItem header="An accordion item with headers and paragraphs" subHeader="A sub-header text to add some context">
+                        <h5>Asperiores nihil voluptatem</h5>
+                        <p>
+                            Omnis quia eum accusamus ipsum. Odit magni voluptas reprehenderit quia iste unde. Quam harum ex consequatur. Ad vitae ipsam et illo architecto aut ipsa laboriosam optio.
+                            Quae quis iusto tempore. Quo consequuntur dolorem qui omnis ducimus.
+                        </p>
+                        <h5>Exercitationem fugit earum</h5>
+                        <p>Suscipit quis quia. Et veniam sit est vero. Aut ut est. Et porro saepe aspernatur dolorum rem beatae blanditiis. Repudiandae veritatis ut.</p>
+                    </AccordionItem>
+                    <AccordionItem header="More complex structures">
+                        <form onSubmit={(e) => e.preventDefault()}>
+                            <fieldset>
+                                <legend>Register your interest</legend>
+                                <Textbox label="email" placeholder="enter your email"></Textbox>
+
+                                <Button type="submit">Submit</Button>
+                            </fieldset>
+                        </form>
+                    </AccordionItem>
                 </Accordion>
             }
             code={code}
@@ -48,43 +69,5 @@ const AccordionPage: React.FC = () => {
         />
     );
 };
-
-const accordionList: Array<AccordionItemProps> = [
-    {
-        header: loremIpsum({ units: "words", count: 3 }),
-        subHeader: loremIpsum({ units: "words", count: 5 }),
-        children: (
-            <div>
-                <h5>{loremIpsum({ units: "words", count: 2 })}</h5>
-                <p>{loremIpsum({ units: "paragraph", count: 1 })}</p>
-            </div>
-        ),
-    },
-    {
-        header: loremIpsum({ units: "words", count: 3 }),
-        children: (
-            <div>
-                <h5>{loremIpsum({ units: "words", count: 2 })}</h5>
-                <p>{loremIpsum({ units: "paragraph", count: 1 })}</p>
-                <h5>{loremIpsum({ units: "words", count: 2 })}</h5>
-                <p>{loremIpsum({ units: "paragraph", count: 1 })}</p>
-                <a href="https://seb.se" target="_blank">
-                    Link to seb.se
-                </a>
-            </div>
-        ),
-    },
-    {
-        header: loremIpsum({ units: "words", count: 3 }),
-        children: (
-            <div>
-                <p className="m-0">{loremIpsum({ units: "sentences", count: 2 })}</p>
-                <a href="https://seb.se" target="_blank">
-                    Link to seb.se
-                </a>
-            </div>
-        ),
-    },
-];
 
 export default AccordionPage;

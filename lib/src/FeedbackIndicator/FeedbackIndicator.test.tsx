@@ -5,7 +5,7 @@ import { FeedbackIndicator, IndicatorType } from ".";
 
 type TestCase = { type: IndicatorType; value: number };
 
-describe("Component: CheckBox", () => {
+describe("Component: FeedbackIndicator", () => {
     let container: HTMLDivElement = null;
 
     beforeEach(() => {

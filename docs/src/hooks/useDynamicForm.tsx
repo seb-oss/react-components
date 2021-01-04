@@ -1,6 +1,6 @@
 import React, { useState, ReactNode, useMemo, useCallback } from "react";
 
-import { CheckBox } from "@sebgroup/react-components/CheckBox";
+import { Checkbox } from "@sebgroup/react-components/Checkbox";
 import { Textbox } from "@sebgroup/react-components/Textbox";
 import { Textarea } from "@sebgroup/react-components/Textarea";
 import { Dropdown } from "@sebgroup/react-components/Dropdown";
@@ -25,6 +25,7 @@ export interface DynamicFormItem {
     rulerKey?: string | null;
     condition?: DynamicFormInternalStateValue;
     controlType?: DynamicFormType;
+    inline?: boolean;
 }
 
 export type DynamicFormType = "Hidden" | "Text" | "Textarea" | "Checkbox" | "Dropdown" | "Datepicker" | "Radio" | "Option" | "ErrorLabel" | "Stepper";
@@ -79,10 +80,8 @@ export function useDynamicForm(sections: DynamicFormSection[]): [() => JSX.Eleme
      */
     const shouldRender: ShouldRenderFormItem = useMemo<ShouldRenderFormItem>(
         () => (sectionKey: string, itemKey: string): boolean => {
-            // console.log("should render sectionKey: ", sectionKey, " itemKey: ", itemKey);
             const { rulerKey, condition, controlType }: Partial<DynamicFormItem> =
                 sections?.find((item: DynamicFormSection) => item.key === sectionKey)?.items?.find((item: DynamicFormItem) => item.key === itemKey) || {};
-            // console.log({ rulerKey, condition, controlType });
             if (controlType === "Hidden") {
                 // Marked as hidden, don't render
                 return false;
@@ -127,8 +126,6 @@ export function useDynamicForm(sections: DynamicFormSection[]): [() => JSX.Eleme
 
     const onChange: OnChangeFormSection = useCallback<OnChangeFormSection>(
         (section: DynamicFormSection) => (item: DynamicFormItem) => (e: InputChange) => {
-            // console.log(section, item, (e as any).target.value);
-
             // TODO: Add support for DynamicFormInternalStateSection as array
             const sectionState: DynamicFormInternalStateSection = state && state.hasOwnProperty(section.key) ? state[section.key] : {};
             const controlType: DynamicFormType = item?.controlType || "Text";
@@ -141,19 +138,13 @@ export function useDynamicForm(sections: DynamicFormSection[]): [() => JSX.Eleme
                     break;
                 case "Option": {
                     let newOptions: DynamicFormOption[] = [...(((sectionState as DynamicFormInternalStateSection)[item.key] as DynamicFormOption[]) || [])];
-                    // console.log("target: ", (e as any).target);
-                    // console.log("newOptions: ", newOptions);
                     const targetId: string = (e as React.ChangeEvent<HTMLInputElement>).target.id;
                     if (newOptions.find((o) => o.key === targetId)) {
                         newOptions = [...newOptions.filter((o) => o.key !== targetId)];
-                        // console.log("removing  ...");
-                        // console.log(newOptions);
                     } else {
                         const targetOption: DynamicFormOption | undefined = item.options?.find((o) => o.key === targetId);
                         if (targetOption) {
                             newOptions.push(targetOption);
-                            // console.log("adding  ...");
-                            // console.log(newOptions);
                         }
                     }
                     newValue = newOptions;
@@ -178,8 +169,6 @@ export function useDynamicForm(sections: DynamicFormSection[]): [() => JSX.Eleme
                     break;
                 }
             }
-
-            // console.log("newValue: ", newValue);
 
             setState({
                 ...state,
@@ -275,7 +264,7 @@ const DynamicFormItemComponent: React.FC<{
                 props.item?.options?.map((option) => {
                     return { label: option.label || "", value: option.value || "", disabled: !!option.disabled };
                 }) || [];
-            formItem = <RadioGroup condensed {...commonProps} value={(props.state as DynamicFormOption)?.value || ""} list={list} />;
+            formItem = <RadioGroup condensed {...commonProps} value={(props.state as DynamicFormOption)?.value || ""} list={list} inline={props.item.inline} />;
             break;
         }
 
@@ -290,7 +279,12 @@ const DynamicFormItemComponent: React.FC<{
         }
 
         case "Checkbox": {
-            formItem = <CheckBox {...commonProps} description={props.item?.description} />;
+            formItem = (
+                <Checkbox {...commonProps}>
+                    {commonProps.label}
+                    {props.item?.description && <p className="text-muted m-0">{props.item?.description}</p>}
+                </Checkbox>
+            );
             break;
         }
 

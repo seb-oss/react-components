@@ -5,7 +5,7 @@
         "Button": "./src/Button/index.ts",
         "ButtonGroup": "./src/ButtonGroup/index.ts",
         "Carousel": "./src/Carousel/index.ts",
-        "CheckBox": "./src/CheckBox/index.ts",
+        "Checkbox": "./src/Checkbox/index.ts",
         "Chip": "./src/Chip/index.ts",
         "Collapse": "./src/Collapse/index.ts",
         "Datepicker": "./src/Datepicker/index.ts",
@@ -59,8 +59,8 @@
             "to": "./Carousel/index.js"
         },
         {
-            "from": "./src/CheckBox/index.ts",
-            "to": "./CheckBox/index.js"
+            "from": "./src/Checkbox/index.ts",
+            "to": "./Checkbox/index.js"
         },
         {
             "from": "./src/Chip/index.ts",

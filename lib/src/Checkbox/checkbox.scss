@@ -12,6 +12,9 @@ $checkbox-padding: $checkbox-padding $checkbox-padding $checkbox-padding $checkb
     &.inline {
         display: inline-block;
         vertical-align: top;
+        &:not(:last-child) {
+            margin-right: 1rem;
+        }
     }
     .custom-checkbox.custom-control {
         padding: $checkbox-padding;
@@ -19,11 +22,6 @@ $checkbox-padding: $checkbox-padding $checkbox-padding $checkbox-padding $checkb
         border-radius: 4px;
         transition: border-color 200ms;
 
-        > .custom-control-label {
-            > .checkbox-label {
-                margin-right: 8px;
-            }
-        }
         > .checkbox-description {
             margin: 0;
             color: $gray-600;
@@ -32,6 +30,7 @@ $checkbox-padding: $checkbox-padding $checkbox-padding $checkbox-padding $checkb
         }
         &.custom-control-inline {
             flex-direction: column;
+            margin: 0;
         }
 
         > .custom-control-input {

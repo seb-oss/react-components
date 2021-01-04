@@ -5,7 +5,7 @@ import { act, Simulate } from "react-dom/test-utils";
 
 describe("Component: Chip", () => {
     let container: HTMLDivElement = null;
-    let onClose: (e: React.MouseEvent<HTMLDivElement>) => void;
+    let onClose: (e: React.MouseEvent<HTMLButtonElement>) => void;
 
     beforeEach(() => {
         onClose = jest.fn();
@@ -19,11 +19,15 @@ describe("Component: Chip", () => {
         container = null;
     });
 
-    it("Should render", () => {
+    it("Should render correction", () => {
         act(() => {
             render(<Chip onClose={onClose}>Test</Chip>, container);
         });
         expect(container).toBeDefined();
+        expect(container.firstElementChild.classList.contains("rc")).toBeTruthy();
+        expect(container.firstElementChild.classList.contains("chip")).toBeTruthy();
+        expect(container.firstElementChild.firstElementChild.classList.contains("content")).toBeTruthy();
+        expect(container.firstElementChild.lastElementChild.tagName.toLowerCase()).toEqual("button");
         expect(container.querySelector(".content").textContent).toEqual("Test");
     });
 
@@ -31,7 +35,7 @@ describe("Component: Chip", () => {
         act(() => {
             render(<Chip onClose={onClose}>Test</Chip>, container);
         });
-        act(() => Simulate.click(container.querySelector(".chip-close")));
+        act(() => Simulate.click(container.querySelector("button")));
         expect(onClose).toHaveBeenCalled();
     });
 });

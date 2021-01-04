@@ -2,16 +2,6 @@
 
 .doc-page {
     margin-top: 3rem;
-
-    ::ng-deep .nav-tabs.doc-page-tabs {
-        margin-bottom: 2rem;
-    }
-
-    &.centered-example {
-        ::ng-deep .example {
-            justify-content: center;
-        }
-    }
     > .doc-page-tabs {
         margin-bottom: 2rem;
     }
@@ -21,7 +11,8 @@
         }
     }
     > .card,
-    .apis > .card {
+    .apis > .card,
+    .note .card {
         border-radius: $border-radius;
         overflow: hidden;
         margin-bottom: 1rem;

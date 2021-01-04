@@ -1,7 +1,7 @@
 import React from "react";
 import classnames from "classnames";
 import { randomId } from "@sebgroup/frontend-tools";
-import { CarouselItem, CarouselItemProps, AfterSlideEvent } from "./CarouselItem";
+import { CarouselItemProps, AfterSlideEvent } from "./CarouselItem";
 import { CarouselIndicators } from "./CarouselIndicators";
 import { CarouselNavs } from "./CarouselNavs";
 import "./carousel.scss";
@@ -17,8 +17,6 @@ export type CarouselProps = JSX.IntrinsicElements["div"] & {
     infinite?: boolean;
     /** Shows clickable indicators at the bottom */
     showIndicators?: boolean;
-    /** A list of accordion items to be rendered */
-    list?: Array<CarouselItemProps>;
     /** The index of default active slide */
     defaultValue?: number;
     /** Enables autoplay slides */
@@ -39,19 +37,19 @@ export const Carousel: React.FC<CarouselProps> = ({
     transitionStyle = "slide",
     infinite = true,
     showIndicators,
-    list = [],
     autoplay = false,
     autoplaySpeed = defaultAutoplaySpeed,
     ...props
 }: CarouselProps) => {
     const [active, setActive] = React.useState<number>(0);
-    const [size, setSize] = React.useState<number>(0);
     const [nav, setNav] = React.useState<NavigationDirection>("next");
     const [id, setId] = React.useState<string>("");
     const [className, setClassName] = React.useState<string>("carousel");
     const [swipePos, setSwipePos] = React.useState<number>();
     const interrupted: React.MutableRefObject<boolean> = React.useRef<boolean>(false);
     const timer: React.MutableRefObject<NodeJS.Timeout | number> = React.useRef<NodeJS.Timeout | number>();
+
+    const size: number = React.Children.toArray(props.children).length;
 
     /** ----- Utilities ----- */
 
@@ -182,8 +180,6 @@ export const Carousel: React.FC<CarouselProps> = ({
     /** ----- Effects ----- */
     /** Set a custom ID if there is none */
     React.useEffect(() => setId(props.id || randomId("carousel-")), [props.id]);
-    /** Set the full size of carousel counting both children and list prop */
-    React.useEffect(() => setSize(list.length + React.Children.count(props.children)), [props.children, list]);
     /** Sets the default value, if any. Otherwise default to the first item */
     React.useEffect(() => setActive(props.defaultValue || 0), [props.defaultValue]);
     /** Set class names */
@@ -201,27 +197,15 @@ export const Carousel: React.FC<CarouselProps> = ({
         <div {...props} id={id} className={className} data-ride="carousel" onMouseDown={handleSwipe} onTouchStart={handleSwipe} onMouseEnter={interruptionHandler} onMouseLeave={interruptionHandler}>
             {showIndicators && <CarouselIndicators active={active} size={size} parentId={id} onIndicatorClicked={goToSlide} />}
             <div className="carousel-inner">
-                {list.map((item: CarouselItemProps, i: number) => (
-                    <CarouselItem
-                        key={i}
-                        {...item}
-                        data-index-number={i}
-                        defaultChecked={active === i}
-                        nav={nav}
-                        transitionDuration={item.transitionDuration || transitionDuration}
-                        afterTransition={afterTransition}
-                        translateX={transitionStyle === "slide" && active === i ? swipePos : undefined}
-                    />
-                ))}
                 {React.Children.map(props.children, (Child: React.ReactElement<CarouselItemProps>, i: number) =>
                     React.isValidElement<CarouselItemProps>(Child)
                         ? React.cloneElement<any>(Child, {
-                              "data-index-number": i + list.length,
-                              defaultChecked: active === i + list.length,
+                              "data-index-number": i,
+                              defaultChecked: active === i,
                               nav,
-                              transitionDuration: Child.props?.transitionDuration || transitionDuration,
+                              transitionDuration,
                               afterTransition,
-                              translateX: transitionStyle === "slide" && active === i + list.length ? swipePos : undefined,
+                              translateX: transitionStyle === "slide" && active === i ? swipePos : undefined,
                           })
                         : Child
                 )}

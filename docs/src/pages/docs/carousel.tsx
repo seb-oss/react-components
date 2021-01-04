@@ -1,19 +1,29 @@
 import React from "react";
 import Docs from "@common/Docs";
-import { Carousel } from "@sebgroup/react-components/Carousel";
-import { CarouselItem } from "@sebgroup/react-components/Carousel/CarouselItem";
-import { DivImage, DivImageProps } from "@sebgroup/react-components/DivImage";
+import { Carousel, CarouselItem, CarouselProps } from "@sebgroup/react-components/Carousel";
+import { DivImage } from "@sebgroup/react-components/DivImage";
 import { DynamicFormOption, useDynamicForm } from "@hooks/useDynamicForm";
 import { checkDynamicFormSelectedKey } from "@utils/helpers";
+
 const images = [require("../../assets/images/cat-pet-animal-1.jpeg"), require("../../assets/images/cat-pet-animal-2.jpg"), require("../../assets/images/cat-pet-animal-3.jpg")];
+const importString: string = require("!raw-loader!@sebgroup/react-components/Carousel/Carousel");
+const code: string = `<Carousel>
+    <CarouselItem><DivImage src="first.jpg" /></CarouselItem>
+    <CarouselItem><DivImage src="second.jpg" /></CarouselItem>
+</Carousel>`;
+
+const checkboxControls: Array<DynamicFormOption> = [
+    { label: "Infinite", value: "infinite", key: "infinite" },
+    { label: "Auto play", value: "autoplay", key: "autoplay" },
+    { label: "Show indicators", value: "showIndicators", key: "showIndicators" },
+];
+
+const transitionStyles: Array<DynamicFormOption<CarouselProps["transitionStyle"]>> = [
+    { key: "slide", label: "Slide-in", value: "slide" },
+    { key: "fade", label: "Fade", value: "fade" },
+];
 
 const CarouselPage: React.FC = (): React.ReactElement<void> => {
-    const checkboxControls: Array<DynamicFormOption> = [
-        { label: "Infinite", value: "infinite", key: "infinite" },
-        { label: "Auto play", value: "autoplay", key: "autoplay" },
-        { label: "Show indicators", value: "showIndicators", key: "showIndicators" },
-    ];
-
     const [renderControls, { controls }] = useDynamicForm([
         {
             key: "controls",
@@ -21,61 +31,57 @@ const CarouselPage: React.FC = (): React.ReactElement<void> => {
                 {
                     key: "autoplaySpeed",
                     label: "Auto play speed",
-                    order: 10,
                     controlType: "Text",
                     value: 2000,
                 },
                 {
                     key: "transitionDuration",
                     label: "Transition duration",
-                    order: 20,
                     controlType: "Text",
                     value: 500,
                 },
                 {
-                    label: "Configurable options",
                     key: "checkboxes",
+                    label: "Configurable options",
                     controlType: "Option",
                     value: [checkboxControls[0]],
                     options: checkboxControls,
+                },
+                {
+                    key: "transitionStyle",
+                    label: "Transition style",
+                    controlType: "Radio",
+                    inline: true,
+                    options: transitionStyles,
+                    value: transitionStyles[0],
                 },
             ],
         },
     ]);
 
-    const importString: string = React.useMemo(() => require("!raw-loader!@sebgroup/react-components/Carousel/Carousel"), []);
-    const importedFiles: Array<string> = React.useMemo(() => [require("!raw-loader!@sebgroup/react-components/Carousel/Carousel")], []);
-    const code: string = React.useMemo(() => require("!raw-loader!./carousel").default, []);
-
-    const divImageStyle: DivImageProps["style"] = { height: "350px", width: "100%", margin: "auto" };
     return (
         <Docs
             mainFile={importString}
-            importedFiles={importedFiles}
             example={
                 <div className="w-100 d-flex justify-content-center">
                     <Carousel
-                        {...controls}
+                        autoplaySpeed={controls.autoplaySpeed}
+                        transitionDuration={controls.transitionDuration}
                         showIndicators={checkDynamicFormSelectedKey("showIndicators", controls)}
                         autoplay={checkDynamicFormSelectedKey("autoplay", controls)}
                         infinite={checkDynamicFormSelectedKey("infinite", controls)}
+                        transitionStyle={controls.transitionStyle?.value}
                     >
-                        <CarouselItem key="1">
-                            <DivImage
-                                style={divImageStyle}
-                                src={`https://static01.nyt.com/images/2020/04/22/science/22VIRUS-PETCATS1/merlin_150476541_233fface-f503-41af-9eae-d90a95eb6051-superJumbo.jpg?quality=90&auto=webp`}
-                            />
+                        <CarouselItem>
+                            <DivImage src={images[0]} width="100%" height="350px" />
                         </CarouselItem>
 
-                        <CarouselItem key="2">
-                            <DivImage
-                                style={divImageStyle}
-                                src={`https://static01.nyt.com/images/2020/04/06/science/06VIRUS-ANIMALS/merlin_171317514_567f80c0-6f04-4737-ad7e-47c4b603fcff-superJumbo.jpg?quality=90&auto=webp`}
-                            />
+                        <CarouselItem>
+                            <DivImage src={images[1]} width="100%" height="350px" />
                         </CarouselItem>
 
-                        <CarouselItem key="3">
-                            <DivImage style={divImageStyle} src={require("../../assets/images/cat-pet-animal-1.jpeg")} />
+                        <CarouselItem>
+                            <DivImage src={images[2]} width="100%" height="350px" />
                         </CarouselItem>
                     </Carousel>
                 </div>
