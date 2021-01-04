@@ -20,13 +20,13 @@ const AccordionPage: React.FC = () => {
             items: [
                 {
                     key: "inverted",
-                    label: "Inverted",
+                    label: "inverted",
                     description: "Renders the toggle icons to the right",
                     controlType: "Checkbox",
                 },
                 {
                     key: "alternative",
-                    label: "Alternative",
+                    label: "alternative",
                     description: "The alternative accordion uses links-like appearance",
                     controlType: "Checkbox",
                 },

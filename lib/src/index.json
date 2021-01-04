@@ -9,7 +9,6 @@
         "Chip": "./src/Chip/index.ts",
         "Collapse": "./src/Collapse/index.ts",
         "Datepicker": "./src/Datepicker/index.ts",
-        "DivImage": "./src/DivImage/index.ts",
         "Dropdown": "./src/Dropdown/index.ts",
         "FeedbackIndicator": "./src/FeedbackIndicator/index.ts",
         "Image": "./src/Image/index.ts",
@@ -73,10 +72,6 @@
         {
             "from": "./src/Datepicker/index.ts",
             "to": "./Datepicker/index.js"
-        },
-        {
-            "from": "./src/DivImage/index.ts",
-            "to": "./DivImage/index.js"
         },
         {
             "from": "./src/Dropdown/index.ts",

@@ -29,25 +29,25 @@ const ButtonPage: React.FC = () => {
             items: [
                 {
                     key: "size",
-                    label: "Size",
+                    label: "size",
                     options: buttonSizes,
                     inline: true,
                     controlType: "Radio",
                 },
                 {
                     key: "theme",
-                    label: "Theme",
+                    label: "theme",
                     options: buttonThemes,
                     controlType: "Dropdown",
                 },
                 {
                     key: "disabled",
-                    label: "Disabled",
+                    label: "disabled",
                     controlType: "Checkbox",
                 },
                 {
                     key: "block",
-                    label: "Block",
+                    label: "block",
                     description: "Sets the display of the button to block so it can take up the container width",
                     controlType: "Checkbox",
                 },

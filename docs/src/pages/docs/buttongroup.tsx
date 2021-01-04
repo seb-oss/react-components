@@ -18,7 +18,7 @@ const ButtonGroupPage: React.FC = (): React.ReactElement<void> => {
             items: [
                 {
                     key: "size",
-                    label: "Size",
+                    label: "size",
                     options: [
                         { key: "sm", label: "sm", value: "sm" },
                         { key: "md", label: "md", value: "md" },
@@ -29,7 +29,7 @@ const ButtonGroupPage: React.FC = (): React.ReactElement<void> => {
                 },
                 {
                     key: "vertical",
-                    label: "Vertical",
+                    label: "vertical",
                     controlType: "Checkbox",
                 },
             ],

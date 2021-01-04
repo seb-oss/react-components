@@ -24,7 +24,7 @@ const BreadcrumbPage: React.FC = () => {
             items: [
                 {
                     key: "light",
-                    label: "Light",
+                    label: "light",
                     description: "Enable light mode",
                     controlType: "Checkbox",
                 },

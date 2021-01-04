@@ -45,11 +45,6 @@
         "filePath": "./src/Datepicker/index.ts"
     },
     {
-        "name": "DivImage",
-        "path": "/docs/divimage/",
-        "filePath": "./src/DivImage/index.ts"
-    },
-    {
         "name": "Dropdown",
         "path": "/docs/dropdown/",
         "filePath": "./src/Dropdown/index.ts"

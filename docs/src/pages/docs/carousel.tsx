@@ -1,26 +1,19 @@
 import React from "react";
 import Docs from "@common/Docs";
 import { Carousel, CarouselItem, CarouselProps } from "@sebgroup/react-components/Carousel";
-import { DivImage } from "@sebgroup/react-components/DivImage";
+import { Img } from "@sebgroup/react-components/Image";
 import { DynamicFormOption, useDynamicForm } from "@hooks/useDynamicForm";
-import { checkDynamicFormSelectedKey } from "@utils/helpers";
 
 const images = [require("../../assets/images/cat-pet-animal-1.jpeg"), require("../../assets/images/cat-pet-animal-2.jpg"), require("../../assets/images/cat-pet-animal-3.jpg")];
 const importString: string = require("!raw-loader!@sebgroup/react-components/Carousel/Carousel");
 const code: string = `<Carousel>
-    <CarouselItem><DivImage src="first.jpg" /></CarouselItem>
-    <CarouselItem><DivImage src="second.jpg" /></CarouselItem>
+    <CarouselItem><Img type="div" src="first.jpg" /></CarouselItem>
+    <CarouselItem><Img type="div" src="second.jpg" /></CarouselItem>
 </Carousel>`;
 
-const checkboxControls: Array<DynamicFormOption> = [
-    { label: "Infinite", value: "infinite", key: "infinite" },
-    { label: "Auto play", value: "autoplay", key: "autoplay" },
-    { label: "Show indicators", value: "showIndicators", key: "showIndicators" },
-];
-
 const transitionStyles: Array<DynamicFormOption<CarouselProps["transitionStyle"]>> = [
-    { key: "slide", label: "Slide-in", value: "slide" },
-    { key: "fade", label: "Fade", value: "fade" },
+    { key: "slide", label: "slide", value: "slide" },
+    { key: "fade", label: "fade", value: "fade" },
 ];
 
 const CarouselPage: React.FC = (): React.ReactElement<void> => {
@@ -30,26 +23,22 @@ const CarouselPage: React.FC = (): React.ReactElement<void> => {
             items: [
                 {
                     key: "autoplaySpeed",
-                    label: "Auto play speed",
+                    label: "autoplaySpeed",
                     controlType: "Text",
                     value: 2000,
                 },
                 {
                     key: "transitionDuration",
-                    label: "Transition duration",
+                    label: "transitionDuration",
                     controlType: "Text",
                     value: 500,
                 },
-                {
-                    key: "checkboxes",
-                    label: "Configurable options",
-                    controlType: "Option",
-                    value: [checkboxControls[0]],
-                    options: checkboxControls,
-                },
+                { key: "infinite", label: "infinite", controlType: "Checkbox" },
+                { key: "autoplay", label: "autoplay", controlType: "Checkbox" },
+                { key: "showIndicators", label: "showIndicators", controlType: "Checkbox" },
                 {
                     key: "transitionStyle",
-                    label: "Transition style",
+                    label: "transitionStyle",
                     controlType: "Radio",
                     inline: true,
                     options: transitionStyles,
@@ -67,21 +56,21 @@ const CarouselPage: React.FC = (): React.ReactElement<void> => {
                     <Carousel
                         autoplaySpeed={controls.autoplaySpeed}
                         transitionDuration={controls.transitionDuration}
-                        showIndicators={checkDynamicFormSelectedKey("showIndicators", controls)}
-                        autoplay={checkDynamicFormSelectedKey("autoplay", controls)}
-                        infinite={checkDynamicFormSelectedKey("infinite", controls)}
+                        showIndicators={controls.showIndicators}
+                        autoplay={controls.autoplay}
+                        infinite={controls.infinite}
                         transitionStyle={controls.transitionStyle?.value}
                     >
                         <CarouselItem>
-                            <DivImage src={images[0]} width="100%" height="350px" />
+                            <Img src={images[0]} responsive width="100%" />
                         </CarouselItem>
 
                         <CarouselItem>
-                            <DivImage src={images[1]} width="100%" height="350px" />
+                            <Img src={images[1]} responsive width="100%" />
                         </CarouselItem>
 
                         <CarouselItem>
-                            <DivImage src={images[2]} width="100%" height="350px" />
+                            <Img src={images[2]} responsive width="100%" />
                         </CarouselItem>
                     </Carousel>
                 </div>

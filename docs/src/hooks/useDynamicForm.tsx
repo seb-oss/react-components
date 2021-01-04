@@ -280,7 +280,7 @@ const DynamicFormItemComponent: React.FC<{
 
         case "Checkbox": {
             formItem = (
-                <Checkbox {...commonProps}>
+                <Checkbox {...commonProps} checked={props.state as boolean}>
                     {commonProps.label}
                     {props.item?.description && <p className="text-muted m-0">{props.item?.description}</p>}
                 </Checkbox>
