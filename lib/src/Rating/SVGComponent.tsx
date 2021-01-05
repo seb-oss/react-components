@@ -25,13 +25,16 @@ export const SVGComponent: React.FC<SVGProps> = ({ colors, index, value, customS
 
     const getGradientId = React.useCallback(
         (defaultValue?: string): string => {
-            switch (step) {
-                case 1:
-                    return "url(#full_grad)";
-                case 0.5:
-                    return defaultValue || "url(#half_grad)";
-                default:
-                    return `url(#dynamic_grad${index})`;
+            const isInt: boolean = step % 1 === 0;
+            if (isInt) {
+                return "url(#full_grad)";
+            } else {
+                switch (step) {
+                    case 0.5:
+                        return defaultValue || "url(#half_grad)";
+                    default:
+                        return `url(#dynamic_grad${index})`;
+                }
             }
         },
         [step, index]

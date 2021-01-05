@@ -2,14 +2,16 @@ import React, { useState, useEffect } from "react";
 import classnames from "classnames";
 import { SVGComponent } from "./SVGComponent";
 import "./rating.scss";
-import { title } from "process";
-
 export type RatingProps = JSX.IntrinsicElements["input"] & {
+    /** Initial value to be passed */
     initialValue?: number;
+    /** Array of two colors to fill the states of the svgs */
     colors?: [string, string];
     /** Div wrapper props */
     wrapperProps?: JSX.IntrinsicElements["div"];
+    /** svg to use instead of the default */
     customSVG?: JSX.IntrinsicElements["svg"];
+    /**  name to be used for accessibility */
     svgname?: string;
 };
 
