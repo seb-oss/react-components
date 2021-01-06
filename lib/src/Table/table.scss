@@ -7,6 +7,7 @@ $icon-size: 12px;
 $row-height: 40px;
 $transition-time: 200ms;
 $filter-gray: #e6e6e6;
+$dark-bg: #121212;
 
 table {
     &.table {
@@ -97,6 +98,33 @@ table {
             > .rc.checkbox {
                 > .custom-checkbox {
                     padding: 0 0 0 1.5rem;
+                }
+            }
+        }
+        &.dark {
+            background-color: $dark-bg;
+            color: $gray-200;
+            > thead {
+                > tr {
+                    > th {
+                        color: $gray-200;
+                        border-bottom: 2px solid $gray-700;
+                    }
+                }
+            }
+            th,
+            td {
+                border-top: 1px solid $gray-700;
+            }
+            td {
+                &.collapse-control {
+                    > .btn {
+                        > .icon-holder {
+                            svg {
+                                fill: $gray-200;
+                            }
+                        }
+                    }
                 }
             }
         }

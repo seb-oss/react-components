@@ -9,8 +9,6 @@ import { randomId } from "@sebgroup/frontend-tools";
 export type TableRowProps<T = any> = JSX.IntrinsicElements["tr"] & {
     checked?: boolean;
     indeterminate?: boolean;
-    subRows?: Array<any>;
-    index?: number;
     isHeaderRow?: boolean;
     hideSelect?: boolean;
     uniqueKey?: string;
@@ -30,13 +28,14 @@ const angleRightIcon: JSX.Element = (
     </svg>
 );
 
-const TableRow: React.FC<TableRowProps> = ({ index, className, isHeaderRow, hideSelect, uniqueKey, parentKey, checked, isSubRow = false, isExpanded = false, ...props }: TableRowProps) => {
+const TableRow: React.FC<TableRowProps> = ({ className, isHeaderRow, hideSelect, uniqueKey, parentKey, checked, isSubRow = false, isExpanded = false, ...props }: TableRowProps) => {
     const context = React.useContext(TableContext);
     const [uniqueId, setUniqueId] = React.useState<string>(uniqueKey);
     const [isShown, setIsShown] = React.useState<boolean>(false);
     const [expanded, setExpanded] = React.useState<boolean>(isExpanded);
     const [expandedRows, setExpandedRows] = React.useState<Array<string>>(context.tableState?.expandedRows || []);
 
+    /** initiate default expanded row */
     const initiateExpandedRows = React.useCallback(() => {
         const newExpandedRows: Array<string> = [...expandedRows];
         const expandedIndex: number = newExpandedRows.indexOf(uniqueKey);

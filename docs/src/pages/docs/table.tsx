@@ -1,17 +1,17 @@
 import React from "react";
 import Docs from "@common/Docs";
-import { Column, DataItem, Table } from "@sebgroup/react-components/Table/Table";
+import { Table } from "@sebgroup/react-components/Table/Table";
 import { DynamicFormOption, useDynamicForm } from "@hooks/useDynamicForm";
 import makeData from "@utils/makeData";
 import { Dropdown, DropdownItem } from "@sebgroup/react-components/Dropdown";
 import { checkDynamicFormSelectedKey } from "@utils/helpers";
 import { Textbox } from "@sebgroup/react-components/Textbox";
-import TableBody from "@sebgroup/react-components/Table/sections/TableBody";
-import TableCell from "@sebgroup/react-components/Table/sections/TableCell";
-import TableHeader from "@sebgroup/react-components/Table/sections/TableHeader";
-import TableHeaderCell from "@sebgroup/react-components/Table/sections/TableHeaderCell";
-import TableRow from "@sebgroup/react-components/Table/sections/TableRow";
-import { filterArray, paginate, searchTextInArray, sortArray } from "@sebgroup/react-components/Table/sections/helperFunctions";
+import TableBody from "@sebgroup/react-components/Table/parts/TableBody";
+import TableCell from "@sebgroup/react-components/Table/parts/TableCell";
+import TableHeader from "@sebgroup/react-components/Table/parts/TableHeader";
+import TableHeaderCell from "@sebgroup/react-components/Table/parts/TableHeaderCell";
+import TableRow from "@sebgroup/react-components/Table/parts/TableRow";
+import { filterArray, paginate, searchTextInArray, sortArray } from "@sebgroup/react-components/Table/parts/helperFunctions";
 import { SortedColumn } from "@sebgroup/react-components/Table/TableContextProvider";
 import { FilterColumn } from "@sebgroup/react-components/Table/table-typings";
 import { Pagination } from "@sebgroup/react-components/Pagination";
@@ -80,6 +80,7 @@ const TablePage: React.FC = (): React.ReactElement<void> => {
             { label: "Enable sub rows", value: "enableSubRows", key: "enableSubRows" },
             { label: "Enable searching", value: "enableSearch", key: "enableSearch" },
             { label: "Enable filter", value: "enableFilter", key: "enableFilter" },
+            { label: "Enable dark theme", value: "enableDark", key: "enableDark" },
         ],
         []
     );
@@ -106,11 +107,12 @@ const TablePage: React.FC = (): React.ReactElement<void> => {
     const enableSubRows = React.useMemo(() => checkDynamicFormSelectedKey("enableSubRows", controls), [controls]);
     const enableSearch = React.useMemo(() => checkDynamicFormSelectedKey("enableSearch", controls), [controls]);
     const enableFilter = React.useMemo(() => checkDynamicFormSelectedKey("enableFilter", controls), [controls]);
-    const defaultData: Array<DataItem<TableDataProps>> = React.useMemo(
-        () => makeData<Array<DataItem<TableDataProps>>>([enablePagination ? 100 : 10, 5]),
+    const enableDark = React.useMemo(() => checkDynamicFormSelectedKey("enableDark", controls), [controls]);
+    const defaultData: Array<TableDataProps> = React.useMemo(
+        () => makeData<Array<TableDataProps>>([enablePagination ? 100 : 10, 5]),
         [enablePagination]
     );
-    const [data, setData] = React.useState<Array<DataItem<TableDataProps>>>([...defaultData]);
+    const [data, setData] = React.useState<Array<TableDataProps>>([...defaultData]);
 
     const statusDropdownList: Array<DropdownItem> = [
         { label: "single", value: "single" },
@@ -165,7 +167,8 @@ const TablePage: React.FC = (): React.ReactElement<void> => {
             example={
                 <div className="w-100">
                     <Table
-                        onSort={enableSorting ? (sortedColumn: SortedColumn) => setData(sortArray(data, sortedColumn.accessor, sortedColumn.sortDirection)) : null}
+                        theme={enableDark ? "dark" : "light"}
+                        onSort={enableSorting ? (sortedColumn: SortedColumn) => sortedColumn && setData(sortArray(data, sortedColumn.accessor, sortedColumn.sortDirection)) : null}
                         onRowSelect={
                             enableRowSelection
                                 ? (rows: any, uniqueKey: string) => {

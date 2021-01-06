@@ -5,7 +5,6 @@ import { SortedColumn, TableContext } from "../TableContextProvider";
 
 export type TableHeaderCellProps<T = any> = JSX.IntrinsicElements["th"] & {
     accessor?: keyof T;
-    selectAllIndicator?: boolean;
     disableSort?: boolean;
 };
 
@@ -22,7 +21,7 @@ const defaultSort: JSX.Element = (
     </svg>
 );
 
-const TableHeaderCell: React.FC<TableHeaderCellProps> = ({ accessor, selectAllIndicator, disableSort, className, ...props }: TableHeaderCellProps) => {
+const TableHeaderCell: React.FC<TableHeaderCellProps> = ({ accessor, disableSort, className, ...props }: TableHeaderCellProps) => {
     const context = React.useContext(TableContext);
     const [sortedColumn, setSortedColumn] = React.useState<SortedColumn>(context.tableState.sortedColumn);
     const [sortDirection, setSortDirection] = React.useState<SortDirection>(SortDirection.ASC);

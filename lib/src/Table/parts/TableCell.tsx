@@ -1,11 +1,8 @@
 import React from "react";
 
-export type TableCellProps<T = any> = JSX.IntrinsicElements["td"] & {
-    accessor?: keyof T;
-    value?: T;
-};
+export type TableCellProps<T = any> = JSX.IntrinsicElements["td"];
 
-const TableCell: React.FC<TableCellProps> = ({ accessor, value, ...props }: TableCellProps) => {
+const TableCell: React.FC<TableCellProps> = ({ ...props }: TableCellProps) => {
     return <td {...props} />;
 };
 
