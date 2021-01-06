@@ -18,18 +18,8 @@ const AccordionPage: React.FC = () => {
         {
             key: "controls",
             items: [
-                {
-                    key: "inverted",
-                    label: "inverted",
-                    description: "Renders the toggle icons to the right",
-                    controlType: "Checkbox",
-                },
-                {
-                    key: "alternative",
-                    label: "alternative",
-                    description: "The alternative accordion uses links-like appearance",
-                    controlType: "Checkbox",
-                },
+                { key: "inverted", label: "inverted", description: "Renders the toggle icons to the right", controlType: "Checkbox" },
+                { key: "alternative", label: "alternative", description: "The alternative accordion uses links-like appearance", controlType: "Checkbox" },
             ],
         },
     ]);

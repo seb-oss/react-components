@@ -21,14 +21,7 @@ const BreadcrumbPage: React.FC = () => {
     const [renderControls, { controls }] = useDynamicForm([
         {
             key: "controls",
-            items: [
-                {
-                    key: "light",
-                    label: "light",
-                    description: "Enable light mode",
-                    controlType: "Checkbox",
-                },
-            ],
+            items: [{ key: "light", label: "light", description: "Enable light mode", controlType: "Checkbox" }],
         },
     ]);
 

@@ -1,167 +1,149 @@
 import React from "react";
+import { createPortal } from "react-dom";
+import classnames from "classnames";
 import "./modal.scss";
 
-export type ModalPositionProp = "left" | "right" | null;
-export type ModalSizeProp = "modal-lg" | "modal-sm" | null;
+export type ModalPosition = "left" | "right" | "default";
+export type ModalSize = "lg" | "md" | "sm";
+type FocusableElements = HTMLInputElement | HTMLButtonElement | HTMLAnchorElement;
 
-export interface ModalProps {
-    /** Accessibility for description */
-    ariaDescribedby?: string;
-    /** Accessibility for label */
-    ariaLabel?: string;
-    /** HTML element to be displayed on the body */
-    body?: React.ReactNode;
-    /** Custom class */
-    className?: string;
-    /** User cannot dismiss Dialog by clicking outside of it, default is `false` */
-    disableBackdropDismiss?: boolean;
-    /** Escape key to dismiss modal if set to `true` */
-    escapeToDismiss?: boolean;
+export type ModalProps = JSX.IntrinsicElements["div"] & {
     /** Centers the modal in the middle of the screen. Default is `false` */
     centered?: boolean;
     /** Size of modal `modal-lg` | `modal-sm` | `null` */
-    size?: ModalSizeProp;
-    /** HTML element to be displayed on the footer */
-    footer?: React.ReactNode;
+    size?: ModalSize;
     /** Toggle fullscreen modal, default is `false` */
     fullscreen?: boolean;
-    /** HTML element to be displayed on the header */
-    header?: React.ReactNode;
-    /** the id property of the modal */
-    id?: string;
-    /** click event when modal is toggled */
-    onDismiss?: () => void;
+    /** Event triggered when escape key is triggered */
+    onEscape?: (e: KeyboardEvent) => void;
+    /** Event triggered when the backdrop is clicked */
+    onBackdropDismiss?: React.MouseEventHandler<HTMLDivElement>;
     /** Modal position. Available positions: `left`, `right` */
-    position?: ModalPositionProp;
+    position?: ModalPosition;
     /** Modal toggle */
-    toggle: boolean;
+    toggle?: boolean;
     /** To only allow tab to focus within modal */
     trapFocus?: boolean;
-}
+    /** Automatically focuses on the first input element in the modal dialog */
+    autoFocus?: boolean;
+};
 /** The modal component provides a solid foundation for creating dialogs or slideout modals */
-export const Modal: React.FC<ModalProps> = React.memo(({ trapFocus = true, escapeToDismiss = true, ...props }: ModalProps) => {
-    const pristine: React.MutableRefObject<boolean> = React.useRef<boolean>(true);
-    const [className, setClassName] = React.useState<string>("seb modal");
-    const modalRef: React.MutableRefObject<HTMLDivElement> = React.useRef<HTMLDivElement>();
-    /**
-     * This is used for focus trap.
-     * The previous key combination registered is used to determine
-     * if the focus should go to the last from the first,
-     * or from the last to the first
-     */
-    const prevKeyCombination = React.useRef<"next" | "previous">();
-
-    /**
-     * Dismisses the modal
-     * @param e clicked element
-     */
-    const onDismiss = React.useCallback(
-        (e: React.MouseEvent<HTMLDivElement>): void => {
-            e && e.stopPropagation();
-            if (!props.disableBackdropDismiss) {
-                props.onDismiss ? props.onDismiss() : console.warn("onDismiss is compulsory in Modal!");
-            }
-        },
-        [props.onDismiss, props.disableBackdropDismiss]
-    );
-
-    /**
-     * A window keyboard listener used to determine whether the `escape` key is registered
-     * @param e The window keyboard event
-     */
-    const escapeKeyListener = React.useCallback(
-        (e: KeyboardEvent): void => {
-            if (e.key.toLowerCase() === "escape" && escapeToDismiss) {
-                props.onDismiss && props.onDismiss();
-            }
-        },
-        [escapeToDismiss, props.onDismiss]
-    );
-
-    /**
-     * An event listener used to capture if `tab` is registered (tab to the next).
-     * And whether or not it has been registered with the shift key (tab to the previous)
-     * @param e The window keyboard event
-     */
-    const keyCombinationListener = React.useCallback((e: KeyboardEvent): void => {
-        if (e.key.toLowerCase() === "tab") {
-            prevKeyCombination.current = e.shiftKey === false ? "next" : "previous";
-        }
-    }, []);
+export const Modal: React.FC<ModalProps> = React.memo(({ trapFocus, autoFocus, centered, size, fullscreen, onEscape, onBackdropDismiss, position, toggle, ...props }: ModalProps) => {
+    const dialogRef: React.MutableRefObject<HTMLDivElement> = React.useRef<HTMLDivElement>();
+    const [isPristine, setIsPristine] = React.useState<boolean>(true);
 
     React.useEffect(() => {
-        /** Adds or removes a listener from the window based on the toggle value */
-        trapFocus && window[props.toggle ? "addEventListener" : "removeEventListener"]("keydown", keyCombinationListener);
-
-        if (props.toggle && trapFocus) {
-            /** Focuses on the first focusable element when the modal is toggled */
-            const focusableElement: HTMLElement = modalRef.current.querySelector("input, button, a");
-            focusableElement && focusableElement.focus();
+        if (toggle) {
+            isPristine && setIsPristine(false);
+            document.body.classList.add("modal-open");
+        } else {
+            document.body.classList.remove("modal-open");
         }
-        /** Un-focus from the element inside the modal when it's toggled off */
-        if (!props.toggle && pristine.current && trapFocus) {
-            (document.activeElement as HTMLElement)?.blur();
-        }
+    }, [toggle]);
 
-        return () => {
-            window.removeEventListener("keydown", keyCombinationListener);
-        };
-    }, [trapFocus, props.toggle, keyCombinationListener]);
+    /** Focus trap */
+    React.useEffect(() => {
+        function tabHandler(e: KeyboardEvent) {
+            if (e.key.toLowerCase() === "tab") {
+                const lastFocusable: string = "last-focusable-element";
+                const focusableElements: FocusableElements[] = Array.from(dialogRef.current.querySelectorAll<FocusableElements>("input, button, a")).filter((el) => el.className !== lastFocusable);
 
-    /**
-     * A transition end handler used as a technique to know if the focus has escaped the modal
-     * An outline propery transitions when the focus escapes the modal, which indicates the
-     * time to re-focus back to an element inside the modal
-     * @param e The transition event
-     */
-    const onTransitionEnd: React.TransitionEventHandler<HTMLDivElement> = React.useCallback(
-        (e: React.TransitionEvent<HTMLDivElement>): void => {
-            /** Cleans up the rgba property from spaces to avoid faulty comparison */
-            const clean = (val: string) => val.replace(/[ ]/g, "");
-
-            if (e.propertyName === "outline-color") {
-                /** The computed value is necessary since these changes happen in the stylesheet */
-                const newBorderColor: string = clean(window.getComputedStyle(e.currentTarget).outlineColor);
-                if (props.toggle && newBorderColor === "rgba(0,0,0,0)") {
-                    const focusableElements: NodeListOf<HTMLElement> = e.currentTarget.querySelectorAll("input, button, a");
-                    if (focusableElements.length) {
-                        /** Focuses on the first or last depending on the tab flow */
-                        focusableElements[prevKeyCombination.current === "previous" ? focusableElements.length - 1 : 0].focus();
+                if (focusableElements.length) {
+                    if (!e.shiftKey) {
+                        // Descending focus
+                        if (document.activeElement.className === lastFocusable && dialogRef.current.contains(document.activeElement)) {
+                            dialogRef.current.querySelector<FocusableElements>("input, button, a").focus();
+                        } else if (!dialogRef.current.contains(document.activeElement)) {
+                            dialogRef.current.querySelector<FocusableElements>("input, button, a").focus();
+                        }
+                    } else {
+                        // Ascending focus
+                        if ((document.activeElement.className === lastFocusable && dialogRef.current.contains(document.activeElement)) || !dialogRef.current.contains(document.activeElement)) {
+                            focusableElements[focusableElements.length - 1].focus();
+                        }
                     }
                 }
             }
-        },
-        [props.toggle]
-    );
+        }
 
+        if (trapFocus && toggle) {
+            document.addEventListener("keyup", tabHandler);
+        } else {
+            document.removeEventListener("keyup", tabHandler);
+        }
+
+        return () => document.removeEventListener("keyup", tabHandler);
+    }, [trapFocus, toggle]);
+
+    // Escape key listner
     React.useEffect(() => {
-        let classNames: string = "seb modal";
-        classNames += props.toggle ? " show" : pristine.current ? "" : " hide";
-        classNames += props.centered ? " modal-centered" : "";
-        classNames += !!props.position ? " modal-aside modal-aside-" + (props.position === "left" ? "left" : "right") : "";
-        classNames += props.fullscreen ? " modal-fullscreen" : "";
-        classNames += props.className ? ` ${props.className}` : "";
-        setClassName(classNames);
-    }, [props.toggle, props.centered, props.position, props.fullscreen, props.className]);
+        function keyupListener(e: KeyboardEvent) {
+            e.key.toLowerCase() === "escape" && onEscape(e);
+        }
 
-    React.useEffect(() => {
-        pristine.current = false;
+        if (onEscape && toggle) {
+            document.addEventListener("keyup", keyupListener);
+        } else {
+            document.removeEventListener("keyup", keyupListener);
+        }
 
-        escapeToDismiss && window[props.toggle ? "addEventListener" : "removeEventListener"]("keyup", escapeKeyListener);
-        return () => {
-            window.removeEventListener("keyup", escapeKeyListener);
-        };
-    }, [props.toggle, escapeToDismiss, escapeKeyListener]);
+        return () => document.removeEventListener("keyup", keyupListener);
+    }, [onEscape, toggle]);
 
-    return (
-        <div className={className} id={props.id} aria-label={props.ariaLabel} aria-describedby={props.ariaDescribedby} role="dialog" tabIndex={-1} aria-modal="true" onClick={onDismiss} ref={modalRef}>
-            <div role="document" className={"modal-dialog" + (props.size ? ` ${props.size}` : "")} onClick={(e) => e.stopPropagation()} onTransitionEnd={trapFocus ? onTransitionEnd : null}>
-                <div className="modal-content">
-                    {props.header && <div className="modal-header">{props.header}</div>}
-                    {props.body && <div className="modal-body">{props.body}</div>}
-                    {props.footer && <div className="modal-footer">{props.footer}</div>}
-                </div>
+    return createPortal(
+        <div
+            {...props}
+            className={classnames(
+                "rc",
+                "modal",
+                {
+                    show: toggle,
+                    hide: !toggle && !isPristine,
+                    "modal-centered": centered,
+                    "modal-aside": position && position !== "default" && !fullscreen,
+                    [`modal-aside-${[position]}`]: position && position !== "default" && !fullscreen,
+                    "modal-fullscreen": fullscreen,
+                },
+                props.className
+            )}
+            role={props.role || "dialog"}
+            tabIndex={props.tabIndex || -1}
+            aria-modal="true"
+            onClick={(e) => {
+                props.onClick && props.onClick(e);
+
+                const target: HTMLDivElement = e.target as any;
+
+                if (onBackdropDismiss && target.classList.contains("rc") && target.classList.contains("modal")) {
+                    onBackdropDismiss(e);
+                }
+            }}
+            onAnimationEnd={(e) => {
+                props.onAnimationEnd && props.onAnimationEnd(e);
+
+                if (fullscreen && autoFocus && toggle && !dialogRef.current.contains(document.activeElement)) {
+                    dialogRef.current.querySelector("input")?.focus();
+                }
+            }}
+        >
+            <div
+                ref={dialogRef}
+                role="document"
+                className={classnames("modal-dialog", { [`modal-${size}`]: size })}
+                onAnimationEnd={() => {
+                    if (autoFocus && toggle && !dialogRef.current.contains(document.activeElement)) {
+                        dialogRef.current.querySelector("input")?.focus();
+                    }
+                }}
+            >
+                <div className="modal-content">{props.children}</div>
+                {trapFocus && (
+                    <a className="last-focusable-element" href="#">
+                        <div className="sr-only">End of focus</div>
+                    </a>
+                )}
             </div>
-        </div>
+        </div>,
+        document.body
     );
 });
