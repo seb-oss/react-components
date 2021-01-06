@@ -2,6 +2,7 @@ import React from "react";
 import { act, Simulate } from "react-dom/test-utils";
 import { unmountComponentAtNode, render } from "react-dom";
 import { Datepicker, DatepickerProps } from ".";
+import { advanceTo, clear } from "jest-date-mock";
 
 describe("Component: Datepicker", () => {
     let container: HTMLDivElement = null;
@@ -96,16 +97,17 @@ describe("Component: Datepicker", () => {
         expect(container.firstElementChild.hasAttribute("disabled")).toBe(true);
     });
 
-    // TODO: Fix this issue causing the datepicker to be off by one day sometimes
-    // it("Should render with custom locale", () => {
-    //     const localeCode: string = "sv-se";
-    //     const value: Date = new Date();
-    //     const [year, month, day] = [2015, 11, 25];
-    //     value.setFullYear(year, month, day);
-    //     act(() => {
-    //         render(<Datepicker {...{ ...props, localeCode, value }} />, container);
-    //     });
+    it("Should ignore timezone info from date and only respect the year, month and day", () => {
+        const [year, month, day] = [2015, 11, 25];
+        // mock change system date to 2015-25-11 midnight!
+        advanceTo(new Date(year, month, day, 0, 0, 0));
+        const value: Date = new Date();
+        act(() => {
+            render(<Datepicker {...{ ...props, value }} />, container);
+        });
 
-    //     expect(container.querySelector<HTMLInputElement>("input").value).toEqual(`${year}-${month + 1}-${day}`);
-    // });
+        expect(container.querySelector<HTMLInputElement>("input").value).toEqual(`${year}-${month + 1}-${day}`);
+        // change back to correct system date!
+        clear();
+    });
 });

@@ -57,7 +57,12 @@ export const Datepicker: React.FunctionComponent<DatepickerProps> = ({
 
     const getStringFromDate = React.useCallback(
         (d: Date, monthPicker: boolean): string => {
-            return isValidDate(d) ? d?.toISOString()?.substr(0, monthPicker ? 7 : 10) || "" : "";
+            if (isValidDate(d)) {
+                const tzoffset: number = new Date().getTimezoneOffset() * 60000;
+                return new Date(Date.now() - tzoffset).toISOString()?.substr(0, monthPicker ? 7 : 10) || "";
+            } else {
+                return "";
+            }
         },
         [isValidDate]
     );
