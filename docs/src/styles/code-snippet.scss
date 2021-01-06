@@ -4,17 +4,29 @@
 .code-snippet {
     position: relative;
     width: 100%;
+
+    &.angular pre {
+        box-shadow: $shadow;
+        border-radius: 0 !important;
+        margin-bottom: 1rem;
+    }
+
+    &:not(.angular) {
+        pre {
+            border-radius: $border-radius !important;
+            overflow: hidden !important;
+        }
+
+        div.snippet-icon {
+            border-top-right-radius: $border-radius;
+        }
+    }
+
     pre {
         margin: 0 !important;
         height: 100%;
         width: 100%;
         overflow: hidden;
-
-        &:not(.fill) {
-            box-shadow: $shadow;
-            border-radius: 0 !important;
-            margin-bottom: 1rem;
-        }
 
         code {
             width: 100%;

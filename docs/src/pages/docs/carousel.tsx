@@ -4,7 +4,12 @@ import { Carousel, CarouselItem, CarouselProps } from "@sebgroup/react-component
 import { Img } from "@sebgroup/react-components/Image";
 import { DynamicFormOption, useDynamicForm } from "@hooks/useDynamicForm";
 
-const images = [require("../../assets/images/cat-pet-animal-1.jpeg"), require("../../assets/images/cat-pet-animal-2.jpg"), require("../../assets/images/cat-pet-animal-3.jpg")];
+const images = [
+    require("../../assets/images/painting-1.jpg"),
+    require("../../assets/images/painting-2.jpg"),
+    require("../../assets/images/painting-3.jpg"),
+    require("../../assets/images/painting-4.jpg"),
+];
 const importString: string = require("!raw-loader!@sebgroup/react-components/Carousel/Carousel");
 const code: string = `<Carousel>
     <CarouselItem><Img type="div" src="first.jpg" /></CarouselItem>
@@ -21,29 +26,12 @@ const CarouselPage: React.FC = (): React.ReactElement<void> => {
         {
             key: "controls",
             items: [
-                {
-                    key: "autoplaySpeed",
-                    label: "autoplaySpeed",
-                    controlType: "Text",
-                    value: 2000,
-                },
-                {
-                    key: "transitionDuration",
-                    label: "transitionDuration",
-                    controlType: "Text",
-                    value: 500,
-                },
-                { key: "infinite", label: "infinite", controlType: "Checkbox" },
-                { key: "autoplay", label: "autoplay", controlType: "Checkbox" },
+                { key: "autoplaySpeed", label: "autoplaySpeed", controlType: "Text", value: 2000 },
+                { key: "transitionDuration", label: "transitionDuration", controlType: "Text", value: 500 },
+                { key: "infinite", label: "infinite", controlType: "Checkbox", value: false },
+                { key: "autoplay", label: "autoplay", controlType: "Checkbox", value: false },
                 { key: "showIndicators", label: "showIndicators", controlType: "Checkbox" },
-                {
-                    key: "transitionStyle",
-                    label: "transitionStyle",
-                    controlType: "Radio",
-                    inline: true,
-                    options: transitionStyles,
-                    value: transitionStyles[0],
-                },
+                { key: "transitionStyle", label: "transitionStyle", controlType: "Radio", inline: true, options: transitionStyles, value: transitionStyles[0] },
             ],
         },
     ]);
@@ -61,17 +49,11 @@ const CarouselPage: React.FC = (): React.ReactElement<void> => {
                         infinite={controls.infinite}
                         transitionStyle={controls.transitionStyle?.value}
                     >
-                        <CarouselItem>
-                            <Img src={images[0]} responsive width="100%" />
-                        </CarouselItem>
-
-                        <CarouselItem>
-                            <Img src={images[1]} responsive width="100%" />
-                        </CarouselItem>
-
-                        <CarouselItem>
-                            <Img src={images[2]} responsive width="100%" />
-                        </CarouselItem>
+                        {images.map((image, i) => (
+                            <CarouselItem key={i}>
+                                <Img src={image} responsive width="100%" />
+                            </CarouselItem>
+                        ))}
                     </Carousel>
                 </div>
             }

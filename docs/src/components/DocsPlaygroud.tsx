@@ -43,7 +43,7 @@ const DocsPlayground: React.FC<DocsPlaygroundProps> = (props: DocsPlaygroundProp
                             </div>
                         )}
                     </div>,
-                    <CodeSnippet fillMode language={"jsx"}>
+                    <CodeSnippet angular language={"jsx"}>
                         {props.code}
                     </CodeSnippet>,
                 ][activeTab]

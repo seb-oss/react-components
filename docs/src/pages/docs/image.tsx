@@ -28,24 +28,6 @@ const ImagePage: React.FC = (): React.ReactElement<void> => {
                     inline: true,
                 },
                 {
-                    key: "rounded",
-                    label: "rounded",
-                    controlType: "Checkbox",
-                },
-                {
-                    key: "thumbnail",
-                    label: "thumbnail",
-                    description: "Thumbnail images are also responsive",
-                    controlType: "Checkbox",
-                },
-                {
-                    key: "responsive",
-                    label: "responsive",
-                    description: "Makes sure that the image scales with it's container",
-                    value: true,
-                    controlType: "Checkbox",
-                },
-                {
                     key: "bgFixed",
                     label: "bgFixed",
                     rulerKey: "imgType",
@@ -61,6 +43,9 @@ const ImagePage: React.FC = (): React.ReactElement<void> => {
                     description: "One advantage of a div image is that you can render children inside the image",
                     controlType: "Checkbox",
                 },
+                { key: "rounded", label: "rounded", controlType: "Checkbox" },
+                { key: "thumbnail", label: "thumbnail", description: "Thumbnail images are also responsive", controlType: "Checkbox" },
+                { key: "responsive", label: "responsive", description: "Makes sure that the image scales with it's container", value: true, controlType: "Checkbox" },
             ],
         },
     ]);
