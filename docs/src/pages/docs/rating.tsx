@@ -18,6 +18,7 @@ const RatingPage: React.FC = (): React.ReactElement<void> => {
                 {
                     key: "min",
                     label: "Min",
+                    description: "Should no be smaller than step",
                     controlType: "Text",
                     value: 1,
                 },
@@ -28,22 +29,10 @@ const RatingPage: React.FC = (): React.ReactElement<void> => {
                     value: 1,
                 },
                 {
-                    key: "initialValue",
-                    label: "Initial Value",
-                    controlType: "Text",
-                    value: 1,
-                },
-                {
-                    key: "height",
-                    label: "Icon height",
+                    key: "dimension",
+                    label: "Icon Dimension",
                     controlType: "Text",
                     value: 30,
-                },
-                {
-                    key: "width",
-                    label: "Icon width",
-                    controlType: "Text",
-                    value: 40,
                 },
                 {
                     key: "readOnly",
@@ -54,6 +43,12 @@ const RatingPage: React.FC = (): React.ReactElement<void> => {
                 {
                     key: "disabled",
                     label: "Disabled",
+                    controlType: "Checkbox",
+                    value: false,
+                },
+                {
+                    key: "customSvg",
+                    label: "Custom SVG",
                     controlType: "Checkbox",
                     value: false,
                 },
@@ -93,15 +88,13 @@ const RatingPage: React.FC = (): React.ReactElement<void> => {
         className="custom-class"
         readOnly={boolean}
         disabled={boolean}
-        height={React.ReactText}
-        width={React.ReactText}
+        dimension={React.ReactText}
         max={React.ReactText}
         min={React.ReactText}
         step={React.ReactText}
         svgname={string}
         colors={[string, string]}
         customSVG={JSX.Element}
-        initialValue={number}
         value={number}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
             setValue(Number(e.target.value));
@@ -125,15 +118,13 @@ const RatingPage: React.FC = (): React.ReactElement<void> => {
                         className="custom-class"
                         readOnly={controls.readOnly}
                         disabled={controls.disabled}
-                        height={controls.height}
-                        width={controls.width}
+                        dimension={controls.dimension}
                         max={controls.max}
                         min={controls.min}
                         step={controls.step}
-                        svgname="hello"
+                        svgname="custom name"
                         colors={colors}
-                        customSVG={heartSVG}
-                        initialValue={controls.initialValue}
+                        customSVG={controls.customSvg && heartSVG}
                         value={value}
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                             setValue(Number(e.target.value));

@@ -2,9 +2,8 @@ import React, { useState, useEffect } from "react";
 import classnames from "classnames";
 import { SVGComponent } from "./SVGComponent";
 import "./rating.scss";
+
 export type RatingProps = JSX.IntrinsicElements["input"] & {
-    /** Initial value to be passed */
-    initialValue?: number;
     /** Array of two colors to fill the states of the svgs */
     colors?: [string, string];
     /** Div wrapper props */
@@ -13,6 +12,8 @@ export type RatingProps = JSX.IntrinsicElements["input"] & {
     customSVG?: JSX.IntrinsicElements["svg"];
     /**  name to be used for accessibility */
     svgname?: string;
+    /** Dimensions (width/height) of the component  */
+    dimension?: number;
 };
 
 /**
@@ -22,13 +23,20 @@ export type RatingProps = JSX.IntrinsicElements["input"] & {
 const initialColors: [string, string] = ["#A9A9A9", "#FFC500"];
 const disabledColors: [string, string] = ["#dddddd", "#bfbfbf"];
 
-export const Rating: React.FC<RatingProps> = ({ initialValue = 1, colors, customSVG, wrapperProps, ...props }: RatingProps) => {
+export const Rating: React.FC<RatingProps> = ({ dimension = 30, colors, customSVG, wrapperProps, ...props }: RatingProps) => {
     const [displayValue, setDisplayValue] = useState<number>(Number(props.value));
     const [min, setMin] = useState<number>(0);
+    const [max, setMax] = useState<number>(Number(props.max) || 5);
 
     useEffect(() => {
         setDisplayValue(Number(props.value));
     }, [props.value]);
+
+    useEffect(() => {
+        if (props.max) {
+            setMax(Number(props.max));
+        }
+    }, [props.max]);
 
     useEffect(() => {
         setMin(Number(props.min));
@@ -60,7 +68,7 @@ export const Rating: React.FC<RatingProps> = ({ initialValue = 1, colors, custom
 
     const calculateDisplayValue = (e: React.MouseEvent<HTMLInputElement>): number => {
         const position: number = calculateHoverPercentage(e);
-        return Number(props.max) * Number(parseFloat(String(position)).toFixed(2));
+        return max * Number(parseFloat(String(position)).toFixed(2));
     };
 
     const calculateHoverPercentage = (event: React.MouseEvent): number => {
@@ -73,7 +81,7 @@ export const Rating: React.FC<RatingProps> = ({ initialValue = 1, colors, custom
     return (
         <div {...wrapperProps} className={classnames("rc", "rating", wrapperProps?.className)}>
             <div className="rating-icons">
-                {Array.apply(null, { length: props.max }).map((e: number, i: number) => (
+                {Array.apply(null, { length: max }).map((e: number, i: number) => (
                     <SVGComponent
                         colors={getColors()}
                         key={i}
@@ -81,8 +89,8 @@ export const Rating: React.FC<RatingProps> = ({ initialValue = 1, colors, custom
                         value={displayValue}
                         customSVG={customSVG}
                         step={Number(props.step)}
-                        width={props.width}
-                        height={props.height}
+                        width={dimension}
+                        height={dimension}
                         name={props.svgname}
                     />
                 ))}

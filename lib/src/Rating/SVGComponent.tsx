@@ -40,15 +40,18 @@ export const SVGComponent: React.FC<SVGProps> = ({ colors, index, value, customS
         [step, index]
     );
 
+    /**
+     * Set backgroud color based on the value selected/hovered and the steps chosen
+     */
     const setLinearGradientType = (): string => {
         if (!value || value === 0) {
             return "url(#no_grad)";
         } else {
             if (value > index && value <= index + 1 / 2) {
                 return getGradientId();
-            } else if (value > index + 1) {
+            } else if (value >= index + 1) {
                 return "url(#full_grad)";
-            } else if (value > index && value <= index + 1) {
+            } else if (value > index && value < index + 1) {
                 return getGradientId("url(#full_grad)");
             }
             return "url(#no_grad)";
