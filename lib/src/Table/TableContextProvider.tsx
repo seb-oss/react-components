@@ -1,11 +1,17 @@
 import React from "react";
+import { SortDirection } from "./table-typings";
+
+export interface SortedColumn {
+    accessor: string;
+    sortDirection: SortDirection;
+}
 
 interface TableState {
-    sortedColumn: Array<any>;
+    sortedColumn: SortedColumn;
     expandedRows: Array<string>;
 }
 
-type TableContextType = {
+export type TableContextType = {
     tableState: TableState;
     setTableState: (newState: TableState) => void;
     onRowSelect: (event: React.ChangeEvent<HTMLInputElement>, rowKey: string) => void;
@@ -15,7 +21,7 @@ type TableContextType = {
 
 const defaultContext: TableContextType = {
     tableState: {
-        sortedColumn: [],
+        sortedColumn: null,
         expandedRows: [],
     },
     setTableState: null,

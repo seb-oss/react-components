@@ -3,6 +3,14 @@ export enum SortDirection {
     DESC = "DESC",
 }
 
-export interface TableCommonTypes<T = any> {
-    onSort?: (accessor: keyof T, sortDirection: SortDirection) => void;
+export interface FilterColumn<T = any> {
+    accessor: keyof T;
+    value: any;
 }
+
+export type GenericTableRow<T = any> = T & {
+    id?: string;
+    checked?: boolean;
+    expanded?: boolean;
+    indeterminate?: boolean;
+};

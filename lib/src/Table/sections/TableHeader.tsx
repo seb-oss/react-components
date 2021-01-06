@@ -1,23 +1,17 @@
 import React from "react";
-import { TableContext } from "../TableContextProvider";
-import TableHeaderCell from "./TableHeaderCell";
 import { TableRowProps } from "./TableRow";
 
-export type TableHeaderProps = JSX.IntrinsicElements["thead"] & {
-    columns?: Array<TableHeaderProps>;
-};
+export type TableHeaderProps = JSX.IntrinsicElements["thead"];
 
-const TableHeader: React.FC<TableHeaderProps> = ({ columns, ...props }: TableHeaderProps) => {
-    const context = React.useContext(TableContext);
+const TableHeader: React.FC<TableHeaderProps> = ({ ...props }: TableHeaderProps) => {
     return (
         <thead {...props}>
             {React.Children.count(props.children) === 1 && React.isValidElement<TableRowProps>(props.children)
                 ? React.cloneElement<any>(props.children, { isHeaderRow: true, index: -1 })
                 : React.Children.map(props.children, (Child: React.ReactElement<any>, i: number) => {
-                      return React.isValidElement<TableRowProps>(Child)
+                      return React.isValidElement<TableRowProps>(Child) && (Child?.type as any)?.displayName === "TableRow"
                           ? React.cloneElement<any>(Child, {
                                 index: i,
-                                isHeaderRow: true,
                                 hideSelect: !Child.props.isHeaderRow,
                             })
                           : Child;

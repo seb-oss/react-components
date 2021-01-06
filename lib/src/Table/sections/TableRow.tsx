@@ -1,23 +1,23 @@
 import React from "react";
 import classnames from "classnames";
 import { CheckBox } from "../../CheckBox";
-import { TableCommonTypes } from "../table-typings";
 import { TableContext } from "../TableContextProvider";
 import TableHeaderCell from "./TableHeaderCell";
+import TableCell from "./TableCell";
+import { randomId } from "@sebgroup/frontend-tools";
 
-export type TableRowProps<T = any> = JSX.IntrinsicElements["tr"] &
-    TableCommonTypes & {
-        checked?: boolean;
-        indeterminate?: boolean;
-        subRows?: Array<any>;
-        index?: number;
-        isHeaderRow?: boolean;
-        hideSelect?: boolean;
-        uniqueKey?: string;
-        parentKey?: string;
-        isExpanded?: boolean;
-        isSubRow?: boolean;
-    };
+export type TableRowProps<T = any> = JSX.IntrinsicElements["tr"] & {
+    checked?: boolean;
+    indeterminate?: boolean;
+    subRows?: Array<any>;
+    index?: number;
+    isHeaderRow?: boolean;
+    hideSelect?: boolean;
+    uniqueKey?: string;
+    parentKey?: string;
+    isExpanded?: boolean;
+    isSubRow?: boolean;
+};
 
 const angleDown: JSX.Element = (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512">
@@ -32,6 +32,7 @@ const angleRightIcon: JSX.Element = (
 
 const TableRow: React.FC<TableRowProps> = ({ index, className, isHeaderRow, hideSelect, uniqueKey, parentKey, checked, isSubRow = false, isExpanded = false, ...props }: TableRowProps) => {
     const context = React.useContext(TableContext);
+    const [uniqueId, setUniqueId] = React.useState<string>(uniqueKey);
     const [isShown, setIsShown] = React.useState<boolean>(false);
     const [expanded, setExpanded] = React.useState<boolean>(isExpanded);
     const [expandedRows, setExpandedRows] = React.useState<Array<string>>(context.tableState?.expandedRows || []);
@@ -50,6 +51,10 @@ const TableRow: React.FC<TableRowProps> = ({ index, className, isHeaderRow, hide
     }, [isExpanded]);
 
     React.useEffect(() => {
+        setUniqueId(uniqueKey || randomId("table-row"));
+    }, [uniqueKey]);
+
+    React.useEffect(() => {
         setExpandedRows(context.tableState.expandedRows || []);
     }, [context.tableState.expandedRows]);
 
@@ -62,7 +67,7 @@ const TableRow: React.FC<TableRowProps> = ({ index, className, isHeaderRow, hide
 
     React.useEffect(() => {
         if (context.onRowExpand) {
-            setIsShown(!isSubRow || expandedRows.indexOf(parentKey) > -1);
+            setIsShown(isSubRow && expandedRows.indexOf(parentKey) > -1);
         }
     }, [expandedRows]);
 
@@ -70,36 +75,38 @@ const TableRow: React.FC<TableRowProps> = ({ index, className, isHeaderRow, hide
         <tr className={classnames(className, { "sub-row": isSubRow, expanded: isExpanded, collapsible: !isSubRow && !!context.onRowExpand, show: isShown })} {...props}>
             {!!context.onRowExpand &&
                 (isHeaderRow ? (
-                    <th />
+                    <TableHeaderCell disableSort />
                 ) : isSubRow ? (
-                    <td />
+                    <TableCell />
                 ) : (
-                    <td className="collapse-control">
+                    <TableCell className="collapse-control">
                         <button className="btn btn-sm" onClick={() => context.onRowExpand(!isExpanded, uniqueKey)}>
                             <div className="icon-holder">{expanded ? angleDown : angleRightIcon}</div>
                         </button>
-                    </td>
+                    </TableCell>
                 ))}
             {!!context.onRowSelect &&
                 (hideSelect || isSubRow ? (
-                    <td />
+                    <TableCell />
                 ) : isHeaderRow ? (
-                    <TableHeaderCell>
+                    <TableHeaderCell disableSort>
                         <CheckBox checked={checked} name={`tb_checkbox_all`} id={`tb_checkbox_all`} onChange={(event: React.ChangeEvent<HTMLInputElement>) => context.onRowSelect(event, "all")} />
                     </TableHeaderCell>
                 ) : (
-                    <td className="select-control">
+                    <TableCell className="select-control">
                         <CheckBox
                             checked={checked}
-                            name={`tb_checkbox_${uniqueKey}`}
-                            id={`tb_checkbox_${uniqueKey}`}
-                            onChange={(event: React.ChangeEvent<HTMLInputElement>) => context.onRowSelect(event, uniqueKey)}
+                            name={`tb_checkbox_${uniqueId}`}
+                            id={`tb_checkbox_${uniqueId}`}
+                            onChange={(event: React.ChangeEvent<HTMLInputElement>) => context.onRowSelect(event, uniqueId)}
                         />
-                    </td>
+                    </TableCell>
                 ))}
             {props.children}
         </tr>
     );
 };
+
+TableRow.displayName = "TableRow";
 
 export default TableRow;

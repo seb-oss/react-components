@@ -1,0 +1,104 @@
+@import "~@sebgroup/bootstrap/scss/variables";
+
+$icon-color: $gray-500;
+$icon-active-color: $blue-dark;
+$chip-height: 32px;
+$icon-size: 12px;
+$row-height: 40px;
+$transition-time: 200ms;
+$filter-gray: #e6e6e6;
+
+table {
+    &.table {
+        thead {
+            > tr {
+                > th {
+                    &.sortable {
+                        cursor: pointer;
+                        &:hover {
+                            color: $icon-active-color;
+                        }
+
+                        > .sort-holder {
+                            display: flex;
+                            align-items: center;
+                            .icon-holder {
+                                position: relative;
+                                margin-left: 8px;
+                                flex: 0 0 0.7rem;
+                                > svg {
+                                    width: 100%;
+                                    height: 100%;
+                                    fill: $icon-color;
+                                    cursor: pointer;
+                                }
+                                &.asc {
+                                    > svg {
+                                        > path:last-child {
+                                            fill: $icon-active-color;
+                                        }
+                                    }
+                                }
+                                &.desc {
+                                    > svg {
+                                        > path:first-child {
+                                            fill: $icon-active-color;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        tbody {
+            tr {
+                &.collapsible {
+                    ~ .sub-row {
+                        display: none;
+                    }
+                    &.expanded {
+                        ~ .sub-row.show {
+                            display: table-row;
+                        }
+                    }
+                }
+
+                td {
+                    &.collapse-control,
+                    &.select-control {
+                        width: 15px;
+                    }
+                    &.collapse-control {
+                        > .btn {
+                            padding: 0;
+                            background: transparent;
+                            > .icon-holder {
+                                cursor: pointer;
+                                width: $icon-size;
+
+                                svg {
+                                    width: $icon-size;
+                                    fill: $gray-800;
+                                    &[name="angle-right"] {
+                                        width: 9px;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        th,
+        td {
+            > .rc.checkbox {
+                > .custom-checkbox {
+                    padding: 0 0 0 1.5rem;
+                }
+            }
+        }
+    }
+}

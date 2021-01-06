@@ -5,24 +5,32 @@ import { DynamicFormOption, useDynamicForm } from "@hooks/useDynamicForm";
 import makeData from "@utils/makeData";
 import { Dropdown, DropdownItem } from "@sebgroup/react-components/Dropdown";
 import { checkDynamicFormSelectedKey } from "@utils/helpers";
-// import { Textbox } from "@sebgroup/react-components/Textbox";
+import { Textbox } from "@sebgroup/react-components/Textbox";
 import TableBody from "@sebgroup/react-components/Table/sections/TableBody";
 import TableCell from "@sebgroup/react-components/Table/sections/TableCell";
 import TableHeader from "@sebgroup/react-components/Table/sections/TableHeader";
 import TableHeaderCell from "@sebgroup/react-components/Table/sections/TableHeaderCell";
 import TableRow from "@sebgroup/react-components/Table/sections/TableRow";
+import { filterArray, paginate, searchTextInArray, sortArray } from "@sebgroup/react-components/Table/sections/helperFunctions";
+import { SortedColumn } from "@sebgroup/react-components/Table/TableContextProvider";
+import { FilterColumn } from "@sebgroup/react-components/Table/table-typings";
+import { Pagination } from "@sebgroup/react-components/Pagination";
+import { NumberedPagination } from "@sebgroup/react-components/Pagination/NumberedPagination";
 
 interface TableDataProps {
     firstName: string;
     lastName: string;
     age: number;
+    status: string;
 }
 
 const TablePage: React.FC = (): React.ReactElement<void> => {
     const [paginationValue, setPaginationValue] = React.useState<number>(0);
-    const [pagingSize, setPagingSize] = React.useState<number>(0);
+    const [pages, setPages] = React.useState<number>(0);
+    const [pagingSize, setPagingSize] = React.useState<number>(10);
     const [searchText, setSearchText] = React.useState<string>("");
-    const [dropDownListSelected, setDropdownListSelected] = React.useState<Array<DropdownItem>>([]);
+    const [dropDownListSelected, setDropdownListSelected] = React.useState<Array<string>>([]);
+    const [filterColumns, setFilterColumns] = React.useState<Array<FilterColumn>>([]);
 
     const columns: Array<any> = React.useMemo(
         () => [
@@ -39,14 +47,12 @@ const TablePage: React.FC = (): React.ReactElement<void> => {
                 accessor: "age",
             },
             {
-                label: "checked",
-                accessor: "checked",
+                label: "Status",
+                accessor: "status",
             },
         ],
         []
     );
-
-    const [filters, setFilters] = React.useState<Array<any>>(columns.map((column: Column) => ({ accessor: column.accessor, filters: [] })));
 
     const primaryButton: any = React.useMemo(
         () => ({
@@ -106,31 +112,28 @@ const TablePage: React.FC = (): React.ReactElement<void> => {
     );
     const [data, setData] = React.useState<Array<DataItem<TableDataProps>>>([...defaultData]);
 
-    const nameDropDownList: Array<DropdownItem> = React.useMemo(
-        () =>
-            data
-                .map((singleData: DataItem<TableDataProps>) => ({ value: singleData.firstName, label: singleData.firstName }))
-                .filter((item: DropdownItem, index: number, self: Array<DropdownItem>) => {
-                    const selfIndex: number = self.findIndex((filter: DropdownItem) => filter.value === item.value);
-                    return selfIndex === index;
-                })
-                .sort(),
-        [data]
-    );
+    const statusDropdownList: Array<DropdownItem> = [
+        { label: "single", value: "single" },
+        { label: "in relationship", value: "in relationship" },
+    ];
 
-    const filterProps: any = React.useMemo(
-        () => ({
-            onAfterFilter: (rows: Array<any>) => {
-                setPagingSize(rows.length);
-            },
-            filterItems: filters,
-        }),
-        [filters]
-    );
+    const onDropdownChange = (value: Array<string>) => {
+        const newFilterColumns: Array<FilterColumn<TableDataProps>> = [...filterColumns];
+        const filterIndex: number = newFilterColumns.findIndex((item: FilterColumn<TableDataProps>) => item.accessor === "status");
+        const newFilter: FilterColumn<TableDataProps> = { accessor: "status", value };
+        if (filterIndex > -1) {
+            newFilterColumns[filterIndex] = newFilter;
+        } else {
+            newFilterColumns.push(newFilter);
+        }
+        setFilterColumns(newFilterColumns);
+        setDropdownListSelected(value);
+    };
 
     const handleTextChange = React.useCallback(
         (e: React.ChangeEvent<HTMLInputElement>) => {
             setSearchText(e.target.value);
+            setData(searchTextInArray(defaultData, e.target.value, ["lastName"]));
         },
         [searchText]
     );
@@ -140,24 +143,20 @@ const TablePage: React.FC = (): React.ReactElement<void> => {
     const code: string = React.useMemo(() => require("!raw-loader!./table").default, []);
 
     React.useEffect(() => {
-        const updatedFilter: Array<string> = dropDownListSelected?.map((item: DropdownItem) => item.value);
-        const updatedFilterItems: Array<any> = filters?.map((filterItem: any) => {
-            if (filterItem.accessor === "firstName") {
-                return { ...filterItem, filters: updatedFilter };
-            }
-            return filterItem;
-        });
-
-        setFilters(updatedFilterItems);
-    }, [dropDownListSelected]);
+        setData(filterArray(defaultData, filterColumns));
+    }, [filterColumns]);
 
     React.useEffect(() => {
         setDropdownListSelected([]);
     }, [enableFilter]);
 
     React.useEffect(() => {
-        setPagingSize(data?.length);
-    }, [data]);
+        setPages(Math.floor(defaultData.length / pagingSize));
+    }, [pagingSize, defaultData]);
+
+    React.useEffect(() => {
+        setData(enablePagination ? paginate(defaultData, pagingSize, paginationValue) : defaultData);
+    }, [paginationValue, pagingSize, defaultData, enablePagination]);
 
     return (
         <Docs
@@ -166,9 +165,7 @@ const TablePage: React.FC = (): React.ReactElement<void> => {
             example={
                 <div className="w-100">
                     <Table
-                        columns={columns}
-                        data={data}
-                        // onSort={(a, b) => console.log(a, b)}
+                        onSort={enableSorting ? (sortedColumn: SortedColumn) => setData(sortArray(data, sortedColumn.accessor, sortedColumn.sortDirection)) : null}
                         onRowSelect={
                             enableRowSelection
                                 ? (rows: any, uniqueKey: string) => {
@@ -227,13 +224,15 @@ const TablePage: React.FC = (): React.ReactElement<void> => {
                                 </React.Fragment>
                             ))}
                         </TableBody>
-                        {/* <thead><tr><th colSpan={5}>yea head </th></tr></thead>
-                        <tbody><tr><td colSpan={5}>yea </td></tr></tbody> */}
-                        {/* <TableHeaderCell accessor="firstName">custom first name</TableHeaderCell> */}
-                        {/* <TableColumnCells accessor="firstName" className="bg-success" render=
-                            {(item: TableDataProps) => {
-                                return `$$${item.firstName}`
-                            }}/> */}
+                        {enablePagination && (
+                            <tfoot>
+                                <tr>
+                                    <td colSpan={4}>
+                                        <NumberedPagination start={1} end={pages} value={paginationValue} onPageChange={setPaginationValue} />
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        )}
                     </Table>
                 </div>
             }
@@ -242,19 +241,30 @@ const TablePage: React.FC = (): React.ReactElement<void> => {
                 <React.Fragment>
                     {enableFilter && (
                         <div className="filter-holder">
-                            {/* <Dropdown
-                                list={nameDropDownList}
-                                label="filter by first name"
-                                selectedValue={dropDownListSelected}
+                            <Dropdown
+                                list={statusDropdownList}
+                                label="filter by status"
+                                value={dropDownListSelected}
                                 // TODO: Find a way to fix this
-                                // onChange={(value: Array<DropdownItem>) => setDropdownListSelected(value)}
-                                multi={true}
-                            /> */}
+                                onChange={onDropdownChange}
+                                multiple
+                            />
+                        </div>
+                    )}
+                    {enablePagination && (
+                        <div className="filter-holder">
+                            <Textbox
+                                name="textInput3"
+                                label="Pagination size"
+                                placeholder="Pagination size"
+                                value={pagingSize}
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPagingSize(isNaN(parseInt(e.target.value)) ? 10 : parseInt(e.target.value))}
+                            />
                         </div>
                     )}
                     {enableSearch && (
                         <div className="filter-holder">
-                            {/* <Textbox name="textInput2" label="Search last name" placeholder="Search by last name" value={searchText} onChange={handleTextChange} /> */}
+                            <Textbox name="textInput2" label="Search last name" placeholder="Search by last name" value={searchText} onChange={handleTextChange} />
                         </div>
                     )}
                     {renderControls()}

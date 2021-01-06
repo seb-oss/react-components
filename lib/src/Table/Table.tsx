@@ -1,8 +1,7 @@
 import React from "react";
-import "./table-style.scss";
+import "./table.scss";
 
-import { TableColumn } from "./useTable";
-import { TableContext } from "./TableContextProvider";
+import { SortedColumn, TableContext } from "./TableContextProvider";
 
 export type DataItem<T = any> = T;
 export type RowTypes = "row" | "subRow";
@@ -29,21 +28,18 @@ export const sortDirectionTypes = {
 export type sortDirectionTypes = typeof sortDirectionTypes[keyof typeof sortDirectionTypes];
 
 export type TableProps = JSX.IntrinsicElements["table"] & {
-    columns: Array<TableColumn>;
-    data: Array<DataItem<any>>;
     onRowExpand?: (ev, uniqueId) => void;
     onRowSelect?: (ev, uniqueId) => void;
     theme?: TableTheme;
     theadTheme?: TableTheme;
-    onSort?: (accessor: string, sortDirection: string) => void;
+    onSort?: (sortedColumn: SortedColumn) => void;
 };
 
 export const Table: React.FunctionComponent<TableProps> = React.memo(
-    ({ onRowSelect, onRowExpand, ...props }: TableProps): React.ReactElement<void> => {
-        const [tableState, setTableState] = React.useState({ expandedRows: [], sortedColumn: [] });
-        const onRowCollapse = (isExpanded: boolean, rowKey: any) => {};
+    ({ onRowSelect, onRowExpand, onSort, ...props }: TableProps): React.ReactElement<void> => {
+        const [tableState, setTableState] = React.useState({ expandedRows: [], sortedColumn: null });
         return (
-            <TableContext.Provider value={{ tableState, onSort: null, onRowSelect, onRowExpand, setTableState }}>
+            <TableContext.Provider value={{ tableState, onSort, onRowSelect, onRowExpand, setTableState }}>
                 <table className="table" {...props} />
             </TableContext.Provider>
         );
