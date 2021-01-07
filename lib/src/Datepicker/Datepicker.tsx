@@ -103,7 +103,7 @@ export const Datepicker: React.FunctionComponent<DatepickerProps> = ({
 
     const handleChangeCustomDay = (e: React.ChangeEvent<HTMLInputElement>): void => {
         if (!monthPicker) {
-            const v: number = e.target?.value && !Number.isNaN(e.target?.value) ? Number(e.target.value) : null;
+            const v: number = e.target?.value && !Number.isNaN(Number(e.target?.value)) ? Number(e.target.value) : null;
             setCustomDay(v);
         }
     };
@@ -122,7 +122,7 @@ export const Datepicker: React.FunctionComponent<DatepickerProps> = ({
     const [customMonth, setCustomMonth] = React.useState<number>(initCustomMonth(value, monthPicker));
 
     const handleChangeCustomMonth = (e: React.ChangeEvent<HTMLSelectElement>): void => {
-        const v: number = e.target?.value && !Number.isNaN(e.target?.value) ? Number(e.target.value) : null;
+        const v: number = e.target?.value && !Number.isNaN(Number(e.target?.value)) ? Number(e.target.value) : null;
         setCustomMonth(v);
     };
 
@@ -140,7 +140,7 @@ export const Datepicker: React.FunctionComponent<DatepickerProps> = ({
     const [customYear, setCustomYear] = React.useState<number>(initCustomYear(value, monthPicker));
 
     const handleChangeCustomYear = (e: React.ChangeEvent<HTMLInputElement>): void => {
-        const v: number = e.target?.value && !Number.isNaN(e.target?.value) ? Number(e.target.value) : null;
+        const v: number = e.target?.value && !Number.isNaN(Number(e.target?.value)) ? Number(e.target.value) : null;
         setCustomYear(v);
     };
 
