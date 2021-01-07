@@ -19,7 +19,7 @@ export type LoaderProps = JSX.IntrinsicElements["div"] & {
     toggle?: boolean;
 };
 
-export const Loader: React.FC<LoaderProps> = React.memo(({ size = "md", type = "spinner", srText = "Loading...", toggle = true, fullscreen, cover, backdrop, ...props }: LoaderProps) => {
+export const Loader: React.FC<LoaderProps> = React.memo(({ size = "md", type = "spinner", toggle = true, fullscreen, cover, backdrop, ...props }: LoaderProps) => {
     return (
         toggle && (
             <div

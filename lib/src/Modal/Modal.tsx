@@ -27,6 +27,10 @@ export type ModalProps = JSX.IntrinsicElements["div"] & {
     /** Automatically focuses on the first input element in the modal dialog */
     autoFocus?: boolean;
 };
+
+// This solution is meant to fix Gatsby build which complains that document doesn't exist in server-side rendering
+const safeDocument: Document | null = typeof document !== "undefined" ? document : null;
+
 /** The modal component provides a solid foundation for creating dialogs or slideout modals */
 export const Modal: React.FC<ModalProps> = React.memo(({ trapFocus, autoFocus, centered, size, fullscreen, onEscape, onBackdropDismiss, position, toggle, ...props }: ModalProps) => {
     const dialogRef: React.MutableRefObject<HTMLDivElement> = React.useRef<HTMLDivElement>();
@@ -90,60 +94,62 @@ export const Modal: React.FC<ModalProps> = React.memo(({ trapFocus, autoFocus, c
         return () => document.removeEventListener("keyup", keyupListener);
     }, [onEscape, toggle]);
 
-    return createPortal(
-        <div
-            {...props}
-            className={classnames(
-                "rc",
-                "modal",
-                {
-                    show: toggle,
-                    hide: !toggle && !isPristine,
-                    "modal-centered": centered,
-                    "modal-aside": position && position !== "default" && !fullscreen,
-                    [`modal-aside-${[position]}`]: position && position !== "default" && !fullscreen,
-                    "modal-fullscreen": fullscreen,
-                },
-                props.className
-            )}
-            role={props.role || "dialog"}
-            tabIndex={props.tabIndex || -1}
-            aria-modal="true"
-            onClick={(e) => {
-                props.onClick && props.onClick(e);
+    return !safeDocument
+        ? null
+        : createPortal(
+              <div
+                  {...props}
+                  className={classnames(
+                      "rc",
+                      "modal",
+                      {
+                          show: toggle,
+                          hide: !toggle && !isPristine,
+                          "modal-centered": centered,
+                          "modal-aside": position && position !== "default" && !fullscreen,
+                          [`modal-aside-${[position]}`]: position && position !== "default" && !fullscreen,
+                          "modal-fullscreen": fullscreen,
+                      },
+                      props.className
+                  )}
+                  role={props.role || "dialog"}
+                  tabIndex={props.tabIndex || -1}
+                  aria-modal="true"
+                  onClick={(e) => {
+                      props.onClick && props.onClick(e);
 
-                const target: HTMLDivElement = e.target as any;
+                      const target: HTMLDivElement = e.target as any;
 
-                if (onBackdropDismiss && target.classList.contains("rc") && target.classList.contains("modal")) {
-                    onBackdropDismiss(e);
-                }
-            }}
-            onAnimationEnd={(e) => {
-                props.onAnimationEnd && props.onAnimationEnd(e);
+                      if (onBackdropDismiss && target.classList.contains("rc") && target.classList.contains("modal")) {
+                          onBackdropDismiss(e);
+                      }
+                  }}
+                  onAnimationEnd={(e) => {
+                      props.onAnimationEnd && props.onAnimationEnd(e);
 
-                if (fullscreen && autoFocus && toggle && !dialogRef.current.contains(document.activeElement)) {
-                    dialogRef.current.querySelector("input")?.focus();
-                }
-            }}
-        >
-            <div
-                ref={dialogRef}
-                role="document"
-                className={classnames("modal-dialog", { [`modal-${size}`]: size })}
-                onAnimationEnd={() => {
-                    if (autoFocus && toggle && !dialogRef.current.contains(document.activeElement)) {
-                        dialogRef.current.querySelector("input")?.focus();
-                    }
-                }}
-            >
-                <div className="modal-content">{props.children}</div>
-                {trapFocus && (
-                    <a className="last-focusable-element" href="#">
-                        <div className="sr-only">End of focus</div>
-                    </a>
-                )}
-            </div>
-        </div>,
-        document.body
-    );
+                      if (fullscreen && autoFocus && toggle && !dialogRef.current.contains(document.activeElement)) {
+                          dialogRef.current.querySelector("input")?.focus();
+                      }
+                  }}
+              >
+                  <div
+                      ref={dialogRef}
+                      role="document"
+                      className={classnames("modal-dialog", { [`modal-${size}`]: size })}
+                      onAnimationEnd={() => {
+                          if (autoFocus && toggle && !dialogRef.current.contains(document.activeElement)) {
+                              dialogRef.current.querySelector("input")?.focus();
+                          }
+                      }}
+                  >
+                      <div className="modal-content">{props.children}</div>
+                      {trapFocus && (
+                          <a className="last-focusable-element" href="#">
+                              <div className="sr-only">End of focus</div>
+                          </a>
+                      )}
+                  </div>
+              </div>,
+              safeDocument.body
+          );
 });
