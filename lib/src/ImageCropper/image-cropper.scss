@@ -71,63 +71,64 @@
             }
         }
     }
-    .image-cropper-modal {
-        .modal-body {
-            text-align: center;
-            // prettier-ignore
-            background-image:
-                linear-gradient(45deg, $gray-600 25%, transparent 25%),
-                linear-gradient(-45deg, $gray-600 25%, transparent 25%),
-                linear-gradient(45deg, transparent 75%, $gray-600 75%),
-                linear-gradient(-45deg, transparent 75%, $gray-600 75%);
-            background-color: $gray-200;
-            background-size: 20px 20px;
-            background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
-            padding: 0;
-            overflow: hidden;
+}
 
-            .cropping-area {
-                position: relative;
-                display: inline-block;
+.image-cropper-modal {
+    .modal-body {
+        text-align: center;
+        // prettier-ignore
+        background-image:
+            linear-gradient(45deg, $gray-600 25%, transparent 25%),
+            linear-gradient(-45deg, $gray-600 25%, transparent 25%),
+            linear-gradient(45deg, transparent 75%, $gray-600 75%),
+            linear-gradient(-45deg, transparent 75%, $gray-600 75%);
+        background-color: $gray-200;
+        background-size: 20px 20px;
+        background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+        padding: 0;
+        overflow: hidden;
+
+        .cropping-area {
+            position: relative;
+            display: inline-block;
+            max-width: 100%;
+
+            > img {
+                max-height: 85vh;
                 max-width: 100%;
+                user-select: none;
+            }
 
-                > img {
-                    max-height: 85vh;
-                    max-width: 100%;
-                    user-select: none;
+            > img:not(.crop-box) {
+                filter: brightness(0.5);
+            }
+            > .crop-box {
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                right: 0;
+                left: 0;
+                background-size: contain;
+                cursor: move;
+            }
+
+            > .handle {
+                background-color: $blue-dark;
+                width: 10px;
+                height: 10px;
+                display: inline-block;
+                position: absolute;
+                background-color: $blue;
+                border: 1px solid $blue;
+
+                &.top-left,
+                &.bottom-right {
+                    cursor: nwse-resize;
                 }
 
-                > img:not(.crop-box) {
-                    filter: brightness(0.5);
-                }
-                > .crop-box {
-                    position: absolute;
-                    top: 0;
-                    bottom: 0;
-                    right: 0;
-                    left: 0;
-                    background-size: contain;
-                    cursor: move;
-                }
-
-                > .handle {
-                    background-color: $blue-dark;
-                    width: 10px;
-                    height: 10px;
-                    display: inline-block;
-                    position: absolute;
-                    background-color: $blue;
-                    border: 1px solid $blue;
-
-                    &.top-left,
-                    &.bottom-right {
-                        cursor: nwse-resize;
-                    }
-
-                    &.top-right,
-                    &.bottom-left {
-                        cursor: nesw-resize;
-                    }
+                &.top-right,
+                &.bottom-left {
+                    cursor: nesw-resize;
                 }
             }
         }

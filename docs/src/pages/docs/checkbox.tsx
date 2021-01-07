@@ -23,25 +23,9 @@ const CheckboxPage: React.FC = (): React.ReactElement<void> => {
         {
             key: "controls",
             items: [
-                {
-                    key: "inline",
-                    label: "Inline",
-                    controlType: "Checkbox",
-                },
-                {
-                    key: "showIndicators",
-                    label: "Render with indicators",
-                    controlType: "Checkbox",
-                },
-                {
-                    key: "indicators",
-                    rulerKey: "showIndicators",
-                    condition: true,
-                    label: "Indicator type",
-                    options: indicators,
-                    inline: true,
-                    controlType: "Radio",
-                },
+                { key: "inline", label: "Inline", controlType: "Checkbox" },
+                { key: "showIndicators", label: "Render with indicators", controlType: "Checkbox" },
+                { key: "indicators", rulerKey: "showIndicators", condition: true, label: "Indicator type", options: indicators, inline: true, controlType: "Radio" },
                 {
                     key: "indicatorType",
                     rulerKey: "showIndicators",
