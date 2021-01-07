@@ -3,14 +3,13 @@ import classnames from "classnames";
 import "./chip.scss";
 
 export type ChipProps = JSX.IntrinsicElements["div"] & {
-    onClose: React.MouseEventHandler<HTMLDivElement>;
+    /** Event triggered when the close button is clicked */
+    onClose: React.MouseEventHandler<HTMLButtonElement>;
 };
 
 export const Chip: React.FC<ChipProps> = ({ onClose, ...props }: ChipProps) => (
-    <div {...props} className={classnames(["custom-chip", props.className])}>
+    <div {...props} className={classnames("rc", "chip", props.className)}>
         <div className="content">{props.children}</div>
-        <div className="chip-close" onClick={onClose}>
-            &times;
-        </div>
+        <button onClick={onClose}>&#x2715;</button>
     </div>
 );

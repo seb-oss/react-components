@@ -1,14 +1,13 @@
 import React from "react";
 import { act, Simulate, SyntheticEventData } from "react-dom/test-utils";
 import { unmountComponentAtNode, render } from "react-dom";
-import { Carousel, CarouselItemProps, CarouselItem } from ".";
+import { Carousel, CarouselItem } from ".";
 
 type EventType = keyof HTMLElementEventMap;
 type Listener = EventListener;
 
 describe("Component: Carousel", () => {
     let container: HTMLDivElement = null;
-    const carouselList: Array<CarouselItemProps> = [{ children: <div>test</div> }, { children: <div>test</div> }];
 
     const events: Map<EventType, Listener> = new Map<EventType, Listener>();
     document.body.addEventListener = jest.fn((type: EventType, listener: Listener) => {
@@ -29,14 +28,6 @@ describe("Component: Carousel", () => {
             act(() => Simulate.animationEnd(element(1)));
         });
     }
-
-    function simulateTouchWithX(clientX: number): TouchList {
-        return {
-            length: 1,
-            item: (index: number) => ({ clientX } as Touch),
-        } as TouchList;
-    }
-
     beforeEach(() => {
         container = document.createElement("div");
         document.body.appendChild(container);
@@ -57,37 +48,26 @@ describe("Component: Carousel", () => {
 
     it("Should render with a list, children, or both", () => {
         act(() => {
-            render(<Carousel list={carouselList} />, container);
-        });
-        expect(container.querySelectorAll(".carousel-item")).toHaveLength(carouselList.length);
-
-        act(() => {
             render(
                 <Carousel>
-                    <CarouselItem>test</CarouselItem>
-                    <CarouselItem>test</CarouselItem>
+                    <CarouselItem>First</CarouselItem>
+                    <CarouselItem>Second</CarouselItem>
                 </Carousel>,
                 container
             );
         });
         expect(container.querySelectorAll(".carousel-item")).toHaveLength(2);
-
-        act(() => {
-            render(
-                <Carousel list={carouselList}>
-                    <CarouselItem>test</CarouselItem>
-                    <CarouselItem>test</CarouselItem>
-                    test
-                </Carousel>,
-                container
-            );
-        });
-        expect(container.querySelectorAll(".carousel-item")).toHaveLength(2 + carouselList.length);
     });
 
     it("Should render indicators when enabled", () => {
         act(() => {
-            render(<Carousel list={carouselList} showIndicators />, container);
+            render(
+                <Carousel showIndicators>
+                    <CarouselItem>test</CarouselItem>
+                    <CarouselItem>test</CarouselItem>
+                </Carousel>,
+                container
+            );
         });
         expect(container.querySelector(".carousel-indicators")).not.toBeNull();
     });
@@ -97,7 +77,7 @@ describe("Component: Carousel", () => {
         const afterChange: jest.Mock = jest.fn();
         act(() => {
             render(
-                <Carousel transitionDuration={transitionDuration} afterChange={afterChange} list={carouselList}>
+                <Carousel transitionDuration={transitionDuration} afterChange={afterChange}>
                     <CarouselItem>test</CarouselItem>
                     <CarouselItem>test</CarouselItem>
                     test
@@ -115,7 +95,13 @@ describe("Component: Carousel", () => {
     it("Should navigate between slides using nav clicks and keyboard arrows", () => {
         const afterChange: jest.Mock = jest.fn();
         act(() => {
-            render(<Carousel showIndicators afterChange={afterChange} list={carouselList} />, container);
+            render(
+                <Carousel showIndicators afterChange={afterChange}>
+                    <CarouselItem>First</CarouselItem>
+                    <CarouselItem>Second</CarouselItem>
+                </Carousel>,
+                container
+            );
         });
 
         // Click next
@@ -142,7 +128,13 @@ describe("Component: Carousel", () => {
 
     it("Should not allow looping when infinite is disabled", () => {
         act(() => {
-            render(<Carousel infinite={false} list={carouselList} />, container);
+            render(
+                <Carousel infinite={false}>
+                    <CarouselItem>First</CarouselItem>
+                    <CarouselItem>Second</CarouselItem>
+                </Carousel>,
+                container
+            );
         });
 
         simulateTimes(2, ".carousel-control-next", "click");
@@ -155,7 +147,13 @@ describe("Component: Carousel", () => {
     it("Should not allow navigating when transition is occuring", () => {
         const afterChange: jest.Mock = jest.fn();
         act(() => {
-            render(<Carousel infinite={false} afterChange={afterChange} list={carouselList} />, container);
+            render(
+                <Carousel infinite={false} afterChange={afterChange}>
+                    <CarouselItem>First</CarouselItem>
+                    <CarouselItem>Second</CarouselItem>
+                </Carousel>,
+                container
+            );
         });
 
         afterChange.mockReset();
@@ -165,7 +163,13 @@ describe("Component: Carousel", () => {
 
     it("Should render with fade style", () => {
         act(() => {
-            render(<Carousel transitionStyle="fade" list={carouselList} />, container);
+            render(
+                <Carousel transitionStyle="fade">
+                    <CarouselItem>First</CarouselItem>
+                    <CarouselItem>Second</CarouselItem>
+                </Carousel>,
+                container
+            );
         });
         expect(container.firstElementChild.classList.contains("carousel-fade")).toBeTruthy();
     });
@@ -178,7 +182,13 @@ describe("Component: Carousel", () => {
             const onMouseDown: jest.Mock = jest.fn();
 
             act(() => {
-                render(<Carousel onMouseDown={onMouseDown} list={carouselList} />, container);
+                render(
+                    <Carousel onMouseDown={onMouseDown}>
+                        <CarouselItem>First</CarouselItem>
+                        <CarouselItem>Second</CarouselItem>
+                    </Carousel>,
+                    container
+                );
             });
             jest.spyOn(container.firstElementChild, "clientWidth", "get").mockImplementation(() => totalWidth);
 
@@ -206,7 +216,13 @@ describe("Component: Carousel", () => {
             const onTouchStart: jest.Mock = jest.fn();
 
             act(() => {
-                render(<Carousel onTouchStart={onTouchStart} list={carouselList} />, container);
+                render(
+                    <Carousel onTouchStart={onTouchStart}>
+                        <CarouselItem>First</CarouselItem>
+                        <CarouselItem>Second</CarouselItem>
+                    </Carousel>,
+                    container
+                );
             });
 
             // Touch swipe
@@ -234,7 +250,13 @@ describe("Component: Carousel", () => {
     it("Should allow autoplay", () => {
         act(() => {
             jest.useFakeTimers();
-            render(<Carousel autoplay list={carouselList} />, container);
+            render(
+                <Carousel autoplay>
+                    <CarouselItem>First</CarouselItem>
+                    <CarouselItem>Second</CarouselItem>
+                </Carousel>,
+                container
+            );
         });
         act(() => jest.advanceTimersToNextTimer());
         expect(element(0).classList.contains("carousel-item-left")).toBeTruthy();
@@ -251,7 +273,13 @@ describe("Component: Carousel", () => {
 
         act(() => {
             jest.useFakeTimers();
-            render(<Carousel onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} autoplay list={carouselList} />, container);
+            render(
+                <Carousel onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} autoplay>
+                    <CarouselItem>First</CarouselItem>
+                    <CarouselItem>Second</CarouselItem>
+                </Carousel>,
+                container
+            );
         });
         act(() => Simulate.mouseEnter(container.firstElementChild));
         act(() => jest.advanceTimersToNextTimer());
@@ -275,7 +303,13 @@ describe("Component: Carousel", () => {
         const autoplaySpeed: number = 9000;
         act(() => {
             jest.useFakeTimers();
-            render(<Carousel autoplay autoplaySpeed={autoplaySpeed} list={carouselList} />, container);
+            render(
+                <Carousel autoplay autoplaySpeed={autoplaySpeed}>
+                    <CarouselItem>First</CarouselItem>
+                    <CarouselItem>Second</CarouselItem>
+                </Carousel>,
+                container
+            );
         });
 
         act(() => jest.advanceTimersByTime(autoplaySpeed));

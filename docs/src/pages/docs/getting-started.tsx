@@ -17,14 +17,14 @@ const GettingStarted: React.FC = React.memo(() => {
 
                 <h2 className="pt-3 pb-3">Installation</h2>
                 <p>First, install the npm package using the following:</p>
-                <CodeSnippet showLineNumbers={false} language={"properties"}>
+                <CodeSnippet showLineNumbers={false} language="properties">
                     npm install @sebgroup/react-components --save
                 </CodeSnippet>
 
                 <p>
                     These components uses SEB Bootstrap for styling and relies on its styles, fonts, colors and variables. You will need to install the SEB Bootstrap package as well to get it to work.
                 </p>
-                <CodeSnippet showLineNumbers={false} language={"properties"}>
+                <CodeSnippet showLineNumbers={false} language="properties">
                     npm install @sebgroup/bootstrap --save
                 </CodeSnippet>
 

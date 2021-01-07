@@ -7,12 +7,12 @@ import CheckIcon from "../../static/icons/check.svg";
 import "../styles/code-snippet.scss";
 
 type CodeSnippetProps = JSX.IntrinsicElements["div"] & {
-    fillMode?: boolean;
+    angular?: boolean;
     language?: HighlightLanguage;
     showLineNumbers?: boolean;
 };
 
-export const CodeSnippet: React.FC<CodeSnippetProps> = React.memo(({ fillMode, language, showLineNumbers = true, ...props }: CodeSnippetProps) => {
+export const CodeSnippet: React.FC<CodeSnippetProps> = React.memo(({ angular, language, showLineNumbers = true, ...props }: CodeSnippetProps) => {
     const [copied, setCopied] = React.useState<boolean>(false);
     const timer: React.MutableRefObject<any> = React.useRef();
 
@@ -29,7 +29,7 @@ export const CodeSnippet: React.FC<CodeSnippetProps> = React.memo(({ fillMode, l
     };
 
     return (
-        <div {...props} className={classnames("code-snippet", props.className)}>
+        <div {...props} className={classnames("code-snippet", { angular }, props.className)}>
             <Highlight language={language} style={theme} showLineNumbers={showLineNumbers}>
                 {props.children}
             </Highlight>

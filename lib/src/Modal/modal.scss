@@ -2,99 +2,100 @@ $modal-sm-width: 300px;
 $modal-md-width: 500px;
 $modal-lg-width: 800px;
 
-div.modal,
-div.modal.modal-aside {
+.rc.modal {
     display: flex;
     justify-content: center;
     height: 0;
     background-color: rgba(black, 0.6);
     transition: opacity 200ms linear;
+
+    > .modal-dialog {
+        margin: 0;
+        animation: none;
+        transition: outline-color 10ms;
+    }
+
+    &.modal-centered {
+        align-items: center;
+    }
+
     &.show {
         animation: fade-in-modal-container 200ms forwards;
     }
     &.hide {
         animation: fade-out-modal-container 400ms forwards;
     }
-    > .modal-dialog {
-        margin: 0;
-        animation: none;
-        outline: 1px solid;
-        /** This is used for focus trap */
-        outline-color: rgba(0, 0, 0, 0);
-        transition: outline-color 10ms;
-    }
-    &.modal-centered {
-        align-items: center;
-    }
-    /** This is used for focus trap */
-    &:focus-within {
-        > .modal-dialog {
-            outline-color: rgba(0, 0, 0, 0.1);
-        }
-    }
-}
 
-/** Normal Modal */
-div.modal:not(.modal-aside):not(.modal-fullscreen) {
-    > .modal-dialog {
-        height: max-content;
-        &:not(.modal-lg):not(.modal-sm) {
-            @media (min-width: 576px) {
-                width: $modal-md-width;
-            }
-        }
-        &.modal-lg {
-            @media (min-width: 576px) {
-                width: $modal-lg-width;
-            }
-        }
-        &.modal-sm {
-            @media (min-width: 576px) {
-                width: $modal-sm-width;
-            }
-        }
-    }
-    &:not(.modal-centered) {
+    /** Normal Modal */
+    &:not(.modal-aside):not(.modal-fullscreen) {
         > .modal-dialog {
-            @media (min-width: 576px) {
-                margin-top: 1.75rem;
+            height: max-content;
+            &:not(.modal-lg):not(.modal-sm) {
+                @media (min-width: 576px) {
+                    width: $modal-md-width;
+                }
+            }
+            &.modal-lg {
+                @media (min-width: 576px) {
+                    width: $modal-lg-width;
+                }
+            }
+            &.modal-sm {
+                @media (min-width: 576px) {
+                    width: $modal-sm-width;
+                }
+            }
+        }
+        &:not(.modal-centered) {
+            > .modal-dialog {
+                @media (min-width: 576px) {
+                    margin-top: 1.75rem;
+                }
+            }
+        }
+        &.show > .modal-dialog {
+            animation: modal-slide-down 400ms forwards;
+        }
+        &.hide > .modal-dialog {
+            animation: modal-slide-up 400ms forwards;
+        }
+    }
+
+    /** Aside Modal */
+    &.modal-aside {
+        > .modal-dialog {
+            position: absolute;
+        }
+        &.modal-aside-right {
+            &.show > .modal-dialog {
+                animation: modal-slide-in-right 400ms forwards;
+            }
+            &.hide > .modal-dialog {
+                animation: modal-slide-out-right 400ms forwards;
+            }
+        }
+        &.modal-aside-left {
+            &.show > .modal-dialog {
+                animation: modal-slide-in-left 400ms forwards;
+            }
+            &.hide > .modal-dialog {
+                animation: modal-slide-out-left 400ms forwards;
             }
         }
     }
-    &.show > .modal-dialog {
-        animation: modal-slide-down 400ms forwards;
-    }
-    &.hide > .modal-dialog {
-        animation: modal-slide-up 400ms forwards;
-    }
-}
-/** Aside Modal */
-div.modal.modal-aside {
-    > .modal-dialog {
-        position: absolute;
-    }
-    &.modal-aside-right {
-        &.show > .modal-dialog {
-            animation: modal-slide-in-right 400ms forwards;
-        }
-        &.hide > .modal-dialog {
-            animation: modal-slide-out-right 400ms forwards;
+
+    /** Fullscreen Modal */
+    &.modal-fullscreen {
+        > .modal-dialog {
+            position: absolute;
+            left: 0;
         }
     }
-    &.modal-aside-left {
-        &.show > .modal-dialog {
-            animation: modal-slide-in-left 400ms forwards;
-        }
-        &.hide > .modal-dialog {
-            animation: modal-slide-out-left 400ms forwards;
-        }
-    }
-}
-/** Fullscreen Modal */
-div.modal.modal-fullscreen {
-    > .modal-dialog {
-        position: absolute;
-        left: 0;
+
+    > .last-focusable-element {
+        opacity: 0;
+        width: 0;
+        height: 0;
     }
 }
 

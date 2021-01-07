@@ -1,6 +1,6 @@
 import React from "react";
 import classnames from "classnames";
-import { CheckBox } from "../../CheckBox";
+import { Checkbox } from "../../Checkbox";
 import { TableContext } from "../TableContextProvider";
 import TableHeaderCell from "./TableHeaderCell";
 import TableCell from "./TableCell";
@@ -100,7 +100,7 @@ const TableRow: React.FC<TableRowProps> = ({
                     <TableCell />
                 ) : isHeaderRow ? (
                     <TableHeaderCell disableSort>
-                        <CheckBox
+                        <Checkbox
                             checked={checked}
                             indeterminate={indeterminate && !checked}
                             name={`tb_checkbox_all`}
@@ -110,7 +110,7 @@ const TableRow: React.FC<TableRowProps> = ({
                     </TableHeaderCell>
                 ) : (
                     <TableCell className="select-control">
-                        <CheckBox
+                        <Checkbox
                             checked={checked}
                             indeterminate={indeterminate && !checked}
                             name={`tb_checkbox_${uniqueId}`}

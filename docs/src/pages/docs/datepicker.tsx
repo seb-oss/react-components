@@ -1,12 +1,14 @@
 import React from "react";
 import Docs from "@common/Docs";
-// import { loremIpsum } from "lorem-ipsum";
 import { Datepicker } from "@sebgroup/react-components/Datepicker";
 import { useDynamicForm } from "@hooks/useDynamicForm";
 
+const importString: string = require("!raw-loader!@sebgroup/react-components/Datepicker/Datepicker");
+const code: string = `<Datepicker value={dateValue} onChange={setDateValue} />`;
+
 const DatepickerPage: React.FC = () => {
-    const importString: string = require("!raw-loader!@sebgroup/react-components/Datepicker/Datepicker");
     const [exampleDate, setExampleDate] = React.useState<Date>(new Date());
+
     const [renderControls, { controls }] = useDynamicForm([
         {
             key: "controls",
@@ -34,13 +36,13 @@ const DatepickerPage: React.FC = () => {
             ],
         },
     ]);
-    const code: string = `<Datepicker value={myDateValue} onChange={(newDate: Date) => setMyDateValue(newDate)} />`;
+
     return (
         <Docs
             mainFile={importString}
             example={<Datepicker value={exampleDate} onChange={setExampleDate} monthPicker={!!controls.monthPicker} forceCustom={!!controls.forceCustom} localeCode={controls.localeCode as string} />}
             code={code}
-            controls={<div>{renderControls()}</div>}
+            controls={renderControls()}
         />
     );
 };
