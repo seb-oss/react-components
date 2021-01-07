@@ -25,9 +25,9 @@
         "Stepper": "./src/Stepper/index.ts",
         "Table": "./src/Table/index.ts",
         "Tabs": "./src/Tabs/index.ts",
-        "TextArea": "./src/TextArea/index.ts",
-        "TextBox": "./src/TextBox/index.ts",
         "TextLabel": "./src/TextLabel/index.ts",
+        "Textarea": "./src/Textarea/index.ts",
+        "Textbox": "./src/Textbox/index.ts",
         "Timeline": "./src/Timeline/index.ts",
         "Timepicker": "./src/Timepicker/index.ts",
         "Timer": "./src/Timer/index.ts",
@@ -138,16 +138,16 @@
             "to": "./Tabs/index.js"
         },
         {
-            "from": "./src/TextArea/index.ts",
-            "to": "./TextArea/index.js"
-        },
-        {
-            "from": "./src/TextBox/index.ts",
-            "to": "./TextBox/index.js"
-        },
-        {
             "from": "./src/TextLabel/index.ts",
             "to": "./TextLabel/index.js"
+        },
+        {
+            "from": "./src/Textarea/index.ts",
+            "to": "./Textarea/index.js"
+        },
+        {
+            "from": "./src/Textbox/index.ts",
+            "to": "./Textbox/index.js"
         },
         {
             "from": "./src/Timeline/index.ts",
