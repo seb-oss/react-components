@@ -11,7 +11,7 @@ import TableCell from "@sebgroup/react-components/Table/parts/TableCell";
 import TableHeader from "@sebgroup/react-components/Table/parts/TableHeader";
 import TableHeaderCell from "@sebgroup/react-components/Table/parts/TableHeaderCell";
 import TableRow from "@sebgroup/react-components/Table/parts/TableRow";
-import { filterArray, onRowSelect, paginate, searchTextInArray, sortArray } from "@sebgroup/react-components/Table/parts/helperFunctions";
+import { filterArrayByColumns, onRowSelect, paginate, searchTextByColumns, sortArray } from "@sebgroup/react-components/Table/parts/helperFunctions";
 import { SortedColumn } from "@sebgroup/react-components/Table/TableContextProvider";
 import { FilterColumn, GenericTableRow } from "@sebgroup/react-components/Table/table-typings";
 import { NumberedPagination } from "@sebgroup/react-components/Pagination/NumberedPagination";
@@ -115,7 +115,7 @@ const TablePage: React.FC = (): React.ReactElement<void> => {
     const handleTextChange = React.useCallback(
         (e: React.ChangeEvent<HTMLInputElement>) => {
             setSearchText(e.target.value);
-            setData(searchTextInArray(defaultData, e.target.value, ["lastName"]));
+            setData(searchTextByColumns(defaultData, e.target.value, ["lastName"]));
         },
         [searchText]
     );
@@ -140,7 +140,7 @@ const TablePage: React.FC = (): React.ReactElement<void> => {
     `;
 
     React.useEffect(() => {
-        setData(filterArray(defaultData, filterColumns));
+        setData(filterArrayByColumns(defaultData, filterColumns));
     }, [filterColumns]);
 
     React.useEffect(() => {
@@ -163,7 +163,9 @@ const TablePage: React.FC = (): React.ReactElement<void> => {
                 <div className="w-100">
                     <Table
                         theme={enableDark ? "dark" : "light"}
-                        onSort={enableSorting ? (sortedColumn: SortedColumn) => sortedColumn && setData(sortArray(data, sortedColumn.accessor, sortedColumn.sortDirection)) : null}
+                        onSort={
+                            enableSorting ? (sortedColumn: SortedColumn) => sortedColumn && setData(sortArray(data, sortedColumn.accessor as keyof TableDataProps, sortedColumn.sortDirection)) : null
+                        }
                         onRowSelect={
                             enableRowSelection
                                 ? (event: React.ChangeEvent<HTMLInputElement>, rowUniqueKey: string) => {

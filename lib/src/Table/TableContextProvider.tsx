@@ -1,8 +1,8 @@
 import React from "react";
 import { SortDirection } from "./table-typings";
 
-export interface SortedColumn {
-    accessor: string;
+export interface SortedColumn<T = any> {
+    accessor: keyof T;
     sortDirection: SortDirection;
 }
 

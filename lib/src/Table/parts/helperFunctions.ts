@@ -31,22 +31,22 @@ export function sumCols(colsLength: number, useSelection?: boolean, useShowActio
  * @param sortDirection the sort direction
  * @return Array of tableRow
  */
-export function sortArray<T = any>(items: Array<T> = [], columnName: string, sortDirection: SortDirection): Array<T> {
+export function sortArray<T = any>(items: Array<T> = [], columnName: keyof T, sortDirection: SortDirection): Array<T> {
     const languages: Readonly<Array<string>> = window.navigator?.languages || ["sw", "en"];
 
     const sortedItems: Array<any> = [...items].sort((firstItem: T, secondItem: T) => {
         let result: number = 0;
         if (sortDirection === SortDirection.ASC) {
-            if (isNaN(secondItem[columnName]) && isNaN(firstItem[columnName])) {
-                result = String(firstItem[columnName]).localeCompare(String(secondItem[columnName]), languages as Array<string>, { sensitivity: "base", ignorePunctuation: true });
+            if (isNaN(secondItem[columnName as string]) && isNaN(firstItem[columnName as string])) {
+                result = String(firstItem[columnName as string]).localeCompare(String(secondItem[columnName as string]), languages as Array<string>, { sensitivity: "base", ignorePunctuation: true });
             } else {
-                result = firstItem[columnName] - secondItem[columnName];
+                result = firstItem[columnName as string] - secondItem[columnName as string];
             }
         } else {
-            if (isNaN(secondItem[columnName]) && isNaN(firstItem[columnName])) {
-                result = String(secondItem[columnName]).localeCompare(String(firstItem[columnName]), languages as Array<string>, { sensitivity: "base", ignorePunctuation: true });
+            if (isNaN(secondItem[columnName as string]) && isNaN(firstItem[columnName as string])) {
+                result = String(secondItem[columnName as string]).localeCompare(String(firstItem[columnName as string]), languages as Array<string>, { sensitivity: "base", ignorePunctuation: true });
             } else {
-                result = secondItem[columnName] - firstItem[columnName];
+                result = secondItem[columnName as string] - firstItem[columnName as string];
             }
         }
         return result;
@@ -59,7 +59,7 @@ export function sortArray<T = any>(items: Array<T> = [], columnName: string, sor
  * @param data table data
  * @param filterColumns filter columns
  */
-export function filterArray<T = any>(data: Array<T>, filterColumns: Array<FilterColumn<T>>): Array<T> {
+export function filterArrayByColumns<T = any>(data: Array<T>, filterColumns: Array<FilterColumn<T>>): Array<T> {
     return data.filter((row: T) => {
         return (
             filterColumns.length === 0 ||
@@ -76,11 +76,11 @@ export function filterArray<T = any>(data: Array<T>, filterColumns: Array<Filter
  * @param keyword The keyword to search in the array
  * @param searchFields the target field to search
  */
-export function searchTextInArray<T = any>(data: Array<T>, keyword: string, searchFields: Array<keyof T>): Array<T> {
+export function searchTextByColumns<T = any>(data: Array<T>, keyword: string, searchFields: Array<keyof T>): Array<T> {
     return [...data].filter((row: T) => {
         const searchText: string = String(keyword);
 
-        return searchFields.some((searchColumn: keyof T) => {
+        return searchFields?.some((searchColumn: keyof T) => {
             let result: boolean = false;
             const searchField: string = searchColumn as string;
             const regEx: RegExp = new RegExp(searchText, "gi");
@@ -113,6 +113,12 @@ export function paginate<T = any>(data: Array<T>, offset: number, currentPage: n
     return data;
 }
 
+export interface RowSelectOutput<T = any> {
+    data: Array<GenericTableRow<T>>;
+    isAllSelected: boolean;
+    isIndeterminate: boolean;
+}
+
 /**
  * on row select
  * @param event input event
@@ -120,11 +126,11 @@ export function paginate<T = any>(data: Array<T>, offset: number, currentPage: n
  * @param rowUniqueAccessor row unique accessor
  * @param rowId row id value
  */
-export function onRowSelect<T = any>(event: React.ChangeEvent<HTMLInputElement>, data: Array<GenericTableRow<T>>, rowUniqueAccessor: keyof GenericTableRow<T>, rowId: string) {
+export function onRowSelect<T = any>(event: React.ChangeEvent<HTMLInputElement>, data: Array<GenericTableRow<T>>, rowUniqueAccessor: keyof GenericTableRow<T>, rowId: string): RowSelectOutput {
     const target: HTMLInputElement = event.target;
     let isAllSelected: boolean = true;
     let isIndeterminate: boolean = false;
-    const newData: Array<GenericTableRow<T>> = data.map((row: GenericTableRow<T>) => {
+    const newData: Array<GenericTableRow<T>> = data?.map((row: GenericTableRow<T>) => {
         if (row[rowUniqueAccessor] === rowId || rowId === "all") {
             row.checked = target.checked;
         }
@@ -134,7 +140,7 @@ export function onRowSelect<T = any>(event: React.ChangeEvent<HTMLInputElement>,
     });
     return {
         data: newData,
-        isAllSelected,
+        isAllSelected: !!newData && isAllSelected,
         isIndeterminate: isIndeterminate && !isAllSelected,
     };
 }
