@@ -113,97 +113,28 @@ export function paginate<T = any>(data: Array<T>, offset: number, currentPage: n
     return data;
 }
 
-// export const onSubRowCheck = <T = any>(tableRows: Array<GenericTableRow<T>>, checked: boolean, config?: SubRowSelectionConfig) => {
-//     return tableRows.map((item) => ({
-//         ...item,
-//         checked,
-//         indeterminate: false,
-//         subRows: item.subRows ? onSubRowCheck(item.subRows, checked) : null,
-//     }));
-// };
-
-// export const onParentCheck = <T>(tableRows: Array<TableRowProps<T>>, row: TableRowProps<T>): any => {
-//     let result = null;
-//     tableRows.some((tableRow) => {
-//         if (tableRow._index === row._index) {
-//             result = row;
-//             return true;
-//         } else if (tableRow.subRows) {
-//             let temp = onParentCheck(tableRow.subRows, row);
-//             let isAllChecked: boolean = true;
-//             let isIndeterminate: boolean = false;
-//             tableRow.subRows.map((item) => {
-//                 const newItem = item._index === row._index ? row : item;
-//                 isAllChecked = isAllChecked && newItem.checked;
-//                 isIndeterminate = isIndeterminate || newItem.checked;
-//                 return {
-//                     ...newItem,
-//                 };
-//             });
-//             tableRow.checked = isAllChecked;
-//             tableRow.indeterminate = isIndeterminate && !isAllChecked;
-//             result = temp ? tableRow : result;
-//             return !!temp;
-//         }
-//     });
-//     return result;
-// };
-
-// export interface SubRowSelectionConfig<T = any, K = any> {
-//     accessor: keyof T;
-//     uniqueKey: keyof K;
-//     subRowConfig?: SubRowSelectionConfig;
-// }
-// export interface RowSelectConfig<T = any, K = any> {
-//     parentC?: string;
-//     uniqueKey?: keyof T;
-//     subRowConfig?: SubRowSelectionConfig<T, K>;
-// }
-
-// export function onRowSelect<T = any, K = any>(event: React.ChangeEvent<HTMLInputElement>, data: Array<GenericTableRow<T>>, rowId: string, config?: RowSelectConfig<T, K>) {
-//     const target: HTMLInputElement = event.target;
-//     const rowUniqueKey: keyof GenericTableRow<T> = config?.uniqueKey || "id";
-//     // row.checked = target.checked;
-//     // row.indeterminate = target.indeterminate && !row.checked;
-//     // if (row.subRows) {
-//     //     row.subRows = onSubRowCheck(row.subRows, row.checked);
-//     // }
-//     // if (parentCheck) {
-//     //     row = onParentCheck(rows, row);
-//     // }
-//     // setRows(
-//     //     rows.map((item) => {
-//     //         if (item._index === row._index) {
-//     //             return row;
-//     //         }
-//     //         return item;
-//     //     })
-//     // );
-//     return data?.map((row: GenericTableRow<T>) => {
-//         if (row[rowUniqueKey] && row[rowUniqueKey] === rowId) {
-//             const newRow: GenericTableRow<T> = { ...row };
-//             newRow.checked = target.checked;
-//             newRow.indeterminate = target.indeterminate && !newRow.checked;
-//             const subRowConfig: SubRowSelectionConfig<T, K> = config?.subRowConfig;
-//             if (subRowConfig && newRow[subRowConfig.accessor]) {
-//                 newRow[subRowConfig.accessor] = onSubRowCheck(newRow[subRowConfig.accessor as string], newRow.checked);
-//                 row = newRow;
-//             }
-//             if (config?.parentId) {
-//                 row = onParentCheck(rows, row);
-//             }
-//         }
-//         return row;
-//     })
-// };
-
-// export const onSelectAll = <T = any>(event: React.ChangeEvent<HTMLInputElement>, rows: Array<T>) => {
-//     const target: HTMLInputElement = event.target;
-//     const checked: boolean = target.checked;
-//     return rows.map((item: TableRowProps<T>) => ({
-//         ...item,
-//         checked,
-//         indeterminate: false,
-//         subRows: item.subRows ? onSubRowCheck(item.subRows, checked) : null,
-//     }));
-// };
+/**
+ * on row select
+ * @param event input event
+ * @param data rows of data
+ * @param rowUniqueAccessor row unique accessor
+ * @param rowId row id value
+ */
+export function onRowSelect<T = any>(event: React.ChangeEvent<HTMLInputElement>, data: Array<GenericTableRow<T>>, rowUniqueAccessor: keyof GenericTableRow<T>, rowId: string) {
+    const target: HTMLInputElement = event.target;
+    let isAllSelected: boolean = true;
+    let isIndeterminate: boolean = false;
+    const newData: Array<GenericTableRow<T>> = data.map((row: GenericTableRow<T>) => {
+        if (row[rowUniqueAccessor] === rowId || rowId === "all") {
+            row.checked = target.checked;
+        }
+        isAllSelected = isAllSelected && row.checked;
+        isIndeterminate = isIndeterminate || row.checked;
+        return row;
+    });
+    return {
+        data: newData,
+        isAllSelected,
+        isIndeterminate: isIndeterminate && !isAllSelected,
+    };
+}

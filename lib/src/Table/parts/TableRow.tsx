@@ -28,7 +28,18 @@ const angleRightIcon: JSX.Element = (
     </svg>
 );
 
-const TableRow: React.FC<TableRowProps> = ({ className, isHeaderRow, hideSelect, uniqueKey, parentKey, checked, isSubRow = false, isExpanded = false, ...props }: TableRowProps) => {
+const TableRow: React.FC<TableRowProps> = ({
+    className,
+    isHeaderRow,
+    hideSelect,
+    uniqueKey,
+    parentKey,
+    checked = false,
+    indeterminate = false,
+    isSubRow = false,
+    isExpanded = false,
+    ...props
+}: TableRowProps) => {
     const context = React.useContext(TableContext);
     const [uniqueId, setUniqueId] = React.useState<string>(uniqueKey);
     const [isShown, setIsShown] = React.useState<boolean>(false);
@@ -38,16 +49,16 @@ const TableRow: React.FC<TableRowProps> = ({ className, isHeaderRow, hideSelect,
     /** initiate default expanded row */
     const initiateExpandedRows = React.useCallback(() => {
         const newExpandedRows: Array<string> = [...expandedRows];
-        const expandedIndex: number = newExpandedRows.indexOf(uniqueKey);
+        const expandedIndex: number = newExpandedRows.indexOf(uniqueId);
         if (isExpanded && expandedIndex === -1) {
-            newExpandedRows.push(uniqueKey);
+            newExpandedRows.push(uniqueId);
         } else if (expandedIndex > -1) {
-            const expandedIndex: number = newExpandedRows.indexOf(uniqueKey);
+            const expandedIndex: number = newExpandedRows.indexOf(uniqueId);
             newExpandedRows.splice(expandedIndex, 1);
         }
         context.setTableState({ ...context.tableState, expandedRows: newExpandedRows });
         setExpandedRows(newExpandedRows);
-    }, [isExpanded]);
+    }, [isExpanded, uniqueId]);
 
     React.useEffect(() => {
         setUniqueId(uniqueKey || randomId("table-row"));
@@ -79,7 +90,7 @@ const TableRow: React.FC<TableRowProps> = ({ className, isHeaderRow, hideSelect,
                     <TableCell />
                 ) : (
                     <TableCell className="collapse-control">
-                        <button className="btn btn-sm" onClick={() => context.onRowExpand(!isExpanded, uniqueKey)}>
+                        <button className="btn btn-sm" onClick={() => context.onRowExpand(!isExpanded, uniqueId)}>
                             <div className="icon-holder">{expanded ? angleDown : angleRightIcon}</div>
                         </button>
                     </TableCell>
@@ -89,12 +100,19 @@ const TableRow: React.FC<TableRowProps> = ({ className, isHeaderRow, hideSelect,
                     <TableCell />
                 ) : isHeaderRow ? (
                     <TableHeaderCell disableSort>
-                        <CheckBox checked={checked} name={`tb_checkbox_all`} id={`tb_checkbox_all`} onChange={(event: React.ChangeEvent<HTMLInputElement>) => context.onRowSelect(event, "all")} />
+                        <CheckBox
+                            checked={checked}
+                            indeterminate={indeterminate && !checked}
+                            name={`tb_checkbox_all`}
+                            id={`tb_checkbox_all`}
+                            onChange={(event: React.ChangeEvent<HTMLInputElement>) => context.onRowSelect(event, "all")}
+                        />
                     </TableHeaderCell>
                 ) : (
                     <TableCell className="select-control">
                         <CheckBox
                             checked={checked}
+                            indeterminate={indeterminate && !checked}
                             name={`tb_checkbox_${uniqueId}`}
                             id={`tb_checkbox_${uniqueId}`}
                             onChange={(event: React.ChangeEvent<HTMLInputElement>) => context.onRowSelect(event, uniqueId)}

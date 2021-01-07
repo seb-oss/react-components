@@ -7,9 +7,13 @@ import { SortedColumn, TableContext } from "./TableContextProvider";
 export type TableTheme = "light" | "dark";
 
 export type TableProps = JSX.IntrinsicElements["table"] & {
-    onRowExpand?: (ev, uniqueId) => void;
-    onRowSelect?: (ev, uniqueId) => void;
+    /** callback when row is selected */
+    onRowSelect: (event: React.ChangeEvent<HTMLInputElement>, rowKey: string) => void;
+    /** callback when row is expanded */
+    onRowExpand: (isExpanded: boolean, rowKey: string) => void;
+    /** table theme */
     theme?: TableTheme;
+    /** callback when column is sorted */
     onSort?: (sortedColumn: SortedColumn) => void;
 };
 

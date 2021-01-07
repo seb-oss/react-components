@@ -11,10 +11,9 @@ import TableCell from "@sebgroup/react-components/Table/parts/TableCell";
 import TableHeader from "@sebgroup/react-components/Table/parts/TableHeader";
 import TableHeaderCell from "@sebgroup/react-components/Table/parts/TableHeaderCell";
 import TableRow from "@sebgroup/react-components/Table/parts/TableRow";
-import { filterArray, paginate, searchTextInArray, sortArray } from "@sebgroup/react-components/Table/parts/helperFunctions";
+import { filterArray, onRowSelect, paginate, searchTextInArray, sortArray } from "@sebgroup/react-components/Table/parts/helperFunctions";
 import { SortedColumn } from "@sebgroup/react-components/Table/TableContextProvider";
-import { FilterColumn } from "@sebgroup/react-components/Table/table-typings";
-import { Pagination } from "@sebgroup/react-components/Pagination";
+import { FilterColumn, GenericTableRow } from "@sebgroup/react-components/Table/table-typings";
 import { NumberedPagination } from "@sebgroup/react-components/Pagination/NumberedPagination";
 
 interface TableDataProps {
@@ -29,6 +28,7 @@ const TablePage: React.FC = (): React.ReactElement<void> => {
     const [pages, setPages] = React.useState<number>(0);
     const [pagingSize, setPagingSize] = React.useState<number>(10);
     const [searchText, setSearchText] = React.useState<string>("");
+    const [selectAllIndicator, setSelectAllIndicator] = React.useState<any>({ checked: false, indeterminate: false });
     const [dropDownListSelected, setDropdownListSelected] = React.useState<Array<string>>([]);
     const [filterColumns, setFilterColumns] = React.useState<Array<FilterColumn>>([]);
 
@@ -54,28 +54,10 @@ const TablePage: React.FC = (): React.ReactElement<void> => {
         []
     );
 
-    const primaryButton: any = React.useMemo(
-        () => ({
-            label: "Buy",
-            onClick: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, selectedRow: any) => {},
-        }),
-        []
-    );
-
-    const actionLinks: Array<any> = React.useMemo(
-        () => [
-            { label: "Add", onClick: (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>, selectedRow: any) => {} },
-            { label: "Edit", onClick: (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>, selectedRow: any) => {} },
-        ],
-        []
-    );
-
     const checkboxControls: Array<DynamicFormOption> = React.useMemo(
         () => [
             { label: "Enable Sorting", value: "enableSorting", key: "enableSorting" },
             { label: "Row Selection", value: "enableRowSelection", key: "enableRowSelection" },
-            { label: "Enable action button", value: "enableActionButton", key: "enableActionButton" },
-            { label: "Enable action links", value: "enableActionLinks", key: "enableActionLinks" },
             { label: "Enable pagination", value: "enablePagination", key: "enablePagination" },
             { label: "Enable sub rows", value: "enableSubRows", key: "enableSubRows" },
             { label: "Enable searching", value: "enableSearch", key: "enableSearch" },
@@ -100,9 +82,7 @@ const TablePage: React.FC = (): React.ReactElement<void> => {
     ]);
 
     const enableSorting = React.useMemo(() => checkDynamicFormSelectedKey("enableSorting", controls), [controls]);
-    const enableActionButton = React.useMemo(() => checkDynamicFormSelectedKey("enableActionButton", controls), [controls]);
     const enableRowSelection = React.useMemo(() => checkDynamicFormSelectedKey("enableRowSelection", controls), [controls]);
-    const enableActionLinks = React.useMemo(() => checkDynamicFormSelectedKey("enableActionLinks", controls), [controls]);
     const enablePagination = React.useMemo(() => checkDynamicFormSelectedKey("enablePagination", controls), [controls]);
     const enableSubRows = React.useMemo(() => checkDynamicFormSelectedKey("enableSubRows", controls), [controls]);
     const enableSearch = React.useMemo(() => checkDynamicFormSelectedKey("enableSearch", controls), [controls]);
@@ -112,7 +92,7 @@ const TablePage: React.FC = (): React.ReactElement<void> => {
         () => makeData<Array<TableDataProps>>([enablePagination ? 100 : 10, 5]),
         [enablePagination]
     );
-    const [data, setData] = React.useState<Array<TableDataProps>>([...defaultData]);
+    const [data, setData] = React.useState<Array<GenericTableRow<TableDataProps>>>([...defaultData]);
 
     const statusDropdownList: Array<DropdownItem> = [
         { label: "single", value: "single" },
@@ -142,7 +122,22 @@ const TablePage: React.FC = (): React.ReactElement<void> => {
 
     const importString: string = require("!raw-loader!@sebgroup/react-components/Table/Table");
     const importedFiles: Array<string> = [];
-    const code: string = React.useMemo(() => require("!raw-loader!./table").default, []);
+    const code: string = `
+        <Table>
+            <TableHeader>
+                <TableRow>
+                    <TableHeaderCell>TableHeaderCell1</TableHeaderCell>
+                    <TableHeaderCell>TableHeaderCell2</TableHeaderCell>
+                </TableRow>
+            </TableHeader>
+            <TableBody>
+                <TableRow>
+                    <TableCell>TableCell1</TableCell>
+                    <TableCell>TableCell2</TableCell>
+                </TableRow>
+            </TableBody>
+        </Table>
+    `;
 
     React.useEffect(() => {
         setData(filterArray(defaultData, filterColumns));
@@ -171,17 +166,19 @@ const TablePage: React.FC = (): React.ReactElement<void> => {
                         onSort={enableSorting ? (sortedColumn: SortedColumn) => sortedColumn && setData(sortArray(data, sortedColumn.accessor, sortedColumn.sortDirection)) : null}
                         onRowSelect={
                             enableRowSelection
-                                ? (rows: any, uniqueKey: string) => {
-                                      console.log(rows, uniqueKey);
+                                ? (event: React.ChangeEvent<HTMLInputElement>, rowUniqueKey: string) => {
+                                      const { data: newData, isAllSelected, isIndeterminate } = onRowSelect(event, data, "firstName", rowUniqueKey);
+                                      setSelectAllIndicator({ checked: isAllSelected, indeterminate: isIndeterminate });
+                                      setData(newData);
                                   }
                                 : null
                         }
                         onRowExpand={
                             enableSubRows
-                                ? (isExpanded: boolean, uniqueKey: string) => {
+                                ? (isExpanded: boolean, rowUniqueKey: string) => {
                                       setData(
                                           data.map((item: any) => {
-                                              if (item.firstName === uniqueKey) {
+                                              if (item.firstName === rowUniqueKey) {
                                                   item.expanded = isExpanded;
                                               }
                                               return item;
@@ -192,10 +189,10 @@ const TablePage: React.FC = (): React.ReactElement<void> => {
                         }
                     >
                         <TableHeader>
-                            <TableRow>
+                            <TableRow {...selectAllIndicator}>
                                 {columns.map((item, index) => (
                                     <TableHeaderCell {...item} key={index}>
-                                        {item.accessor}
+                                        {item.label}
                                     </TableHeaderCell>
                                 ))}
                             </TableRow>
@@ -203,7 +200,7 @@ const TablePage: React.FC = (): React.ReactElement<void> => {
                         <TableBody>
                             {data.map((row, rowIndex) => (
                                 <React.Fragment key={`row-${rowIndex}`}>
-                                    <TableRow uniqueKey={row.firstName} checked={(row as any).checked} isExpanded={(row as any).expanded}>
+                                    <TableRow uniqueKey={row.firstName} checked={row.checked} isExpanded={row.expanded}>
                                         {columns.map((item, index) => {
                                             return (
                                                 <TableCell {...item} key={index}>

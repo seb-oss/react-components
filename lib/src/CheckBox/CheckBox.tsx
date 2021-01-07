@@ -13,11 +13,13 @@ export type CheckBoxProps = JSX.IntrinsicElements["input"] & {
     label?: React.ReactNode;
     /** Div wrapper props */
     wrapperProps?: JSX.IntrinsicElements["div"];
+    /** Indeterminate state */
+    indeterminate?: boolean;
     /** Indicator for error, warning or success */
     indicator?: Indicator;
 };
 
-export const CheckBox: React.FC<CheckBoxProps> = ({ inline, description, label, wrapperProps, indicator, ...props }: CheckBoxProps) => {
+export const CheckBox: React.FC<CheckBoxProps> = ({ inline, description, label, wrapperProps, indicator, indeterminate, ...props }: CheckBoxProps) => {
     const [id, setId] = React.useState<string>(props.id);
 
     React.useEffect(() => setId(props.id || (label ? props.id || randomId("checkbox-") : null)), [props.id, label]);
@@ -25,7 +27,17 @@ export const CheckBox: React.FC<CheckBoxProps> = ({ inline, description, label, 
     return (
         <div {...wrapperProps} className={classnames("rc", "checkbox", { inline }, wrapperProps?.className)}>
             <div className={classnames("custom-control", "custom-checkbox", { "custom-control-inline": inline }, { [`is-${indicator?.type}`]: indicator })}>
-                <input {...props} type="checkbox" id={id} className={classnames("custom-control-input", props.className)} />
+                <input
+                    {...props}
+                    type="checkbox"
+                    id={id}
+                    className={classnames("custom-control-input", props.className)}
+                    ref={(input: HTMLInputElement) => {
+                        if (input) {
+                            input.indeterminate = indeterminate;
+                        }
+                    }}
+                />
                 <label className="custom-control-label" htmlFor={id}>
                     {label && <span className="checkbox-label">{label}</span>}
                 </label>
