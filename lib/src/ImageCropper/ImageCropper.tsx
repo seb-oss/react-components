@@ -96,19 +96,14 @@ export const ImageCropper: React.FC<ImageCropperProps> = React.memo(({ onChange,
                 onReset={reset}
                 onSelect={() => {
                     fileRef.current.value = fileRef.current.files = null;
-                    fileRef.current?.click();
+                    fileRef.current.click();
                 }}
             >
                 {text?.select}
             </ImagePicker>
 
-            <Modal
-                toggle={modalToggle}
-                size="modal-lg"
-                className="image-cropper-modal"
-                disableBackdropDismiss
-                escapeToDismiss={false}
-                body={
+            <Modal toggle={modalToggle} size="lg" className="image-cropper-modal">
+                <div className="modal-body">
                     <div className="cropping-area">
                         <img src={imgSrc} draggable={false} ref={imgRef} />
                         <img
@@ -124,8 +119,8 @@ export const ImageCropper: React.FC<ImageCropperProps> = React.memo(({ onChange,
                         <ResizeHandle position="bottom-left" coordinates={pos} handleResize={handleResize} />
                         <ResizeHandle position="bottom-right" coordinates={pos} handleResize={handleResize} />
                     </div>
-                }
-                footer={
+                </div>
+                <div className="modal-footer">
                     <div>
                         <button className="btn btn-outline-primary cancel" onClick={() => setModalToggle(false)} type="button">
                             {text?.cancel || "Cancel"}
@@ -134,8 +129,8 @@ export const ImageCropper: React.FC<ImageCropperProps> = React.memo(({ onChange,
                             {text?.crop || "Crop"}
                         </button>
                     </div>
-                }
-            />
+                </div>
+            </Modal>
         </div>
     );
 });
