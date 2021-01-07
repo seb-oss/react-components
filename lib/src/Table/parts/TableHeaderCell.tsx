@@ -6,6 +6,7 @@ import { SortedColumn, TableContext } from "../TableContextProvider";
 export type TableHeaderCellProps<T = any> = JSX.IntrinsicElements["th"] & {
     accessor?: keyof T;
     disableSort?: boolean;
+    sortDirection?: SortDirection;
 };
 
 const defaultSort: JSX.Element = (
@@ -21,10 +22,10 @@ const defaultSort: JSX.Element = (
     </svg>
 );
 
-const TableHeaderCell: React.FC<TableHeaderCellProps> = ({ accessor, disableSort, className, ...props }: TableHeaderCellProps) => {
+const TableHeaderCell: React.FC<TableHeaderCellProps> = ({ accessor, disableSort, className, sortDirection, ...props }: TableHeaderCellProps) => {
     const context = React.useContext(TableContext);
     const [sortedColumn, setSortedColumn] = React.useState<SortedColumn>(context.tableState.sortedColumn);
-    const [sortDirection, setSortDirection] = React.useState<SortDirection>(SortDirection.ASC);
+    const [sortOrder, setSortOrder] = React.useState<SortDirection>(SortDirection.ASC);
     const [sortable, setSortable] = React.useState<boolean>(!disableSort || context.onSort);
 
     /**
@@ -38,9 +39,7 @@ const TableHeaderCell: React.FC<TableHeaderCellProps> = ({ accessor, disableSort
     /** on column sort */
     const onSort = React.useCallback(() => {
         const newSortedColumn: SortedColumn =
-            sortedColumn && sortedColumn.accessor === accessor
-                ? { ...sortedColumn, sortDirection: getSortDirection(sortedColumn.sortDirection) }
-                : { accessor: accessor as string, sortDirection: SortDirection.DESC };
+            sortedColumn && sortedColumn.accessor === accessor ? { ...sortedColumn, sortDirection: getSortDirection(sortedColumn.sortDirection) } : { accessor, sortDirection: SortDirection.DESC };
         context.setTableState({ ...context.tableState, sortedColumn: newSortedColumn });
         !!newSortedColumn && context.onSort(newSortedColumn);
     }, [sortedColumn, context]);
@@ -54,7 +53,13 @@ const TableHeaderCell: React.FC<TableHeaderCellProps> = ({ accessor, disableSort
     }, [context.tableState]);
 
     React.useEffect(() => {
-        setSortDirection(sortable && sortedColumn?.accessor === accessor ? sortedColumn?.sortDirection : null);
+        if (sortDirection && context.onSort) {
+            context.setTableState({ ...context.tableState, sortedColumn: { accessor, sortDirection } });
+        }
+    }, [sortDirection, context.onSort]);
+
+    React.useEffect(() => {
+        setSortOrder(sortable && sortedColumn?.accessor === accessor ? sortedColumn?.sortDirection : null);
     }, [sortable, sortedColumn]);
 
     return (
@@ -63,7 +68,7 @@ const TableHeaderCell: React.FC<TableHeaderCellProps> = ({ accessor, disableSort
                 return sortable ? (
                     <div className="sort-holder" onClick={() => onSort()}>
                         <div className="header-content">{Child}</div>
-                        <div className={classnames("icon-holder", { asc: sortDirection === SortDirection.ASC, desc: sortDirection === SortDirection.DESC })}>{defaultSort}</div>
+                        <div className={classnames("icon-holder", { asc: sortOrder === SortDirection.ASC, desc: sortDirection === SortDirection.DESC })}>{defaultSort}</div>
                     </div>
                 ) : (
                     Child

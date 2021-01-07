@@ -84,6 +84,32 @@ describe("Component: Table header cell", () => {
         expect(sortFn).toBeCalled();
     });
 
+    it("Should change sorting direction using prop", () => {
+        const sortFn: jest.Mock = jest.fn();
+        const setTableStateFn: jest.Mock = jest.fn();
+        const mockProviderValue: TableContextType = {
+            tableState: { sortedColumn: null, expandedRows: [] },
+            setTableState: setTableStateFn,
+            onRowSelect: null,
+            onRowExpand: null,
+            onSort: sortFn,
+        };
+        act(() => {
+            render(
+                <TableContext.Provider value={mockProviderValue}>
+                    <TableHeaderCell accessor="test" sortDirection={SortDirection.ASC}>
+                        child
+                    </TableHeaderCell>
+                </TableContext.Provider>,
+                container
+            );
+        });
+        expect(setTableStateFn).toBeCalledWith({
+            ...mockProviderValue.tableState,
+            sortedColumn: { accessor: "test", sortDirection: SortDirection.ASC },
+        });
+    });
+
     it("Should able to disable sort per cell", () => {
         const sortFn: jest.Mock = jest.fn();
         const setTableStateFn: jest.Mock = jest.fn();

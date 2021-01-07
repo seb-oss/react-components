@@ -15,12 +15,19 @@ import { filterArrayByColumns, onRowSelect, paginate, searchTextByColumns, sortA
 import { SortedColumn } from "@sebgroup/react-components/Table/TableContextProvider";
 import { FilterColumn, GenericTableRow } from "@sebgroup/react-components/Table/table-typings";
 import { NumberedPagination } from "@sebgroup/react-components/Pagination/NumberedPagination";
+import { CodeSnippet } from "@common/CodeSnippet";
 
 interface TableDataProps {
     firstName: string;
     lastName: string;
     age: number;
     status: string;
+    subRows?: Array<TableDataProps>;
+}
+
+interface Column<T = TableDataProps> {
+    accessor: keyof T;
+    label: string;
 }
 
 const TablePage: React.FC = (): React.ReactElement<void> => {
@@ -32,7 +39,7 @@ const TablePage: React.FC = (): React.ReactElement<void> => {
     const [dropDownListSelected, setDropdownListSelected] = React.useState<Array<string>>([]);
     const [filterColumns, setFilterColumns] = React.useState<Array<FilterColumn>>([]);
 
-    const columns: Array<any> = React.useMemo(
+    const columns: Array<Column> = React.useMemo(
         () => [
             {
                 label: "First Name",
@@ -192,7 +199,7 @@ const TablePage: React.FC = (): React.ReactElement<void> => {
                     >
                         <TableHeader>
                             <TableRow {...selectAllIndicator}>
-                                {columns.map((item, index) => (
+                                {columns.map((item: Column, index: number) => (
                                     <TableHeaderCell {...item} key={index}>
                                         {item.label}
                                     </TableHeaderCell>
@@ -200,10 +207,10 @@ const TablePage: React.FC = (): React.ReactElement<void> => {
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                            {data.map((row, rowIndex) => (
+                            {data.map((row: GenericTableRow<TableDataProps>, rowIndex: number) => (
                                 <React.Fragment key={`row-${rowIndex}`}>
                                     <TableRow uniqueKey={row.firstName} checked={row.checked} isExpanded={row.expanded}>
-                                        {columns.map((item, index) => {
+                                        {columns.map((item: Column, index: number) => {
                                             return (
                                                 <TableCell {...item} key={index}>
                                                     {row[item.accessor]}
@@ -212,11 +219,11 @@ const TablePage: React.FC = (): React.ReactElement<void> => {
                                         })}
                                     </TableRow>
                                     {enableSubRows &&
-                                        (row as any).subRows?.map((sub, subi) => (
-                                            <TableRow isSubRow key={`rowsub-${subi}`}>
+                                        row.subRows?.map((sub: TableDataProps, subIndex: number) => (
+                                            <TableRow isSubRow key={`rowsub-${subIndex}`}>
                                                 {columns.map((item, index) => {
                                                     return (
-                                                        <TableCell {...item} key={`rowsub-${subi}-${index}`}>
+                                                        <TableCell {...item} key={`rowsub-${subIndex}-${index}`}>
                                                             {sub[item.accessor]}
                                                         </TableCell>
                                                     );
@@ -243,14 +250,7 @@ const TablePage: React.FC = (): React.ReactElement<void> => {
                 <React.Fragment>
                     {enableFilter && (
                         <div className="filter-holder">
-                            <Dropdown
-                                list={statusDropdownList}
-                                label="filter by status"
-                                value={dropDownListSelected}
-                                // TODO: Find a way to fix this
-                                onChange={onDropdownChange}
-                                multiple
-                            />
+                            <Dropdown list={statusDropdownList} label="filter by status" value={dropDownListSelected} onChange={onDropdownChange} multiple />
                         </div>
                     )}
                     {enablePagination && (
@@ -272,6 +272,85 @@ const TablePage: React.FC = (): React.ReactElement<void> => {
                     {renderControls()}
                 </React.Fragment>
             }
+            note={
+                <>
+                    <div>
+                        <h3>Using built-in table row selection function</h3>
+                        <p>
+                            The developer will just need to pass in <code>onRowSelect</code> callback function in <code>{`<Table />`}</code> and Checkbox will be appended automatically to rows.
+                        </p>
+                        An example can be found below:
+                        <CodeSnippet language="jsx">
+                            {`<Table onRowSelect={(event: React.ChangeEvent<HTMLInputElement>, rowUniqueKey: string) => console.log(event, rowUniqueKey)}>
+    <TableHeader>...</TableHeader>
+    <TableBody>
+        <TableRow uniqueKey={row.id} checked={row.checked}>
+            ...
+        </TableRow>
+    </TableBody>
+</Table>`}
+                        </CodeSnippet>
+                    </div>
+                    <div className="mt-5">
+                        <h3>Using built-in table row expand function</h3>
+                        <p>
+                            The developer will just need to pass in <code>onRowExpand</code> callback function in <code>{`<Table />`}</code> and collapse icon will be appended automatically to rows.
+                        </p>
+                        An example can be found below:
+                        <CodeSnippet language="jsx">
+                            {`<Table onRowExpand={(isExpanded: boolean, rowUniqueKey: string) => console.log(isExpanded, rowUniqueKey)}>
+    <TableHeader>...</TableHeader>
+    <TableBody>
+        <TableRow uniqueKey={row.id} isExpanded={row.expanded}>
+            ...
+        </TableRow>
+    </TableBody>
+</Table>`}
+                        </CodeSnippet>
+                    </div>
+                    <div className="mt-5">
+                        <h3>Using built-in onSort function</h3>
+                        <p>
+                            The developer will just need to pass in <code>onSort</code> callback function in <code>{`<Table />`}</code> and sort icon will be appended automatically to header.
+                        </p>
+                        An example can be found below:
+                        <CodeSnippet language="jsx">
+                            {`<Table onSort={sortedColumn: SortedColumn) => console.log(sortedColumn)}>
+    <TableHeader>...</TableHeader>
+    <TableBody>...</TableBody>
+</Table>`}
+                        </CodeSnippet>
+                        <h4 className="mt-4">Disabling sort on column</h4>
+                        <p>The developer can disable sort on specific column.</p>
+                        An example can be found below:
+                        <CodeSnippet language="jsx">
+                            {`<Table onSort={sortedColumn: SortedColumn) => console.log(sortedColumn)}>
+    <TableHeader>
+        <TableRow>
+            <TableHeaderCell accessor="id" disableSort>ID</TableHeaderCell>
+            <TableHeaderCell accessor="name">Name</TableHeaderCell>
+        </TableRow>
+    </TableHeader>
+    <TableBody>...</TableBody>
+</Table>`}
+                        </CodeSnippet>
+                        <h4 className="mt-4">Setting default sort direction on column</h4>
+                        <p>The developer can specify sort direction on column. Currently only support single sort column.</p>
+                        An example can be found below:
+                        <CodeSnippet language="jsx">
+                            {`<Table onSort={sortedColumn: SortedColumn) => console.log(sortedColumn)}>
+    <TableHeader>
+        <TableRow>
+            <TableHeaderCell accessor="id" sortDirection={SortDirection.ASC}>ID</TableHeaderCell>
+            <TableHeaderCell accessor="name">Name</TableHeaderCell>
+        </TableRow>
+    </TableHeader>
+    <TableBody>...</TableBody>
+</Table>`}
+                        </CodeSnippet>
+                    </div>
+                </>
+            }
         />
     );
 };
@@ -279,3 +358,13 @@ const TablePage: React.FC = (): React.ReactElement<void> => {
 export default TablePage;
 
 type TableCell = any;
+
+/**
+ * <Table
+    onSort={sortedColumn: SortedColumn) => console.log(sortedColumn)}
+    onRowSelect={(event: React.ChangeEvent<HTMLInputElement>, rowUniqueKey: string) => console.log(event, rowUniqueKey)}
+    onRowExpand={(isExpanded: boolean, rowUniqueKey: string) => console.log(isExpanded, rowUniqueKey)}>
+    <TableHeader>...</TableHeader>
+    <TableBody>...</TableBody>
+</Table>
+ */
