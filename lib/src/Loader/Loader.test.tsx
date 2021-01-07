@@ -76,10 +76,9 @@ describe("Component: Loader", () => {
 
     it("Should render children under the loader and sr-only at the end with option to pass custom text to it", () => {
         const text: string = "testing...";
-        const srText: string = "sr text";
         act(() => {
             render(
-                <Loader srText={srText}>
+                <Loader>
                     <p>{text}</p>
                 </Loader>,
                 container
@@ -88,8 +87,14 @@ describe("Component: Loader", () => {
         expect(container.firstElementChild.firstElementChild.tagName.toUpperCase()).toEqual("SVG");
         expect(container.firstElementChild.children.item(1).tagName.toUpperCase()).toEqual("P");
         expect(container.firstElementChild.children.item(1).textContent).toEqual(text);
-        expect(container.firstElementChild.lastElementChild.tagName.toUpperCase()).toEqual("SPAN");
-        expect(container.firstElementChild.lastElementChild.classList.contains("sr-only")).toBeTruthy();
-        expect(container.firstElementChild.lastElementChild.textContent).toEqual(srText);
+        expect(container.firstElementChild.lastElementChild.tagName.toUpperCase()).toEqual("P");
+    });
+
+    it("Should not show anything if the toggle is set to false", () => {
+        act(() => {
+            render(<Loader toggle={false} />, container);
+        });
+
+        expect(container.children).toHaveLength(0);
     });
 });

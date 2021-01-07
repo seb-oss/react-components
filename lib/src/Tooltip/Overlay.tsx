@@ -12,8 +12,10 @@ export type OverlayProps = React.PropsWithChildren<{
     ref?: React.Ref<HTMLDivElement>;
 }>;
 
+// This solution is meant to fix Gatsby build which complains that document doesn't exist in server-side rendering
+const safeDocument: Document | null = typeof document !== "undefined" ? document : null;
+
 export const Overlay: React.FC<OverlayProps> = React.forwardRef((props: OverlayProps, ref: React.RefObject<HTMLDivElement>) => {
-    const d: Document | null = typeof document !== "undefined" ? document : null;
     const overlayContentRef: React.MutableRefObject<HTMLDivElement> = React.useRef(null);
     const [placementWithCoords, setPlacementWithCoords] = React.useState<ElementPlacementWithCoord>(null);
     const [overlayPositionChecker, setOverlayPositionChecker] = React.useState<OverlayPositionChecker>(null);
@@ -77,21 +79,19 @@ export const Overlay: React.FC<OverlayProps> = React.forwardRef((props: OverlayP
         });
     }
 
-    if (d) {
-        return createPortal(
-            <div
-                className={`overlay-container${props.show ? " show" : ""} ${placementWithCoords ? placementWithCoords.position : props.position || "top"}`}
-                ref={overlayContentRef}
-                tabIndex={-1}
-                onBlur={props.show ? props.onBlur : null}
-                aria-hidden={!props.show}
-                style={placementWithCoords ? placementWithCoords.coord : {}}
-            >
-                {props.children}
-            </div>,
-            d?.body
-        );
-    }
-
-    return null;
+    return !safeDocument
+        ? null
+        : createPortal(
+              <div
+                  className={`overlay-container${props.show ? " show" : ""} ${placementWithCoords ? placementWithCoords.position : props.position || "top"}`}
+                  ref={overlayContentRef}
+                  tabIndex={-1}
+                  onBlur={props.show ? props.onBlur : null}
+                  aria-hidden={!props.show}
+                  style={placementWithCoords ? placementWithCoords.coord : {}}
+              >
+                  {props.children}
+              </div>,
+              safeDocument.body
+          );
 });
