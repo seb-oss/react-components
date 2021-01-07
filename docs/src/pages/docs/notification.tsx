@@ -3,6 +3,7 @@ import Docs from "@common/Docs";
 import { Notification, NotificationProps } from "@sebgroup/react-components/Notification";
 import { DynamicFormOption, useDynamicForm } from "@hooks/useDynamicForm";
 import { Button } from "@sebgroup/react-components/Button";
+import { CodeSnippet } from "@common/CodeSnippet";
 
 const importString: string = require("!raw-loader!@sebgroup/react-components/Notification/Notification");
 const code: string = `<Notification toggle={toggle} onDismiss={() => setToggle(false)}>
@@ -72,6 +73,30 @@ const NotificationPage: React.FC = () => {
             }
             code={code}
             controls={renderForm()}
+            note={
+                <>
+                    <h3>Notification header and body</h3>
+                    <p>
+                        Defining the notification's header and body is done in a declarative style. Meaning that the developer is responsive for declaring these parts individually if needed. Remember
+                        to pass the following class names:
+                    </p>
+                    <ul>
+                        <li>
+                            <code>notificaiton-header</code> for the <code>div</code> representing the header
+                        </li>
+                        <li>
+                            <code>notificaiton-body</code> for the <code>div</code> representing the body
+                        </li>
+                    </ul>
+                    An example can be found below:
+                    <CodeSnippet language="jsx">
+                        {`<Notification>
+    <div className="notification-header">Header content here</div>
+    <div className="notification-body">Body content here</div>
+</Notification>`}
+                    </CodeSnippet>
+                </>
+            }
         />
     );
 };
