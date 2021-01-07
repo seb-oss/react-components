@@ -353,15 +353,3 @@ describe("Component: Modal", () => {
         });
     });
 });
-
-const TestBed: React.FC<ModalProps> = (props: ModalProps) => {
-    const [toggle, setToggle] = React.useState<boolean>(false);
-    return (
-        <div>
-            <button id="toggle" onClick={() => setToggle(true)}>
-                Open
-            </button>
-            <Modal {...props} />
-        </div>
-    );
-};
