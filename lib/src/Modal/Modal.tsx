@@ -10,7 +10,7 @@ type FocusableElements = HTMLInputElement | HTMLButtonElement | HTMLAnchorElemen
 export type ModalProps = JSX.IntrinsicElements["div"] & {
     /** Centers the modal in the middle of the screen. Default is `false` */
     centered?: boolean;
-    /** Size of modal `modal-lg` | `modal-sm` | `null` */
+    /** Size of modal `lg` | `md` | `sm` */
     size?: ModalSize;
     /** Toggle fullscreen modal, default is `false` */
     fullscreen?: boolean;
