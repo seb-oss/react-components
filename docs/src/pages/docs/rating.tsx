@@ -83,23 +83,7 @@ const RatingPage: React.FC = (): React.ReactElement<void> => {
     const importString: string = React.useMemo(() => require("!raw-loader!@sebgroup/react-components/Rating/Rating"), []);
     const importedFiles: Array<string> = React.useMemo(() => [require("!raw-loader!@sebgroup/react-components/Rating/Rating")], []);
     const code: string = `
-    <Rating
-        id="some-id"
-        className="custom-class"
-        readOnly={boolean}
-        disabled={boolean}
-        dimension={React.ReactText}
-        max={React.ReactText}
-        min={React.ReactText}
-        step={React.ReactText}
-        svgname={string}
-        colors={[string, string]}
-        customSVG={JSX.Element}
-        value={number}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-            setValue(Number(e.target.value));
-        }}
-    />`;
+    <Rating value={number} onChange={(e) => setValue(e.target.value)} />`;
 
     const heartSVG = (
         <svg xmlns="http://www.w3.org/2000/svg">
