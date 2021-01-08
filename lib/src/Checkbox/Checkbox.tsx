@@ -9,13 +9,11 @@ export type CheckboxProps = JSX.IntrinsicElements["input"] & {
     inline?: boolean;
     /** Div wrapper props */
     wrapperProps?: JSX.IntrinsicElements["div"];
-    /** Indeterminate state */
-    indeterminate?: boolean;
     /** Indicator for error, warning or success */
     indicator?: Indicator;
 };
 
-export const Checkbox: React.FC<CheckboxProps> = ({ inline, wrapperProps, indicator, indeterminate, children, ...props }: CheckboxProps) => {
+export const Checkbox: React.FC<CheckboxProps> = React.forwardRef(({ inline, wrapperProps, indicator, children, ...props }: CheckboxProps, ref: React.ForwardedRef<HTMLInputElement>) => {
     const [id, setId] = React.useState<string>(props.id);
 
     React.useEffect(() => setId(props.id || (children ? props.id || randomId("checkbox-") : null)), [props.id, children]);
@@ -23,24 +21,12 @@ export const Checkbox: React.FC<CheckboxProps> = ({ inline, wrapperProps, indica
     return (
         <div {...wrapperProps} className={classnames("rc", "checkbox", { inline }, wrapperProps?.className)}>
             <div className={classnames("custom-control", "custom-checkbox", { "custom-control-inline": inline }, { [`is-${indicator?.type}`]: indicator })}>
-                <input
-                    {...props}
-                    type="checkbox"
-                    id={id}
-                    className={classnames("custom-control-input", props.className)}
-                    ref={(input: HTMLInputElement) => {
-                        if (input) {
-                            input.indeterminate = indeterminate;
-                        }
-                    }}
-                />
-                {children && (
-                    <label className="custom-control-label" htmlFor={id}>
-                        {children}
-                    </label>
-                )}
+                <input {...props} type="checkbox" id={id} className={classnames("custom-control-input", props.className)} ref={ref} />
+                <label className="custom-control-label" htmlFor={id}>
+                    {children}
+                </label>
             </div>
             {indicator && <FeedbackIndicator {...indicator} />}
         </div>
     );
-};
+});

@@ -102,7 +102,11 @@ const TableRow: React.FC<TableRowProps> = ({
                     <TableHeaderCell disableSort>
                         <Checkbox
                             checked={checked}
-                            indeterminate={indeterminate && !checked}
+                            ref={(input: HTMLInputElement) => {
+                                if (input) {
+                                    input.indeterminate = indeterminate && !checked;
+                                }
+                            }}
                             name={`tb_checkbox_all`}
                             id={`tb_checkbox_all`}
                             onChange={(event: React.ChangeEvent<HTMLInputElement>) => context.onRowSelect(event, "all")}
@@ -112,7 +116,11 @@ const TableRow: React.FC<TableRowProps> = ({
                     <TableCell className="select-control">
                         <Checkbox
                             checked={checked}
-                            indeterminate={indeterminate && !checked}
+                            ref={(input: HTMLInputElement) => {
+                                if (input) {
+                                    input.indeterminate = indeterminate && !checked;
+                                }
+                            }}
                             name={`tb_checkbox_${uniqueId}`}
                             id={`tb_checkbox_${uniqueId}`}
                             onChange={(event: React.ChangeEvent<HTMLInputElement>) => context.onRowSelect(event, uniqueId)}
