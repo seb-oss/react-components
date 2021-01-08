@@ -2,8 +2,8 @@ import React from "react";
 import classnames from "classnames";
 import { Checkbox } from "../../Checkbox";
 import { TableContext } from "../TableContextProvider";
-import TableHeaderCell from "./TableHeaderCell";
-import TableCell from "./TableCell";
+import TableHeaderCell, { TableHeaderCellProps } from "./TableHeaderCell";
+import TableCell, { TableCellProps } from "./TableCell";
 import { randomId } from "@sebgroup/frontend-tools";
 
 export type TableRowProps<T = any> = JSX.IntrinsicElements["tr"] & {
@@ -44,6 +44,8 @@ const TableRow: React.FC<TableRowProps> = ({
     const [uniqueId, setUniqueId] = React.useState<string>(uniqueKey);
     const [isShown, setIsShown] = React.useState<boolean>(false);
     const [expanded, setExpanded] = React.useState<boolean>(isExpanded);
+    const [isParentRow, setIsParentRow] = React.useState<boolean>(isExpanded);
+    const [columnProps, setColumnProps] = React.useState<TableHeaderCellProps | TableCellProps>(null);
     const [expandedRows, setExpandedRows] = React.useState<Array<string>>(context.tableState?.expandedRows || []);
 
     /** initiate default expanded row */
@@ -61,8 +63,8 @@ const TableRow: React.FC<TableRowProps> = ({
     }, [isExpanded, uniqueId]);
 
     React.useEffect(() => {
-        setUniqueId(uniqueKey || randomId("table-row"));
-    }, [uniqueKey]);
+        setUniqueId(isHeaderRow ? "all" : uniqueKey || randomId("table-row"));
+    }, [uniqueKey, isHeaderRow]);
 
     React.useEffect(() => {
         setExpandedRows(context.tableState.expandedRows || []);
@@ -76,44 +78,35 @@ const TableRow: React.FC<TableRowProps> = ({
     }, [isExpanded, initiateExpandedRows]);
 
     React.useEffect(() => {
+        setColumnProps(isHeaderRow ? { disableSort: true } : null);
+    }, [isHeaderRow]);
+
+    React.useEffect(() => {
+        setIsParentRow(!(isHeaderRow || isSubRow));
+    }, [isHeaderRow, isSubRow]);
+
+    React.useEffect(() => {
         if (context.onRowExpand) {
             setIsShown(isSubRow && expandedRows.indexOf(parentKey) > -1);
         }
     }, [expandedRows]);
 
+    const Cell: React.FC<TableHeaderCellProps | TableCellProps> = isHeaderRow ? TableHeaderCell : TableCell;
+
     return (
-        <tr className={classnames(className, { "sub-row": isSubRow, expanded: isExpanded, collapsible: !isSubRow && !!context.onRowExpand, show: isShown })} {...props}>
-            {!!context.onRowExpand &&
-                (isHeaderRow ? (
-                    <TableHeaderCell disableSort />
-                ) : isSubRow ? (
-                    <TableCell />
-                ) : (
-                    <TableCell className="collapse-control">
+        <tr className={classnames(className, { "sub-row": isSubRow, expanded: isExpanded, collapsible: isParentRow && !!context.onRowExpand, show: isShown })} {...props}>
+            {!!context.onRowExpand && (
+                <Cell {...columnProps} className={classnames({ "collapse-control": isParentRow })}>
+                    {isParentRow && (
                         <button className="btn btn-sm" onClick={() => context.onRowExpand(!isExpanded, uniqueId)}>
                             <div className="icon-holder">{expanded ? angleDown : angleRightIcon}</div>
                         </button>
-                    </TableCell>
-                ))}
-            {!!context.onRowSelect &&
-                (hideSelect || isSubRow ? (
-                    <TableCell />
-                ) : isHeaderRow ? (
-                    <TableHeaderCell disableSort>
-                        <Checkbox
-                            checked={checked}
-                            ref={(input: HTMLInputElement) => {
-                                if (input) {
-                                    input.indeterminate = indeterminate && !checked;
-                                }
-                            }}
-                            name={`tb_checkbox_all`}
-                            id={`tb_checkbox_all`}
-                            onChange={(event: React.ChangeEvent<HTMLInputElement>) => context.onRowSelect(event, "all")}
-                        />
-                    </TableHeaderCell>
-                ) : (
-                    <TableCell className="select-control">
+                    )}
+                </Cell>
+            )}
+            {!!context.onRowSelect && (
+                <Cell {...columnProps} className={classnames({ "select-control": !(hideSelect || isSubRow) })}>
+                    {!(hideSelect || isSubRow) && (
                         <Checkbox
                             checked={checked}
                             ref={(input: HTMLInputElement) => {
@@ -125,8 +118,9 @@ const TableRow: React.FC<TableRowProps> = ({
                             id={`tb_checkbox_${uniqueId}`}
                             onChange={(event: React.ChangeEvent<HTMLInputElement>) => context.onRowSelect(event, uniqueId)}
                         />
-                    </TableCell>
-                ))}
+                    )}
+                </Cell>
+            )}
             {props.children}
         </tr>
     );
