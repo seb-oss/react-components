@@ -11,20 +11,23 @@ export type ButtonGroupProps = JSX.IntrinsicElements["div"] & {
 };
 
 /** Button group wrapper. Use this to group multiple buttons */
-export const ButtonGroup: React.FC<ButtonGroupProps> = React.memo(({ vertical, size, ...props }: ButtonGroupProps) => (
-    <div
-        {...props}
-        className={classnames(
-            "rc",
-            "btn-group",
-            {
-                [`btn-group-${size}`]: size,
-                "btn-group-vertical": vertical,
-            },
-            props.className
-        )}
-        role={props.role || "group"}
-    >
-        {props.children}
-    </div>
-));
+export const ButtonGroup: React.FC<ButtonGroupProps> = React.memo(
+    React.forwardRef(({ vertical, size, ...props }: ButtonGroupProps, ref: React.ForwardedRef<HTMLDivElement>) => (
+        <div
+            {...props}
+            ref={ref}
+            className={classnames(
+                "rc",
+                "btn-group",
+                {
+                    [`btn-group-${size}`]: size,
+                    "btn-group-vertical": vertical,
+                },
+                props.className
+            )}
+            role={props.role || "group"}
+        >
+            {props.children}
+        </div>
+    ))
+);
