@@ -2,6 +2,7 @@ import React from "react";
 import Docs from "@common/Docs";
 import { Dropdown, DropdownItem } from "@sebgroup/react-components/Dropdown";
 import { useDynamicForm } from "@hooks/useDynamicForm";
+import { CodeSnippet } from "@common/CodeSnippet";
 
 const importString: string = require("!raw-loader!@sebgroup/react-components/Dropdown/Dropdown");
 const code: string = `<Dropdown value={value} onChange={e => setValue(e.target.value)}>
@@ -110,6 +111,60 @@ const DropdownPage: React.FC = (): React.ReactElement<void> => {
             }
             code={code}
             controls={renderControls()}
+            note={
+                <>
+                    <h4>Select multiple</h4>
+                    <p>
+                        The native select element exposes APIs similar to an HTML input element. Passing a value and retrieving a value from the element using the change event is all the same.
+                        However, if you are using the dropdown with <code>multiple</code> enabled, the native APIs will change. To get a list of the selected options in a multi-select element, you
+                        need to do the following:
+                    </p>
+                    <CodeSnippet language="typescript">
+                        {`function changeHandler(event: React.ChangeEvent<HTMLSelectElement>): void {
+    const selectedOptions: string[] = Array.from(event.target.options)
+        .filter((option) => option.selected)
+        .map((option) => option.value);
+    
+    setValue(selectedOptions);
+}`}
+                    </CodeSnippet>
+
+                    <p>This might not be as convenient to work with as the rest of the elements, therefore, we have provided 2 ways of simplifying this interaction</p>
+                    <ol>
+                        <li>
+                            Using <code>onMultipleChange</code>:
+                        </li>
+                        <p>
+                            Dropdown component allows you to pass your setter function to <code>onMultipleChange</code> directly which returns an array of selected options like this:
+                        </p>
+                        <CodeSnippet language="jsx">{`<Dropdown value={value} onMultipleChange={setValue} multiple>
+    <DropdownItem value="1">First</DropdownItem>
+    <DropdownItem value="2">Second</DropdownItem>
+    <DropdownItem value="3">Third</DropdownItem>
+    <DropdownItem value="4">Fourth</DropdownItem>
+</Dropdown>`}</CodeSnippet>
+
+                        <br />
+
+                        <li>
+                            Using <code>getValueOfMultipleSelect</code>
+                        </li>
+                        <p>
+                            We also exported a method <code>getValueOfMultipleSelect</code> for you to use that will just do the extraction of the values for you. This is especially useful if you have
+                            a generic <code>changeHandler</code> method. For example:
+                        </p>
+                        <CodeSnippet language="typescript">{`function genericChangeHandler(event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>): void {
+    if (event.target.multiple) { // Dropdowns
+        setValue(getValueOfMultipleSelect(event.target));
+    } else if (event.target.type === "checkbox") { // Checkboxes
+        setValue(event.target.checked);
+    } else { // Everything else
+        setValue(event.target.value);
+    }
+}`}</CodeSnippet>
+                    </ol>
+                </>
+            }
         />
     );
 };

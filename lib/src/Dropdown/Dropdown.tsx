@@ -4,8 +4,8 @@ import classnames from "classnames";
 import { useCombinedRefs } from "../hooks";
 import { CloseButton } from "../CloseButton";
 import { CustomDropdownItem } from "./CustomDropdownItem";
-import "./dropdown.scss";
 import { randomId } from "@sebgroup/frontend-tools";
+import "./dropdown.scss";
 
 export interface DropdownText {
     selectAll?: string;
@@ -85,28 +85,34 @@ export const Dropdown: React.FC<DropdownProps> = React.forwardRef(({ wrapperProp
         props.multiple && onMultipleChange && onMultipleChange(getValueOfMultipleSelect(selectRef.current));
     };
 
-    const toggleMenu = (event: React.MouseEvent<HTMLButtonElement>) => {
-        if (show) {
-            setShow(false);
-        } else {
-            const rect = event.currentTarget.getBoundingClientRect();
-            const top: number = rect.top + rect.height;
-            const left: number = rect.left;
-            const bottom: number = window.innerHeight - rect.y + 4;
-            const minWidth: number = rect.width;
-            if (window.innerHeight - top < 200) {
-                setMenuStyle({ minWidth, bottom, left, maxHeight: rect.y - 10 });
+    const toggleMenu = React.useCallback(
+        (event: React.MouseEvent<HTMLButtonElement>) => {
+            if (show) {
+                setShow(false);
             } else {
-                setMenuStyle({ minWidth, top, left, maxHeight: window.innerHeight - top - 12 });
+                const rect = event.currentTarget.getBoundingClientRect();
+                const top: number = rect.top + rect.height;
+                const left: number = rect.left;
+                const bottom: number = window.innerHeight - rect.y + 4;
+                const minWidth: number = rect.width;
+                if (window.innerHeight - top < 200) {
+                    setMenuStyle({ minWidth, bottom, left, maxHeight: rect.y - 10 });
+                } else {
+                    setMenuStyle({ minWidth, top, left, maxHeight: window.innerHeight - top - 12 });
+                }
+                setShow(true);
             }
-            setShow(true);
-        }
-    };
+        },
+        [show]
+    );
 
-    const onChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        props.multiple && onMultipleChange && onMultipleChange(getValueOfMultipleSelect(event.target));
-        props.onChange && props.onChange(event);
-    };
+    const onChange = React.useCallback(
+        (event: React.ChangeEvent<HTMLSelectElement>) => {
+            props.multiple && onMultipleChange && onMultipleChange(getValueOfMultipleSelect(event.target));
+            props.onChange && props.onChange(event);
+        },
+        [props.multiple, props.onChange, onMultipleChange]
+    );
 
     React.useEffect(() => {
         props.multiple && setAllSelected(Array.from(selectRef.current.options).every((option) => option.selected));
@@ -143,6 +149,7 @@ export const Dropdown: React.FC<DropdownProps> = React.forwardRef(({ wrapperProp
         setLabel((Array.isArray(props.value) ? props.value.join(", ") : props.value) || props.placeholder);
     }, [props.value]);
 
+    /** TODO: Can be extracted to a component */
     const getOptions = () => {
         const list = React.Children.map(props.children, (Child) => {
             if (!React.isValidElement(Child)) {
@@ -161,11 +168,14 @@ export const Dropdown: React.FC<DropdownProps> = React.forwardRef(({ wrapperProp
                     }
                     return false;
                 };
+                /** Radio buttons should be grouped with a name */
+                const name: string = props.multiple ? null : toggleId;
                 switch (type) {
                     case "DropdownItem":
                         return filteredBySearch(Child) ? null : (
                             <CustomDropdownItem
                                 multiple={props.multiple}
+                                name={name}
                                 value={Child.props.value}
                                 checked={Array.isArray(props.value) ? props.value.includes(Child.props.value) : props.value === Child.props.value}
                                 onChange={handleChange}
@@ -181,6 +191,7 @@ export const Dropdown: React.FC<DropdownProps> = React.forwardRef(({ wrapperProp
                                 return filteredBySearch(groupChild) ? null : (
                                     <CustomDropdownItem
                                         multiple={props.multiple}
+                                        name={name}
                                         value={groupChild.props.value}
                                         checked={Array.isArray(props.value) ? props.value.includes(groupChild.props.value) : props.value === groupChild.props.value}
                                         onChange={handleChange}
