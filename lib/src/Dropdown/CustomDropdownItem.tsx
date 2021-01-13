@@ -12,7 +12,7 @@ export const CustomDropdownItem: React.FC<CustomDropdownItemProps> = ({ multiple
     return (
         <div className={classnames("custom-control", { "custom-checkbox": multiple })}>
             <input {...props} type={multiple ? "checkbox" : "radio"} id={id} className={classnames({ "custom-control-input": multiple }) || null} hidden={!multiple} />
-            <label className={classnames({ "custom-control-label": multiple, "custom-radio": !multiple }) || null} htmlFor={id}>
+            <label className={classnames({ "custom-control-label": multiple, "custom-radio": !multiple })} htmlFor={id}>
                 {children}
             </label>
         </div>

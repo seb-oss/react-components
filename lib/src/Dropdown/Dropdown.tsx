@@ -21,7 +21,7 @@ const defaultText: Required<DropdownText> = {
     search: "Search...",
 };
 
-type DropdownProps = Omit<JSX.IntrinsicElements["select"], "value"> & {
+export type DropdownProps = Omit<JSX.IntrinsicElements["select"], "value"> & {
     /** Props for the select's wrapper (div) */
     wrapperProps?: JSX.IntrinsicElements["div"];
     /** The value of the dropdown */
@@ -42,8 +42,6 @@ export function getValueOfMultipleSelect(select: HTMLSelectElement): string[] {
         .map((option) => option.value);
 }
 
-const isMobile: boolean = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(window.navigator.userAgent);
-
 export const Dropdown: React.FC<DropdownProps> = React.forwardRef(({ wrapperProps = {}, text = {}, onMultipleChange, searchable, clearable, ...props }: DropdownProps, ref) => {
     const [toggleId] = React.useState<string>(randomId("ddt-"));
     const [selectAllId] = React.useState<string>(randomId("sa-"));
@@ -58,18 +56,18 @@ export const Dropdown: React.FC<DropdownProps> = React.forwardRef(({ wrapperProp
     const menuRef = React.useRef<HTMLDivElement>();
     const dropdownRef = React.useRef<HTMLDivElement>();
 
+    const isMobile: boolean = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(window.navigator.userAgent);
+
     const handleChange = React.useCallback(
         (e: React.ChangeEvent<HTMLInputElement>) => {
-            if (!isMobile) {
-                if (props.multiple) {
-                    const current = Array.from(selectRef.current.options).find((option) => option.value == e.target.value);
-                    current.selected = !current.selected;
-                } else {
-                    selectRef.current.value = e.target.value;
-                    setShow(false);
-                }
-                selectRef.current.dispatchEvent(new Event("change", { bubbles: true }));
+            if (props.multiple) {
+                const current = Array.from(selectRef.current.options).find((option) => option.value == e.target.value);
+                current.selected = !current.selected;
+            } else {
+                selectRef.current.value = e.target.value;
+                setShow(false);
             }
+            selectRef.current.dispatchEvent(new Event("change", { bubbles: true }));
             props.multiple && onMultipleChange && onMultipleChange(getValueOfMultipleSelect(selectRef.current));
         },
         [isMobile, props.multiple, onMultipleChange]
@@ -114,41 +112,6 @@ export const Dropdown: React.FC<DropdownProps> = React.forwardRef(({ wrapperProp
         [props.multiple, props.onChange, onMultipleChange]
     );
 
-    React.useEffect(() => {
-        props.multiple && setAllSelected(Array.from(selectRef.current.options).every((option) => option.selected));
-    }, [props.value]);
-
-    React.useEffect(() => {
-        function detectBlur(event: MouseEvent) {
-            if (!dropdownRef.current.contains(event.target as any) && !menuRef.current.contains(event.target as any)) {
-                setShow(false);
-            }
-        }
-        function handleScroll(event: WheelEvent): void {
-            if (!menuRef.current.contains(event.target as any)) {
-                setShow(false);
-            }
-        }
-
-        if (show) {
-            searchRef.current?.focus();
-            document.addEventListener("click", detectBlur);
-            window.addEventListener("wheel", handleScroll);
-        } else {
-            document.removeEventListener("click", detectBlur);
-            window.removeEventListener("wheel", handleScroll);
-        }
-
-        return () => {
-            document.removeEventListener("click", detectBlur);
-            window.removeEventListener("wheel", handleScroll);
-        };
-    }, [show]);
-
-    React.useEffect(() => {
-        setLabel((Array.isArray(props.value) ? props.value.join(", ") : props.value) || props.placeholder);
-    }, [props.value]);
-
     /** TODO: Can be extracted to a component */
     const getOptions = () => {
         const list = React.Children.map(props.children, (Child) => {
@@ -171,13 +134,13 @@ export const Dropdown: React.FC<DropdownProps> = React.forwardRef(({ wrapperProp
                 /** Radio buttons should be grouped with a name */
                 const name: string = props.multiple ? null : toggleId;
                 switch (type) {
-                    case "DropdownItem":
+                    case "option":
                         return filteredBySearch(Child) ? null : (
                             <CustomDropdownItem
                                 multiple={props.multiple}
                                 name={name}
                                 value={Child.props.value}
-                                checked={Array.isArray(props.value) ? props.value.includes(Child.props.value) : props.value === Child.props.value}
+                                checked={Array.isArray(props.value) ? props.value.includes(Child.props.value) : props.value == Child.props.value}
                                 onChange={handleChange}
                             >
                                 {Child.props.children}
@@ -193,7 +156,7 @@ export const Dropdown: React.FC<DropdownProps> = React.forwardRef(({ wrapperProp
                                         multiple={props.multiple}
                                         name={name}
                                         value={groupChild.props.value}
-                                        checked={Array.isArray(props.value) ? props.value.includes(groupChild.props.value) : props.value === groupChild.props.value}
+                                        checked={Array.isArray(props.value) ? props.value.includes(groupChild.props.value) : props.value == groupChild.props.value}
                                         onChange={handleChange}
                                     >
                                         {groupChild.props.children}
@@ -206,8 +169,45 @@ export const Dropdown: React.FC<DropdownProps> = React.forwardRef(({ wrapperProp
                 }
             }
         });
-        return list.length ? list : searchKeyword ? <p>{text.noResult || defaultText.noResult}</p> : <p>{text.emptyList || defaultText.emptyList}</p>;
+        return list?.length ? list : searchKeyword ? <p>{text.noResult || defaultText.noResult}</p> : <p>{text.emptyList || defaultText.emptyList}</p>;
     };
+
+    if (!isMobile) {
+        React.useEffect(() => {
+            props.multiple && setAllSelected(Array.from(selectRef.current.options).every((option) => option.selected));
+        }, [props.value]);
+
+        React.useEffect(() => {
+            function detectBlur(event: MouseEvent) {
+                if (!dropdownRef.current.contains(event.target as any) && !menuRef.current.contains(event.target as any)) {
+                    setShow(false);
+                }
+            }
+            function handleScroll(event: WheelEvent): void {
+                if (!menuRef.current.contains(event.target as any)) {
+                    setShow(false);
+                }
+            }
+
+            if (show) {
+                searchRef.current?.focus();
+                document.addEventListener("click", detectBlur);
+                window.addEventListener("wheel", handleScroll);
+            } else {
+                document.removeEventListener("click", detectBlur);
+                window.removeEventListener("wheel", handleScroll);
+            }
+
+            return () => {
+                document.removeEventListener("click", detectBlur);
+                window.removeEventListener("wheel", handleScroll);
+            };
+        }, [show]);
+
+        React.useEffect(() => {
+            setLabel((Array.isArray(props.value) ? props.value.join(", ") : props.value) || props.placeholder);
+        }, [props.value]);
+    }
 
     return (
         <div {...wrapperProps} className={classnames("rc custom-dropdown", wrapperProps.className)}>
@@ -251,7 +251,7 @@ export const Dropdown: React.FC<DropdownProps> = React.forwardRef(({ wrapperProp
                                         <div className="dropdown-divider" />
                                     </>
                                 ) : (
-                                    "not items"
+                                    text.emptyList || defaultText.emptyList
                                 )
                             ) : null}
 
@@ -268,7 +268,7 @@ export const Dropdown: React.FC<DropdownProps> = React.forwardRef(({ wrapperProp
                         {props.placeholder}
                     </option>
                 )}
-                {React.Children.toArray(props.children).filter((Child: any) => (Child.type as any)?.name === "DropdownItem" || (Child.type as any) === "optgroup")}
+                {React.Children.toArray(props.children).filter((Child: any) => ["option", "optgroup"].includes(Child.type))}
             </select>
             {clearable && isMobile && <CloseButton onClick={() => selectAll(false)} disabled={props.disabled} />}
         </div>

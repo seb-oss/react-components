@@ -4,7 +4,7 @@ import classnames from "classnames";
 import { Checkbox } from "@sebgroup/react-components/Checkbox";
 import { Textbox } from "@sebgroup/react-components/Textbox";
 import { Textarea } from "@sebgroup/react-components/Textarea";
-import { Dropdown, DropdownItem, getValueOfMultipleSelect } from "@sebgroup/react-components/Dropdown";
+import { Dropdown, getValueOfMultipleSelect } from "@sebgroup/react-components/Dropdown";
 import { Datepicker } from "@sebgroup/react-components/Datepicker";
 import { Stepper } from "@sebgroup/react-components/Stepper";
 import { RadioButton, RadioGroup } from "@sebgroup/react-components/RadioButton";
@@ -295,9 +295,9 @@ const DynamicFormItemComponent: React.FC<{
                     {props.item?.label && <label>{props.item?.label}</label>}
                     <Dropdown name={props.item?.key} placeholder={props.item?.placeholder} onChange={props.onChange as any} multiple={props.item?.multi} value={props.state as string | string[]}>
                         {props.item?.options?.map((option, i) => (
-                            <DropdownItem key={i} value={option.value}>
+                            <option key={i} value={option.value}>
                                 {option.label}
-                            </DropdownItem>
+                            </option>
                         ))}
                     </Dropdown>
                 </>

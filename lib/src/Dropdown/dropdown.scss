@@ -69,15 +69,6 @@
             color: $blue-dark;
         }
     }
-
-    .custom-select {
-        .dropdown-item {
-            &:hover {
-                background-color: transparent;
-                color: $gray-900;
-            }
-        }
-    }
 }
 
 .rc.dropdown-menu {

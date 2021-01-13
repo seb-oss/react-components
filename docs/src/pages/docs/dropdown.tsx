@@ -1,14 +1,14 @@
 import React from "react";
 import Docs from "@common/Docs";
-import { Dropdown, DropdownItem } from "@sebgroup/react-components/Dropdown";
+import { Dropdown } from "@sebgroup/react-components/Dropdown";
 import { useDynamicForm } from "@hooks/useDynamicForm";
 import { CodeSnippet } from "@common/CodeSnippet";
 
 const importString: string = require("!raw-loader!@sebgroup/react-components/Dropdown/Dropdown");
 const code: string = `<Dropdown value={value} onChange={e => setValue(e.target.value)}>
-    <DropdownItem value="first">First</DropdownItem>
-    <DropdownItem value="Second">Second</DropdownItem>
-    <DropdownItem value="third">Third</DropdownItem>
+    <option value="first">First</option>
+    <option value="Second">Second</option>
+    <option value="third">Third</option>
 </Dropdown>`;
 
 const countries: string[] = [
@@ -17,7 +17,7 @@ const countries: string[] = [
     "Japan",
     "Singapore",
     "Iraq",
-    "Morocco",
+    "Kuwait",
     "Iran",
     "Jordan",
     "Slovenia",
@@ -61,9 +61,9 @@ const DropdownPage: React.FC = (): React.ReactElement<void> => {
             let group: React.ReactElement[] = [];
             countries.forEach((country: string, i: number) => {
                 group.push(
-                    <DropdownItem key={`item-${i}`} value={country}>
+                    <option key={`item-${i}`} value={country}>
                         {country}
-                    </DropdownItem>
+                    </option>
                 );
                 if (Math.round((i + 1) / 4) === (i + 1) / 4) {
                     newList.push(
@@ -78,9 +78,9 @@ const DropdownPage: React.FC = (): React.ReactElement<void> => {
         } else {
             countries.forEach((country: string, i: number) => {
                 newList.push(
-                    <DropdownItem key={`item-${i}`} value={country}>
+                    <option key={`item-${i}`} value={country}>
                         {country}
-                    </DropdownItem>
+                    </option>
                 );
                 if (controls.useDividers && Math.round((i + 1) / 4) === (i + 1) / 4) {
                     newList.push(<div key={`divider-${i}`} className="dropdown-divider" />);
@@ -138,10 +138,10 @@ const DropdownPage: React.FC = (): React.ReactElement<void> => {
                             Dropdown component allows you to pass your setter function to <code>onMultipleChange</code> directly which returns an array of selected options like this:
                         </p>
                         <CodeSnippet language="jsx">{`<Dropdown value={value} onMultipleChange={setValue} multiple>
-    <DropdownItem value="1">First</DropdownItem>
-    <DropdownItem value="2">Second</DropdownItem>
-    <DropdownItem value="3">Third</DropdownItem>
-    <DropdownItem value="4">Fourth</DropdownItem>
+    <option value="1">First</option>
+    <option value="2">Second</option>
+    <option value="3">Third</option>
+    <option value="4">Fourth</option>
 </Dropdown>`}</CodeSnippet>
 
                         <br />
