@@ -1,40 +1,39 @@
-@import "~@sebgroup/bootstrap/scss/variables";
+@import "~@sebgroup/bootstrap/scss/core";
 
-$transition-time: 100ms;
+$inverted: black;
+
+$colors: (
+    purple: $purple-dark,
+    primary: $blue-darker,
+    danger: $red-dark,
+    success: $green-darker,
+    warning: $yellow-dark,
+    inverted: $inverted,
+);
+
+@mixin apply-theme {
+    @each $name, $color in $colors {
+        &.theme-#{"" + $name} {
+            color: $color;
+
+            &::-webkit-progress-value {
+                background: $color;
+            }
+
+            &::-moz-progress-bar {
+                background: $color;
+            }
+        }
+    }
+}
 
 .rc.progress-bar {
     width: 100%;
-    display: block;
-    position: relative;
-    text-align: center;
-    background-color: $gray-300;
-    overflow: hidden;
-    min-height: 6px;
-    border-radius: 3px;
-    .custom-progress-text {
-        position: absolute;
-        font-size: 12px;
-        font-weight: 500;
-        line-height: 19px;
-        text-align: center;
-        top: 0px;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        color: black;
-        will-change: color;
-        transition: color $transition-time * 2;
-        &.white {
-            color: white;
-        }
-    }
-    .custom-progress-bar {
-        overflow: hidden;
-        position: relative;
-        background-color: $green;
-        min-height: 6px;
-        &.show-progress {
-            height: 18px;
-        }
-    }
+
+    @include apply-theme();
+}
+
+.rc.progress-bar,
+.rc.progress-bar::-webkit-progress-bar {
+    background-color: $gray-200;
 }
