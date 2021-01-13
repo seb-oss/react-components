@@ -13,7 +13,7 @@ export type CheckboxProps = JSX.IntrinsicElements["input"] & {
     indicator?: Indicator;
 };
 
-export const Checkbox: React.FC<CheckboxProps> = ({ inline, wrapperProps, indicator, children, ...props }: CheckboxProps) => {
+export const Checkbox: React.FC<CheckboxProps> = React.forwardRef(({ inline, wrapperProps, indicator, children, ...props }: CheckboxProps, ref: React.ForwardedRef<HTMLInputElement>) => {
     const [id, setId] = React.useState<string>(props.id);
 
     React.useEffect(() => setId(props.id || (children ? props.id || randomId("checkbox-") : null)), [props.id, children]);
@@ -22,7 +22,7 @@ export const Checkbox: React.FC<CheckboxProps> = ({ inline, wrapperProps, indica
         <FeedbackIndicator {...indicator}>
             <div {...wrapperProps} className={classnames("rc", "checkbox", { inline }, wrapperProps?.className)}>
                 <div className={classnames("custom-control", "custom-checkbox", { "custom-control-inline": inline })}>
-                    <input {...props} type="checkbox" id={id} className={classnames("custom-control-input", props.className)} />
+                    <input {...props} type="checkbox" id={id} className={classnames("custom-control-input", props.className)} ref={ref} />
                     {children && (
                         <label className="custom-control-label" htmlFor={id}>
                             {children}
@@ -32,4 +32,4 @@ export const Checkbox: React.FC<CheckboxProps> = ({ inline, wrapperProps, indica
             </div>
         </FeedbackIndicator>
     );
-};
+});

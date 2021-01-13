@@ -18,6 +18,7 @@ const RatingPage: React.FC = (): React.ReactElement<void> => {
                 {
                     key: "min",
                     label: "Min",
+                    description: "Should no be smaller than step",
                     controlType: "Text",
                     value: 1,
                 },
@@ -28,22 +29,10 @@ const RatingPage: React.FC = (): React.ReactElement<void> => {
                     value: 1,
                 },
                 {
-                    key: "initialValue",
-                    label: "Initial Value",
-                    controlType: "Text",
-                    value: 1,
-                },
-                {
-                    key: "height",
-                    label: "Icon height",
+                    key: "dimension",
+                    label: "Icon Dimension",
                     controlType: "Text",
                     value: 30,
-                },
-                {
-                    key: "width",
-                    label: "Icon width",
-                    controlType: "Text",
-                    value: 40,
                 },
                 {
                     key: "readOnly",
@@ -54,6 +43,12 @@ const RatingPage: React.FC = (): React.ReactElement<void> => {
                 {
                     key: "disabled",
                     label: "Disabled",
+                    controlType: "Checkbox",
+                    value: false,
+                },
+                {
+                    key: "customSvg",
+                    label: "Custom SVG",
                     controlType: "Checkbox",
                     value: false,
                 },
@@ -88,15 +83,7 @@ const RatingPage: React.FC = (): React.ReactElement<void> => {
     const importString: string = React.useMemo(() => require("!raw-loader!@sebgroup/react-components/Rating/Rating"), []);
     const importedFiles: Array<string> = React.useMemo(() => [require("!raw-loader!@sebgroup/react-components/Rating/Rating")], []);
     const code: string = `
-        <Rating 
-            initialValue={number}
-            useHollow={boolean}
-            readOnly={boolean}
-            disabled={boolean}
-            iconHeight={number}
-            iconWidth={number}
-            colors={Array<string>}
-        />`;
+    <Rating value={number} onChange={(e) => setValue(e.target.value)} />`;
 
     const heartSVG = (
         <svg xmlns="http://www.w3.org/2000/svg">
@@ -115,15 +102,13 @@ const RatingPage: React.FC = (): React.ReactElement<void> => {
                         className="custom-class"
                         readOnly={controls.readOnly}
                         disabled={controls.disabled}
-                        height={controls.height}
-                        width={controls.width}
+                        dimension={controls.dimension}
                         max={controls.max}
                         min={controls.min}
                         step={controls.step}
-                        svgname="hello"
+                        svgname="custom name"
                         colors={colors}
-                        customSVG={heartSVG}
-                        initialValue={controls.initialValue}
+                        customSVG={controls.customSvg && heartSVG}
                         value={value}
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                             setValue(Number(e.target.value));
