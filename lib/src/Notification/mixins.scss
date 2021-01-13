@@ -1,0 +1,90 @@
+@import "~@sebgroup/bootstrap/scss/core";
+
+$animation-time: 600ms;
+$animation-func: ease-in-out;
+$inverted: black;
+
+$colors: (
+    purple: $purple-dark,
+    primary: $blue-darker,
+    danger: $red-dark,
+    success: $green-darker,
+    warning: $yellow-dark,
+    inverted: $inverted,
+);
+
+@mixin close-color($icon, $halo) {
+    > .close {
+        @if $icon == "light" {
+            &::before {
+                filter: invert(1);
+            }
+        }
+        &::after {
+            background-color: if($halo == "light", rgba(white, 0.4), rgba(black, 0.4));
+        }
+    }
+}
+
+@mixin apply-themes() {
+    @each $name, $color in $colors {
+        &.theme-#{"" + $name} {
+            > .content-wrapper {
+                background-color: $color;
+                color: if(str-index(#{$name}, "warning"), black, white);
+
+                @if $name == "warning" {
+                    @include close-color("dark", "light");
+                } @else if $name == "inverted" {
+                    @include close-color("light", "light");
+                } @else {
+                    @include close-color("light", "dark");
+                }
+            }
+        }
+    }
+}
+
+@mixin animate($name) {
+    animation: $name $animation-time $animation-func forwards;
+}
+
+@mixin create-animation($name) {
+    $property: if(str-index($name, "-left") or str-index($name, "-right"), "translateX", "translateY");
+    $distance: if(str-index($name, "-left") or str-index($name, "-top"), -150%, 150%);
+    @keyframes #{$name} {
+        @if (str-index($name, "-in-")) {
+            0% {
+                display: none;
+                opacity: 0;
+                transform: #{$property }($distance);
+            }
+            1% {
+                display: block;
+                opacity: 0;
+                transform: #{$property }($distance);
+            }
+            100% {
+                display: block;
+                opacity: 1;
+                transform: #{$property }(0%);
+            }
+        } @else {
+            0% {
+                display: block;
+                opacity: 1;
+                transform: #{$property }(0);
+            }
+            99% {
+                display: block;
+                opacity: 0;
+                transform: #{$property }($distance);
+            }
+            100% {
+                display: none;
+                opacity: 0;
+                transform: #{$property }($distance);
+            }
+        }
+    }
+}
