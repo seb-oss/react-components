@@ -55,9 +55,9 @@ describe("Component: Slider", () => {
     it("Should render error message", () => {
         const error: string = "Some error";
         act(() => {
-            render(<Slider {...props} hint={error} />, container);
+            render(<Slider {...props} indicator={{ type: "danger", message: error }} />, container);
         });
-        expect(container.querySelector(".progress-feedback").classList).toContain("show");
+        expect(container.querySelector(".feedback")).not.toBeNull();
     });
 
     it("Should render with default min and max if not passed", () => {

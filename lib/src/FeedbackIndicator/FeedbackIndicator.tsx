@@ -39,7 +39,7 @@ export const FeedbackIndicator: React.FC<FeedbackIndicatorProps> = (props: Feedb
         return React.isValidElement(Child) ? (
             <>
                 {React.cloneElement<any>(Child as any, {
-                    className: props.type ? classnames((Child.props as any).className, `rc-d feedback feedback-${indicatorValue}`, { "no-border": props.noBorder }) : (Child.props as any).className,
+                    className: classnames((Child.props as any).className, `rc-d feedback feedback-${indicatorValue}`, { "no-border": props.noBorder }),
                 })}
                 {props.type && <p className={classnames("rc-d feedback-message")}>{props.message}</p>}
             </>

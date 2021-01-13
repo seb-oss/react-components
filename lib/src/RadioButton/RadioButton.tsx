@@ -5,8 +5,6 @@ import { FeedbackIndicator, Indicator } from "../FeedbackIndicator";
 import "./radio-button.scss";
 
 export type RadioButtonProps<T = React.ReactText> = Omit<JSX.IntrinsicElements["input"], "value"> & {
-    /** Inline radio button */
-    inline?: boolean;
     /** Radio button value */
     value?: T;
     indicator?: Indicator;
@@ -14,16 +12,16 @@ export type RadioButtonProps<T = React.ReactText> = Omit<JSX.IntrinsicElements["
     wrapperProps?: JSX.IntrinsicElements["div"];
 };
 /** A radio button allows a user to select a single item from a predefined list of options. Radio buttons are common to use in forms, i.e when you apply for a loan and need to enter "Yes" or "No". */
-export const RadioButton: React.FC<RadioButtonProps> = ({ inline, children, indicator, wrapperProps, ...props }: RadioButtonProps) => {
+export const RadioButton: React.FC<RadioButtonProps> = ({ children, indicator, wrapperProps = {}, ...props }: RadioButtonProps) => {
     const [id, setId] = React.useState<string>("");
 
     React.useEffect(() => setId(props.id || randomId("radiobtn-")), [props.id]);
 
     return (
         <FeedbackIndicator {...indicator}>
-            <div {...wrapperProps} className={classnames("rc radio-button", { inline }, wrapperProps?.className)}>
+            <div {...wrapperProps} className={classnames("rc radio-button", wrapperProps.className)}>
                 <div className="rc custom-radio custom-control">
-                    <input {...props} className="custom-control-input" type="radio" id={id} />
+                    <input {...props} className={classnames("custom-control-input", props.className)} type="radio" id={id} />
                     {children && (
                         <label className="custom-control-label" htmlFor={id}>
                             {children}

@@ -1,2 +1,2 @@
-export * from "./RadioGroup/RadioGroup";
+export * from "./RadioGroup";
 export * from "./RadioButton";

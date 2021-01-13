@@ -26,12 +26,13 @@ describe("Component: RadioButton", () => {
 
     it("Should pass custom class and id", () => {
         const className: string = "myRadiobuttonClass";
-        const id: string = "myRadiobuttonId";
+        const wrapperClassname: string = "myWrapperClassname";
+
         act(() => {
-            render(<RadioButton className={className} id={id} />, container);
+            render(<RadioButton className={className} wrapperProps={{ className: wrapperClassname }} />, container);
         });
-        expect(container.querySelector(".custom-radio").classList).toContain(className);
-        expect(container.querySelector(`#${id}`)).not.toBeNull();
+        expect(container.querySelector(".custom-control-input").classList.contains(className)).toBeTruthy();
+        expect(container.firstElementChild.classList.contains(wrapperClassname)).toBeTruthy();
     });
 
     it("Should render with random id if id is not passed", () => {
@@ -40,6 +41,13 @@ describe("Component: RadioButton", () => {
         });
         expect(container.querySelector("input").hasAttribute("id")).toBeTruthy();
         expect(container.querySelector("label").getAttribute("for")).toBe(container.querySelector("input").getAttribute("id"));
+
+        const id: string = "myId";
+        act(() => {
+            render(<RadioButton id={id}>label</RadioButton>, container);
+        });
+        expect(container.querySelector("input").id).toEqual(id);
+        expect(container.querySelector("label").getAttribute("for")).toEqual(id);
     });
 
     it("Should render and display label", () => {
@@ -49,12 +57,5 @@ describe("Component: RadioButton", () => {
         });
         expect(container.querySelector(`.custom-control-label`)).not.toBeNull();
         expect(container.querySelector(`.custom-control-label`).innerHTML).toContain(label);
-    });
-
-    it("Should render inline when inline prop is set to true", () => {
-        act(() => {
-            render(<RadioButton inline />, container);
-        });
-        expect(container.querySelector(".custom-radio").classList).toContain("inline");
     });
 });
