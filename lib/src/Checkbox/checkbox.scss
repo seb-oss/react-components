@@ -38,35 +38,5 @@ $checkbox-padding: $checkbox-padding $checkbox-padding $checkbox-padding $checkb
                 color: $gray-300;
             }
         }
-
-        &.is-danger {
-            border-color: $red-dark;
-            > .custom-control-label {
-                &::before {
-                    border-color: $red-dark;
-                }
-            }
-        }
-        &.is-success {
-            border-color: $green-darker;
-            > .custom-control-label {
-                &::before {
-                    border-color: $green-darker;
-                }
-            }
-        }
-        &.is-warning {
-            border-color: $yellow;
-            > .custom-control-label {
-                &::before {
-                    border-color: $yellow;
-                }
-            }
-        }
-        & + .progress-feedback {
-            &:before {
-                content: none;
-            }
-        }
     }
 }

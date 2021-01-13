@@ -35,6 +35,11 @@
         "filePath": "./src/Chip/index.ts"
     },
     {
+        "name": "CloseButton",
+        "path": "/docs/closebutton/",
+        "filePath": "./src/CloseButton/index.ts"
+    },
+    {
         "name": "Collapse",
         "path": "/docs/collapse/",
         "filePath": "./src/Collapse/index.ts"

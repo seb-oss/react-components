@@ -7,6 +7,7 @@
         "Carousel": "./src/Carousel/index.ts",
         "Checkbox": "./src/Checkbox/index.ts",
         "Chip": "./src/Chip/index.ts",
+        "CloseButton": "./src/CloseButton/index.ts",
         "Collapse": "./src/Collapse/index.ts",
         "Datepicker": "./src/Datepicker/index.ts",
         "Dropdown": "./src/Dropdown/index.ts",
@@ -34,7 +35,8 @@
         "Toggle": "./src/Toggle/index.ts",
         "ToggleSelector": "./src/ToggleSelector/index.ts",
         "Tooltip": "./src/Tooltip/index.ts",
-        "Video": "./src/Video/index.ts"
+        "Video": "./src/Video/index.ts",
+        "hooks": "./src/hooks/index.ts"
     },
     "indexes": [
         {
@@ -64,6 +66,10 @@
         {
             "from": "./src/Chip/index.ts",
             "to": "./Chip/index.js"
+        },
+        {
+            "from": "./src/CloseButton/index.ts",
+            "to": "./CloseButton/index.js"
         },
         {
             "from": "./src/Collapse/index.ts",
@@ -176,6 +182,10 @@
         {
             "from": "./src/Video/index.ts",
             "to": "./Video/index.js"
+        },
+        {
+            "from": "./src/hooks/index.ts",
+            "to": "./hooks/index.js"
         }
     ]
 }

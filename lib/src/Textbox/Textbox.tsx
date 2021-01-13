@@ -1,12 +1,10 @@
 import React from "react";
 import { randomId } from "@sebgroup/frontend-tools";
 import classnames from "classnames";
-import { FeedbackIndicator, IndicatorType } from "../FeedbackIndicator";
+import { FeedbackIndicator, Indicator } from "../FeedbackIndicator";
 import "./textbox.scss";
 
 export type TextboxProps = JSX.IntrinsicElements["input"] & {
-    /** hint message of textbox */
-    hint?: string;
     /** Element label */
     label?: string;
     /** Element prefix slot */
@@ -23,44 +21,45 @@ export type TextboxProps = JSX.IntrinsicElements["input"] & {
     rightSlot?: React.ReactNode;
     /** Element suffix title */
     rightSlotTitle?: string;
-    /** Theme of text box hint */
-    hintTheme?: IndicatorType;
+    /** Feedback indicator object */
+    indicator?: Indicator;
+    /** Wrapper props */
+    wrapperProps?: JSX.IntrinsicElements["div"];
 };
 /** Textbox is a component that allows user to add or edit text with extra text or icon port */
-export const Textbox: React.FC<TextboxProps> = ({ hintTheme, leftSlot, leftSlotTitle, onLeftClick, rightSlot, rightSlotTitle, onRightClick, id, ...props }: TextboxProps) => {
+export const Textbox: React.FC<TextboxProps> = ({ leftSlot, leftSlotTitle, onLeftClick, rightSlot, rightSlotTitle, onRightClick, indicator, wrapperProps, ...props }: TextboxProps) => {
     const [customId, setCustomId] = React.useState<string>(null);
 
-    React.useEffect(() => {
-        setCustomId(id ? id : props.label ? randomId("tbg-") : null);
-    }, [id, props.label]);
+    React.useEffect(() => setCustomId(props.id ? props.id : props.label ? randomId("tbg-") : null), [props.id]);
 
     return (
-        <div className={classnames("form-group input-box-group", props.className)}>
-            {props.label && (
-                <label className="custom-label" htmlFor={customId}>
-                    {props.label}
-                </label>
-            )}
-            <div className={classnames("rc input-group", hintTheme, { disabled: props.disabled })}>
-                <div className="input-box-group-wrapper">
-                    {leftSlot && (
-                        <div className={classnames("input-group-prepend", { clickable: onLeftClick })} role={onLeftClick ? "button" : ""} onClick={onLeftClick}>
-                            <span className="input-group-text" title={leftSlotTitle}>
-                                {leftSlot}
-                            </span>
-                        </div>
-                    )}
-                    <input id={customId} {...props} className="form-control" />
-                    {rightSlot && (
-                        <div className={classnames("input-group-append", { clickable: onRightClick })} onClick={onRightClick} role={onRightClick ? "button" : ""}>
-                            <span className="input-group-text" title={rightSlotTitle}>
-                                {rightSlot}
-                            </span>
-                        </div>
-                    )}
+        <FeedbackIndicator {...indicator}>
+            <div className={classnames("form-group input-box-group", props.className)}>
+                {props.label && (
+                    <label className="custom-label" htmlFor={customId}>
+                        {props.label}
+                    </label>
+                )}
+                <div className={classnames("rc input-group", { disabled: props.disabled })}>
+                    <div className="input-box-group-wrapper">
+                        {leftSlot && (
+                            <div className={classnames("input-group-prepend", { clickable: onLeftClick })} role={onLeftClick ? "button" : ""} onClick={onLeftClick}>
+                                <span className="input-group-text" title={leftSlotTitle}>
+                                    {leftSlot}
+                                </span>
+                            </div>
+                        )}
+                        <input {...props} id={customId} className="form-control" />
+                        {rightSlot && (
+                            <div className={classnames("input-group-append", { clickable: onRightClick })} onClick={onRightClick} role={onRightClick ? "button" : ""}>
+                                <span className="input-group-text" title={rightSlotTitle}>
+                                    {rightSlot}
+                                </span>
+                            </div>
+                        )}
+                    </div>
                 </div>
-                <FeedbackIndicator className={classnames({ show: props.hint })} type={hintTheme} withoutBorder message={props.hint} />
             </div>
-        </div>
+        </FeedbackIndicator>
     );
 };

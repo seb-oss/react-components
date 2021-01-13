@@ -60,7 +60,7 @@ export const ToggleSelector: React.FC<ToggleSelectorProps> = ({ multiple, value,
 
     return (
         <div {...props} className={classnames("rc", "toggle-selector", props.className)}>
-            <FeedbackIndicator {...indicator} withoutBorder>
+            <FeedbackIndicator {...indicator} noBorder>
                 {props.children &&
                     React.Children.map(props.children, (Child: React.ReactElement<ToggleSelectorItemProps>, index: number) => {
                         return React.isValidElement<ToggleSelectorItemProps>(Child)

@@ -77,7 +77,7 @@ export const Img: React.FC<ImgProps> = React.memo(({ type, responsive, rounded, 
                 style={{
                     ...props.style,
                     width: width || props.style?.width || naturalWidth,
-                    height: height || props.style?.height || (responsive || thumbnail ? "100%" : naturalHeight),
+                    height: height || props.style?.height || React.Children.toArray(children).length ? "auto" : responsive || thumbnail ? "100%" : naturalHeight,
                     backgroundImage: props.style?.backgroundImage || `url(${src})`,
                 }}
             >

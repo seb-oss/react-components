@@ -3,24 +3,22 @@ import classnames from "classnames";
 import "./feedback-indicator.scss";
 
 export type IndicatorType = "danger" | "warning" | "success";
-export type Indicator = {
+export type Indicator = FeedbackIndicatorProps;
+
+type FeedbackIndicatorProps = React.PropsWithChildren<{
     /** The type of the indicator. Available values: "danger" | "warning" | "success" */
     type: IndicatorType;
     /** The indicator message. `children` can also be used instead. */
     message?: React.ReactNode;
-};
-
-export type FeedbackIndicatorProps = JSX.IntrinsicElements["div"] &
-    Indicator & {
-        /** To show indicator without border */
-        withoutBorder?: boolean;
-    };
+    /** Disable feedback indicator border */
+    noBorder?: boolean;
+}>;
 /** A helper component to display feedback for children content */
-export const FeedbackIndicator: React.FC<FeedbackIndicatorProps> = React.memo(({ type, message, children, withoutBorder, ...props }: FeedbackIndicatorProps) => {
+export const FeedbackIndicator: React.FC<FeedbackIndicatorProps> = (props: FeedbackIndicatorProps) => {
     const [indicatorValue, setIndicatorValue] = React.useState<number>(0);
 
     React.useEffect(() => {
-        switch (type) {
+        switch (props.type) {
             case "danger":
                 setIndicatorValue(10);
                 break;
@@ -33,12 +31,24 @@ export const FeedbackIndicator: React.FC<FeedbackIndicatorProps> = React.memo(({
             default:
                 setIndicatorValue(0);
         }
-    }, [type]);
+    }, [props.type]);
 
-    return (
-        <div {...props} className={classnames("rc", "progress-feedback", `progress-${indicatorValue}`, { "wrapper-indicator": children }, props.className)}>
-            {children && <div className={classnames("children", { "no-border": withoutBorder })}>{children}</div>}
-            {message}
-        </div>
-    );
-});
+    function wrap(children: any) {
+        const Child: any = React.Children.toArray(children)[0];
+
+        return React.isValidElement(Child) ? (
+            <>
+                {React.cloneElement<any>(Child as any, {
+                    className: classnames((Child.props as any).className, `rc-d feedback feedback-${indicatorValue}`, { "no-border": props.noBorder }),
+                })}
+                {props.type && <p className={classnames("rc-d feedback-message")}>{props.message}</p>}
+            </>
+        ) : (
+            Child
+        );
+    }
+
+    const count: number = React.Children.count(props.children);
+
+    return count ? (props.type ? wrap(count > 1 ? <div>{props.children}</div> : props.children) : props.children) : null;
+};

@@ -1,5 +1,4 @@
 import React from "react";
-import { TableContext } from "../TableContextProvider";
 import { TableRowProps } from "./TableRow";
 
 export type TableBodyProps = JSX.IntrinsicElements["tbody"];
