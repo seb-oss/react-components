@@ -1,7 +1,7 @@
 import React from "react";
 import { randomId } from "@sebgroup/frontend-tools";
 import classnames from "classnames";
-import { Indicator, FeedbackIndicator } from "../FeedbackIndicator/FeedbackIndicator";
+import { FeedbackIndicator, Indicator } from "../FeedbackIndicator/FeedbackIndicator";
 import "./checkbox.scss";
 
 export type CheckboxProps = JSX.IntrinsicElements["input"] & {
@@ -19,16 +19,17 @@ export const Checkbox: React.FC<CheckboxProps> = ({ inline, wrapperProps, indica
     React.useEffect(() => setId(props.id || (children ? props.id || randomId("checkbox-") : null)), [props.id, children]);
 
     return (
-        <div {...wrapperProps} className={classnames("rc", "checkbox", { inline }, wrapperProps?.className)}>
-            <div className={classnames("custom-control", "custom-checkbox", { "custom-control-inline": inline }, { [`is-${indicator?.type}`]: indicator })}>
-                <input {...props} type="checkbox" id={id} className={classnames("custom-control-input", props.className)} />
-                {children && (
-                    <label className="custom-control-label" htmlFor={id}>
-                        {children}
-                    </label>
-                )}
+        <FeedbackIndicator {...indicator}>
+            <div {...wrapperProps} className={classnames("rc", "checkbox", { inline }, wrapperProps?.className)}>
+                <div className={classnames("custom-control", "custom-checkbox", { "custom-control-inline": inline })}>
+                    <input {...props} type="checkbox" id={id} className={classnames("custom-control-input", props.className)} />
+                    {children && (
+                        <label className="custom-control-label" htmlFor={id}>
+                            {children}
+                        </label>
+                    )}
+                </div>
             </div>
-            {indicator && <FeedbackIndicator {...indicator} />}
-        </div>
+        </FeedbackIndicator>
     );
 };

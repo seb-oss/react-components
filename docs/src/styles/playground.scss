@@ -83,15 +83,37 @@
     }
 
     > .controls {
+        display: block;
+        overflow: auto;
         padding: 1rem;
         grid-area: controls;
         border-top-right-radius: $border-radius;
         border-left: 2px solid $gray-400;
-        align-items: flex-start;
-        flex-direction: column;
         grid-column: 2;
         grid-row: 2;
         width: 350px;
+
+        .indent {
+            margin-left: 1.5rem;
+            position: relative;
+            &::before,
+            &::after {
+                content: "";
+                position: absolute;
+                background-color: $gray-700;
+                left: 0;
+            }
+            &::before {
+                width: 1px;
+                height: 21px;
+                top: 0;
+            }
+            &:after {
+                width: 10px;
+                height: 1px;
+                top: 21px;
+            }
+        }
     }
 }
 

@@ -48,7 +48,7 @@ export const Stepper: React.FC<StepperProps> = ({ hint, label, onDecrease, onInc
                 </button>
             </div>
             <input id={id} type="number" {...props} readOnly={true} className="stepper-input" aria-live="assertive" />
-            <FeedbackIndicator className={classnames({ show: !!hint })} type={hintTheme} withoutBorder message={hint} />
+            <FeedbackIndicator className={classnames({ show: !!hint })} type={hintTheme} noBorder message={hint} />
         </div>
     );
 };

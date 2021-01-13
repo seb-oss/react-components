@@ -8,9 +8,9 @@ describe("Component: RadioGroup", () => {
     let container: HTMLDivElement = null;
     const props: RadioGroupProps<string> = {
         list: [
-            { value: "option1", label: "option1" },
-            { value: "option2", label: "option2", description: "desc" },
-            { value: "option3", label: "option3", disabled: true },
+            { value: "option1", child: "option1" },
+            { value: "option2", child: "option2", description: "desc" },
+            { value: "option3", child: "option3", disabled: true },
         ],
         onChange: jest.fn(),
         value: "male",
@@ -32,7 +32,7 @@ describe("Component: RadioGroup", () => {
         act(() => {
             render(<RadioGroup {...props} />, container);
         });
-        expect(container.querySelector(".rc.radio-group")).not.toBeNull();
+        expect(container.firstElementChild).not.toBeNull();
     });
 
     it("Should pass custom class", () => {

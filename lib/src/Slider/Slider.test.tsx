@@ -1,5 +1,5 @@
 import React from "react";
-import { Slider, RangeSliderLabel, SliderProps, SliderTheme } from ".";
+import { Slider, SliderLabel, SliderProps, SliderTheme } from ".";
 import { unmountComponentAtNode, render } from "react-dom";
 import { act } from "react-dom/test-utils";
 
@@ -10,9 +10,9 @@ describe("Component: Slider", () => {
         onChange: jest.fn(),
         name: "slider",
     };
-    const labels: Array<RangeSliderLabel> = [
-        { position: 0, text: "empty" },
-        { position: 100, text: "full" },
+    const labels: Array<SliderLabel> = [
+        { position: 0, label: "empty" },
+        { position: 100, label: "full" },
     ];
 
     beforeEach(() => {
@@ -112,9 +112,9 @@ describe("Component: Slider", () => {
     });
 
     it("Should render labels out of bounds at the edges of the slider", () => {
-        const testLabels: Array<RangeSliderLabel> = [
-            { position: -12, text: "lower than minimum" },
-            { position: 112, text: "higher than maximum" },
+        const testLabels: Array<SliderLabel> = [
+            { position: -12, label: "lower than minimum" },
+            { position: 112, label: "higher than maximum" },
         ];
         act(() => {
             render(<Slider {...props} labels={testLabels} />, container);
@@ -129,10 +129,10 @@ describe("Component: Slider", () => {
     });
 
     it("Should render labels correctly", () => {
-        const testLabels: Array<RangeSliderLabel> = [
-            { position: 0, text: "0%" },
-            { position: 50, text: "50%" },
-            { position: 100, text: "100%" },
+        const testLabels: Array<SliderLabel> = [
+            { position: 0, label: "0%" },
+            { position: 50, label: "50%" },
+            { position: 100, label: "100%" },
         ];
         act(() => {
             render(<Slider {...props} labels={testLabels} />, container);
