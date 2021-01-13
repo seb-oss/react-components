@@ -21,6 +21,16 @@ const defaultText: Required<DropdownText> = {
     search: "Search...",
 };
 
+export function getValueOfMultipleSelect(select: HTMLSelectElement): string[] {
+    return Array.from(select.options)
+        .filter((option) => option.selected)
+        .map((option) => option.value);
+}
+
+// This solution is meant to fix Gatsby build which complains that document and window doesn't exist in server-side rendering
+const safeDocument: Document | null = typeof document !== "undefined" ? document : null;
+const safeWindow: Window | null = typeof window !== "undefined" ? window : null;
+
 export type DropdownProps = Omit<JSX.IntrinsicElements["select"], "value"> & {
     /** Props for the select's wrapper (div) */
     wrapperProps?: JSX.IntrinsicElements["div"];
@@ -36,12 +46,6 @@ export type DropdownProps = Omit<JSX.IntrinsicElements["select"], "value"> & {
     text?: DropdownText;
 };
 
-export function getValueOfMultipleSelect(select: HTMLSelectElement): string[] {
-    return Array.from(select.options)
-        .filter((option) => option.selected)
-        .map((option) => option.value);
-}
-
 export const Dropdown: React.FC<DropdownProps> = React.forwardRef(({ wrapperProps = {}, text = {}, onMultipleChange, searchable, clearable, ...props }: DropdownProps, ref) => {
     const [toggleId] = React.useState<string>(randomId("ddt-"));
     const [selectAllId] = React.useState<string>(randomId("sa-"));
@@ -56,7 +60,7 @@ export const Dropdown: React.FC<DropdownProps> = React.forwardRef(({ wrapperProp
     const menuRef = React.useRef<HTMLDivElement>();
     const dropdownRef = React.useRef<HTMLDivElement>();
 
-    const isMobile: boolean = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(window.navigator.userAgent);
+    const isMobile: boolean = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(safeWindow?.navigator?.userAgent);
 
     const handleChange = React.useCallback(
         (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -226,39 +230,41 @@ export const Dropdown: React.FC<DropdownProps> = React.forwardRef(({ wrapperProp
                         <span>{label}</span>
                     </button>
                     {clearable && <CloseButton onClick={() => selectAll(false)} disabled={props.disabled} />}
-                    {createPortal(
-                        <div className={classnames("rc dropdown-menu", { show })} aria-labelledby={toggleId} ref={menuRef} style={{ ...menuStyle }}>
-                            {searchable && (
-                                <input
-                                    className="form-control"
-                                    type="search"
-                                    placeholder={text.search || defaultText.search}
-                                    value={searchKeyword}
-                                    onChange={(e) => setSearchKeyword(e.target.value)}
-                                    ref={searchRef}
-                                />
-                            )}
-                            {/* Select all button */}
-                            {props.multiple && !searchKeyword ? (
-                                React.Children.count(props.children) ? (
-                                    <>
-                                        <div className="custom-control custom-checkbox select-all">
-                                            <input id={selectAllId} name="inline" type="checkbox" className="custom-control-input" checked={allSelected} hidden onChange={selectAll} />
-                                            <label className="custom-control-label" htmlFor={selectAllId}>
-                                                {text.selectAll || defaultText.selectAll}
-                                            </label>
-                                        </div>
-                                        <div className="dropdown-divider" />
-                                    </>
-                                ) : (
-                                    text.emptyList || defaultText.emptyList
-                                )
-                            ) : null}
+                    {!safeDocument
+                        ? null
+                        : createPortal(
+                              <div className={classnames("rc dropdown-menu", { show })} aria-labelledby={toggleId} ref={menuRef} style={{ ...menuStyle }}>
+                                  {searchable && (
+                                      <input
+                                          className="form-control"
+                                          type="search"
+                                          placeholder={text.search || defaultText.search}
+                                          value={searchKeyword}
+                                          onChange={(e) => setSearchKeyword(e.target.value)}
+                                          ref={searchRef}
+                                      />
+                                  )}
+                                  {/* Select all button */}
+                                  {props.multiple && !searchKeyword ? (
+                                      React.Children.count(props.children) ? (
+                                          <>
+                                              <div className="custom-control custom-checkbox select-all">
+                                                  <input id={selectAllId} name="inline" type="checkbox" className="custom-control-input" checked={allSelected} hidden onChange={selectAll} />
+                                                  <label className="custom-control-label" htmlFor={selectAllId}>
+                                                      {text.selectAll || defaultText.selectAll}
+                                                  </label>
+                                              </div>
+                                              <div className="dropdown-divider" />
+                                          </>
+                                      ) : (
+                                          text.emptyList || defaultText.emptyList
+                                      )
+                                  ) : null}
 
-                            {getOptions()}
-                        </div>,
-                        document.body
-                    )}
+                                  {getOptions()}
+                              </div>,
+                              safeDocument.body
+                          )}
                 </div>
             )}
             <select {...props} ref={selectRef} onChange={onChange} className={classnames("custom-select", props.className)} hidden={!isMobile}>
