@@ -150,11 +150,6 @@
         "filePath": "./src/Timeline/index.ts"
     },
     {
-        "name": "Timepicker",
-        "path": "/docs/timepicker/",
-        "filePath": "./src/Timepicker/index.ts"
-    },
-    {
         "name": "Timer",
         "path": "/docs/timer/",
         "filePath": "./src/Timer/index.ts"

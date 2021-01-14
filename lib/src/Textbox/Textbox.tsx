@@ -33,14 +33,14 @@ export const Textbox: React.FC<TextboxProps> = ({ leftSlot, leftSlotTitle, onLef
     React.useEffect(() => setCustomId(props.id ? props.id : props.label ? randomId("tbg-") : null), [props.id]);
 
     return (
-        <FeedbackIndicator {...indicator}>
-            <div className={classnames("form-group input-box-group", props.className)}>
-                {props.label && (
-                    <label className="custom-label" htmlFor={customId}>
-                        {props.label}
-                    </label>
-                )}
-                <div className={classnames("rc input-group", { disabled: props.disabled })}>
+        <div className={classnames("rc input-box-group", props.className)}>
+            {props.label && (
+                <label className="custom-label" htmlFor={customId}>
+                    {props.label}
+                </label>
+            )}
+            <div className={classnames("rc input-group", { disabled: props.disabled })}>
+                <FeedbackIndicator {...indicator}>
                     <div className="input-box-group-wrapper">
                         {leftSlot && (
                             <div className={classnames("input-group-prepend", { clickable: onLeftClick })} role={onLeftClick ? "button" : ""} onClick={onLeftClick}>
@@ -58,8 +58,8 @@ export const Textbox: React.FC<TextboxProps> = ({ leftSlot, leftSlotTitle, onLef
                             </div>
                         )}
                     </div>
-                </div>
+                </FeedbackIndicator>
             </div>
-        </FeedbackIndicator>
+        </div>
     );
 };

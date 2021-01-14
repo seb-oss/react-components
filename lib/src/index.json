@@ -30,7 +30,6 @@
         "Textarea": "./src/Textarea/index.ts",
         "Textbox": "./src/Textbox/index.ts",
         "Timeline": "./src/Timeline/index.ts",
-        "Timepicker": "./src/Timepicker/index.ts",
         "Timer": "./src/Timer/index.ts",
         "Toggle": "./src/Toggle/index.ts",
         "ToggleSelector": "./src/ToggleSelector/index.ts",
@@ -158,10 +157,6 @@
         {
             "from": "./src/Timeline/index.ts",
             "to": "./Timeline/index.js"
-        },
-        {
-            "from": "./src/Timepicker/index.ts",
-            "to": "./Timepicker/index.js"
         },
         {
             "from": "./src/Timer/index.ts",

@@ -1,7 +1,7 @@
 import React from "react";
 import classnames from "classnames";
 import { randomId } from "@sebgroup/frontend-tools";
-import { FeedbackIndicator, Indicator, IndicatorType } from "../FeedbackIndicator";
+import { FeedbackIndicator, Indicator } from "../FeedbackIndicator";
 import "./stepper.scss";
 
 export type StepperProps = JSX.IntrinsicElements["input"] & {
@@ -13,17 +13,21 @@ export type StepperProps = JSX.IntrinsicElements["input"] & {
     onIncrease: (event: React.MouseEvent<HTMLButtonElement>) => void;
     /** Feedback indicator */
     indicator?: Indicator;
+    /** Props for the wrapper element (div) */
+    wrapperProps?: JSX.IntrinsicElements["div"];
 };
 
 /** A stepper makes it easier to input values that are in a narrow range */
-export const Stepper: React.FC<StepperProps> = ({ label, onDecrease, onIncrease, className, indicator, ...props }: StepperProps) => {
+export const Stepper: React.FC<StepperProps> = ({ label, onDecrease, onIncrease, indicator, wrapperProps = {}, ...props }: StepperProps) => {
     const [id, setId] = React.useState<string>("");
+
     React.useEffect(() => {
         setId(props.id ? props.id : randomId("stepper-"));
     }, [props.id]);
+
     return (
         <FeedbackIndicator {...indicator} noBorder>
-            <div className={classnames("form-group custom-stepper", className)}>
+            <div {...wrapperProps} className={classnames("rc custom-stepper", wrapperProps.className)}>
                 {label && <label className="custom-label">{label}</label>}
                 <div className={"stepper-container" + (props.disabled ? " disabled" : "")}>
                     <button
@@ -46,7 +50,7 @@ export const Stepper: React.FC<StepperProps> = ({ label, onDecrease, onIncrease,
                         <span>&#43;</span>
                     </button>
                 </div>
-                <input id={id} type="number" {...props} readOnly={true} className="stepper-input" aria-live="assertive" />
+                <input {...props} id={id} type="number" readOnly={true} className={classnames("stepper-input", props.className)} aria-live="assertive" />
             </div>
         </FeedbackIndicator>
     );

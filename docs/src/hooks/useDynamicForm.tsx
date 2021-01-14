@@ -270,15 +270,9 @@ const DynamicFormItemComponent: React.FC<{
 
         case "Radio": {
             formItem = (
-                <RadioGroup
-                    className={classnames({ indent: props.item?.indent })}
-                    {...commonProps}
-                    name={props.item?.key}
-                    value={(props.state as DynamicFormOption)?.value || ""}
-                    inline={props.item.inline}
-                >
+                <RadioGroup className={classnames({ indent: props.item?.indent })} {...commonProps} name={props.item?.key} value={(props.state as DynamicFormOption)?.value || ""}>
                     {props.item?.options?.map((item, i) => (
-                        <RadioButton key={i} value={item.value}>
+                        <RadioButton key={i} value={item.value} wrapperProps={{ className: props.item.inline ? "d-inline-block" : null }}>
                             {item.label}
                             {item.description && <p className="text-muted m-0">{item.description}</p>}
                         </RadioButton>
