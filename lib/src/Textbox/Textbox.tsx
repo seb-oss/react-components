@@ -27,39 +27,41 @@ export type TextboxProps = JSX.IntrinsicElements["input"] & {
     wrapperProps?: JSX.IntrinsicElements["div"];
 };
 /** Textbox is a component that allows user to add or edit text with extra text or icon port */
-export const Textbox: React.FC<TextboxProps> = ({ leftSlot, leftSlotTitle, onLeftClick, rightSlot, rightSlotTitle, onRightClick, indicator, wrapperProps, ...props }: TextboxProps) => {
-    const [customId, setCustomId] = React.useState<string>(null);
+export const Textbox: React.FC<TextboxProps> = React.forwardRef(
+    ({ leftSlot, leftSlotTitle, onLeftClick, rightSlot, rightSlotTitle, onRightClick, indicator, wrapperProps, ...props }: TextboxProps, ref: React.ForwardedRef<HTMLInputElement>) => {
+        const [customId, setCustomId] = React.useState<string>(null);
 
-    React.useEffect(() => setCustomId(props.id ? props.id : props.label ? randomId("tbg-") : null), [props.id]);
+        React.useEffect(() => setCustomId(props.id ? props.id : props.label ? randomId("tbg-") : null), [props.id]);
 
-    return (
-        <div className={classnames("rc input-box-group", props.className)}>
-            {props.label && (
-                <label className="custom-label" htmlFor={customId}>
-                    {props.label}
-                </label>
-            )}
-            <div className={classnames("rc input-group", { disabled: props.disabled })}>
-                <FeedbackIndicator {...indicator}>
-                    <div className="input-box-group-wrapper">
-                        {leftSlot && (
-                            <div className={classnames("input-group-prepend", { clickable: onLeftClick })} role={onLeftClick ? "button" : ""} onClick={onLeftClick}>
-                                <span className="input-group-text" title={leftSlotTitle}>
-                                    {leftSlot}
-                                </span>
-                            </div>
-                        )}
-                        <input {...props} id={customId} className="form-control" />
-                        {rightSlot && (
-                            <div className={classnames("input-group-append", { clickable: onRightClick })} onClick={onRightClick} role={onRightClick ? "button" : ""}>
-                                <span className="input-group-text" title={rightSlotTitle}>
-                                    {rightSlot}
-                                </span>
-                            </div>
-                        )}
-                    </div>
-                </FeedbackIndicator>
+        return (
+            <div className={classnames("rc input-box-group", props.className)}>
+                {props.label && (
+                    <label className="custom-label" htmlFor={customId}>
+                        {props.label}
+                    </label>
+                )}
+                <div className={classnames("rc input-group", { disabled: props.disabled })}>
+                    <FeedbackIndicator {...indicator}>
+                        <div className="input-box-group-wrapper">
+                            {leftSlot && (
+                                <div className={classnames("input-group-prepend", { clickable: onLeftClick })} role={onLeftClick ? "button" : ""} onClick={onLeftClick}>
+                                    <span className="input-group-text" title={leftSlotTitle}>
+                                        {leftSlot}
+                                    </span>
+                                </div>
+                            )}
+                            <input {...props} ref={ref} id={customId} className="form-control" />
+                            {rightSlot && (
+                                <div className={classnames("input-group-append", { clickable: onRightClick })} onClick={onRightClick} role={onRightClick ? "button" : ""}>
+                                    <span className="input-group-text" title={rightSlotTitle}>
+                                        {rightSlot}
+                                    </span>
+                                </div>
+                            )}
+                        </div>
+                    </FeedbackIndicator>
+                </div>
             </div>
-        </div>
-    );
-};
+        );
+    }
+);
