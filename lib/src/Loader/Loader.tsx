@@ -19,31 +19,34 @@ export type LoaderProps = JSX.IntrinsicElements["div"] & {
     toggle?: boolean;
 };
 
-export const Loader: React.FC<LoaderProps> = React.memo(({ size = "md", type = "spinner", toggle = true, fullscreen, cover, backdrop, ...props }: LoaderProps) => {
-    return (
-        toggle && (
-            <div
-                {...props}
-                className={classnames(
-                    "rc",
-                    "loader",
-                    {
-                        "loader-cover": cover,
-                        "loader-fullscreen": fullscreen && !cover,
-                        "loader-backdrop": backdrop,
-                        [`loader-${size}`]: size,
-                        [`loader-${type}`]: type,
-                    },
-                    props.className
-                )}
-                role={props.role || "status"}
-            >
-                <svg viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
-                    {type === "spinner" && <circle cx="33" cy="33" r="30" fill="none" />}
-                    {type === "square" && <rect x="0" y="0" width="100%" height="100%" />}
-                </svg>
-                {props.children}
-            </div>
-        )
-    );
-});
+export const Loader: React.FC<LoaderProps> = React.memo(
+    React.forwardRef(({ size = "md", type = "spinner", toggle = true, fullscreen, cover, backdrop, ...props }: LoaderProps, ref: React.ForwardedRef<HTMLDivElement>) => {
+        return (
+            toggle && (
+                <div
+                    {...props}
+                    ref={ref}
+                    className={classnames(
+                        "rc",
+                        "loader",
+                        {
+                            "loader-cover": cover,
+                            "loader-fullscreen": fullscreen && !cover,
+                            "loader-backdrop": backdrop,
+                            [`loader-${size}`]: size,
+                            [`loader-${type}`]: type,
+                        },
+                        props.className
+                    )}
+                    role={props.role || "status"}
+                >
+                    <svg viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
+                        {type === "spinner" && <circle cx="33" cy="33" r="30" fill="none" />}
+                        {type === "square" && <rect x="0" y="0" width="100%" height="100%" />}
+                    </svg>
+                    {props.children}
+                </div>
+            )
+        );
+    })
+);
