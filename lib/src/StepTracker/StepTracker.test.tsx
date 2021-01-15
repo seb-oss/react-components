@@ -6,7 +6,7 @@ import { act, Simulate } from "react-dom/test-utils";
 describe("Component: StepTracker", () => {
     let container: HTMLDivElement = null;
     const props: StepTrackerProps = {
-        step: 1,
+        value: 1,
         list: [{ label: "First" }, { label: "Second" }, { label: "Third" }, { label: "Forth" }],
     };
 
@@ -50,13 +50,13 @@ describe("Component: StepTracker", () => {
         const onClick: jest.Mock = jest.fn();
 
         act(() => {
-            render(<StepTracker {...props} onClick={onClick} />, container);
+            render(<StepTracker {...props} onChange={onClick} />, container);
         });
 
         expect(container.querySelector(`.clickable`)).not.toBeNull();
         Simulate.click(container.querySelector(".step-wrapper .step"));
         act(() => {
-            render(<StepTracker {...props} onClick={onClick} orientation="vertical" />, container);
+            render(<StepTracker {...props} onChange={onClick} orientation="vertical" />, container);
         });
         Simulate.click(container.querySelector(".step-wrapper .step"));
         expect(onClick).toHaveBeenCalledTimes(2);

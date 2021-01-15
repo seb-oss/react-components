@@ -5,14 +5,7 @@ import { Stepper } from "@sebgroup/react-components/Stepper";
 import { Indicator, IndicatorType } from "@sebgroup/react-components/FeedbackIndicator";
 
 const importString: string = require("!raw-loader!@sebgroup/react-components/Stepper/Stepper");
-const code: string = `<Stepper
-    label={"stepper label"}
-    min={0}
-    max={100}
-    onIncrease={null}
-    onDecrease={null}
-    value={0}
-/>`;
+const code: string = `<Stepper value={value} onStepChange={setValue} />`;
 
 const indicators: Array<DynamicFormOption<IndicatorType>> = [
     { key: "error", label: "danger", value: "danger" },
@@ -27,8 +20,6 @@ const StepTrackerPage: React.FC = React.memo(() => {
         {
             key: "controls",
             items: [
-                { key: "min", value: 0, min: 0, max: 100, label: "Min", controlType: "Stepper" },
-                { key: "max", value: 10, min: 0, max: 100, label: "Max", controlType: "Stepper" },
                 { key: "disabled", label: "disabled", controlType: "Checkbox" },
                 { key: "indicator", label: "indicator", controlType: "Checkbox" },
                 { key: "indicatorType", rulerKey: "indicator", condition: true, label: "Indicator type", options: indicators, inline: true, controlType: "Radio", value: indicators[0], indent: true },
@@ -41,20 +32,7 @@ const StepTrackerPage: React.FC = React.memo(() => {
     return (
         <Docs
             mainFile={importString}
-            example={
-                <div className="w-100">
-                    <Stepper
-                        label="Element label"
-                        min={controls.min}
-                        max={controls.max}
-                        onIncrease={() => setValue(value + 1)}
-                        onDecrease={() => setValue(value - 1)}
-                        disabled={controls.disabled}
-                        value={value}
-                        indicator={indicator}
-                    />
-                </div>
-            }
+            example={<Stepper label="Element label" value={value} onChange={setValue} disabled={controls.disabled} indicator={indicator} min={0} max={10} />}
             code={code}
             controls={renderForm()}
         />

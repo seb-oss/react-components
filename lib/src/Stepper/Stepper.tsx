@@ -4,13 +4,13 @@ import { randomId } from "@sebgroup/frontend-tools";
 import { FeedbackIndicator, Indicator } from "../FeedbackIndicator";
 import "./stepper.scss";
 
-export type StepperProps = JSX.IntrinsicElements["input"] & {
+export type StepperProps = Omit<JSX.IntrinsicElements["input"], "value" | "onChange"> & {
     /** Element label */
     label?: string;
-    /** callback when element value is decreased */
-    onDecrease: (event: React.MouseEvent<HTMLButtonElement>) => void;
-    /** callback when element value is increased */
-    onIncrease: (event: React.MouseEvent<HTMLButtonElement>) => void;
+    /** Stepper value */
+    value?: number;
+    /** Event fired when stepper is changed */
+    onChange?: (value: number) => void;
     /** Feedback indicator */
     indicator?: Indicator;
     /** Props for the wrapper element (div) */
@@ -18,23 +18,22 @@ export type StepperProps = JSX.IntrinsicElements["input"] & {
 };
 
 /** A stepper makes it easier to input values that are in a narrow range */
-export const Stepper: React.FC<StepperProps> = ({ label, onDecrease, onIncrease, indicator, wrapperProps = {}, ...props }: StepperProps) => {
+export const Stepper: React.FC<StepperProps> = ({ label, onChange, indicator, wrapperProps = {}, ...props }: StepperProps) => {
     const [id, setId] = React.useState<string>("");
 
-    React.useEffect(() => {
-        setId(props.id ? props.id : randomId("stepper-"));
-    }, [props.id]);
+    React.useEffect(() => setId(props.id ? props.id : randomId("stepper-")), [props.id]);
 
     return (
-        <FeedbackIndicator {...indicator} noBorder>
-            <div {...wrapperProps} className={classnames("rc custom-stepper", wrapperProps.className)}>
-                {label && <label className="custom-label">{label}</label>}
+        <div {...wrapperProps} className={classnames("rc stepper", wrapperProps.className)}>
+            {label && <label className="custom-label">{label}</label>}
+            <FeedbackIndicator {...indicator}>
                 <div className={"stepper-container" + (props.disabled ? " disabled" : "")}>
                     <button
-                        className={"stepper-decrement" + (props.value === props.min ? " disabled" : "")}
-                        onClick={props.value > props.min && !props.disabled ? onDecrease : null}
+                        className="btn"
+                        onClick={() => props.value > props.min && !props.disabled && onChange && onChange(props.value - 1)}
                         aria-controls={id}
                         aria-labelledby="decrement"
+                        disabled={props.disabled || props.value === props.min}
                     >
                         <span>&#8722;</span>
                     </button>
@@ -42,16 +41,17 @@ export const Stepper: React.FC<StepperProps> = ({ label, onDecrease, onIncrease,
                         <span>{props.value}</span>
                     </div>
                     <button
-                        className={"stepper-increment" + (props.value === props.max ? " disabled" : "")}
-                        onClick={props.value < props.max && !props.disabled ? onIncrease : null}
+                        className="btn"
+                        onClick={() => props.value < props.max && !props.disabled && onChange && onChange(props.value + 1)}
                         aria-controls={id}
                         aria-labelledby="increment"
+                        disabled={props.disabled || props.value === props.max}
                     >
                         <span>&#43;</span>
                     </button>
                 </div>
-                <input {...props} id={id} type="number" readOnly={true} className={classnames("stepper-input", props.className)} aria-live="assertive" />
-            </div>
-        </FeedbackIndicator>
+            </FeedbackIndicator>
+            <input {...props} id={id} type="number" readOnly className={classnames("stepper-input", props.className)} aria-live="assertive" />
+        </div>
     );
 };

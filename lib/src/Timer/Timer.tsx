@@ -1,85 +1,60 @@
 import React from "react";
 import classnames from "classnames";
 
-export type TimerProps = JSX.IntrinsicElements["div"] & {
+export type TimerProps = JSX.IntrinsicElements["time"] & {
+    /** Active state when the timer starts counting */
+    active?: boolean;
     /** Callback when timer ends */
-    callback?: VoidFunction;
+    onTimerEnd?: VoidFunction;
     /** Timer's duration in milliseconds */
     duration?: number;
 };
-
-interface TimerState {
-    timer: string;
-}
 /** A timer is a component for measuring time intervals */
-export class Timer extends React.Component<TimerProps, TimerState> {
-    private innerInterval: any;
-    constructor(props: TimerProps) {
-        super(props);
+export const Timer: React.FC<TimerProps> = ({ duration, onTimerEnd, active, ...props }: TimerProps) => {
+    const innerInterval = React.useRef<any>(0);
+    const [timer, setTimer] = React.useState<string>("00:00");
 
-        this.state = {
-            timer: "00:00",
-        };
-    }
+    const clearTimerInterval = React.useCallback((): void => {
+        if (innerInterval.current) {
+            clearTimeout(innerInterval.current);
+            innerInterval.current = null;
+        }
+    }, []);
 
-    startInterval(timeout: number): void {
-        this.setState({ timer: this.convertMStoTime(timeout) }, () => {
-            this.clearInterval();
-            this.innerInterval = setInterval(() => {
-                if (timeout > 0) {
-                    timeout = timeout - 1000;
-                    this.setState({ timer: this.convertMStoTime(timeout) }, () => {
-                        if (timeout === 0) {
-                            this.props.callback();
-                            this.clearInterval();
-                        }
-                    });
+    const startInterval = React.useCallback((timeout: number): void => {
+        clearTimerInterval();
+        innerInterval.current = setInterval(() => {
+            if (timeout > 0) {
+                timeout = timeout - 1000;
+                setTimer(convertMStoTime(timeout));
+                if (timeout === 0) {
+                    onTimerEnd && onTimerEnd();
+                    clearTimerInterval();
                 }
-            }, 1000);
-        });
-    }
-
-    clearInterval(): void {
-        if (this.innerInterval) {
-            clearTimeout(this.innerInterval);
-            this.innerInterval = null;
-        }
-    }
-
-    convertMStoTime(value: number): string {
-        const date: Date = new Date(value);
-        return (
-            (date.getUTCHours() > 0 ? date.getUTCHours() + ":" : "") +
-            (date.getUTCMinutes() < 10 ? "0" + date.getUTCMinutes() : date.getUTCMinutes()) +
-            ":" +
-            (date.getUTCSeconds() < 10 ? "0" + date.getUTCSeconds() : date.getUTCSeconds())
-        );
-    }
-
-    componentDidMount() {
-        if (this.props.duration !== null && this.props.duration !== undefined) {
-            this.startInterval(this.props.duration);
-        }
-    }
-
-    componentWillUnmount() {
-        this.clearInterval();
-    }
-
-    componentDidUpdate(prevProps: TimerProps): void {
-        if (prevProps.duration !== this.props.duration) {
-            if (this.props.duration !== null && this.props.duration !== undefined) {
-                this.startInterval(this.props.duration);
             }
-        }
-    }
+        }, 1000);
+    }, []);
 
-    render(): React.ReactNode {
-        const { callback, duration, ...props } = this.props;
-        return (
-            <div className={classnames("custom-timer", props.className)} {...props}>
-                {this.state.timer}
-            </div>
-        );
-    }
+    React.useEffect(() => setTimer(convertMStoTime(duration)), [duration]);
+
+    React.useEffect(() => {
+        active && duration > 0 ? startInterval(duration) : clearTimerInterval();
+        return clearTimerInterval;
+    }, [active]);
+
+    return (
+        <time className={classnames("rc timer", props.className)} {...props}>
+            {timer}
+        </time>
+    );
+};
+
+function convertMStoTime(value: number): string {
+    const date: Date = new Date(value);
+    return (
+        (date.getUTCHours() > 0 ? date.getUTCHours() + ":" : "") +
+        (date.getUTCMinutes() < 10 ? "0" + date.getUTCMinutes() : date.getUTCMinutes()) +
+        ":" +
+        (date.getUTCSeconds() < 10 ? "0" + date.getUTCSeconds() : date.getUTCSeconds())
+    );
 }

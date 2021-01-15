@@ -283,7 +283,6 @@ const DynamicFormItemComponent: React.FC<{
         }
 
         case "Dropdown": {
-            console.log(props.state);
             formItem = (
                 <>
                     {props.item?.label && <label>{props.item?.label}</label>}
@@ -315,16 +314,7 @@ const DynamicFormItemComponent: React.FC<{
         }
 
         case "Stepper": {
-            formItem = (
-                <Stepper
-                    label={props.item?.label}
-                    min={props.item?.min}
-                    max={props.item?.max}
-                    onIncrease={() => props.onChange((props.state as number) + 1)}
-                    onDecrease={() => props.onChange((props.state as number) - 1)}
-                    value={props.state as number}
-                />
-            );
+            formItem = <Stepper label={props.item?.label} min={props.item?.min} max={props.item?.max} onChange={props.onChange} value={props.state as number} />;
             break;
         }
 
