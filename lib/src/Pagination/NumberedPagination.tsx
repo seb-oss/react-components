@@ -10,28 +10,30 @@ export interface NumberedPagesProps extends PaginationProps {
     hrefMask?: string;
 }
 
-export const NumberedPagination: React.FC<NumberedPagesProps> = React.memo(({ start = 1, end, hrefMask, ...props }: NumberedPagesProps) => {
-    const [pages, setPages] = React.useState<number[]>([]);
+export const NumberedPagination: React.FC<NumberedPagesProps> = React.memo(
+    React.forwardRef(({ start = 1, end, hrefMask, ...props }: NumberedPagesProps, ref: React.ForwardedRef<HTMLElement>) => {
+        const [pages, setPages] = React.useState<number[]>([]);
 
-    React.useEffect(() => {
-        const arr: number[] = [];
+        React.useEffect(() => {
+            const arr: number[] = [];
 
-        for (let i: number = start; i <= end; i++) {
-            arr.push(i);
-        }
+            for (let i: number = start; i <= end; i++) {
+                arr.push(i);
+            }
 
-        setPages(arr);
-    }, [start, end]);
+            setPages(arr);
+        }, [start, end]);
 
-    return (
-        <Pagination {...props}>
-            {pages.map((page: number, index: number) => (
-                <Page key={index} href={hrefMask?.includes("$i") ? hrefMask.replace("$i", page.toString()) : null}>
-                    {page}
-                </Page>
-            ))}
-        </Pagination>
-    );
-});
+        return (
+            <Pagination {...props} ref={ref}>
+                {pages.map((page: number, index: number) => (
+                    <Page key={index} href={hrefMask?.includes("$i") ? hrefMask.replace("$i", page.toString()) : null}>
+                        {page}
+                    </Page>
+                ))}
+            </Pagination>
+        );
+    })
+);
 
 export default NumberedPagination;
