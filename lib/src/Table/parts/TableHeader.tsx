@@ -3,9 +3,9 @@ import { TableRowProps } from "./TableRow";
 
 export type TableHeaderProps = JSX.IntrinsicElements["thead"];
 
-const TableHeader: React.FC<TableHeaderProps> = ({ ...props }: TableHeaderProps) => {
+const TableHeader: React.FC<TableHeaderProps> = React.forwardRef(({ ...props }: TableHeaderProps, ref: React.ForwardedRef<HTMLTableSectionElement>) => {
     return (
-        <thead {...props}>
+        <thead {...props} ref={ref}>
             {React.Children.count(props.children) === 1 && React.isValidElement<TableRowProps>(props.children)
                 ? React.cloneElement<any>(props.children, { isHeaderRow: true, index: -1 })
                 : React.Children.map(props.children, (Child: React.ReactElement<any>, i: number) => {
@@ -18,7 +18,7 @@ const TableHeader: React.FC<TableHeaderProps> = ({ ...props }: TableHeaderProps)
                   })}
         </thead>
     );
-};
+});
 
 TableHeader.displayName = "TableHeader";
 

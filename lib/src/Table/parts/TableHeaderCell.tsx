@@ -22,61 +22,63 @@ const defaultSort: JSX.Element = (
     </svg>
 );
 
-const TableHeaderCell: React.FC<TableHeaderCellProps> = ({ accessor, disableSort, className, sortDirection, ...props }: TableHeaderCellProps) => {
-    const context = React.useContext(TableContext);
-    const [sortedColumn, setSortedColumn] = React.useState<SortedColumn>(context.tableState.sortedColumn);
-    const [sortOrder, setSortOrder] = React.useState<SortDirection>(SortDirection.ASC);
-    const [sortable, setSortable] = React.useState<boolean>(!disableSort || context.onSort);
+const TableHeaderCell: React.FC<TableHeaderCellProps> = React.forwardRef(
+    ({ accessor, disableSort, className, sortDirection, ...props }: TableHeaderCellProps, ref: React.ForwardedRef<HTMLTableCellElement>) => {
+        const context = React.useContext(TableContext);
+        const [sortedColumn, setSortedColumn] = React.useState<SortedColumn>(context.tableState.sortedColumn);
+        const [sortOrder, setSortOrder] = React.useState<SortDirection>(SortDirection.ASC);
+        const [sortable, setSortable] = React.useState<boolean>(!disableSort || context.onSort);
 
-    /**
-     * get latest sort direction
-     * @param oldSortDirection current sort direction
-     */
-    const getSortDirection = (oldSortDirection: SortDirection): SortDirection => {
-        return oldSortDirection === SortDirection.ASC ? SortDirection.DESC : SortDirection.ASC;
-    };
+        /**
+         * get latest sort direction
+         * @param oldSortDirection current sort direction
+         */
+        const getSortDirection = (oldSortDirection: SortDirection): SortDirection => {
+            return oldSortDirection === SortDirection.ASC ? SortDirection.DESC : SortDirection.ASC;
+        };
 
-    /** on column sort */
-    const onSort = React.useCallback(() => {
-        const newSortedColumn: SortedColumn =
-            sortedColumn && sortedColumn.accessor === accessor ? { ...sortedColumn, sortDirection: getSortDirection(sortedColumn.sortDirection) } : { accessor, sortDirection: SortDirection.DESC };
-        context.setTableState({ ...context.tableState, sortedColumn: newSortedColumn });
-        !!newSortedColumn && context.onSort(newSortedColumn);
-    }, [sortedColumn, context]);
+        /** on column sort */
+        const onSort = React.useCallback(() => {
+            const newSortedColumn: SortedColumn =
+                sortedColumn && sortedColumn.accessor === accessor ? { ...sortedColumn, sortDirection: getSortDirection(sortedColumn.sortDirection) } : { accessor, sortDirection: SortDirection.DESC };
+            context.setTableState({ ...context.tableState, sortedColumn: newSortedColumn });
+            !!newSortedColumn && context.onSort(newSortedColumn);
+        }, [sortedColumn, context]);
 
-    React.useEffect(() => {
-        setSortable(!disableSort && !!context.onSort);
-    }, [disableSort, context.onSort]);
+        React.useEffect(() => {
+            setSortable(!disableSort && !!context.onSort);
+        }, [disableSort, context.onSort]);
 
-    React.useEffect(() => {
-        setSortedColumn(context.tableState.sortedColumn);
-    }, [context.tableState]);
+        React.useEffect(() => {
+            setSortedColumn(context.tableState.sortedColumn);
+        }, [context.tableState]);
 
-    React.useEffect(() => {
-        if (sortDirection && context.onSort) {
-            context.setTableState({ ...context.tableState, sortedColumn: { accessor, sortDirection } });
-        }
-    }, [sortDirection, context.onSort]);
+        React.useEffect(() => {
+            if (sortDirection && context.onSort) {
+                context.setTableState({ ...context.tableState, sortedColumn: { accessor, sortDirection } });
+            }
+        }, [sortDirection, context.onSort]);
 
-    React.useEffect(() => {
-        setSortOrder(sortable && sortedColumn?.accessor === accessor ? sortedColumn?.sortDirection : null);
-    }, [sortable, sortedColumn]);
+        React.useEffect(() => {
+            setSortOrder(sortable && sortedColumn?.accessor === accessor ? sortedColumn?.sortDirection : null);
+        }, [sortable, sortedColumn]);
 
-    return (
-        <th className={classnames(className, { sortable: sortable })} {...props}>
-            {React.Children.map(props.children, (Child: React.ReactElement<any>, i: number) => {
-                return sortable ? (
-                    <div className="sort-holder" onClick={() => onSort()}>
-                        <div className="header-content">{Child}</div>
-                        <div className={classnames("icon-holder", { asc: sortOrder === SortDirection.ASC, desc: sortDirection === SortDirection.DESC })}>{defaultSort}</div>
-                    </div>
-                ) : (
-                    Child
-                );
-            })}
-        </th>
-    );
-};
+        return (
+            <th {...props} ref={ref} className={classnames(className, { sortable: sortable })}>
+                {React.Children.map(props.children, (Child: React.ReactElement<any>, i: number) => {
+                    return sortable ? (
+                        <div className="sort-holder" onClick={() => onSort()}>
+                            <div className="header-content">{Child}</div>
+                            <div className={classnames("icon-holder", { asc: sortOrder === SortDirection.ASC, desc: sortDirection === SortDirection.DESC })}>{defaultSort}</div>
+                        </div>
+                    ) : (
+                        Child
+                    );
+                })}
+            </th>
+        );
+    }
+);
 
 TableHeaderCell.displayName = "TableHeaderCell";
 

@@ -28,103 +28,97 @@ const angleRightIcon: JSX.Element = (
     </svg>
 );
 
-const TableRow: React.FC<TableRowProps> = ({
-    className,
-    isHeaderRow,
-    hideSelect,
-    uniqueKey,
-    parentKey,
-    checked = false,
-    indeterminate = false,
-    isSubRow = false,
-    isExpanded = false,
-    ...props
-}: TableRowProps) => {
-    const context = React.useContext(TableContext);
-    const [uniqueId, setUniqueId] = React.useState<string>(uniqueKey);
-    const [isShown, setIsShown] = React.useState<boolean>(false);
-    const [expanded, setExpanded] = React.useState<boolean>(isExpanded);
-    const [isParentRow, setIsParentRow] = React.useState<boolean>(isExpanded);
-    const [columnProps, setColumnProps] = React.useState<TableHeaderCellProps | TableCellProps>(null);
-    const [expandedRows, setExpandedRows] = React.useState<Array<string>>(context.tableState?.expandedRows || []);
+const TableRow: React.FC<TableRowProps> = React.forwardRef(
+    (
+        { className, isHeaderRow, hideSelect, uniqueKey, parentKey, checked = false, indeterminate = false, isSubRow = false, isExpanded = false, ...props }: TableRowProps,
+        ref: React.ForwardedRef<HTMLTableRowElement>
+    ) => {
+        const context = React.useContext(TableContext);
+        const [uniqueId, setUniqueId] = React.useState<string>(uniqueKey);
+        const [isShown, setIsShown] = React.useState<boolean>(false);
+        const [expanded, setExpanded] = React.useState<boolean>(isExpanded);
+        const [isParentRow, setIsParentRow] = React.useState<boolean>(isExpanded);
+        const [columnProps, setColumnProps] = React.useState<TableHeaderCellProps | TableCellProps>(null);
+        const [expandedRows, setExpandedRows] = React.useState<Array<string>>(context.tableState?.expandedRows || []);
 
-    /** initiate default expanded row */
-    const initiateExpandedRows = React.useCallback(() => {
-        const newExpandedRows: Array<string> = [...expandedRows];
-        const expandedIndex: number = newExpandedRows.indexOf(uniqueId);
-        if (isExpanded && expandedIndex === -1) {
-            newExpandedRows.push(uniqueId);
-        } else if (expandedIndex > -1) {
+        /** initiate default expanded row */
+        const initiateExpandedRows = React.useCallback(() => {
+            const newExpandedRows: Array<string> = [...expandedRows];
             const expandedIndex: number = newExpandedRows.indexOf(uniqueId);
-            newExpandedRows.splice(expandedIndex, 1);
-        }
-        context.setTableState({ ...context.tableState, expandedRows: newExpandedRows });
-        setExpandedRows(newExpandedRows);
-    }, [isExpanded, uniqueId]);
+            if (isExpanded && expandedIndex === -1) {
+                newExpandedRows.push(uniqueId);
+            } else if (expandedIndex > -1) {
+                const expandedIndex: number = newExpandedRows.indexOf(uniqueId);
+                newExpandedRows.splice(expandedIndex, 1);
+            }
+            context.setTableState({ ...context.tableState, expandedRows: newExpandedRows });
+            setExpandedRows(newExpandedRows);
+        }, [isExpanded, uniqueId]);
 
-    React.useEffect(() => {
-        setUniqueId(isHeaderRow ? "all" : uniqueKey || randomId("table-row"));
-    }, [uniqueKey, isHeaderRow]);
+        React.useEffect(() => {
+            setUniqueId(isHeaderRow ? "all" : uniqueKey || randomId("table-row"));
+        }, [uniqueKey, isHeaderRow]);
 
-    React.useEffect(() => {
-        setExpandedRows(context.tableState.expandedRows || []);
-    }, [context.tableState.expandedRows]);
+        React.useEffect(() => {
+            setExpandedRows(context.tableState.expandedRows || []);
+        }, [context.tableState.expandedRows]);
 
-    React.useEffect(() => {
-        setExpanded(isExpanded);
-        if (!isSubRow && !isHeaderRow && context.onRowExpand) {
-            initiateExpandedRows();
-        }
-    }, [isExpanded, initiateExpandedRows]);
+        React.useEffect(() => {
+            setExpanded(isExpanded);
+            if (!isSubRow && !isHeaderRow && context.onRowExpand) {
+                initiateExpandedRows();
+            }
+        }, [isExpanded, initiateExpandedRows]);
 
-    React.useEffect(() => {
-        setColumnProps(isHeaderRow ? { disableSort: true } : null);
-    }, [isHeaderRow]);
+        React.useEffect(() => {
+            setColumnProps(isHeaderRow ? { disableSort: true } : null);
+        }, [isHeaderRow]);
 
-    React.useEffect(() => {
-        setIsParentRow(!(isHeaderRow || isSubRow));
-    }, [isHeaderRow, isSubRow]);
+        React.useEffect(() => {
+            setIsParentRow(!(isHeaderRow || isSubRow));
+        }, [isHeaderRow, isSubRow]);
 
-    React.useEffect(() => {
-        if (context.onRowExpand) {
-            setIsShown(isSubRow && expandedRows.indexOf(parentKey) > -1);
-        }
-    }, [expandedRows]);
+        React.useEffect(() => {
+            if (context.onRowExpand) {
+                setIsShown(isSubRow && expandedRows.indexOf(parentKey) > -1);
+            }
+        }, [expandedRows]);
 
-    const Cell: React.FC<TableHeaderCellProps | TableCellProps> = isHeaderRow ? TableHeaderCell : TableCell;
+        const Cell: React.FC<TableHeaderCellProps | TableCellProps> = isHeaderRow ? TableHeaderCell : TableCell;
 
-    return (
-        <tr className={classnames(className, { "sub-row": isSubRow, expanded: isExpanded, collapsible: isParentRow && !!context.onRowExpand, show: isShown })} {...props}>
-            {!!context.onRowExpand && (
-                <Cell {...columnProps} className={classnames({ "collapse-control": isParentRow })}>
-                    {isParentRow && (
-                        <button className="btn btn-sm" onClick={() => context.onRowExpand(!isExpanded, uniqueId)}>
-                            <div className="icon-holder">{expanded ? angleDown : angleRightIcon}</div>
-                        </button>
-                    )}
-                </Cell>
-            )}
-            {!!context.onRowSelect && (
-                <Cell {...columnProps} className={classnames({ "select-control": !(hideSelect || isSubRow) })}>
-                    {!(hideSelect || isSubRow) && (
-                        <Checkbox
-                            checked={checked}
-                            ref={(input: HTMLInputElement) => {
-                                if (input) {
-                                    input.indeterminate = indeterminate && !checked;
-                                }
-                            }}
-                            name={`tb_checkbox_${uniqueId}`}
-                            id={`tb_checkbox_${uniqueId}`}
-                            onChange={(event: React.ChangeEvent<HTMLInputElement>) => context.onRowSelect(event, uniqueId)}
-                        />
-                    )}
-                </Cell>
-            )}
-            {props.children}
-        </tr>
-    );
-};
+        return (
+            <tr {...props} ref={ref} className={classnames(className, { "sub-row": isSubRow, expanded: isExpanded, collapsible: isParentRow && !!context.onRowExpand, show: isShown })}>
+                {!!context.onRowExpand && (
+                    <Cell {...columnProps} className={classnames({ "collapse-control": isParentRow })}>
+                        {isParentRow && (
+                            <button className="btn btn-sm" onClick={() => context.onRowExpand(!isExpanded, uniqueId)}>
+                                <div className="icon-holder">{expanded ? angleDown : angleRightIcon}</div>
+                            </button>
+                        )}
+                    </Cell>
+                )}
+                {!!context.onRowSelect && (
+                    <Cell {...columnProps} className={classnames({ "select-control": !(hideSelect || isSubRow) })}>
+                        {!(hideSelect || isSubRow) && (
+                            <Checkbox
+                                checked={checked}
+                                ref={(input: HTMLInputElement) => {
+                                    if (input) {
+                                        input.indeterminate = indeterminate && !checked;
+                                    }
+                                }}
+                                name={`tb_checkbox_${uniqueId}`}
+                                id={`tb_checkbox_${uniqueId}`}
+                                onChange={(event: React.ChangeEvent<HTMLInputElement>) => context.onRowSelect(event, uniqueId)}
+                            />
+                        )}
+                    </Cell>
+                )}
+                {props.children}
+            </tr>
+        );
+    }
+);
 
 TableRow.displayName = "TableRow";
 
