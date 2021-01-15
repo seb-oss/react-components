@@ -5,6 +5,7 @@ import { CarouselItemProps, AfterSlideEvent } from "./CarouselItem";
 import { CarouselIndicators } from "./CarouselIndicators";
 import { CarouselNavs } from "./CarouselNavs";
 import "./carousel.scss";
+import { useCombinedRefs } from "../hooks";
 
 export type CarouselProps = JSX.IntrinsicElements["div"] & {
     /** Event handler triggered after change have happened to the carousel returning the index of the new active carousel slide */
@@ -50,6 +51,7 @@ export const Carousel: React.FC<CarouselProps> = React.forwardRef(
         const [id, setId] = React.useState<string>("");
         const [className, setClassName] = React.useState<string>("carousel");
         const [swipePos, setSwipePos] = React.useState<number>();
+        const carouselRef = useCombinedRefs<HTMLDivElement>(ref);
         const interrupted: React.MutableRefObject<boolean> = React.useRef<boolean>(false);
         const timer: React.MutableRefObject<NodeJS.Timeout | number> = React.useRef<NodeJS.Timeout | number>();
 
@@ -200,7 +202,7 @@ export const Carousel: React.FC<CarouselProps> = React.forwardRef(
         return (
             <div
                 {...props}
-                ref={ref}
+                ref={carouselRef}
                 id={id}
                 className={className}
                 data-ride="carousel"
