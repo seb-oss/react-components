@@ -1,55 +1,47 @@
 import React from "react";
 import Docs from "@common/Docs";
-import { ProgressBar } from "@sebgroup/react-components/ProgressBar";
-import { useDynamicForm } from "@hooks/useDynamicForm";
+import { ProgressBar, ProgressBarProps } from "@sebgroup/react-components/ProgressBar";
+import { DynamicFormOption, useDynamicForm } from "@hooks/useDynamicForm";
+import { Slider } from "@sebgroup/react-components/Slider";
+
+const importString: string = require("!raw-loader!@sebgroup/react-components/ProgressBar/ProgressBar");
+const code: string = `<ProgressBar value={progress} />`;
+
+const themes: Array<DynamicFormOption<ProgressBarProps["theme"]>> = [
+    { label: "purple", value: "purple", key: "purple" },
+    { label: "primary", value: "primary", key: "primary" },
+    { label: "danger", value: "danger", key: "danger" },
+    { label: "success", value: "success", key: "success" },
+    { label: "warning", value: "warning", key: "warning" },
+    { label: "inverted", value: "inverted", key: "inverted" },
+];
 
 const ProgressBarPage: React.FC = (): React.ReactElement<void> => {
-    const [progress, setProgress] = React.useState<number>(1);
-    const timer: React.MutableRefObject<NodeJS.Timeout | number> = React.useRef<NodeJS.Timeout | number>();
+    const [value, setValue] = React.useState<number>(50);
 
     const [renderControls, { controls }] = useDynamicForm([
         {
             key: "controls",
-            items: [
-                {
-                    key: "showProgress",
-                    label: "Show progress",
-                    order: 40,
-                    controlType: "Checkbox",
-                    value: false,
-                },
-            ],
+            items: [{ key: "theme", label: "theme", controlType: "Dropdown", options: themes, value: themes[0].value }],
         },
     ]);
-
-    const importString: string = React.useMemo(() => require("!raw-loader!@sebgroup/react-components/ProgressBar/ProgressBar"), []);
-    const importedFiles: Array<string> = React.useMemo(() => [require("!raw-loader!@sebgroup/react-components/ProgressBar/ProgressBar")], []);
-    const code: string = `<ProgressBar value={progress} />`;
-
-    React.useEffect(() => {
-        timer.current = setInterval((): void => {
-            if (progress < 100) {
-                setProgress(progress + 1);
-            } else {
-                clearInterval(timer.current as number);
-            }
-        }, 100);
-        return () => {
-            timer.current && clearInterval(timer.current as number);
-        };
-    }, [timer?.current]);
 
     return (
         <Docs
             mainFile={importString}
-            importedFiles={importedFiles}
             example={
-                <div className="w-100 d-flex justify-content-center">
-                    <ProgressBar showProgress={controls.showProgress} value={progress} />
+                <div className="w-100">
+                    <ProgressBar value={value} max={100} theme={controls.theme} />
                 </div>
             }
             code={code}
-            controls={renderControls()}
+            controls={
+                <>
+                    {renderControls()}
+                    <br />
+                    <Slider label="Value" min={0} max={100} value={value} onChange={(e) => setValue(parseInt(e.target.value))} />
+                </>
+            }
         />
     );
 };

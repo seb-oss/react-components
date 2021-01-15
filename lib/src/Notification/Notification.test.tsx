@@ -1,20 +1,12 @@
 import React from "react";
 import { unmountComponentAtNode, render } from "react-dom";
 import { act, Simulate } from "react-dom/test-utils";
-import { Notification, NotificationProps, NotificationAction } from ".";
+import { Notification, NotificationProps } from ".";
+
+jest.useFakeTimers();
 
 describe("Component: Notification", () => {
     let container: HTMLDivElement = null;
-    let onDismiss: jest.Mock = jest.fn();
-    const actions: Array<NotificationAction> = [
-        { text: "action1", action: jest.fn() },
-        { text: "action2", action: jest.fn() },
-        { text: "action3", action: jest.fn() },
-    ];
-    const props: NotificationProps = {
-        toggle: false,
-        onDismiss,
-    };
 
     beforeEach(() => {
         container = document.createElement("div");
@@ -25,162 +17,139 @@ describe("Component: Notification", () => {
         unmountComponentAtNode(container);
         container.remove();
         container = null;
-        jest.clearAllMocks();
     });
 
-    it("Should render", () => {
+    it("Should render correctly", () => {
         act(() => {
-            render(<Notification {...props} />, container);
+            render(<Notification />, container);
         });
-        expect(container.querySelector(".rc.custom-notification")).not.toBeNull();
+        expect(document.querySelector(".rc.notification")).not.toBeNull();
+        expect(document.querySelector(".rc.notification .content-wrapper")).not.toBeNull();
+        expect(document.querySelector(".rc.notification .content-wrapper .close")).not.toBeNull();
     });
 
-    describe("Should render with defaults", () => {
-        test("slide-in style should render with bottom-left position and purple theme", () => {
-            act(() => {
-                render(<Notification {...props} />, container);
-            });
-            expect(container.querySelector(".style-slide-in")).not.toBeNull();
-            expect(container.querySelector(".bottom-left")).not.toBeNull();
-            expect(container.querySelector(".theme-purple")).not.toBeNull();
-        });
+    it("Should dismiss itself automatically after 5 seconds", () => {
+        const onAnimationEnd: jest.Mock = jest.fn();
 
-        test("bar style should render purple theme", () => {
-            act(() => {
-                render(<Notification {...props} type="bar" />, container);
-            });
-            expect(container.querySelector(".style-bar")).not.toBeNull();
-            expect(container.querySelector(".theme-purple")).not.toBeNull();
-        });
-
-        it("Should dismiss when the default timer is done", async () => {
-            jest.useFakeTimers();
-            act(() => {
-                render(<Notification {...props} toggle dismissTimeout={500} />, container);
-            });
-            expect(container.querySelector(".open")).not.toBeNull();
-            jest.runAllTimers();
-            expect(onDismiss).toBeCalled();
-        });
-
-        it("Should render with defaults if type is not supported", () => {
-            act(() => {
-                render(<Notification {...props} type={"bingo" as any} />, container);
-            });
-            expect(container.querySelector(".default")).not.toBeNull();
-        });
-    });
-
-    it("Should render different variations of style, position and theme", () => {
         act(() => {
-            render(<Notification {...props} type="bar" theme="primary" position="bottom" />, container);
+            render(<TestBed onAnimationEnd={onAnimationEnd} />, container);
         });
-        expect(container.querySelector(".style-bar")).not.toBeNull();
-        expect(container.querySelector(".theme-primary")).not.toBeNull();
-        expect(container.querySelector(".bottom")).not.toBeNull();
+
+        const notification: HTMLDivElement = document.querySelector(".rc.notification");
+
+        expect(notification).not.toBeNull();
+        expect(notification.classList.contains("show")).toBeFalsy();
+        expect(notification.classList.contains("hide")).toBeFalsy();
+
+        act(() => Simulate.click(container.querySelector("#toggle")));
+
+        expect(notification.classList.contains("show")).toBeTruthy();
+        expect(notification.classList.contains("hide")).toBeFalsy();
+
+        act(() => jest.advanceTimersByTime(5000));
+
+        expect(notification.classList.contains("show")).toBeFalsy();
+        expect(notification.classList.contains("hide")).toBeTruthy();
+
+        act(() => Simulate.animationEnd(document.querySelector(".rc.notification")));
+
+        expect(notification.classList.contains("show")).toBeFalsy();
+        expect(notification.classList.contains("hide")).toBeFalsy();
+        expect(onAnimationEnd).toBeCalled();
     });
 
-    it("Should pass custom class", () => {
-        const className: string = "myNotification";
+    it("Should accept custom dismiss timeout", () => {
+        const customTimeout: number = 8000;
+
         act(() => {
-            render(<Notification {...props} className={className} />, container);
+            render(<TestBed dismissTimeout={customTimeout} />, container);
         });
-        expect(container.querySelector(`.${className}`)).not.toBeNull();
+
+        const notification: HTMLDivElement = document.querySelector(".rc.notification");
+
+        expect(notification).not.toBeNull();
+        expect(notification.classList.contains("show")).toBeFalsy();
+        expect(notification.classList.contains("hide")).toBeFalsy();
+
+        act(() => Simulate.click(container.querySelector("#toggle")));
+
+        expect(notification.classList.contains("show")).toBeTruthy();
+        expect(notification.classList.contains("hide")).toBeFalsy();
+
+        act(() => jest.advanceTimersByTime(customTimeout));
+
+        expect(notification.classList.contains("show")).toBeFalsy();
+        expect(notification.classList.contains("hide")).toBeTruthy();
     });
 
-    it("Should render title and message", () => {
-        const title: string = "title";
-        const message: string = "message";
+    it("Should should not automatically dismiss when persist is enabled", () => {
         act(() => {
-            render(<Notification {...props} title={title} message={message} />, container);
+            render(<TestBed persist />, container);
         });
-        expect(container.querySelector(".notification-title")).not.toBeNull();
-        expect(container.querySelector(".notification-title").innerHTML).toBe(title);
-        expect(container.querySelector(".notification-message")).not.toBeNull();
-        expect(container.querySelector(".notification-message").innerHTML).toBe(message);
+
+        act(() => Simulate.click(container.querySelector("#toggle")));
+
+        jest.advanceTimersByTime(5000);
+
+        const notification: HTMLDivElement = document.querySelector(".rc.notification");
+        // Still showing
+        expect(notification.classList.contains("show")).toBeTruthy();
+        expect(notification.classList.contains("hide")).toBeFalsy();
     });
 
-    it("Should allow dismissing with close button", () => {
-        act(() => {
-            render(<Notification {...props} dismissable />, container);
-        });
-        expect(container.querySelector(".dismiss-btn")).not.toBeNull();
-        Simulate.click(container.querySelector(".dismiss-btn"));
-        expect(onDismiss).toBeCalled();
+    describe("It should allow multiple themes", () => {
+        const themes: NotificationProps["theme"][] = ["danger", "inverted", "primary", "purple", "success", "warning"];
+
+        themes.forEach((theme) =>
+            test(theme, () => {
+                act(() => {
+                    render(<Notification theme={theme} />, container);
+                });
+
+                expect(document.querySelector(".rc.notification").classList.contains(`theme-${theme}`)).toBeTruthy();
+                const contentWrapper = document.querySelector(".content-wrapper");
+                // Value rgba(0, 0, 0, 0) means that there is no style applied
+                expect(window.getComputedStyle(contentWrapper).backgroundColor).not.toEqual("rgba(0, 0, 0, 0)");
+            })
+        );
     });
 
-    it("Should call onClick when notification is clicked", () => {
-        const onClick: jest.Mock = jest.fn();
-        act(() => {
-            render(<Notification {...props} onClick={onClick} />, container);
-        });
-        Simulate.click(container.querySelector(".content-wrapper"));
-        expect(container.querySelector(".content-wrapper").classList).toContain("clickable");
-        expect(onClick).toBeCalled();
+    describe("It should allow slide and bar types", () => {
+        const types: NotificationProps["type"][] = ["slide", "bar"];
+
+        types.forEach((type) =>
+            test(type, () => {
+                act(() => {
+                    render(<Notification type={type} />, container);
+                });
+
+                expect(document.querySelector(".rc.notification").classList.contains(`type-${type}`)).toBeTruthy();
+            })
+        );
     });
 
-    it("Should render child element when passed", () => {
-        act(() => {
-            render(
-                <Notification {...props}>
-                    <div className="testing">test</div>
-                </Notification>,
-                container
-            );
-        });
-        expect(container.querySelector(".testing")).not.toBeNull();
-    });
+    describe("It should allow multiple positions", () => {
+        const positions: NotificationProps["position"][] = ["top", "bottom", "bottom-left", "bottom-right", "top-left", "top-right"];
 
-    describe("Should render actions when passed", () => {
-        it("Should render actions", () => {
-            act(() => {
-                render(<Notification {...props} actions={actions} />, container);
-            });
-            expect(container.querySelector(".actions-wrapper")).not.toBeNull();
-        });
+        positions.forEach((position) =>
+            test(position, () => {
+                act(() => {
+                    render(<Notification position={position} />, container);
+                });
 
-        it("Should not render actions if the style is set to bar", () => {
-            act(() => {
-                render(<Notification {...props} type="bar" actions={actions} />, container);
-            });
-            expect(container.querySelector(".actions-wrapper")).toBeNull();
-        });
-
-        it("Should render one action taking the whole width", () => {
-            act(() => {
-                render(<Notification {...props} actions={[actions[0]]} />, container);
-            });
-            expect(container.querySelector(".actions-wrapper")).not.toBeNull();
-            expect(container.querySelector(".actions-wrapper").classList).not.toContain("partitioned");
-        });
-
-        it("Should render two actions with equal width", () => {
-            act(() => {
-                render(<Notification {...props} actions={actions} />, container);
-            });
-            expect(container.querySelector(".actions-wrapper")).not.toBeNull();
-            expect(container.querySelector(".actions-wrapper").classList).toContain("partitioned");
-        });
-
-        it("Should render actions with correct label and action callback should be called when clicked", () => {
-            act(() => {
-                render(<Notification {...props} actions={actions} />, container);
-            });
-            actions.map((item: NotificationAction, index: number) => {
-                expect(container.querySelectorAll(".action-wrapper")[index].querySelector("button").innerHTML).toBe(item.text);
-                Simulate.click(container.querySelectorAll(".action-wrapper")[index].querySelector("button"));
-                expect(item.action).toBeCalled();
-            });
-        });
-    });
-
-    it("Should not start timer if persist prop is set to true", () => {
-        jest.useFakeTimers();
-        act(() => {
-            render(<Notification {...props} toggle dismissTimeout={500} persist />, container);
-        });
-        expect(container.querySelector(".open")).not.toBeNull();
-        jest.runAllTimers();
-        expect(onDismiss).not.toBeCalled();
+                expect(document.querySelector(".rc.notification").classList.contains(position)).toBeTruthy();
+            })
+        );
     });
 });
+
+const TestBed: React.FC<NotificationProps> = (props: NotificationProps) => {
+    const [toggle, setToggle] = React.useState<boolean>(false);
+
+    return (
+        <>
+            <button id="toggle" onClick={() => setToggle(!toggle)} />
+            <Notification {...props} toggle={toggle} onDismiss={() => setToggle(false)} />
+        </>
+    );
+};

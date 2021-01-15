@@ -1,11 +1,13 @@
-.rc.custom-radio {
-    margin-bottom: 1rem;
-    min-height: 2.75rem;
+.rc.radio-button {
+    padding: 0.563rem 0.563rem 0.563rem 12px;
+
     &.inline {
         display: inline-block;
         vertical-align: top;
     }
-    &.condensed {
+
+    .custom-radio {
+        margin-bottom: 1rem;
         margin: 0;
     }
 }

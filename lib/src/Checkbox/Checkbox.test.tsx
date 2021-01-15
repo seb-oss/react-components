@@ -43,14 +43,6 @@ describe("Component: Checkbox", () => {
         expect(container.firstElementChild.classList.contains(className)).toBeTruthy();
     });
 
-    it("Should render an indicator when passed", () => {
-        act(() => {
-            render(<Checkbox indicator={{ type: "danger", message: "error" }} />, container);
-        });
-        expect(container.querySelector(".custom-control").classList.contains("is-danger")).toBeTruthy();
-        expect(container.querySelector(".progress-feedback")).not.toBeNull();
-    });
-
     it("Should render random id when there is a label and no id passed", () => {
         const id: string = "some-id";
         act(() => {

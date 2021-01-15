@@ -84,11 +84,4 @@ describe("Component: Stepper", () => {
         expect(container.querySelector(".stepper-container").classList).toContain("disabled");
         expect(container.querySelector("input").hasAttribute("disabled")).toBeTruthy();
     });
-
-    it("Should render warning and error message when passed", () => {
-        act(() => {
-            render(<Stepper {...props} disabled={true} hint="error" />, container);
-        });
-        expect(container.querySelector(".progress-feedback").classList).toContain("show");
-    });
 });

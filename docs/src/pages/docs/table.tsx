@@ -1,74 +1,66 @@
 import React from "react";
 import Docs from "@common/Docs";
-import { Column, DataItem, Table, TableRow, TableHeader, PrimaryActionButton, ActionLinkItem, FilterProps, FilterItem } from "@sebgroup/react-components/Table/Table";
-import { DynamicFormOption, useDynamicForm } from "@hooks/useDynamicForm";
+import { Table } from "@sebgroup/react-components/Table/Table";
+import { useDynamicForm } from "@hooks/useDynamicForm";
 import makeData from "@utils/makeData";
-import { Dropdown, DropdownItem } from "@sebgroup/react-components/Dropdown";
+import { Dropdown } from "@sebgroup/react-components/Dropdown";
 import { checkDynamicFormSelectedKey } from "@utils/helpers";
 import { Textbox } from "@sebgroup/react-components/Textbox";
-import { NumberedPagination } from "@sebgroup/react-components/Pagination";
+import TableBody from "@sebgroup/react-components/Table/parts/TableBody";
+import TableCell from "@sebgroup/react-components/Table/parts/TableCell";
+import TableHeader from "@sebgroup/react-components/Table/parts/TableHeader";
+import TableHeaderCell from "@sebgroup/react-components/Table/parts/TableHeaderCell";
+import TableRow from "@sebgroup/react-components/Table/parts/TableRow";
+import { filterArrayByColumns, onRowSelect, paginate, searchTextByColumns, sortArray } from "@sebgroup/react-components/Table/parts/helperFunctions";
+import { SortedColumn } from "@sebgroup/react-components/Table/TableContextProvider";
+import { FilterColumn, GenericTableRow } from "@sebgroup/react-components/Table/table-typings";
+import { NumberedPagination } from "@sebgroup/react-components/Pagination/NumberedPagination";
+import { CodeSnippet } from "@common/CodeSnippet";
+
+const importString: string = require("!raw-loader!@sebgroup/react-components/Table/Table");
+const code: string = `<Table>
+    <TableHeader>
+        <TableRow>
+            <TableHeaderCell>TableHeaderCell1</TableHeaderCell>
+            <TableHeaderCell>TableHeaderCell2</TableHeaderCell>
+        </TableRow>
+    </TableHeader>
+    <TableBody>
+        <TableRow>
+            <TableCell>TableCell1</TableCell>
+            <TableCell>TableCell2</TableCell>
+        </TableRow>
+    </TableBody>
+</Table>`;
+
+const columns: Array<Column> = [
+    { label: "First Name", accessor: "firstName" },
+    { label: "Last Name", accessor: "lastName" },
+    { label: "Age", accessor: "age" },
+    { label: "Status", accessor: "status" },
+];
 
 interface TableDataProps {
     firstName: string;
     lastName: string;
     age: number;
+    status: string;
+    subRows?: Array<TableDataProps>;
+}
+
+interface Column<T = TableDataProps> {
+    accessor: keyof T;
+    label: string;
 }
 
 const TablePage: React.FC = (): React.ReactElement<void> => {
     const [paginationValue, setPaginationValue] = React.useState<number>(0);
-    const [pagingSize, setPagingSize] = React.useState<number>(0);
+    const [pages, setPages] = React.useState<number>(0);
+    const [pagingSize, setPagingSize] = React.useState<number>(10);
     const [searchText, setSearchText] = React.useState<string>("");
-    const [dropDownListSelected, setDropdownListSelected] = React.useState<Array<DropdownItem>>([]);
-
-    const columns: Array<Column> = React.useMemo(
-        () => [
-            {
-                label: "First Name",
-                accessor: "firstName",
-            },
-            {
-                label: "Last Name",
-                accessor: "lastName",
-            },
-            {
-                label: "Age",
-                accessor: "age",
-            },
-        ],
-        []
-    );
-
-    const [filters, setFilters] = React.useState<Array<FilterItem>>(columns.map((column: Column) => ({ accessor: column.accessor, filters: [] })));
-
-    const primaryButton: PrimaryActionButton = React.useMemo(
-        () => ({
-            label: "Buy",
-            onClick: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, selectedRow: TableRow) => {},
-        }),
-        []
-    );
-
-    const actionLinks: Array<ActionLinkItem> = React.useMemo(
-        () => [
-            { label: "Add", onClick: (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>, selectedRow: TableRow) => {} },
-            { label: "Edit", onClick: (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>, selectedRow: TableRow) => {} },
-        ],
-        []
-    );
-
-    const checkboxControls: Array<DynamicFormOption> = React.useMemo(
-        () => [
-            { label: "Enable Sorting", value: "enableSorting", key: "enableSorting" },
-            { label: "Row Selection", value: "enableRowSelection", key: "enableRowSelection" },
-            { label: "Enable action button", value: "enableActionButton", key: "enableActionButton" },
-            { label: "Enable action links", value: "enableActionLinks", key: "enableActionLinks" },
-            { label: "Enable pagination", value: "enablePagination", key: "enablePagination" },
-            { label: "Enable sub rows", value: "enableSubRows", key: "enableSubRows" },
-            { label: "Enable searching", value: "enableSearch", key: "enableSearch" },
-            { label: "Enable filter", value: "enableFilter", key: "enableFilter" },
-        ],
-        []
-    );
+    const [selectAllIndicator, setSelectAllIndicator] = React.useState<any>({ checked: false, indeterminate: false });
+    const [dropDownListSelected, setDropdownListSelected] = React.useState<Array<string>>([]);
+    const [filterColumns, setFilterColumns] = React.useState<Array<FilterColumn>>([]);
 
     const [renderControls, { controls }] = useDynamicForm([
         {
@@ -78,114 +70,143 @@ const TablePage: React.FC = (): React.ReactElement<void> => {
                     label: "Configurable options",
                     key: "checkboxes",
                     controlType: "Option",
-                    options: checkboxControls,
+                    options: [
+                        { label: "Enable Sorting", value: "enableSorting", key: "enableSorting" },
+                        { label: "Row Selection", value: "enableRowSelection", key: "enableRowSelection" },
+                        { label: "Enable pagination", value: "enablePagination", key: "enablePagination" },
+                        { label: "Enable sub rows", value: "enableSubRows", key: "enableSubRows" },
+                        { label: "Enable searching", value: "enableSearch", key: "enableSearch" },
+                        { label: "Enable filter", value: "enableFilter", key: "enableFilter" },
+                        { label: "Enable dark theme", value: "enableDark", key: "enableDark" },
+                    ],
                 },
             ],
         },
     ]);
 
-    const enableSorting = React.useMemo(() => checkDynamicFormSelectedKey("enableSorting", controls), [controls]);
-    const enableActionButton = React.useMemo(() => checkDynamicFormSelectedKey("enableActionButton", controls), [controls]);
-    const enableRowSelection = React.useMemo(() => checkDynamicFormSelectedKey("enableRowSelection", controls), [controls]);
-    const enableActionLinks = React.useMemo(() => checkDynamicFormSelectedKey("enableActionLinks", controls), [controls]);
-    const enablePagination = React.useMemo(() => checkDynamicFormSelectedKey("enablePagination", controls), [controls]);
-    const enableSubRows = React.useMemo(() => checkDynamicFormSelectedKey("enableSubRows", controls), [controls]);
-    const enableSearch = React.useMemo(() => checkDynamicFormSelectedKey("enableSearch", controls), [controls]);
-    const enableFilter = React.useMemo(() => checkDynamicFormSelectedKey("enableFilter", controls), [controls]);
+    const enableSorting = checkDynamicFormSelectedKey("enableSorting", controls);
+    const enableRowSelection = checkDynamicFormSelectedKey("enableRowSelection", controls);
+    const enablePagination = checkDynamicFormSelectedKey("enablePagination", controls);
+    const enableSubRows = checkDynamicFormSelectedKey("enableSubRows", controls);
+    const enableSearch = checkDynamicFormSelectedKey("enableSearch", controls);
+    const enableFilter = checkDynamicFormSelectedKey("enableFilter", controls);
+    const enableDark = checkDynamicFormSelectedKey("enableDark", controls);
 
-    const data: Array<DataItem<TableDataProps>> = React.useMemo(
-        () => makeData<Array<DataItem<TableDataProps>>>([enablePagination ? 100 : 10, 5]),
+    const defaultData: Array<TableDataProps> = React.useMemo(
+        () => makeData<Array<TableDataProps>>([enablePagination ? 100 : 10, 5]),
         [enablePagination]
     );
+    const [data, setData] = React.useState<Array<GenericTableRow<TableDataProps>>>([...defaultData]);
 
-    const nameDropDownList: Array<DropdownItem> = React.useMemo(
-        () =>
-            data
-                .map((singleData: DataItem<TableDataProps>) => ({ value: singleData.firstName, label: singleData.firstName }))
-                .filter((item: DropdownItem, index: number, self: Array<DropdownItem>) => {
-                    const selfIndex: number = self.findIndex((filter: DropdownItem) => filter.value === item.value);
-                    return selfIndex === index;
-                })
-                .sort(),
-        [data]
-    );
+    const statusDropdownList: string[] = ["single", "in relationship"];
 
-    const filterProps: FilterProps = React.useMemo(
-        () => ({
-            onAfterFilter: (rows: Array<TableRow>) => {
-                setPagingSize(rows.length);
-            },
-            filterItems: filters,
-        }),
-        [filters]
-    );
+    const onDropdownChange = (value: Array<string>) => {
+        const newFilterColumns: Array<FilterColumn<TableDataProps>> = [...filterColumns];
+        const filterIndex: number = newFilterColumns.findIndex((item: FilterColumn<TableDataProps>) => item.accessor === "status");
+        const newFilter: FilterColumn<TableDataProps> = { accessor: "status", value };
+        if (filterIndex > -1) {
+            newFilterColumns[filterIndex] = newFilter;
+        } else {
+            newFilterColumns.push(newFilter);
+        }
+        setFilterColumns(newFilterColumns);
+        setDropdownListSelected(value);
+    };
 
     const handleTextChange = React.useCallback(
         (e: React.ChangeEvent<HTMLInputElement>) => {
             setSearchText(e.target.value);
+            setData(searchTextByColumns(defaultData, e.target.value, ["lastName"]));
         },
         [searchText]
     );
 
-    const importString: string = require("!raw-loader!@sebgroup/react-components/Table/Table");
-    const importedFiles: Array<string> = [];
-    const code: string = React.useMemo(() => require("!raw-loader!./table").default, []);
-
-    React.useEffect(() => {
-        const updatedFilter: Array<string> = dropDownListSelected?.map((item: DropdownItem) => item.value);
-        const updatedFilterItems: Array<FilterItem> = filters?.map((filterItem: FilterItem) => {
-            if (filterItem.accessor === "firstName") {
-                return { ...filterItem, filters: updatedFilter };
-            }
-            return filterItem;
-        });
-
-        setFilters(updatedFilterItems);
-    }, [dropDownListSelected]);
-
-    React.useEffect(() => {
-        setDropdownListSelected([]);
-    }, [enableFilter]);
-
-    React.useEffect(() => {
-        setPagingSize(data?.length);
-    }, [data]);
+    React.useEffect(() => setData(filterArrayByColumns(defaultData, filterColumns)), [filterColumns]);
+    React.useEffect(() => setDropdownListSelected([]), [enableFilter]);
+    React.useEffect(() => setPages(Math.floor(defaultData.length / pagingSize)), [pagingSize, defaultData]);
+    React.useEffect(() => setData(enablePagination ? paginate(defaultData, pagingSize, paginationValue) : defaultData), [paginationValue, pagingSize, defaultData, enablePagination]);
 
     return (
         <Docs
             mainFile={importString}
-            importedFiles={importedFiles}
+            exampleTheme={enableDark ? "dark" : null}
             example={
                 <div className="w-100">
                     <Table
-                        columns={columns}
-                        data={data}
-                        offset={enablePagination ? 10 : null}
-                        currentpage={enablePagination ? paginationValue + 1 : null}
-                        searchProps={
-                            enableSearch
-                                ? {
-                                      searchInColumns: ["lastName"],
-                                      searchText: searchText,
-                                      triggerSearchOn: "Change",
-                                      onSearch: (searchResults: Array<TableRow>) => {
-                                          setPagingSize(searchResults.length);
-                                      },
+                        theme={enableDark ? "dark" : "light"}
+                        onSort={
+                            enableSorting ? (sortedColumn: SortedColumn) => sortedColumn && setData(sortArray(data, sortedColumn.accessor as keyof TableDataProps, sortedColumn.sortDirection)) : null
+                        }
+                        onRowSelect={
+                            enableRowSelection
+                                ? (event: React.ChangeEvent<HTMLInputElement>, rowUniqueKey: string) => {
+                                      const { data: newData, isAllSelected, isIndeterminate } = onRowSelect(event, data, "firstName", rowUniqueKey);
+                                      setSelectAllIndicator({ checked: isAllSelected, indeterminate: isIndeterminate });
+                                      setData(newData);
                                   }
                                 : null
                         }
-                        primaryActionButton={enableActionButton ? primaryButton : null}
-                        actionLinks={enableActionLinks ? actionLinks : null}
-                        filterProps={enableFilter ? filterProps : null}
-                        sortProps={{
-                            onAfterSorting: (rows: Array<TableRow>, sortByColumn: TableHeader) => {
-                                setPagingSize(rows.length);
-                            },
-                        }}
-                        onRowSelected={enableRowSelection ? (rows: Array<TableRow>) => {} : null}
-                        onRowExpanded={enableSubRows ? (rows: Array<TableRow>) => {} : null}
-                        footer={enablePagination ? <NumberedPagination value={paginationValue} onPageChange={setPaginationValue} end={Math.ceil(pagingSize / 10)} showFirstAndLast /> : null}
-                    />
+                        onRowExpand={
+                            enableSubRows
+                                ? (isExpanded: boolean, rowUniqueKey: string) => {
+                                      setData(
+                                          data.map((item: any) => {
+                                              if (item.firstName === rowUniqueKey) {
+                                                  item.expanded = isExpanded;
+                                              }
+                                              return item;
+                                          })
+                                      );
+                                  }
+                                : null
+                        }
+                    >
+                        <TableHeader>
+                            <TableRow {...selectAllIndicator}>
+                                {columns.map((item: Column, index: number) => (
+                                    <TableHeaderCell {...item} key={index}>
+                                        {item.label}
+                                    </TableHeaderCell>
+                                ))}
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            {data.map((row: GenericTableRow<TableDataProps>, rowIndex: number) => (
+                                <React.Fragment key={`row-${rowIndex}`}>
+                                    <TableRow uniqueKey={row.firstName} checked={row.checked} isExpanded={row.expanded}>
+                                        {columns.map((item: Column, index: number) => {
+                                            return (
+                                                <TableCell {...item} key={index}>
+                                                    {row[item.accessor]}
+                                                </TableCell>
+                                            );
+                                        })}
+                                    </TableRow>
+                                    {enableSubRows &&
+                                        row.subRows?.map((sub: TableDataProps, subIndex: number) => (
+                                            <TableRow isSubRow key={`rowsub-${subIndex}`}>
+                                                {columns.map((item, index) => {
+                                                    return (
+                                                        <TableCell {...item} key={`rowsub-${subIndex}-${index}`}>
+                                                            {sub[item.accessor]}
+                                                        </TableCell>
+                                                    );
+                                                })}
+                                            </TableRow>
+                                        ))}
+                                </React.Fragment>
+                            ))}
+                        </TableBody>
+                        {enablePagination && (
+                            <tfoot>
+                                <tr>
+                                    <td colSpan={4}>
+                                        <NumberedPagination start={1} end={pages} value={paginationValue} onPageChange={setPaginationValue} />
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        )}
+                    </Table>
                 </div>
             }
             code={code}
@@ -193,13 +214,24 @@ const TablePage: React.FC = (): React.ReactElement<void> => {
                 <React.Fragment>
                     {enableFilter && (
                         <div className="filter-holder">
-                            <Dropdown
-                                list={nameDropDownList}
-                                label="filter by first name"
-                                selectedValue={dropDownListSelected}
-                                // TODO: Find a way to fix this
-                                // onChange={(value: Array<DropdownItem>) => setDropdownListSelected(value)}
-                                multi={true}
+                            <label>Filter by status</label>
+                            <Dropdown value={dropDownListSelected} onMultipleChange={onDropdownChange} placeholder="Select filter..." multiple>
+                                {statusDropdownList.map((item: string, i: number) => (
+                                    <option key={i} value={item}>
+                                        {item}
+                                    </option>
+                                ))}
+                            </Dropdown>
+                        </div>
+                    )}
+                    {enablePagination && (
+                        <div className="filter-holder">
+                            <Textbox
+                                name="textInput3"
+                                label="Pagination size"
+                                placeholder="Pagination size"
+                                value={pagingSize}
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPagingSize(isNaN(parseInt(e.target.value)) ? 10 : parseInt(e.target.value))}
                             />
                         </div>
                     )}
@@ -211,8 +243,99 @@ const TablePage: React.FC = (): React.ReactElement<void> => {
                     {renderControls()}
                 </React.Fragment>
             }
+            note={
+                <>
+                    <div>
+                        <h3>Using built-in table row selection function</h3>
+                        <p>
+                            The developer will just need to pass in <code>onRowSelect</code> callback function in <code>{`<Table />`}</code> and Checkbox will be appended automatically to rows.
+                        </p>
+                        An example can be found below:
+                        <CodeSnippet language="jsx">
+                            {`<Table onRowSelect={(event: React.ChangeEvent<HTMLInputElement>, rowUniqueKey: string) => console.log(event, rowUniqueKey)}>
+    <TableHeader>...</TableHeader>
+    <TableBody>
+        <TableRow uniqueKey={row.id} checked={row.checked}>
+            ...
+        </TableRow>
+    </TableBody>
+</Table>`}
+                        </CodeSnippet>
+                    </div>
+                    <div className="mt-5">
+                        <h3>Using built-in table row expand function</h3>
+                        <p>
+                            The developer will just need to pass in <code>onRowExpand</code> callback function in <code>{`<Table />`}</code> and collapse icon will be appended automatically to rows.
+                        </p>
+                        An example can be found below:
+                        <CodeSnippet language="jsx">
+                            {`<Table onRowExpand={(isExpanded: boolean, rowUniqueKey: string) => console.log(isExpanded, rowUniqueKey)}>
+    <TableHeader>...</TableHeader>
+    <TableBody>
+        <TableRow uniqueKey={row.id} isExpanded={row.expanded}>
+            ...
+        </TableRow>
+    </TableBody>
+</Table>`}
+                        </CodeSnippet>
+                    </div>
+                    <div className="mt-5">
+                        <h3>Using built-in onSort function</h3>
+                        <p>
+                            The developer will just need to pass in <code>onSort</code> callback function in <code>{`<Table />`}</code> and sort icon will be appended automatically to header.
+                        </p>
+                        An example can be found below:
+                        <CodeSnippet language="jsx">
+                            {`<Table onSort={sortedColumn: SortedColumn) => console.log(sortedColumn)}>
+    <TableHeader>...</TableHeader>
+    <TableBody>...</TableBody>
+</Table>`}
+                        </CodeSnippet>
+                        <h4 className="mt-4">Disabling sort on column</h4>
+                        <p>The developer can disable sort on specific column.</p>
+                        An example can be found below:
+                        <CodeSnippet language="jsx">
+                            {`<Table onSort={sortedColumn: SortedColumn) => console.log(sortedColumn)}>
+    <TableHeader>
+        <TableRow>
+            <TableHeaderCell accessor="id" disableSort>ID</TableHeaderCell>
+            <TableHeaderCell accessor="name">Name</TableHeaderCell>
+        </TableRow>
+    </TableHeader>
+    <TableBody>...</TableBody>
+</Table>`}
+                        </CodeSnippet>
+                        <h4 className="mt-4">Setting default sort direction on column</h4>
+                        <p>The developer can specify sort direction on column. Currently only support single sort column.</p>
+                        An example can be found below:
+                        <CodeSnippet language="jsx">
+                            {`<Table onSort={sortedColumn: SortedColumn) => console.log(sortedColumn)}>
+    <TableHeader>
+        <TableRow>
+            <TableHeaderCell accessor="id" sortDirection={SortDirection.ASC}>ID</TableHeaderCell>
+            <TableHeaderCell accessor="name">Name</TableHeaderCell>
+        </TableRow>
+    </TableHeader>
+    <TableBody>...</TableBody>
+</Table>`}
+                        </CodeSnippet>
+                    </div>
+                </>
+            }
         />
     );
 };
 
 export default TablePage;
+
+type TableCell = any;
+
+/**
+ * <Table
+    onSort={sortedColumn: SortedColumn) => console.log(sortedColumn)}
+    onRowSelect={(event: React.ChangeEvent<HTMLInputElement>, rowUniqueKey: string) => console.log(event, rowUniqueKey)}
+    onRowExpand={(isExpanded: boolean, rowUniqueKey: string) => console.log(isExpanded, rowUniqueKey)}>
+    <TableHeader>...</TableHeader>
+    <TableBody>...</TableBody>
+</Table>
+ */

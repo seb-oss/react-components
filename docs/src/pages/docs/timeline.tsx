@@ -1,35 +1,28 @@
 import React from "react";
 import Docs from "@common/Docs";
-import { Timeline, TimelineItem } from "@sebgroup/react-components/Timeline";
+import { Timeline, TimelineDirection, TimelineItem } from "@sebgroup/react-components/Timeline";
 import { DynamicFormOption, useDynamicForm } from "@hooks/useDynamicForm";
 import { loremIpsum } from "lorem-ipsum";
 
-const contents = [...Array(3)].map(() => loremIpsum({ units: "paragraph" }));
-
-const TimelinePage: React.FC = React.memo(() => {
-    const importString: string = require("!raw-loader!@sebgroup/react-components/Timeline/Timeline");
-    const directionList: Array<DynamicFormOption> = [
-        { label: "Vertical", value: "vertical", key: "vertical" },
-        { label: "Horizontal", value: "horizontal", key: "horizontal" },
-    ];
-    const [renderForm, { controls }] = useDynamicForm([
-        {
-            key: "controls",
-            items: [
-                {
-                    key: "direction",
-                    label: "Direction",
-                    value: directionList[0],
-                    options: directionList,
-                    controlType: "Radio",
-                },
-            ],
-        },
-    ]);
-    const code: string = `<Timeline>
+const importString: string = require("!raw-loader!@sebgroup/react-components/Timeline/Timeline");
+const code: string = `<Timeline>
     <TimelineItem header="First item" time="Today">The content goes here</TimelineItem>
     <TimelineItem header="Second item" time="Yesterday">The content goes here</TimelineItem>
 </Timeline>`;
+
+const directionList: Array<DynamicFormOption<TimelineDirection>> = [
+    { label: "Vertical", value: "vertical", key: "vertical" },
+    { label: "Horizontal", value: "horizontal", key: "horizontal" },
+];
+const contents = [...Array(3)].map(() => loremIpsum({ units: "paragraph" }));
+
+const TimelinePage: React.FC = React.memo(() => {
+    const [renderForm, { controls }] = useDynamicForm([
+        {
+            key: "controls",
+            items: [{ key: "direction", label: "Direction", value: directionList[0], options: directionList, controlType: "Radio", inline: true }],
+        },
+    ]);
 
     const handleClick: React.MouseEventHandler = React.useCallback((e: React.MouseEvent<HTMLDivElement>) => {
         alert(`Item ${e.currentTarget.dataset.indexNumber} clicked`);

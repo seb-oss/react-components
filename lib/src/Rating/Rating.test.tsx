@@ -7,7 +7,6 @@ describe("Component: Rating", () => {
     let container: HTMLDivElement = null;
 
     const props: RatingProps = {
-        initialValue: 1,
         max: 5,
         min: 1,
     };

@@ -13,18 +13,8 @@ const DatepickerPage: React.FC = () => {
         {
             key: "controls",
             items: [
-                {
-                    key: "monthPicker",
-                    label: "Month picker",
-                    description: "Switch to month picker only",
-                    controlType: "Checkbox",
-                },
-                {
-                    key: "forceCustom",
-                    label: "Custom date picker",
-                    description: "This picker is the automatic fallback on browsers that don't support html5 datepicker",
-                    controlType: "Checkbox",
-                },
+                { key: "monthPicker", label: "Month picker", description: "Switch to month picker only", controlType: "Checkbox" },
+                { key: "forceCustom", label: "Custom date picker", description: "This picker is the automatic fallback on browsers that don't support html5 datepicker", controlType: "Checkbox" },
                 {
                     key: "localeCode",
                     rulerKey: "forceCustom",
@@ -32,6 +22,7 @@ const DatepickerPage: React.FC = () => {
                     label: "Locale code:",
                     description: "Set a locale for the custom picker (defaults to system locale).",
                     controlType: "Text",
+                    indent: true,
                 },
             ],
         },

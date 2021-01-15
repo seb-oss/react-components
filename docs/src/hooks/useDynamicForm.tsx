@@ -1,50 +1,53 @@
 import React, { useState, ReactNode, useMemo, useCallback } from "react";
+import classnames from "classnames";
 
 import { Checkbox } from "@sebgroup/react-components/Checkbox";
 import { Textbox } from "@sebgroup/react-components/Textbox";
 import { Textarea } from "@sebgroup/react-components/Textarea";
-import { Dropdown } from "@sebgroup/react-components/Dropdown";
+import { Dropdown, getValueOfMultipleSelect } from "@sebgroup/react-components/Dropdown";
 import { Datepicker } from "@sebgroup/react-components/Datepicker";
 import { Stepper } from "@sebgroup/react-components/Stepper";
-import { DropdownProps } from "@sebgroup/react-components/Dropdown/Dropdown";
-import { RadioButtonProps, RadioGroup } from "@sebgroup/react-components/RadioButton";
+import { RadioButton, RadioGroup } from "@sebgroup/react-components/RadioButton";
 
-type DynamicFormInternalStateValue = string | string[] | DynamicFormOption | DynamicFormOption[] | Date | boolean | number | null;
+type DynamicFormInternalStateValue = string | string[] | DynamicFormOption | DynamicFormOption[] | Date | boolean | number;
 export interface DynamicFormItem {
     key: string;
     value?: DynamicFormInternalStateValue;
-    label?: string | null;
-    description?: string | null;
+    label?: string;
+    description?: string;
     required?: boolean;
     multi?: boolean;
     min?: any;
     max?: any;
     order?: number;
-    placeholder?: string | null;
-    options?: Array<DynamicFormOption> | null;
-    rulerKey?: string | null;
+    placeholder?: string;
+    options?: Array<DynamicFormOption>;
+    rulerKey?: string;
     condition?: DynamicFormInternalStateValue;
     controlType?: DynamicFormType;
     inline?: boolean;
+    valueType?: "string" | "number";
+    indent?: boolean;
 }
 
 export type DynamicFormType = "Hidden" | "Text" | "Textarea" | "Checkbox" | "Dropdown" | "Datepicker" | "Radio" | "Option" | "ErrorLabel" | "Stepper";
 
 export interface DynamicFormSection {
-    title?: string | null;
+    title?: string;
     key: string;
     order?: number;
-    items?: Array<DynamicFormItem> | null;
+    items?: Array<DynamicFormItem>;
 }
 
 export interface DynamicFormOption<T = any> {
     value?: T;
-    label?: string | null;
+    label?: string;
+    description?: string;
     key: string;
-    disabled?: boolean | null;
+    disabled?: boolean;
 }
 
-type InputChange = React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | React.MouseEvent<HTMLButtonElement, MouseEvent> | DropdownProps["onChange"] | Date | number;
+type InputChange = React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement> | React.MouseEvent<HTMLButtonElement, MouseEvent> | Date | number;
 interface DynamicFormInternalStateSection {
     [k: string]: DynamicFormInternalStateValue;
 }
@@ -135,6 +138,7 @@ export function useDynamicForm(sections: DynamicFormSection[]): [() => JSX.Eleme
                 case "Text":
                 case "Textarea":
                     newValue = (e as React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>).target.value;
+                    newValue = item.valueType === "number" ? Number(newValue) : newValue;
                     break;
                 case "Option": {
                     let newOptions: DynamicFormOption[] = [...(((sectionState as DynamicFormInternalStateSection)[item.key] as DynamicFormOption[]) || [])];
@@ -161,6 +165,11 @@ export function useDynamicForm(sections: DynamicFormSection[]): [() => JSX.Eleme
                 case "Checkbox": {
                     const targetValue: boolean = (e as React.ChangeEvent<HTMLInputElement>).target.checked;
                     newValue = targetValue;
+                    break;
+                }
+                case "Dropdown": {
+                    const target = (e as React.ChangeEvent<HTMLSelectElement>).target;
+                    newValue = target.multiple ? getValueOfMultipleSelect(target) : target.value;
                     break;
                 }
 
@@ -211,7 +220,7 @@ const DynamicFormComponent: React.FC<{
 
 const DynamicFormSectionComponent: React.FC<{
     section: DynamicFormSection;
-    state: DynamicFormInternalStateSection | null;
+    state: DynamicFormInternalStateSection;
     onChange: OnChangeFormItem;
     shouldRender: ShouldRenderFormItem;
 }> = (props) => {
@@ -228,7 +237,7 @@ const DynamicFormSectionComponent: React.FC<{
 
 const DynamicFormItemComponent: React.FC<{
     item: DynamicFormItem;
-    state: DynamicFormInternalStateValue | null;
+    state: DynamicFormInternalStateValue;
     onChange: OnChangeInput;
 }> = (props) => {
     const controlType: DynamicFormType = props.item?.controlType || "Text";
@@ -247,40 +256,52 @@ const DynamicFormItemComponent: React.FC<{
         }
         case "Text": {
             formItem = (
-                <>
-                    <Textbox {...commonProps} value={(props.state as string) || ""} />
+                <div className={props.item?.indent ? "indent pl-3 pt-2" : ""}>
+                    <Textbox {...commonProps} type={props.item.valueType || "text"} value={(props.state as string) || ""} />
                     {props.item?.description ? (
                         <p>
                             <small>{props.item?.description}</small>
                         </p>
                     ) : null}
-                </>
+                </div>
             );
             break;
         }
 
         case "Radio": {
-            const list: RadioButtonProps[] =
-                props.item?.options?.map((option) => {
-                    return { label: option.label || "", value: option.value || "", disabled: !!option.disabled };
-                }) || [];
-            formItem = <RadioGroup condensed {...commonProps} value={(props.state as DynamicFormOption)?.value || ""} list={list} inline={props.item.inline} />;
+            formItem = (
+                <RadioGroup className={classnames({ indent: props.item?.indent })} {...commonProps} name={props.item?.key} value={(props.state as DynamicFormOption)?.value || ""}>
+                    {props.item?.options?.map((item, i) => (
+                        <RadioButton key={i} value={item.value} wrapperProps={{ className: props.item.inline ? "d-inline-block" : null }}>
+                            {item.label}
+                            {item.description && <p className="text-muted m-0">{item.description}</p>}
+                        </RadioButton>
+                    ))}
+                </RadioGroup>
+            );
             break;
         }
 
         case "Dropdown": {
-            const list: DropdownProps["list"] =
-                props.item?.options?.map((option) => {
-                    return { label: option.label || "", value: option.value || "", disabled: !!option.disabled };
-                }) || [];
-
-            formItem = <Dropdown {...commonProps} multi={props.item?.multi} value={props.state as string | string[]} list={list} />;
+            console.log(props.state);
+            formItem = (
+                <>
+                    {props.item?.label && <label>{props.item?.label}</label>}
+                    <Dropdown name={props.item?.key} placeholder={props.item?.placeholder} onChange={props.onChange as any} multiple={props.item?.multi} value={props.state as string | string[]}>
+                        {props.item?.options?.map((option, i) => (
+                            <option key={i} value={option.value}>
+                                {option.label}
+                            </option>
+                        ))}
+                    </Dropdown>
+                </>
+            );
             break;
         }
 
         case "Checkbox": {
             formItem = (
-                <Checkbox {...commonProps} checked={props.state as boolean}>
+                <Checkbox wrapperProps={{ className: classnames({ indent: props.item?.indent }) }} {...commonProps} checked={!!props.state}>
                     {commonProps.label}
                     {props.item?.description && <p className="text-muted m-0">{props.item?.description}</p>}
                 </Checkbox>

@@ -1,7 +1,13 @@
 @import "~@sebgroup/bootstrap/scss/core";
 
 @mixin style-checkbox($color) {
-    .rc.checkbox > .custom-checkbox > .custom-control-label::before {
+    .custom-checkbox > .custom-control-label::before {
+        border-color: $color;
+    }
+}
+
+@mixin style-radiobutton($color) {
+    .custom-control-label::before {
         border-color: $color;
     }
 }
@@ -12,28 +18,52 @@
     }
 }
 
-.rc.progress-feedback {
-    &.wrapper-indicator {
-        &:before {
-            content: none;
+.rc-d.feedback {
+    &:before {
+        content: none;
+    }
+    &:not(.feedback-0):not(.feedback-message) {
+        border-radius: 4px;
+
+        &.feedback-10 {
+            &:not(.no-border) {
+                border: 1px solid $red-dark;
+            }
+            & + .feedback-message {
+                color: $red-dark;
+            }
+
+            @include style-checkbox($red-dark);
+            @include style-radiobutton($red-dark);
+            @include style-toggle-selector($red-dark);
         }
-        &:not(.progress-0) {
-            > .children:not(.no-border) {
-                border-radius: 4px;
-                border: 1px solid currentColor;
+        &.feedback-50 {
+            &:not(.no-border) {
+                border: 1px solid $yellow-darker;
             }
-            &.progress-10 {
-                @include style-checkbox($red-dark);
-                @include style-toggle-selector($red-dark);
+            & + .feedback-message {
+                color: $yellow-darker;
             }
-            &.progress-50 {
-                @include style-checkbox($yellow-darker);
-                @include style-toggle-selector($yellow-darker);
+
+            @include style-checkbox($yellow-darker);
+            @include style-radiobutton($yellow-darker);
+            @include style-toggle-selector($yellow-darker);
+        }
+        &.feedback-100 {
+            &:not(.no-border) {
+                border: 1px solid $green-darker;
             }
-            &.progress-100 {
-                @include style-checkbox($green-darker);
-                @include style-toggle-selector($green-darker);
+            & + .feedback-message {
+                color: $green-darker;
             }
+
+            @include style-checkbox($green-darker);
+            @include style-radiobutton($green-darker);
+            @include style-toggle-selector($green-darker);
         }
     }
+}
+
+.rc-d.feedback-message {
+    margin: 0;
 }

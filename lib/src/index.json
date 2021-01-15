@@ -7,6 +7,7 @@
         "Carousel": "./src/Carousel/index.ts",
         "Checkbox": "./src/Checkbox/index.ts",
         "Chip": "./src/Chip/index.ts",
+        "CloseButton": "./src/CloseButton/index.ts",
         "Collapse": "./src/Collapse/index.ts",
         "Datepicker": "./src/Datepicker/index.ts",
         "Dropdown": "./src/Dropdown/index.ts",
@@ -29,12 +30,12 @@
         "Textarea": "./src/Textarea/index.ts",
         "Textbox": "./src/Textbox/index.ts",
         "Timeline": "./src/Timeline/index.ts",
-        "Timepicker": "./src/Timepicker/index.ts",
         "Timer": "./src/Timer/index.ts",
         "Toggle": "./src/Toggle/index.ts",
         "ToggleSelector": "./src/ToggleSelector/index.ts",
         "Tooltip": "./src/Tooltip/index.ts",
-        "Video": "./src/Video/index.ts"
+        "Video": "./src/Video/index.ts",
+        "hooks": "./src/hooks/index.ts"
     },
     "indexes": [
         {
@@ -64,6 +65,10 @@
         {
             "from": "./src/Chip/index.ts",
             "to": "./Chip/index.js"
+        },
+        {
+            "from": "./src/CloseButton/index.ts",
+            "to": "./CloseButton/index.js"
         },
         {
             "from": "./src/Collapse/index.ts",
@@ -154,10 +159,6 @@
             "to": "./Timeline/index.js"
         },
         {
-            "from": "./src/Timepicker/index.ts",
-            "to": "./Timepicker/index.js"
-        },
-        {
             "from": "./src/Timer/index.ts",
             "to": "./Timer/index.js"
         },
@@ -176,6 +177,10 @@
         {
             "from": "./src/Video/index.ts",
             "to": "./Video/index.js"
+        },
+        {
+            "from": "./src/hooks/index.ts",
+            "to": "./hooks/index.js"
         }
     ]
 }

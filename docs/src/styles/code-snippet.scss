@@ -14,7 +14,7 @@
     &:not(.angular) {
         pre {
             border-radius: $border-radius !important;
-            overflow: hidden !important;
+            overflow: hidden;
         }
 
         div.snippet-icon {

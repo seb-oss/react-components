@@ -2,13 +2,7 @@
 
 $transition-time: 200ms;
 
-@mixin hint-theme($color) {
-    > .input-box-group-wrapper {
-        border-bottom: 2px solid $color;
-    }
-}
-
-.form-group.input-box-group {
+.rc.input-box-group {
     position: relative;
     > .input-group {
         position: relative;
@@ -98,15 +92,6 @@ $transition-time: 200ms;
                 }
             }
         }
-        &.warning {
-            @include hint-theme($yellow-darker);
-        }
-        &.danger {
-            @include hint-theme($red);
-        }
-        &.success {
-            @include hint-theme($green);
-        }
         &.disabled {
             .input-box-group-wrapper {
                 background-color: $gray-100;
@@ -125,22 +110,6 @@ $transition-time: 200ms;
                     }
                     color: $gray-500;
                 }
-            }
-        }
-        > .progress-feedback {
-            opacity: 0;
-            margin: 0;
-            padding: 0;
-            background: transparent;
-            max-height: 0;
-            border: none;
-            border-radius: 0px;
-            overflow: hidden;
-            width: 100%;
-            transition: opacity $transition-time, padding $transition-time, max-height $transition-time * 2;
-            &.show {
-                opacity: 1;
-                max-height: 100px;
             }
         }
     }
