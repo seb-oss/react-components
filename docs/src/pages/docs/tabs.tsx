@@ -1,6 +1,7 @@
 import React from "react";
 import Docs from "@common/Docs";
-import { Tabs, TabItem } from "@sebgroup/react-components/Tabs";
+import { Tabs } from "@sebgroup/react-components/Tabs";
+import { TabItem } from "@sebgroup/react-components/TabItem";
 
 const importString: string = require("!raw-loader!@sebgroup/react-components/Tabs/Tabs");
 const code: string = `<Tabs value={value} onTabChange={setValue}>

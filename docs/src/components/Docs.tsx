@@ -1,5 +1,6 @@
 import React from "react";
-import { Tabs, TabItem } from "@sebgroup/react-components/Tabs";
+import { Tabs } from "@sebgroup/react-components/Tabs";
+import { TabItem } from "@sebgroup/react-components/TabItem";
 import Layout from "./Layout";
 import { Helmet } from "react-helmet";
 import { APIExtractService } from "@utils/api-parser";

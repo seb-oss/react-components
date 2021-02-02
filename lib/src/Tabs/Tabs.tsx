@@ -1,5 +1,5 @@
 import React from "react";
-import { TabItemProps } from "./TabItem";
+import { TabItemProps } from "../TabItem/TabItem";
 import classnames from "classnames";
 
 export type TabsProps = JSX.IntrinsicElements["ul"] & {

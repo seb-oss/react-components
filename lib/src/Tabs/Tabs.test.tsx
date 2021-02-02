@@ -1,6 +1,7 @@
 import React from "react";
 import { unmountComponentAtNode, render } from "react-dom";
-import { Tabs, TabItem } from ".";
+import { Tabs } from ".";
+import { TabItem } from "../TabItem";
 import { act, Simulate } from "react-dom/test-utils";
 
 describe("Component: Tabs", () => {
