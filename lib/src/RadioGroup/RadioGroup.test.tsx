@@ -1,7 +1,8 @@
 import React from "react";
 import { unmountComponentAtNode, render } from "react-dom";
 import { act, Simulate } from "react-dom/test-utils";
-import { RadioGroup, RadioButton } from ".";
+import { RadioGroup } from ".";
+import { RadioButton } from "../RadioButton";
 
 const radios: React.ReactElement[] = [
     <RadioButton key={1} value="Yes">

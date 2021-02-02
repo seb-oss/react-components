@@ -1,10 +1,10 @@
 import React from "react";
 import Docs from "@common/Docs";
 import { DynamicFormOption, useDynamicForm } from "@hooks/useDynamicForm";
-import { RadioButton, RadioGroup } from "@sebgroup/react-components/RadioButton";
+import { RadioButton } from "@sebgroup/react-components/RadioButton";
+import { RadioGroup } from "@sebgroup/react-components/RadioGroup";
 import { CodeSnippet } from "@common/CodeSnippet";
 import { Indicator, IndicatorType } from "@sebgroup/react-components/FeedbackIndicator";
-import { Checkbox } from "@sebgroup/react-components/Checkbox";
 
 const importString: string = require("!raw-loader!@sebgroup/react-components/RadioButton/RadioButton");
 const code: string = `{/* Use them in our RadioGroup helper component */}

@@ -26,6 +26,7 @@
         "Pagination": "./src/Pagination/index.ts",
         "ProgressBar": "./src/ProgressBar/index.ts",
         "RadioButton": "./src/RadioButton/index.ts",
+        "RadioGroup": "./src/RadioGroup/index.ts",
         "Rating": "./src/Rating/index.ts",
         "Slider": "./src/Slider/index.ts",
         "Stepper": "./src/Stepper/index.ts",
@@ -146,6 +147,10 @@
         {
             "from": "./src/RadioButton/index.ts",
             "to": "./RadioButton/index.js"
+        },
+        {
+            "from": "./src/RadioGroup/index.ts",
+            "to": "./RadioGroup/index.js"
         },
         {
             "from": "./src/Rating/index.ts",

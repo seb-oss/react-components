@@ -1,7 +1,7 @@
 import React from "react";
 import classnames from "classnames";
 import { FeedbackIndicator, Indicator } from "../FeedbackIndicator";
-import { RadioButtonProps } from "./RadioButton";
+import { RadioButtonProps } from "../RadioButton/RadioButton";
 
 export type RadioGroupProps<T = React.ReactText> = JSX.IntrinsicElements["div"] & {
     /** The name of the group */
