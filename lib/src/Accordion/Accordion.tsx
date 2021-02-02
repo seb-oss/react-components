@@ -1,7 +1,7 @@
 import React from "react";
 import { randomId } from "@sebgroup/frontend-tools";
 import classnames from "classnames";
-import { AccordionItemProps } from "./AccordionItem";
+import { AccordionItemProps } from "../AccordionItem";
 import "./accordion.scss";
 
 export type AccordionProps = JSX.IntrinsicElements["div"] & {

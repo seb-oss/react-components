@@ -1,5 +1,5 @@
 import React from "react";
-import { Collapse } from "../Collapse/Collapse";
+import { Collapse } from "../Collapse";
 import classnames from "classnames";
 import { randomId } from "@sebgroup/frontend-tools";
 

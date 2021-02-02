@@ -1,12 +1,13 @@
 import React from "react";
 import Docs from "@common/Docs";
-import { Accordion, AccordionItem } from "@sebgroup/react-components/Accordion";
+import { Accordion } from "@sebgroup/react-components/Accordion";
+import { AccordionItem } from "@sebgroup/react-components/AccordionItem";
 import { useDynamicForm } from "@hooks/useDynamicForm";
 import { Button } from "@sebgroup/react-components/Button";
 import { Textbox } from "@sebgroup/react-components/Textbox";
 
-const importString: string = require("!raw-loader!@sebgroup/react-components/Accordion/Accordion");
-const importedFiles: Array<string> = [require("!raw-loader!@sebgroup/react-components/Accordion/AccordionItem")];
+const importString: string = require("!raw-loader!@sebgroup/react-components/Accordion");
+const importedFiles: Array<string> = [require("!raw-loader!@sebgroup/react-components/AccordionItem")];
 const code: string = `<Accordion>
     <AccordionItem header="First">First content</AccordionItem>
     <AccordionItem header="Second">Second content</AccordionItem>
@@ -46,7 +47,7 @@ const AccordionPage: React.FC = () => {
                         <form onSubmit={(e) => e.preventDefault()}>
                             <fieldset>
                                 <legend>Register your interest</legend>
-                                <Textbox label="email" placeholder="enter your email"></Textbox>
+                                <Textbox label="email" placeholder="enter your email" />
 
                                 <Button type="submit">Submit</Button>
                             </fieldset>
