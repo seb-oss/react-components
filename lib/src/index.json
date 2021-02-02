@@ -42,6 +42,7 @@
         "Timer": "./src/Timer/index.ts",
         "Toggle": "./src/Toggle/index.ts",
         "ToggleSelector": "./src/ToggleSelector/index.ts",
+        "ToggleSelectorItem": "./src/ToggleSelectorItem/index.ts",
         "Tooltip": "./src/Tooltip/index.ts",
         "Video": "./src/Video/index.ts",
         "hooks": "./src/hooks/index.ts"
@@ -214,6 +215,10 @@
         {
             "from": "./src/ToggleSelector/index.ts",
             "to": "./ToggleSelector/index.js"
+        },
+        {
+            "from": "./src/ToggleSelectorItem/index.ts",
+            "to": "./ToggleSelectorItem/index.js"
         },
         {
             "from": "./src/Tooltip/index.ts",

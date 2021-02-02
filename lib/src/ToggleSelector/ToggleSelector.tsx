@@ -1,6 +1,6 @@
 import React from "react";
 import classnames from "classnames";
-import { ToggleSelectorItemProps } from "./ToggleSelectorItem";
+import { ToggleSelectorItemProps } from "../ToggleSelectorItem";
 import { FeedbackIndicator, Indicator } from "../FeedbackIndicator";
 import { randomId } from "@sebgroup/frontend-tools";
 import "./toggle-selector.scss";

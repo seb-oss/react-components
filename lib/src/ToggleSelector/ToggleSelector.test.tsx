@@ -1,8 +1,8 @@
 import React from "react";
 import { act, Simulate } from "react-dom/test-utils";
 import { unmountComponentAtNode, render } from "react-dom";
-import { ToggleSelector, ToggleSelectorProps } from ".";
-import { ToggleSelectorItem, ToggleSelectorItemProps } from "./ToggleSelectorItem";
+import { ToggleSelector } from ".";
+import { ToggleSelectorItem } from "../ToggleSelectorItem";
 
 describe("Component: ToggleSelector", () => {
     let container: HTMLDivElement = null;
