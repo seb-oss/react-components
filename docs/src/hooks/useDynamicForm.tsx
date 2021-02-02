@@ -7,7 +7,8 @@ import { Textarea } from "@sebgroup/react-components/Textarea";
 import { Dropdown, getValueOfMultipleSelect } from "@sebgroup/react-components/Dropdown";
 import { Datepicker } from "@sebgroup/react-components/Datepicker";
 import { Stepper } from "@sebgroup/react-components/Stepper";
-import { RadioButton, RadioGroup } from "@sebgroup/react-components/RadioButton";
+import { RadioButton } from "@sebgroup/react-components/RadioButton";
+import { RadioGroup } from "@sebgroup/react-components/RadioGroup";
 
 type DynamicFormInternalStateValue = string | string[] | DynamicFormOption | DynamicFormOption[] | Date | boolean | number;
 export interface DynamicFormItem {

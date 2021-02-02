@@ -1,6 +1,7 @@
 import React from "react";
 import Docs from "@common/Docs";
-import { Timeline, TimelineDirection, TimelineItem } from "@sebgroup/react-components/Timeline";
+import { Timeline, TimelineDirection } from "@sebgroup/react-components/Timeline";
+import { TimelineItem } from "@sebgroup/react-components/TimelineItem";
 import { DynamicFormOption, useDynamicForm } from "@hooks/useDynamicForm";
 import { loremIpsum } from "lorem-ipsum";
 

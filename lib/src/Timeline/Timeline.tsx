@@ -1,6 +1,6 @@
 import React from "react";
 import classnames from "classnames";
-import { TimelineItemProps } from ".";
+import { TimelineItemProps } from "../TimelineItem";
 import "./timeline.scss";
 
 export type TimelineDirection = "vertical" | "horizontal";

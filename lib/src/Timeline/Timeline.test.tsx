@@ -1,7 +1,8 @@
 import React from "react";
 import { unmountComponentAtNode, render } from "react-dom";
-import { act, Simulate } from "react-dom/test-utils";
-import { Timeline, TimelineDirection, TimelineProps, TimelineItem } from ".";
+import { act } from "react-dom/test-utils";
+import { Timeline, TimelineDirection, TimelineProps } from ".";
+import { TimelineItem } from "../TimelineItem";
 
 interface TimelineClickTestCase {
     statement: string;
