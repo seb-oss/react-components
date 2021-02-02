@@ -2,7 +2,7 @@ import React from "react";
 import Docs from "@common/Docs";
 import { DynamicFormOption, DynamicFormSection, useDynamicForm } from "@hooks/useDynamicForm";
 import { StepTracker } from "@sebgroup/react-components/StepTracker";
-import StepLabel, { StepLabelProps } from "@sebgroup/react-components/StepTracker/StepLabel";
+import { StepLabel, StepLabelProps } from "@sebgroup/react-components/StepLabel";
 
 const StepTrackerPage: React.FC = React.memo(() => {
     const importString: string = require("!raw-loader!@sebgroup/react-components/StepTracker/StepTracker");

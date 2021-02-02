@@ -1,7 +1,7 @@
 import React from "react";
 import classnames from "classnames";
 import "./steptracker.scss";
-import StepLabel, { StepLabelProps } from "./StepLabel";
+import { StepLabel, StepLabelProps } from "../StepLabel/StepLabel";
 
 const checkIcon: JSX.Element = (
     <svg name="check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">

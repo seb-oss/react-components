@@ -29,6 +29,7 @@
         "RadioGroup": "./src/RadioGroup/index.ts",
         "Rating": "./src/Rating/index.ts",
         "Slider": "./src/Slider/index.ts",
+        "StepLabel": "./src/StepLabel/index.ts",
         "Stepper": "./src/Stepper/index.ts",
         "StepTracker": "./src/StepTracker/index.ts",
         "Table": "./src/Table/index.ts",
@@ -159,6 +160,10 @@
         {
             "from": "./src/Slider/index.ts",
             "to": "./Slider/index.js"
+        },
+        {
+            "from": "./src/StepLabel/index.ts",
+            "to": "./StepLabel/index.js"
         },
         {
             "from": "./src/Stepper/index.ts",
