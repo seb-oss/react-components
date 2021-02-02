@@ -1,6 +1,7 @@
 import React from "react";
 import Docs from "@common/Docs";
-import { Breadcrumb, BreadcrumbItem } from "@sebgroup/react-components/Breadcrumb";
+import { Breadcrumb } from "@sebgroup/react-components/Breadcrumb";
+import { BreadcrumbItem } from "@sebgroup/react-components/BreadcrumbItem";
 import { useDynamicForm } from "@hooks/useDynamicForm";
 
 const homeIcon: JSX.Element = (
@@ -10,7 +11,7 @@ const homeIcon: JSX.Element = (
 );
 
 const importString: string = require("!raw-loader!@sebgroup/react-components/Breadcrumb/Breadcrumb");
-const importedFiles: Array<string> = [require("!raw-loader!@sebgroup/react-components/Breadcrumb/BreadcrumbItem")];
+const importedFiles: Array<string> = [require("!raw-loader!@sebgroup/react-components/BreadcrumbItem")];
 const code: string = `<Breadcrumb onNavigate={(e) => e.preventDefault(); /** Or do something else */}>
     <BreadcrumbItem>Home</BreadcrumbItem>
     <BreadcrumbItem>Users</BreadcrumbItem>

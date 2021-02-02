@@ -1,6 +1,6 @@
 import React from "react";
 import classnames from "classnames";
-import { BreadcrumbItemProps } from "./BreadcrumbItem";
+import { BreadcrumbItemProps } from "../BreadcrumbItem";
 
 export type BreadcrumbProps = JSX.IntrinsicElements["nav"] & {
     /** Event handler triggered when one of the breadcrumb links is clicked */
