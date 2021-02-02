@@ -21,6 +21,7 @@
         "Modal": "./src/Modal/index.ts",
         "Notification": "./src/Notification/index.ts",
         "NumberedPagination": "./src/NumberedPagination/index.ts",
+        "Overlay": "./src/Overlay/index.ts",
         "Page": "./src/Page/index.ts",
         "Pagination": "./src/Pagination/index.ts",
         "ProgressBar": "./src/ProgressBar/index.ts",
@@ -131,6 +132,10 @@
         {
             "from": "./src/NumberedPagination/index.ts",
             "to": "./NumberedPagination/index.js"
+        },
+        {
+            "from": "./src/Overlay/index.ts",
+            "to": "./Overlay/index.js"
         },
         {
             "from": "./src/Page/index.ts",

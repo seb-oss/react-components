@@ -2,7 +2,7 @@ import React from "react";
 import { unmountComponentAtNode, render } from "react-dom";
 import { act } from "react-dom/test-utils";
 import { ElementPosition } from "./placement";
-import { Overlay, OverlayProps } from "./Overlay";
+import { Overlay, OverlayProps } from ".";
 
 type PositionTestCase = {
     position: ElementPosition;

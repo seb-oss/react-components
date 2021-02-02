@@ -1,7 +1,7 @@
 import React from "react";
-import { ElementPosition } from "./placement";
+import { ElementPosition } from "../Overlay/placement";
 import { randomId } from "@sebgroup/frontend-tools";
-import { Overlay } from "./Overlay";
+import { Overlay } from "../Overlay";
 import classnames from "classnames";
 import "./tooltip.scss";
 
