@@ -1,5 +1,6 @@
 import React from "react";
-import { Pagination, Page, PaginationProps } from ".";
+import { Pagination, PaginationProps } from "../Pagination";
+import { Page } from "../Page";
 
 export interface NumberedPagesProps extends PaginationProps {
     /** The number of the first item */

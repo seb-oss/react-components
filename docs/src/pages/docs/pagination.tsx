@@ -1,7 +1,8 @@
 import React from "react";
 import Docs from "@common/Docs";
 import { DynamicFormOption, useDynamicForm } from "@hooks/useDynamicForm";
-import { Pagination, Page, CustomNavs, PaginationProps } from "@sebgroup/react-components/Pagination";
+import { Pagination, CustomNavs, PaginationProps } from "@sebgroup/react-components/Pagination";
+import { Page } from "@sebgroup/react-components/Page";
 import CPUIcon from "../../../static/icons/cpu.svg";
 import GameControllerIcon from "../../../static/icons/game-controller.svg";
 import ArrowFirstLeftIcon from "../../../static/icons/arrow-first-left.svg";

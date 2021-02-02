@@ -1,6 +1,6 @@
 import React from "react";
 import classnames from "classnames";
-import { Page, PageProps } from ".";
+import { Page, PageProps } from "../Page";
 import "./pagination.scss";
 
 const ChevronLeftIcon: JSX.Element = (

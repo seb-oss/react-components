@@ -1,7 +1,7 @@
 import React from "react";
 import { act } from "react-dom/test-utils";
 import { unmountComponentAtNode, render } from "react-dom";
-import { AccordionItem } from "../Accordion";
+import { AccordionItem } from ".";
 import { renderToStaticMarkup } from "react-dom/server";
 
 describe("Component: Accordion", () => {

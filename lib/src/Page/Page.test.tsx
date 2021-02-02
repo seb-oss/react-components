@@ -3,7 +3,7 @@ import { Page } from ".";
 import { act, Simulate } from "react-dom/test-utils";
 import { unmountComponentAtNode, render } from "react-dom";
 
-describe("Component: Pagination page", () => {
+describe("Component: Page", () => {
     let container: HTMLDivElement = null;
 
     beforeEach(() => {

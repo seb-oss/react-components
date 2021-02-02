@@ -1,7 +1,8 @@
 import React from "react";
 import { act } from "react-dom/test-utils";
 import { unmountComponentAtNode, render } from "react-dom";
-import { Accordion, AccordionItem } from ".";
+import { Accordion } from ".";
+import { AccordionItem } from "../AccordionItem";
 
 describe("Component: Accordion", () => {
     let container: HTMLDivElement = null;

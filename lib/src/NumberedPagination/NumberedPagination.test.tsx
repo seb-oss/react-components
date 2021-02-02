@@ -1,9 +1,9 @@
 import React from "react";
 import { NumberedPagination } from ".";
-import { act, Simulate } from "react-dom/test-utils";
+import { act } from "react-dom/test-utils";
 import { unmountComponentAtNode, render } from "react-dom";
 
-describe("Component: Pagination page", () => {
+describe("Component: NumberedPagination", () => {
     let container: HTMLDivElement = null;
 
     beforeEach(() => {

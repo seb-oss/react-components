@@ -14,7 +14,7 @@ import TableRow from "@sebgroup/react-components/Table/parts/TableRow";
 import { filterArrayByColumns, onRowSelect, paginate, searchTextByColumns, sortArray } from "@sebgroup/react-components/Table/parts/helperFunctions";
 import { SortedColumn } from "@sebgroup/react-components/Table/TableContextProvider";
 import { FilterColumn, GenericTableRow } from "@sebgroup/react-components/Table/table-typings";
-import { NumberedPagination } from "@sebgroup/react-components/Pagination/NumberedPagination";
+import { NumberedPagination } from "@sebgroup/react-components/NumberedPagination/NumberedPagination";
 import { CodeSnippet } from "@common/CodeSnippet";
 
 const importString: string = require("!raw-loader!@sebgroup/react-components/Table/Table");
