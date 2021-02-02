@@ -1,6 +1,6 @@
 import React from "react";
 import classnames from "classnames";
-import { NavigationDirection, defaultTransitionDuration } from "./Carousel";
+import { NavigationDirection, defaultTransitionDuration } from "../Carousel/Carousel";
 
 export type CarouselItemProps = JSX.IntrinsicElements["div"] & {
     /** Navigation direction, whether the next slide is next in line or previous. (Managed by Carousel) */

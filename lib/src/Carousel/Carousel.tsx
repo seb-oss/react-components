@@ -1,7 +1,7 @@
 import React from "react";
 import classnames from "classnames";
 import { randomId } from "@sebgroup/frontend-tools";
-import { CarouselItemProps, AfterSlideEvent } from "./CarouselItem";
+import { CarouselItemProps, AfterSlideEvent } from "../CarouselItem";
 import { CarouselIndicators } from "./CarouselIndicators";
 import { CarouselNavs } from "./CarouselNavs";
 import "./carousel.scss";

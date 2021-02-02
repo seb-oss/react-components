@@ -1,6 +1,7 @@
 import React from "react";
 import Docs from "@common/Docs";
-import { Carousel, CarouselItem, CarouselProps } from "@sebgroup/react-components/Carousel";
+import { Carousel, CarouselProps } from "@sebgroup/react-components/Carousel";
+import { CarouselItem } from "@sebgroup/react-components/CarouselItem";
 import { Img } from "@sebgroup/react-components/Image";
 import { DynamicFormOption, useDynamicForm } from "@hooks/useDynamicForm";
 

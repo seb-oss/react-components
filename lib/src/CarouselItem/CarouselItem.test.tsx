@@ -88,7 +88,7 @@ describe("Component: Carousel", () => {
 const Testbed: React.FC<CarouselItemProps> = (props: CarouselItemProps) => {
     const [value, setValue] = React.useState<boolean>(false);
 
-    const onClick: React.MouseEventHandler<HTMLButtonElement> = React.useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
+    const onClick: React.MouseEventHandler<HTMLButtonElement> = React.useCallback(() => {
         setValue(!value);
     }, []);
 

@@ -1,7 +1,8 @@
 import React from "react";
 import { act, Simulate, SyntheticEventData } from "react-dom/test-utils";
 import { unmountComponentAtNode, render } from "react-dom";
-import { Carousel, CarouselItem } from ".";
+import { Carousel } from ".";
+import { CarouselItem } from "../CarouselItem";
 
 type EventType = keyof HTMLElementEventMap;
 type Listener = EventListener;

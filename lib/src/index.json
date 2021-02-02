@@ -7,6 +7,7 @@
         "Button": "./src/Button/index.ts",
         "ButtonGroup": "./src/ButtonGroup/index.ts",
         "Carousel": "./src/Carousel/index.ts",
+        "CarouselItem": "./src/CarouselItem/index.ts",
         "Checkbox": "./src/Checkbox/index.ts",
         "Chip": "./src/Chip/index.ts",
         "CloseButton": "./src/CloseButton/index.ts",
@@ -67,6 +68,10 @@
         {
             "from": "./src/Carousel/index.ts",
             "to": "./Carousel/index.js"
+        },
+        {
+            "from": "./src/CarouselItem/index.ts",
+            "to": "./CarouselItem/index.js"
         },
         {
             "from": "./src/Checkbox/index.ts",
