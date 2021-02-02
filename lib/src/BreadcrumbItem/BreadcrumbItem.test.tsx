@@ -1,5 +1,6 @@
 import React from "react";
-import { Breadcrumb, BreadcrumbItem } from "../Breadcrumb";
+import { Breadcrumb } from "../Breadcrumb";
+import { BreadcrumbItem } from "./BreadcrumbItem";
 import { unmountComponentAtNode, render } from "react-dom";
 import { act } from "react-dom/test-utils";
 
