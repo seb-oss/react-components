@@ -8,4 +8,4 @@ const TableCell: React.FC<TableCellProps> = ({ ...props }: TableCellProps) => {
 
 TableCell.displayName = "TableCell";
 
-export default TableCell;
+export { TableCell };

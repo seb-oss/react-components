@@ -1,9 +1,9 @@
 import React from "react";
 import classnames from "classnames";
-import { Checkbox } from "../../Checkbox";
-import { TableContext } from "../TableContextProvider";
-import TableHeaderCell, { TableHeaderCellProps } from "./TableHeaderCell";
-import TableCell, { TableCellProps } from "./TableCell";
+import { Checkbox } from "../Checkbox";
+import { TableContext } from "../Table/TableContextProvider";
+import { TableHeaderCell, TableHeaderCellProps } from "../TableHeaderCell/TableHeaderCell";
+import { TableCell, TableCellProps } from "../TableCell/TableCell";
 import { randomId } from "@sebgroup/frontend-tools";
 
 export type TableRowProps<T = any> = JSX.IntrinsicElements["tr"] & {
@@ -128,4 +128,4 @@ const TableRow: React.FC<TableRowProps> = ({
 
 TableRow.displayName = "TableRow";
 
-export default TableRow;
+export { TableRow };

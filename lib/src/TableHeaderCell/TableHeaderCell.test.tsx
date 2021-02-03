@@ -1,9 +1,9 @@
 import React from "react";
 import { act, Simulate } from "react-dom/test-utils";
 import { unmountComponentAtNode, render } from "react-dom";
-import TableHeaderCell from "./TableHeaderCell";
-import { TableContext, TableContextType } from "../TableContextProvider";
-import { SortDirection } from "../table-typings";
+import { TableHeaderCell } from "./TableHeaderCell";
+import { TableContext, TableContextType } from "../Table/TableContextProvider";
+import { SortDirection } from "../Table/table-typings";
 
 describe("Component: Table header cell", () => {
     let container: HTMLDivElement = null;

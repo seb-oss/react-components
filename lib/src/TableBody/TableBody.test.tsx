@@ -1,8 +1,8 @@
 import React from "react";
 import { act } from "react-dom/test-utils";
 import { unmountComponentAtNode, render } from "react-dom";
-import TableBody from "./TableBody";
-import TableRow from "./TableRow";
+import { TableBody } from ".";
+import { TableRow } from "../TableRow";
 
 describe("Component: Table body", () => {
     let container: HTMLDivElement = null;

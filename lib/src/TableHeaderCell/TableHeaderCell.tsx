@@ -1,7 +1,7 @@
 import React from "react";
 import classnames from "classnames";
-import { SortDirection } from "../table-typings";
-import { SortedColumn, TableContext } from "../TableContextProvider";
+import { SortDirection, SortedColumn } from "../Table/table-typings";
+import { TableContext } from "../Table/TableContextProvider";
 
 export type TableHeaderCellProps<T = any> = JSX.IntrinsicElements["th"] & {
     accessor?: keyof T;
@@ -80,4 +80,4 @@ const TableHeaderCell: React.FC<TableHeaderCellProps> = ({ accessor, disableSort
 
 TableHeaderCell.displayName = "TableHeaderCell";
 
-export default TableHeaderCell;
+export { TableHeaderCell };

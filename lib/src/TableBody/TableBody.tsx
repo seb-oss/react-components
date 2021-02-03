@@ -1,5 +1,5 @@
 import React from "react";
-import { TableRowProps } from "./TableRow";
+import { TableRowProps } from "../TableRow";
 
 export type TableBodyProps = JSX.IntrinsicElements["tbody"];
 
@@ -36,4 +36,4 @@ const TableBody: React.FC<TableBodyProps> = ({ ...props }: TableBodyProps) => {
 
 TableBody.displayName = "TableBody";
 
-export default TableBody;
+export { TableBody };

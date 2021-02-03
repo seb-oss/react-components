@@ -1,4 +1,4 @@
-import { FilterColumn, GenericTableRow, SortDirection } from "../table-typings";
+import { SortDirection, FilterColumn, GenericTableRow } from "../Table/table-typings";
 
 /**
  * sum the total of columns or cols in a row

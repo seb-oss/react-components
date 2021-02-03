@@ -1,5 +1,5 @@
-import { filterArrayByColumns, searchTextByColumns, sortArray, sumCols } from "..";
-import { FilterColumn, GenericTableRow, SortDirection } from "../table-typings";
+import { filterArrayByColumns, searchTextByColumns, sortArray, sumCols } from ".";
+import { FilterColumn, GenericTableRow, SortDirection } from "../Table/table-typings";
 import { onRowSelect, paginate, RowSelectOutput } from "./helperFunctions";
 
 type Data = {

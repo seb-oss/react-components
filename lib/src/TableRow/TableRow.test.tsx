@@ -1,8 +1,8 @@
 import React from "react";
 import { act, Simulate } from "react-dom/test-utils";
 import { unmountComponentAtNode, render } from "react-dom";
-import TableRow from "./TableRow";
-import { TableContext, TableContextType } from "../TableContextProvider";
+import { TableRow } from "./TableRow";
+import { TableContext, TableContextType } from "../Table/TableContextProvider";
 
 describe("Component: Table row", () => {
     let container: HTMLDivElement = null;

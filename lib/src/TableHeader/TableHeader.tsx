@@ -1,5 +1,5 @@
 import React from "react";
-import { TableRowProps } from "./TableRow";
+import { TableRowProps } from "../TableRow";
 
 export type TableHeaderProps = JSX.IntrinsicElements["thead"];
 
@@ -22,4 +22,4 @@ const TableHeader: React.FC<TableHeaderProps> = ({ ...props }: TableHeaderProps)
 
 TableHeader.displayName = "TableHeader";
 
-export default TableHeader;
+export { TableHeader };

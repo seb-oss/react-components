@@ -1,21 +1,20 @@
 import React from "react";
 import Docs from "@common/Docs";
-import { Table } from "@sebgroup/react-components/Table/Table";
 import { useDynamicForm } from "@hooks/useDynamicForm";
 import makeData from "@utils/makeData";
 import { Dropdown } from "@sebgroup/react-components/Dropdown";
 import { checkDynamicFormSelectedKey } from "@utils/helpers";
 import { Textbox } from "@sebgroup/react-components/Textbox";
-import TableBody from "@sebgroup/react-components/Table/parts/TableBody";
-import TableCell from "@sebgroup/react-components/Table/parts/TableCell";
-import TableHeader from "@sebgroup/react-components/Table/parts/TableHeader";
-import TableHeaderCell from "@sebgroup/react-components/Table/parts/TableHeaderCell";
-import TableRow from "@sebgroup/react-components/Table/parts/TableRow";
-import { filterArrayByColumns, onRowSelect, paginate, searchTextByColumns, sortArray } from "@sebgroup/react-components/Table/parts/helperFunctions";
-import { SortedColumn } from "@sebgroup/react-components/Table/TableContextProvider";
-import { FilterColumn, GenericTableRow } from "@sebgroup/react-components/Table/table-typings";
+import { TableBody } from "@sebgroup/react-components/TableBody";
+import { TableCell } from "@sebgroup/react-components/TableCell";
+import { TableHeader } from "@sebgroup/react-components/TableHeader";
+import { TableHeaderCell } from "@sebgroup/react-components/TableHeaderCell";
+import { TableRow } from "@sebgroup/react-components/TableRow";
+import { Table } from "@sebgroup/react-components/Table";
+import { filterArrayByColumns, onRowSelect, paginate, searchTextByColumns, sortArray } from "@sebgroup/react-components/TableHelperFunctions";
 import { NumberedPagination } from "@sebgroup/react-components/NumberedPagination/NumberedPagination";
 import { CodeSnippet } from "@common/CodeSnippet";
+import { FilterColumn, GenericTableRow, SortedColumn } from "@sebgroup/react-components/Table/table-typings";
 
 const importString: string = require("!raw-loader!@sebgroup/react-components/Table/Table");
 const code: string = `<Table>

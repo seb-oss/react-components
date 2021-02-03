@@ -1,7 +1,8 @@
 import React from "react";
 import classnames from "classnames";
-import { SortedColumn, TableContext } from "./TableContextProvider";
+import { TableContext } from "./TableContextProvider";
 import "./table.scss";
+import { SortedColumn } from "./table-typings";
 
 export type TableTheme = "light" | "dark";
 

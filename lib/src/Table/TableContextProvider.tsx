@@ -1,10 +1,5 @@
 import React from "react";
-import { SortDirection } from "./table-typings";
-
-export interface SortedColumn<T = any> {
-    accessor: keyof T;
-    sortDirection: SortDirection;
-}
+import { SortedColumn } from "./table-typings";
 
 interface TableState {
     sortedColumn: SortedColumn;

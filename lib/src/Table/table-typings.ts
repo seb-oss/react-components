@@ -14,3 +14,8 @@ export type GenericTableRow<T = any> = T & {
     expanded?: boolean;
     indeterminate?: boolean;
 };
+
+export interface SortedColumn<T = any> {
+    accessor: keyof T;
+    sortDirection: SortDirection;
+}

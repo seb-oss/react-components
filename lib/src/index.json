@@ -34,6 +34,12 @@
         "Stepper": "./src/Stepper/index.ts",
         "TabItem": "./src/TabItem/index.ts",
         "Table": "./src/Table/index.ts",
+        "TableBody": "./src/TableBody/index.ts",
+        "TableCell": "./src/TableCell/index.ts",
+        "TableHeader": "./src/TableHeader/index.ts",
+        "TableHeaderCell": "./src/TableHeaderCell/index.ts",
+        "TableHelperFunctions": "./src/TableHelperFunctions/index.ts",
+        "TableRow": "./src/TableRow/index.ts",
         "Tabs": "./src/Tabs/index.ts",
         "TextLabel": "./src/TextLabel/index.ts",
         "Textarea": "./src/Textarea/index.ts",
@@ -184,6 +190,30 @@
         {
             "from": "./src/Table/index.ts",
             "to": "./Table/index.js"
+        },
+        {
+            "from": "./src/TableBody/index.ts",
+            "to": "./TableBody/index.js"
+        },
+        {
+            "from": "./src/TableCell/index.ts",
+            "to": "./TableCell/index.js"
+        },
+        {
+            "from": "./src/TableHeader/index.ts",
+            "to": "./TableHeader/index.js"
+        },
+        {
+            "from": "./src/TableHeaderCell/index.ts",
+            "to": "./TableHeaderCell/index.js"
+        },
+        {
+            "from": "./src/TableHelperFunctions/index.ts",
+            "to": "./TableHelperFunctions/index.js"
+        },
+        {
+            "from": "./src/TableRow/index.ts",
+            "to": "./TableRow/index.js"
         },
         {
             "from": "./src/Tabs/index.ts",
