@@ -1,6 +1,6 @@
 import React from "react";
 import Docs from "@common/Docs";
-import { Img, ImgProps } from "@sebgroup/react-components/Image/Img";
+import { Img, ImgProps } from "@sebgroup/react-components/Image";
 import { DynamicFormOption, useDynamicForm } from "@hooks/useDynamicForm";
 import { Button } from "@sebgroup/react-components/Button";
 const image: string = require("../../assets/images/rabbit-on-the-spot.jpg");

@@ -15,6 +15,7 @@
         "Datepicker": "./src/Datepicker/index.ts",
         "Dropdown": "./src/Dropdown/index.ts",
         "FeedbackIndicator": "./src/FeedbackIndicator/index.ts",
+        "hooks": "./src/hooks/index.ts",
         "Image": "./src/Image/index.ts",
         "ImageCropper": "./src/ImageCropper/index.ts",
         "Loader": "./src/Loader/index.ts",
@@ -30,20 +31,21 @@
         "Rating": "./src/Rating/index.ts",
         "Slider": "./src/Slider/index.ts",
         "StepLabel": "./src/StepLabel/index.ts",
-        "StepTracker": "./src/StepTracker/index.ts",
         "Stepper": "./src/Stepper/index.ts",
+        "StepTracker": "./src/StepTracker/index.ts",
         "TabItem": "./src/TabItem/index.ts",
         "Table": "./src/Table/index.ts",
         "TableBody": "./src/TableBody/index.ts",
         "TableCell": "./src/TableCell/index.ts",
+        "TableContext": "./src/TableContext/index.ts",
         "TableHeader": "./src/TableHeader/index.ts",
         "TableHeaderCell": "./src/TableHeaderCell/index.ts",
         "TableHelperFunctions": "./src/TableHelperFunctions/index.ts",
         "TableRow": "./src/TableRow/index.ts",
         "Tabs": "./src/Tabs/index.ts",
-        "TextLabel": "./src/TextLabel/index.ts",
         "Textarea": "./src/Textarea/index.ts",
         "Textbox": "./src/Textbox/index.ts",
+        "TextLabel": "./src/TextLabel/index.ts",
         "Timeline": "./src/Timeline/index.ts",
         "TimelineItem": "./src/TimelineItem/index.ts",
         "Timer": "./src/Timer/index.ts",
@@ -51,8 +53,7 @@
         "ToggleSelector": "./src/ToggleSelector/index.ts",
         "ToggleSelectorItem": "./src/ToggleSelectorItem/index.ts",
         "Tooltip": "./src/Tooltip/index.ts",
-        "Video": "./src/Video/index.ts",
-        "hooks": "./src/hooks/index.ts"
+        "Video": "./src/Video/index.ts"
     },
     "indexes": [
         {
@@ -116,6 +117,10 @@
             "to": "./FeedbackIndicator/index.js"
         },
         {
+            "from": "./src/hooks/index.ts",
+            "to": "./hooks/index.js"
+        },
+        {
             "from": "./src/Image/index.ts",
             "to": "./Image/index.js"
         },
@@ -176,12 +181,12 @@
             "to": "./StepLabel/index.js"
         },
         {
-            "from": "./src/StepTracker/index.ts",
-            "to": "./StepTracker/index.js"
-        },
-        {
             "from": "./src/Stepper/index.ts",
             "to": "./Stepper/index.js"
+        },
+        {
+            "from": "./src/StepTracker/index.ts",
+            "to": "./StepTracker/index.js"
         },
         {
             "from": "./src/TabItem/index.ts",
@@ -198,6 +203,10 @@
         {
             "from": "./src/TableCell/index.ts",
             "to": "./TableCell/index.js"
+        },
+        {
+            "from": "./src/TableContext/index.ts",
+            "to": "./TableContext/index.js"
         },
         {
             "from": "./src/TableHeader/index.ts",
@@ -220,16 +229,16 @@
             "to": "./Tabs/index.js"
         },
         {
-            "from": "./src/TextLabel/index.ts",
-            "to": "./TextLabel/index.js"
-        },
-        {
             "from": "./src/Textarea/index.ts",
             "to": "./Textarea/index.js"
         },
         {
             "from": "./src/Textbox/index.ts",
             "to": "./Textbox/index.js"
+        },
+        {
+            "from": "./src/TextLabel/index.ts",
+            "to": "./TextLabel/index.js"
         },
         {
             "from": "./src/Timeline/index.ts",
@@ -262,10 +271,6 @@
         {
             "from": "./src/Video/index.ts",
             "to": "./Video/index.js"
-        },
-        {
-            "from": "./src/hooks/index.ts",
-            "to": "./hooks/index.js"
         }
     ]
 }

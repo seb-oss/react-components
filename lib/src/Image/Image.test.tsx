@@ -8,7 +8,7 @@ type TestCase = { prop: keyof ImgProps; className: string };
 
 const image: string = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=";
 
-describe("Component: Image", () => {
+describe("Component: Img", () => {
     let container: HTMLDivElement = null;
 
     beforeEach(() => {
