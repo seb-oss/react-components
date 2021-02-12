@@ -1,7 +1,7 @@
 export * from "./Table";
-export * from "./parts/TableHeaderCell";
-export * from "./parts/TableHeader";
-export * from "./parts/TableBody";
-export * from "./parts/TableRow";
-export * from "./parts/TableCell";
-export * from "./parts/helperFunctions";
+export { TableHeaderCellProps } from "./parts/TableHeaderCell";
+export { TableHeaderProps } from "./parts/TableHeader";
+export { TableBodyProps } from "./parts/TableBody";
+export { TableRowProps } from "./parts/TableRow";
+export { TableCellProps } from "./parts/TableCell";
+export { RowSelectOutput, filterArrayByColumns, onRowSelect, paginate, searchTextByColumns, sortArray, sumCols } from "./parts/helperFunctions";

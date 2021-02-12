@@ -80,4 +80,4 @@ const TableHeaderCell: React.FC<TableHeaderCellProps> = ({ accessor, disableSort
 
 TableHeaderCell.displayName = "TableHeaderCell";
 
-export default TableHeaderCell;
+export { TableHeaderCell };

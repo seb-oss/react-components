@@ -4,7 +4,12 @@ import { DynamicFormOption, useDynamicForm } from "@hooks/useDynamicForm";
 import { StepTracker, StepTrackerProps } from "@sebgroup/react-components/StepTracker";
 
 const importString: string = require("!raw-loader!@sebgroup/react-components/StepTracker/StepTracker");
-const code: string = `<StepTracker list={[{ label: "hello" }]} step={0} onClick={null} />`;
+const code: string = `<StepTracker value={value} onStepClicked={setValue}>
+    <StepTracker.Label>First</StepTracker.Label>
+    <StepTracker.Label>Second</StepTracker.Label>
+    <StepTracker.Label>Third</StepTracker.Label>
+    <StepTracker.Label>Fourth</StepTracker.Label>
+</StepTracker>`;
 
 const orientations: Array<DynamicFormOption<StepTrackerProps["orientation"]>> = [
     { label: "horizontal", value: "horizontal", key: "horizontal" },

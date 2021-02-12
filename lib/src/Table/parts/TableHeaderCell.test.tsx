@@ -1,7 +1,7 @@
 import React from "react";
 import { act, Simulate } from "react-dom/test-utils";
 import { unmountComponentAtNode, render } from "react-dom";
-import TableHeaderCell from "./TableHeaderCell";
+import { TableHeaderCell } from "./TableHeaderCell";
 import { TableContext, TableContextType } from "../TableContextProvider";
 import { SortDirection } from "../table-typings";
 

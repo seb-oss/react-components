@@ -6,11 +6,6 @@ import makeData from "@utils/makeData";
 import { Dropdown } from "@sebgroup/react-components/Dropdown";
 import { checkDynamicFormSelectedKey } from "@utils/helpers";
 import { Textbox } from "@sebgroup/react-components/Textbox";
-import TableBody from "@sebgroup/react-components/Table/parts/TableBody";
-import TableCell from "@sebgroup/react-components/Table/parts/TableCell";
-import TableHeader from "@sebgroup/react-components/Table/parts/TableHeader";
-import TableHeaderCell from "@sebgroup/react-components/Table/parts/TableHeaderCell";
-import TableRow from "@sebgroup/react-components/Table/parts/TableRow";
 import { filterArrayByColumns, onRowSelect, paginate, searchTextByColumns, sortArray } from "@sebgroup/react-components/Table/parts/helperFunctions";
 import { SortedColumn } from "@sebgroup/react-components/Table/TableContextProvider";
 import { FilterColumn, GenericTableRow } from "@sebgroup/react-components/Table/table-typings";
@@ -19,18 +14,18 @@ import { CodeSnippet } from "@common/CodeSnippet";
 
 const importString: string = require("!raw-loader!@sebgroup/react-components/Table/Table");
 const code: string = `<Table>
-    <TableHeader>
-        <TableRow>
-            <TableHeaderCell>TableHeaderCell1</TableHeaderCell>
-            <TableHeaderCell>TableHeaderCell2</TableHeaderCell>
-        </TableRow>
-    </TableHeader>
-    <TableBody>
-        <TableRow>
-            <TableCell>TableCell1</TableCell>
-            <TableCell>TableCell2</TableCell>
-        </TableRow>
-    </TableBody>
+    <Table.Header>
+        <Table.Row>
+            <Table.HeaderCell>officia eos quis</Table.HeaderCell>
+            <Table.HeaderCell>impedit voluptas amet</Table.HeaderCell>
+        </Table.Row>
+    </Table.Header>
+    <Table.Body>
+        <Table.Row>
+            <Table.Cell>dolorem ut at</Table.Cell>
+            <Table.Cell>consequatur molestiae</Table.Cell>
+        </Table.Row>
+    </Table.Body>
 </Table>`;
 
 const columns: Array<Column> = [
@@ -161,42 +156,42 @@ const TablePage: React.FC = (): React.ReactElement<void> => {
                                 : null
                         }
                     >
-                        <TableHeader>
-                            <TableRow {...selectAllIndicator}>
+                        <Table.Header>
+                            <Table.Row {...selectAllIndicator}>
                                 {columns.map((item: Column, index: number) => (
-                                    <TableHeaderCell {...item} key={index}>
+                                    <Table.HeaderCell {...item} key={index}>
                                         {item.label}
-                                    </TableHeaderCell>
+                                    </Table.HeaderCell>
                                 ))}
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
+                            </Table.Row>
+                        </Table.Header>
+                        <Table.Body>
                             {data.map((row: GenericTableRow<TableDataProps>, rowIndex: number) => (
                                 <React.Fragment key={`row-${rowIndex}`}>
-                                    <TableRow uniqueKey={row.firstName} checked={row.checked} isExpanded={row.expanded}>
+                                    <Table.Row uniqueKey={row.firstName} checked={row.checked} isExpanded={row.expanded}>
                                         {columns.map((item: Column, index: number) => {
                                             return (
-                                                <TableCell {...item} key={index}>
+                                                <Table.Cell {...item} key={index}>
                                                     {row[item.accessor]}
-                                                </TableCell>
+                                                </Table.Cell>
                                             );
                                         })}
-                                    </TableRow>
+                                    </Table.Row>
                                     {enableSubRows &&
                                         row.subRows?.map((sub: TableDataProps, subIndex: number) => (
-                                            <TableRow isSubRow key={`rowsub-${subIndex}`}>
+                                            <Table.Row isSubRow key={`rowsub-${subIndex}`}>
                                                 {columns.map((item, index) => {
                                                     return (
-                                                        <TableCell {...item} key={`rowsub-${subIndex}-${index}`}>
+                                                        <Table.Cell {...item} key={`rowsub-${subIndex}-${index}`}>
                                                             {sub[item.accessor]}
-                                                        </TableCell>
+                                                        </Table.Cell>
                                                     );
                                                 })}
-                                            </TableRow>
+                                            </Table.Row>
                                         ))}
                                 </React.Fragment>
                             ))}
-                        </TableBody>
+                        </Table.Body>
                         {enablePagination && (
                             <tfoot>
                                 <tr>
@@ -327,15 +322,3 @@ const TablePage: React.FC = (): React.ReactElement<void> => {
 };
 
 export default TablePage;
-
-type TableCell = any;
-
-/**
- * <Table
-    onSort={sortedColumn: SortedColumn) => console.log(sortedColumn)}
-    onRowSelect={(event: React.ChangeEvent<HTMLInputElement>, rowUniqueKey: string) => console.log(event, rowUniqueKey)}
-    onRowExpand={(isExpanded: boolean, rowUniqueKey: string) => console.log(isExpanded, rowUniqueKey)}>
-    <TableHeader>...</TableHeader>
-    <TableBody>...</TableBody>
-</Table>
- */
