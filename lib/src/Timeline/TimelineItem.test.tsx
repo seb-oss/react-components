@@ -1,7 +1,7 @@
 import React from "react";
 import { unmountComponentAtNode, render } from "react-dom";
 import { act, Simulate } from "react-dom/test-utils";
-import { TimelineItem, TimelineItemProps } from ".";
+import { TimelineItem, TimelineItemProps } from "./TimelineItem";
 
 describe("Component: TimelineItem", () => {
     let container: HTMLDivElement = null;

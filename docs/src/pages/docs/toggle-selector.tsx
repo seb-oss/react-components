@@ -1,6 +1,6 @@
 import React from "react";
 import Docs from "@common/Docs";
-import { ToggleSelector, ToggleSelectorItem } from "@sebgroup/react-components/ToggleSelector";
+import { ToggleSelector } from "@sebgroup/react-components/ToggleSelector";
 import { DynamicFormOption, useDynamicForm } from "@hooks/useDynamicForm";
 import { Indicator, IndicatorType } from "@sebgroup/react-components/FeedbackIndicator";
 import LaughingIcon from "../../../static/icons/emoji-laughing-fill.svg";
@@ -16,9 +16,9 @@ const indicatorList: Array<DynamicFormOption<IndicatorType>> = [
 
 const importString: string = require("!raw-loader!@sebgroup/react-components/ToggleSelector/ToggleSelector");
 const code: string = `<ToggleSelector name="choices" value={value} onChange={setValue}>
-    <ToggleSelectorItem>Yes</ToggleSelectorItem>
-    <ToggleSelectorItem>No</ToggleSelectorItem>
-    <ToggleSelectorItem>Maybe</ToggleSelectorItem>
+    <ToggleSelector.Item>Yes</ToggleSelector.Item>
+    <ToggleSelector.Item>No</ToggleSelector.Item>
+    <ToggleSelector.Item>Maybe</ToggleSelector.Item>
 </ToggleSelector>`;
 
 const ToggleSelectorPage: React.FC = (): React.ReactElement<void> => {
@@ -52,18 +52,18 @@ const ToggleSelectorPage: React.FC = (): React.ReactElement<void> => {
                     disabled={controls.disabled}
                     indicator={controls.indicator ? indicator : null}
                 >
-                    <ToggleSelectorItem>
+                    <ToggleSelector.Item>
                         {controls.icons && <LaughingIcon width="2em" height="2em" />}
                         <span className="mx-auto">Yes</span>
-                    </ToggleSelectorItem>
-                    <ToggleSelectorItem>
+                    </ToggleSelector.Item>
+                    <ToggleSelector.Item>
                         {controls.icons && <DizzyIcon width="2em" height="2em" />}
                         <span className="mx-auto">No</span>
-                    </ToggleSelectorItem>
-                    <ToggleSelectorItem>
+                    </ToggleSelector.Item>
+                    <ToggleSelector.Item>
                         {controls.icons && <SmileUpsideDownIcon width="2em" height="2em" />}
                         <span className="mx-auto">Maybe</span>
-                    </ToggleSelectorItem>
+                    </ToggleSelector.Item>
                 </ToggleSelector>
             }
             code={code}
@@ -75,18 +75,18 @@ const ToggleSelectorPage: React.FC = (): React.ReactElement<void> => {
 
                     <CodeSnippet language="jsx">
                         {`<ToggleSelector>
-    <ToggleSelectorItem>
+    <ToggleSelector.Item>
         <LaughingIcon />
         <span className="mx-auto">Yes</span>
-    </ToggleSelectorItem>
-    <ToggleSelectorItem>
+    </ToggleSelector.Item>
+    <ToggleSelector.Item>
         <DizzyIcon />
         <span className="mx-auto">No</span>
-    </ToggleSelectorItem>
-    <ToggleSelectorItem>
+    </ToggleSelector.Item>
+    <ToggleSelector.Item>
         <SmileUpsideDownIcon />
         <span className="mx-auto">Maybe</span>
-    </ToggleSelectorItem>
+    </ToggleSelector.Item>
 </ToggleSelector>`}
                     </CodeSnippet>
                 </>

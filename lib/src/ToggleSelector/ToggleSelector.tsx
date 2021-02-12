@@ -1,6 +1,6 @@
 import React from "react";
 import classnames from "classnames";
-import { ToggleSelectorItemProps } from "./ToggleSelectorItem";
+import { ToggleSelectorItem, ToggleSelectorItemProps } from "./ToggleSelectorItem";
 import { FeedbackIndicator, Indicator } from "../FeedbackIndicator";
 import { randomId } from "@sebgroup/frontend-tools";
 import "./toggle-selector.scss";
@@ -35,7 +35,7 @@ export type ToggleSelectorProps = NativeDivProps &
     };
 
 /** A selector to display and select options in a flow. */
-export const ToggleSelector: React.FC<ToggleSelectorProps> = ({ multiple, value, onChange, indicator, ...props }: ToggleSelectorProps) => {
+const ToggleSelector = ({ multiple, value, onChange, indicator, ...props }: ToggleSelectorProps) => {
     const [name] = React.useState<string>(randomId("ts-"));
 
     const handleChange = React.useCallback(
@@ -78,3 +78,7 @@ export const ToggleSelector: React.FC<ToggleSelectorProps> = ({ multiple, value,
         </div>
     );
 };
+
+ToggleSelector.Item = ToggleSelectorItem;
+
+export { ToggleSelector };

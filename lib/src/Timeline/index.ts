@@ -1,2 +1,2 @@
 export * from "./Timeline";
-export * from "./TimelineItem";
+export { TimelineItemProps } from "./TimelineItem";

@@ -1,2 +1,2 @@
 export * from "./ToggleSelector";
-export * from "./ToggleSelectorItem";
+export { ToggleSelectorItemProps } from "./ToggleSelectorItem";

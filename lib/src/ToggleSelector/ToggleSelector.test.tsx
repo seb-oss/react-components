@@ -1,8 +1,7 @@
 import React from "react";
 import { act, Simulate } from "react-dom/test-utils";
 import { unmountComponentAtNode, render } from "react-dom";
-import { ToggleSelector, ToggleSelectorProps } from ".";
-import { ToggleSelectorItem, ToggleSelectorItemProps } from "./ToggleSelectorItem";
+import { ToggleSelector } from ".";
 
 describe("Component: ToggleSelector", () => {
     let container: HTMLDivElement = null;
@@ -42,8 +41,8 @@ describe("Component: ToggleSelector", () => {
         act(() => {
             render(
                 <ToggleSelector>
-                    <ToggleSelectorItem>Yes</ToggleSelectorItem>
-                    <ToggleSelectorItem>No</ToggleSelectorItem>
+                    <ToggleSelector.Item>Yes</ToggleSelector.Item>
+                    <ToggleSelector.Item>No</ToggleSelector.Item>
                 </ToggleSelector>,
                 container
             );
@@ -60,8 +59,8 @@ describe("Component: ToggleSelector", () => {
         act(() => {
             render(
                 <ToggleSelector multiple>
-                    <ToggleSelectorItem>Yes</ToggleSelectorItem>
-                    <ToggleSelectorItem>No</ToggleSelectorItem>
+                    <ToggleSelector.Item>Yes</ToggleSelector.Item>
+                    <ToggleSelector.Item>No</ToggleSelector.Item>
                 </ToggleSelector>,
                 container
             );
@@ -98,8 +97,8 @@ describe("Component: ToggleSelector", () => {
             act(() => {
                 render(
                     <ToggleSelector value={testCase.value as any} multiple={testCase.multiple}>
-                        <ToggleSelectorItem>Yes</ToggleSelectorItem>
-                        <ToggleSelectorItem>No</ToggleSelectorItem>
+                        <ToggleSelector.Item>Yes</ToggleSelector.Item>
+                        <ToggleSelector.Item>No</ToggleSelector.Item>
                     </ToggleSelector>,
                     container
                 );
@@ -139,8 +138,8 @@ describe("Component: ToggleSelector", () => {
             act(() => {
                 render(
                     <ToggleSelector value={testCase.value as any} onChange={onChange} multiple={testCase.multiple}>
-                        <ToggleSelectorItem>Yes</ToggleSelectorItem>
-                        <ToggleSelectorItem>No</ToggleSelectorItem>
+                        <ToggleSelector.Item>Yes</ToggleSelector.Item>
+                        <ToggleSelector.Item>No</ToggleSelector.Item>
                     </ToggleSelector>,
                     container
                 );
@@ -158,8 +157,8 @@ describe("Component: ToggleSelector", () => {
         act(() => {
             render(
                 <ToggleSelector>
-                    <ToggleSelectorItem onChange={onChange}>Yes</ToggleSelectorItem>
-                    <ToggleSelectorItem>No</ToggleSelectorItem>
+                    <ToggleSelector.Item onChange={onChange}>Yes</ToggleSelector.Item>
+                    <ToggleSelector.Item>No</ToggleSelector.Item>
                 </ToggleSelector>,
                 container
             );
@@ -176,9 +175,9 @@ describe("Component: ToggleSelector", () => {
         act(() => {
             render(
                 <ToggleSelector>
-                    <ToggleSelectorItem>Yes</ToggleSelectorItem>
+                    <ToggleSelector.Item>Yes</ToggleSelector.Item>
                     {content}
-                    <ToggleSelectorItem>No</ToggleSelectorItem>
+                    <ToggleSelector.Item>No</ToggleSelector.Item>
                 </ToggleSelector>,
                 container
             );

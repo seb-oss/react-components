@@ -1,13 +1,13 @@
 import React from "react";
 import Docs from "@common/Docs";
-import { Timeline, TimelineDirection, TimelineItem } from "@sebgroup/react-components/Timeline";
+import { Timeline, TimelineDirection } from "@sebgroup/react-components/Timeline";
 import { DynamicFormOption, useDynamicForm } from "@hooks/useDynamicForm";
 import { loremIpsum } from "lorem-ipsum";
 
 const importString: string = require("!raw-loader!@sebgroup/react-components/Timeline/Timeline");
 const code: string = `<Timeline>
-    <TimelineItem header="First item" time="Today">The content goes here</TimelineItem>
-    <TimelineItem header="Second item" time="Yesterday">The content goes here</TimelineItem>
+    <Timeline.Item header="First item" time="Today">The content goes here</Timeline.Item>
+    <Timeline.Item header="Second item" time="Yesterday">The content goes here</Timeline.Item>
 </Timeline>`;
 
 const directionList: Array<DynamicFormOption<TimelineDirection>> = [
@@ -33,15 +33,15 @@ const TimelinePage: React.FC = React.memo(() => {
             mainFile={importString}
             example={
                 <Timeline direction={controls.direction.value}>
-                    <TimelineItem header="Current Day" time="2016 - Present" onClick={handleClick} data-index-number="0">
+                    <Timeline.Item header="Current Day" time="2016 - Present" onClick={handleClick} data-index-number="0">
                         {contents[0]}
-                    </TimelineItem>
-                    <TimelineItem header="Previously" time="2012 - 2016" onClick={handleClick} data-index-number="1">
+                    </Timeline.Item>
+                    <Timeline.Item header="Previously" time="2012 - 2016" onClick={handleClick} data-index-number="1">
                         {contents[1]}
-                    </TimelineItem>
-                    <TimelineItem header="At the begining" time="2008 - 2012" onClick={handleClick} data-index-number="2">
+                    </Timeline.Item>
+                    <Timeline.Item header="At the begining" time="2008 - 2012" onClick={handleClick} data-index-number="2">
                         {contents[2]}
-                    </TimelineItem>
+                    </Timeline.Item>
                 </Timeline>
             }
             code={code}

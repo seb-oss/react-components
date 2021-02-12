@@ -1,16 +1,7 @@
 import React from "react";
 import { unmountComponentAtNode, render } from "react-dom";
-import { act, Simulate } from "react-dom/test-utils";
-import { Timeline, TimelineDirection, TimelineProps, TimelineItem } from ".";
-
-interface TimelineClickTestCase {
-    statement: string;
-    props: TimelineProps;
-}
-interface TimelineItemTestCase {
-    statement: string;
-    render: () => void;
-}
+import { act } from "react-dom/test-utils";
+import { Timeline, TimelineDirection } from ".";
 
 describe("Component: Timeline", () => {
     let container: HTMLDivElement = null;
@@ -43,15 +34,15 @@ describe("Component: Timeline", () => {
         act(() => {
             render(
                 <Timeline>
-                    <TimelineItem header="Header1" time="Time1">
+                    <Timeline.Item header="Header1" time="Time1">
                         Content1
-                    </TimelineItem>
-                    <TimelineItem header="Header2" time="Time2">
+                    </Timeline.Item>
+                    <Timeline.Item header="Header2" time="Time2">
                         Content1
-                    </TimelineItem>
-                    <TimelineItem header="Header3" time="Time3">
+                    </Timeline.Item>
+                    <Timeline.Item header="Header3" time="Time3">
                         Content1
-                    </TimelineItem>
+                    </Timeline.Item>
                 </Timeline>,
                 container
             );
@@ -67,9 +58,9 @@ describe("Component: Timeline", () => {
         act(() => {
             render(
                 <Timeline>
-                    <TimelineItem header="header" time="time" />
+                    <Timeline.Item header="header" time="time" />
                     invalid
-                    <TimelineItem header="header" time="time" />
+                    <Timeline.Item header="header" time="time" />
                 </Timeline>,
                 container
             );
