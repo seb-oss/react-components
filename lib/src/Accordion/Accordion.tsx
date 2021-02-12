@@ -1,7 +1,7 @@
 import React from "react";
 import { randomId } from "@sebgroup/frontend-tools";
 import classnames from "classnames";
-import { AccordionItemProps } from "./AccordionItem";
+import { AccordionItem, AccordionItemProps } from "./AccordionItem";
 import "./accordion.scss";
 
 export type AccordionProps = JSX.IntrinsicElements["div"] & {
@@ -16,7 +16,7 @@ export type AccordionProps = JSX.IntrinsicElements["div"] & {
 };
 
 /** Accordions show and hide information that is not necessary at all time with one click. */
-export const Accordion: React.FC<AccordionProps> = React.memo(({ alternative, onToggle, inverted, ...props }: AccordionProps) => {
+const Accordion = ({ alternative, onToggle, inverted, ...props }: AccordionProps) => {
     const [active, setActive] = React.useState<number>(props.defaultValue);
     const [id, setId] = React.useState<string>(props.id);
 
@@ -49,4 +49,8 @@ export const Accordion: React.FC<AccordionProps> = React.memo(({ alternative, on
             })}
         </div>
     );
-});
+};
+
+Accordion.Item = AccordionItem;
+
+export { Accordion };

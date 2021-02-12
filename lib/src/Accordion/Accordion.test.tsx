@@ -1,7 +1,7 @@
 import React from "react";
 import { act } from "react-dom/test-utils";
 import { unmountComponentAtNode, render } from "react-dom";
-import { Accordion, AccordionItem } from ".";
+import { Accordion } from ".";
 
 describe("Component: Accordion", () => {
     let container: HTMLDivElement = null;
@@ -44,8 +44,8 @@ describe("Component: Accordion", () => {
         act(() => {
             render(
                 <Accordion>
-                    <AccordionItem header="First" />
-                    <AccordionItem header="Second" />
+                    <Accordion.Item header="First" />
+                    <Accordion.Item header="Second" />
                 </Accordion>,
                 container
             );
@@ -77,8 +77,8 @@ describe("Component: Accordion", () => {
             act(() => {
                 render(
                     <Accordion id={id} defaultValue={0}>
-                        <AccordionItem header="First" />
-                        <AccordionItem header="Second" />
+                        <Accordion.Item header="First" />
+                        <Accordion.Item header="Second" />
                     </Accordion>,
                     container
                 );
@@ -102,8 +102,8 @@ describe("Component: Accordion", () => {
             act(() => {
                 render(
                     <Accordion defaultValue={0}>
-                        <AccordionItem header="First" />
-                        <AccordionItem header="Second" />
+                        <Accordion.Item header="First" />
+                        <Accordion.Item header="Second" />
                     </Accordion>,
                     container
                 );
@@ -114,8 +114,8 @@ describe("Component: Accordion", () => {
             act(() => {
                 render(
                     <Accordion>
-                        <AccordionItem defaultChecked header="First" />
-                        <AccordionItem header="Second" />
+                        <Accordion.Item defaultChecked header="First" />
+                        <Accordion.Item header="Second" />
                     </Accordion>,
                     container
                 );

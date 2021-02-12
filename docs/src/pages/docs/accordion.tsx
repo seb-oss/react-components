@@ -1,6 +1,6 @@
 import React from "react";
 import Docs from "@common/Docs";
-import { Accordion, AccordionItem } from "@sebgroup/react-components/Accordion";
+import { Accordion } from "@sebgroup/react-components/Accordion";
 import { useDynamicForm } from "@hooks/useDynamicForm";
 import { Button } from "@sebgroup/react-components/Button";
 import { Textbox } from "@sebgroup/react-components/Textbox";
@@ -30,10 +30,10 @@ const AccordionPage: React.FC = () => {
             importedFiles={importedFiles}
             example={
                 <Accordion className="w-100" inverted={controls.inverted} alternative={controls.alternative} defaultValue={0}>
-                    <AccordionItem header="A simple accordion item">
+                    <Accordion.Item header="A simple accordion item">
                         <p>Illum amet voluptas minus aut esse totam blanditiis. Et corporis vel aspernatur dicta fugit et est placeat. Beatae dolor nisi aut minus placeat et at accusantium.</p>
-                    </AccordionItem>
-                    <AccordionItem header="An accordion item with headers and paragraphs" subHeader="A sub-header text to add some context">
+                    </Accordion.Item>
+                    <Accordion.Item header="An accordion item with headers and paragraphs" subHeader="A sub-header text to add some context">
                         <h5>Asperiores nihil voluptatem</h5>
                         <p>
                             Omnis quia eum accusamus ipsum. Odit magni voluptas reprehenderit quia iste unde. Quam harum ex consequatur. Ad vitae ipsam et illo architecto aut ipsa laboriosam optio.
@@ -41,8 +41,8 @@ const AccordionPage: React.FC = () => {
                         </p>
                         <h5>Exercitationem fugit earum</h5>
                         <p>Suscipit quis quia. Et veniam sit est vero. Aut ut est. Et porro saepe aspernatur dolorum rem beatae blanditiis. Repudiandae veritatis ut.</p>
-                    </AccordionItem>
-                    <AccordionItem header="More complex structures">
+                    </Accordion.Item>
+                    <Accordion.Item header="More complex structures">
                         <form onSubmit={(e) => e.preventDefault()}>
                             <fieldset>
                                 <legend>Register your interest</legend>
@@ -51,7 +51,7 @@ const AccordionPage: React.FC = () => {
                                 <Button type="submit">Submit</Button>
                             </fieldset>
                         </form>
-                    </AccordionItem>
+                    </Accordion.Item>
                 </Accordion>
             }
             code={code}
