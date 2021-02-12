@@ -8,9 +8,9 @@ import { Textbox } from "@sebgroup/react-components/Textbox";
 const importString: string = require("!raw-loader!@sebgroup/react-components/Accordion/Accordion");
 const importedFiles: Array<string> = [require("!raw-loader!@sebgroup/react-components/Accordion/AccordionItem")];
 const code: string = `<Accordion>
-    <AccordionItem header="First">First content</AccordionItem>
-    <AccordionItem header="Second">Second content</AccordionItem>
-    <AccordionItem header="Third">Third content</AccordionItem>
+    <Accordion.Item header="First">First content</Accordion.Item>
+    <Accordion.Item header="Second">Second content</Accordion.Item>
+    <Accordion.Item header="Third">Third content</Accordion.Item>
 </Accordion>`;
 
 const AccordionPage: React.FC = () => {

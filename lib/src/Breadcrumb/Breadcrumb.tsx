@@ -1,6 +1,6 @@
 import React from "react";
 import classnames from "classnames";
-import { BreadcrumbItemProps } from "./BreadcrumbItem";
+import { BreadcrumbItem, BreadcrumbItemProps } from "./BreadcrumbItem";
 
 export type BreadcrumbProps = JSX.IntrinsicElements["nav"] & {
     /** Event handler triggered when one of the breadcrumb links is clicked */
@@ -10,7 +10,7 @@ export type BreadcrumbProps = JSX.IntrinsicElements["nav"] & {
 };
 
 /** A breadcrumb is a secondary navigation showing the website hierarchy. */
-export const Breadcrumb: React.FC<BreadcrumbProps> = React.memo(({ onNavigate, light, ...props }: BreadcrumbProps) => {
+const Breadcrumb = ({ onNavigate, light, ...props }: BreadcrumbProps) => {
     return (
         <nav {...props} aria-label="breadcrumb">
             <ol className={classnames("breadcrumb", { "breadcrumb-light": light })}>
@@ -26,4 +26,8 @@ export const Breadcrumb: React.FC<BreadcrumbProps> = React.memo(({ onNavigate, l
             </ol>
         </nav>
     );
-});
+};
+
+Breadcrumb.Item = BreadcrumbItem;
+
+export { Breadcrumb };

@@ -1,5 +1,5 @@
 import React from "react";
-import { Breadcrumb, BreadcrumbItem } from ".";
+import { Breadcrumb } from ".";
 import { unmountComponentAtNode, render } from "react-dom";
 import { act } from "react-dom/test-utils";
 
@@ -31,8 +31,8 @@ describe("Component: Breadcrumb", () => {
         act(() => {
             render(
                 <Breadcrumb>
-                    <BreadcrumbItem>First</BreadcrumbItem>
-                    <BreadcrumbItem>Second</BreadcrumbItem>
+                    <Breadcrumb.Item>First</Breadcrumb.Item>
+                    <Breadcrumb.Item>Second</Breadcrumb.Item>
                 </Breadcrumb>,
                 container
             );

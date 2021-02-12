@@ -1,6 +1,6 @@
 import React from "react";
 import Docs from "@common/Docs";
-import { Breadcrumb, BreadcrumbItem } from "@sebgroup/react-components/Breadcrumb";
+import { Breadcrumb } from "@sebgroup/react-components/Breadcrumb";
 import { useDynamicForm } from "@hooks/useDynamicForm";
 
 const homeIcon: JSX.Element = (
@@ -12,9 +12,9 @@ const homeIcon: JSX.Element = (
 const importString: string = require("!raw-loader!@sebgroup/react-components/Breadcrumb/Breadcrumb");
 const importedFiles: Array<string> = [require("!raw-loader!@sebgroup/react-components/Breadcrumb/BreadcrumbItem")];
 const code: string = `<Breadcrumb onNavigate={(e) => e.preventDefault(); /** Or do something else */}>
-    <BreadcrumbItem>Home</BreadcrumbItem>
-    <BreadcrumbItem>Users</BreadcrumbItem>
-    <BreadcrumbItem>Edit</BreadcrumbItem>
+    <Breadcrumb.Item>Home</Breadcrumb.Item>
+    <Breadcrumb.Item>Users</Breadcrumb.Item>
+    <Breadcrumb.Item>Edit</Breadcrumb.Item>
 </Breadcrumb>`;
 
 const BreadcrumbPage: React.FC = () => {
@@ -38,9 +38,9 @@ const BreadcrumbPage: React.FC = () => {
                     }}
                     light={controls.light}
                 >
-                    <BreadcrumbItem title="Home">{homeIcon}</BreadcrumbItem>
-                    <BreadcrumbItem title="Users">Users</BreadcrumbItem>
-                    <BreadcrumbItem title="Edit">Edit</BreadcrumbItem>
+                    <Breadcrumb.Item title="Home">{homeIcon}</Breadcrumb.Item>
+                    <Breadcrumb.Item title="Users">Users</Breadcrumb.Item>
+                    <Breadcrumb.Item title="Edit">Edit</Breadcrumb.Item>
                 </Breadcrumb>
             }
             code={code}
