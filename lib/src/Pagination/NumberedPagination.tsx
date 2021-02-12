@@ -1,5 +1,5 @@
 import React from "react";
-import { Pagination, Page, PaginationProps } from ".";
+import { Pagination, PaginationProps } from ".";
 
 export interface NumberedPagesProps extends PaginationProps {
     /** The number of the first item */
@@ -26,9 +26,9 @@ export const NumberedPagination: React.FC<NumberedPagesProps> = React.memo(({ st
     return (
         <Pagination {...props}>
             {pages.map((page: number, index: number) => (
-                <Page key={index} href={hrefMask?.includes("$i") ? hrefMask.replace("$i", page.toString()) : null}>
+                <Pagination.Item key={index} href={hrefMask?.includes("$i") ? hrefMask.replace("$i", page.toString()) : null}>
                     {page}
-                </Page>
+                </Pagination.Item>
             ))}
         </Pagination>
     );

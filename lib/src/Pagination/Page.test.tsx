@@ -1,5 +1,5 @@
 import React from "react";
-import { Page } from ".";
+import { Page } from "./Page";
 import { act, Simulate } from "react-dom/test-utils";
 import { unmountComponentAtNode, render } from "react-dom";
 

@@ -1,5 +1,5 @@
 import React from "react";
-import { Pagination, PaginationSize, Page } from ".";
+import { Pagination, PaginationSize } from ".";
 import { act, Simulate } from "react-dom/test-utils";
 import { unmountComponentAtNode, render } from "react-dom";
 
@@ -46,9 +46,9 @@ describe("Component: RadioButton", () => {
         act(() => {
             render(
                 <Pagination>
-                    <Page>1</Page>
-                    <Page>2</Page>
-                    <Page>3</Page>
+                    <Pagination.Item>1</Pagination.Item>
+                    <Pagination.Item>2</Pagination.Item>
+                    <Pagination.Item>3</Pagination.Item>
                 </Pagination>,
                 container
             );
@@ -64,9 +64,9 @@ describe("Component: RadioButton", () => {
         act(() => {
             render(
                 <Pagination showFirstAndLast>
-                    <Page>1</Page>
-                    <Page>2</Page>
-                    <Page>3</Page>
+                    <Pagination.Item>1</Pagination.Item>
+                    <Pagination.Item>2</Pagination.Item>
+                    <Pagination.Item>3</Pagination.Item>
                 </Pagination>,
                 container
             );
@@ -86,7 +86,7 @@ describe("Component: RadioButton", () => {
                 render(
                     <Pagination value={value} offset={3} showFirstAndLast>
                         {[...Array(10)].map((_: undefined, i: number) => (
-                            <Page key={i}>{i}</Page>
+                            <Pagination.Item key={i}>{i}</Pagination.Item>
                         ))}
                     </Pagination>,
                     container
@@ -119,8 +119,8 @@ describe("Component: RadioButton", () => {
         act(() => {
             render(
                 <Pagination value={0} onPageChange={onPageChange}>
-                    <Page>1</Page>
-                    <Page>2</Page>
+                    <Pagination.Item>1</Pagination.Item>
+                    <Pagination.Item>2</Pagination.Item>
                 </Pagination>,
                 container
             );
@@ -138,7 +138,7 @@ describe("Component: RadioButton", () => {
             render(
                 <Pagination offset={0}>
                     {[...Array(10)].map((_: undefined, i: number) => (
-                        <Page key={i}>{i}</Page>
+                        <Pagination.Item key={i}>{i}</Pagination.Item>
                     ))}
                 </Pagination>,
                 container
@@ -154,7 +154,7 @@ describe("Component: RadioButton", () => {
             render(
                 <Pagination value={5} useDotNav>
                     {[...Array(10)].map((_: undefined, i: number) => (
-                        <Page key={i}>{i}</Page>
+                        <Pagination.Item key={i}>{i}</Pagination.Item>
                     ))}
                 </Pagination>,
                 container
@@ -175,7 +175,7 @@ describe("Component: RadioButton", () => {
                 render(
                     <Pagination value={0} onPageChange={onPageChange} showFirstAndLast>
                         {[...Array(10)].map((_: undefined, i: number) => (
-                            <Page key={i}>{i}</Page>
+                            <Pagination.Item key={i}>{i}</Pagination.Item>
                         ))}
                     </Pagination>,
                     container
@@ -190,7 +190,7 @@ describe("Component: RadioButton", () => {
                 render(
                     <Pagination value={4} onPageChange={onPageChange} showFirstAndLast>
                         {[...Array(10)].map((_: undefined, i: number) => (
-                            <Page key={i}>{i}</Page>
+                            <Pagination.Item key={i}>{i}</Pagination.Item>
                         ))}
                     </Pagination>,
                     container
@@ -208,7 +208,7 @@ describe("Component: RadioButton", () => {
                 render(
                     <Pagination value={9} onPageChange={onPageChange} showFirstAndLast>
                         {[...Array(10)].map((_: undefined, i: number) => (
-                            <Page key={i}>{i}</Page>
+                            <Pagination.Item key={i}>{i}</Pagination.Item>
                         ))}
                     </Pagination>,
                     container
@@ -223,7 +223,7 @@ describe("Component: RadioButton", () => {
                 render(
                     <Pagination value={4} onPageChange={onPageChange} showFirstAndLast>
                         {[...Array(10)].map((_: undefined, i: number) => (
-                            <Page key={i}>{i}</Page>
+                            <Pagination.Item key={i}>{i}</Pagination.Item>
                         ))}
                     </Pagination>,
                     container
@@ -241,9 +241,9 @@ describe("Component: RadioButton", () => {
         act(() => {
             render(
                 <Pagination>
-                    <Page>1</Page>
+                    <Pagination.Item>1</Pagination.Item>
                     {phrase}
-                    <Page>2</Page>
+                    <Pagination.Item>2</Pagination.Item>
                 </Pagination>,
                 container
             );

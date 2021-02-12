@@ -1,7 +1,7 @@
 import React from "react";
 import Docs from "@common/Docs";
 import { DynamicFormOption, useDynamicForm } from "@hooks/useDynamicForm";
-import { Pagination, Page, CustomNavs, PaginationProps } from "@sebgroup/react-components/Pagination";
+import { Pagination, CustomNavs, PaginationProps } from "@sebgroup/react-components/Pagination";
 import CPUIcon from "../../../static/icons/cpu.svg";
 import GameControllerIcon from "../../../static/icons/game-controller.svg";
 import ArrowFirstLeftIcon from "../../../static/icons/arrow-first-left.svg";
@@ -11,7 +11,9 @@ import ArrowLastRightIcon from "../../../static/icons/arrow-last-right.svg";
 
 const importString: string = require("!raw-loader!@sebgroup/react-components/Pagination/Pagination");
 const code: string = `<Pagination value={page} onPageChange={setPage}>
-    {[...Array(10)].map((_: undefined, i: number) => <Page href={\'"pages/\${i + 1}"\'}>{i + 1}</Page>)}
+    <Pagination.Item>1</Pagination.Item>
+    <Pagination.Item>2</Pagination.Item>
+    <Pagination.Item>3</Pagination.Item>
 </Pagination>`;
 
 const PaginationSizes: DynamicFormOption<PaginationProps["size"]>[] = [
@@ -74,9 +76,9 @@ const PaginationPage: React.FC = (): React.ReactElement<void> => {
                         navs={controls.useCustomNavs ? customNavs : null}
                     >
                         {(controls.useCustomPages ? customPaginations : [...Array(10)]).map((_: undefined, i: number) => (
-                            <Page key={i} href={`/pages/${i + 1}`}>
+                            <Pagination.Item key={i} href={`/pages/${i + 1}`}>
                                 {controls.useCustomPages ? _ : i + 1}
-                            </Page>
+                            </Pagination.Item>
                         ))}
                     </Pagination>
                 </div>
