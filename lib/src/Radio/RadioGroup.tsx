@@ -1,7 +1,7 @@
 import React from "react";
 import classnames from "classnames";
 import { FeedbackIndicator, Indicator } from "../FeedbackIndicator";
-import { RadioButtonProps } from "./RadioButton";
+import { RadioProps } from ".";
 
 export type RadioGroupProps<T = React.ReactText> = JSX.IntrinsicElements["div"] & {
     /** The name of the group */
@@ -19,8 +19,8 @@ export type RadioGroupProps<T = React.ReactText> = JSX.IntrinsicElements["div"] 
 export const RadioGroup: React.FC<RadioGroupProps> = ({ name, indicator, disabled, value, onChange, ...props }: RadioGroupProps) => (
     <FeedbackIndicator {...indicator}>
         <div {...props} className={classnames("radio-group", props.className)}>
-            {React.Children.map(props.children, (Child: React.ReactElement<RadioButtonProps>) =>
-                React.isValidElement<React.FC<RadioButtonProps>>(Child)
+            {React.Children.map(props.children, (Child: React.ReactElement<RadioProps>) =>
+                React.isValidElement<React.FC<RadioProps>>(Child)
                     ? React.cloneElement<any>(Child, {
                           checked: value === Child.props.value,
                           disabled: disabled || Child.props.disabled,

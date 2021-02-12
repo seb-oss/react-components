@@ -1,15 +1,15 @@
 import React from "react";
 import { unmountComponentAtNode, render } from "react-dom";
 import { act, Simulate } from "react-dom/test-utils";
-import { RadioGroup, RadioButton } from ".";
+import { Radio } from ".";
 
 const radios: React.ReactElement[] = [
-    <RadioButton key={1} value="Yes">
+    <Radio key={1} value="Yes">
         Yes
-    </RadioButton>,
-    <RadioButton key={2} value="No">
+    </Radio>,
+    <Radio key={2} value="No">
         No
-    </RadioButton>,
+    </Radio>,
 ];
 
 describe("Component: RadioGroup", () => {
@@ -28,7 +28,7 @@ describe("Component: RadioGroup", () => {
 
     it("Should render", () => {
         act(() => {
-            render(<RadioGroup name="test">{radios}</RadioGroup>, container);
+            render(<Radio.Group name="test">{radios}</Radio.Group>, container);
         });
         expect(container.firstElementChild).not.toBeNull();
         expect(container.firstElementChild.classList.contains("radio-group")).toBeTruthy();
@@ -38,7 +38,7 @@ describe("Component: RadioGroup", () => {
     it("Should allow passing a custom classname", () => {
         const className: string = "myclassname";
         act(() => {
-            render(<RadioGroup name="test" className={className} />, container);
+            render(<Radio.Group name="test" className={className} />, container);
         });
 
         expect(container.firstElementChild.classList.contains(className)).toBeTruthy();
@@ -49,9 +49,9 @@ describe("Component: RadioGroup", () => {
 
         act(() => {
             render(
-                <RadioGroup name="test" onChange={onChange}>
+                <Radio.Group name="test" onChange={onChange}>
                     {radios}
-                </RadioGroup>,
+                </Radio.Group>,
                 container
             );
         });
@@ -63,10 +63,10 @@ describe("Component: RadioGroup", () => {
     it("Should render any non radio button components", () => {
         act(() => {
             render(
-                <RadioGroup name="test">
+                <Radio.Group name="test">
                     {radios}
                     test
-                </RadioGroup>,
+                </Radio.Group>,
                 container
             );
         });

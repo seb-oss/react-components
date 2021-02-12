@@ -1,9 +1,9 @@
 import React from "react";
 import { unmountComponentAtNode, render } from "react-dom";
 import { act } from "react-dom/test-utils";
-import { RadioButton } from "./RadioButton";
+import { Radio } from "./Radio";
 
-describe("Component: RadioButton", () => {
+describe("Component: Radio", () => {
     let container: HTMLDivElement = null;
 
     beforeEach(() => {
@@ -19,17 +19,17 @@ describe("Component: RadioButton", () => {
 
     it("Should render", () => {
         act(() => {
-            render(<RadioButton />, container);
+            render(<Radio />, container);
         });
         expect(container).toBeDefined();
     });
 
     it("Should pass custom class and id", () => {
-        const className: string = "myRadiobuttonClass";
+        const className: string = "myRadioClass";
         const wrapperClassname: string = "myWrapperClassname";
 
         act(() => {
-            render(<RadioButton className={className} wrapperProps={{ className: wrapperClassname }} />, container);
+            render(<Radio className={className} wrapperProps={{ className: wrapperClassname }} />, container);
         });
         expect(container.querySelector(".custom-control-input").classList.contains(className)).toBeTruthy();
         expect(container.firstElementChild.classList.contains(wrapperClassname)).toBeTruthy();
@@ -37,14 +37,14 @@ describe("Component: RadioButton", () => {
 
     it("Should render with random id if id is not passed", () => {
         act(() => {
-            render(<RadioButton>label</RadioButton>, container);
+            render(<Radio>label</Radio>, container);
         });
         expect(container.querySelector("input").hasAttribute("id")).toBeTruthy();
         expect(container.querySelector("label").getAttribute("for")).toBe(container.querySelector("input").getAttribute("id"));
 
         const id: string = "myId";
         act(() => {
-            render(<RadioButton id={id}>label</RadioButton>, container);
+            render(<Radio id={id}>label</Radio>, container);
         });
         expect(container.querySelector("input").id).toEqual(id);
         expect(container.querySelector("label").getAttribute("for")).toEqual(id);
@@ -53,7 +53,7 @@ describe("Component: RadioButton", () => {
     it("Should render and display label", () => {
         const label: string = "my label";
         act(() => {
-            render(<RadioButton>{label}</RadioButton>, container);
+            render(<Radio>{label}</Radio>, container);
         });
         expect(container.querySelector(`.custom-control-label`)).not.toBeNull();
         expect(container.querySelector(`.custom-control-label`).innerHTML).toContain(label);

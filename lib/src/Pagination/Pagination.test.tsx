@@ -3,7 +3,7 @@ import { Pagination, PaginationSize } from ".";
 import { act, Simulate } from "react-dom/test-utils";
 import { unmountComponentAtNode, render } from "react-dom";
 
-describe("Component: RadioButton", () => {
+describe("Component: Pagination", () => {
     let container: HTMLDivElement = null;
 
     beforeEach(() => {

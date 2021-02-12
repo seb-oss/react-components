@@ -3,7 +3,7 @@ import Docs from "@common/Docs";
 import { FeedbackIndicator, IndicatorType } from "@sebgroup/react-components/FeedbackIndicator";
 import { DynamicFormOption, useDynamicForm } from "@hooks/useDynamicForm";
 import { Checkbox } from "@sebgroup/react-components/Checkbox";
-import { RadioButton } from "@sebgroup/react-components/RadioButton";
+import { Radio } from "@sebgroup/react-components/Radio";
 
 const importString: string = require("!raw-loader!@sebgroup/react-components/FeedbackIndicator/FeedbackIndicator");
 const code: string = `<FeedbackIndicator toggle={toggle}>text</FeedbackIndicator>`;
@@ -33,7 +33,7 @@ const FeedbackIndicatorPage: React.FC = () => {
                 <div className="w-100">
                     <FeedbackIndicator type={controls.type?.value} message={controls?.message} noBorder={controls.noBorder}>
                         <Checkbox>A Checkbox</Checkbox>
-                        <RadioButton>A Radio button</RadioButton>
+                        <Radio>A Radio button</Radio>
                         <div className="px-3 pb-2">Some content 🦾</div>
                     </FeedbackIndicator>
                 </div>

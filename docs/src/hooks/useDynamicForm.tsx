@@ -7,7 +7,7 @@ import { Textarea } from "@sebgroup/react-components/Textarea";
 import { Dropdown, getValueOfMultipleSelect } from "@sebgroup/react-components/Dropdown";
 import { Datepicker } from "@sebgroup/react-components/Datepicker";
 import { Stepper } from "@sebgroup/react-components/Stepper";
-import { RadioButton, RadioGroup } from "@sebgroup/react-components/RadioButton";
+import { Radio } from "@sebgroup/react-components/Radio";
 
 type DynamicFormInternalStateValue = string | string[] | DynamicFormOption | DynamicFormOption[] | Date | boolean | number;
 export interface DynamicFormItem {
@@ -270,14 +270,14 @@ const DynamicFormItemComponent: React.FC<{
 
         case "Radio": {
             formItem = (
-                <RadioGroup className={classnames({ indent: props.item?.indent })} {...commonProps} name={props.item?.key} value={(props.state as DynamicFormOption)?.value || ""}>
+                <Radio.Group className={classnames({ indent: props.item?.indent })} {...commonProps} name={props.item?.key} value={(props.state as DynamicFormOption)?.value || ""}>
                     {props.item?.options?.map((item, i) => (
-                        <RadioButton key={i} value={item.value} wrapperProps={{ className: props.item.inline ? "d-inline-block" : null }}>
+                        <Radio key={i} value={item.value} wrapperProps={{ className: props.item.inline ? "d-inline-block" : null }}>
                             {item.label}
                             {item.description && <p className="text-muted m-0">{item.description}</p>}
-                        </RadioButton>
+                        </Radio>
                     ))}
-                </RadioGroup>
+                </Radio.Group>
             );
             break;
         }

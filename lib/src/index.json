@@ -18,7 +18,7 @@
         "Notification": "./src/Notification/index.ts",
         "Pagination": "./src/Pagination/index.ts",
         "ProgressBar": "./src/ProgressBar/index.ts",
-        "RadioButton": "./src/RadioButton/index.ts",
+        "Radio": "./src/Radio/index.ts",
         "Rating": "./src/Rating/index.ts",
         "Slider": "./src/Slider/index.ts",
         "StepTracker": "./src/StepTracker/index.ts",
@@ -110,8 +110,8 @@
             "to": "./ProgressBar/index.js"
         },
         {
-            "from": "./src/RadioButton/index.ts",
-            "to": "./RadioButton/index.js"
+            "from": "./src/Radio/index.ts",
+            "to": "./Radio/index.js"
         },
         {
             "from": "./src/Rating/index.ts",
