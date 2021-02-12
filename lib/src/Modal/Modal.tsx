@@ -32,7 +32,7 @@ export type ModalProps = JSX.IntrinsicElements["div"] & {
 const safeDocument: Document | null = typeof document !== "undefined" ? document : null;
 
 /** The modal component provides a solid foundation for creating dialogs or slideout modals */
-export const Modal: React.FC<ModalProps> = React.memo(({ trapFocus, autoFocus, centered, size, fullscreen, onEscape, onBackdropDismiss, position, toggle, ...props }: ModalProps) => {
+const Modal = ({ trapFocus, autoFocus, centered, size, fullscreen, onEscape, onBackdropDismiss, position, toggle, ...props }: ModalProps) => {
     const dialogRef: React.MutableRefObject<HTMLDivElement> = React.useRef<HTMLDivElement>();
     const [isPristine, setIsPristine] = React.useState<boolean>(true);
 
@@ -152,4 +152,10 @@ export const Modal: React.FC<ModalProps> = React.memo(({ trapFocus, autoFocus, c
               </div>,
               safeDocument.body
           );
-});
+};
+
+Modal.Header = (props: JSX.IntrinsicElements["div"]) => <div {...props} className={classnames("modal-header", props.className)} />;
+Modal.Body = (props: JSX.IntrinsicElements["div"]) => <div {...props} className={classnames("modal-body", props.className)} />;
+Modal.Footer = (props: JSX.IntrinsicElements["div"]) => <div {...props} className={classnames("modal-footer", props.className)} />;
+
+export { Modal };

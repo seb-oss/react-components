@@ -8,9 +8,9 @@ import { CodeSnippet } from "@common/CodeSnippet";
 
 const importString: string = require("!raw-loader!@sebgroup/react-components/Modal/Modal");
 const code: string = `<Modal toggle={toggle}>
-    <div className="modal-header">Header content</div>
-    <div className="modal-body">Modal content here</div>
-    <div className="modal-footer">Footer content</div>
+    <Modal.Header>Header content</Modal.Header>
+    <Modal.Body>Modal content here</Modal.Body>
+    <Modal.Footer>Footer content</Modal.Footer>
 </Modal>`;
 
 const sizses: Array<DynamicFormOption<ModalSize>> = [
@@ -62,11 +62,11 @@ const NotificationPage: React.FC = () => {
                         onBackdropDismiss={controls.onBackdropDismiss ? dismiss : null}
                         autoFocus={controls.autoFocus}
                     >
-                        <div className="modal-header">
+                        <Modal.Header>
                             <h3>Header</h3>
                             <button className="close" type="button" onClick={dismiss} />
-                        </div>
-                        <div className="modal-body">
+                        </Modal.Header>
+                        <Modal.Body>
                             {controls.trapfocus || controls.autoFocus ? (
                                 <form>
                                     <fieldset>
@@ -89,10 +89,10 @@ const NotificationPage: React.FC = () => {
                                     </p>
                                 </>
                             )}
-                        </div>
-                        <div className="modal-footer">
+                        </Modal.Body>
+                        <Modal.Footer>
                             <Button onClick={dismiss}>Close Modal</Button>
-                        </div>
+                        </Modal.Footer>
                     </Modal>
                 </>
             }
@@ -100,31 +100,6 @@ const NotificationPage: React.FC = () => {
             controls={renderForm()}
             note={
                 <>
-                    <h3>Modal header, body and footer</h3>
-                    <p>
-                        Defining the modal's header, body and footer is done in a declarative style. Meaning that the developer is responsive for declaring these parts individually if needed. Remember
-                        to pass the following class names:
-                    </p>
-                    <ul>
-                        <li>
-                            <code>modal-header</code> for the <code>div</code> representing the header
-                        </li>
-                        <li>
-                            <code>modal-body</code> for the <code>div</code> representing the body
-                        </li>
-                        <li>
-                            <code>modal-footer</code> for the <code>div</code> representing the footer
-                        </li>
-                    </ul>
-                    An example can be found below:
-                    <CodeSnippet language="jsx">
-                        {`<Modal>
-    <div className="modal-header">Header content here</div>
-    <div className="modal-body">Body content here</div>
-    <div className="modal-footer">Footer content here</div>
-</Modal>`}
-                    </CodeSnippet>
-                    <hr />
                     <h3>Header close button</h3>
                     <p>
                         To add a close button to the modal's header just pass a button of class "close" and it will be aligned correctly. You don't need to pass any content inside the button as it

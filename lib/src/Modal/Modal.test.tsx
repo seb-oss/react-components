@@ -90,9 +90,9 @@ describe("Component: Modal", () => {
                 act(() => {
                     render(
                         <Modal toggle autoFocus>
-                            <div className="modal-body">
+                            <Modal.Body>
                                 <input id="test-input" type="test" />
-                            </div>
+                            </Modal.Body>
                         </Modal>,
                         container
                     );
@@ -108,9 +108,9 @@ describe("Component: Modal", () => {
                 act(() => {
                     render(
                         <Modal toggle autoFocus fullscreen onAnimationEnd={onAnimationEnd}>
-                            <div className="modal-body">
+                            <Modal.Body>
                                 <input id="test-input" type="test" />
-                            </div>
+                            </Modal.Body>
                         </Modal>,
                         container
                     );
@@ -127,9 +127,9 @@ describe("Component: Modal", () => {
                 act(() => {
                     render(
                         <Modal autoFocus>
-                            <div className="modal-body">
+                            <Modal.Body>
                                 <input id="test-input" type="test" />
-                            </div>
+                            </Modal.Body>
                         </Modal>,
                         container
                     );
@@ -143,9 +143,9 @@ describe("Component: Modal", () => {
                 act(() => {
                     render(
                         <Modal autoFocus fullscreen>
-                            <div className="modal-body">
+                            <Modal.Body>
                                 <input id="test-input" type="test" />
-                            </div>
+                            </Modal.Body>
                         </Modal>,
                         container
                     );
@@ -161,7 +161,7 @@ describe("Component: Modal", () => {
                 act(() => {
                     render(
                         <Modal toggle autoFocus>
-                            <div className="modal-body"></div>
+                            <Modal.Body />
                         </Modal>,
                         container
                     );
@@ -175,7 +175,7 @@ describe("Component: Modal", () => {
                 act(() => {
                     render(
                         <Modal toggle autoFocus fullscreen>
-                            <div className="modal-body"></div>
+                            <Modal.Body />
                         </Modal>,
                         container
                     );
