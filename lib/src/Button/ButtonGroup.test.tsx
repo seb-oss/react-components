@@ -1,7 +1,7 @@
 import React from "react";
 import { act } from "react-dom/test-utils";
 import { unmountComponentAtNode, render } from "react-dom";
-import { ButtonGroup, ButtonGroupSizes } from ".";
+import { ButtonGroup, ButtonGroupSizes } from "./ButtonGroup";
 
 type ButtonTestItem<T, K> = { value: T; expected: K };
 

@@ -1,15 +1,14 @@
 import React from "react";
 import Docs from "@common/Docs";
-import { ButtonGroup, ButtonGroupProps } from "@sebgroup/react-components/ButtonGroup";
+import { Button, ButtonGroupProps } from "@sebgroup/react-components/Button";
 import { DynamicFormOption, useDynamicForm } from "@hooks/useDynamicForm";
-import { Button } from "@sebgroup/react-components/Button";
 
-const importString: string = require("!raw-loader!@sebgroup/react-components/ButtonGroup/ButtonGroup");
-const code: string = `<ButtonGroup>
+const importString: string = require("!raw-loader!@sebgroup/react-components/Button/ButtonGroup");
+const code: string = `<Button.Group>
     <Button>First</Button>
     <Button>Second</Button>
     <Button>Third</Button>
-</ButtonGroup>`;
+</Button.Group>`;
 
 const sizes: Array<DynamicFormOption<ButtonGroupProps["size"]>> = [
     { key: "sm", label: "sm", value: "sm" },
@@ -32,11 +31,11 @@ const ButtonGroupPage: React.FC = (): React.ReactElement<void> => {
         <Docs
             mainFile={importString}
             example={
-                <ButtonGroup size={controls.size?.value} vertical={controls.vertical}>
+                <Button.Group size={controls.size?.value} vertical={controls.vertical}>
                     <Button>Add</Button>
                     <Button>Edit</Button>
                     <Button>Delete</Button>
-                </ButtonGroup>
+                </Button.Group>
             }
             code={code}
             controls={renderControls()}

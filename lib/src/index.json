@@ -3,7 +3,6 @@
         "Accordion": "./src/Accordion/index.ts",
         "Breadcrumb": "./src/Breadcrumb/index.ts",
         "Button": "./src/Button/index.ts",
-        "ButtonGroup": "./src/ButtonGroup/index.ts",
         "Carousel": "./src/Carousel/index.ts",
         "Checkbox": "./src/Checkbox/index.ts",
         "Chip": "./src/Chip/index.ts",
@@ -49,10 +48,6 @@
         {
             "from": "./src/Button/index.ts",
             "to": "./Button/index.js"
-        },
-        {
-            "from": "./src/ButtonGroup/index.ts",
-            "to": "./ButtonGroup/index.js"
         },
         {
             "from": "./src/Carousel/index.ts",

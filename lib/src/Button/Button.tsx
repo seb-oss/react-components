@@ -1,5 +1,6 @@
 import React from "react";
 import classnames from "classnames";
+import { ButtonGroup } from "./ButtonGroup";
 
 export type ButtonTheme = "primary" | "secondary" | "danger" | "outline-primary" | "outline-danger" | "dark" | "light" | "link";
 export type ButtonSize = "lg" | "md" | "sm";
@@ -13,7 +14,7 @@ export type ButtonProps = JSX.IntrinsicElements["button"] & {
     block?: boolean;
 };
 /** Buttons allow users to take action with a single tap. */
-export const Button: React.FC<ButtonProps> = React.memo(({ theme = "primary", size, block, ...props }: ButtonProps) => {
+const Button = ({ theme = "primary", size, block, ...props }: ButtonProps) => {
     const [className, setClassName] = React.useState<string>("btn btn-primary");
 
     React.useEffect(() => {
@@ -25,4 +26,8 @@ export const Button: React.FC<ButtonProps> = React.memo(({ theme = "primary", si
             {props.children}
         </button>
     );
-});
+};
+
+Button.Group = ButtonGroup;
+
+export { Button };
