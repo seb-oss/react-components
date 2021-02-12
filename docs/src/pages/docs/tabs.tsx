@@ -1,12 +1,12 @@
 import React from "react";
 import Docs from "@common/Docs";
-import { Tabs, TabItem } from "@sebgroup/react-components/Tabs";
+import { Tabs } from "@sebgroup/react-components/Tabs";
 
 const importString: string = require("!raw-loader!@sebgroup/react-components/Tabs/Tabs");
 const code: string = `<Tabs value={value} onTabChange={setValue}>
-    <TabItem>First</TabItem>
-    <TabItem>Second</TabItem>
-    <TabItem>Third</TabItem>
+    <Tabs.Item>First</Tabs.Item>
+    <Tabs.Item>Second</Tabs.Item>
+    <Tabs.Item>Third</Tabs.Item>
 </Tabs>`;
 
 const TabsPage: React.FC = React.memo(() => {
@@ -17,10 +17,10 @@ const TabsPage: React.FC = React.memo(() => {
             mainFile={importString}
             example={
                 <Tabs value={value} onTabChange={setValue}>
-                    <TabItem>First</TabItem>
-                    <TabItem>Second</TabItem>
-                    <TabItem>Third</TabItem>
-                    <TabItem disabled>Fourth</TabItem>
+                    <Tabs.Item>First</Tabs.Item>
+                    <Tabs.Item>Second</Tabs.Item>
+                    <Tabs.Item>Third</Tabs.Item>
+                    <Tabs.Item disabled>Fourth</Tabs.Item>
                 </Tabs>
             }
             code={code}

@@ -1,6 +1,6 @@
 import React from "react";
 import { unmountComponentAtNode, render } from "react-dom";
-import { Tabs, TabItem } from ".";
+import { Tabs } from ".";
 import { act, Simulate } from "react-dom/test-utils";
 
 describe("Component: Tabs", () => {
@@ -33,8 +33,8 @@ describe("Component: Tabs", () => {
         act(() => {
             render(
                 <Tabs>
-                    <TabItem>First</TabItem>
-                    <TabItem>Second</TabItem>
+                    <Tabs.Item>First</Tabs.Item>
+                    <Tabs.Item>Second</Tabs.Item>
                 </Tabs>,
                 container
             );
@@ -51,8 +51,8 @@ describe("Component: Tabs", () => {
         act(() => {
             render(
                 <Tabs>
-                    <TabItem>First</TabItem>
-                    <TabItem>Second</TabItem>
+                    <Tabs.Item>First</Tabs.Item>
+                    <Tabs.Item>Second</Tabs.Item>
                     test123
                 </Tabs>,
                 container
@@ -68,8 +68,8 @@ describe("Component: Tabs", () => {
         act(() => {
             render(
                 <Tabs value={0} onTabChange={onTabChange}>
-                    <TabItem>First</TabItem>
-                    <TabItem>Second</TabItem>
+                    <Tabs.Item>First</Tabs.Item>
+                    <Tabs.Item>Second</Tabs.Item>
                 </Tabs>,
                 container
             );

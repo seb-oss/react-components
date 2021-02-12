@@ -1,2 +1,2 @@
 export * from "./Tabs";
-export * from "./TabItem";
+export { TabItemProps } from "./TabItem";

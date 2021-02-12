@@ -1,5 +1,5 @@
 import React from "react";
-import { TabItemProps } from "./TabItem";
+import { TabItem, TabItemProps } from "./TabItem";
 import classnames from "classnames";
 
 export type TabsProps = JSX.IntrinsicElements["ul"] & {
@@ -9,7 +9,7 @@ export type TabsProps = JSX.IntrinsicElements["ul"] & {
     onTabChange?: (index: number) => void;
 };
 /** Tabs organize and allow navigation between groups of content that are related and at the same level of hierarchy. */
-export const Tabs: React.FC<TabsProps> = ({ value, onTabChange, ...props }: TabsProps) => {
+const Tabs = ({ value, onTabChange, ...props }: TabsProps) => {
     const onClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
         event.currentTarget.href.endsWith("#") && event.preventDefault();
         onTabChange && onTabChange(parseInt(event.currentTarget.dataset.indexNumber));
@@ -29,3 +29,7 @@ export const Tabs: React.FC<TabsProps> = ({ value, onTabChange, ...props }: Tabs
         </ul>
     );
 };
+
+Tabs.Item = TabItem;
+
+export { Tabs };

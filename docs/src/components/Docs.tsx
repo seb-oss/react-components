@@ -1,5 +1,5 @@
 import React from "react";
-import { Tabs, TabItem } from "@sebgroup/react-components/Tabs";
+import { Tabs } from "@sebgroup/react-components/Tabs";
 import Layout from "./Layout";
 import { Helmet } from "react-helmet";
 import { APIExtractService } from "@utils/api-parser";
@@ -33,9 +33,9 @@ const Docs: React.FC<DocsProps> = ({ mainFile, importedFiles, ...props }: DocsPr
                 <h1>{apis?.name}</h1>
                 <p>{apis?.description}</p>
                 <Tabs className="doc-page-tabs" value={activeTab} onTabChange={setActiveTab}>
-                    <TabItem>Playground</TabItem>
-                    <TabItem>APIs</TabItem>
-                    {props.note && <TabItem>Notes</TabItem>}
+                    <Tabs.Item>Playground</Tabs.Item>
+                    <Tabs.Item>APIs</Tabs.Item>
+                    {props.note && <Tabs.Item>Notes</Tabs.Item>}
                 </Tabs>
                 {
                     /* prettier-ignore */ [
