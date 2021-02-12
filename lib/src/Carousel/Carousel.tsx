@@ -1,7 +1,7 @@
 import React from "react";
 import classnames from "classnames";
 import { randomId } from "@sebgroup/frontend-tools";
-import { CarouselItemProps, AfterSlideEvent } from "./CarouselItem";
+import { CarouselItemProps, AfterSlideEvent, CarouselItem } from "./CarouselItem";
 import { CarouselIndicators } from "./CarouselIndicators";
 import { CarouselNavs } from "./CarouselNavs";
 import "./carousel.scss";
@@ -31,7 +31,7 @@ export type NavigationDirection = "next" | "prev";
 type NavigateTrigger = React.MouseEvent<HTMLLIElement | HTMLAnchorElement | HTMLDivElement> | React.TouchEvent<HTMLDivElement> | React.KeyboardEvent<HTMLAnchorElement>;
 type SwipeEvent = React.TouchEvent<HTMLDivElement> | React.MouseEvent<HTMLDivElement>;
 
-export const Carousel: React.FC<CarouselProps> = ({
+const Carousel = ({
     afterChange,
     transitionDuration = defaultTransitionDuration,
     transitionStyle = "slide",
@@ -214,3 +214,7 @@ export const Carousel: React.FC<CarouselProps> = ({
         </div>
     );
 };
+
+Carousel.Item = CarouselItem;
+
+export { Carousel };

@@ -1,7 +1,7 @@
 import React from "react";
 import { act, Simulate, SyntheticEventData } from "react-dom/test-utils";
 import { unmountComponentAtNode, render } from "react-dom";
-import { Carousel, CarouselItem } from ".";
+import { Carousel } from ".";
 
 type EventType = keyof HTMLElementEventMap;
 type Listener = EventListener;
@@ -50,8 +50,8 @@ describe("Component: Carousel", () => {
         act(() => {
             render(
                 <Carousel>
-                    <CarouselItem>First</CarouselItem>
-                    <CarouselItem>Second</CarouselItem>
+                    <Carousel.Item>First</Carousel.Item>
+                    <Carousel.Item>Second</Carousel.Item>
                 </Carousel>,
                 container
             );
@@ -63,8 +63,8 @@ describe("Component: Carousel", () => {
         act(() => {
             render(
                 <Carousel showIndicators>
-                    <CarouselItem>test</CarouselItem>
-                    <CarouselItem>test</CarouselItem>
+                    <Carousel.Item>test</Carousel.Item>
+                    <Carousel.Item>test</Carousel.Item>
                 </Carousel>,
                 container
             );
@@ -78,8 +78,8 @@ describe("Component: Carousel", () => {
         act(() => {
             render(
                 <Carousel transitionDuration={transitionDuration} afterChange={afterChange}>
-                    <CarouselItem>test</CarouselItem>
-                    <CarouselItem>test</CarouselItem>
+                    <Carousel.Item>test</Carousel.Item>
+                    <Carousel.Item>test</Carousel.Item>
                     test
                 </Carousel>,
                 container
@@ -97,8 +97,8 @@ describe("Component: Carousel", () => {
         act(() => {
             render(
                 <Carousel showIndicators afterChange={afterChange}>
-                    <CarouselItem>First</CarouselItem>
-                    <CarouselItem>Second</CarouselItem>
+                    <Carousel.Item>First</Carousel.Item>
+                    <Carousel.Item>Second</Carousel.Item>
                 </Carousel>,
                 container
             );
@@ -130,8 +130,8 @@ describe("Component: Carousel", () => {
         act(() => {
             render(
                 <Carousel infinite={false}>
-                    <CarouselItem>First</CarouselItem>
-                    <CarouselItem>Second</CarouselItem>
+                    <Carousel.Item>First</Carousel.Item>
+                    <Carousel.Item>Second</Carousel.Item>
                 </Carousel>,
                 container
             );
@@ -149,8 +149,8 @@ describe("Component: Carousel", () => {
         act(() => {
             render(
                 <Carousel infinite={false} afterChange={afterChange}>
-                    <CarouselItem>First</CarouselItem>
-                    <CarouselItem>Second</CarouselItem>
+                    <Carousel.Item>First</Carousel.Item>
+                    <Carousel.Item>Second</Carousel.Item>
                 </Carousel>,
                 container
             );
@@ -165,8 +165,8 @@ describe("Component: Carousel", () => {
         act(() => {
             render(
                 <Carousel transitionStyle="fade">
-                    <CarouselItem>First</CarouselItem>
-                    <CarouselItem>Second</CarouselItem>
+                    <Carousel.Item>First</Carousel.Item>
+                    <Carousel.Item>Second</Carousel.Item>
                 </Carousel>,
                 container
             );
@@ -184,8 +184,8 @@ describe("Component: Carousel", () => {
             act(() => {
                 render(
                     <Carousel onMouseDown={onMouseDown}>
-                        <CarouselItem>First</CarouselItem>
-                        <CarouselItem>Second</CarouselItem>
+                        <Carousel.Item>First</Carousel.Item>
+                        <Carousel.Item>Second</Carousel.Item>
                     </Carousel>,
                     container
                 );
@@ -218,8 +218,8 @@ describe("Component: Carousel", () => {
             act(() => {
                 render(
                     <Carousel onTouchStart={onTouchStart}>
-                        <CarouselItem>First</CarouselItem>
-                        <CarouselItem>Second</CarouselItem>
+                        <Carousel.Item>First</Carousel.Item>
+                        <Carousel.Item>Second</Carousel.Item>
                     </Carousel>,
                     container
                 );
@@ -252,8 +252,8 @@ describe("Component: Carousel", () => {
             jest.useFakeTimers();
             render(
                 <Carousel autoplay>
-                    <CarouselItem>First</CarouselItem>
-                    <CarouselItem>Second</CarouselItem>
+                    <Carousel.Item>First</Carousel.Item>
+                    <Carousel.Item>Second</Carousel.Item>
                 </Carousel>,
                 container
             );
@@ -275,8 +275,8 @@ describe("Component: Carousel", () => {
             jest.useFakeTimers();
             render(
                 <Carousel onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} autoplay>
-                    <CarouselItem>First</CarouselItem>
-                    <CarouselItem>Second</CarouselItem>
+                    <Carousel.Item>First</Carousel.Item>
+                    <Carousel.Item>Second</Carousel.Item>
                 </Carousel>,
                 container
             );
@@ -305,8 +305,8 @@ describe("Component: Carousel", () => {
             jest.useFakeTimers();
             render(
                 <Carousel autoplay autoplaySpeed={autoplaySpeed}>
-                    <CarouselItem>First</CarouselItem>
-                    <CarouselItem>Second</CarouselItem>
+                    <Carousel.Item>First</Carousel.Item>
+                    <Carousel.Item>Second</Carousel.Item>
                 </Carousel>,
                 container
             );

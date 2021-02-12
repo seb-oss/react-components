@@ -1,6 +1,6 @@
 import React from "react";
 import Docs from "@common/Docs";
-import { Carousel, CarouselItem, CarouselProps } from "@sebgroup/react-components/Carousel";
+import { Carousel, CarouselProps } from "@sebgroup/react-components/Carousel";
 import { Img } from "@sebgroup/react-components/Image";
 import { DynamicFormOption, useDynamicForm } from "@hooks/useDynamicForm";
 
@@ -12,8 +12,8 @@ const images = [
 ];
 const importString: string = require("!raw-loader!@sebgroup/react-components/Carousel/Carousel");
 const code: string = `<Carousel>
-    <CarouselItem><Img type="div" src="first.jpg" /></CarouselItem>
-    <CarouselItem><Img type="div" src="second.jpg" /></CarouselItem>
+    <Carousel.Item><Img type="div" src="first.jpg" /></Carousel.Item>
+    <Carousel.Item><Img type="div" src="second.jpg" /></Carousel.Item>
 </Carousel>`;
 
 const transitionStyles: Array<DynamicFormOption<CarouselProps["transitionStyle"]>> = [
@@ -50,9 +50,9 @@ const CarouselPage: React.FC = (): React.ReactElement<void> => {
                         transitionStyle={controls.transitionStyle?.value}
                     >
                         {images.map((image, i) => (
-                            <CarouselItem key={i}>
+                            <Carousel.Item key={i}>
                                 <Img src={image} responsive width="100%" />
-                            </CarouselItem>
+                            </Carousel.Item>
                         ))}
                     </Carousel>
                 </div>

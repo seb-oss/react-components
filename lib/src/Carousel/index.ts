@@ -1,2 +1,2 @@
 export * from "./Carousel";
-export * from "./CarouselItem";
+export { CarouselItemProps, TransitionDirection, AfterSlideEvent } from "./CarouselItem";
