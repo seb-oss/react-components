@@ -1,7 +1,7 @@
 import React from "react";
 import classnames from "classnames";
+import { StepLabelProps, StepLabel } from "./StepLabel";
 import "./steptracker.scss";
-import StepLabel, { StepLabelProps } from "./StepLabel";
 
 const checkIcon: JSX.Element = (
     <svg name="check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
@@ -12,58 +12,55 @@ const checkIcon: JSX.Element = (
 export type StepTrackerLabelPosition = "right" | "left" | "bottom" | "top";
 export type StepTrackerLabelOrientation = "horizontal" | "vertical";
 
-export type StepTrackerProps = Omit<JSX.IntrinsicElements["div"], "onClick"> & {
+type SharedProps = JSX.IntrinsicElements["div"] & {
     /** Position of label in step tracker */
     labelPosition?: StepTrackerLabelPosition;
-    /** list of item in step tracker */
-    list?: Array<StepLabelProps>;
-    /** callback when step tracker item clicked */
-    onClick?: (index: number) => void;
+    /** Callback when step tracker item clicked */
+    onStepClicked?: (index: number) => void;
     /** To display step tracker vertically or horizontally */
     orientation?: StepTrackerLabelOrientation;
     /** Current/ active step */
-    step: number;
+    value?: number;
     /** Use numbers for each step */
     useNumbers?: boolean;
 };
+
+interface VerticalStepTrackerProps extends SharedProps {
+    /** Position of label in step tracker */
+    labelPosition?: "right" | "left";
+    /** To display step tracker vertically or horizontally */
+    orientation?: "vertical";
+}
+interface HorizontalStepTrackerProps extends SharedProps {
+    /** Position of label in step tracker */
+    labelPosition?: "bottom" | "top";
+    /** To display step tracker vertically or horizontally */
+    orientation?: "horizontal";
+}
+
+export type StepTrackerProps = VerticalStepTrackerProps | HorizontalStepTrackerProps;
+
 /** Step trackers illustrate the steps in a multi step process */
-export const StepTracker: React.FC<StepTrackerProps> = React.memo(({ labelPosition = "bottom", list, onClick, orientation = "horizontal", step, useNumbers, ...props }: StepTrackerProps) => {
+const StepTracker = ({ labelPosition, onStepClicked, orientation = "horizontal", value, useNumbers, ...props }: StepTrackerProps) => {
     const [isVertical, setIsVertical] = React.useState<boolean>(orientation === "vertical");
-    const [stepList, setStepList] = React.useState<Array<number>>([]);
 
-    const getProgress = React.useCallback(
-        (pos: number): string => {
-            return (100 / (stepList.length - 1)) * pos + "%";
-        },
-        [stepList]
-    );
-
-    const getStyles = React.useCallback(
-        (key: keyof React.CSSProperties, pos: number): React.CSSProperties => {
-            return { [key]: getProgress(pos) };
-        },
-        [getProgress]
-    );
+    const getStyles = (key: keyof React.CSSProperties, pos: number) => ({ [key]: (100 / (React.Children.count(props.children) - 1)) * pos + "%" });
 
     React.useEffect(() => {
         setIsVertical(orientation === "vertical");
     }, [orientation]);
 
-    React.useEffect(() => {
-        setStepList((list ? list : React.Children.toArray(props.children)).map((value: null, i: number) => i));
-    }, [props.children, list]);
-
     return (
-        <div className={classnames("rc step-tracker", orientation, labelPosition, props.className, { clickable: onClick })} {...props}>
+        <div {...props} className={classnames("rc step-tracker", orientation, labelPosition || (orientation === "horizontal" ? "bottom" : "right"), { clickable: onStepClicked }, props.className)}>
             <div className="step-wrapper">
                 <div className="line">
-                    <div className="progress" style={getStyles(isVertical ? "height" : "width", step)} />
+                    <div className="progress" style={getStyles(isVertical ? "height" : "width", value)} />
                 </div>
-                {stepList.map((i: number) => (
+                {React.Children.map(props.children, (_, i: number) => (
                     <div
-                        className={"step" + (step === i ? " active" : "") + (useNumbers ? " numbered" : "")}
+                        className={"step" + (value === i ? " active" : "") + (useNumbers ? " numbered" : "")}
                         style={getStyles(isVertical ? "top" : "left", i)}
-                        onClick={() => onClick && onClick(i)}
+                        onClick={() => onStepClicked && onStepClicked(i)}
                         key={i}
                     >
                         <div className="step-border" />
@@ -73,13 +70,10 @@ export const StepTracker: React.FC<StepTrackerProps> = React.memo(({ labelPositi
                 ))}
             </div>
             <div className="text-wrapper">
-                {list?.map((item: StepLabelProps, i: number) => (
-                    <StepLabel key={i} isActive={step === i} style={isVertical ? null : getStyles("width", 1)} {...item} />
-                ))}
                 {React.Children.map(props.children, (Child: React.ReactElement<StepLabelProps>, i: number) =>
                     React.isValidElement<React.FC<StepLabelProps>>(Child)
                         ? React.cloneElement<any>(Child, {
-                              isActive: step === i,
+                              isActive: value === i,
                               style: isVertical ? null : getStyles("width", 1),
                           })
                         : Child
@@ -87,4 +81,8 @@ export const StepTracker: React.FC<StepTrackerProps> = React.memo(({ labelPositi
             </div>
         </div>
     );
-});
+};
+
+StepTracker.Label = StepLabel;
+
+export { StepTracker };

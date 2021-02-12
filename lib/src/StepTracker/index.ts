@@ -1,2 +1,2 @@
 export * from "./StepTracker";
-export * from "./StepLabel";
+export { StepLabelProps } from "./StepLabel";
