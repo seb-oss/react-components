@@ -216,7 +216,7 @@ aside.side-menu {
     }
 }
 
-.sidemenu-search {
+aside.side-menu > .sidemenu-content > .rc.input-box-group.sidemenu-search {
     direction: ltr;
     margin-top: 1.5rem;
     margin-bottom: 1.5rem;
