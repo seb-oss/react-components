@@ -1,0 +1,29 @@
+@import "~@sebgroup/bootstrap/scss/core";
+
+button.rc.close-btn {
+    border: none;
+    box-shadow: none;
+    background: transparent;
+    border-radius: 50%;
+    line-height: 0;
+    padding: 0.5em;
+    text-decoration: none;
+    transition: background-color 200ms, color 200ms;
+
+    &:not(:disabled) {
+        &:hover,
+        &:active,
+        &:visited {
+            background-color: rgba($gray-600, 0.2);
+        }
+        &:active {
+            color: white;
+        }
+    }
+
+    &::after {
+        content: "\2715";
+        line-height: 0.8em;
+        display: inline-block;
+    }
+}

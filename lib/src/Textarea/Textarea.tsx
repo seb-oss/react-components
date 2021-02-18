@@ -1,35 +1,31 @@
 import React from "react";
 import { randomId } from "@sebgroup/frontend-tools";
 import classnames from "classnames";
+import { FeedbackIndicator, Indicator } from "../FeedbackIndicator";
 import "./textarea.scss";
 
 export type TextareaProps = JSX.IntrinsicElements["textarea"] & {
-    /** Error message related to element */
-    error?: string;
     /** Element label */
     label?: string;
     /** Property sets whether textarea is resizable */
     resizable?: boolean;
+    /** Form indicator */
+    indicator?: Indicator;
+    /** Wrapper props (div) */
+    wrapperProps?: JSX.IntrinsicElements["div"];
 };
 /** Textarea is a component that allows user to add or edit text in multiline */
-export const Textarea: React.FC<TextareaProps> = ({ error, label, resizable, className, ...props }: TextareaProps) => {
+export const Textarea: React.FC<TextareaProps> = ({ indicator, label, resizable, wrapperProps = {}, ...props }: TextareaProps) => {
     const [id, setId] = React.useState<string>();
 
-    React.useEffect(() => {
-        setId(props.id ? props.id : label ? randomId("textarea-") : null);
-    }, [props.id, label]);
+    React.useEffect(() => setId(props.id ? props.id : label ? randomId("textarea-") : null), [props.id, label]);
 
     return (
-        <div className={classnames("form-group text-area", className)}>
-            <div className={classnames("input-field", { "has-error": !!error })}>
-                {label && (
-                    <label className="custom-label" htmlFor={id}>
-                        {label}
-                    </label>
-                )}
-                <textarea className={classnames("form-control", { resizable: !!resizable })} {...props} />
-                <div className="alert alert-danger">{error}</div>
-            </div>
+        <div {...wrapperProps} className={classnames("rc text-area input-field", wrapperProps.className)}>
+            {label && <label htmlFor={id}>{label}</label>}
+            <FeedbackIndicator {...indicator}>
+                <textarea {...props} className={classnames("form-control", { resizable }, props.className)} />
+            </FeedbackIndicator>
         </div>
     );
 };

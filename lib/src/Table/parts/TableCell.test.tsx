@@ -1,13 +1,13 @@
 import React from "react";
-import { unmountComponentAtNode, render } from "react-dom";
-import { Timepicker } from ".";
 import { act } from "react-dom/test-utils";
+import { unmountComponentAtNode, render } from "react-dom";
+import TableCell from "./TableCell";
 
-describe("Component: Timepicker", () => {
+describe("Component: Table cell", () => {
     let container: HTMLDivElement = null;
 
     beforeEach(() => {
-        container = document.createElement("div");
+        container = document.createElement("tr");
         document.body.appendChild(container);
     });
 
@@ -17,10 +17,12 @@ describe("Component: Timepicker", () => {
         container = null;
     });
 
-    it("Should render", () => {
+    it("Should render correctly", () => {
         act(() => {
-            render(<Timepicker name="test" onChange={jest.fn()} value={{ hours: 1, minutes: 0, dayperiod: "AM" as any }} />, container);
+            render(<TableCell />, container);
         });
+
         expect(container).toBeDefined();
+        expect(container.querySelector("td")).not.toBeNull();
     });
 });

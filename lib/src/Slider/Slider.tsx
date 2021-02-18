@@ -1,7 +1,7 @@
 import React from "react";
 import classnames from "classnames";
+import { FeedbackIndicator, Indicator } from "../FeedbackIndicator";
 import "./slider.scss";
-import { FeedbackIndicator, IndicatorType } from "../FeedbackIndicator";
 
 const angleLeftIcon: JSX.Element = (
     <svg name="angle-left" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 512">
@@ -17,9 +17,9 @@ const angleRightIcon: JSX.Element = (
 export type SliderTheme = "primary" | "inverted" | "success" | "danger" | "warning" | "purple";
 export type SliderAppearance = "normal" | "alternative";
 
-export interface RangeSliderLabel {
+export interface SliderLabel {
     position: number;
-    text: string;
+    label: React.ReactNode;
 }
 
 export type SliderProps = Omit<JSX.IntrinsicElements["input"], "value"> & {
@@ -28,7 +28,7 @@ export type SliderProps = Omit<JSX.IntrinsicElements["input"], "value"> & {
     /** field label */
     label?: string;
     /** range slider labels */
-    labels?: Array<RangeSliderLabel>;
+    labels?: Array<SliderLabel>;
     /** maximum value for range */
     max?: number;
     /** minimum value for range */
@@ -47,10 +47,8 @@ export type SliderProps = Omit<JSX.IntrinsicElements["input"], "value"> & {
     tooltipValue?: string;
     /** field value */
     value: number;
-    /** Hint message for stepper */
-    hint?: string;
-    /** Theme of text box hint */
-    hintTheme?: IndicatorType;
+    /** Indicator type and message */
+    indicator?: Indicator;
 };
 
 type AppearanceStyleMap = {
@@ -73,8 +71,7 @@ export const Slider: React.FC<SliderProps> = ({
     alternative,
     tooltipTheme = "inverted",
     tooltipValue,
-    hint,
-    hintTheme,
+    indicator,
     ...props
 }: SliderProps) => {
     const [minValue, setMinValue] = React.useState<number>(min || 0);
@@ -101,7 +98,7 @@ export const Slider: React.FC<SliderProps> = ({
     React.useEffect(() => {
         if (labels && labels.length) {
             const positions: Array<string> = [];
-            labels.map((label: RangeSliderLabel) => {
+            labels.map((label: SliderLabel) => {
                 positions.push(getLabelPosition(label.position) + "%");
             });
             setLabelsPositions(positions);
@@ -204,34 +201,35 @@ export const Slider: React.FC<SliderProps> = ({
     }
 
     return (
-        <div className={classnames("form-group custom-slider", props.className, { disabled: props.disabled })}>
-            {label && <label className="custom-label">{label}</label>}
-            <div className={classnames("input-field", appearance, { "has-labels": labels && labels.length })}>
-                <input type="range" min={minValue} max={maxValue} step={step} {...props} />
-                <div className={classnames("custom-slider-holder", theme)}>
-                    <div className={classnames("custom-slider-track", { "with-transitions": shouldEnableTransition() })}>
-                        <div className="custom-slider-slider-before" />
-                        <div className="custom-slider-slider-after" style={activeTrackStyles} />
-                        <div className="custom-slider-thumb" style={{ left: thumbPosition + "%" }}>
-                            <div className={classnames("custom-slider-preview", tooltipTheme, { "always-show": alwaysShowTooltip })}>{tooltipValue || props.value}</div>
-                            {appearance === "alternative" ? (
-                                <>
-                                    <span className="custom-slider-icon-left">{angleLeftIcon}</span>
-                                    <span className="custom-slider-icon-right">{angleRightIcon}</span>
-                                </>
-                            ) : null}
+        <FeedbackIndicator {...indicator} noBorder>
+            <div className={classnames("rc custom-slider", props.className, { disabled: props.disabled })}>
+                {label && <label className="custom-label">{label}</label>}
+                <div className={classnames("input-field", appearance, { "has-labels": labels && labels.length })}>
+                    <input type="range" min={minValue} max={maxValue} step={step} {...props} />
+                    <div className={classnames("custom-slider-holder", theme)}>
+                        <div className={classnames("custom-slider-track", { "with-transitions": shouldEnableTransition() })}>
+                            <div className="custom-slider-slider-before" />
+                            <div className="custom-slider-slider-after" style={activeTrackStyles} />
+                            <div className="custom-slider-thumb" style={{ left: thumbPosition + "%" }}>
+                                <div className={classnames("custom-slider-preview", tooltipTheme, { "always-show": alwaysShowTooltip })}>{tooltipValue || props.value}</div>
+                                {appearance === "alternative" ? (
+                                    <>
+                                        <span className="custom-slider-icon-left">{angleLeftIcon}</span>
+                                        <span className="custom-slider-icon-right">{angleRightIcon}</span>
+                                    </>
+                                ) : null}
+                            </div>
+                            {labels && labels.length
+                                ? labels.map((label: SliderLabel, i: number) => (
+                                      <div key={i} className={classnames("custom-slider-label", { "show-ticks": showTicks })} style={{ left: labelsPositions[i] }}>
+                                          <span>{label.label}</span>
+                                      </div>
+                                  ))
+                                : null}
                         </div>
-                        {labels && labels.length
-                            ? labels.map((label: RangeSliderLabel, i: number) => (
-                                  <div key={i} className={classnames("custom-slider-label", { "show-ticks": showTicks })} style={{ left: labelsPositions[i] }}>
-                                      <span>{label.text}</span>
-                                  </div>
-                              ))
-                            : null}
                     </div>
                 </div>
             </div>
-            <FeedbackIndicator className={classnames({ show: !!hint })} type={hintTheme} withoutBorder message={hint} />
-        </div>
+        </FeedbackIndicator>
     );
 };
