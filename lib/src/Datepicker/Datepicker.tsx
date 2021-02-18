@@ -58,8 +58,11 @@ export const Datepicker: React.FunctionComponent<DatepickerProps> = ({
     const getStringFromDate = React.useCallback(
         (d: Date, monthPicker: boolean): string => {
             if (isValidDate(d)) {
-                const tzoffset: number = new Date().getTimezoneOffset() * 60000;
-                return new Date(Date.now() - tzoffset).toISOString()?.substr(0, monthPicker ? 7 : 10) || "";
+                const year: string = `0000${d.getFullYear()}`.substr(-4, 4);
+                const month: string = `00${d.getMonth() + 1}`.substr(-2, 2);
+                const day: string = `00${d.getDate()}`.substr(-2, 2);
+
+                return `${year}-${month}-${day}`.substr(0, monthPicker ? 7 : 10) || "";
             } else {
                 return "";
             }
