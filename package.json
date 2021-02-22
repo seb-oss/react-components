@@ -3,6 +3,13 @@
     "version": "0.0.0-semantically-released",
     "description": "A set of React components based on SEB design library guidelines for mobile and web React applications",
     "license": "Apache-2.0",
+    "main": "./index.js",
+    "module": "./esm/index.js",
+    "exports": {
+        "import": "./esm/*.js",
+        "require": "./cjs/*.js",
+        "default": "./cjs/*.js"
+    },
     "keywords": [
         "react",
         "components",
@@ -28,7 +35,7 @@
         "coveralls": "cat ./coverage/lcov.info | coveralls",
         "commit": "git-cz",
         "commit-chore": "npm run sanitize && npm run generate-indexes && npm run format:staged",
-        "postcommit-chore": "git add package-lock.json lib/src/index.json",
+        "postgenerate-indexes": "git add package-lock.json lib/src/index.json",
         "sanitize": "package-lock-sanitizer",
         "generate-indexes": "node ./lib/scripts/indexer.js",
         "release": "semantic-release"
@@ -45,6 +52,7 @@
         "@sebgroup/bootstrap": "^5.4.0",
         "@sebgroup/frontend-tools": "^2.0.2",
         "classnames": "^2.2.6",
+        "css-style-inject": "^1.1.0",
         "react": "^17.0.1",
         "react-dom": "^17.0.1",
         "typescript": "^4.1.3"
