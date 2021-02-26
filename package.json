@@ -6,9 +6,11 @@
     "main": "./cjs/index.js",
     "module": "./esm/index.js",
     "exports": {
-        "import": "./esm/*.js",
-        "require": "./cjs/*.js",
-        "default": "./cjs/*.js"
+        "./": {
+            "import": "./esm/",
+            "require": "./cjs/",
+            "default": "./cjs/"
+        }
     },
     "keywords": [
         "react",
