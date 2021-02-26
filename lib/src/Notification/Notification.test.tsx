@@ -46,7 +46,9 @@ describe("Component: Notification", () => {
         expect(notification.classList.contains("show")).toBeTruthy();
         expect(notification.classList.contains("hide")).toBeFalsy();
 
-        act(() => jest.advanceTimersByTime(5000));
+        act(() => {
+            jest.advanceTimersByTime(5000);
+        });
 
         expect(notification.classList.contains("show")).toBeFalsy();
         expect(notification.classList.contains("hide")).toBeTruthy();
@@ -76,7 +78,9 @@ describe("Component: Notification", () => {
         expect(notification.classList.contains("show")).toBeTruthy();
         expect(notification.classList.contains("hide")).toBeFalsy();
 
-        act(() => jest.advanceTimersByTime(customTimeout));
+        act(() => {
+            jest.advanceTimersByTime(customTimeout);
+        });
 
         expect(notification.classList.contains("show")).toBeFalsy();
         expect(notification.classList.contains("hide")).toBeTruthy();
