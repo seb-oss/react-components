@@ -3,7 +3,7 @@
     "version": "0.0.0-semantically-released",
     "description": "A set of React components based on SEB design library guidelines for mobile and web React applications",
     "license": "Apache-2.0",
-    "main": "./index.js",
+    "main": "./cjs/index.js",
     "module": "./esm/index.js",
     "exports": {
         "import": "./esm/*.js",
