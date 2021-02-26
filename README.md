@@ -1,5 +1,6 @@
 # SEB React Components
 
+[![https://img.shields.io/npm/v/@sebgroup/react-components](https://img.shields.io/npm/v/@sebgroup/react-components)](https://www.npmjs.com/package/@sebgroup/react-components)
 ![Deployment](https://github.com/sebgroup/react-components/workflows/Deployment/badge.svg)
 ![Github Pages](https://github.com/sebgroup/react-components/workflows/Github%20Pages/badge.svg)
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
