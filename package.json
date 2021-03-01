@@ -30,7 +30,7 @@
         "build:docs": "npm run build --prefix ./docs",
         "build:lib": "npm run build --prefix ./lib",
         "build": "npm run build:lib && npm run build:docs",
-        "postinstall": "npm install --prefix ./lib && npm install --prefix ./docs",
+        "postinstall": "npm install --prefix ./lib --cwd ./lib && npm install --prefix ./docs --cwd ./docs",
         "format:all": "pretty-quick --write \"{,*/**/}*.{js,jsx, ts, tsx,json}\"",
         "format:staged": "pretty-quick --staged --verbose",
         "format:check": "pretty-quick --check --verbose",
@@ -52,9 +52,6 @@
     "homepage": "https://sebgroup.github.io/react-components",
     "dependencies": {
         "@sebgroup/bootstrap": "^5.4.0",
-        "@sebgroup/frontend-tools": "^2.0.2",
-        "classnames": "^2.2.6",
-        "css-style-inject": "^1.1.0",
         "react": "^17.0.1",
         "react-dom": "^17.0.1",
         "typescript": "^4.1.3"
