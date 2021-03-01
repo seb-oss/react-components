@@ -211,7 +211,7 @@ export const Dropdown: React.FC<DropdownProps> = React.forwardRef(({ wrapperProp
 
     React.useEffect(() => {
         !isMobile && setLabel((Array.isArray(props.value) ? props.value.join(", ") : props.value) || props.placeholder);
-    }, [props.value]);
+    }, [props.value, props.placeholder]);
 
     return (
         <div {...wrapperProps} className={classnames("rc custom-dropdown", wrapperProps.className)}>
