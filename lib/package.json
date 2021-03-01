@@ -35,7 +35,7 @@
         "raw-loader": "^4.0.2",
         "rollup": "^2.38.5",
         "rollup-plugin-styles": "^3.14.1",
-        "rollup-plugin-typescript2": "^0.29.0",
+        "rollup-plugin-typescript2": "^0.30.0",
         "sass-loader": "^10.1.0",
         "style-loader": "^2.0.0",
         "ts-jest": "^26.4.4",
