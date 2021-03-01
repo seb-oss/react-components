@@ -54,18 +54,7 @@ const TableHeaderCell: React.FC<TableHeaderCellProps> = ({ accessor, disableSort
             className={classnames(className, { sort: sortable, "sort-asc": sortable && sortOrder === SortDirection.ASC, "sort-desc": sortable && sortOrder === SortDirection.DESC })}
             onClick={sortable ? onSort : onClick}
             {...props}
-        >
-            {/* {React.Children.map(props.children, (Child: React.ReactElement<any>, i: number) => {
-                return sortable ? (
-                    <div className="sort-holder" onClick={() => onSort()}>
-                        <div className="header-content">{Child}</div>
-                        <div className={classnames("icon-holder", { asc: sortOrder === SortDirection.ASC, desc: sortDirection === SortDirection.DESC })}>{defaultSort}</div>
-                    </div>
-                ) : (
-                    Child
-                );
-            })} */}
-        </th>
+        />
     );
 };
 

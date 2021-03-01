@@ -46,9 +46,9 @@ describe("Component: Table header cell", () => {
                 container
             );
         });
-        expect(container.querySelector("th").classList.contains("sortable")).toBeTruthy();
+        expect(container.querySelector("th").classList.contains("sort")).toBeTruthy();
         act(() => {
-            Simulate.click(container.querySelector(".sort-holder"));
+            Simulate.click(container.querySelector(".sort"));
         });
         expect(setTableStateFn).toBeCalled();
         expect(sortFn).toBeCalled();
@@ -72,10 +72,10 @@ describe("Component: Table header cell", () => {
                 container
             );
         });
-        expect(container.querySelector("th").classList.contains("sortable")).toBeTruthy();
-        expect(container.querySelector(".asc")).not.toBeNull();
+        expect(container.querySelector("th").classList.contains("sort")).toBeTruthy();
+        expect(container.querySelector(".sort-asc")).not.toBeNull();
         act(() => {
-            Simulate.click(container.querySelector(".sort-holder"));
+            Simulate.click(container.querySelector(".sort-asc"));
         });
         expect(setTableStateFn).toBeCalledWith({
             ...mockProviderValue.tableState,
