@@ -3,7 +3,7 @@
     "version": "0.0.0-semantically-released",
     "description": "A set of React components based on SEB design library guidelines for mobile and web React applications",
     "license": "Apache-2.0",
-    "main": "./cjs/index.js",
+    "main": "./index.js",
     "module": "./esm/index.js",
     "exports": {
         "./": {
@@ -80,6 +80,7 @@
         "semantic-release": "^17.3.9"
     },
     "config": {
+        "base": "/react-components",
         "commitizen": {
             "path": "./node_modules/cz-conventional-changelog"
         }
