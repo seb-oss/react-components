@@ -36,10 +36,10 @@ jobs:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      - name: publish coverage
-        uses: coverallsapp/github-action@v1.0.1
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-        env:
-          COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_TOKEN }}
+      # - name: publish coverage
+      #   uses: coverallsapp/github-action@v1.0.1
+      #   with:
+      #     github-token: ${{ secrets.GITHUB_TOKEN }}
+      #   env:
+      #     COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_TOKEN }}
           

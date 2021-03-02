@@ -5,6 +5,7 @@ import { Navbar } from "../components/Navbar";
 import { Footer } from "../components/Footer";
 import { TechStack } from "../components/TechStack";
 import { httpGet } from "../utils/http";
+import { withPrefix } from "gatsby";
 import { getCommonMetaTag, initMetaConfiguration } from "../utils/meta.util";
 import AccessibilityIllustration from "../../static/illustrations/accessibility.svg";
 import AdjustmentsIllustration from "../../static/illustrations/adjustments.svg";
@@ -15,7 +16,7 @@ const designer: GithubContributor = {
     login: "boonying",
     type: "User",
     html_url: "https://www.behance.net/boonying",
-    avatar_url: "/boonying-profile.png",
+    avatar_url: withPrefix("/boonying-profile.png"),
 };
 
 export default function Home() {
