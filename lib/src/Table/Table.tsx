@@ -19,13 +19,15 @@ export type TableProps = JSX.IntrinsicElements["table"] & {
     theme?: TableTheme;
     /** callback when column is sorted */
     onSort?: (sortedColumn: SortedColumn) => void;
+    /** preset sorted column */
+    sortedColumn?: SortedColumn;
 };
 
-const Table = ({ onRowSelect, onRowExpand, onSort, theme = "light", ...props }: TableProps): React.ReactElement<void> => {
-    const [tableState, setTableState] = React.useState({ expandedRows: [], sortedColumn: null });
+const Table = ({ onRowSelect, onRowExpand, onSort, sortedColumn, theme = "light", ...props }: TableProps): React.ReactElement<void> => {
+    const [tableState, setTableState] = React.useState({ expandedRows: [], sortedColumn });
     return (
         <TableContext.Provider value={{ tableState, onSort, onRowSelect, onRowExpand, setTableState }}>
-            <table className={classnames("table", theme)} {...props} />
+            <table {...props} className={classnames("table", theme, props.className)} />
         </TableContext.Provider>
     );
 };

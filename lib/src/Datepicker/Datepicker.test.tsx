@@ -2,6 +2,7 @@ import React from "react";
 import { act, Simulate } from "react-dom/test-utils";
 import { unmountComponentAtNode, render } from "react-dom";
 import { Datepicker, DatepickerProps } from ".";
+import { advanceTo, clear } from "jest-date-mock";
 
 describe("Component: Datepicker", () => {
     let container: HTMLDivElement = null;
@@ -85,8 +86,119 @@ describe("Component: Datepicker", () => {
             render(<Datepicker {...props} />, container);
         });
 
-        Simulate.change(container.querySelector<HTMLInputElement>("input"));
+        const value = "2010-01-01";
+        const inputElement: HTMLInputElement = container.querySelector<HTMLInputElement>("input.seb-datepicker-native");
+        const event: any = { target: { value } };
+        Simulate.change(inputElement, event);
         expect(props.onChange).toHaveBeenCalled();
+    });
+
+    it("Should fire change event with null when component value is out of range and with latest value when in range", () => {
+        const [min, max]: [Date, Date] = [new Date(props.value.getFullYear() - 10, 1, 1), new Date(props.value.getFullYear() + 10, 1, 1)];
+        act(() => {
+            render(<Datepicker {...props} min={max} />, container);
+        });
+
+        expect(props.onChange).toHaveBeenCalledWith(null);
+
+        act(() => {
+            render(<Datepicker {...props} max={min} />, container);
+        });
+
+        expect(props.onChange).toHaveBeenCalledWith(null);
+
+        act(() => {
+            render(<Datepicker {...props} min={min} max={min} />, container);
+        });
+
+        expect(props.onChange).toHaveBeenCalledWith(null);
+
+        act(() => {
+            render(<Datepicker {...props} min={max} max={max} />, container);
+        });
+
+        expect(props.onChange).toHaveBeenCalledWith(null);
+
+        act(() => {
+            render(<Datepicker {...props} min={min} max={max} />, container);
+        });
+
+        expect(props.onChange).toHaveBeenCalled();
+        const tzoffset: number = new Date().getTimezoneOffset() * 60000;
+        const expectedDate: string = new Date(Date.now() - tzoffset).toISOString()?.substr(0, 10) || "";
+        expect(container.querySelector<HTMLInputElement>("input").value).toEqual(expectedDate);
+
+        act(() => {
+            render(<Datepicker {...props} min={min} max={max} forceCustom />, container);
+        });
+
+        expect(props.onChange).toHaveBeenCalled();
+        expect(container.querySelector<HTMLInputElement>("input.seb-datepicker-custom-day").value).toEqual(props.value.getDate().toString());
+        expect(container.querySelector<HTMLInputElement>("select.seb-datepicker-custom-month").value).toEqual(`${props.value.getMonth() + 1}`);
+        expect(container.querySelector<HTMLInputElement>("input.seb-datepicker-custom-year").value).toEqual(props.value.getFullYear().toString());
+    });
+
+    it("should support fallback custom picker", () => {
+        act(() => {
+            render(<Datepicker {...props} forceCustom />, container);
+        });
+
+        const dayElement: HTMLInputElement = container.querySelector("input.seb-datepicker-custom-day");
+        const dayEvent: any = { target: { value: "27" } };
+        act(() => {
+            Simulate.change(dayElement, dayEvent);
+        });
+
+        expect(dayElement.value).toEqual("27");
+        expect(props.onChange).toHaveBeenCalled();
+
+        const monthElement: HTMLSelectElement = container.querySelector("select.seb-datepicker-custom-month");
+        const monthEvent: any = { target: { value: "12" } };
+        act(() => {
+            Simulate.change(monthElement, monthEvent);
+        });
+
+        expect(monthElement.value).toEqual("12");
+        expect(props.onChange).toHaveBeenCalled();
+
+        const yearElement: HTMLInputElement = container.querySelector("input.seb-datepicker-custom-year");
+        const yearEvent: any = { target: { value: "2030" } };
+        act(() => {
+            Simulate.change(yearElement, yearEvent);
+        });
+
+        expect(yearElement.value).toEqual("2030");
+        expect(props.onChange).toHaveBeenCalled();
+    });
+
+    it("should fire null for invalid input on custom picker", () => {
+        act(() => {
+            render(<Datepicker {...props} forceCustom />, container);
+        });
+
+        const dayElement: HTMLInputElement = container.querySelector("input.seb-datepicker-custom-day");
+        const dayEvent: any = { target: { value: "ABC" } };
+        act(() => {
+            Simulate.change(dayElement, dayEvent);
+        });
+
+        expect(dayElement.value).toEqual("");
+        expect(props.onChange).toHaveBeenCalledWith(null);
+    });
+
+    it("Should use default locale when unknown locale code provided", () => {
+        act(() => {
+            render(<Datepicker {...props} localeCode="sl" forceCustom />, container);
+        });
+
+        const monthElement: HTMLSelectElement = container.querySelector("select.seb-datepicker-custom-month");
+        expect(monthElement.querySelectorAll("option").item(0).innerHTML.toLowerCase()).toBe("mesec");
+
+        act(() => {
+            render(<Datepicker {...props} localeCode="%$#^%$@" forceCustom />, container);
+        });
+
+        expect(monthElement.querySelectorAll("option").item(0).innerHTML.toLowerCase()).toBe("month");
     });
 
     it("Should enable disabled when disabled prop is set to true", () => {
@@ -96,16 +208,35 @@ describe("Component: Datepicker", () => {
         expect(container.firstElementChild.hasAttribute("disabled")).toBe(true);
     });
 
-    // TODO: Fix this issue causing the datepicker to be off by one day sometimes
-    // it("Should render with custom locale", () => {
-    //     const localeCode: string = "sv-se";
-    //     const value: Date = new Date();
-    //     const [year, month, day] = [2015, 11, 25];
-    //     value.setFullYear(year, month, day);
-    //     act(() => {
-    //         render(<Datepicker {...{ ...props, localeCode, value }} />, container);
-    //     });
+    it("Should support monthPicker", () => {
+        act(() => {
+            render(<Datepicker {...props} monthPicker />, container);
+        });
+        const inputElement: HTMLInputElement = container.querySelector<HTMLInputElement>("input.seb-datepicker-native");
+        expect(inputElement.type).toBe("month");
 
-    //     expect(container.querySelector<HTMLInputElement>("input").value).toEqual(`${year}-${month + 1}-${day}`);
-    // });
+        act(() => {
+            render(<Datepicker {...props} monthPicker forceCustom />, container);
+        });
+        const dayElement: HTMLInputElement = container.querySelector("input.seb-datepicker-custom-day");
+        const monthElement: HTMLSelectElement = container.querySelector("select.seb-datepicker-custom-month");
+        const yearElement: HTMLInputElement = container.querySelector("input.seb-datepicker-custom-year");
+        expect(dayElement).toBeFalsy();
+        expect(monthElement).toBeTruthy();
+        expect(yearElement).toBeTruthy();
+    });
+
+    it("Should ignore timezone info from date and only respect the year, month and day", () => {
+        const [year, month, day] = [2015, 11, 25];
+        // mock change system date to 2015-25-11 midnight!
+        advanceTo(new Date(year, month, day, 0, 0, 0));
+        const value: Date = new Date();
+        act(() => {
+            render(<Datepicker {...{ ...props, value }} />, container);
+        });
+
+        expect(container.querySelector<HTMLInputElement>("input").value).toEqual(`${year}-${month + 1}-${day}`);
+        // change back to correct system date!
+        clear();
+    });
 });

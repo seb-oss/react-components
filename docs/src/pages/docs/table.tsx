@@ -1,6 +1,6 @@
 import React from "react";
 import Docs from "@common/Docs";
-import { Table } from "@sebgroup/react-components/Table/Table";
+import { Table, TableBody, TableCell, TableHeader, TableHeaderCell, TableRow } from "@sebgroup/react-components/Table";
 import { useDynamicForm } from "@hooks/useDynamicForm";
 import makeData from "@utils/makeData";
 import { Dropdown } from "@sebgroup/react-components/Dropdown";

@@ -89,6 +89,7 @@ $triangle-background: $gray-100 0%, $gray-100 1%, $gray-100 53%, transparent 53%
     &.vertical {
         .timeline-item {
             &:nth-of-type(odd) {
+                justify-content: flex-end;
                 .content-wrapper {
                     &:after {
                         top: 9px;

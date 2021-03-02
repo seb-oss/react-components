@@ -176,22 +176,22 @@ export const Dropdown: React.FC<DropdownProps> = React.forwardRef(({ wrapperProp
         return list?.length ? list : searchKeyword ? <p>{text.noResult || defaultText.noResult}</p> : <p>{text.emptyList || defaultText.emptyList}</p>;
     };
 
-    if (!isMobile) {
-        React.useEffect(() => {
-            props.multiple && setAllSelected(Array.from(selectRef.current.options).every((option) => option.selected));
-        }, [props.value]);
+    React.useEffect(() => {
+        !isMobile && props.multiple && setAllSelected(Array.from(selectRef.current.options).every((option) => option.selected));
+    }, [props.value]);
 
-        React.useEffect(() => {
-            function detectBlur(event: MouseEvent) {
+    React.useEffect(() => {
+        if (!isMobile) {
+            const detectBlur = (event: MouseEvent) => {
                 if (!dropdownRef.current.contains(event.target as any) && !menuRef.current.contains(event.target as any)) {
                     setShow(false);
                 }
-            }
-            function handleScroll(event: WheelEvent): void {
+            };
+            const handleScroll = (event: WheelEvent): void => {
                 if (!menuRef.current.contains(event.target as any)) {
                     setShow(false);
                 }
-            }
+            };
 
             if (show) {
                 searchRef.current?.focus();
@@ -206,12 +206,12 @@ export const Dropdown: React.FC<DropdownProps> = React.forwardRef(({ wrapperProp
                 document.removeEventListener("click", detectBlur);
                 window.removeEventListener("wheel", handleScroll);
             };
-        }, [show]);
+        }
+    }, [show]);
 
-        React.useEffect(() => {
-            setLabel((Array.isArray(props.value) ? props.value.join(", ") : props.value) || props.placeholder);
-        }, [props.value]);
-    }
+    React.useEffect(() => {
+        !isMobile && setLabel((Array.isArray(props.value) ? props.value.join(", ") : props.value) || props.placeholder);
+    }, [props.value, props.placeholder]);
 
     return (
         <div {...wrapperProps} className={classnames("rc custom-dropdown", wrapperProps.className)}>
