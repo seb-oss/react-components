@@ -2,8 +2,7 @@ name: Deployment
 
 on:
   push:
-    branches:
-      - master
+    branches: [master, beta]
 
 jobs:
   publish:
@@ -13,23 +12,23 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Setup node
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v2
         with:
-          node-version: "13.x"
+          node-version: 14.x
 
-      - name: installing dependencies
+      - name: Installing dependencies
         run: npm ci
 
-      - name: building
+      - name: Building library
         run: npm run build:lib
 
-      - name: preparing to publish
+      - name: Preparing to publish
         run: npm config set //registry.npmjs.org/:_authToken=$NPM_TOKEN
         env:
           CI: true
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      - name: semantic release
+      - name: Publish
         run: npm run release
         env:
           CI: true
@@ -43,3 +42,4 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
         env:
           COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_TOKEN }}
+          
