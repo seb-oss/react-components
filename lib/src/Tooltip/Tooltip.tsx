@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Children } from "react";
 import { ElementPosition } from "./placement";
 import { randomId } from "@sebgroup/frontend-tools";
 import { Overlay } from "./Overlay";
@@ -97,7 +97,17 @@ export class Tooltip extends React.Component<TooltipProps, TooltipState> {
                     onTouchEnd={this.onTouchEndEvent}
                     onFocus={this.onFocusEvent}
                 >
-                    {this.props.children || <div className="default-content">{InfoCircleIcon}</div>}
+                    {this.props.children ? (
+                        React.Children.count(this.props.children) === 1 ? (
+                            React.Children.map(this.props.children, (Child: React.ReactElement) => {
+                                return Object(Child) !== Child ? <span className="text-help">{Child}</span> : Child;
+                            })
+                        ) : (
+                            this.props.children
+                        )
+                    ) : (
+                        <div className="default-content">{InfoCircleIcon}</div>
+                    )}
                 </div>
                 <TooltipContentContainer
                     {...tooltipWrapperProps}
