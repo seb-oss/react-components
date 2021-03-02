@@ -22,4 +22,4 @@ const TableHeader: React.FC<TableHeaderProps> = ({ ...props }: TableHeaderProps)
 
 TableHeader.displayName = "TableHeader";
 
-export default TableHeader;
+export { TableHeader };
