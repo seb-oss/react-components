@@ -8,8 +8,8 @@
     "exports": {
         "./": {
             "import": "./esm/",
-            "require": "./cjs/",
-            "default": "./cjs/"
+            "require": "./",
+            "default": "./"
         }
     },
     "keywords": [
