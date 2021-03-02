@@ -1,9 +1,9 @@
 import React from "react";
 import { act } from "react-dom/test-utils";
 import { unmountComponentAtNode, render } from "react-dom";
-import TableHeader from "./TableHeader";
+import { TableHeader } from "./TableHeader";
 import { TableContext, TableContextType } from "../TableContextProvider";
-import TableRow from "./TableRow";
+import { TableRow } from "./TableRow";
 
 describe("Component: Table header", () => {
     let container: HTMLDivElement = null;

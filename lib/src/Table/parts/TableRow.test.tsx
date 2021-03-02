@@ -1,7 +1,7 @@
 import React from "react";
 import { act, Simulate } from "react-dom/test-utils";
 import { unmountComponentAtNode, render } from "react-dom";
-import TableRow from "./TableRow";
+import { TableRow } from "./TableRow";
 import { TableContext, TableContextType } from "../TableContextProvider";
 
 describe("Component: Table row", () => {
