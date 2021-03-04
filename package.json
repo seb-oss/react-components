@@ -77,7 +77,8 @@
         "pretty-quick": "^3.1.0",
         "rimraf": "^3.0.2",
         "sass": "^1.32.0",
-        "semantic-release": "^17.3.9"
+        "semantic-release": "^17.3.9",
+        "tslib": "^2.1.0"
     },
     "config": {
         "base": "/react-components",
