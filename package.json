@@ -3,7 +3,7 @@
     "version": "0.0.0-semantically-released",
     "description": "A set of React components based on SEB design library guidelines for mobile and web React applications",
     "license": "Apache-2.0",
-    "main": "./cjs/index.js",
+    "main": "./index.js",
     "module": "./esm/index.js",
     "exports": {
         "./": {
@@ -59,6 +59,7 @@
     "devDependencies": {
         "@commitlint/cli": "^11.0.0",
         "@commitlint/config-conventional": "^11.0.0",
+        "@semantic-release/changelog": "^5.0.1",
         "@types/classnames": "^2.2.11",
         "@types/node": "^14.14.17",
         "@types/react": "^17.0.0",
@@ -76,10 +77,11 @@
         "pretty-quick": "^3.1.0",
         "rimraf": "^3.0.2",
         "sass": "^1.32.0",
-        "semantic-release": "^17.3.1",
+        "semantic-release": "^17.3.9",
         "tslib": "^2.1.0"
     },
     "config": {
+        "base": "/react-components",
         "commitizen": {
             "path": "./node_modules/cz-conventional-changelog"
         }

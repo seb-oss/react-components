@@ -1,4 +1,5 @@
 import React from "react";
+import { withPrefix } from "gatsby";
 import pkg from "@pkg";
 import "../styles/tech-stack.scss";
 
@@ -16,7 +17,7 @@ export const TechStack: React.FC = React.memo(() => {
             <div className="col-md-4 col-12">
                 <div className="img">
                     <a href="https://reactjs.org/" target="_blank" rel="noreferrer noopener nofollow">
-                        <img className="img-fluid" src="/react.png" alt="React" />
+                        <img className="img-fluid" src={withPrefix("/react.png")} alt="React" />
                     </a>
                 </div>
                 <h3>React</h3>
@@ -25,7 +26,7 @@ export const TechStack: React.FC = React.memo(() => {
             <div className="col-md-4 col-12">
                 <div className="img">
                     <a href="https://www.typescriptlang.org/" target="_blank" rel="noreferrer noopener nofollow">
-                        <img className="img-fluid" src="/typescript.png" alt="Typescript" />
+                        <img className="img-fluid" src={withPrefix("/typescript.png")} alt="Typescript" />
                     </a>
                 </div>
                 <h3>Typescript</h3>
@@ -34,7 +35,7 @@ export const TechStack: React.FC = React.memo(() => {
             <div className="col-md-4 col-12">
                 <div className="img">
                     <a href="https://sebgroup.github.io/bootstrap/" target="_blank" rel="noreferrer noopener nofollow">
-                        <img className="img-fluid" src="/bootstrap.png" alt="Bootstrap" />
+                        <img className="img-fluid" src={withPrefix("/bootstrap.png")} alt="Bootstrap" />
                     </a>
                 </div>
                 <h3>SEB Bootstrap</h3>
