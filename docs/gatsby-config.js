@@ -1,4 +1,7 @@
+const pkg = require("../package.json");
+
 module.exports = {
+    pathPrefix: pkg.config.base,
     siteMetadata: {
         title: "react-comps",
         siteUrl: "https://sebgroup.github.io/react-components/",
