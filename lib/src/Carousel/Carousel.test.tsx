@@ -286,7 +286,9 @@ describe("Component: Carousel", () => {
         expect(element(0).classList.contains("carousel-item-left")).toBeFalsy();
 
         act(() => Simulate.mouseLeave(container.firstElementChild));
-        act(() => jest.advanceTimersByTime(1000));
+        act(() => {
+            jest.advanceTimersByTime(1000);
+        });
         expect(element(0).classList.contains("carousel-item-left")).toBeFalsy();
 
         act(() => Simulate.mouseLeave(container.firstElementChild));
@@ -312,7 +314,9 @@ describe("Component: Carousel", () => {
             );
         });
 
-        act(() => jest.advanceTimersByTime(autoplaySpeed));
+        act(() => {
+            jest.advanceTimersByTime(autoplaySpeed);
+        });
         expect(element(0).classList.contains("carousel-item-left")).toBeTruthy();
 
         jest.clearAllTimers();

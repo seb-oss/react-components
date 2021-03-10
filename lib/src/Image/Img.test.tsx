@@ -89,7 +89,9 @@ describe("Component: Image", () => {
             });
         });
 
-        await act(() => promise);
+        await act(async () => {
+            await promise;
+        });
         const style: string = container.firstElementChild.getAttribute("style");
         expect(style).toContain(`background-image: url(${image})`);
         expect(style).toContain(`width: 1px`);

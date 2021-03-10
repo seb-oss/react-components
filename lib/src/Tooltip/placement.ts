@@ -184,7 +184,7 @@ export class OverlayPositionChecker {
      * @returns overlay coordinate
      */
     private getOverlayPositionCoord(position: ElementPosition): void {
-        const overlayRect: ClientRect = this.overlayElement.getBoundingClientRect();
+        const overlayRect: ClientRect = this.overlayElement?.getBoundingClientRect();
         const selectedPlacement: ElementPlacement = elementPlacements[position];
         if (selectedPlacement) {
             const top: number = this.getPointPosition(selectedPlacement.y);
@@ -208,8 +208,8 @@ export class OverlayPositionChecker {
      * @returns position
      */
     private getPointPosition(point: PointPositionLabel): number {
-        const referenceRect: ClientRect = this.referenceElement.getBoundingClientRect();
-        const overlayRect: ClientRect = this.overlayElement.getBoundingClientRect();
+        const referenceRect: ClientRect = this.referenceElement?.getBoundingClientRect();
+        const overlayRect: ClientRect = this.overlayElement?.getBoundingClientRect();
         let calculatedPosition: number = 0;
         switch (point) {
             case "vertical-center":
