@@ -4,6 +4,7 @@ import { Link } from "gatsby";
 import { urls } from "@configs";
 import { useIsMobile } from "@hooks/useIsMobile";
 import ExternalLinkIcon from "../../static/icons/external-link.svg";
+import VersionsDropdown from "./VersionsDropdown";
 import "../styles/navbar.scss";
 
 export const Navbar: React.FC = React.memo(() => {
@@ -35,6 +36,11 @@ export const Navbar: React.FC = React.memo(() => {
 
 const Navs: React.FC = React.memo(() => (
     <ul className="nav nav-dark">
+        <li className="nav-item">
+            <div className="nav-link">
+                <VersionsDropdown />
+            </div>
+        </li>
         <li className="nav-item">
             <Link className="nav-link" to="/docs">
                 Docs
