@@ -1,10 +1,10 @@
 const pkg = require("../package.json");
 
 export const urls: NavsURLs = {
-    releases: "https://github.com/sebgroup/ng-components/releases",
-    github: "https://github.com/sebgroup/ng-components/",
-    contribute: "https://github.com/sebgroup/ng-components/blob/alpha/CONTRIBUTING.md",
-    issues: "https://github.com/sebgroup/ng-components/issues",
+    releases: "https://github.com/sebgroup/react-components/releases",
+    github: "https://github.com/sebgroup/react-components/",
+    contribute: "https://github.com/sebgroup/react-components/blob/alpha/CONTRIBUTING.md",
+    issues: "https://github.com/sebgroup/react-components/issues",
     v4: "/v4/index.html",
 };
 
