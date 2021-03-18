@@ -1,7 +1,7 @@
 import React from "react";
 import Docs from "@common/Docs";
 import { Breadcrumb, BreadcrumbItem } from "@sebgroup/react-components/Breadcrumb";
-import { useDynamicForm } from "@hooks/useDynamicForm";
+import { useDynamicForm } from "@sebgroup/react-components/hooks/useDynamicForm";
 
 const homeIcon: JSX.Element = (
     <svg xmlns="http://www.w3.org/2000/svg" width="1.3em" fill="currentColor" viewBox="0 0 16 16" style={{ verticalAlign: "baseline" }}>

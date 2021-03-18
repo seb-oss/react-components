@@ -1,7 +1,7 @@
 import React from "react";
 import Docs from "@common/Docs";
 import { Accordion, AccordionItem } from "@sebgroup/react-components/Accordion";
-import { useDynamicForm } from "@hooks/useDynamicForm";
+import { useDynamicForm } from "@sebgroup/react-components/hooks/useDynamicForm";
 import { Button } from "@sebgroup/react-components/Button";
 import { Textbox } from "@sebgroup/react-components/Textbox";
 

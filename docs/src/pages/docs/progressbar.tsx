@@ -1,7 +1,7 @@
 import React from "react";
 import Docs from "@common/Docs";
 import { ProgressBar, ProgressBarProps } from "@sebgroup/react-components/ProgressBar";
-import { DynamicFormOption, useDynamicForm } from "@hooks/useDynamicForm";
+import { DynamicFormOption, useDynamicForm } from "@sebgroup/react-components/hooks/useDynamicForm";
 import { Slider } from "@sebgroup/react-components/Slider";
 
 const importString: string = require("!raw-loader!@sebgroup/react-components/ProgressBar/ProgressBar");

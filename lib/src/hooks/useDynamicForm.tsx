@@ -1,13 +1,13 @@
 import React, { useState, ReactNode, useMemo, useCallback } from "react";
 import classnames from "classnames";
 
-import { Checkbox } from "@sebgroup/react-components/Checkbox";
-import { Textbox } from "@sebgroup/react-components/Textbox";
-import { Textarea } from "@sebgroup/react-components/Textarea";
-import { Dropdown, getValueOfMultipleSelect } from "@sebgroup/react-components/Dropdown";
-import { Datepicker } from "@sebgroup/react-components/Datepicker";
-import { Stepper } from "@sebgroup/react-components/Stepper";
-import { RadioButton, RadioGroup } from "@sebgroup/react-components/RadioButton";
+import { Checkbox } from "../Checkbox";
+import { Textbox } from "../Textbox";
+import { Textarea } from "../Textarea";
+import { Dropdown, getValueOfMultipleSelect } from "../Dropdown";
+import { Datepicker } from "../Datepicker";
+import { Stepper } from "../Stepper";
+import { RadioButton, RadioGroup } from "../RadioButton";
 
 type DynamicFormInternalStateValue = string | string[] | DynamicFormOption | DynamicFormOption[] | Date | boolean | number;
 export interface DynamicFormItem {
