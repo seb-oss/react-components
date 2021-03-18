@@ -283,7 +283,6 @@ const DynamicFormItemComponent: React.FC<{
         }
 
         case "Dropdown": {
-            console.log(props.state);
             formItem = (
                 <>
                     {props.item?.label && <label>{props.item?.label}</label>}
