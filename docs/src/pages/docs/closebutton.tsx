@@ -2,7 +2,7 @@ import React from "react";
 import Docs from "@common/Docs";
 import { CloseButton } from "@sebgroup/react-components/CloseButton";
 import { Slider } from "@sebgroup/react-components/Slider";
-import { useDynamicForm } from "@hooks/useDynamicForm";
+import { useDynamicForm } from "@sebgroup/react-components/hooks/useDynamicForm";
 
 const importString: string = require("!raw-loader!@sebgroup/react-components/CloseButton/CloseButton");
 const code: string = `<CloseButton />`;

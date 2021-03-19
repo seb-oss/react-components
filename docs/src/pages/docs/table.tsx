@@ -1,7 +1,7 @@
 import React from "react";
 import Docs from "@common/Docs";
 import { Table, TableBody, TableCell, TableHeader, TableHeaderCell, TableRow } from "@sebgroup/react-components/Table";
-import { useDynamicForm } from "@hooks/useDynamicForm";
+import { useDynamicForm } from "@sebgroup/react-components/hooks/useDynamicForm";
 import makeData from "@utils/makeData";
 import { Dropdown } from "@sebgroup/react-components/Dropdown";
 import { checkDynamicFormSelectedKey } from "@utils/helpers";

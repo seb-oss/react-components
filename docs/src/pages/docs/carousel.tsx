@@ -2,7 +2,7 @@ import React from "react";
 import Docs from "@common/Docs";
 import { Carousel, CarouselItem, CarouselProps } from "@sebgroup/react-components/Carousel";
 import { Img } from "@sebgroup/react-components/Image";
-import { DynamicFormOption, useDynamicForm } from "@hooks/useDynamicForm";
+import { DynamicFormOption, useDynamicForm } from "@sebgroup/react-components/hooks/useDynamicForm";
 
 const images = [
     require("../../assets/images/painting-1.jpg"),

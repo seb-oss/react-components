@@ -1,7 +1,7 @@
 import React from "react";
 import Docs from "@common/Docs";
 import { Dropdown } from "@sebgroup/react-components/Dropdown";
-import { useDynamicForm } from "@hooks/useDynamicForm";
+import { useDynamicForm } from "@sebgroup/react-components/hooks/useDynamicForm";
 import { CodeSnippet } from "@common/CodeSnippet";
 
 const importString: string = require("!raw-loader!@sebgroup/react-components/Dropdown/Dropdown");

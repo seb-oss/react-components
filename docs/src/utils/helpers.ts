@@ -1,4 +1,4 @@
-import { DynamicFormOption } from "@hooks/useDynamicForm";
+import { DynamicFormOption } from "@sebgroup/react-components/hooks/useDynamicForm";
 
 /** check if key selected from options */
 
