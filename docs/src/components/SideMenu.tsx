@@ -199,6 +199,9 @@ export const SideMenu: React.FC = React.memo(() => {
                     <Link to="/docs/getting-started" activeClassName="highlighted" className="list-item">
                         Getting Started
                     </Link>
+                    <Link to="/docs/dynamic-forms" activeClassName="highlighted" className="list-item">
+                        Dynamic Forms
+                    </Link>
                     <a href={urls.releases} target="_blank" rel="noreferrer noopener nofollow" className="list-item">
                         Release notes
                         <ExternalLinkIcon className="align-icon-with-text" />

@@ -12,22 +12,21 @@ import { RadioButton, RadioGroup } from "../RadioButton";
 type DynamicFormInternalStateValue = string | string[] | DynamicFormOption | DynamicFormOption[] | Date | boolean | number;
 export interface DynamicFormItem {
     key: string;
+    controlType: DynamicFormType;
     value?: DynamicFormInternalStateValue;
     label?: string;
     description?: string;
-    required?: boolean;
     multi?: boolean;
     min?: any;
     max?: any;
     order?: number;
     placeholder?: string;
     options?: Array<DynamicFormOption>;
+    inline?: boolean;
+    indent?: boolean;
+    valueType?: "string" | "number";
     rulerKey?: string;
     condition?: DynamicFormInternalStateValue;
-    controlType?: DynamicFormType;
-    inline?: boolean;
-    valueType?: "string" | "number";
-    indent?: boolean;
 }
 
 export type DynamicFormType = "Hidden" | "Text" | "Textarea" | "Checkbox" | "Dropdown" | "Datepicker" | "Radio" | "Option" | "ErrorLabel" | "Stepper";
@@ -251,13 +250,15 @@ const DynamicFormItemComponent: React.FC<{
 
     switch (controlType) {
         case "Textarea": {
-            formItem = <Textarea {...commonProps} value={(props.state as string) || ""} />;
+            // TODO: Map min and max and minLength and Maxlength to Textarea and Text?
+            // TODO: Add description just like for Textbox?
+            formItem = <Textarea {...commonProps} value={(props.state as string) || ""} placeholder={props.item?.placeholder} />;
             break;
         }
         case "Text": {
             formItem = (
                 <div className={props.item?.indent ? "indent pl-3 pt-2" : ""}>
-                    <Textbox {...commonProps} type={props.item.valueType || "text"} value={(props.state as string) || ""} />
+                    <Textbox {...commonProps} type={props.item.valueType || "text"} value={(props.state as string) || ""} placeholder={props.item?.placeholder} />
                     {props.item?.description ? (
                         <p>
                             <small>{props.item?.description}</small>
@@ -309,7 +310,7 @@ const DynamicFormItemComponent: React.FC<{
         }
 
         case "Datepicker": {
-            formItem = <Datepicker {...commonProps} onChange={props.onChange} value={props.state as Date} />;
+            formItem = <Datepicker {...commonProps} min={props.item?.min} max={props.item?.max} value={props.state as Date} />;
             break;
         }
 
