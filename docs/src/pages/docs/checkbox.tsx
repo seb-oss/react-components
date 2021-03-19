@@ -1,7 +1,7 @@
 import React from "react";
 import Docs from "@common/Docs";
 import { Checkbox } from "@sebgroup/react-components/Checkbox/Checkbox";
-import { DynamicFormOption, useDynamicForm } from "@hooks/useDynamicForm";
+import { DynamicFormOption, useDynamicForm } from "@sebgroup/react-components/hooks/useDynamicForm";
 import { FeedbackIndicator, Indicator, IndicatorType } from "@sebgroup/react-components/FeedbackIndicator";
 import { CodeSnippet } from "@common/CodeSnippet";
 

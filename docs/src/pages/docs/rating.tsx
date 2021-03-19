@@ -1,7 +1,7 @@
 import React from "react";
 import Docs from "@common/Docs";
 import { Rating } from "@sebgroup/react-components/Rating";
-import { useDynamicForm } from "@hooks/useDynamicForm";
+import { useDynamicForm } from "@sebgroup/react-components/hooks/useDynamicForm";
 import HeartSVG from "../../../static/icons/heart.svg";
 
 const importString: string = require("!raw-loader!@sebgroup/react-components/Rating/Rating");

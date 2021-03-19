@@ -1,7 +1,7 @@
 import React from "react";
 import Docs from "@common/Docs";
 import { TextLabel } from "@sebgroup/react-components/TextLabel";
-import { DynamicFormOption, DynamicFormSection, useDynamicForm } from "@hooks/useDynamicForm";
+import { DynamicFormOption, DynamicFormSection, useDynamicForm } from "@sebgroup/react-components/hooks/useDynamicForm";
 
 const TextLabelPage: React.FC = React.memo(() => {
     const importString: string = require("!raw-loader!@sebgroup/react-components/TextLabel/TextLabel");

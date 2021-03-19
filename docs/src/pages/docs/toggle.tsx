@@ -1,7 +1,7 @@
 import React from "react";
 import Docs from "@common/Docs";
 import { Toggle } from "@sebgroup/react-components/Toggle";
-import { DynamicFormOption, DynamicFormSection, useDynamicForm } from "@hooks/useDynamicForm";
+import { DynamicFormOption, DynamicFormSection, useDynamicForm } from "@sebgroup/react-components/hooks/useDynamicForm";
 
 const TogglePage: React.FC = () => {
     const importString: string = require("!raw-loader!@sebgroup/react-components/Toggle/Toggle");

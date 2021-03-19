@@ -1,7 +1,7 @@
 import React from "react";
 import Docs from "@common/Docs";
 import { ImageCropper } from "@sebgroup/react-components/ImageCropper/ImageCropper";
-import { useDynamicForm } from "@hooks/useDynamicForm";
+import { useDynamicForm } from "@sebgroup/react-components/hooks/useDynamicForm";
 
 const importString: string = require("!raw-loader!@sebgroup/react-components/ImageCropper/ImageCropper");
 const code: string = `<ImageCropper value={image} onChange={setImage} />`;

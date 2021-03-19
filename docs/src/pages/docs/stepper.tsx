@@ -1,6 +1,6 @@
 import React from "react";
 import Docs from "@common/Docs";
-import { DynamicFormOption, useDynamicForm } from "@hooks/useDynamicForm";
+import { DynamicFormOption, useDynamicForm } from "@sebgroup/react-components/hooks/useDynamicForm";
 import { Stepper } from "@sebgroup/react-components/Stepper";
 import { Indicator, IndicatorType } from "@sebgroup/react-components/FeedbackIndicator";
 
