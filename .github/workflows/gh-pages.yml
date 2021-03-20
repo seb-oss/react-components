@@ -2,7 +2,7 @@ name: Github Pages
 
 on:
   push:
-    branches: [master, beta]
+    branches: [feature/version-documentation]
 
 jobs:
   get_tags:
@@ -23,11 +23,15 @@ jobs:
         id: set-matrix
         run: |
           arr=( $(echo $data | jq -r '.[].name') )
+          major=""
           JSON="{\"include\":["
           for i in "${arr[@]}"
           do
             if [ "$(printf '%s\n' "$minver" "$i" | sort -V | head -n1)" = "$minver" ]; then 
-              JSON="$JSON$(printf '{"name": "%s"}, ' "${i}")"
+              if [ "$major" != "$(echo $i | cut -d. -f1)" ]; then
+                major=`echo $i | cut -d. -f1`
+                JSON="$JSON$(printf '{"name": "%s"}, ' "${i}")"
+              fi
             fi
           done
           JSON="${JSON%,*} ${JSON##*,}"
@@ -36,7 +40,7 @@ jobs:
           echo "::set-output name=matrix::$JSON"
         env:
           data: ${{steps.get_latest_release.outputs.data}}
-          minver: v3.0.0
+          minver: v4.0.0
   gh_pages:
     needs: get_tags
     runs-on: ubuntu-latest
@@ -73,7 +77,7 @@ jobs:
           build_dir: docs/public
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-  buildDocs:
+  build_docs:
     needs: gh_pages
     runs-on: ubuntu-latest
     strategy:
