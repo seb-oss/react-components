@@ -1,7 +1,7 @@
 import React from "react";
 import Docs from "@common/Docs";
 import { ButtonGroup, ButtonGroupProps } from "@sebgroup/react-components/ButtonGroup";
-import { DynamicFormOption, useDynamicForm } from "@hooks/useDynamicForm";
+import { DynamicFormOption, useDynamicForm } from "@sebgroup/react-components/hooks/useDynamicForm";
 import { Button } from "@sebgroup/react-components/Button";
 
 const importString: string = require("!raw-loader!@sebgroup/react-components/ButtonGroup/ButtonGroup");

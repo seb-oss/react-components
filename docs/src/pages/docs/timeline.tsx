@@ -1,7 +1,7 @@
 import React from "react";
 import Docs from "@common/Docs";
 import { Timeline, TimelineDirection, TimelineItem } from "@sebgroup/react-components/Timeline";
-import { DynamicFormOption, useDynamicForm } from "@hooks/useDynamicForm";
+import { DynamicFormOption, useDynamicForm } from "@sebgroup/react-components/hooks/useDynamicForm";
 import { loremIpsum } from "lorem-ipsum";
 
 const importString: string = require("!raw-loader!@sebgroup/react-components/Timeline/Timeline");

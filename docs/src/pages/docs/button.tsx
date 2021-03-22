@@ -1,7 +1,7 @@
 import React from "react";
 import Docs from "@common/Docs";
 import { Button, ButtonSize, ButtonTheme } from "@sebgroup/react-components/Button";
-import { DynamicFormOption, useDynamicForm } from "@hooks/useDynamicForm";
+import { DynamicFormOption, useDynamicForm } from "@sebgroup/react-components/hooks/useDynamicForm";
 
 const importString: string = require("!raw-loader!@sebgroup/react-components/Button/Button");
 const code: string = `<Button>Click me</Button>`;

@@ -1,7 +1,7 @@
 import React from "react";
 import Docs from "@common/Docs";
 import { ToggleSelector, ToggleSelectorItem } from "@sebgroup/react-components/ToggleSelector";
-import { DynamicFormOption, useDynamicForm } from "@hooks/useDynamicForm";
+import { DynamicFormOption, useDynamicForm } from "@sebgroup/react-components/hooks/useDynamicForm";
 import { Indicator, IndicatorType } from "@sebgroup/react-components/FeedbackIndicator";
 import LaughingIcon from "../../../static/icons/emoji-laughing-fill.svg";
 import DizzyIcon from "../../../static/icons/emoji-dizzy-fill.svg";

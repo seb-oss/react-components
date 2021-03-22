@@ -1,7 +1,7 @@
 import Docs from "@common/Docs";
 import React from "react";
 import { Loader, LoaderSize, LoaderType } from "@sebgroup/react-components/Loader";
-import { useDynamicForm, DynamicFormOption } from "@hooks/useDynamicForm";
+import { useDynamicForm, DynamicFormOption } from "@sebgroup/react-components/hooks/useDynamicForm";
 
 const importString: string = require("!raw-loader!@sebgroup/react-components/Loader/Loader");
 const code: string = `<Loader toggle={toggle} />`;

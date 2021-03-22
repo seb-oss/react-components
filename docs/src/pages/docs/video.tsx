@@ -1,7 +1,7 @@
 import React from "react";
 import Docs from "@common/Docs";
 import { Video } from "@sebgroup/react-components/Video";
-import { DynamicFormOption, DynamicFormSection, useDynamicForm } from "@hooks/useDynamicForm";
+import { DynamicFormOption, DynamicFormSection, useDynamicForm } from "@sebgroup/react-components/hooks/useDynamicForm";
 
 const VideoPage: React.FC = () => {
     const defaultSrc: string = "https://www.youtube.com/embed/f19fctL72CY";

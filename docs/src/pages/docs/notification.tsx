@@ -1,7 +1,7 @@
 import React from "react";
 import Docs from "@common/Docs";
 import { Notification, NotificationProps } from "@sebgroup/react-components/Notification";
-import { DynamicFormOption, useDynamicForm } from "@hooks/useDynamicForm";
+import { DynamicFormOption, useDynamicForm } from "@sebgroup/react-components/hooks/useDynamicForm";
 import { Button } from "@sebgroup/react-components/Button";
 import { CodeSnippet } from "@common/CodeSnippet";
 
