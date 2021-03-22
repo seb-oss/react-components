@@ -157,7 +157,7 @@ export function useDynamicForm(sections: DynamicFormSection[]): [() => JSX.Eleme
                     const targetValue: string = (e as React.ChangeEvent<HTMLInputElement>).target.value;
                     const targetOption: DynamicFormOption | undefined = item.options?.find((o) => o.value === targetValue);
                     if (targetOption) {
-                        newValue = targetOption;
+                        newValue = targetOption.value;
                     }
                     break;
                 }
@@ -271,7 +271,7 @@ const DynamicFormItemComponent: React.FC<{
 
         case "Radio": {
             formItem = (
-                <RadioGroup className={classnames({ indent: props.item?.indent })} {...commonProps} name={props.item?.key} value={(props.state as DynamicFormOption)?.value || ""}>
+                <RadioGroup className={classnames({ indent: props.item?.indent })} {...commonProps} name={props.item?.key} value={(props.state as string) || ""}>
                     {props.item?.options?.map((item, i) => (
                         <RadioButton key={i} value={item.value} wrapperProps={{ className: props.item.inline ? "d-inline-block" : null }}>
                             {item.label}
@@ -287,7 +287,7 @@ const DynamicFormItemComponent: React.FC<{
             formItem = (
                 <>
                     {props.item?.label && <label>{props.item?.label}</label>}
-                    <Dropdown name={props.item?.key} placeholder={props.item?.placeholder} onChange={props.onChange as any} multiple={props.item?.multi} value={props.state as string | string[]}>
+                    <Dropdown {...commonProps} placeholder={props.item?.placeholder} multiple={props.item?.multi} value={props.state as string | string[]}>
                         {props.item?.options?.map((option, i) => (
                             <option key={i} value={option.value}>
                                 {option.label}
