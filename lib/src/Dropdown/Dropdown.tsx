@@ -42,11 +42,13 @@ export type DropdownProps = Omit<JSX.IntrinsicElements["select"], "value"> & {
     searchable?: boolean;
     /** Allows clearing the dropdown with a clear button */
     clearable?: boolean;
+    /** Allows setting custom label to be displayed for selected item */
+    selectedLabel?: string | ((value: string | string[]) => string | string[]);
     /** Custom texts to be dispalyed in different parts of the dropdown */
     text?: DropdownText;
 };
 
-export const Dropdown: React.FC<DropdownProps> = React.forwardRef(({ wrapperProps = {}, text = {}, onMultipleChange, searchable, clearable, ...props }: DropdownProps, ref) => {
+export const Dropdown: React.FC<DropdownProps> = React.forwardRef(({ wrapperProps = {}, text = {}, onMultipleChange, searchable, clearable, selectedLabel, ...props }: DropdownProps, ref) => {
     const [toggleId] = React.useState<string>(randomId("ddt-"));
     const [selectAllId] = React.useState<string>(randomId("sa-"));
     const [show, setShow] = React.useState<boolean>(false);
@@ -210,8 +212,15 @@ export const Dropdown: React.FC<DropdownProps> = React.forwardRef(({ wrapperProp
     }, [show]);
 
     React.useEffect(() => {
-        !isMobile && setLabel((Array.isArray(props.value) ? props.value.join(", ") : props.value) || props.placeholder);
-    }, [props.value, props.placeholder]);
+        if (selectedLabel && typeof selectedLabel === "string") {
+            !isMobile && setLabel(selectedLabel || props.placeholder);
+        } else if (selectedLabel && typeof selectedLabel === "function") {
+            const newLabel: string | string[] = selectedLabel(props.value);
+            !isMobile && setLabel((Array.isArray(newLabel) ? newLabel.join(", ") : newLabel) || props.placeholder);
+        } else {
+            !isMobile && setLabel((Array.isArray(props.value) ? props.value.join(", ") : props.value) || props.placeholder);
+        }
+    }, [props.value, props.placeholder, selectedLabel]);
 
     return (
         <div {...wrapperProps} className={classnames("rc custom-dropdown", wrapperProps.className)}>
