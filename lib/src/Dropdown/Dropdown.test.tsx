@@ -181,6 +181,66 @@ describe("Component: Dropdown", () => {
         expect(container.querySelector("select").multiple).toBe(true);
     });
 
+    it("Should render custom static label", () => {
+        const hardcodedLabel: string = "Always show this text";
+        act(() => {
+            render(
+                <Dropdown selectedLabel={hardcodedLabel} multiple>
+                    {testOptions}
+                </Dropdown>,
+                container
+            );
+        });
+
+        expect(container.querySelector(".rc.custom-dropdown > .dropdown > .btn.dropdown-toggle > span").textContent).toBe(hardcodedLabel);
+    });
+
+    it("Should render custom label for selected element", () => {
+        const customLabels: { [k: string]: string } = {
+            1: "One",
+            2: "Two",
+            3: "Three",
+        };
+
+        const getLabel = (value: string) => {
+            return customLabels[value];
+        };
+
+        act(() => {
+            render(
+                <Dropdown selectedLabel={getLabel} value="3">
+                    {testOptions}
+                </Dropdown>,
+                container
+            );
+        });
+
+        expect(container.querySelector(".rc.custom-dropdown > .dropdown > .btn.dropdown-toggle > span").textContent).toBe(customLabels["3"]);
+    });
+
+    it("Should render custom label and separator for selected elements", () => {
+        const customLabels: { [k: string]: string } = {
+            1: "One",
+            2: "Two",
+            3: "Three",
+        };
+
+        const getLabel = (value: string[]) => {
+            return value.map((e) => customLabels[e]).join(" + ");
+        };
+
+        act(() => {
+            render(
+                <Dropdown selectedLabel={getLabel} multiple value={["1", "2"]}>
+                    {testOptions}
+                </Dropdown>,
+                container
+            );
+        });
+
+        expect(container.querySelector(".rc.custom-dropdown > .dropdown > .btn.dropdown-toggle > span").textContent).toBe("One + Two");
+    });
+
     it("Should render native only when used in a mobile device", () => {
         const userAgent: string = window.navigator.userAgent;
         const onChange: jest.Mock = jest.fn();
