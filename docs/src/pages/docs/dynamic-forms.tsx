@@ -5,41 +5,6 @@ import { CodeSnippet } from "@common/CodeSnippet";
 import { useDynamicForm, DynamicFormSection } from "@sebgroup/react-components/hooks";
 import { Table, TableBody, TableCell, TableHeader, TableHeaderCell, TableRow } from "@sebgroup/react-components/Table";
 
-const Component: React.FC = () => {
-    const sections: DynamicFormSection[] = [
-        {
-            title: "Login",
-            key: "section-1-login",
-            items: [
-                {
-                    key: "name",
-                    label: "Name",
-                    order: 1,
-                    controlType: "Text",
-                },
-                {
-                    key: "email",
-                    label: "Email",
-                    placeholder: "name@domain.com",
-                    order: 2,
-                    controlType: "Text",
-                },
-                {
-                    key: "user-accepted",
-                    label: "I understand",
-                    order: 3,
-                    value: true,
-                    controlType: "Checkbox",
-                },
-            ],
-        },
-    ];
-
-    const [renderForm, state] = useDynamicForm(sections);
-
-    return <div>{renderForm()}</div>;
-};
-
 const DynamicForms: React.FC = React.memo(() => {
     return (
         <Layout>
@@ -103,18 +68,63 @@ const Component = () => {
 export default Component;
                     `}
                 </CodeSnippet>
-                <hr />
 
-                <h3 className="pt-3 pb-3">Result</h3>
-                <p>The above code produces this form:</p>
-
-                <Component />
-
-                {/**TODO: Add simple conditional render section */}
+                <div className="p-3 rounded bg-white">
+                    <Component />
+                </div>
 
                 <hr />
 
-                <h2 className="pt-3 pb-3">DynamicForm APIs</h2>
+                <h2 className="pt-3 pb-3">Conditional rendering example</h2>
+                <p>
+                    Define the <b>condition</b> and the <b>rulerKey</b> of the <code>DynamicFormItem</code> to render that item based on the value of another item.
+                </p>
+                <CodeSnippet language="javascript">
+                    {`
+import { useDynamicForm } from "@sebgroup/react-components/hooks/useDynamicForm";
+
+const ComponentConditionalRender: React.FC = () => {
+    const sections: DynamicFormSection[] = [
+        {
+            title: "Extra Info",
+            key: "section-2-extra-info",
+            items: [
+                {
+                    key: "have-additional-info",
+                    label: "I have additional information",
+                    order: 1,
+                    value: false,
+                    controlType: "Checkbox"
+                },
+                {
+                    key: "info",
+                    order: 2,
+                    placeholder: "Additional information",
+                    controlType: "Text",
+                    // this component will be shown only when 
+                    // "have-additional-info" component's value is true
+                    rulerKey: "have-additional-info",
+                    condition: true
+                }
+            ],
+        },
+    ];
+
+    const [renderForm, state] = useDynamicForm(sections);
+
+    return <div>{renderForm()}</div>;
+};
+
+export default ComponentConditionalRender;
+                    `}
+                </CodeSnippet>
+                <div className="p-3 rounded bg-white">
+                    <ComponentConditionalRender />
+                </div>
+
+                <hr />
+
+                <h2 className="pt-3 pb-3">Dynamic forms API</h2>
                 <h3 className="pt-3 pb-3">
                     <code>DynamicFormSection</code>
                 </h3>
@@ -434,3 +444,68 @@ export default Component;
 });
 
 export default DynamicForms;
+
+const Component: React.FC = () => {
+    const sections: DynamicFormSection[] = [
+        {
+            title: "Login",
+            key: "section-1-login",
+            items: [
+                {
+                    key: "name",
+                    label: "Name",
+                    order: 1,
+                    controlType: "Text",
+                },
+                {
+                    key: "email",
+                    label: "Email",
+                    placeholder: "name@domain.com",
+                    order: 2,
+                    controlType: "Text",
+                },
+                {
+                    key: "user-accepted",
+                    label: "I understand",
+                    order: 3,
+                    value: true,
+                    controlType: "Checkbox",
+                },
+            ],
+        },
+    ];
+
+    const [renderForm, state] = useDynamicForm(sections);
+
+    return <div>{renderForm()}</div>;
+};
+
+const ComponentConditionalRender: React.FC = () => {
+    const sections: DynamicFormSection[] = [
+        {
+            title: "Extra Info",
+            key: "section-2-extra-info",
+            items: [
+                {
+                    key: "have-additional-info",
+                    label: "I have additional information",
+                    order: 1,
+                    value: false,
+                    controlType: "Checkbox",
+                },
+                {
+                    key: "info",
+                    order: 2,
+                    placeholder: "Additional information",
+                    controlType: "Text",
+                    rulerKey: "have-additional-info",
+                    condition: true,
+                },
+            ],
+        },
+    ];
+
+    const [renderForm, state] = useDynamicForm(sections);
+
+    return <div>{renderForm()}</div>;
+};
