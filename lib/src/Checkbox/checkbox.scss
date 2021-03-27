@@ -21,7 +21,6 @@ $checkbox-padding: $checkbox-padding $checkbox-padding $checkbox-padding $checkb
         border: 1px solid transparent;
         border-radius: 4px;
         transition: border-color 200ms;
-
         > .checkbox-description {
             margin: 0;
             color: $gray-600;
@@ -37,6 +36,9 @@ $checkbox-padding: $checkbox-padding $checkbox-padding $checkbox-padding $checkb
             &:disabled ~ .checkbox-description {
                 color: $gray-300;
             }
+        }
+        > .custom-control-label {
+            cursor: pointer;
         }
     }
 }
