@@ -58,19 +58,19 @@ This project uses `prettier` for a more consistent (less annoying) coding. We ar
 For performance benefits we are not combining all the components into single Index rather they are chunked into their subpackage. Therefore, to use a component, you need to import the `Component` submodule from the `dist` folder, in whichever Class you want to use it. Here is a sample of how to import a `Button` component in a page.
 
 ```javascript
-import { Button } from "@sebgroup/react-components/dist/Button";
+import { Button } from "@sebgroup/react-components";
 
-const Comp = () => {
+const Component = () => {
     const onClick = (e) => {
         console.log("Im Clicked");
     }
 
     return (
         <div>
-            <Button label="a button" onClick={onClick} />
+            <Button onClick={onClick}>Button label</Button>
         </div>
     );
 }
 
-export default Comp;
+export default Component;
 ```
