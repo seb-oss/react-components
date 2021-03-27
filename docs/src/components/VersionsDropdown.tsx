@@ -1,6 +1,8 @@
 import React from "react";
+import classnames from "classnames";
 import { Dropdown } from "@sebgroup/react-components/Dropdown";
 import { withPrefix } from "gatsby-link";
+import "../styles/versions-dropdown.scss";
 const versions = require("../assets/jsons/versions.json").include;
 
 interface VersionItem {
@@ -19,6 +21,7 @@ const VersionsDropdown: React.FC<React.PropsWithChildren<VersionsDropdownProps>>
     const [currentVersion, setCurrentVersion] = React.useState<string>("");
     const [formattedList, setFormattedList] = React.useState<Array<FormattedVersionItem>>([]);
 
+    /** format dropdown list */
     const formatList = () => {
         setFormattedList(
             versions?.length > 0
@@ -40,8 +43,9 @@ const VersionsDropdown: React.FC<React.PropsWithChildren<VersionsDropdownProps>>
 
     return (
         <Dropdown
-            className={props.className}
+            wrapperProps={{ className: classnames("version-dropdown", props.className) }}
             value={currentVersion}
+            selectedLabel={(value: string) => formattedList.find((item: FormattedVersionItem) => item.value === value)?.label}
             onChange={(e: React.ChangeEvent<HTMLSelectElement>) => (window.location.href = `${window.location.origin}${withPrefix(e.target.value)}/`)}
         >
             {formattedList.map((item: FormattedVersionItem, index: number) => (

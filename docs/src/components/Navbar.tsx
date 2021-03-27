@@ -38,7 +38,7 @@ const Navs: React.FC = React.memo(() => (
     <ul className="nav nav-dark">
         <li className="nav-item">
             <div className="nav-link">
-                <VersionsDropdown />
+                <VersionsDropdown className="top-nav" />
             </div>
         </li>
         <li className="nav-item">
