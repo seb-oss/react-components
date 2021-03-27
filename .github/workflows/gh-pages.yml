@@ -2,7 +2,7 @@ name: Github Pages
 
 on:
   push:
-    branches: [feature/version-documentation]
+    branches: [master, beta]
 
 jobs:
   get_tags:
