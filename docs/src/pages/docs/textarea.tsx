@@ -1,7 +1,7 @@
 import React from "react";
 import Docs from "@common/Docs";
 import { Textarea } from "@sebgroup/react-components/Textarea";
-import { DynamicFormOption, useDynamicForm } from "@hooks/useDynamicForm";
+import { DynamicFormOption, useDynamicForm } from "@sebgroup/react-components/hooks/useDynamicForm";
 import { Indicator, IndicatorType } from "@sebgroup/react-components/FeedbackIndicator";
 
 const importString: string = require("!raw-loader!@sebgroup/react-components/Textarea/Textarea");

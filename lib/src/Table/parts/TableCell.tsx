@@ -8,4 +8,4 @@ const TableCell: React.FC<TableCellProps> = React.forwardRef(({ ...props }: Tabl
 
 TableCell.displayName = "TableCell";
 
-export default TableCell;
+export { TableCell };

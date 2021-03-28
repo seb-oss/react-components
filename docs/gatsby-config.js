@@ -1,4 +1,10 @@
+const pkg = require("../package.json");
+require("dotenv").config({
+    path: `../.env`,
+});
+
 module.exports = {
+    pathPrefix: process.env.base || pkg.config.base,
     siteMetadata: {
         title: "react-comps",
         siteUrl: "https://sebgroup.github.io/react-components/",

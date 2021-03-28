@@ -1,6 +1,6 @@
 import React from "react";
 import Docs from "@common/Docs";
-import { DynamicFormOption, useDynamicForm } from "@hooks/useDynamicForm";
+import { DynamicFormOption, useDynamicForm } from "@sebgroup/react-components/hooks/useDynamicForm";
 import { Button } from "@sebgroup/react-components/Button";
 import { Modal, ModalSize, ModalPosition } from "@sebgroup/react-components/Modal";
 import { Textbox } from "@sebgroup/react-components/Textbox";

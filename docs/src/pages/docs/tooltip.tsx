@@ -2,7 +2,7 @@ import React from "react";
 import Docs from "@common/Docs";
 import { Tooltip } from "@sebgroup/react-components/Tooltip";
 import { Notification } from "@sebgroup/react-components/Notification";
-import { DynamicFormOption, DynamicFormSection, useDynamicForm } from "@hooks/useDynamicForm";
+import { DynamicFormOption, DynamicFormSection, useDynamicForm } from "@sebgroup/react-components/hooks/useDynamicForm";
 
 const TooltipPage: React.FC = () => {
     const importString: string = require("!raw-loader!@sebgroup/react-components/Tooltip/Tooltip");

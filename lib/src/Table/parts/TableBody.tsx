@@ -36,4 +36,4 @@ const TableBody: React.FC<TableBodyProps> = React.forwardRef(({ ...props }: Tabl
 
 TableBody.displayName = "TableBody";
 
-export default TableBody;
+export { TableBody };

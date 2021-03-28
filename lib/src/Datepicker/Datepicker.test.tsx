@@ -188,15 +188,10 @@ describe("Component: Datepicker", () => {
 
     it("Should use default locale when unknown locale code provided", () => {
         act(() => {
-            render(<Datepicker {...props} localeCode="sl" forceCustom />, container);
+            render(<Datepicker {...props} localeCode="%$#^%$@" forceCustom />, container);
         });
 
         const monthElement: HTMLSelectElement = container.querySelector("select.seb-datepicker-custom-month");
-        expect(monthElement.querySelectorAll("option").item(0).innerHTML.toLowerCase()).toBe("mesec");
-
-        act(() => {
-            render(<Datepicker {...props} localeCode="%$#^%$@" forceCustom />, container);
-        });
 
         expect(monthElement.querySelectorAll("option").item(0).innerHTML.toLowerCase()).toBe("month");
     });

@@ -1,6 +1,6 @@
 import React from "react";
 import Docs from "@common/Docs";
-import { DynamicFormOption, DynamicFormSection, useDynamicForm } from "@hooks/useDynamicForm";
+import { DynamicFormOption, DynamicFormSection, useDynamicForm } from "@sebgroup/react-components/hooks/useDynamicForm";
 import { StepTracker } from "@sebgroup/react-components/StepTracker";
 import StepLabel, { StepLabelProps } from "@sebgroup/react-components/StepTracker/StepLabel";
 

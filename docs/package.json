@@ -8,7 +8,7 @@
     ],
     "scripts": {
         "start": "gatsby develop -p 3000",
-        "build": "gatsby build",
+        "build": "gatsby build --prefix-paths",
         "serve": "gatsby serve",
         "clean": "gatsby clean"
     },
@@ -25,9 +25,12 @@
         "gatsby-plugin-tsconfig-paths": "^1.0.2",
         "lorem-ipsum": "^2.0.3",
         "react-helmet": "^6.1.0",
-        "react-syntax-highlighter": "^15.4.3"
+        "react-syntax-highlighter": "^15.4.3",
+        "classnames": "^2.2.6",
+        "@sebgroup/frontend-tools": "^2.0.2"
     },
     "devDependencies": {
-        "@types/react-helmet": "^6.1.0"
+        "@types/react-helmet": "^6.1.0",
+        "dotenv": "^8.2.0"
     }
 }

@@ -14,15 +14,17 @@ export type TableProps = JSX.IntrinsicElements["table"] & {
     theme?: TableTheme;
     /** callback when column is sorted */
     onSort?: (sortedColumn: SortedColumn) => void;
+    /** preset sorted column */
+    sortedColumn?: SortedColumn;
 };
 
 export const Table: React.FunctionComponent<TableProps> = React.memo(
     React.forwardRef(
-        ({ onRowSelect, onRowExpand, onSort, theme = "light", ...props }: TableProps, ref: React.ForwardedRef<HTMLTableElement>): React.ReactElement<void> => {
-            const [tableState, setTableState] = React.useState({ expandedRows: [], sortedColumn: null });
+        ({ onRowSelect, onRowExpand, onSort, sortedColumn, theme = "light", className, ...props }: TableProps, ref: React.ForwardedRef<HTMLTableElement>): React.ReactElement<void> => {
+            const [tableState, setTableState] = React.useState({ expandedRows: [], sortedColumn });
             return (
                 <TableContext.Provider value={{ tableState, onSort, onRowSelect, onRowExpand, setTableState }}>
-                    <table {...props} ref={ref} className={classnames("table", theme)} />
+                    <table {...props} className={classnames("table", className, theme)} ref={ref} />
                 </TableContext.Provider>
             );
         }

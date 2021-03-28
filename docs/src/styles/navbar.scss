@@ -29,6 +29,9 @@ header {
                     @include media-breakpoint-down(sm) {
                         flex-direction: column;
                     }
+                    > .nav-item {
+                        margin: auto 0;
+                    }
                     &.nav-dark {
                         a {
                             color: white;

@@ -2,7 +2,7 @@ import React from "react";
 import Docs from "@common/Docs";
 import SearchIcon from "../../../static/icons/search.svg";
 import { Textbox } from "@sebgroup/react-components/Textbox";
-import { DynamicFormOption, DynamicFormSection, useDynamicForm } from "@hooks/useDynamicForm";
+import { DynamicFormOption, DynamicFormSection, useDynamicForm } from "@sebgroup/react-components/hooks/useDynamicForm";
 import { Indicator, IndicatorType } from "@sebgroup/react-components/FeedbackIndicator";
 
 const importString: string = require("!raw-loader!@sebgroup/react-components/Textbox/Textbox");

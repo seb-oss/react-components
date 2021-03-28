@@ -22,4 +22,4 @@ const TableHeader: React.FC<TableHeaderProps> = React.forwardRef(({ ...props }: 
 
 TableHeader.displayName = "TableHeader";
 
-export default TableHeader;
+export { TableHeader };

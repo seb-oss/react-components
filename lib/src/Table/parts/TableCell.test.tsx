@@ -1,7 +1,7 @@
 import React from "react";
 import { act } from "react-dom/test-utils";
 import { unmountComponentAtNode, render } from "react-dom";
-import TableCell from "./TableCell";
+import { TableCell } from "./TableCell";
 
 describe("Component: Table cell", () => {
     let container: HTMLDivElement = null;

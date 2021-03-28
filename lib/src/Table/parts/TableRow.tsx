@@ -2,8 +2,8 @@ import React from "react";
 import classnames from "classnames";
 import { Checkbox } from "../../Checkbox";
 import { TableContext } from "../TableContextProvider";
-import TableHeaderCell, { TableHeaderCellProps } from "./TableHeaderCell";
-import TableCell, { TableCellProps } from "./TableCell";
+import { TableHeaderCell, TableHeaderCellProps } from "./TableHeaderCell";
+import { TableCell, TableCellProps } from "./TableCell";
 import { randomId } from "@sebgroup/frontend-tools";
 
 export type TableRowProps<T = any> = JSX.IntrinsicElements["tr"] & {
@@ -122,4 +122,4 @@ const TableRow: React.FC<TableRowProps> = React.forwardRef(
 
 TableRow.displayName = "TableRow";
 
-export default TableRow;
+export { TableRow };
