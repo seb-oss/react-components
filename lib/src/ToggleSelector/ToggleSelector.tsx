@@ -35,7 +35,7 @@ export type ToggleSelectorProps = NativeDivProps &
     };
 
 /** A selector to display and select options in a flow. */
-export const ToggleSelector: React.FC<ToggleSelectorProps> = ({ multiple, value, onChange, indicator, ...props }: ToggleSelectorProps) => {
+export const ToggleSelector: React.FC<ToggleSelectorProps> = React.forwardRef(({ multiple, value, onChange, indicator, ...props }: ToggleSelectorProps, ref: React.ForwardedRef<HTMLDivElement>) => {
     const [name] = React.useState<string>(randomId("ts-"));
 
     const handleChange = React.useCallback(
@@ -59,7 +59,7 @@ export const ToggleSelector: React.FC<ToggleSelectorProps> = ({ multiple, value,
     );
 
     return (
-        <div {...props} className={classnames("rc", "toggle-selector", props.className)}>
+        <div {...props} ref={ref} className={classnames("rc", "toggle-selector", props.className)}>
             <FeedbackIndicator {...indicator} noBorder>
                 {props.children &&
                     React.Children.map(props.children, (Child: React.ReactElement<ToggleSelectorItemProps>, index: number) => {
@@ -77,4 +77,4 @@ export const ToggleSelector: React.FC<ToggleSelectorProps> = ({ multiple, value,
             </FeedbackIndicator>
         </div>
     );
-};
+}) as React.ForwardRefExoticComponent<React.PropsWithoutRef<ToggleSelectorProps & ToggleSelectorMultipleProps> & React.RefAttributes<HTMLDivElement>>;

@@ -11,16 +11,18 @@ export type BreadcrumbItemProps = JSX.IntrinsicElements["li"] & {
     onNavigate?: React.MouseEventHandler<HTMLAnchorElement>;
 };
 
-export const BreadcrumbItem: React.FC<BreadcrumbItemProps> = React.memo(({ href = "#", onNavigate, ...props }: BreadcrumbItemProps) => {
-    const [className, setClassName] = React.useState<string>("breadcrumb-item");
+export const BreadcrumbItem: React.FC<BreadcrumbItemProps> = React.memo(
+    React.forwardRef(({ href = "#", onNavigate, ...props }: BreadcrumbItemProps, ref: React.ForwardedRef<HTMLLIElement>) => {
+        const [className, setClassName] = React.useState<string>("breadcrumb-item");
 
-    React.useEffect(() => setClassName(classnames(["breadcrumb-item", { active: props.defaultChecked }, props.className])), [props.defaultChecked, props.className]);
+        React.useEffect(() => setClassName(classnames(["breadcrumb-item", { active: props.defaultChecked }, props.className])), [props.defaultChecked, props.className]);
 
-    return (
-        <li {...props} className={className} aria-current={props.defaultChecked ? props["aria-current"] || "page" : null}>
-            <a title={props.title} href={props.defaultChecked ? null : href} data-index-number={props["data-index-number"]} onClick={!props.defaultChecked ? onNavigate : null}>
-                {props.children}
-            </a>
-        </li>
-    );
-});
+        return (
+            <li {...props} ref={ref} className={className} aria-current={props.defaultChecked ? props["aria-current"] || "page" : null}>
+                <a title={props.title} href={props.defaultChecked ? null : href} data-index-number={props["data-index-number"]} onClick={!props.defaultChecked ? onNavigate : null}>
+                    {props.children}
+                </a>
+            </li>
+        );
+    })
+);

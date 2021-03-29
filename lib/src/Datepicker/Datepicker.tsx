@@ -37,325 +37,319 @@ interface UnitNames {
     year: string;
 }
 
-export const Datepicker: React.FunctionComponent<DatepickerProps> = ({
-    monthPicker,
-    forceCustom,
-    className,
-    value,
-    min,
-    max,
-    disabled,
-    onChange,
-    localeCode = "en",
-    wrapperProps,
-    customPickerSelectProps,
-    ...props
-}: DatepickerProps): React.ReactElement<void> => {
-    const isValidDate = React.useCallback((d: Date): boolean => {
-        return !!(d && d instanceof Date && !isNaN(d.getTime()));
-    }, []);
+export const Datepicker: React.FunctionComponent<DatepickerProps> = React.forwardRef(
+    (
+        { monthPicker, forceCustom, className, value, min, max, disabled, onChange, localeCode = "en", wrapperProps, customPickerSelectProps, ...props }: DatepickerProps,
+        ref: React.ForwardedRef<HTMLInputElement>
+    ): React.ReactElement<void> => {
+        const isValidDate = React.useCallback((d: Date): boolean => {
+            return !!(d && d instanceof Date && !isNaN(d.getTime()));
+        }, []);
 
-    const getStringFromDate = React.useCallback(
-        (d: Date, monthPicker: boolean): string => {
-            if (isValidDate(d)) {
-                const year: string = `0000${d.getFullYear()}`.substr(-4, 4);
-                const month: string = `00${d.getMonth() + 1}`.substr(-2, 2);
-                const day: string = `00${d.getDate()}`.substr(-2, 2);
+        const getStringFromDate = React.useCallback(
+            (d: Date, monthPicker: boolean): string => {
+                if (isValidDate(d)) {
+                    const year: string = `0000${d.getFullYear()}`.substr(-4, 4);
+                    const month: string = `00${d.getMonth() + 1}`.substr(-2, 2);
+                    const day: string = `00${d.getDate()}`.substr(-2, 2);
 
-                return `${year}-${month}-${day}`.substr(0, monthPicker ? 7 : 10) || "";
-            } else {
-                return "";
-            }
-        },
-        [isValidDate]
-    );
+                    return `${year}-${month}-${day}`.substr(0, monthPicker ? 7 : 10) || "";
+                } else {
+                    return "";
+                }
+            },
+            [isValidDate]
+        );
 
-    const getInputRawValue = React.useCallback(
-        (value: Date, monthPicker: boolean): string => {
-            return getStringFromDate(value, monthPicker);
-        },
-        [getStringFromDate]
-    );
+        const getInputRawValue = React.useCallback(
+            (value: Date, monthPicker: boolean): string => {
+                return getStringFromDate(value, monthPicker);
+            },
+            [getStringFromDate]
+        );
 
-    const isDateInRange = React.useCallback((d: Date, min: Date, max: Date): boolean => {
-        if (!min && !max) {
-            return true;
-        } else if (min && d >= min) {
-            if (!max || (max && d <= max)) {
+        const isDateInRange = React.useCallback((d: Date, min: Date, max: Date): boolean => {
+            if (!min && !max) {
                 return true;
+            } else if (min && d >= min) {
+                if (!max || (max && d <= max)) {
+                    return true;
+                } else {
+                    return false;
+                }
             } else {
                 return false;
             }
-        } else {
-            return false;
-        }
-    }, []);
+        }, []);
 
-    const initCustomDay = React.useCallback(
-        (value: Date, monthPicker: boolean): number => {
-            const inputRawValue: string = getInputRawValue(value, monthPicker);
-            if (!!inputRawValue) {
-                const value: number = monthPicker ? 1 : Number(inputRawValue.substr(8, 2));
-                return value;
-            }
-        },
-        [getInputRawValue]
-    );
-
-    const [customDay, setCustomDay] = React.useState<number>(initCustomDay(value, monthPicker));
-
-    const handleChangeCustomDay = (e: React.ChangeEvent<HTMLInputElement>): void => {
-        if (!monthPicker) {
-            const v: number = e.target?.value && !Number.isNaN(Number(e.target?.value)) ? Number(e.target.value) : null;
-            setCustomDay(v);
-        }
-    };
-
-    const initCustomMonth = React.useCallback(
-        (value: Date, monthPicker: boolean): number => {
-            const inputRawValue: string = getInputRawValue(value, monthPicker);
-            if (!!inputRawValue) {
-                const value: number = monthPicker ? 1 : Number(inputRawValue.substr(5, 2));
-                return value;
-            }
-        },
-        [getInputRawValue]
-    );
-
-    const [customMonth, setCustomMonth] = React.useState<number>(initCustomMonth(value, monthPicker));
-
-    const handleChangeCustomMonth = (e: React.ChangeEvent<HTMLSelectElement>): void => {
-        const v: number = e.target?.value && !Number.isNaN(Number(e.target?.value)) ? Number(e.target.value) : null;
-        setCustomMonth(v);
-    };
-
-    const initCustomYear = React.useCallback(
-        (value: Date, monthPicker: boolean): number => {
-            const inputRawValue: string = getInputRawValue(value, monthPicker);
-            if (!!inputRawValue) {
-                const value: number = monthPicker ? 1 : Number(inputRawValue.substr(0, 4));
-                return value;
-            }
-        },
-        [getInputRawValue]
-    );
-
-    const [customYear, setCustomYear] = React.useState<number>(initCustomYear(value, monthPicker));
-
-    const handleChangeCustomYear = (e: React.ChangeEvent<HTMLInputElement>): void => {
-        const v: number = e.target?.value && !Number.isNaN(Number(e.target?.value)) ? Number(e.target.value) : null;
-        setCustomYear(v);
-    };
-
-    React.useEffect(() => {
-        const day: number = monthPicker ? 1 : customDay;
-        const month: number = customMonth;
-        const year: number = customYear;
-        const dateString: string = `${padNumber(year, true)}-${padNumber(month)}-${padNumber(day)}`;
-        const date: Date = new Date(dateString);
-        const m: number = date.getMonth() + 1;
-        if (date.getFullYear() === year && m === month && date.getDate() === day) {
-            isDateInRange(date, min, max) ? onChange(date) : onChange(null);
-        } else {
-            onChange(null);
-        }
-    }, [monthPicker, customDay, customMonth, customYear, min, max]);
-
-    const getRelativeTimeFormat = React.useCallback((code: string): any => {
-        if ((Intl as any)["RelativeTimeFormat"]) {
-            try {
-                const rtf: any = new (Intl as any).RelativeTimeFormat(code);
-                if (rtf) {
-                    return rtf;
+        const initCustomDay = React.useCallback(
+            (value: Date, monthPicker: boolean): number => {
+                const inputRawValue: string = getInputRawValue(value, monthPicker);
+                if (!!inputRawValue) {
+                    const value: number = monthPicker ? 1 : Number(inputRawValue.substr(8, 2));
+                    return value;
                 }
-            } catch (error) {
-                return null;
+            },
+            [getInputRawValue]
+        );
+
+        const [customDay, setCustomDay] = React.useState<number>(initCustomDay(value, monthPicker));
+
+        const handleChangeCustomDay = (e: React.ChangeEvent<HTMLInputElement>): void => {
+            if (!monthPicker) {
+                const v: number = e.target?.value && !Number.isNaN(Number(e.target?.value)) ? Number(e.target.value) : null;
+                setCustomDay(v);
             }
-        }
-        return null;
-    }, []);
+        };
 
-    const getLocaleOrDefault = React.useCallback((localeCode: string): Intl.DateTimeFormat => {
-        let locale: Intl.DateTimeFormat;
-        try {
-            locale = new Intl.DateTimeFormat(localeCode, { month: "long" });
-        } catch (error) {
-            console.warn(`Locale with code: ${localeCode} was not recognised. Using locale 'en' instead.`);
-            locale = new Intl.DateTimeFormat("en", { month: "long" });
-        }
-        return locale;
-    }, []);
+        const initCustomMonth = React.useCallback(
+            (value: Date, monthPicker: boolean): number => {
+                const inputRawValue: string = getInputRawValue(value, monthPicker);
+                if (!!inputRawValue) {
+                    const value: number = monthPicker ? 1 : Number(inputRawValue.substr(5, 2));
+                    return value;
+                }
+            },
+            [getInputRawValue]
+        );
 
-    const unitNames: UnitNames = {
-        month: "Month",
-        day: "Day",
-        year: "Year",
-    };
+        const [customMonth, setCustomMonth] = React.useState<number>(initCustomMonth(value, monthPicker));
 
-    const monthNames = () => {
-        const date: Date = new Date(2012, 0, 5);
-        const locale: Intl.DateTimeFormat = getLocaleOrDefault(localeCode);
+        const handleChangeCustomMonth = (e: React.ChangeEvent<HTMLSelectElement>): void => {
+            const v: number = e.target?.value && !Number.isNaN(Number(e.target?.value)) ? Number(e.target.value) : null;
+            setCustomMonth(v);
+        };
 
-        const names: string[] = [unitNames.month];
-        [...Array(12)].map((_, i) => {
-            date.setMonth(i);
-            names.push(locale.format(date));
-        });
-        return names;
-    };
+        const initCustomYear = React.useCallback(
+            (value: Date, monthPicker: boolean): number => {
+                const inputRawValue: string = getInputRawValue(value, monthPicker);
+                if (!!inputRawValue) {
+                    const value: number = monthPicker ? 1 : Number(inputRawValue.substr(0, 4));
+                    return value;
+                }
+            },
+            [getInputRawValue]
+        );
 
-    const customPickerOrder = () => {
-        const date: Date = new Date(2012, 0, 5);
-        const rtf: any = getRelativeTimeFormat(localeCode);
-        let order: string[] = ["day", "month", "year"];
-        const locale: Intl.DateTimeFormat = getLocaleOrDefault(localeCode);
+        const [customYear, setCustomYear] = React.useState<number>(initCustomYear(value, monthPicker));
 
-        const localeDateString: string = locale.format(date);
-        order.sort((a, b) => {
-            const positions: { day: number; month: number; year: number } = {
-                day: localeDateString?.search(/5/g) || 0,
-                month: localeDateString?.search(/1/g) || 1,
-                year: localeDateString?.search(/2012/g) || 2,
-            };
-            return positions[a] - positions[b];
-        });
+        const handleChangeCustomYear = (e: React.ChangeEvent<HTMLInputElement>): void => {
+            const v: number = e.target?.value && !Number.isNaN(Number(e.target?.value)) ? Number(e.target.value) : null;
+            setCustomYear(v);
+        };
 
-        order?.map((unit) => {
-            unitNames[unit] =
-                rtf
-                    ?.formatToParts(1, unit)
-                    ?.filter((x) => x.type === "literal")[1]
-                    ?.value?.trim() || unit;
-        });
+        React.useEffect(() => {
+            const day: number = monthPicker ? 1 : customDay;
+            const month: number = customMonth;
+            const year: number = customYear;
+            const dateString: string = `${padNumber(year, true)}-${padNumber(month)}-${padNumber(day)}`;
+            const date: Date = new Date(dateString);
+            const m: number = date.getMonth() + 1;
+            if (date.getFullYear() === year && m === month && date.getDate() === day) {
+                isDateInRange(date, min, max) ? onChange(date) : onChange(null);
+            } else {
+                onChange(null);
+            }
+        }, [monthPicker, customDay, customMonth, customYear, min, max]);
 
-        return order;
-    };
-
-    const supportsInputOfType = (type: "date" | "month"): boolean => {
-        if (typeof document !== "undefined") {
-            const input: HTMLInputElement = document.createElement("input");
-            input.setAttribute("type", type);
-
-            const notADateValue: string = "not-a-date";
-            input.setAttribute("value", notADateValue);
-
-            return input.value !== notADateValue;
-        }
-
-        return false;
-    };
-
-    const nativeClassNames = React.useCallback(
-        (value: Date, className: string): string => {
-            return classnames("form-control", "seb-datepicker-native", { "is-invalid": !isValidDate(value) }, className);
-        },
-        [isValidDate]
-    );
-
-    const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-        const { value: changeEventValue } = e.target;
-        const value: Date = new Date(changeEventValue);
-        onChange(value);
-    };
-
-    const renderCustomDatepicker = (value: Date, monthPicker: boolean, customPickerOrder: string[], unitNames: UnitNames, disabled: boolean, monthNames: string[]) => {
-        const order: string[] = monthPicker ? [...customPickerOrder.filter((x: string) => x !== "day")] : customPickerOrder;
-        return (
-            <div {...wrapperProps} className={classnames("input-group", "seb-datepicker-custom", wrapperProps?.className)}>
-                {order?.map((unit: string, unitIndex: number) => {
-                    switch (unit) {
-                        case "day":
-                            return (
-                                <input
-                                    {...props}
-                                    key={unitIndex}
-                                    className={classnames("form-control", "seb-datepicker-custom-day", { "is-invalid": !isValidDate(value) }, className)}
-                                    type="number"
-                                    min="1"
-                                    max="31"
-                                    placeholder={unitNames.day}
-                                    disabled={disabled}
-                                    value={isDateInRange(value, min, max) ? customDay || "" : ""}
-                                    onChange={handleChangeCustomDay}
-                                />
-                            );
-
-                        case "month":
-                            return (
-                                <select
-                                    {...customPickerSelectProps}
-                                    key={unitIndex}
-                                    className={classnames(
-                                        "custom-select",
-                                        "seb-datepicker-custom-month",
-                                        { "is-invalid": !isValidDate(value) },
-                                        { "rounded-left": unitIndex === 0 },
-                                        { "rounded-right": unitIndex === customPickerOrder.length - 1 },
-                                        customPickerSelectProps?.className
-                                    )}
-                                    value={isDateInRange(value, min, max) ? customMonth || "" : ""}
-                                    disabled={disabled}
-                                    onChange={handleChangeCustomMonth}
-                                >
-                                    {monthNames.map((month: string, i: number) => {
-                                        return (
-                                            <option key={i} disabled={disabled || i === 0} value={i}>
-                                                {month}
-                                            </option>
-                                        );
-                                    })}
-                                </select>
-                            );
-
-                        case "year":
-                            return (
-                                <input
-                                    {...props}
-                                    key={unitIndex}
-                                    className={classnames("form-control", "seb-datepicker-custom-year", { "is-invalid": !isValidDate(value) }, className)}
-                                    type="number"
-                                    min="1"
-                                    placeholder={unitNames.year}
-                                    disabled={disabled}
-                                    value={isDateInRange(value, min, max) ? customYear || "" : ""}
-                                    onChange={handleChangeCustomYear}
-                                />
-                            );
-                        default:
-                            break;
+        const getRelativeTimeFormat = React.useCallback((code: string): any => {
+            if ((Intl as any)["RelativeTimeFormat"]) {
+                try {
+                    const rtf: any = new (Intl as any).RelativeTimeFormat(code);
+                    if (rtf) {
+                        return rtf;
                     }
-                })}
-            </div>
-        );
-    };
+                } catch (error) {
+                    return null;
+                }
+            }
+            return null;
+        }, []);
 
-    if (monthPicker && !forceCustom && supportsInputOfType("month")) {
-        return (
-            <input
-                {...props}
-                type="month"
-                className={nativeClassNames(value, className)}
-                min={getStringFromDate(min, monthPicker)}
-                max={getStringFromDate(max, monthPicker)}
-                value={isDateInRange(value, min, max) ? getInputRawValue(value, monthPicker) : ""}
-                disabled={disabled}
-                onChange={handleOnChange}
-            />
+        const getLocaleOrDefault = React.useCallback((localeCode: string): Intl.DateTimeFormat => {
+            let locale: Intl.DateTimeFormat;
+            try {
+                locale = new Intl.DateTimeFormat(localeCode, { month: "long" });
+            } catch (error) {
+                console.warn(`Locale with code: ${localeCode} was not recognised. Using locale 'en' instead.`);
+                locale = new Intl.DateTimeFormat("en", { month: "long" });
+            }
+            return locale;
+        }, []);
+
+        const unitNames: UnitNames = {
+            month: "Month",
+            day: "Day",
+            year: "Year",
+        };
+
+        const monthNames = () => {
+            const date: Date = new Date(2012, 0, 5);
+            const locale: Intl.DateTimeFormat = getLocaleOrDefault(localeCode);
+
+            const names: string[] = [unitNames.month];
+            [...Array(12)].map((_, i) => {
+                date.setMonth(i);
+                names.push(locale.format(date));
+            });
+            return names;
+        };
+
+        const customPickerOrder = () => {
+            const date: Date = new Date(2012, 0, 5);
+            const rtf: any = getRelativeTimeFormat(localeCode);
+            let order: string[] = ["day", "month", "year"];
+            const locale: Intl.DateTimeFormat = getLocaleOrDefault(localeCode);
+
+            const localeDateString: string = locale.format(date);
+            order.sort((a, b) => {
+                const positions: { day: number; month: number; year: number } = {
+                    day: localeDateString?.search(/5/g) || 0,
+                    month: localeDateString?.search(/1/g) || 1,
+                    year: localeDateString?.search(/2012/g) || 2,
+                };
+                return positions[a] - positions[b];
+            });
+
+            order?.map((unit) => {
+                unitNames[unit] =
+                    rtf
+                        ?.formatToParts(1, unit)
+                        ?.filter((x) => x.type === "literal")[1]
+                        ?.value?.trim() || unit;
+            });
+
+            return order;
+        };
+
+        const supportsInputOfType = (type: "date" | "month"): boolean => {
+            if (typeof document !== "undefined") {
+                const input: HTMLInputElement = document.createElement("input");
+                input.setAttribute("type", type);
+
+                const notADateValue: string = "not-a-date";
+                input.setAttribute("value", notADateValue);
+
+                return input.value !== notADateValue;
+            }
+
+            return false;
+        };
+
+        const nativeClassNames = React.useCallback(
+            (value: Date, className: string): string => {
+                return classnames("form-control", "seb-datepicker-native", { "is-invalid": !isValidDate(value) }, className);
+            },
+            [isValidDate]
         );
-    } else if (!forceCustom && supportsInputOfType("date")) {
-        return (
-            <input
-                {...props}
-                type="date"
-                className={nativeClassNames(value, className)}
-                min={getStringFromDate(min, monthPicker)}
-                max={getStringFromDate(max, monthPicker)}
-                value={isDateInRange(value, min, max) ? getInputRawValue(value, monthPicker) : ""}
-                disabled={disabled}
-                onChange={handleOnChange}
-            />
-        );
-    } else {
-        return <>{renderCustomDatepicker(value, monthPicker, customPickerOrder(), unitNames, disabled, monthNames())}</>;
+
+        const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+            const { value: changeEventValue } = e.target;
+            const value: Date = new Date(changeEventValue);
+            onChange(value);
+        };
+
+        const renderCustomDatepicker = (value: Date, monthPicker: boolean, customPickerOrder: string[], unitNames: UnitNames, disabled: boolean, monthNames: string[]) => {
+            const order: string[] = monthPicker ? [...customPickerOrder.filter((x: string) => x !== "day")] : customPickerOrder;
+            return (
+                <div {...wrapperProps} ref={ref} className={classnames("input-group", "seb-datepicker-custom", wrapperProps?.className)}>
+                    {order?.map((unit: string, unitIndex: number) => {
+                        switch (unit) {
+                            case "day":
+                                return (
+                                    <input
+                                        {...props}
+                                        key={unitIndex}
+                                        className={classnames("form-control", "seb-datepicker-custom-day", { "is-invalid": !isValidDate(value) }, className)}
+                                        type="number"
+                                        min="1"
+                                        max="31"
+                                        placeholder={unitNames.day}
+                                        disabled={disabled}
+                                        value={isDateInRange(value, min, max) ? customDay || "" : ""}
+                                        onChange={handleChangeCustomDay}
+                                    />
+                                );
+
+                            case "month":
+                                return (
+                                    <select
+                                        {...customPickerSelectProps}
+                                        key={unitIndex}
+                                        className={classnames(
+                                            "custom-select",
+                                            "seb-datepicker-custom-month",
+                                            { "is-invalid": !isValidDate(value) },
+                                            { "rounded-left": unitIndex === 0 },
+                                            { "rounded-right": unitIndex === customPickerOrder.length - 1 },
+                                            customPickerSelectProps?.className
+                                        )}
+                                        value={isDateInRange(value, min, max) ? customMonth || "" : ""}
+                                        disabled={disabled}
+                                        onChange={handleChangeCustomMonth}
+                                    >
+                                        {monthNames.map((month: string, i: number) => {
+                                            return (
+                                                <option key={i} disabled={disabled || i === 0} value={i}>
+                                                    {month}
+                                                </option>
+                                            );
+                                        })}
+                                    </select>
+                                );
+
+                            case "year":
+                                return (
+                                    <input
+                                        {...props}
+                                        key={unitIndex}
+                                        className={classnames("form-control", "seb-datepicker-custom-year", { "is-invalid": !isValidDate(value) }, className)}
+                                        type="number"
+                                        min="1"
+                                        placeholder={unitNames.year}
+                                        disabled={disabled}
+                                        value={isDateInRange(value, min, max) ? customYear || "" : ""}
+                                        onChange={handleChangeCustomYear}
+                                    />
+                                );
+                            default:
+                                break;
+                        }
+                    })}
+                </div>
+            );
+        };
+
+        if (monthPicker && !forceCustom && supportsInputOfType("month")) {
+            return (
+                <input
+                    {...props}
+                    ref={ref}
+                    type="month"
+                    className={nativeClassNames(value, className)}
+                    min={getStringFromDate(min, monthPicker)}
+                    max={getStringFromDate(max, monthPicker)}
+                    value={isDateInRange(value, min, max) ? getInputRawValue(value, monthPicker) : ""}
+                    disabled={disabled}
+                    onChange={handleOnChange}
+                />
+            );
+        } else if (!forceCustom && supportsInputOfType("date")) {
+            return (
+                <input
+                    {...props}
+                    ref={ref}
+                    type="date"
+                    className={nativeClassNames(value, className)}
+                    min={getStringFromDate(min, monthPicker)}
+                    max={getStringFromDate(max, monthPicker)}
+                    value={isDateInRange(value, min, max) ? getInputRawValue(value, monthPicker) : ""}
+                    disabled={disabled}
+                    onChange={handleOnChange}
+                />
+            );
+        } else {
+            return <>{renderCustomDatepicker(value, monthPicker, customPickerOrder(), unitNames, disabled, monthNames())}</>;
+        }
     }
-};
+);
