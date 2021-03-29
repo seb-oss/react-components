@@ -23,7 +23,7 @@ export type RatingProps = JSX.IntrinsicElements["input"] & {
 const initialColors: [string, string] = ["#A9A9A9", "#FFC500"];
 const disabledColors: [string, string] = ["#dddddd", "#bfbfbf"];
 
-export const Rating: React.FC<RatingProps> = ({ dimension = 30, colors, customSVG, wrapperProps, ...props }: RatingProps) => {
+export const Rating: React.FC<RatingProps> = React.forwardRef(({ dimension = 30, colors, customSVG, wrapperProps, ...props }: RatingProps, ref: React.ForwardedRef<HTMLInputElement>) => {
     const [displayValue, setDisplayValue] = useState<number>(Number(props.value));
     const [min, setMin] = useState<number>(0);
     const [max, setMax] = useState<number>(Number(props.max) || 5);
@@ -96,8 +96,9 @@ export const Rating: React.FC<RatingProps> = ({ dimension = 30, colors, customSV
                 ))}
             </div>
             <input
-                type="range"
                 {...props}
+                ref={ref}
+                type="range"
                 onChange={!props.readOnly ? props.onChange : null}
                 onClick={!props.readOnly ? props.onClick : null}
                 onMouseEnter={onHover}
@@ -106,4 +107,4 @@ export const Rating: React.FC<RatingProps> = ({ dimension = 30, colors, customSV
             />
         </div>
     );
-};
+});

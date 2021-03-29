@@ -13,11 +13,13 @@ export type TimelineProps = JSX.IntrinsicElements["div"] & {
 const GridPlaceholder = <div className="timeline-placeholder" />;
 
 /** A component where a list of events is displayed chronologically. */
-export const Timeline: React.FunctionComponent<TimelineProps> = React.memo(({ direction = "vertical", ...props }: TimelineProps) => (
-    <div {...props} className={classnames("rc", "timeline", direction, props.className)}>
-        {props.children && <aside className="timeline-bar" />}
-        {React.Children.map(props.children, (Child: React.ReactElement<TimelineItemProps>, index: number) =>
-            React.isValidElement(Child) ? (index % 2 ? [GridPlaceholder, Child] : [Child, GridPlaceholder]) : null
-        )}
-    </div>
-));
+export const Timeline: React.FunctionComponent<TimelineProps> = React.memo(
+    React.forwardRef(({ direction = "vertical", ...props }: TimelineProps, ref: React.ForwardedRef<HTMLDivElement>) => (
+        <div {...props} ref={ref} className={classnames("rc", "timeline", direction, props.className)}>
+            {props.children && <aside className="timeline-bar" />}
+            {React.Children.map(props.children, (Child: React.ReactElement<TimelineItemProps>, index: number) =>
+                React.isValidElement(Child) ? (index % 2 ? [GridPlaceholder, Child] : [Child, GridPlaceholder]) : null
+            )}
+        </div>
+    ))
+);

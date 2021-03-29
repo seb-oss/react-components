@@ -36,64 +36,58 @@ export type NotificationProps = SlideNotification | BarNotification;
 const safeDocument: Document | null = typeof document !== "undefined" ? document : null;
 
 /** An alert which pops up on the page to inform the user of an event which occured and optionally provide actions to perform. */
-export const Notification: React.FC<NotificationProps> = ({
-    toggle,
-    type = "slide",
-    theme = "purple",
-    position = "bottom-left",
-    onDismiss,
-    dismissTimeout = 5000,
-    persist,
-    ...props
-}: NotificationProps) => {
-    const timerRef: React.MutableRefObject<any> = React.useRef();
-    const [disableAnimation, setDisableAnimation] = React.useState<boolean>(true);
+export const Notification: React.FC<NotificationProps> = React.forwardRef(
+    ({ toggle, type = "slide", theme = "purple", position = "bottom-left", onDismiss, dismissTimeout = 5000, persist, ...props }: NotificationProps, ref: React.ForwardedRef<HTMLDivElement>) => {
+        const timerRef: React.MutableRefObject<any> = React.useRef();
+        const [disableAnimation, setDisableAnimation] = React.useState<boolean>(true);
 
-    React.useEffect(() => {
-        if (toggle) {
-            disableAnimation && setDisableAnimation(false);
-            if (!persist) {
-                timerRef.current = setTimeout(() => {
-                    timerRef.current && onDismiss && onDismiss(new Event("dismiss"));
-                    clearTimeout(timerRef.current);
-                }, dismissTimeout);
+        React.useEffect(() => {
+            if (toggle) {
+                disableAnimation && setDisableAnimation(false);
+                if (!persist) {
+                    timerRef.current = setTimeout(() => {
+                        timerRef.current && onDismiss && onDismiss(new Event("dismiss"));
+                        clearTimeout(timerRef.current);
+                    }, dismissTimeout);
+                }
+            } else {
+                clearTimeout(timerRef.current);
             }
-        } else {
-            clearTimeout(timerRef.current);
-        }
-    }, [toggle]);
+        }, [toggle]);
 
-    React.useEffect(() => {
-        persist && clearTimeout(timerRef.current);
-    }, [persist]);
+        React.useEffect(() => {
+            persist && clearTimeout(timerRef.current);
+        }, [persist]);
 
-    return !safeDocument
-        ? null
-        : createPortal(
-              <div
-                  className={classnames(
-                      "rc",
-                      "notification",
-                      {
-                          show: toggle,
-                          hide: !toggle && !disableAnimation,
-                          [`theme-${theme}`]: theme,
-                          [`type-${type}`]: type,
-                      },
-                      position,
-                      props.className
-                  )}
-                  {...props}
-                  onAnimationEnd={(e) => {
-                      props.onAnimationEnd && props.onAnimationEnd(e);
-                      !toggle && setDisableAnimation(true);
-                  }}
-              >
-                  <div className={classnames(`content-wrapper`, { clickable: props.onClick })} {...props}>
-                      {props.children}
-                      <button className="close" onClick={onDismiss}></button>
-                  </div>
-              </div>,
-              safeDocument.body
-          );
-};
+        return !safeDocument
+            ? null
+            : createPortal(
+                  <div
+                      ref={ref}
+                      className={classnames(
+                          "rc",
+                          "notification",
+                          {
+                              show: toggle,
+                              hide: !toggle && !disableAnimation,
+                              [`theme-${theme}`]: theme,
+                              [`type-${type}`]: type,
+                          },
+                          position,
+                          props.className
+                      )}
+                      {...props}
+                      onAnimationEnd={(e) => {
+                          props.onAnimationEnd && props.onAnimationEnd(e);
+                          !toggle && setDisableAnimation(true);
+                      }}
+                  >
+                      <div className={classnames(`content-wrapper`, { clickable: props.onClick })} {...props}>
+                          {props.children}
+                          <button className="close" onClick={onDismiss}></button>
+                      </div>
+                  </div>,
+                  safeDocument.body
+              );
+    }
+) as React.ForwardRefExoticComponent<React.PropsWithoutRef<SlideNotification & BarNotification> & React.RefAttributes<HTMLDivElement>>;

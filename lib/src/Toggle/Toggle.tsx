@@ -12,14 +12,14 @@ export type ToggleProps = JSX.IntrinsicElements["input"] & {
     wrapperProps?: JSX.IntrinsicElements["div"];
 };
 /** A Slide toggle allows the user to change between two states */
-export const Toggle: React.FC<ToggleProps> = ({ wrapperProps, label, inline, ...props }: ToggleProps) => {
+export const Toggle: React.FC<ToggleProps> = React.forwardRef(({ wrapperProps, label, inline, ...props }: ToggleProps, ref: React.ForwardedRef<HTMLInputElement>) => {
     const [id, setId] = React.useState<string>(props.id);
 
     React.useEffect(() => setId(props.id || (!!label ? randomId("toggle-") : null)), [props.id]);
 
     return (
         <div {...wrapperProps} className={classnames("rc", "custom-control", "custom-slide-toggle", { inline }, wrapperProps?.className)}>
-            <input {...props} className={classnames("custom-control-input", props.className)} id={id} type="checkbox" role={props.role || "switch"} />
+            <input {...props} ref={ref} className={classnames("custom-control-input", props.className)} id={id} type="checkbox" role={props.role || "switch"} />
             {label && (
                 <label className="custom-control-label" htmlFor={id}>
                     {label}
@@ -27,4 +27,4 @@ export const Toggle: React.FC<ToggleProps> = ({ wrapperProps, label, inline, ...
             )}
         </div>
     );
-};
+});

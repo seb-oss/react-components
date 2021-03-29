@@ -27,64 +27,66 @@ export type StepTrackerProps = Omit<JSX.IntrinsicElements["div"], "onClick"> & {
     useNumbers?: boolean;
 };
 /** Step trackers illustrate the steps in a multi step process */
-export const StepTracker: React.FC<StepTrackerProps> = React.memo(({ labelPosition = "bottom", list, onClick, orientation = "horizontal", step, useNumbers, ...props }: StepTrackerProps) => {
-    const [isVertical, setIsVertical] = React.useState<boolean>(orientation === "vertical");
-    const [stepList, setStepList] = React.useState<Array<number>>([]);
+export const StepTracker: React.FC<StepTrackerProps> = React.memo(
+    React.forwardRef(({ labelPosition = "bottom", list, onClick, orientation = "horizontal", step, useNumbers, ...props }: StepTrackerProps, ref: React.ForwardedRef<HTMLDivElement>) => {
+        const [isVertical, setIsVertical] = React.useState<boolean>(orientation === "vertical");
+        const [stepList, setStepList] = React.useState<Array<number>>([]);
 
-    const getProgress = React.useCallback(
-        (pos: number): string => {
-            return (100 / (stepList.length - 1)) * pos + "%";
-        },
-        [stepList]
-    );
+        const getProgress = React.useCallback(
+            (pos: number): string => {
+                return (100 / (stepList.length - 1)) * pos + "%";
+            },
+            [stepList]
+        );
 
-    const getStyles = React.useCallback(
-        (key: keyof React.CSSProperties, pos: number): React.CSSProperties => {
-            return { [key]: getProgress(pos) };
-        },
-        [getProgress]
-    );
+        const getStyles = React.useCallback(
+            (key: keyof React.CSSProperties, pos: number): React.CSSProperties => {
+                return { [key]: getProgress(pos) };
+            },
+            [getProgress]
+        );
 
-    React.useEffect(() => {
-        setIsVertical(orientation === "vertical");
-    }, [orientation]);
+        React.useEffect(() => {
+            setIsVertical(orientation === "vertical");
+        }, [orientation]);
 
-    React.useEffect(() => {
-        setStepList((list ? list : React.Children.toArray(props.children)).map((value: null, i: number) => i));
-    }, [props.children, list]);
+        React.useEffect(() => {
+            setStepList((list ? list : React.Children.toArray(props.children)).map((value: null, i: number) => i));
+        }, [props.children, list]);
 
-    return (
-        <div className={classnames("rc step-tracker", orientation, labelPosition, props.className, { clickable: onClick })} {...props}>
-            <div className="step-wrapper">
-                <div className="line">
-                    <div className="progress" style={getStyles(isVertical ? "height" : "width", step)} />
-                </div>
-                {stepList.map((i: number) => (
-                    <div
-                        className={"step" + (step === i ? " active" : "") + (useNumbers ? " numbered" : "")}
-                        style={getStyles(isVertical ? "top" : "left", i)}
-                        onClick={() => onClick && onClick(i)}
-                        key={i}
-                    >
-                        <div className="step-border" />
-                        {checkIcon}
-                        <div className="number">{i + 1}</div>
+        return (
+            <div {...props} ref={ref} className={classnames("rc step-tracker", orientation, labelPosition, props.className, { clickable: onClick })}>
+                <div className="step-wrapper">
+                    <div className="line">
+                        <div className="progress" style={getStyles(isVertical ? "height" : "width", step)} />
                     </div>
-                ))}
+                    {stepList.map((i: number) => (
+                        <div
+                            className={"step" + (step === i ? " active" : "") + (useNumbers ? " numbered" : "")}
+                            style={getStyles(isVertical ? "top" : "left", i)}
+                            onClick={() => onClick && onClick(i)}
+                            key={i}
+                        >
+                            <div className="step-border" />
+                            {checkIcon}
+                            <div className="number">{i + 1}</div>
+                        </div>
+                    ))}
+                </div>
+                <div className="text-wrapper">
+                    {list?.map((item: StepLabelProps, i: number) => (
+                        <StepLabel key={i} isActive={step === i} style={isVertical ? null : getStyles("width", 1)} {...item} />
+                    ))}
+                    {React.Children.map(props.children, (Child: React.ReactElement<StepLabelProps>, i: number) =>
+                        React.isValidElement<React.FC<StepLabelProps>>(Child)
+                            ? React.cloneElement<any>(Child, {
+                                  isActive: step === i,
+                                  style: isVertical ? null : getStyles("width", 1),
+                              })
+                            : Child
+                    )}
+                </div>
             </div>
-            <div className="text-wrapper">
-                {list?.map((item: StepLabelProps, i: number) => (
-                    <StepLabel key={i} isActive={step === i} style={isVertical ? null : getStyles("width", 1)} {...item} />
-                ))}
-                {React.Children.map(props.children, (Child: React.ReactElement<StepLabelProps>, i: number) =>
-                    React.isValidElement<React.FC<StepLabelProps>>(Child)
-                        ? React.cloneElement<any>(Child, {
-                              isActive: step === i,
-                              style: isVertical ? null : getStyles("width", 1),
-                          })
-                        : Child
-                )}
-            </div>
-        </div>
-    );
-});
+        );
+    })
+);

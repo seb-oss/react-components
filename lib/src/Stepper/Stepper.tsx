@@ -18,40 +18,42 @@ export type StepperProps = JSX.IntrinsicElements["input"] & {
 };
 
 /** A stepper makes it easier to input values that are in a narrow range */
-export const Stepper: React.FC<StepperProps> = ({ label, onDecrease, onIncrease, indicator, wrapperProps = {}, ...props }: StepperProps) => {
-    const [id, setId] = React.useState<string>("");
+export const Stepper: React.FC<StepperProps> = React.forwardRef(
+    ({ label, onDecrease, onIncrease, indicator, wrapperProps = {}, ...props }: StepperProps, ref: React.ForwardedRef<HTMLInputElement>) => {
+        const [id, setId] = React.useState<string>("");
 
-    React.useEffect(() => {
-        setId(props.id ? props.id : randomId("stepper-"));
-    }, [props.id]);
+        React.useEffect(() => {
+            setId(props.id ? props.id : randomId("stepper-"));
+        }, [props.id]);
 
-    return (
-        <FeedbackIndicator {...indicator} noBorder>
-            <div {...wrapperProps} className={classnames("rc custom-stepper", wrapperProps.className)}>
-                {label && <label className="custom-label">{label}</label>}
-                <div className={"stepper-container" + (props.disabled ? " disabled" : "")}>
-                    <button
-                        className={"stepper-decrement" + (props.value === props.min ? " disabled" : "")}
-                        onClick={props.value > props.min && !props.disabled ? onDecrease : null}
-                        aria-controls={id}
-                        aria-labelledby="decrement"
-                    >
-                        <span>&#8722;</span>
-                    </button>
-                    <div className="stepper-preview">
-                        <span>{props.value}</span>
+        return (
+            <FeedbackIndicator {...indicator} noBorder>
+                <div {...wrapperProps} className={classnames("rc custom-stepper", wrapperProps.className)}>
+                    {label && <label className="custom-label">{label}</label>}
+                    <div className={"stepper-container" + (props.disabled ? " disabled" : "")}>
+                        <button
+                            className={"stepper-decrement" + (props.value === props.min ? " disabled" : "")}
+                            onClick={props.value > props.min && !props.disabled ? onDecrease : null}
+                            aria-controls={id}
+                            aria-labelledby="decrement"
+                        >
+                            <span>&#8722;</span>
+                        </button>
+                        <div className="stepper-preview">
+                            <span>{props.value}</span>
+                        </div>
+                        <button
+                            className={"stepper-increment" + (props.value === props.max ? " disabled" : "")}
+                            onClick={props.value < props.max && !props.disabled ? onIncrease : null}
+                            aria-controls={id}
+                            aria-labelledby="increment"
+                        >
+                            <span>&#43;</span>
+                        </button>
                     </div>
-                    <button
-                        className={"stepper-increment" + (props.value === props.max ? " disabled" : "")}
-                        onClick={props.value < props.max && !props.disabled ? onIncrease : null}
-                        aria-controls={id}
-                        aria-labelledby="increment"
-                    >
-                        <span>&#43;</span>
-                    </button>
+                    <input {...props} ref={ref} id={id} type="number" readOnly={true} className={classnames("stepper-input", props.className)} aria-live="assertive" />
                 </div>
-                <input {...props} id={id} type="number" readOnly={true} className={classnames("stepper-input", props.className)} aria-live="assertive" />
-            </div>
-        </FeedbackIndicator>
-    );
-};
+            </FeedbackIndicator>
+        );
+    }
+);

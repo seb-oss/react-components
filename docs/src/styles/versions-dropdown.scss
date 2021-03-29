@@ -1,0 +1,17 @@
+@import "~@sebgroup/bootstrap/scss/core";
+
+.version-dropdown {
+    &.rc.custom-dropdown {
+        .dropdown-toggle {
+            background: transparent;
+            border: none;
+            padding: 0;
+            font-weight: bold;
+            min-height: unset;
+            color: $black;
+        }
+        &.top-nav .dropdown-toggle {
+            color: $white;
+        }
+    }
+}

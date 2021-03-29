@@ -10,11 +10,13 @@ export type TextLabelProps = JSX.IntrinsicElements["div"] & {
 };
 
 /** A text label is a component to display value with label */
-export const TextLabel: React.FC<TextLabelProps> = React.memo(({ label, value, ...props }: TextLabelProps) => {
-    return (
-        <div className={classnames("text-label", props.className)} {...props}>
-            {label && <label className="custom-label">{label}</label>}
-            <div className="custom-label-value">{value}</div>
-        </div>
-    );
-});
+export const TextLabel: React.FC<TextLabelProps> = React.memo(
+    React.forwardRef(({ label, value, ...props }: TextLabelProps, ref: React.ForwardedRef<HTMLDivElement>) => {
+        return (
+            <div {...props} ref={ref} className={classnames("text-label", props.className)}>
+                {label && <label className="custom-label">{label}</label>}
+                <div className="custom-label-value">{value}</div>
+            </div>
+        );
+    })
+);

@@ -12,36 +12,38 @@ export type AccordionItemProps = JSX.IntrinsicElements["div"] & {
     onToggle?: React.MouseEventHandler<HTMLButtonElement>;
 };
 
-export const AccordionItem: React.FC<AccordionItemProps> = React.memo(({ header, subHeader, onToggle, ...props }: AccordionItemProps) => {
-    const [uniqueId] = React.useState<string>(randomId("accordion-item-"));
+export const AccordionItem: React.FC<AccordionItemProps> = React.memo(
+    React.forwardRef(({ header, subHeader, onToggle, ...props }: AccordionItemProps, ref: React.ForwardedRef<HTMLDivElement>) => {
+        const [uniqueId] = React.useState<string>(randomId("accordion-item-"));
 
-    return (
-        <div className={classnames("rc", "card", { collapsed: !props.defaultChecked }, props.className)} {...props}>
-            <div className="card-header" id={uniqueId + "-header"}>
-                <button
-                    className="btn btn-link"
-                    type="button"
-                    data-toggle="collapse"
-                    aria-expanded={props.defaultChecked}
-                    data-target={`#${uniqueId}`}
-                    aria-controls={uniqueId}
-                    onClick={onToggle}
-                    data-index-number={props["data-index-number"]}
+        return (
+            <div {...props} ref={ref} className={classnames("rc", "card", { collapsed: !props.defaultChecked }, props.className)}>
+                <div className="card-header" id={uniqueId + "-header"}>
+                    <button
+                        className="btn btn-link"
+                        type="button"
+                        data-toggle="collapse"
+                        aria-expanded={props.defaultChecked}
+                        data-target={`#${uniqueId}`}
+                        aria-controls={uniqueId}
+                        onClick={onToggle}
+                        data-index-number={props["data-index-number"]}
+                    >
+                        <h4>{header}</h4>
+                        {subHeader && <h6>{subHeader}</h6>}
+                    </button>
+                </div>
+                <div
+                    id={uniqueId}
+                    className={classnames("collapse", { collapsed: !props.defaultChecked })}
+                    aria-labelledby={uniqueId + "--header"}
+                    data-parent={props["data-parent-id"] ? `#${props["data-parent-id"]}` : null}
                 >
-                    <h4>{header}</h4>
-                    {subHeader && <h6>{subHeader}</h6>}
-                </button>
+                    <Collapse className="card-body" toggle={props.defaultChecked}>
+                        <div className="content">{props.children}</div>
+                    </Collapse>
+                </div>
             </div>
-            <div
-                id={uniqueId}
-                className={classnames("collapse", { collapsed: !props.defaultChecked })}
-                aria-labelledby={uniqueId + "--header"}
-                data-parent={props["data-parent-id"] ? `#${props["data-parent-id"]}` : null}
-            >
-                <Collapse className="card-body" toggle={props.defaultChecked}>
-                    <div className="content">{props.children}</div>
-                </Collapse>
-            </div>
-        </div>
-    );
-});
+        );
+    })
+);
