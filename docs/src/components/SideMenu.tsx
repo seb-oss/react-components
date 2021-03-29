@@ -8,6 +8,7 @@ import { Link } from "gatsby";
 import { urls } from "@configs";
 import comps from "../../static/components-list.json";
 import { Textbox } from "@sebgroup/react-components/Textbox";
+import VersionsDropdown from "./VersionsDropdown";
 import "../styles/sidemenu.scss";
 
 const SIDE_MENU_STORAGE_KEY = "SIDEMENU";
@@ -207,8 +208,8 @@ export const SideMenu: React.FC = React.memo(() => {
                         Issues
                         <ExternalLinkIcon className="align-icon-with-text" />
                     </a>
-                    <a href={urls.v4} className="list-item">
-                        Earlier version?
+                    <a className="list-item">
+                        <VersionsDropdown />
                     </a>
                 </nav>
                 <hr />
