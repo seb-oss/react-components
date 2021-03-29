@@ -80,16 +80,16 @@ export function useDynamicForm(sections: DynamicFormSection[]): [() => JSX.Eleme
      * @param sectionKey section key
      * @param itemKey section key
      */
-    const shouldRender: ShouldRenderFormItem = useMemo<ShouldRenderFormItem>(
-        () => (sectionKey: string, itemKey: string): boolean => {
+    const shouldRender: ShouldRenderFormItem = useCallback<ShouldRenderFormItem>(
+        (sectionKey: string, itemKey: string): boolean => {
             const { rulerKey, condition, controlType }: Partial<DynamicFormItem> =
                 sections?.find((item: DynamicFormSection) => item.key === sectionKey)?.items?.find((item: DynamicFormItem) => item.key === itemKey) || {};
             if (controlType === "Hidden") {
                 // Marked as hidden, don't render
                 return false;
             }
-            if (rulerKey) {
-                const rulerState: DynamicFormInternalStateValue = (state[sectionKey] as DynamicFormInternalStateSection)[rulerKey];
+            if (typeof rulerKey === "string" && !!rulerKey.length) {
+                const rulerState: DynamicFormInternalStateValue = !!state[sectionKey] ? (state[sectionKey] as DynamicFormInternalStateSection)[rulerKey] : undefined;
                 if (rulerState === undefined || condition === undefined) {
                     return false;
                 }
