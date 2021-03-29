@@ -15,14 +15,8 @@ export type ButtonProps = JSX.IntrinsicElements["button"] & {
 /** Buttons allow users to take action with a single tap. */
 export const Button: React.FC<ButtonProps> = React.memo(
     React.forwardRef(({ theme = "primary", size, block, ...props }: ButtonProps, ref: React.ForwardedRef<HTMLButtonElement>) => {
-        const [className, setClassName] = React.useState<string>("btn btn-primary");
-
-        React.useEffect(() => {
-            setClassName(classnames("rc", "btn", `btn-${theme}`, { [`btn-${size}`]: size, "btn-block": block }, props.className));
-        }, [size, theme, block, props.className]);
-
         return (
-            <button {...props} ref={ref} className={className}>
+            <button {...props} ref={ref} className={classnames("rc", "btn", `btn-${theme}`, { [`btn-${size}`]: size, "btn-block": block }, props.className)}>
                 {props.children}
             </button>
         );
