@@ -8,6 +8,7 @@ import { Dropdown, getValueOfMultipleSelect } from "../Dropdown";
 import { Datepicker } from "../Datepicker";
 import { Stepper } from "../Stepper";
 import { RadioButton, RadioGroup } from "../RadioButton";
+import { isEmpty } from "@sebgroup/frontend-tools/isEmpty";
 
 type DynamicFormInternalStateValue = string | string[] | DynamicFormOption | DynamicFormOption[] | Date | boolean | number;
 export interface DynamicFormItem {
@@ -89,7 +90,12 @@ export function useDynamicForm(sections: DynamicFormSection[]): [() => JSX.Eleme
                 return false;
             }
             if (typeof rulerKey === "string" && !!rulerKey.length) {
-                const rulerState: DynamicFormInternalStateValue = !!state[sectionKey] ? (state[sectionKey] as DynamicFormInternalStateSection)[rulerKey] : undefined;
+                let rulerState: DynamicFormInternalStateValue;
+
+                if (!isEmpty(state) && !isEmpty(state[sectionKey])) {
+                    rulerState = (state[sectionKey] as DynamicFormInternalStateSection)[rulerKey];
+                }
+
                 if (rulerState === undefined || condition === undefined) {
                     return false;
                 }
