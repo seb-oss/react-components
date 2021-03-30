@@ -43,9 +43,9 @@ const NotificationPage: React.FC = () => {
             items: [
                 { key: "theme", label: "theme", controlType: "Dropdown", options: themes, value: themes[0].value },
                 { key: "persist", label: "persist", value: false, controlType: "Checkbox", description: "Disable timer and persist the notification until dismissed" },
-                { key: "type", label: "type", controlType: "Radio", options: types, inline: true, value: types[0] },
-                { key: "slidePosition", label: "position", controlType: "Radio", options: slidePositions, value: slidePositions[0], rulerKey: "type", condition: types[0] },
-                { key: "barPosition", label: "position", controlType: "Radio", options: barPositions, inline: true, value: barPositions[0], rulerKey: "type", condition: types[1] },
+                { key: "type", label: "type", controlType: "Radio", options: types, inline: true, value: types[0].value },
+                { key: "slidePosition", label: "position", controlType: "Radio", options: slidePositions, value: slidePositions[0].value, rulerKey: "type", condition: types[0].value },
+                { key: "barPosition", label: "position", controlType: "Radio", options: barPositions, inline: true, value: barPositions[0].value, rulerKey: "type", condition: types[1].value },
             ],
         },
     ]);
@@ -58,9 +58,9 @@ const NotificationPage: React.FC = () => {
                     <Button onClick={() => setToggle(!toggle)}>Toggle notification</Button>
                     <Notification
                         toggle={toggle}
-                        type={controls.type?.value}
+                        type={controls.type}
                         theme={controls.theme}
-                        position={controls.type?.value === "slide" ? controls.slidePosition?.value : controls.barPosition?.value}
+                        position={controls.type === "slide" ? controls.slidePosition : controls.barPosition}
                         onDismiss={() => setToggle(false)}
                         persist={controls.persist}
                     >

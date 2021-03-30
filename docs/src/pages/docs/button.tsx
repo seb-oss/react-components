@@ -40,7 +40,7 @@ const ButtonPage: React.FC = () => {
             exampleTheme={controls.theme === "light" ? "dark" : controls.theme === "dark" ? "warning" : null}
             mainFile={importString}
             example={
-                <Button size={controls.size?.value} theme={controls.theme} disabled={controls.disabled} block={controls.block}>
+                <Button size={controls.size} theme={controls.theme} disabled={controls.disabled} block={controls.block}>
                     Click me
                 </Button>
             }

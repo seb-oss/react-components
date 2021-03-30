@@ -31,8 +31,8 @@ const NotificationPage: React.FC = () => {
         {
             key: "controls",
             items: [
-                { key: "size", label: "Size", controlType: "Radio", options: sizses, value: sizses[1], inline: true },
-                { key: "position", label: "Position", controlType: "Radio", options: positions, value: positions[0], inline: true },
+                { key: "size", label: "Size", controlType: "Radio", options: sizses, value: sizses[1].value, inline: true },
+                { key: "position", label: "Position", controlType: "Radio", options: positions, value: positions[0].value, inline: true },
                 { key: "centered", label: "centered", controlType: "Checkbox", value: false },
                 { key: "fullscreen", label: "fullscreen", controlType: "Checkbox", value: false },
                 { key: "trapfocus", label: "trapfocus", controlType: "Checkbox", value: false },
@@ -53,8 +53,8 @@ const NotificationPage: React.FC = () => {
                     <Button onClick={() => setToggle(!toggle)}>Toggle Modal</Button>
                     <Modal
                         toggle={toggle}
-                        position={controls.position?.value}
-                        size={controls.size?.value}
+                        position={controls.position}
+                        size={controls.size}
                         fullscreen={controls.fullscreen}
                         centered={controls.centered}
                         trapFocus={controls.trapfocus}

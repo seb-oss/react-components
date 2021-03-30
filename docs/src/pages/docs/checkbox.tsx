@@ -30,7 +30,17 @@ const CheckboxPage: React.FC = (): React.ReactElement<void> => {
             items: [
                 { key: "inline", label: "inline", controlType: "Checkbox", value: false },
                 { key: "indicator", label: "indicator", controlType: "Checkbox", value: false },
-                { key: "indicatorType", rulerKey: "indicator", condition: true, label: "Indicator type", options: indicators, inline: true, controlType: "Radio", value: indicators[0], indent: true },
+                {
+                    key: "indicatorType",
+                    rulerKey: "indicator",
+                    condition: true,
+                    label: "Indicator type",
+                    options: indicators,
+                    inline: true,
+                    controlType: "Radio",
+                    value: indicators[0].value,
+                    indent: true,
+                },
                 {
                     key: "indicatorGrouping",
                     label: "Indicator choices",
@@ -38,16 +48,16 @@ const CheckboxPage: React.FC = (): React.ReactElement<void> => {
                     rulerKey: "indicator",
                     condition: true,
                     options: indicatorGrouping,
-                    value: indicatorGrouping[0],
+                    value: indicatorGrouping[0].value,
                     indent: true,
                 },
             ],
         },
     ]);
 
-    const isIndividual: boolean = controls.indicatorGrouping?.value === "1";
-    const isGrouped: boolean = controls.indicatorGrouping?.value === "2";
-    const indicator: Indicator = controls.indicator ? { type: controls.indicatorType?.value, message: "Indicator message" } : null;
+    const isIndividual: boolean = controls.indicatorGrouping === "1";
+    const isGrouped: boolean = controls.indicatorGrouping === "2";
+    const indicator: Indicator = controls.indicator ? { type: controls.indicatorType, message: "Indicator message" } : null;
 
     return (
         <Docs

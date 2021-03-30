@@ -21,7 +21,7 @@ const FeedbackIndicatorPage: React.FC = () => {
             items: [
                 { key: "message", value: "Indicator message", label: "Message", placeholder: "Message", controlType: "Text" },
                 { key: "noBorder", value: false, label: "noBorder", controlType: "Checkbox" },
-                { key: "type", value: typeList[0], label: "Type", options: typeList, controlType: "Radio" },
+                { key: "type", value: typeList[0].value, label: "Type", options: typeList, controlType: "Radio" },
             ],
         },
     ]);
@@ -31,7 +31,7 @@ const FeedbackIndicatorPage: React.FC = () => {
             mainFile={importString}
             example={
                 <div className="w-100">
-                    <FeedbackIndicator type={controls.type?.value} message={controls?.message} noBorder={controls.noBorder}>
+                    <FeedbackIndicator type={controls.type} message={controls?.message} noBorder={controls.noBorder}>
                         <Checkbox>A Checkbox</Checkbox>
                         <RadioButton>A Radio button</RadioButton>
                         <div className="px-3 pb-2">Some content 🦾</div>

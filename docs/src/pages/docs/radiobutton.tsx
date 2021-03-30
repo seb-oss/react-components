@@ -47,16 +47,25 @@ const RadioButtonPage: React.FC = () => {
                     rulerKey: "indicator",
                     condition: true,
                     options: indicatorGrouping,
-                    value: indicatorGrouping[0],
+                    value: indicatorGrouping[0].value,
                 },
-                { key: "indicatorType", label: "Indicator type", controlType: "Radio", rulerKey: "indicator", condition: true, options: indicators, value: indicators[0], inline: true },
+                {
+                    key: "indicatorType",
+                    label: "Indicator type",
+                    controlType: "Radio",
+                    rulerKey: "indicator",
+                    condition: true,
+                    options: indicators,
+                    value: indicators[0].value,
+                    inline: true,
+                },
             ],
         },
     ]);
 
-    const isIndividual: boolean = controls.indicatorGrouping?.value === "1";
-    const isGrouped: boolean = controls.indicatorGrouping?.value === "2";
-    const indicator: Indicator = controls.indicator ? { type: controls.indicatorType?.value, message: "Indicator message" } : null;
+    const isIndividual: boolean = controls.indicatorGrouping === "1";
+    const isGrouped: boolean = controls.indicatorGrouping === "2";
+    const indicator: Indicator = controls.indicator ? { type: controls.indicatorType, message: "Indicator message" } : null;
 
     return (
         <Docs
