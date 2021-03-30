@@ -8,6 +8,7 @@ import { Dropdown, getValueOfMultipleSelect } from "../Dropdown";
 import { Datepicker } from "../Datepicker";
 import { Stepper } from "../Stepper";
 import { RadioButton, RadioGroup } from "../RadioButton";
+import { isEmpty } from "@sebgroup/frontend-tools/isEmpty";
 
 type DynamicFormInternalStateValue = string | string[] | DynamicFormOption | DynamicFormOption[] | Date | boolean | number;
 export interface DynamicFormItem {
@@ -80,16 +81,21 @@ export function useDynamicForm(sections: DynamicFormSection[]): [() => JSX.Eleme
      * @param sectionKey section key
      * @param itemKey section key
      */
-    const shouldRender: ShouldRenderFormItem = useMemo<ShouldRenderFormItem>(
-        () => (sectionKey: string, itemKey: string): boolean => {
+    const shouldRender: ShouldRenderFormItem = useCallback<ShouldRenderFormItem>(
+        (sectionKey: string, itemKey: string): boolean => {
             const { rulerKey, condition, controlType }: Partial<DynamicFormItem> =
                 sections?.find((item: DynamicFormSection) => item.key === sectionKey)?.items?.find((item: DynamicFormItem) => item.key === itemKey) || {};
             if (controlType === "Hidden") {
                 // Marked as hidden, don't render
                 return false;
             }
-            if (rulerKey) {
-                const rulerState: DynamicFormInternalStateValue = (state[sectionKey] as DynamicFormInternalStateSection)[rulerKey];
+            if (typeof rulerKey === "string" && !!rulerKey.length) {
+                let rulerState: DynamicFormInternalStateValue;
+
+                if (!isEmpty(state) && !isEmpty(state[sectionKey])) {
+                    rulerState = (state[sectionKey] as DynamicFormInternalStateSection)[rulerKey];
+                }
+
                 if (rulerState === undefined || condition === undefined) {
                     return false;
                 }
