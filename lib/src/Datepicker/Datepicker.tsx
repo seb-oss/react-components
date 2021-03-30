@@ -236,13 +236,6 @@ export const Datepicker: React.FunctionComponent<DatepickerProps> = React.forwar
             return false;
         };
 
-        const nativeClassNames = React.useCallback(
-            (value: Date, className: string): string => {
-                return classnames("form-control", "seb-datepicker-native", { "is-invalid": !isValidDate(value) }, className);
-            },
-            [isValidDate]
-        );
-
         const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
             const { value: changeEventValue } = e.target;
             const value: Date = new Date(changeEventValue);
@@ -260,7 +253,7 @@ export const Datepicker: React.FunctionComponent<DatepickerProps> = React.forwar
                                     <input
                                         {...props}
                                         key={unitIndex}
-                                        className={classnames("form-control", "seb-datepicker-custom-day", { "is-invalid": !isValidDate(value) }, className)}
+                                        className={classnames("form-control", "seb-datepicker-custom-day", className)}
                                         type="number"
                                         min="1"
                                         max="31"
@@ -279,7 +272,6 @@ export const Datepicker: React.FunctionComponent<DatepickerProps> = React.forwar
                                         className={classnames(
                                             "custom-select",
                                             "seb-datepicker-custom-month",
-                                            { "is-invalid": !isValidDate(value) },
                                             { "rounded-left": unitIndex === 0 },
                                             { "rounded-right": unitIndex === customPickerOrder.length - 1 },
                                             customPickerSelectProps?.className
@@ -303,7 +295,7 @@ export const Datepicker: React.FunctionComponent<DatepickerProps> = React.forwar
                                     <input
                                         {...props}
                                         key={unitIndex}
-                                        className={classnames("form-control", "seb-datepicker-custom-year", { "is-invalid": !isValidDate(value) }, className)}
+                                        className={classnames("form-control", "seb-datepicker-custom-year", className)}
                                         type="number"
                                         min="1"
                                         placeholder={unitNames.year}
@@ -326,7 +318,7 @@ export const Datepicker: React.FunctionComponent<DatepickerProps> = React.forwar
                     {...props}
                     ref={ref}
                     type="month"
-                    className={nativeClassNames(value, className)}
+                    className={classnames("form-control", "seb-datepicker-native", className)}
                     min={getStringFromDate(min, monthPicker)}
                     max={getStringFromDate(max, monthPicker)}
                     value={isDateInRange(value, min, max) ? getInputRawValue(value, monthPicker) : ""}
@@ -340,7 +332,7 @@ export const Datepicker: React.FunctionComponent<DatepickerProps> = React.forwar
                     {...props}
                     ref={ref}
                     type="date"
-                    className={nativeClassNames(value, className)}
+                    className={classnames("form-control", "seb-datepicker-native", className)}
                     min={getStringFromDate(min, monthPicker)}
                     max={getStringFromDate(max, monthPicker)}
                     value={isDateInRange(value, min, max) ? getInputRawValue(value, monthPicker) : ""}
