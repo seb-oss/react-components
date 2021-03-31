@@ -1,6 +1,6 @@
-import React, { Children } from "react";
+import React from "react";
 import { ElementPosition } from "./placement";
-import { randomId } from "@sebgroup/frontend-tools";
+import { randomId } from "@sebgroup/frontend-tools/randomId";
 import { Overlay } from "./Overlay";
 import classnames from "classnames";
 import "./tooltip.scss";

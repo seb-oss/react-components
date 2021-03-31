@@ -1,10 +1,10 @@
 import React from "react";
 import { createPortal } from "react-dom";
 import classnames from "classnames";
-import { useCombinedRefs } from "../hooks";
+import { useCombinedRefs } from "../hooks/useCombinedRef";
 import { CloseButton } from "../CloseButton";
 import { CustomDropdownItem } from "./CustomDropdownItem";
-import { randomId } from "@sebgroup/frontend-tools";
+import { randomId } from "@sebgroup/frontend-tools/randomId";
 import "./dropdown.scss";
 
 export interface DropdownText {
