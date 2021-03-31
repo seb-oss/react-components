@@ -2,7 +2,7 @@ import React from "react";
 import classnames from "classnames";
 import { ToggleSelectorItemProps } from "./ToggleSelectorItem";
 import { FeedbackIndicator, Indicator } from "../FeedbackIndicator";
-import { randomId } from "@sebgroup/frontend-tools";
+import { randomId } from "@sebgroup/frontend-tools/randomId";
 import "./toggle-selector.scss";
 
 interface ToggleSelectorSingleProps {

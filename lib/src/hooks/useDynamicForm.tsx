@@ -1,4 +1,4 @@
-import React, { useState, ReactNode, useMemo, useCallback } from "react";
+import React, { useState, ReactNode, useCallback } from "react";
 import classnames from "classnames";
 
 import { Checkbox } from "../Checkbox";

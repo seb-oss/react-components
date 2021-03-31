@@ -2,7 +2,7 @@ import React from "react";
 import { act, Simulate } from "react-dom/test-utils";
 import { unmountComponentAtNode, render } from "react-dom";
 import { CarouselNavs, CarouselNavsProps } from "./CarouselNavs";
-import { randomId } from "@sebgroup/frontend-tools";
+import { randomId } from "@sebgroup/frontend-tools/randomId";
 
 describe("Component: Carousel", () => {
     let container: HTMLDivElement = null;

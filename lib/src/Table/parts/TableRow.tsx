@@ -4,7 +4,7 @@ import { Checkbox } from "../../Checkbox";
 import { TableContext } from "../TableContextProvider";
 import { TableHeaderCell, TableHeaderCellProps } from "./TableHeaderCell";
 import { TableCell, TableCellProps } from "./TableCell";
-import { randomId } from "@sebgroup/frontend-tools";
+import { randomId } from "@sebgroup/frontend-tools/randomId";
 
 export type TableRowProps<T = any> = JSX.IntrinsicElements["tr"] & {
     checked?: boolean;
