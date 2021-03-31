@@ -38,7 +38,9 @@ const ToggleSelectorPage: React.FC = (): React.ReactElement<void> => {
         },
     ]);
 
-    const indicator: Indicator = { type: controls.indicatorType?.value, message: "Indicator Message" };
+    const indicator: Indicator = React.useMemo(() => {
+        return controls.indicator ? { type: controls.indicatorType, message: "Indicator message" } : null;
+    }, [controls.indicator, controls.indicatorType]);
 
     return (
         <Docs

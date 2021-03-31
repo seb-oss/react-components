@@ -32,7 +32,7 @@ const ButtonGroupPage: React.FC = (): React.ReactElement<void> => {
         <Docs
             mainFile={importString}
             example={
-                <ButtonGroup size={controls.size?.value} vertical={controls.vertical}>
+                <ButtonGroup size={controls.size} vertical={controls.vertical}>
                     <Button>Add</Button>
                     <Button>Edit</Button>
                     <Button>Delete</Button>

@@ -31,12 +31,24 @@ const StepTrackerPage: React.FC = React.memo(() => {
                 { key: "max", value: 10, min: 0, max: 100, label: "Max", controlType: "Stepper" },
                 { key: "disabled", label: "disabled", controlType: "Checkbox" },
                 { key: "indicator", label: "indicator", controlType: "Checkbox" },
-                { key: "indicatorType", rulerKey: "indicator", condition: true, label: "Indicator type", options: indicators, inline: true, controlType: "Radio", value: indicators[0], indent: true },
+                {
+                    key: "indicatorType",
+                    rulerKey: "indicator",
+                    condition: true,
+                    label: "Indicator type",
+                    options: indicators,
+                    inline: true,
+                    controlType: "Radio",
+                    value: indicators[0].value,
+                    indent: true,
+                },
             ],
         },
     ]);
 
-    const indicator: Indicator = controls.indicator ? { type: controls.indicatorType?.value, message: "Indicator message" } : null;
+    const indicator: Indicator = React.useMemo(() => {
+        return controls.indicator ? { type: controls.indicatorType, message: "Indicator message" } : null;
+    }, [controls.indicator, controls.indicatorType]);
 
     return (
         <Docs

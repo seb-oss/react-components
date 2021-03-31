@@ -31,7 +31,7 @@ const CarouselPage: React.FC = (): React.ReactElement<void> => {
                 { key: "infinite", label: "infinite", controlType: "Checkbox", value: false },
                 { key: "autoplay", label: "autoplay", controlType: "Checkbox", value: false },
                 { key: "showIndicators", label: "showIndicators", controlType: "Checkbox" },
-                { key: "transitionStyle", label: "transitionStyle", controlType: "Radio", inline: true, options: transitionStyles, value: transitionStyles[0] },
+                { key: "transitionStyle", label: "transitionStyle", controlType: "Radio", inline: true, options: transitionStyles, value: transitionStyles[0].value },
             ],
         },
     ]);
@@ -47,7 +47,7 @@ const CarouselPage: React.FC = (): React.ReactElement<void> => {
                         showIndicators={controls.showIndicators}
                         autoplay={controls.autoplay}
                         infinite={controls.infinite}
-                        transitionStyle={controls.transitionStyle?.value}
+                        transitionStyle={controls.transitionStyle}
                     >
                         {images.map((image, i) => (
                             <CarouselItem key={i}>

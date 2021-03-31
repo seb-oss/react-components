@@ -43,7 +43,7 @@ const PaginationPage: React.FC = (): React.ReactElement<void> => {
         {
             key: "controls",
             items: [
-                { key: "size", label: "Size", value: PaginationSizes[1], options: PaginationSizes, controlType: "Radio" },
+                { key: "size", label: "Size", value: PaginationSizes[1].value, options: PaginationSizes, controlType: "Radio" },
                 { key: "offset", min: 1, max: 10, value: 5, label: "Offset", controlType: "Stepper" },
                 { key: "useDotNav", label: "Use dot navigation", value: false, controlType: "Checkbox" },
                 { key: "showFirstAndLast", label: "Show first and last buttons", description: "Show buttons for the first and last page when available.", value: false, controlType: "Checkbox" },
@@ -68,7 +68,7 @@ const PaginationPage: React.FC = (): React.ReactElement<void> => {
                         value={page}
                         onPageChange={setPage}
                         offset={controls.offset}
-                        size={controls.size.value}
+                        size={controls.size}
                         useDotNav={controls.useDotNav}
                         showFirstAndLast={controls.showFirstAndLast}
                         navs={controls.useCustomNavs ? customNavs : null}
