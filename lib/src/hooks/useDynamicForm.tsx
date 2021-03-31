@@ -1,10 +1,10 @@
-import React, { useState, ReactNode, useMemo, useCallback } from "react";
+import React, { useState, ReactNode, useCallback } from "react";
 import classnames from "classnames";
 
 import { Checkbox } from "../Checkbox";
 import { Textbox } from "../Textbox";
 import { Textarea } from "../Textarea";
-import { Dropdown, getValueOfMultipleSelect } from "../Dropdown";
+import { Dropdown, getValueOfMultipleSelect } from "../Dropdown/Dropdown";
 import { Datepicker } from "../Datepicker";
 import { Stepper } from "../Stepper";
 import { RadioButton, RadioGroup } from "../RadioButton";

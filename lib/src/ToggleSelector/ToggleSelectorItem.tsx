@@ -1,6 +1,6 @@
 import React from "react";
 import classnames from "classnames";
-import { randomId } from "@sebgroup/frontend-tools";
+import { randomId } from "@sebgroup/frontend-tools/randomId";
 import "./toggle-selector-item.scss";
 
 export type ToggleSelectorItemProps = JSX.IntrinsicElements["input"] & {

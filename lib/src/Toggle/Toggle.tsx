@@ -1,5 +1,5 @@
 import React from "react";
-import { randomId } from "@sebgroup/frontend-tools";
+import { randomId } from "@sebgroup/frontend-tools/randomId";
 import classnames from "classnames";
 import "./toggle.scss";
 
