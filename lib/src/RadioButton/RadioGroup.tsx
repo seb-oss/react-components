@@ -16,9 +16,9 @@ export type RadioGroupProps<T = React.ReactText> = JSX.IntrinsicElements["div"] 
     onChange?: React.ChangeEventHandler<HTMLInputElement>;
 };
 /** A radio button allows a user to select a single item from a predefined list of options. Radio buttons are common to use in forms, i.e when you apply for a loan and need to enter "Yes" or "No". */
-export const RadioGroup: React.FC<RadioGroupProps> = ({ name, indicator, disabled, value, onChange, ...props }: RadioGroupProps) => (
+export const RadioGroup: React.FC<RadioGroupProps> = React.forwardRef(({ name, indicator, disabled, value, onChange, ...props }: RadioGroupProps, ref: React.ForwardedRef<HTMLDivElement>) => (
     <FeedbackIndicator {...indicator}>
-        <div {...props} className={classnames("radio-group", props.className)}>
+        <div {...props} ref={ref} className={classnames("radio-group", props.className)}>
             {React.Children.map(props.children, (Child: React.ReactElement<RadioButtonProps>) =>
                 React.isValidElement<React.FC<RadioButtonProps>>(Child)
                     ? React.cloneElement<any>(Child, {
@@ -30,4 +30,4 @@ export const RadioGroup: React.FC<RadioGroupProps> = ({ name, indicator, disable
             )}
         </div>
     </FeedbackIndicator>
-);
+));

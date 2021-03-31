@@ -24,7 +24,7 @@ const ImagePage: React.FC = (): React.ReactElement<void> => {
                     description: "The image can be rendered as a native img tag or div tag. Each has pros and cons.",
                     controlType: "Radio",
                     options: imgTypes,
-                    value: imgTypes[0],
+                    value: imgTypes[0].value,
                     inline: true,
                 },
                 {
@@ -59,7 +59,7 @@ const ImagePage: React.FC = (): React.ReactElement<void> => {
                 <div className="w-100 h-100">
                     <Img
                         src={image}
-                        type={controls.imgType?.value}
+                        type={controls.imgType}
                         width={controls.width}
                         height={controls.height}
                         rounded={controls.rounded}

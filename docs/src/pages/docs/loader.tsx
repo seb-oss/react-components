@@ -28,8 +28,8 @@ const LoaderPage: React.FC = (): React.ReactElement<void> => {
             key: "controls",
             items: [
                 { key: "size", label: "size", options: sizes, controlType: "Radio", inline: true },
-                { key: "type", label: "type", options: types, controlType: "Radio", value: types[0], inline: true },
-                { key: "display", label: "Display types", options: displayTypes, controlType: "Radio", inline: true, value: displayTypes[0] },
+                { key: "type", label: "type", options: types, controlType: "Radio", value: types[0].value, inline: true },
+                { key: "display", label: "Display types", options: displayTypes, controlType: "Radio", inline: true, value: displayTypes[0].value },
                 { key: "backdrop", label: "backdrop", controlType: "Checkbox", value: false },
                 { key: "children", label: "Render children to be displayed under the loader", controlType: "Checkbox", value: false },
             ],
@@ -41,16 +41,16 @@ const LoaderPage: React.FC = (): React.ReactElement<void> => {
             mainFile={importString}
             example={
                 <Loader
-                    size={controls.size?.value}
-                    type={controls.type?.value}
+                    size={controls.size}
+                    type={controls.type}
                     backdrop={controls.backdrop}
-                    fullscreen={controls.display?.value === "fullscreen" && controls}
-                    cover={controls.display?.value === "cover"}
+                    fullscreen={controls.display === "fullscreen" && controls}
+                    cover={controls.display === "cover"}
                     onClick={() => {
-                        controls.display?.value === "fullscreen" &&
+                        controls.display === "fullscreen" &&
                             setState((prevState) => {
                                 return {
-                                    controls: { ...prevState.controls, display: displayTypes[0] },
+                                    controls: { ...prevState.controls, display: displayTypes[0].value },
                                 };
                             });
                     }}

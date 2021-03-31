@@ -6,12 +6,14 @@ export type PageProps = JSX.IntrinsicElements["li"] & {
     href?: string;
 };
 
-export const Page: React.FC<PageProps> = React.memo(({ href, ...props }: PageProps) => {
-    return (
-        <li {...props} className={classnames("page-item", { active: props["data-active"], disabled: props["data-disabled"] }, props.className)}>
-            <a className="page-link" href={href || "#"} onClick={(e) => e.preventDefault()} aria-disabled={props["data-disabled"]}>
-                {props.children}
-            </a>
-        </li>
-    );
-});
+export const Page: React.FC<PageProps> = React.memo(
+    React.forwardRef(({ href, ...props }: PageProps, ref: React.ForwardedRef<HTMLLIElement>) => {
+        return (
+            <li {...props} ref={ref} className={classnames("page-item", { active: props["data-active"], disabled: props["data-disabled"] }, props.className)}>
+                <a className="page-link" href={href || "#"} onClick={(e) => e.preventDefault()} aria-disabled={props["data-disabled"]}>
+                    {props.children}
+                </a>
+            </li>
+        );
+    })
+);

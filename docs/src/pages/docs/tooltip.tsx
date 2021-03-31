@@ -112,7 +112,7 @@ const TooltipPage: React.FC = () => {
                 code={code}
                 controls={renderForm()}
             />
-            <Notification toggle={notificationToggle} type="slide-in" dismissTimeout={3000} onDismiss={() => setNotifcationToggle(false)}>
+            <Notification toggle={notificationToggle} type="slide" dismissTimeout={3000} onDismiss={() => setNotifcationToggle(false)}>
                 <div>Tooltip visibility changed!</div>
             </Notification>
         </>

@@ -9,7 +9,7 @@ import "./close-button.scss";
  */
 
 export const CloseButton: React.FC<JSX.IntrinsicElements["button"]> = React.memo(
-    React.forwardRef((props: JSX.IntrinsicElements["button"], ref) => {
+    React.forwardRef((props: JSX.IntrinsicElements["button"], ref: React.ForwardedRef<HTMLButtonElement>) => {
         return <button ref={ref} {...props} className={classnames("rc close-btn", props.className)} />;
     })
 );

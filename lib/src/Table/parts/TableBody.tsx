@@ -3,7 +3,7 @@ import { TableRowProps } from "./TableRow";
 
 export type TableBodyProps = JSX.IntrinsicElements["tbody"];
 
-const TableBody: React.FC<TableBodyProps> = ({ ...props }: TableBodyProps) => {
+const TableBody: React.FC<TableBodyProps> = React.forwardRef(({ ...props }: TableBodyProps, ref: React.ForwardedRef<HTMLTableSectionElement>) => {
     let parentKey: string;
 
     /**
@@ -20,7 +20,7 @@ const TableBody: React.FC<TableBodyProps> = ({ ...props }: TableBodyProps) => {
     }, []);
 
     return (
-        <tbody {...props}>
+        <tbody {...props} ref={ref}>
             {React.Children.map(props.children, (Child: React.ReactElement<any>, i: number) => {
                 if (Child?.type === React.Fragment) {
                     return React.cloneElement<any>(Child, {
@@ -32,7 +32,7 @@ const TableBody: React.FC<TableBodyProps> = ({ ...props }: TableBodyProps) => {
             })}
         </tbody>
     );
-};
+});
 
 TableBody.displayName = "TableBody";
 

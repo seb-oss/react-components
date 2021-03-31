@@ -16,37 +16,39 @@ export type AccordionProps = JSX.IntrinsicElements["div"] & {
 };
 
 /** Accordions show and hide information that is not necessary at all time with one click. */
-export const Accordion: React.FC<AccordionProps> = React.memo(({ alternative, onToggle, inverted, ...props }: AccordionProps) => {
-    const [active, setActive] = React.useState<number>(props.defaultValue);
-    const [id, setId] = React.useState<string>(props.id);
+export const Accordion: React.FC<AccordionProps> = React.memo(
+    React.forwardRef(({ alternative, onToggle, inverted, ...props }: AccordionProps, ref: React.ForwardedRef<HTMLDivElement>) => {
+        const [active, setActive] = React.useState<number>(props.defaultValue);
+        const [id, setId] = React.useState<string>(props.id);
 
-    /** Sets custom id if the user din't pass any */
-    React.useEffect(() => setId(props.id || randomId("accordion-")), [props.id]);
-    React.useEffect(() => {
-        typeof props.defaultValue === "number" && setActive(props.defaultValue);
-    }, [props.defaultValue]);
+        /** Sets custom id if the user din't pass any */
+        React.useEffect(() => setId(props.id || randomId("accordion-")), [props.id]);
+        React.useEffect(() => {
+            typeof props.defaultValue === "number" && setActive(props.defaultValue);
+        }, [props.defaultValue]);
 
-    /**
-     * Handles accordion item click event
-     * @param {React.MouseEvent<HTMLButtonElement>} e MouseEvent
-     */
-    const onToggleInner: React.MouseEventHandler<HTMLButtonElement> = React.useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
-        const index: number = Number(e.currentTarget.dataset.indexNumber);
-        !isNaN(index) && setActive((val: number) => (val === index ? -1 : index));
-    }, []);
+        /**
+         * Handles accordion item click event
+         * @param {React.MouseEvent<HTMLButtonElement>} e MouseEvent
+         */
+        const onToggleInner: React.MouseEventHandler<HTMLButtonElement> = React.useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
+            const index: number = Number(e.currentTarget.dataset.indexNumber);
+            !isNaN(index) && setActive((val: number) => (val === index ? -1 : index));
+        }, []);
 
-    return (
-        <div {...props} className={classnames(["rc", "accordion", { alternative }, { inverted }, props.className])} id={id}>
-            {React.Children.map(props.children, (Child: React.ReactElement<AccordionItemProps>, i: number) => {
-                return React.isValidElement<React.FC<AccordionItemProps>>(Child)
-                    ? React.cloneElement<any>(Child, {
-                          onToggle: onToggle || onToggleInner,
-                          defaultChecked: typeof active !== "number" ? Child.props.defaultChecked : active === i,
-                          "data-parent-id": id,
-                          "data-index-number": i,
-                      })
-                    : Child;
-            })}
-        </div>
-    );
-});
+        return (
+            <div {...props} ref={ref} className={classnames(["rc", "accordion", { alternative }, { inverted }, props.className])} id={id}>
+                {React.Children.map(props.children, (Child: React.ReactElement<AccordionItemProps>, i: number) => {
+                    return React.isValidElement<React.FC<AccordionItemProps>>(Child)
+                        ? React.cloneElement<any>(Child, {
+                              onToggle: onToggle || onToggleInner,
+                              defaultChecked: typeof active !== "number" ? Child.props.defaultChecked : active === i,
+                              "data-parent-id": id,
+                              "data-index-number": i,
+                          })
+                        : Child;
+                })}
+            </div>
+        );
+    })
+);

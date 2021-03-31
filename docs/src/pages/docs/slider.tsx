@@ -37,7 +37,17 @@ const SliderPage: React.FC = (): React.ReactElement<void> => {
                 { key: "alwaysShowTooltip", label: "alwaysShowTooltip", controlType: "Checkbox", value: false },
                 { key: "disabled", label: "disabled", controlType: "Checkbox", value: false },
                 { key: "indicator", label: "indicator", controlType: "Checkbox", value: false },
-                { key: "indicatorType", label: "Indicator type", controlType: "Radio", rulerKey: "indicator", condition: true, options: indicators, value: indicators[0], inline: true, indent: true },
+                {
+                    key: "indicatorType",
+                    label: "Indicator type",
+                    controlType: "Radio",
+                    rulerKey: "indicator",
+                    condition: true,
+                    options: indicators,
+                    value: indicators[0].value,
+                    inline: true,
+                    indent: true,
+                },
                 { key: "labels", label: "labels", controlType: "Checkbox", value: false, description: "Pass a list of positions and labels to be mapped" },
                 { key: "showTicks", label: "showTicks", controlType: "Checkbox", value: false, description: "Show ticks for the lables", rulerKey: "labels", condition: true, indent: true },
             ],
@@ -52,7 +62,7 @@ const SliderPage: React.FC = (): React.ReactElement<void> => {
         { position: controls.max, label: controls.max },
     ];
 
-    const indicator: Indicator = controls.indicator ? { type: controls.indicatorType?.value, message: "Indicator message" } : null;
+    const indicator: Indicator = controls.indicator ? { type: controls.indicatorType, message: "Indicator message" } : null;
 
     return (
         <Docs

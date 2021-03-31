@@ -8,26 +8,26 @@ import { Dropdown, getValueOfMultipleSelect } from "../Dropdown";
 import { Datepicker } from "../Datepicker";
 import { Stepper } from "../Stepper";
 import { RadioButton, RadioGroup } from "../RadioButton";
+import { isEmpty } from "@sebgroup/frontend-tools/isEmpty";
 
 type DynamicFormInternalStateValue = string | string[] | DynamicFormOption | DynamicFormOption[] | Date | boolean | number;
 export interface DynamicFormItem {
     key: string;
+    controlType: DynamicFormType;
     value?: DynamicFormInternalStateValue;
     label?: string;
     description?: string;
-    required?: boolean;
     multi?: boolean;
     min?: any;
     max?: any;
     order?: number;
     placeholder?: string;
     options?: Array<DynamicFormOption>;
+    inline?: boolean;
+    indent?: boolean;
+    valueType?: "string" | "number";
     rulerKey?: string;
     condition?: DynamicFormInternalStateValue;
-    controlType?: DynamicFormType;
-    inline?: boolean;
-    valueType?: "string" | "number";
-    indent?: boolean;
 }
 
 export type DynamicFormType = "Hidden" | "Text" | "Textarea" | "Checkbox" | "Dropdown" | "Datepicker" | "Radio" | "Option" | "ErrorLabel" | "Stepper";
@@ -81,16 +81,21 @@ export function useDynamicForm(sections: DynamicFormSection[]): [() => JSX.Eleme
      * @param sectionKey section key
      * @param itemKey section key
      */
-    const shouldRender: ShouldRenderFormItem = useMemo<ShouldRenderFormItem>(
-        () => (sectionKey: string, itemKey: string): boolean => {
+    const shouldRender: ShouldRenderFormItem = useCallback<ShouldRenderFormItem>(
+        (sectionKey: string, itemKey: string): boolean => {
             const { rulerKey, condition, controlType }: Partial<DynamicFormItem> =
                 sections?.find((item: DynamicFormSection) => item.key === sectionKey)?.items?.find((item: DynamicFormItem) => item.key === itemKey) || {};
             if (controlType === "Hidden") {
                 // Marked as hidden, don't render
                 return false;
             }
-            if (rulerKey) {
-                const rulerState: DynamicFormInternalStateValue = (state[sectionKey] as DynamicFormInternalStateSection)[rulerKey];
+            if (typeof rulerKey === "string" && !!rulerKey.length) {
+                let rulerState: DynamicFormInternalStateValue;
+
+                if (!isEmpty(state) && !isEmpty(state[sectionKey])) {
+                    rulerState = (state[sectionKey] as DynamicFormInternalStateSection)[rulerKey];
+                }
+
                 if (rulerState === undefined || condition === undefined) {
                     return false;
                 }
@@ -158,7 +163,7 @@ export function useDynamicForm(sections: DynamicFormSection[]): [() => JSX.Eleme
                     const targetValue: string = (e as React.ChangeEvent<HTMLInputElement>).target.value;
                     const targetOption: DynamicFormOption | undefined = item.options?.find((o) => o.value === targetValue);
                     if (targetOption) {
-                        newValue = targetOption;
+                        newValue = targetOption.value;
                     }
                     break;
                 }
@@ -251,13 +256,15 @@ const DynamicFormItemComponent: React.FC<{
 
     switch (controlType) {
         case "Textarea": {
-            formItem = <Textarea {...commonProps} value={(props.state as string) || ""} />;
+            // TODO: Map min and max and minLength and Maxlength to Textarea and Text?
+            // TODO: Add description just like for Textbox?
+            formItem = <Textarea {...commonProps} value={(props.state as string) || ""} placeholder={props.item?.placeholder} />;
             break;
         }
         case "Text": {
             formItem = (
                 <div className={props.item?.indent ? "indent pl-3 pt-2" : ""}>
-                    <Textbox {...commonProps} type={props.item.valueType || "text"} value={(props.state as string) || ""} />
+                    <Textbox {...commonProps} type={props.item.valueType || "text"} value={(props.state as string) || ""} placeholder={props.item?.placeholder} />
                     {props.item?.description ? (
                         <p>
                             <small>{props.item?.description}</small>
@@ -270,7 +277,7 @@ const DynamicFormItemComponent: React.FC<{
 
         case "Radio": {
             formItem = (
-                <RadioGroup className={classnames({ indent: props.item?.indent })} {...commonProps} name={props.item?.key} value={(props.state as DynamicFormOption)?.value || ""}>
+                <RadioGroup className={classnames({ indent: props.item?.indent })} {...commonProps} name={props.item?.key} value={(props.state as string) || ""}>
                     {props.item?.options?.map((item, i) => (
                         <RadioButton key={i} value={item.value} wrapperProps={{ className: props.item.inline ? "d-inline-block" : null }}>
                             {item.label}
@@ -286,7 +293,7 @@ const DynamicFormItemComponent: React.FC<{
             formItem = (
                 <>
                     {props.item?.label && <label>{props.item?.label}</label>}
-                    <Dropdown name={props.item?.key} placeholder={props.item?.placeholder} onChange={props.onChange as any} multiple={props.item?.multi} value={props.state as string | string[]}>
+                    <Dropdown {...commonProps} placeholder={props.item?.placeholder} multiple={props.item?.multi} value={props.state as string | string[]}>
                         {props.item?.options?.map((option, i) => (
                             <option key={i} value={option.value}>
                                 {option.label}
@@ -309,7 +316,7 @@ const DynamicFormItemComponent: React.FC<{
         }
 
         case "Datepicker": {
-            formItem = <Datepicker {...commonProps} onChange={props.onChange} value={props.state as Date} />;
+            formItem = <Datepicker {...commonProps} min={props.item?.min} max={props.item?.max} value={props.state as Date} />;
             break;
         }
 
