@@ -24,7 +24,6 @@ export interface DynamicFormItem {
     placeholder?: string;
     options?: Array<DynamicFormOption>;
     inline?: boolean;
-    indent?: boolean;
     valueType?: "string" | "number";
     rulerKey?: string;
     condition?: DynamicFormInternalStateValue;
@@ -246,90 +245,124 @@ const DynamicFormItemComponent: React.FC<{
     onChange: OnChangeInput;
 }> = (props) => {
     const controlType: DynamicFormType = props.item?.controlType || "Text";
-    const commonProps: { name: string; label: string; onChange: (...args: any) => void } = {
-        label: props.item?.label || "",
+    const commonProps: {
+        name: string;
+        label: string;
+        value: any;
+        minLength: number;
+        maxLength: number;
+        placeholder: string;
+        onChange: (...args: any[]) => void;
+    } = {
         name: props.item?.key || "",
+        label: props.item?.label || "",
+        value: (props.state as string) || "",
+        minLength: props.item?.min,
+        maxLength: props.item?.max,
+        placeholder: props.item?.placeholder,
         onChange: props.onChange,
     };
 
     let formItem: ReactNode;
 
+    const descriptionItem: ReactNode = props.item?.description ? <p className="text-muted m-0">{props.item?.description}</p> : <></>;
+
     switch (controlType) {
         case "Textarea": {
             // TODO: Map min and max and minLength and Maxlength to Textarea and Text?
-            // TODO: Add description just like for Textbox?
-            formItem = <Textarea {...commonProps} value={(props.state as string) || ""} placeholder={props.item?.placeholder} />;
+            formItem = (
+                <>
+                    <Textarea {...commonProps} />
+                    {descriptionItem}
+                </>
+            );
             break;
         }
         case "Text": {
             formItem = (
-                <div className={props.item?.indent ? "indent pl-3 pt-2" : ""}>
-                    <Textbox {...commonProps} type={props.item.valueType || "text"} value={(props.state as string) || ""} placeholder={props.item?.placeholder} />
-                    {props.item?.description ? (
-                        <p>
-                            <small>{props.item?.description}</small>
-                        </p>
-                    ) : null}
-                </div>
+                <>
+                    <Textbox {...commonProps} type={props.item.valueType || "text"} />
+                    {descriptionItem}
+                </>
             );
             break;
         }
 
         case "Radio": {
+            const { name, onChange, value, label } = commonProps;
             formItem = (
-                <RadioGroup className={classnames({ indent: props.item?.indent })} {...commonProps} name={props.item?.key} value={(props.state as string) || ""}>
-                    {props.item?.options?.map((item, i) => (
-                        <RadioButton key={i} value={item.value} wrapperProps={{ className: props.item.inline ? "d-inline-block" : null }}>
-                            {item.label}
-                            {item.description && <p className="text-muted m-0">{item.description}</p>}
-                        </RadioButton>
-                    ))}
-                </RadioGroup>
+                <>
+                    {label && <label>{label}</label>}
+                    <RadioGroup {...{ name, onChange, value }}>
+                        {props.item?.options?.map((item, i) => (
+                            <RadioButton key={i} value={item.value} wrapperProps={{ className: props.item.inline ? "d-inline-block" : null }}>
+                                {item.label}
+                                {item.description && <p className="text-muted m-0">{item.description}</p>}
+                            </RadioButton>
+                        ))}
+                    </RadioGroup>
+                    {descriptionItem}
+                </>
             );
             break;
         }
 
         case "Dropdown": {
+            const { name, onChange, placeholder, value, label } = commonProps;
+
             formItem = (
                 <>
-                    {props.item?.label && <label>{props.item?.label}</label>}
-                    <Dropdown {...commonProps} placeholder={props.item?.placeholder} multiple={props.item?.multi} value={props.state as string | string[]}>
+                    {label && <label>{label}</label>}
+                    <Dropdown {...{ name, onChange, placeholder, value }} multiple={props.item?.multi}>
                         {props.item?.options?.map((option, i) => (
                             <option key={i} value={option.value}>
                                 {option.label}
                             </option>
                         ))}
                     </Dropdown>
+                    {descriptionItem}
                 </>
             );
             break;
         }
 
         case "Checkbox": {
+            const { name, onChange } = commonProps;
             formItem = (
-                <Checkbox wrapperProps={{ className: classnames({ indent: props.item?.indent }) }} {...commonProps} checked={!!props.state}>
+                <Checkbox {...{ name, onChange }} checked={!!props.state}>
                     {commonProps.label}
-                    {props.item?.description && <p className="text-muted m-0">{props.item?.description}</p>}
+                    {descriptionItem}
                 </Checkbox>
             );
             break;
         }
 
         case "Datepicker": {
-            formItem = <Datepicker {...commonProps} min={props.item?.min} max={props.item?.max} value={props.state as Date} />;
+            const { value, onChange, name, label } = commonProps;
+            formItem = (
+                <>
+                    {label && <label>{label}</label>}
+                    <Datepicker {...{ value, onChange, name }} min={props.item?.min} max={props.item?.max} />
+                    {descriptionItem}
+                </>
+            );
             break;
         }
 
         case "Stepper": {
+            const { value, label } = commonProps;
+
             formItem = (
-                <Stepper
-                    label={props.item?.label}
-                    min={props.item?.min}
-                    max={props.item?.max}
-                    onIncrease={() => props.onChange((props.state as number) + 1)}
-                    onDecrease={() => props.onChange((props.state as number) - 1)}
-                    value={props.state as number}
-                />
+                <>
+                    <Stepper
+                        {...{ value, label }}
+                        min={props.item?.min}
+                        max={props.item?.max}
+                        onIncrease={() => props.onChange((props.state as number) + 1)}
+                        onDecrease={() => props.onChange((props.state as number) - 1)}
+                    />
+                    {descriptionItem}
+                </>
             );
             break;
         }
@@ -356,6 +389,7 @@ const DynamicFormItemComponent: React.FC<{
                             );
                         })}
                     </div>
+                    {descriptionItem}
                 </>
             );
             break;
@@ -365,7 +399,7 @@ const DynamicFormItemComponent: React.FC<{
             formItem = (
                 <div>
                     <label>{props.item?.label}</label>
-                    {" ---- "}
+                    {` ERORR: controlType: ${controlType} not recognised.`}
                 </div>
             );
             break;
