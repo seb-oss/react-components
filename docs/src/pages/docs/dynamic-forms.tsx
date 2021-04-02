@@ -206,6 +206,16 @@ export default ComponentConditionalRender;
                         </TableRow>
                         <TableRow>
                             <TableCell>
+                                <b>controlType</b>
+                            </TableCell>
+                            <TableCell></TableCell>
+                            <TableCell>
+                                <code>"Hidden" | "Text" | "Textarea" | "Checkbox" | "Dropdown" | "Datepicker" | "Radio" | "Option" | "ErrorLabel" | "Stepper"</code>
+                            </TableCell>
+                            <TableCell>Required type of element (or control)</TableCell>
+                        </TableRow>
+                        <TableRow>
+                            <TableCell>
                                 <b>value</b>
                             </TableCell>
                             <TableCell>&#10004;</TableCell>
@@ -316,18 +326,6 @@ export default ComponentConditionalRender;
                             </TableCell>
                             <TableCell>
                                 Shows the <code>Radio</code> options inlined.
-                            </TableCell>
-                        </TableRow>
-                        <TableRow>
-                            <TableCell>
-                                <b>indent</b>
-                            </TableCell>
-                            <TableCell>&#10004;</TableCell>
-                            <TableCell>
-                                <code>boolean</code>
-                            </TableCell>
-                            <TableCell>
-                                Shows the following components as indented: <code>Text</code>,<code>Radio</code>, <code>Checkbox</code>
                             </TableCell>
                         </TableRow>
                         <TableRow>
