@@ -99,11 +99,7 @@ export const Dropdown: React.FC<DropdownProps> = React.forwardRef(({ wrapperProp
     const isAllSelected = (): boolean => {
         return Array.from(selectRef.current.options).every((_, i) => {
             const option = selectRef.current.options.item(i);
-            if (option.disabled) {
-                return true;
-            } else {
-                return option.selected;
-            }
+          return option.disabled ? true : option.selected
         });
     };
 
