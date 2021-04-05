@@ -12,9 +12,9 @@ const code: string = `<ButtonGroup>
 </ButtonGroup>`;
 
 const sizes: Array<DynamicFormOption<ButtonGroupProps["size"]>> = [
-    { key: "sm", label: "sm", value: "sm" },
-    { key: "md", label: "md", value: "md" },
-    { key: "lg", label: "lg", value: "lg" },
+    { key: "sm", label: "sm", value: "sm", additionalProps: { wrapperProps: { className: "d-inline-block" } } },
+    { key: "md", label: "md", value: "md", additionalProps: { wrapperProps: { className: "d-inline-block" } } },
+    { key: "lg", label: "lg", value: "lg", additionalProps: { wrapperProps: { className: "d-inline-block" } } },
 ];
 
 const ButtonGroupPage: React.FC = (): React.ReactElement<void> => {
@@ -22,7 +22,7 @@ const ButtonGroupPage: React.FC = (): React.ReactElement<void> => {
         {
             key: "controls",
             items: [
-                { key: "size", label: "size", options: sizes, controlType: "Radio", inline: true },
+                { key: "size", label: "size", options: sizes, controlType: "Radio" },
                 { key: "vertical", label: "vertical", controlType: "Checkbox" },
             ],
         },

@@ -13,9 +13,9 @@ const checkboxWithDescriptionCode: string = `<Checkbox>
 </Checkbox>`;
 
 const indicators: Array<DynamicFormOption<IndicatorType>> = [
-    { key: "error", label: "danger", value: "danger" },
-    { key: "success", label: "success", value: "success" },
-    { key: "warning", label: "warning", value: "warning" },
+    { key: "error", label: "danger", value: "danger", additionalProps: { wrapperProps: { className: "d-inline-block" } } },
+    { key: "success", label: "success", value: "success", additionalProps: { wrapperProps: { className: "d-inline-block" } } },
+    { key: "warning", label: "warning", value: "warning", additionalProps: { wrapperProps: { className: "d-inline-block" } } },
 ];
 
 const indicatorGrouping: Array<DynamicFormOption> = [
@@ -36,10 +36,9 @@ const CheckboxPage: React.FC = (): React.ReactElement<void> => {
                     condition: true,
                     label: "Indicator type",
                     options: indicators,
-                    inline: true,
                     controlType: "Radio",
                     value: indicators[0].value,
-                    indent: true,
+                    additionalProps: { className: "indent pl-3 pt-2" },
                 },
                 {
                     key: "indicatorGrouping",
@@ -49,7 +48,7 @@ const CheckboxPage: React.FC = (): React.ReactElement<void> => {
                     condition: true,
                     options: indicatorGrouping,
                     value: indicatorGrouping[0].value,
-                    indent: true,
+                    additionalProps: { className: "indent pl-3 pt-2" },
                 },
             ],
         },
@@ -57,7 +56,9 @@ const CheckboxPage: React.FC = (): React.ReactElement<void> => {
 
     const isIndividual: boolean = controls.indicatorGrouping === "1";
     const isGrouped: boolean = controls.indicatorGrouping === "2";
-    const indicator: Indicator = controls.indicator ? { type: controls.indicatorType, message: "Indicator message" } : null;
+    const indicator: Indicator = React.useMemo(() => {
+        return controls.indicator ? { type: controls.indicatorType, message: "Indicator message" } : null;
+    }, [controls.indicator, controls.indicatorType]);
 
     return (
         <Docs
