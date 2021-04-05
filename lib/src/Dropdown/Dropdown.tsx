@@ -79,14 +79,32 @@ export const Dropdown: React.FC<DropdownProps> = React.forwardRef(({ wrapperProp
         [isMobile, props.multiple, onMultipleChange]
     );
 
-    const selectAll = (forceValue?: boolean | React.ChangeEvent<HTMLInputElement>) => {
-        Array.from(selectRef.current.options).forEach((option) => {
-            option.selected = typeof forceValue === "boolean" ? forceValue : !allSelected;
+    const selectAll = React.useCallback(
+        (forceValue?: boolean | React.ChangeEvent<HTMLInputElement>) => {
+            Array.from(selectRef.current.options).forEach((_, i) => {
+                const option = selectRef.current.options.item(i);
+                if (!option.disabled) {
+                    option.selected = typeof forceValue === "boolean" ? forceValue : !allSelected;
+                } else {
+                    option.selected = false;
+                }
+            });
+            typeof forceValue === "boolean" && (selectRef.current.value = "");
+            selectRef.current.dispatchEvent(new Event("change", { bubbles: true }));
+            props.multiple && onMultipleChange && onMultipleChange(getValueOfMultipleSelect(selectRef.current));
+        },
+        [allSelected, props.multiple]
+    );
+
+    const isAllSelected = (): boolean => {
+        return Array.from(selectRef.current.options).every((_, i) => {
+            const option = selectRef.current.options.item(i);
+            if (option.disabled) {
+                return true;
+            } else {
+                return option.selected;
+            }
         });
-        typeof forceValue === "boolean" && (selectRef.current.value = "");
-        selectRef.current.dispatchEvent(new Event("change", { bubbles: true }));
-        setAllSelected(!allSelected);
-        props.multiple && onMultipleChange && onMultipleChange(getValueOfMultipleSelect(selectRef.current));
     };
 
     const toggleMenu = React.useCallback(
@@ -143,6 +161,7 @@ export const Dropdown: React.FC<DropdownProps> = React.forwardRef(({ wrapperProp
                     case "option":
                         return filteredBySearch(Child) ? null : (
                             <CustomDropdownItem
+                                {...Child.props}
                                 multiple={props.multiple}
                                 name={name}
                                 value={Child.props.value}
@@ -159,6 +178,7 @@ export const Dropdown: React.FC<DropdownProps> = React.forwardRef(({ wrapperProp
                             ...React.Children.toArray(Child.props.children).map((groupChild: React.ReactElement<any>) => {
                                 return filteredBySearch(groupChild) ? null : (
                                     <CustomDropdownItem
+                                        {...groupChild.props}
                                         multiple={props.multiple}
                                         name={name}
                                         value={groupChild.props.value}
@@ -179,7 +199,7 @@ export const Dropdown: React.FC<DropdownProps> = React.forwardRef(({ wrapperProp
     };
 
     React.useEffect(() => {
-        !isMobile && props.multiple && setAllSelected(Array.from(selectRef.current.options).every((option) => option.selected));
+        !isMobile && props.multiple && setAllSelected(isAllSelected());
     }, [props.value]);
 
     React.useEffect(() => {
