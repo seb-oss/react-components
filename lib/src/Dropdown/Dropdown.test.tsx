@@ -13,6 +13,9 @@ const testOptions: React.ReactElement[] = [
     <option key={3} value="3">
         Third
     </option>,
+    <option key={4} value="4" disabled>
+        Disabled
+    </option>,
 ];
 
 describe("Component: Dropdown", () => {
@@ -60,10 +63,10 @@ describe("Component: Dropdown", () => {
             render(<Dropdown>{testOptions}</Dropdown>, container);
         });
 
-        // 3 options + first empty option that is injected
-        expect(container.querySelector("select").options).toHaveLength(4);
+        // 4 options + first empty option that is injected
+        expect(container.querySelector("select").options).toHaveLength(5);
         expect(document.body.querySelector(".dropdown-menu")).not.toBeNull();
-        expect(document.body.querySelectorAll(".custom-control")).toHaveLength(3);
+        expect(document.body.querySelectorAll(".custom-control")).toHaveLength(4);
     });
 
     it("Should render grouped options inside", () => {
@@ -77,7 +80,7 @@ describe("Component: Dropdown", () => {
             );
         });
 
-        expect(container.querySelector("select").options).toHaveLength(4);
+        expect(container.querySelector("select").options).toHaveLength(5);
         expect(container.querySelector("select").querySelector("optgroup")).not.toBeNull();
         expect(document.body.querySelector("label.optgroup-label")).not.toBeNull();
         expect(document.body.querySelector("label.optgroup-label").textContent).toEqual(optgroupLabel);
@@ -91,6 +94,27 @@ describe("Component: Dropdown", () => {
         expect(container.querySelector("select").options.item(0).textContent).toEqual(placeholder);
         expect(container.querySelector("button.dropdown-toggle").firstElementChild.tagName.toLowerCase()).toEqual("span");
         expect(container.querySelector("button.dropdown-toggle").firstElementChild.textContent).toEqual(placeholder);
+    });
+
+    it("Should support disabled options", () => {
+        const placeholder: string = "My placeholder";
+        act(() => {
+            render(<Dropdown placeholder={placeholder}>{testOptions}</Dropdown>, container);
+        });
+        expect(container.querySelector("select").options.item(4).disabled).toBeTruthy();
+    });
+
+    it("Should ignore disabled elements when determining if all elements are selected", () => {
+        const placeholder: string = "My placeholder";
+        act(() => {
+            render(
+                <Dropdown multiple value={["1", "2", "3"]} placeholder={placeholder}>
+                    {testOptions}
+                </Dropdown>,
+                container
+            );
+        });
+        expect(document.body.querySelector<HTMLInputElement>(".select-all .custom-control-input").checked).toBeTruthy();
     });
 
     it("Should allow padding a dropdown divider", () => {
@@ -115,7 +139,7 @@ describe("Component: Dropdown", () => {
         const searchField = document.body.querySelector("input[type=search]");
 
         expect(searchField).not.toBeNull();
-        expect(document.body.querySelectorAll(".custom-control")).toHaveLength(3);
+        expect(document.body.querySelectorAll(".custom-control")).toHaveLength(4);
 
         act(() => Simulate.change(searchField, { target: { value: "second" } as any }));
 

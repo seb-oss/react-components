@@ -48,6 +48,8 @@
 
                 &::after {
                     filter: grayscale(1);
+                    transition: none;
+                    transform: none;
                 }
             }
         }
@@ -102,18 +104,24 @@
         padding: 0;
 
         > input {
-            &:checked + label:not(:hover) {
-                background-color: $blue-darker;
-                color: white;
-            }
-
             &[type="radio"] {
                 &:checked + label {
+                    &:not(:hover) {
+                        background-color: $blue-darker;
+                        color: white;
+                    }
                     &::before {
                         content: "\2713";
                         position: absolute;
                         left: 10px;
                     }
+                }
+            }
+
+            &:disabled + label {
+                color: $gray-500;
+                &:hover {
+                    background-color: $gray-300;
                 }
             }
         }
