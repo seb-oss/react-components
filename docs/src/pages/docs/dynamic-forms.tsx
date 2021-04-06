@@ -178,6 +178,26 @@ export default ComponentConditionalRender;
                             </TableCell>
                             <TableCell>The form items that belong to that section.</TableCell>
                         </TableRow>
+                        <TableRow>
+                            <TableCell>
+                                <b>wrappingElement</b>
+                            </TableCell>
+                            <TableCell>&#10004;</TableCell>
+                            <TableCell>
+                                <code>{`"div" | "section" | "none"`}</code>
+                            </TableCell>
+                            <TableCell>The wrapping element (if any) for the form items of that section. Defaut: "none"'.</TableCell>
+                        </TableRow>
+                        <TableRow>
+                            <TableCell>
+                                <b>additionalProps</b>
+                            </TableCell>
+                            <TableCell>&#10004;</TableCell>
+                            <TableCell>
+                                <code>{`{ [k: string]: any; }`}</code>
+                            </TableCell>
+                            <TableCell>Any additional element props to be mapped to the wrappingElement (if one is enabled).</TableCell>
+                        </TableRow>
                     </TableBody>
                 </Table>
 
@@ -212,7 +232,7 @@ export default ComponentConditionalRender;
                             <TableCell>
                                 <code>"Hidden" | "Text" | "Textarea" | "Checkbox" | "Dropdown" | "Datepicker" | "Radio" | "Option" | "ErrorLabel" | "Stepper"</code>
                             </TableCell>
-                            <TableCell>Required type of element (or control)</TableCell>
+                            <TableCell>Required type of element (or control). Default: "Text".</TableCell>
                         </TableRow>
                         <TableRow>
                             <TableCell>
@@ -318,18 +338,6 @@ export default ComponentConditionalRender;
                         </TableRow>
                         <TableRow>
                             <TableCell>
-                                <b>inline</b>
-                            </TableCell>
-                            <TableCell>&#10004;</TableCell>
-                            <TableCell>
-                                <code>boolean</code>
-                            </TableCell>
-                            <TableCell>
-                                Shows the <code>Radio</code> options inlined.
-                            </TableCell>
-                        </TableRow>
-                        <TableRow>
-                            <TableCell>
                                 <b>valueType</b>
                             </TableCell>
                             <TableCell>&#10004;</TableCell>
@@ -364,6 +372,18 @@ export default ComponentConditionalRender;
                             <TableCell>
                                 <b>Conditional rendering:</b> The exact value of the <b>rulerKey</b> element, as the condition for this element to be rendered. The type of value must be the same as
                                 the <b>rulerKey</b> item.
+                            </TableCell>
+                        </TableRow>
+                        <TableRow>
+                            <TableCell>
+                                <b>additionalProps</b>
+                            </TableCell>
+                            <TableCell>&#10004;</TableCell>
+                            <TableCell>
+                                <code>{`{ [k: string]: any; }`}</code>
+                            </TableCell>
+                            <TableCell>
+                                Any additional element props to be mapped to the element. Depends on the <b>controlType</b>. Must be a valid prop for that element.
                             </TableCell>
                         </TableRow>
                     </TableBody>
@@ -404,16 +424,6 @@ export default ComponentConditionalRender;
                         </TableRow>
                         <TableRow>
                             <TableCell>
-                                <b>disabled</b>
-                            </TableCell>
-                            <TableCell>&#10004;</TableCell>
-                            <TableCell>
-                                <code>boolean</code>
-                            </TableCell>
-                            <TableCell>If this option should be displayed as disabled or not (on supporting Components).</TableCell>
-                        </TableRow>
-                        <TableRow>
-                            <TableCell>
                                 <b>label</b>
                             </TableCell>
                             <TableCell>&#10004;</TableCell>
@@ -432,6 +442,18 @@ export default ComponentConditionalRender;
                             </TableCell>
                             <TableCell>
                                 An optional description displayed below the label for the following components: <code>Checkbox</code>, <code>Radio</code>
+                            </TableCell>
+                        </TableRow>
+                        <TableRow>
+                            <TableCell>
+                                <b>additionalProps</b>
+                            </TableCell>
+                            <TableCell>&#10004;</TableCell>
+                            <TableCell>
+                                <code>{`{ [k: string]: any; }`}</code>
+                            </TableCell>
+                            <TableCell>
+                                Any additional element props to be mapped to the element. Depends on the <b>controlType</b>. Must be a valid prop for that element.
                             </TableCell>
                         </TableRow>
                     </TableBody>

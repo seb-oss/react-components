@@ -12,8 +12,8 @@ const code: string = `<Notification toggle={toggle} onDismiss={() => setToggle(f
 </Notification>`;
 
 const types: Array<DynamicFormOption<NotificationProps["type"]>> = [
-    { label: "slide", value: "slide", key: "slide" },
-    { label: "bar", value: "bar", key: "bar" },
+    { label: "slide", value: "slide", key: "slide", additionalProps: { wrapperProps: { className: "d-inline-block" } } },
+    { label: "bar", value: "bar", key: "bar", additionalProps: { wrapperProps: { className: "d-inline-block" } } },
 ];
 const themes: Array<DynamicFormOption<NotificationProps["theme"]>> = [
     { label: "purple", value: "purple", key: "purple" },
@@ -30,8 +30,8 @@ const slidePositions: Array<DynamicFormOption<NotificationProps["position"]>> = 
     { label: "top-right", value: "top-right", key: "top-right" },
 ];
 const barPositions: Array<DynamicFormOption<NotificationProps["position"]>> = [
-    { label: "top", value: "top", key: "top" },
-    { label: "bottom", value: "bottom", key: "bottom" },
+    { label: "top", value: "top", key: "top", additionalProps: { wrapperProps: { className: "d-inline-block" } } },
+    { label: "bottom", value: "bottom", key: "bottom", additionalProps: { wrapperProps: { className: "d-inline-block" } } },
 ];
 
 const NotificationPage: React.FC = () => {
@@ -43,9 +43,9 @@ const NotificationPage: React.FC = () => {
             items: [
                 { key: "theme", label: "theme", controlType: "Dropdown", options: themes, value: themes[0].value },
                 { key: "persist", label: "persist", value: false, controlType: "Checkbox", description: "Disable timer and persist the notification until dismissed" },
-                { key: "type", label: "type", controlType: "Radio", options: types, inline: true, value: types[0].value },
-                { key: "slidePosition", label: "position", controlType: "Radio", options: slidePositions, value: slidePositions[0].value, rulerKey: "type", condition: types[0].value },
-                { key: "barPosition", label: "position", controlType: "Radio", options: barPositions, inline: true, value: barPositions[0].value, rulerKey: "type", condition: types[1].value },
+                { key: "type", label: "type", controlType: "Radio", options: types, value: types[0].value },
+                { key: "slidePosition", label: "position", controlType: "Dropdown", options: slidePositions, value: slidePositions[0].value, rulerKey: "type", condition: types[0].value },
+                { key: "barPosition", label: "position", controlType: "Radio", options: barPositions, value: barPositions[0].value, rulerKey: "type", condition: types[1].value },
             ],
         },
     ]);

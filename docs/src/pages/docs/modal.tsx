@@ -14,14 +14,14 @@ const code: string = `<Modal toggle={toggle}>
 </Modal>`;
 
 const sizses: Array<DynamicFormOption<ModalSize>> = [
-    { label: "sm", value: "sm", key: "sm" },
-    { label: "md", value: "md", key: "md" },
-    { label: "lg", value: "lg", key: "lg" },
+    { key: "sm", label: "sm", value: "sm", additionalProps: { wrapperProps: { className: "d-inline-block" } } },
+    { key: "md", label: "md", value: "md", additionalProps: { wrapperProps: { className: "d-inline-block" } } },
+    { key: "lg", label: "lg", value: "lg", additionalProps: { wrapperProps: { className: "d-inline-block" } } },
 ];
 const positions: Array<DynamicFormOption<ModalPosition>> = [
-    { label: "default", value: "default", key: "default" },
-    { label: "left", value: "left", key: "left" },
-    { label: "right", value: "right", key: "bottom" },
+    { label: "default", value: "default", key: "default", additionalProps: { wrapperProps: { className: "d-inline-block" } } },
+    { label: "left", value: "left", key: "left", additionalProps: { wrapperProps: { className: "d-inline-block" } } },
+    { label: "right", value: "right", key: "bottom", additionalProps: { wrapperProps: { className: "d-inline-block" } } },
 ];
 
 const NotificationPage: React.FC = () => {
@@ -31,8 +31,8 @@ const NotificationPage: React.FC = () => {
         {
             key: "controls",
             items: [
-                { key: "size", label: "Size", controlType: "Radio", options: sizses, value: sizses[1].value, inline: true },
-                { key: "position", label: "Position", controlType: "Radio", options: positions, value: positions[0].value, inline: true },
+                { key: "size", label: "Size", controlType: "Radio", options: sizses, value: sizses[1].value },
+                { key: "position", label: "Position", controlType: "Radio", options: positions, value: positions[0].value },
                 { key: "centered", label: "centered", controlType: "Checkbox", value: false },
                 { key: "fullscreen", label: "fullscreen", controlType: "Checkbox", value: false },
                 { key: "trapfocus", label: "trapfocus", controlType: "Checkbox", value: false },
