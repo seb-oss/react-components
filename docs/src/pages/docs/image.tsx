@@ -9,8 +9,8 @@ const importString: string = require("!raw-loader!@sebgroup/react-components/Ima
 const code: string = `<Img src={imageSrc} />`;
 
 const imgTypes: Array<DynamicFormOption<ImgProps["type"]>> = [
-    { key: "img", value: "img", label: "img" },
-    { key: "div", value: "div", label: "div" },
+    { key: "img", value: "img", label: "img", additionalProps: { wrapperProps: { className: "d-inline-block" } } },
+    { key: "div", value: "div", label: "div", additionalProps: { wrapperProps: { className: "d-inline-block" } } },
 ];
 
 const ImagePage: React.FC = (): React.ReactElement<void> => {
@@ -25,13 +25,12 @@ const ImagePage: React.FC = (): React.ReactElement<void> => {
                     controlType: "Radio",
                     options: imgTypes,
                     value: imgTypes[0].value,
-                    inline: true,
                 },
                 {
                     key: "bgFixed",
                     label: "bgFixed",
                     rulerKey: "imgType",
-                    indent: true,
+                    additionalProps: { className: "indent pl-3 pt-2" },
                     condition: imgTypes[1],
                     description: "Fixing the background allows it to have parallax effect when scrolling. Only available for div image type.",
                     controlType: "Checkbox",
@@ -40,7 +39,7 @@ const ImagePage: React.FC = (): React.ReactElement<void> => {
                     key: "showChildren",
                     label: "Render children inside div image",
                     rulerKey: "imgType",
-                    indent: true,
+                    additionalProps: { className: "indent pl-3 pt-2" },
                     condition: imgTypes[1],
                     description: "One advantage of a div image is that you can render children inside the image",
                     controlType: "Checkbox",

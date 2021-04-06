@@ -8,10 +8,10 @@ import DizzyIcon from "../../../static/icons/emoji-dizzy-fill.svg";
 import SmileUpsideDownIcon from "../../../static/icons/emoji-smile-upside-down-fill.svg";
 import { CodeSnippet } from "@common/CodeSnippet";
 
-const indicatorList: Array<DynamicFormOption<IndicatorType>> = [
-    { label: "Danger", value: "danger", key: "danger" },
-    { label: "Success", value: "success", key: "success" },
-    { label: "Warning", value: "warning", key: "warning" },
+const indicators: Array<DynamicFormOption<IndicatorType>> = [
+    { key: "error", label: "danger", value: "danger", additionalProps: { wrapperProps: { className: "d-inline-block" } } },
+    { key: "success", label: "success", value: "success", additionalProps: { wrapperProps: { className: "d-inline-block" } } },
+    { key: "warning", label: "warning", value: "warning", additionalProps: { wrapperProps: { className: "d-inline-block" } } },
 ];
 
 const importString: string = require("!raw-loader!@sebgroup/react-components/ToggleSelector/ToggleSelector");
@@ -32,7 +32,15 @@ const ToggleSelectorPage: React.FC = (): React.ReactElement<void> => {
                 { key: "multiple", label: "multiple", controlType: "Checkbox", description: "Select multiple items at the same time" },
                 { key: "disabled", label: "disabled", description: "You can disable individual buttons or disable all toggles", controlType: "Checkbox" },
                 { key: "indicator", label: "indicator", controlType: "Checkbox", value: false },
-                { key: "indicatorType", label: "Indicator type", options: indicatorList, controlType: "Radio", inline: true, rulerKey: "indicator", condition: true },
+                {
+                    key: "indicatorType",
+                    label: "Indicator type",
+                    options: indicators,
+                    controlType: "Radio",
+                    rulerKey: "indicator",
+                    condition: true,
+                    additionalProps: { className: "indent pl-3 pt-2" },
+                },
                 { key: "icons", label: "With icons as children", controlType: "Checkbox", description: "Find this example in the notes" },
             ],
         },

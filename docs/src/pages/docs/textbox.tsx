@@ -12,9 +12,9 @@ const defaultPortOption: DynamicFormOption = { label: "None", value: "none", key
 const textOption: DynamicFormOption = { label: "Text", value: "text", key: "text" };
 const iconOption: DynamicFormOption = { label: "Icon", value: "icon", key: "icon" };
 const indicators: Array<DynamicFormOption<IndicatorType>> = [
-    { key: "error", label: "danger", value: "danger" },
-    { key: "success", label: "success", value: "success" },
-    { key: "warning", label: "warning", value: "warning" },
+    { key: "error", label: "danger", value: "danger", additionalProps: { wrapperProps: { className: "d-inline-block" } } },
+    { key: "success", label: "success", value: "success", additionalProps: { wrapperProps: { className: "d-inline-block" } } },
+    { key: "warning", label: "warning", value: "warning", additionalProps: { wrapperProps: { className: "d-inline-block" } } },
 ];
 
 const TextboxPage: React.FC = React.memo(() => {
@@ -34,10 +34,9 @@ const TextboxPage: React.FC = React.memo(() => {
                     condition: true,
                     label: "Indicator type",
                     options: indicators,
-                    inline: true,
                     controlType: "Radio",
                     value: indicators[0].value,
-                    indent: true,
+                    additionalProps: { className: "indent pl-3 pt-2" },
                 },
             ],
         },

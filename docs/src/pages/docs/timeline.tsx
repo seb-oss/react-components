@@ -11,8 +11,8 @@ const code: string = `<Timeline>
 </Timeline>`;
 
 const directionList: Array<DynamicFormOption<TimelineDirection>> = [
-    { label: "Vertical", value: "vertical", key: "vertical" },
-    { label: "Horizontal", value: "horizontal", key: "horizontal" },
+    { label: "Vertical", value: "vertical", key: "vertical", additionalProps: { wrapperProps: { className: "d-inline-block" } } },
+    { label: "Horizontal", value: "horizontal", key: "horizontal", additionalProps: { wrapperProps: { className: "d-inline-block" } } },
 ];
 const contents = [...Array(3)].map(() => loremIpsum({ units: "paragraph" }));
 
@@ -20,7 +20,7 @@ const TimelinePage: React.FC = React.memo(() => {
     const [renderForm, { controls }] = useDynamicForm([
         {
             key: "controls",
-            items: [{ key: "direction", label: "Direction", value: directionList[0].value, options: directionList, controlType: "Radio", inline: true }],
+            items: [{ key: "direction", label: "Direction", value: directionList[0].value, options: directionList, controlType: "Radio" }],
         },
     ]);
 

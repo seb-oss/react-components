@@ -7,9 +7,9 @@ const importString: string = require("!raw-loader!@sebgroup/react-components/But
 const code: string = `<Button>Click me</Button>`;
 
 const buttonSizes: Array<DynamicFormOption<ButtonSize>> = [
-    { key: "sm", label: "sm", value: "sm" },
-    { key: "md", label: "md", value: "md" },
-    { key: "lg", label: "lg", value: "lg" },
+    { key: "sm", label: "sm", value: "sm", additionalProps: { wrapperProps: { className: "d-inline-block" } } },
+    { key: "md", label: "md", value: "md", additionalProps: { wrapperProps: { className: "d-inline-block" } } },
+    { key: "lg", label: "lg", value: "lg", additionalProps: { wrapperProps: { className: "d-inline-block" } } },
 ];
 const buttonThemes: Array<DynamicFormOption<ButtonTheme>> = [
     { key: "primary", label: "primary", value: "primary" },
@@ -27,7 +27,7 @@ const ButtonPage: React.FC = () => {
         {
             key: "controls",
             items: [
-                { key: "size", label: "size", options: buttonSizes, inline: true, controlType: "Radio" },
+                { key: "size", label: "size", options: buttonSizes, controlType: "Radio" },
                 { key: "theme", label: "theme", options: buttonThemes, controlType: "Dropdown", placeholder: "Select theme" },
                 { key: "disabled", label: "disabled", controlType: "Checkbox" },
                 { key: "block", label: "block", description: "Sets the display of the button to block so it can take up the container width", controlType: "Checkbox" },

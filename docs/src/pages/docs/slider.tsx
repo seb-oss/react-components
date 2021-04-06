@@ -16,9 +16,9 @@ const tooltipThemes: Array<DynamicFormOption<SliderTheme>> = [
     { key: "warning", label: "Warning", value: "warning" },
 ];
 const indicators: Array<DynamicFormOption<IndicatorType>> = [
-    { key: "error", label: "danger", value: "danger" },
-    { key: "success", label: "success", value: "success" },
-    { key: "warning", label: "warning", value: "warning" },
+    { key: "error", label: "danger", value: "danger", additionalProps: { wrapperProps: { className: "d-inline-block" } } },
+    { key: "success", label: "success", value: "success", additionalProps: { wrapperProps: { className: "d-inline-block" } } },
+    { key: "warning", label: "warning", value: "warning", additionalProps: { wrapperProps: { className: "d-inline-block" } } },
 ];
 
 const SliderPage: React.FC = (): React.ReactElement<void> => {
@@ -28,8 +28,8 @@ const SliderPage: React.FC = (): React.ReactElement<void> => {
         {
             key: "controls",
             items: [
-                { key: "theme", label: "Theme", options: tooltipThemes, value: "primary", controlType: "Dropdown", inline: true },
-                { key: "tooltipTheme", label: "Tooltip theme", options: tooltipThemes, value: "inverted", controlType: "Dropdown", inline: true },
+                { key: "theme", label: "Theme", options: tooltipThemes, value: "primary", controlType: "Dropdown", additionalProps: { className: "indent pl-3 pt-2" } },
+                { key: "tooltipTheme", label: "Tooltip theme", options: tooltipThemes, value: "inverted", controlType: "Dropdown", additionalProps: { className: "indent pl-3 pt-2" } },
                 { key: "min", label: "Min", controlType: "Text", value: 1, valueType: "number" },
                 { key: "max", label: "Max", controlType: "Text", value: 100, valueType: "number" },
                 { key: "step", label: "Step", controlType: "Text", value: 1, valueType: "number" },
@@ -45,11 +45,19 @@ const SliderPage: React.FC = (): React.ReactElement<void> => {
                     condition: true,
                     options: indicators,
                     value: indicators[0].value,
-                    inline: true,
-                    indent: true,
+                    additionalProps: { className: "indent pl-3 pt-2" },
                 },
                 { key: "labels", label: "labels", controlType: "Checkbox", value: false, description: "Pass a list of positions and labels to be mapped" },
-                { key: "showTicks", label: "showTicks", controlType: "Checkbox", value: false, description: "Show ticks for the lables", rulerKey: "labels", condition: true, indent: true },
+                {
+                    key: "showTicks",
+                    label: "showTicks",
+                    controlType: "Checkbox",
+                    value: false,
+                    description: "Show ticks for the lables",
+                    rulerKey: "labels",
+                    condition: true,
+                    additionalProps: { className: "indent pl-3 pt-2" },
+                },
             ],
         },
     ]);
@@ -62,7 +70,9 @@ const SliderPage: React.FC = (): React.ReactElement<void> => {
         { position: controls.max, label: controls.max },
     ];
 
-    const indicator: Indicator = controls.indicator ? { type: controls.indicatorType, message: "Indicator message" } : null;
+    const indicator: Indicator = React.useMemo(() => {
+        return controls.indicator ? { type: controls.indicatorType, message: "Indicator message" } : null;
+    }, [controls.indicator, controls.indicatorType]);
 
     return (
         <Docs

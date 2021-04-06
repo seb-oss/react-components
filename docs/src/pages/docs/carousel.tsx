@@ -17,8 +17,8 @@ const code: string = `<Carousel>
 </Carousel>`;
 
 const transitionStyles: Array<DynamicFormOption<CarouselProps["transitionStyle"]>> = [
-    { key: "slide", label: "slide", value: "slide" },
-    { key: "fade", label: "fade", value: "fade" },
+    { key: "slide", label: "slide", value: "slide", additionalProps: { wrapperProps: { className: "d-inline-block" } } },
+    { key: "fade", label: "fade", value: "fade", additionalProps: { wrapperProps: { className: "d-inline-block" } } },
 ];
 
 const CarouselPage: React.FC = (): React.ReactElement<void> => {
@@ -31,7 +31,7 @@ const CarouselPage: React.FC = (): React.ReactElement<void> => {
                 { key: "infinite", label: "infinite", controlType: "Checkbox", value: false },
                 { key: "autoplay", label: "autoplay", controlType: "Checkbox", value: false },
                 { key: "showIndicators", label: "showIndicators", controlType: "Checkbox" },
-                { key: "transitionStyle", label: "transitionStyle", controlType: "Radio", inline: true, options: transitionStyles, value: transitionStyles[0].value },
+                { key: "transitionStyle", label: "transitionStyle", controlType: "Radio", options: transitionStyles, value: transitionStyles[0].value },
             ],
         },
     ]);
