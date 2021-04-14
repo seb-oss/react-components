@@ -54,7 +54,7 @@ jobs:
       - name: Setup Node 🏗️
         uses: actions/setup-node@v2
         with:
-          node-version: 14.x
+          node-version: 15.x
 
       - name: Installing dependencies ⏳
         run: npm ci
@@ -90,9 +90,9 @@ jobs:
       - name: Setup Node 🏗️
         uses: actions/setup-node@v2
         with:
-          node-version: 14.x
+          node-version: 15.x
       - name: Installing dependencies ⏳
-        run: npm ci
+        run: npm ci --legacy-peer-deps
       - name: Building docs 🔨
         id: get_doc_folder
         run: |
