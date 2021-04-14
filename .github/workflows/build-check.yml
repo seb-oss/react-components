@@ -16,7 +16,7 @@ jobs:
         with:
           node-version: ${{ matrix.node }}
       - name: Install latest npm
-        run: npm i npm@latest
+        run: npm i npm@7
       - name: Installing dependencies
         run: npm ci
       - name: Testing
