@@ -27,7 +27,7 @@ const LoaderPage: React.FC = (): React.ReactElement<void> => {
         {
             key: "controls",
             items: [
-                { key: "size", label: "size", options: sizes, controlType: "Radio" },
+                { key: "size", label: "size", options: sizes, controlType: "Radio", value: sizes[1].value },
                 { key: "type", label: "type", options: types, controlType: "Radio", value: types[0].value },
                 { key: "display", label: "Display types", options: displayTypes, controlType: "Radio", value: displayTypes[0].value },
                 { key: "backdrop", label: "backdrop", controlType: "Checkbox", value: false },
