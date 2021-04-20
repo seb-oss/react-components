@@ -27,9 +27,9 @@ export const Stepper: React.FC<StepperProps> = React.forwardRef(
         }, [props.id]);
 
         return (
-            <FeedbackIndicator {...indicator} noBorder>
-                <div {...wrapperProps} className={classnames("rc custom-stepper", wrapperProps.className)}>
-                    {label && <label className="custom-label">{label}</label>}
+            <div {...wrapperProps} className={classnames("rc custom-stepper", wrapperProps.className)}>
+                {label && <label className="custom-label">{label}</label>}
+                <FeedbackIndicator {...indicator}>
                     <div className={"stepper-container" + (props.disabled ? " disabled" : "")}>
                         <button
                             className={"stepper-decrement" + (props.value === props.min ? " disabled" : "")}
@@ -51,9 +51,9 @@ export const Stepper: React.FC<StepperProps> = React.forwardRef(
                             <span>&#43;</span>
                         </button>
                     </div>
-                    <input {...props} ref={ref} id={id} type="number" readOnly={true} className={classnames("stepper-input", props.className)} aria-live="assertive" />
-                </div>
-            </FeedbackIndicator>
+                </FeedbackIndicator>
+                <input {...props} ref={ref} id={id} type="number" readOnly={true} className={classnames("stepper-input", props.className)} aria-live="assertive" />
+            </div>
         );
     }
 );
