@@ -90,7 +90,7 @@ const TooltipPage: React.FC = () => {
 
     /** check if key selected */
     const checkSelectedKey = (key: string) => {
-        return controls.checkboxes?.some((item: DynamicFormOption) => item.key === key);
+        return controls.checkboxes?.find((item: string) => item === key);
     };
 
     return (
