@@ -5,6 +5,7 @@ import { Textbox } from "../Textbox";
 import { Textarea } from "../Textarea";
 import { Dropdown, getValueOfMultipleSelect } from "../Dropdown";
 import { Datepicker } from "../Datepicker";
+import { FeedbackIndicator, Indicator } from "../FeedbackIndicator";
 import { Stepper } from "../Stepper";
 import { RadioButton, RadioGroup } from "../RadioButton";
 import { isEmpty } from "@sebgroup/frontend-tools/isEmpty";
@@ -61,12 +62,21 @@ interface DynamicFormInternalStateSection {
 interface DynamicFormInternalState {
     [k: string]: DynamicFormInternalStateSection;
 }
+
+interface DynamicFormErrors {
+    [k: string]: {
+        [k: string]: string;
+    };
+}
+
 type OnChangeFormSection = (section: DynamicFormSection) => OnChangeFormItem;
 type OnChangeFormItem = (item: DynamicFormItem) => OnChangeInput;
 type OnChangeInput = (e: InputChange) => void;
 type ShouldRenderFormItem = (sectionKey: string, itemKey: string) => boolean;
 
-export function useDynamicForm(sections: DynamicFormSection[]): [() => JSX.Element, any, React.Dispatch<React.SetStateAction<DynamicFormInternalState>>] {
+export function useDynamicForm(
+    sections: DynamicFormSection[]
+): [() => JSX.Element, any, React.Dispatch<React.SetStateAction<DynamicFormInternalState>>, React.Dispatch<React.SetStateAction<DynamicFormErrors>>] {
     const initialState: DynamicFormInternalState = {};
     sections?.map((section) => {
         initialState[section?.key] = {};
@@ -130,6 +140,7 @@ export function useDynamicForm(sections: DynamicFormSection[]): [() => JSX.Eleme
         });
     });
     const [state, setState] = useState<DynamicFormInternalState>(initialState);
+    const [errorMessages, setErrorMessages] = useState<DynamicFormErrors>({});
 
     /**
      * SHOULD RENDER CONTROL:
@@ -239,13 +250,16 @@ export function useDynamicForm(sections: DynamicFormSection[]): [() => JSX.Eleme
         },
         [state]
     );
-    const renderForm = useCallback(() => <DynamicFormComponent sections={sections} state={state} onChange={onChange} shouldRender={shouldRender} />, [sections, state, onChange, shouldRender]);
+    const renderForm = useCallback(() => {
+        return <DynamicFormComponent sections={sections} errorMessages={errorMessages} state={state} onChange={onChange} shouldRender={shouldRender} />;
+    }, [sections, state, onChange, shouldRender, errorMessages]);
 
-    return [renderForm, state, setState];
+    return [renderForm, state, setState, setErrorMessages];
 }
 
 const DynamicFormComponent: React.FC<{
     sections: DynamicFormSection[];
+    errorMessages: DynamicFormErrors;
     state: DynamicFormInternalState;
     onChange: OnChangeFormSection;
     shouldRender: ShouldRenderFormItem;
@@ -258,6 +272,7 @@ const DynamicFormComponent: React.FC<{
                     <DynamicFormSectionComponent
                         key={i}
                         section={section}
+                        errors={!isEmpty(props.errorMessages) && !isEmpty(props.errorMessages[section.key]) ? props.errorMessages[section.key] : {}}
                         shouldRender={props.shouldRender}
                         onChange={props.onChange(section)}
                         state={props.state && props.state.hasOwnProperty(section.key) ? props.state[section.key] : null}
@@ -271,6 +286,7 @@ const DynamicFormComponent: React.FC<{
 const DynamicFormSectionComponent: React.FC<{
     section: DynamicFormSection;
     state: DynamicFormInternalStateSection;
+    errors: { [k: string]: string };
     onChange: OnChangeFormItem;
     shouldRender: ShouldRenderFormItem;
 }> = (props) => {
@@ -279,7 +295,15 @@ const DynamicFormSectionComponent: React.FC<{
     const getSections = (): JSX.Element[] =>
         props.section?.items?.map((item, i) => {
             if (props.shouldRender(props.section.key, item.key)) {
-                return <DynamicFormItemComponent key={i} item={item} onChange={props.onChange(item)} state={props.state ? (props.state as DynamicFormInternalStateSection)[item.key] : null} />;
+                return (
+                    <DynamicFormItemComponent
+                        key={i}
+                        item={item}
+                        errorMessage={!isEmpty(props.errors) && !isEmpty(props.errors[item.key]) ? props.errors[item.key] : null}
+                        onChange={props.onChange(item)}
+                        state={props.state ? (props.state as DynamicFormInternalStateSection)[item.key] : null}
+                    />
+                );
             }
         });
 
@@ -297,6 +321,7 @@ const DynamicFormSectionComponent: React.FC<{
 const DynamicFormItemComponent: React.FC<{
     item: DynamicFormItem;
     state: DynamicFormInternalStateValue;
+    errorMessage: string | null;
     onChange: OnChangeInput;
 }> = (props) => {
     const controlType: DynamicFormType = props.item?.controlType || "Text";
@@ -324,11 +349,15 @@ const DynamicFormItemComponent: React.FC<{
 
     const descriptionItem: ReactNode = props.item?.description ? <p className="rc dynamic-form text-muted m-0">{props.item?.description}</p> : <></>;
 
+    const indicator: Indicator = React.useMemo(() => {
+        return props.errorMessage ? { type: "danger", message: props.errorMessage } : null;
+    }, [props.errorMessage]);
+
     switch (controlType) {
         case "Textarea": {
             formItem = (
                 <>
-                    <Textarea {...commonProps} {...additionalProps} />
+                    <Textarea {...commonProps} indicator={indicator} {...additionalProps} />
                     {descriptionItem}
                 </>
             );
@@ -337,7 +366,7 @@ const DynamicFormItemComponent: React.FC<{
         case "Text": {
             formItem = (
                 <>
-                    <Textbox {...commonProps} type={props.item.valueType || "text"} {...additionalProps} />
+                    <Textbox {...commonProps} indicator={indicator} type={props.item.valueType || "text"} {...additionalProps} />
                     {descriptionItem}
                 </>
             );
@@ -350,14 +379,16 @@ const DynamicFormItemComponent: React.FC<{
             formItem = (
                 <>
                     {label && <label>{label}</label>}
-                    <RadioGroup {...{ name, onChange, value }} {...additionalProps}>
-                        {props.item?.options?.map((option: DynamicFormOption, i) => (
-                            <RadioButton key={i} value={option?.value} {...(option?.additionalProps || {})}>
-                                {option?.label}
-                                {option?.description && <p className="text-muted m-0">{option?.description}</p>}
-                            </RadioButton>
-                        ))}
-                    </RadioGroup>
+                    <FeedbackIndicator type={indicator?.type} message={indicator?.message}>
+                        <RadioGroup {...{ name, onChange, value }} {...additionalProps}>
+                            {props.item?.options?.map((option: DynamicFormOption, i) => (
+                                <RadioButton key={i} value={option?.value} {...(option?.additionalProps || {})}>
+                                    {option?.label}
+                                    {option?.description && <p className="text-muted m-0">{option?.description}</p>}
+                                </RadioButton>
+                            ))}
+                        </RadioGroup>
+                    </FeedbackIndicator>
                     {descriptionItem}
                 </>
             );
@@ -370,7 +401,7 @@ const DynamicFormItemComponent: React.FC<{
             formItem = (
                 <>
                     {label && <label>{label}</label>}
-                    <Dropdown {...{ name, onChange, placeholder, value }} multiple={props.item?.multi} {...additionalProps}>
+                    <Dropdown {...{ name, onChange, placeholder, value }} indicator={indicator} multiple={props.item?.multi} {...additionalProps}>
                         {props.item?.options?.map((option: DynamicFormOption, i) => (
                             <option key={i} value={option?.value} {...(option?.additionalProps || {})}>
                                 {option?.label}
@@ -386,7 +417,7 @@ const DynamicFormItemComponent: React.FC<{
         case "Checkbox": {
             const { name, onChange, value } = commonProps;
             formItem = (
-                <Checkbox {...{ name, onChange }} checked={!!value} {...additionalProps}>
+                <Checkbox {...{ name, onChange }} indicator={indicator} checked={!!value} {...additionalProps}>
                     {commonProps.label}
                     {descriptionItem}
                 </Checkbox>
@@ -399,7 +430,9 @@ const DynamicFormItemComponent: React.FC<{
             formItem = (
                 <>
                     {label && <label>{label}</label>}
-                    <Datepicker {...{ value, onChange, name }} min={props.item?.min} max={props.item?.max} {...additionalProps} />
+                    <FeedbackIndicator type={indicator?.type} message={indicator?.message}>
+                        <Datepicker {...{ value, onChange, name }} min={props.item?.min} max={props.item?.max} {...additionalProps} />
+                    </FeedbackIndicator>
                     {descriptionItem}
                 </>
             );
@@ -413,8 +446,9 @@ const DynamicFormItemComponent: React.FC<{
                 <>
                     <Stepper
                         {...{ value, label }}
-                        min={props.item?.min}
-                        max={props.item?.max}
+                        indicator={indicator}
+                        min={props.item?.min || 0}
+                        max={props.item?.max || 100}
                         onIncrease={() => props.onChange(value + 1)}
                         onDecrease={() => props.onChange(value - 1)}
                         {...additionalProps}
@@ -431,25 +465,27 @@ const DynamicFormItemComponent: React.FC<{
             formItem = (
                 <>
                     {label && <label>{label}</label>}
-                    <div className="d-flex flex-wrap" role="group" {...additionalProps}>
-                        {props.item?.options?.map((option: DynamicFormOption, i) => {
-                            const active: boolean = !!(value as string[])?.find((e: string) => option.value === e);
-                            return (
-                                <button
-                                    key={i}
-                                    onClick={props.onChange}
-                                    type="button"
-                                    id={option.key}
-                                    name={props.item?.key}
-                                    className={`btn btn-sm mr-1 mb-1 btn-outline-primary${active ? " active" : ""}`}
-                                    value={option.value}
-                                    {...(option?.additionalProps || {})}
-                                >
-                                    {option?.label}
-                                </button>
-                            );
-                        })}
-                    </div>
+                    <FeedbackIndicator type={indicator?.type} message={indicator?.message}>
+                        <div className="d-flex flex-wrap" role="group" {...additionalProps}>
+                            {props.item?.options?.map((option: DynamicFormOption, i) => {
+                                const active: boolean = !!(value as string[])?.find((e: string) => option.value === e);
+                                return (
+                                    <button
+                                        key={i}
+                                        onClick={props.onChange}
+                                        type="button"
+                                        id={option.key}
+                                        name={props.item?.key}
+                                        className={`btn btn-sm mr-1 mb-1 btn-outline-primary${active ? " active" : ""}`}
+                                        value={option.value}
+                                        {...(option?.additionalProps || {})}
+                                    >
+                                        {option?.label}
+                                    </button>
+                                );
+                            })}
+                        </div>
+                    </FeedbackIndicator>
                     {descriptionItem}
                 </>
             );

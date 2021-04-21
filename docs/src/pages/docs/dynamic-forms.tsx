@@ -4,6 +4,8 @@ import Layout from "@common/Layout";
 import { CodeSnippet } from "@common/CodeSnippet";
 import { useDynamicForm, DynamicFormSection } from "@sebgroup/react-components/hooks";
 import { Table, TableBody, TableCell, TableHeader, TableHeaderCell, TableRow } from "@sebgroup/react-components/Table";
+import { Button } from "@sebgroup/react-components/Button";
+import { isEmpty } from "@sebgroup/frontend-tools";
 
 const DynamicForms: React.FC = React.memo(() => {
     return (
@@ -120,6 +122,67 @@ export default ComponentConditionalRender;
                 </CodeSnippet>
                 <div className="p-3 rounded bg-white">
                     <ComponentConditionalRender />
+                </div>
+
+                <hr />
+
+                <h2 className="pt-3 pb-3">Form errors example</h2>
+                <p>Every form element defined can display an error message based on any validation rules you define yourself. Simply set the errors for that key as shown in the code snippet below.</p>
+                <CodeSnippet language="javascript">
+                    {`
+import { useDynamicForm } from "@sebgroup/react-components/hooks/useDynamicForm";
+
+const FormWithErrors: React.FC = () => {
+    const sections: DynamicFormSection[] = [
+        {
+            key: "section-3-errors",
+            items: [
+                {
+                    key: "normal",
+                    label: "Non mandatory field",
+                    order: 1,
+                    value: false,
+                    controlType: "Checkbox",
+                },
+                {
+                    key: "with-error",
+                    order: 2,
+                    label: "Mandatory field",
+                    controlType: "Text",
+                },
+            ],
+        },
+    ];
+
+    const [renderForm, state, , setErrors] = useDynamicForm(sections);
+
+    const validate = () => {
+        if (!isEmpty(state) && !isEmpty(state["section-3-errors"])) {
+            setErrors((existing) => {
+                return {
+                    ...existing,
+                    "section-3-errors": {
+                        ...existing["section-3-errors"],
+                        "with-error": !state["section-3-errors"]["with-error"] ? "Please fill in this field" : null,
+                    },
+                };
+            });
+        }
+    };
+
+    return (
+        <>
+            <div>{renderForm()}</div>
+            <Button className="mt-3" onClick={validate}>Validate</Button>
+        </>
+    );
+};
+
+export default FormWithErrors;
+                    `}
+                </CodeSnippet>
+                <div className="p-3 rounded bg-white">
+                    <FormWithErrors />
                 </div>
 
                 <hr />
@@ -538,4 +601,52 @@ const ComponentConditionalRender: React.FC = () => {
     const [renderForm, state] = useDynamicForm(sections);
 
     return <div>{renderForm()}</div>;
+};
+
+const FormWithErrors: React.FC = () => {
+    const sections: DynamicFormSection[] = [
+        {
+            key: "section-3-errors",
+            items: [
+                {
+                    key: "normal",
+                    label: "Non mandatory field",
+                    order: 1,
+                    value: false,
+                    controlType: "Checkbox",
+                },
+                {
+                    key: "with-error",
+                    order: 2,
+                    label: "Mandatory field",
+                    controlType: "Text",
+                },
+            ],
+        },
+    ];
+
+    const [renderForm, state, , setErrors] = useDynamicForm(sections);
+
+    const validate = () => {
+        if (!isEmpty(state) && !isEmpty(state["section-3-errors"])) {
+            setErrors((existing) => {
+                return {
+                    ...existing,
+                    "section-3-errors": {
+                        ...existing["section-3-errors"],
+                        "with-error": !state["section-3-errors"]["with-error"] ? "Please fill in this field" : null,
+                    },
+                };
+            });
+        }
+    };
+
+    return (
+        <>
+            <div>{renderForm()}</div>
+            <Button className="mt-3" onClick={validate}>
+                Validate
+            </Button>
+        </>
+    );
 };
