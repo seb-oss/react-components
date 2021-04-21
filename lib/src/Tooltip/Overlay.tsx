@@ -1,4 +1,5 @@
 import React from "react";
+import classnames from "classnames";
 import { createPortal } from "react-dom";
 import { ElementPosition, ElementPlacementWithCoord, OverlayPositionChecker } from "./placement";
 import "./overlay.scss";
@@ -6,6 +7,7 @@ import "./overlay.scss";
 export type OverlayProps = React.PropsWithChildren<{
     disableAutoPosition?: boolean;
     overlayReference: () => HTMLDivElement;
+    className?: string;
     onBlur: (event: React.FocusEvent<HTMLDivElement>) => void;
     show: boolean;
     position?: ElementPosition;
@@ -83,7 +85,7 @@ export const Overlay: React.FC<OverlayProps> = React.forwardRef((props: OverlayP
         ? null
         : createPortal(
               <div
-                  className={`overlay-container${props.show ? " show" : ""} ${placementWithCoords ? placementWithCoords.position : props.position || "top"}`}
+                  className={classnames("overlay-container", props.className, placementWithCoords ? placementWithCoords.position : props.position || "top", { show: props.show })}
                   ref={overlayContentRef}
                   tabIndex={-1}
                   onBlur={props.show ? props.onBlur : null}
