@@ -219,7 +219,7 @@ export default FormWithErrors;
                             <TableCell>
                                 <code>string</code>
                             </TableCell>
-                            <TableCell></TableCell>
+                            <TableCell>The title of the header of the section</TableCell>
                         </TableRow>
                         <TableRow>
                             <TableCell>
@@ -229,7 +229,9 @@ export default FormWithErrors;
                             <TableCell>
                                 <code>number</code>
                             </TableCell>
-                            <TableCell>The order of the section. Any number, lower number will be displayed before.</TableCell>
+                            <TableCell>
+                                Optional order of the section. Any number, lower number will be displayed before. If order is not provided the original order of the array will be used.
+                            </TableCell>
                         </TableRow>
                         <TableRow>
                             <TableCell>
@@ -303,7 +305,7 @@ export default FormWithErrors;
                             </TableCell>
                             <TableCell>&#10004;</TableCell>
                             <TableCell>
-                                <code>{`string | string[] | DynamicFormOption | DynamicFormOption[] | Date | boolean | number`}</code>
+                                <code>{`string | string[] | Date | boolean | number | null`}</code>
                             </TableCell>
                             <TableCell>Optional initial value of the element when it gets created.</TableCell>
                         </TableRow>
@@ -335,9 +337,7 @@ export default FormWithErrors;
                             <TableCell>
                                 <code>string</code>
                             </TableCell>
-                            <TableCell>
-                                This optional property will be applied to the following components: <code>Checkbox</code>, <code>Radio</code>, <code>Text</code>
-                            </TableCell>
+                            <TableCell>An optional description displayed below the form field.</TableCell>
                         </TableRow>
                         <TableRow>
                             <TableCell>
@@ -360,7 +360,12 @@ export default FormWithErrors;
                                 <code>{`number | Date`}</code>
                             </TableCell>
                             <TableCell>
-                                The 'min' property which will applied to the following components: <code>Stepper</code>, <code>Datepicker</code>
+                                <p>
+                                    The 'min' property which will applied to the following components: <code>Stepper</code>, <code>Datepicker</code>
+                                </p>
+                                <p>
+                                    This will also apply the 'minLength' property of <code>Text</code> and <code>TextArea</code>
+                                </p>
                             </TableCell>
                         </TableRow>
                         <TableRow>
@@ -372,7 +377,12 @@ export default FormWithErrors;
                                 <code>{`number | Date`}</code>
                             </TableCell>
                             <TableCell>
-                                The 'max' property which will applied to the following components: <code>Stepper</code>, <code>Datepicker</code>
+                                <p>
+                                    The 'max' property which will applied to the following components: <code>Stepper</code>, <code>Datepicker</code>
+                                </p>
+                                <p>
+                                    This will also apply the 'maxLength' property of <code>Text</code> and <code>TextArea</code>
+                                </p>
                             </TableCell>
                         </TableRow>
                         <TableRow>
@@ -430,7 +440,7 @@ export default FormWithErrors;
                             </TableCell>
                             <TableCell>&#10004;</TableCell>
                             <TableCell>
-                                <code>{`string | string[] | DynamicFormOption | DynamicFormOption[] | Date | boolean | number`}</code>
+                                <code>{`string | string[] | Date | boolean | number | null`}</code>
                             </TableCell>
                             <TableCell>
                                 <b>Conditional rendering:</b> The exact value of the <b>rulerKey</b> element, as the condition for this element to be rendered. The type of value must be the same as
@@ -504,7 +514,7 @@ export default FormWithErrors;
                                 <code>string</code>
                             </TableCell>
                             <TableCell>
-                                An optional description displayed below the label for the following components: <code>Checkbox</code>, <code>Radio</code>
+                                An optional description displayed below the label for the <code>Radio</code> component.
                             </TableCell>
                         </TableRow>
                         <TableRow>

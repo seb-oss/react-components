@@ -46,10 +46,10 @@ const StepTrackerPage: React.FC = React.memo(() => {
                         controlType: "Stepper",
                     },
                     {
-                        label: "Optional configurations",
-                        key: "checkboxes",
-                        controlType: "Option",
-                        options: [{ label: "Use numbers", value: "useNumbers", key: "useNumbers" }],
+                        label: "Use numbers",
+                        key: "useNumbers",
+                        value: false,
+                        controlType: "Checkbox",
                     },
                 ],
             },
@@ -58,11 +58,6 @@ const StepTrackerPage: React.FC = React.memo(() => {
     );
     const [renderForm, form, setForm] = useDynamicForm(fields);
     const code: string = `<StepTracker list={[{ label: "hello" }]} step={0} onClick={null} />`;
-
-    /** check if key selected */
-    const checkSelectedKey = (key: string) => {
-        return form.controls.checkboxes?.some((item: DynamicFormOption) => item.key === key);
-    };
 
     React.useEffect(() => {
         setValue((form.controls as any)?.step);
@@ -89,7 +84,7 @@ const StepTrackerPage: React.FC = React.memo(() => {
                     onClick={setValue}
                     orientation={(form.controls as any)?.orientation}
                     labelPosition={(form.controls as any)?.direction}
-                    useNumbers={checkSelectedKey("useNumbers")}
+                    useNumbers={(form.controls as any)?.useNumbers}
                 >
                     {stepList.map((item, i) => (
                         <StepLabel label={item.label} key={i} />

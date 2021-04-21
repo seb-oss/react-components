@@ -11,7 +11,7 @@ import { RadioButton, RadioGroup } from "../RadioButton";
 import { isEmpty } from "@sebgroup/frontend-tools/isEmpty";
 import { isValidDate } from "@sebgroup/frontend-tools/isValidDate";
 
-type DynamicFormInternalStateValue = string | string[] | DynamicFormOption | DynamicFormOption[] | Date | boolean | number;
+type DynamicFormInternalStateValue = string | string[] | Date | boolean | number | null;
 export interface DynamicFormItem {
     key: string;
     controlType: DynamicFormType;
@@ -174,21 +174,13 @@ export function useDynamicForm(
                         if (conditionItem) {
                             if (typeof rulerState === "object" && Array.isArray(rulerState)) {
                                 for (const rulerValueItem of rulerState) {
-                                    if (rulerValueItem && typeof rulerValueItem === "object" && rulerValueItem.value === conditionItem.value && rulerValueItem.key === conditionItem.key) {
-                                        return shouldRender(sectionKey, rulerKey);
-                                    } else if (rulerValueItem && typeof rulerValueItem === "string" && rulerValueItem === conditionItem) {
+                                    if (rulerValueItem && typeof rulerValueItem === "string" && rulerValueItem === conditionItem) {
                                         return shouldRender(sectionKey, rulerKey);
                                     }
-                                }
-                            } else if (typeof rulerState === "object" && !Array.isArray(rulerState)) {
-                                if (rulerState && (rulerState as DynamicFormOption)?.value === conditionItem.value && (rulerState as DynamicFormOption)?.key === conditionItem.key) {
-                                    return shouldRender(sectionKey, rulerKey);
                                 }
                             }
                         }
                     }
-                } else if (rulerState && typeof rulerState === "object" && !Array.isArray(rulerState) && (rulerState as DynamicFormOption)?.value === (condition as DynamicFormOption)?.value) {
-                    return shouldRender(sectionKey, rulerKey);
                 } else if (rulerState && typeof rulerState === "boolean") {
                     return shouldRender(sectionKey, rulerKey);
                 }
@@ -212,15 +204,13 @@ export function useDynamicForm(
                     newValue = item.valueType === "number" ? Number(newValue) : newValue;
                     break;
                 case "Option": {
-                    let newOptions: DynamicFormOption[] = [...(((sectionState as DynamicFormInternalStateSection)[item.key] as DynamicFormOption[]) || [])];
-                    const targetId: string = (e as React.ChangeEvent<HTMLInputElement>).target.id;
-                    if (newOptions.find((o) => o.key === targetId)) {
-                        newOptions = [...newOptions.filter((o) => o.key !== targetId)];
+                    let newOptions: string[] = [...((sectionState[item.key] as string[]) || [])];
+                    const targetValue: string = (e as React.ChangeEvent<HTMLInputElement>).target.value;
+
+                    if (newOptions.find((e: string) => e === targetValue)) {
+                        newOptions = [...newOptions.filter((e: string) => e !== targetValue)];
                     } else {
-                        const targetOption: DynamicFormOption | undefined = item.options?.find((o) => o.key === targetId);
-                        if (targetOption) {
-                            newOptions.push(targetOption);
-                        }
+                        newOptions.push(targetValue);
                     }
                     newValue = newOptions;
                     break;
@@ -476,9 +466,9 @@ const DynamicFormItemComponent: React.FC<{
                 <>
                     {label && <label>{label}</label>}
                     <FeedbackIndicator type={indicator?.type} message={indicator?.message}>
-                        <div className="d-flex flex-wrap pt-1 pl-1" role="group">
+                        <div className="d-flex flex-wrap" role="group" {...additionalProps}>
                             {props.item?.options?.map((option: DynamicFormOption, i) => {
-                                const active: boolean = !!(value as DynamicFormOption[])?.find((o) => option.key === o.key)?.value;
+                                const active: boolean = !!(value as string[])?.find((e: string) => option.value === e);
                                 return (
                                     <button
                                         key={i}
@@ -487,6 +477,7 @@ const DynamicFormItemComponent: React.FC<{
                                         id={option.key}
                                         name={props.item?.key}
                                         className={`btn btn-sm mr-1 mb-1 btn-outline-primary${active ? " active" : ""}`}
+                                        value={option.value}
                                         {...(option?.additionalProps || {})}
                                     >
                                         {option?.label}
