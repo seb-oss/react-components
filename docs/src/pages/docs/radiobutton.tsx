@@ -73,13 +73,17 @@ const RadioButtonPage: React.FC = () => {
             mainFile={importString}
             example={
                 <div className="w-100">
-                    <RadioGroup name="test-group" value={value} onChange={(e) => setValue(e.target.value)} {...controls} indicator={isGrouped ? indicator : null}>
-                        <RadioButton value="Yes" indicator={isIndividual ? indicator : null}>
+                    <RadioGroup name="test-group" value={value} onChange={(e) => setValue(e.target.value)} disabled={controls?.disabled} indicator={isGrouped ? indicator : null}>
+                        <RadioButton value="Yes" wrapperProps={controls.inline ? { className: "d-inline-block" } : {}} indicator={isIndividual ? indicator : null}>
                             Yes
                             <p className="text-muted m-0">Express yourself here</p>
                         </RadioButton>
-                        <RadioButton value="No">No</RadioButton>
-                        <RadioButton value="Maybe">Maybe</RadioButton>
+                        <RadioButton value="No" wrapperProps={controls.inline ? { className: "d-inline-block" } : {}}>
+                            No
+                        </RadioButton>
+                        <RadioButton value="Maybe" wrapperProps={controls.inline ? { className: "d-inline-block" } : {}}>
+                            Maybe
+                        </RadioButton>
                     </RadioGroup>
                 </div>
             }
@@ -90,7 +94,7 @@ const RadioButtonPage: React.FC = () => {
                     <h4>Radio group</h4>
                     <p>
                         We have exported a helper component that makes it easy for you to compose a radio group. The component is name <code>RadioGroup</code>. You can apply group level properties
-                        like <code>inline</code> or <code>disabled</code>
+                        like <code>indicator</code> or <code>disabled</code>
                     </p>
 
                     <br />

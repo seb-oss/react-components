@@ -4,6 +4,8 @@ import Layout from "@common/Layout";
 import { CodeSnippet } from "@common/CodeSnippet";
 import { useDynamicForm, DynamicFormSection } from "@sebgroup/react-components/hooks";
 import { Table, TableBody, TableCell, TableHeader, TableHeaderCell, TableRow } from "@sebgroup/react-components/Table";
+import { Button } from "@sebgroup/react-components/Button";
+import { isEmpty } from "@sebgroup/frontend-tools";
 
 const DynamicForms: React.FC = React.memo(() => {
     return (
@@ -124,6 +126,67 @@ export default ComponentConditionalRender;
 
                 <hr />
 
+                <h2 className="pt-3 pb-3">Form errors example</h2>
+                <p>Every form element defined can display an error message based on any validation rules you define yourself. Simply set the errors for that key as shown in the code snippet below.</p>
+                <CodeSnippet language="javascript">
+                    {`
+import { useDynamicForm } from "@sebgroup/react-components/hooks/useDynamicForm";
+
+const FormWithErrors: React.FC = () => {
+    const sections: DynamicFormSection[] = [
+        {
+            key: "section-3-errors",
+            items: [
+                {
+                    key: "normal",
+                    label: "Non mandatory field",
+                    order: 1,
+                    value: false,
+                    controlType: "Checkbox",
+                },
+                {
+                    key: "with-error",
+                    order: 2,
+                    label: "Mandatory field",
+                    controlType: "Text",
+                },
+            ],
+        },
+    ];
+
+    const [renderForm, state, , setErrors] = useDynamicForm(sections);
+
+    const validate = () => {
+        if (!isEmpty(state) && !isEmpty(state["section-3-errors"])) {
+            setErrors((existing) => {
+                return {
+                    ...existing,
+                    "section-3-errors": {
+                        ...existing["section-3-errors"],
+                        "with-error": !state["section-3-errors"]["with-error"] ? "Please fill in this field" : null,
+                    },
+                };
+            });
+        }
+    };
+
+    return (
+        <>
+            <div>{renderForm()}</div>
+            <Button className="mt-3" onClick={validate}>Validate</Button>
+        </>
+    );
+};
+
+export default FormWithErrors;
+                    `}
+                </CodeSnippet>
+                <div className="p-3 rounded bg-white">
+                    <FormWithErrors />
+                </div>
+
+                <hr />
+
                 <h2 className="pt-3 pb-3">Dynamic forms API</h2>
                 <h3 className="pt-3 pb-3">
                     <code>DynamicFormSection</code>
@@ -156,7 +219,7 @@ export default ComponentConditionalRender;
                             <TableCell>
                                 <code>string</code>
                             </TableCell>
-                            <TableCell></TableCell>
+                            <TableCell>The title of the header of the section</TableCell>
                         </TableRow>
                         <TableRow>
                             <TableCell>
@@ -166,7 +229,9 @@ export default ComponentConditionalRender;
                             <TableCell>
                                 <code>number</code>
                             </TableCell>
-                            <TableCell>The order of the section. Any number, lower number will be displayed before.</TableCell>
+                            <TableCell>
+                                Optional order of the section. Any number, lower number will be displayed before. If order is not provided the original order of the array will be used.
+                            </TableCell>
                         </TableRow>
                         <TableRow>
                             <TableCell>
@@ -240,7 +305,7 @@ export default ComponentConditionalRender;
                             </TableCell>
                             <TableCell>&#10004;</TableCell>
                             <TableCell>
-                                <code>{`string | string[] | DynamicFormOption | DynamicFormOption[] | Date | boolean | number`}</code>
+                                <code>{`string | string[] | Date | boolean | number | null`}</code>
                             </TableCell>
                             <TableCell>Optional initial value of the element when it gets created.</TableCell>
                         </TableRow>
@@ -272,9 +337,7 @@ export default ComponentConditionalRender;
                             <TableCell>
                                 <code>string</code>
                             </TableCell>
-                            <TableCell>
-                                This optional property will be applied to the following components: <code>Checkbox</code>, <code>Radio</code>, <code>Text</code>
-                            </TableCell>
+                            <TableCell>An optional description displayed below the form field.</TableCell>
                         </TableRow>
                         <TableRow>
                             <TableCell>
@@ -297,7 +360,12 @@ export default ComponentConditionalRender;
                                 <code>{`number | Date`}</code>
                             </TableCell>
                             <TableCell>
-                                The 'min' property which will applied to the following components: <code>Stepper</code>, <code>Datepicker</code>
+                                <p>
+                                    The 'min' property which will applied to the following components: <code>Stepper</code>, <code>Datepicker</code>
+                                </p>
+                                <p>
+                                    This will also apply the 'minLength' property of <code>Text</code> and <code>TextArea</code>
+                                </p>
                             </TableCell>
                         </TableRow>
                         <TableRow>
@@ -309,7 +377,12 @@ export default ComponentConditionalRender;
                                 <code>{`number | Date`}</code>
                             </TableCell>
                             <TableCell>
-                                The 'max' property which will applied to the following components: <code>Stepper</code>, <code>Datepicker</code>
+                                <p>
+                                    The 'max' property which will applied to the following components: <code>Stepper</code>, <code>Datepicker</code>
+                                </p>
+                                <p>
+                                    This will also apply the 'maxLength' property of <code>Text</code> and <code>TextArea</code>
+                                </p>
                             </TableCell>
                         </TableRow>
                         <TableRow>
@@ -367,7 +440,7 @@ export default ComponentConditionalRender;
                             </TableCell>
                             <TableCell>&#10004;</TableCell>
                             <TableCell>
-                                <code>{`string | string[] | DynamicFormOption | DynamicFormOption[] | Date | boolean | number`}</code>
+                                <code>{`string | string[] | Date | boolean | number | null`}</code>
                             </TableCell>
                             <TableCell>
                                 <b>Conditional rendering:</b> The exact value of the <b>rulerKey</b> element, as the condition for this element to be rendered. The type of value must be the same as
@@ -441,7 +514,7 @@ export default ComponentConditionalRender;
                                 <code>string</code>
                             </TableCell>
                             <TableCell>
-                                An optional description displayed below the label for the following components: <code>Checkbox</code>, <code>Radio</code>
+                                An optional description displayed below the label for the <code>Radio</code> component.
                             </TableCell>
                         </TableRow>
                         <TableRow>
@@ -528,4 +601,52 @@ const ComponentConditionalRender: React.FC = () => {
     const [renderForm, state] = useDynamicForm(sections);
 
     return <div>{renderForm()}</div>;
+};
+
+const FormWithErrors: React.FC = () => {
+    const sections: DynamicFormSection[] = [
+        {
+            key: "section-3-errors",
+            items: [
+                {
+                    key: "normal",
+                    label: "Non mandatory field",
+                    order: 1,
+                    value: false,
+                    controlType: "Checkbox",
+                },
+                {
+                    key: "with-error",
+                    order: 2,
+                    label: "Mandatory field",
+                    controlType: "Text",
+                },
+            ],
+        },
+    ];
+
+    const [renderForm, state, , setErrors] = useDynamicForm(sections);
+
+    const validate = () => {
+        if (!isEmpty(state) && !isEmpty(state["section-3-errors"])) {
+            setErrors((existing) => {
+                return {
+                    ...existing,
+                    "section-3-errors": {
+                        ...existing["section-3-errors"],
+                        "with-error": !state["section-3-errors"]["with-error"] ? "Please fill in this field" : null,
+                    },
+                };
+            });
+        }
+    };
+
+    return (
+        <>
+            <div>{renderForm()}</div>
+            <Button className="mt-3" onClick={validate}>
+                Validate
+            </Button>
+        </>
+    );
 };
