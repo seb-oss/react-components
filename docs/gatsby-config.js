@@ -21,18 +21,17 @@ module.exports = {
             },
         },
         {
-            resolve: "gatsby-plugin-tsconfig-paths",
-            options: {
-                configFile: `${__dirname}/tsconfig.json`,
-                silent: true,
-            },
-        },
-        {
             resolve: "gatsby-plugin-react-svg",
             options: {
                 rule: {
                     include: /static/,
                 },
+            },
+        },
+        {
+            resolve: `gatsby-plugin-polyfill-io`,
+            options: {
+                features: [`String.prototype.codePointAt`, `fetch`],
             },
         },
     ],

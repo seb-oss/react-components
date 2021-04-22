@@ -20,17 +20,16 @@
         "frontend",
         "ui"
     ],
-    "directories": {
-        "doc": "docs",
-        "lib": "lib"
-    },
+    "workspaces": [
+        "docs",
+        "lib"
+    ],
     "scripts": {
-        "test": "npm test --prefix ./lib",
-        "start": "npm start --prefix ./docs",
-        "build:docs": "npm run build --prefix ./docs",
-        "build:lib": "npm run build --prefix ./lib",
-        "build": "npm run build:lib && npm run build:docs",
-        "postinstall": "npm install --prefix ./lib --cwd ./lib && npm install --prefix ./docs --cwd ./docs",
+        "test": "npm test --workspace=lib",
+        "start": "npm start --workspace=docs",
+        "build:docs": "npm run build --workspace=docs",
+        "build:lib": "npm run build --workspace=lib",
+        "build": "npm run build --workspaces",
         "format:all": "pretty-quick --write \"{,*/**/}*.{js,jsx, ts, tsx,json}\"",
         "format:staged": "pretty-quick --staged --verbose",
         "format:check": "pretty-quick --check --verbose",
@@ -112,8 +111,8 @@
         "access": "public"
     },
     "engines": {
-        "node": ">=13.0.0",
-        "npm": ">=6.0.0"
+        "node": ">=15.0.0",
+        "npm": ">=7.0.0"
     },
     "browserslist": [
         "cover 99.5%"
