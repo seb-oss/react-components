@@ -27,6 +27,10 @@ interface RegexMapper<T = any> {
     index: string;
 }
 
+interface DefaultFileImport {
+    default: string;
+}
+
 export class APIExtractService {
     constructor() {}
     tsParser: TypescriptParser = new TypescriptParser();
@@ -183,11 +187,11 @@ export class APIExtractService {
      * @param importedTypeFileUrls array of imported types file source
      * @returns promise of list of API section
      */
-    parseSourceFile(source: string, importedTypeFileUrls: Array<any>): Promise<Array<ApiSection>> {
-        const description: APIInput = APIExtractService.extractDescription(source);
-        return this.tsParser.parseSource(source).then(async (res: ParsedFile) => {
+    parseSourceFile(source: DefaultFileImport, importedTypeFileUrls: Array<any>): Promise<Array<ApiSection>> {
+        const description: APIInput = APIExtractService.extractDescription(source.default);
+        return this.tsParser.parseSource(source.default).then(async (res: ParsedFile) => {
             const importedInterfaces = await this.extractImportedTypesInterfaces(importedTypeFileUrls);
-            return this.parse(res, source, importedInterfaces, description);
+            return this.parse(res, source.default, importedInterfaces, description);
         });
     }
 
@@ -240,10 +244,10 @@ export class APIExtractService {
      * @return list of list of parsed types/ interfaces
      */
     async extractImportedTypesInterfaces(imports: Array<any>): Promise<Array<Array<ParsedPropertyDeclartion>>> {
-        const test = imports.map((item: any) => {
-            const rawSource: string = item;
-            return this.tsParser.parseSource(rawSource).then((parsedFile: ParsedFile) => {
-                return this.parseTypesInterfaces(this.extractTypesInterfaces(parsedFile, rawSource), "").interfaces;
+        const test = imports.map((item: DefaultFileImport) => {
+            const rawSource: DefaultFileImport = item;
+            return this.tsParser.parseSource(rawSource.default).then((parsedFile: ParsedFile) => {
+                return this.parseTypesInterfaces(this.extractTypesInterfaces(parsedFile, rawSource.default), "").interfaces;
             });
         });
         return await Promise.all(test);
