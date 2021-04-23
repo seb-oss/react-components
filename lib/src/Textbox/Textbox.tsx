@@ -28,7 +28,7 @@ export type TextboxProps = JSX.IntrinsicElements["input"] & {
 };
 /** Textbox is a component that allows user to add or edit text with extra text or icon port */
 export const Textbox: React.FC<TextboxProps> = React.forwardRef(
-    ({ leftSlot, leftSlotTitle, onLeftClick, rightSlot, rightSlotTitle, onRightClick, indicator, wrapperProps, ...props }: TextboxProps, ref: React.ForwardedRef<HTMLInputElement>) => {
+    ({ leftSlot, leftSlotTitle, onLeftClick, rightSlot, rightSlotTitle, onRightClick, indicator, wrapperProps = {}, ...props }: TextboxProps, ref: React.ForwardedRef<HTMLInputElement>) => {
         const [customId, setCustomId] = React.useState<string>(null);
 
         React.useEffect(() => setCustomId(props.id ? props.id : props.label ? randomId("tbg-") : null), [props.id]);
