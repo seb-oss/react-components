@@ -34,7 +34,7 @@ export const Textbox: React.FC<TextboxProps> = React.forwardRef(
         React.useEffect(() => setCustomId(props.id ? props.id : props.label ? randomId("tbg-") : null), [props.id]);
 
         return (
-            <div className={classnames("rc input-box-group", props.className)}>
+            <div {...wrapperProps} className={classnames("rc input-box-group", wrapperProps.className)}>
                 {props.label && (
                     <label className="custom-label" htmlFor={customId}>
                         {props.label}
@@ -50,7 +50,7 @@ export const Textbox: React.FC<TextboxProps> = React.forwardRef(
                                     </span>
                                 </div>
                             )}
-                            <input {...props} ref={ref} id={customId} className="form-control" />
+                            <input {...props} ref={ref} id={customId} className={classnames("form-control", props.className)} />
                             {rightSlot && (
                                 <div className={classnames("input-group-append", { clickable: onRightClick })} onClick={onRightClick} role={onRightClick ? "button" : ""}>
                                     <span className="input-group-text" title={rightSlotTitle}>
