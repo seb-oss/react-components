@@ -27,6 +27,10 @@ export interface DynamicFormItem {
     valueType?: "string" | "number";
     rulerKey?: string;
     condition?: DynamicFormInternalStateValue;
+    formElementAdditionalProps?: {
+        [k: string]: any;
+    };
+    wrappingElement?: "div" | "section" | "none";
     additionalProps?: {
         [k: string]: any;
     };
@@ -343,7 +347,7 @@ const DynamicFormItemComponent: React.FC<{
         onChange: props.onChange,
     };
 
-    const { additionalProps = {} }: DynamicFormItem = props.item;
+    const { formElementAdditionalProps = {} }: DynamicFormItem = props.item;
 
     let formItem: ReactNode;
 
@@ -355,18 +359,22 @@ const DynamicFormItemComponent: React.FC<{
 
     switch (controlType) {
         case "Textarea": {
+            const { value = "", ...rest } = commonProps;
+
             formItem = (
                 <>
-                    <Textarea {...commonProps} indicator={indicator} {...additionalProps} />
+                    <Textarea {...rest} indicator={indicator} {...formElementAdditionalProps} />
                     {descriptionItem}
                 </>
             );
             break;
         }
         case "Text": {
+            const { value = "", ...rest } = commonProps;
+
             formItem = (
                 <>
-                    <Textbox {...commonProps} indicator={indicator} type={props.item.valueType || "text"} {...additionalProps} />
+                    <Textbox {...rest} indicator={indicator} type={props.item.valueType || "text"} {...formElementAdditionalProps} />
                     {descriptionItem}
                 </>
             );
@@ -380,7 +388,7 @@ const DynamicFormItemComponent: React.FC<{
                 <>
                     {label && <label>{label}</label>}
                     <FeedbackIndicator type={indicator?.type} message={indicator?.message}>
-                        <RadioGroup {...{ name, onChange, value }} {...additionalProps}>
+                        <RadioGroup {...{ name, onChange, value }} {...formElementAdditionalProps}>
                             {props.item?.options?.map((option: DynamicFormOption, i) => (
                                 <RadioButton key={i} value={option?.value} {...(option?.additionalProps || {})}>
                                     {option?.label}
@@ -401,7 +409,7 @@ const DynamicFormItemComponent: React.FC<{
             formItem = (
                 <>
                     {label && <label>{label}</label>}
-                    <Dropdown {...{ name, onChange, placeholder, value }} indicator={indicator} multiple={props.item?.multi} {...additionalProps}>
+                    <Dropdown {...{ name, onChange, placeholder, value }} indicator={indicator} multiple={props.item?.multi} {...formElementAdditionalProps}>
                         {props.item?.options?.map((option: DynamicFormOption, i) => (
                             <option key={i} value={option?.value} {...(option?.additionalProps || {})}>
                                 {option?.label}
@@ -417,7 +425,7 @@ const DynamicFormItemComponent: React.FC<{
         case "Checkbox": {
             const { name, onChange, value } = commonProps;
             formItem = (
-                <Checkbox {...{ name, onChange }} indicator={indicator} checked={!!value} {...additionalProps}>
+                <Checkbox {...{ name, onChange }} indicator={indicator} checked={!!value} {...formElementAdditionalProps}>
                     {commonProps.label}
                     {descriptionItem}
                 </Checkbox>
@@ -431,7 +439,7 @@ const DynamicFormItemComponent: React.FC<{
                 <>
                     {label && <label>{label}</label>}
                     <FeedbackIndicator type={indicator?.type} message={indicator?.message}>
-                        <Datepicker {...{ value, onChange, name }} min={props.item?.min} max={props.item?.max} {...additionalProps} />
+                        <Datepicker {...{ value, onChange, name }} min={props.item?.min} max={props.item?.max} {...formElementAdditionalProps} />
                     </FeedbackIndicator>
                     {descriptionItem}
                 </>
@@ -440,7 +448,7 @@ const DynamicFormItemComponent: React.FC<{
         }
 
         case "Stepper": {
-            const { label, value } = commonProps;
+            const { label, value = 0 } = commonProps;
 
             formItem = (
                 <>
@@ -451,7 +459,7 @@ const DynamicFormItemComponent: React.FC<{
                         max={props.item?.max || 100}
                         onIncrease={() => props.onChange(value + 1)}
                         onDecrease={() => props.onChange(value - 1)}
-                        {...additionalProps}
+                        {...formElementAdditionalProps}
                     />
                     {descriptionItem}
                 </>
@@ -466,7 +474,7 @@ const DynamicFormItemComponent: React.FC<{
                 <>
                     {label && <label>{label}</label>}
                     <FeedbackIndicator type={indicator?.type} message={indicator?.message}>
-                        <div className="d-flex flex-wrap" role="group" {...additionalProps}>
+                        <div className="d-flex flex-wrap" role="group" {...formElementAdditionalProps}>
                             {props.item?.options?.map((option: DynamicFormOption, i) => {
                                 const active: boolean = !!(value as string[])?.find((e: string) => option.value === e);
                                 return (
@@ -513,5 +521,15 @@ const DynamicFormItemComponent: React.FC<{
             break;
     }
 
-    return <>{formItem}</>;
+    const { wrappingElement = "none", additionalProps = {} } = props.item;
+
+    switch (wrappingElement) {
+        case "div":
+            return <div {...additionalProps}>{formItem}</div>;
+        case "section":
+            return <section {...additionalProps}>{formItem}</section>;
+
+        default:
+            return <>{formItem}</>;
+    }
 };

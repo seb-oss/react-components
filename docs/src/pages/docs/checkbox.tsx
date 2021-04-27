@@ -38,7 +38,7 @@ const CheckboxPage: React.FC = (): React.ReactElement<void> => {
                     options: indicators,
                     controlType: "Radio",
                     value: indicators[0].value,
-                    additionalProps: { className: "indent pl-3 pt-2" },
+                    formElementAdditionalProps: { className: "indent pl-3 pt-2" },
                 },
                 {
                     key: "indicatorGrouping",
@@ -48,7 +48,7 @@ const CheckboxPage: React.FC = (): React.ReactElement<void> => {
                     condition: true,
                     options: indicatorGrouping,
                     value: indicatorGrouping[0].value,
-                    additionalProps: { className: "indent pl-3 pt-2" },
+                    formElementAdditionalProps: { className: "indent pl-3 pt-2" },
                 },
             ],
         },
