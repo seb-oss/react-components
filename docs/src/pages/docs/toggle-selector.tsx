@@ -39,7 +39,7 @@ const ToggleSelectorPage: React.FC = (): React.ReactElement<void> => {
                     controlType: "Radio",
                     rulerKey: "indicator",
                     condition: true,
-                    additionalProps: { className: "indent pl-3 pt-2" },
+                    formElementAdditionalProps: { className: "indent pl-3 pt-2" },
                 },
                 { key: "icons", label: "With icons as children", controlType: "Checkbox", description: "Find this example in the notes" },
             ],

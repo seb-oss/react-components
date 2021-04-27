@@ -39,7 +39,7 @@ const StepTrackerPage: React.FC = React.memo(() => {
                     options: indicators,
                     controlType: "Radio",
                     value: indicators[0].value,
-                    additionalProps: { className: "indent pl-3 pt-2" },
+                    formElementAdditionalProps: { className: "indent pl-3 pt-2" },
                 },
             ],
         },

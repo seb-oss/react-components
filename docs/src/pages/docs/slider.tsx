@@ -45,7 +45,7 @@ const SliderPage: React.FC = (): React.ReactElement<void> => {
                     condition: true,
                     options: indicators,
                     value: indicators[0].value,
-                    additionalProps: { className: "indent pl-3 pt-2" },
+                    formElementAdditionalProps: { className: "indent pl-3 pt-2" },
                 },
                 { key: "labels", label: "labels", controlType: "Checkbox", value: false, description: "Pass a list of positions and labels to be mapped" },
                 {
@@ -56,7 +56,7 @@ const SliderPage: React.FC = (): React.ReactElement<void> => {
                     description: "Show ticks for the lables",
                     rulerKey: "labels",
                     condition: true,
-                    additionalProps: { className: "indent pl-3 pt-2" },
+                    formElementAdditionalProps: { className: "indent pl-3 pt-2" },
                 },
             ],
         },

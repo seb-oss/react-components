@@ -22,6 +22,7 @@ const DatepickerPage: React.FC = () => {
                     label: "Locale code:",
                     description: "Set a locale for the custom picker (defaults to system locale).",
                     controlType: "Text",
+                    wrappingElement: "div",
                     additionalProps: { className: "indent pl-3 pt-2" },
                 },
             ],
