@@ -1,15 +1,11 @@
 import React from "react";
 import Docs from "@common/Docs";
+import { withPrefix } from "gatsby";
 import { Carousel, CarouselItem, CarouselProps } from "@sebgroup/react-components/Carousel";
 import { Img } from "@sebgroup/react-components/Image";
 import { DynamicFormOption, useDynamicForm } from "@sebgroup/react-components/hooks/useDynamicForm";
 
-const images = [
-    require("../../assets/images/painting-1.jpg"),
-    require("../../assets/images/painting-2.jpg"),
-    require("../../assets/images/painting-3.jpg"),
-    require("../../assets/images/painting-4.jpg"),
-];
+const images = ["/images/painting-1.jpg", "/images/painting-2.jpg", "/images/painting-3.jpg", "/images/painting-4.jpg"];
 const importString: string = require("!raw-loader!@sebgroup/react-components/Carousel/Carousel");
 const code: string = `<Carousel>
     <CarouselItem><Img type="div" src="first.jpg" /></CarouselItem>
@@ -51,7 +47,7 @@ const CarouselPage: React.FC = (): React.ReactElement<void> => {
                     >
                         {images.map((image, i) => (
                             <CarouselItem key={i}>
-                                <Img src={image} responsive width="100%" />
+                                <Img src={withPrefix(image)} responsive width="100%" />
                             </CarouselItem>
                         ))}
                     </Carousel>
