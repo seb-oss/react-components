@@ -1,9 +1,9 @@
 import React from "react";
+import { withPrefix } from "gatsby";
 import Docs from "@common/Docs";
 import { Img, ImgProps } from "@sebgroup/react-components/Image/Img";
 import { DynamicFormOption, useDynamicForm } from "@sebgroup/react-components/hooks/useDynamicForm";
 import { Button } from "@sebgroup/react-components/Button";
-const image: string = require("../../assets/images/rabbit-on-the-spot.jpg");
 
 const importString: string = require("!raw-loader!@sebgroup/react-components/Image/Img");
 const code: string = `<Img src={imageSrc} />`;
@@ -57,7 +57,7 @@ const ImagePage: React.FC = (): React.ReactElement<void> => {
             example={
                 <div className="w-100 h-100">
                     <Img
-                        src={image}
+                        src={withPrefix("/images/rabbit-on-the-spot.jpg")}
                         type={controls.imgType}
                         width={controls.width}
                         height={controls.height}
