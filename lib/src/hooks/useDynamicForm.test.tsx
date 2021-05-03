@@ -1,5 +1,5 @@
 import React from "react";
-import { act } from "react-dom/test-utils";
+import { act, Simulate } from "react-dom/test-utils";
 import { unmountComponentAtNode, render } from "react-dom";
 import { DynamicFormItem, DynamicFormSection, useDynamicForm } from "./useDynamicForm";
 
@@ -9,11 +9,21 @@ type WrapperElementTestCase = Pick<DynamicFormSection, "wrappingElement"> & {
 };
 
 type DynamicFormFieldTestCase = DynamicFormItem & {
-    result: string;
+    result: string | number | boolean | string[] | Date;
 };
 
-const TestHook: React.FC<{ sections: DynamicFormSection[] }> = ({ sections }) => {
-    const [renderForm] = useDynamicForm(sections);
+type ConditionalFormFieldTestCase = {
+    statement: string;
+    sections: DynamicFormSection[];
+    onChange: () => void;
+};
+
+const TestHook: React.FC<{ sections: DynamicFormSection[]; onFormChange?: (state: any) => void }> = ({ sections, onFormChange }) => {
+    const [renderForm, state] = useDynamicForm(sections);
+
+    React.useEffect(() => {
+        onFormChange && onFormChange(state);
+    }, [state]);
     return <div>{renderForm()}</div>;
 };
 
@@ -167,13 +177,15 @@ describe("hook: useDynamicForm", () => {
 
     describe("Should render field with initial value correctly", () => {
         const testCases: DynamicFormFieldTestCase[] = [
-            { key: "name", label: "Name", controlType: "Checkbox", result: "checkbox", value: true },
-            { key: "name", label: "Name", controlType: "Datepicker", result: "seb-datepicker-native", value: "2020-11-20" },
+            { key: "name", label: "Name", controlType: "Checkbox", result: "", value: true },
+            { key: "name", label: "Name", controlType: "Datepicker", result: "2020-11-20", value: "2020-11-20" },
+            { key: "name", label: "Name", controlType: "Datepicker", result: "", value: "aa" },
+            { key: "name", label: "Name", controlType: "Datepicker", result: "2020-11-20", value: new Date("2020-11-20") },
             {
                 key: "name",
                 label: "Name",
                 controlType: "Dropdown",
-                result: "custom-dropdown",
+                result: "item 1",
                 options: [
                     { label: "item 1", value: "item 1", key: "item 1" },
                     { label: "item 2", value: "item 2", key: "item 2" },
@@ -184,37 +196,209 @@ describe("hook: useDynamicForm", () => {
                 key: "name",
                 label: "Name",
                 controlType: "Radio",
-                result: "radio-group",
+                result: "item 1",
                 options: [
                     { label: "item 1", value: "item 1", key: "item 1" },
                     { label: "item 2", value: "item 2", key: "item 2" },
                 ],
                 value: "item 1",
             },
-            { key: "name", label: "Name", controlType: "Stepper", result: "custom-stepper", value: "1" },
-            { key: "name", label: "Name", controlType: "Text", result: "input-box-group", value: "test" },
-            { key: "name", label: "Name", controlType: "Textarea", result: "text-area", value: "test" },
+            { key: "name", label: "Name", controlType: "Stepper", result: "1", value: "1" },
+            { key: "name", label: "Name", controlType: "Text", result: "test", value: "test" },
+            { key: "name", label: "Name", controlType: "Textarea", result: "test", value: "test" },
         ];
         testCases.map((testCase: DynamicFormFieldTestCase) => {
             const { result, ...props } = testCase;
-            it(props.controlType, () => {
+            it(`${props.controlType} with value: ${props.value}`, () => {
                 act(() => {
                     render(<TestHook sections={[{ ...sections[0], items: [{ ...props }] }]} />, container);
                 });
-                console.log(container.innerHTML);
                 switch (props.controlType) {
                     case "Checkbox":
                         expect(container.querySelector(`input`).hasAttribute("checked")).toBeTruthy();
                         break;
                     case "Textarea":
-                        expect(container.querySelector(`textarea`).innerHTML).toBe(props.value);
+                        expect(container.querySelector(`textarea`).innerHTML).toBe(result);
                         break;
                     case "Dropdown":
-                        expect(container.querySelector(`select`).value).toBe(props.value);
+                        expect(container.querySelector(`select`).value).toBe(result);
                         break;
                     default:
-                        expect(container.querySelector(`input`).value).toBe(props.value);
+                        expect(container.querySelector(`input`).value).toBe(result);
                 }
+            });
+        });
+    });
+
+    describe("Should be able to update field", () => {
+        const testCases: DynamicFormFieldTestCase[] = [
+            { key: "name", label: "Name", controlType: "Checkbox", result: true, value: true },
+            { key: "name", label: "Name", controlType: "Datepicker", result: new Date("2020-11-20T00:00:00.000Z"), value: "2020-11-20" },
+            {
+                key: "name",
+                label: "Name",
+                controlType: "Dropdown",
+                result: "item 1",
+                options: [
+                    { label: "item 1", value: "item 1", key: "item 1" },
+                    { label: "item 2", value: "item 2", key: "item 2" },
+                ],
+                value: "item 1",
+            },
+            {
+                key: "name",
+                label: "Name",
+                controlType: "Dropdown",
+                result: ["item 1"],
+                multi: true,
+                options: [
+                    { label: "item 1", value: "item 1", key: "item 1" },
+                    { label: "item 2", value: "item 2", key: "item 2" },
+                ],
+                value: ["item 1"],
+            },
+            {
+                key: "name",
+                label: "Name",
+                controlType: "Dropdown",
+                result: [],
+                multi: true,
+                options: [
+                    { label: "item 1", value: "item 1", key: "item 1" },
+                    { label: "item 2", value: "item 2", key: "item 2" },
+                ],
+            },
+            {
+                key: "name",
+                label: "Name",
+                controlType: "Option",
+                result: ["item 1"],
+                options: [
+                    { label: "item 1", value: "item 1", key: "item 1" },
+                    { label: "item 2", value: "item 2", key: "item 2" },
+                ],
+                value: "item 1",
+            },
+            {
+                key: "name",
+                label: "Name",
+                controlType: "Radio",
+                result: "item 1",
+                options: [
+                    { label: "item 1", value: "item 1", key: "item 1" },
+                    { label: "item 2", value: "item 2", key: "item 2" },
+                ],
+                value: "item 1",
+            },
+            { key: "name", label: "Name", controlType: "Stepper", result: 1, value: 1 },
+            { key: "name", label: "Name", controlType: "Stepper", result: -1, value: -1, min: -2 },
+            { key: "name", label: "Name", controlType: "Text", result: "test", value: "test" },
+            { key: "name", label: "Name", controlType: "Textarea", result: "test", value: "test" },
+        ];
+        testCases.map((testCase: DynamicFormFieldTestCase) => {
+            const onChange: jest.Mock = jest.fn();
+            const { result, value, ...props } = testCase;
+            it(`${props.controlType} with value: ${value}`, async () => {
+                act(() => {
+                    render(<TestHook sections={[{ ...sections[0], items: [{ ...props }] }]} onFormChange={onChange} />, container);
+                });
+                await act(async () => {
+                    switch (props.controlType) {
+                        case "Checkbox":
+                            Simulate.change(container.querySelector("input"), { target: { checked: true } as any });
+                            break;
+                        case "Textarea":
+                            Simulate.change(container.querySelector("textarea"), { target: { value } } as any);
+                            break;
+                        case "Dropdown":
+                            Simulate.change(container.querySelector("select"), { target: { value } } as any);
+                            break;
+                        case "Stepper":
+                            Simulate.click(document.querySelector(`[aria-labelledby="${value > 0 ? "increment" : "decrement"}"]`));
+                            break;
+                        case "Option":
+                            Simulate.click(document.querySelector(`button`));
+                            break;
+                        default:
+                            Simulate.change(container.querySelector("input"), { target: { value } } as any);
+                    }
+                });
+
+                expect(onChange).toBeCalledWith({ [sections[0].key]: { [props.key]: result } });
+            });
+        });
+    });
+
+    describe("Should display conditional field", () => {
+        const testCases: ConditionalFormFieldTestCase[] = [
+            {
+                statement: "conditonal field based on checkbox",
+                sections: [
+                    {
+                        title: "Extra Info",
+                        key: "section-2-extra-info",
+                        items: [
+                            {
+                                key: "have-additional-info",
+                                label: "I have additional information",
+                                order: 1,
+                                value: false,
+                                controlType: "Checkbox",
+                            },
+                            {
+                                key: "info",
+                                order: 2,
+                                placeholder: "Additional information",
+                                controlType: "Text",
+                                rulerKey: "have-additional-info",
+                                condition: true,
+                            },
+                        ],
+                    },
+                ],
+                onChange: () => {
+                    Simulate.change(container.querySelector("input"), { target: { checked: true } as any });
+                },
+            },
+            {
+                statement: "conditonal field based on textfield",
+                sections: [
+                    {
+                        title: "Extra Info",
+                        key: "section-2-extra-info",
+                        items: [
+                            {
+                                key: "have-additional-info",
+                                label: "I have additional information",
+                                order: 1,
+                                value: "",
+                                controlType: "Text",
+                            },
+                            {
+                                key: "info",
+                                order: 2,
+                                placeholder: "Additional information",
+                                controlType: "Text",
+                                rulerKey: "have-additional-info",
+                                condition: "hello",
+                            },
+                        ],
+                    },
+                ],
+                onChange: () => {
+                    Simulate.change(container.querySelector("input"), { target: { value: "hello" } as any });
+                },
+            },
+        ];
+        testCases.map((item: ConditionalFormFieldTestCase) => {
+            it(item.statement, () => {
+                act(() => {
+                    render(<TestHook sections={item.sections} />, container);
+                });
+                act(() => {
+                    item.onChange();
+                });
+                expect(container.querySelector(`input[name='${item.sections[0].items[1].key}']`)).not.toBeNull();
             });
         });
     });
