@@ -8,6 +8,11 @@ type WrapperElementTestCase = Pick<DynamicFormSection, "wrappingElement"> & {
     result: string;
 };
 
+type WrapperElementItemTestCase = Pick<DynamicFormItem, "wrappingElement"> & {
+    statement: string;
+    result: "div" | "section" | "none";
+};
+
 type DynamicFormFieldTestCase = DynamicFormItem & {
     result: string | number | boolean | string[] | Date;
 };
@@ -112,6 +117,48 @@ describe("hook: useDynamicForm", () => {
         });
     });
 
+    describe("Should render form items with desired wrapper element", () => {
+        const testCases: WrapperElementItemTestCase[] = [
+            {
+                statement: "Should render div",
+                wrappingElement: "div",
+                result: "div",
+            },
+            {
+                statement: "Should render section",
+                wrappingElement: "section",
+                result: "section",
+            },
+            {
+                statement: "Should render with no wrapper",
+                wrappingElement: "none",
+                result: "section",
+            },
+        ];
+        testCases.map((testCase: WrapperElementItemTestCase, i: number) => {
+            it(testCase.statement, () => {
+                act(() => {
+                    const sections: DynamicFormSection[] = [
+                        {
+                            key: "section-key",
+                            wrappingElement: testCases[2].result,
+                            items: [
+                                {
+                                    key: "item-key",
+                                    controlType: "LabelOnly",
+                                    label: "Hello",
+                                    wrappingElement: testCase.wrappingElement,
+                                },
+                            ],
+                        },
+                    ];
+                    render(<TestHook sections={sections} />, container);
+                });
+                expect(container.querySelector("label").parentElement.tagName.toLowerCase()).toBe(testCase.result);
+            });
+        });
+    });
+
     describe("Should render field correctly", () => {
         const testCases: DynamicFormFieldTestCase[] = [
             { key: "name", label: "Name", controlType: "Checkbox", result: "checkbox" },
@@ -191,6 +238,18 @@ describe("hook: useDynamicForm", () => {
                     { label: "item 2", value: "item 2", key: "item 2" },
                 ],
                 value: "item 1",
+            },
+            {
+                key: "name",
+                label: "Name",
+                controlType: "Dropdown",
+                multi: true,
+                value: ["item 1"],
+                result: "item 1",
+                options: [
+                    { label: "item 1", value: "item 1", key: "item 1" },
+                    { label: "item 2", value: "item 2", key: "item 2" },
+                ],
             },
             {
                 key: "name",
@@ -389,6 +448,39 @@ describe("hook: useDynamicForm", () => {
                     Simulate.change(container.querySelector("input"), { target: { value: "hello" } as any });
                 },
             },
+            {
+                statement: "conditonal field based on multi dropdown",
+                sections: [
+                    {
+                        title: "Extra Info",
+                        key: "section-2-extra-info",
+                        items: [
+                            {
+                                key: "have-additional-info",
+                                label: "I have additional information",
+                                order: 1,
+                                multi: true,
+                                options: [
+                                    { label: "item 1", value: "item 1", key: "item 1" },
+                                    { label: "item 2", value: "item 2", key: "item 2" },
+                                ],
+                                controlType: "Dropdown",
+                            },
+                            {
+                                key: "info",
+                                order: 2,
+                                placeholder: "Additional information",
+                                controlType: "Text",
+                                rulerKey: "have-additional-info",
+                                condition: ["item 1"],
+                            },
+                        ],
+                    },
+                ],
+                onChange: () => {
+                    Simulate.change(container.querySelector("select"), { target: { value: ["item 1"] } as any });
+                },
+            },
         ];
         testCases.map((item: ConditionalFormFieldTestCase) => {
             it(item.statement, () => {
@@ -399,6 +491,63 @@ describe("hook: useDynamicForm", () => {
                     item.onChange();
                 });
                 expect(container.querySelector(`input[name='${item.sections[0].items[1].key}']`)).not.toBeNull();
+            });
+        });
+    });
+
+    describe("Should not display field if hidden or conditional render properties not set correctly", () => {
+        const testSections: DynamicFormSection[] = [
+            {
+                title: "Extra Info",
+                key: "section-2-extra-info",
+                items: [
+                    {
+                        key: "hidden-field",
+                        controlType: "Hidden",
+                    },
+                    {
+                        key: "my-ruler-has-no-value",
+                        controlType: "Text",
+                        rulerKey: "hidden-field",
+                        condition: "hello",
+                    },
+                    {
+                        key: "i-have-no-condition",
+                        controlType: "Text",
+                        rulerKey: "hidden-field",
+                    },
+                ],
+            },
+        ];
+        testSections[0].items.map((item: DynamicFormItem) => {
+            it("should not be shown", () => {
+                act(() => {
+                    render(<TestHook sections={testSections} />, container);
+                });
+                expect(container.querySelector(`input[name='${item.key}']`)).toBeNull();
+            });
+        });
+    });
+
+    describe("Should display error if unsupported controlType is used", () => {
+        const testSections: any[] = [
+            {
+                title: "Extra Info",
+                key: "section-2-extra-info",
+                items: [
+                    {
+                        key: "i-have-unknown-control",
+                        controlType: "UNKNOWN",
+                    },
+                ],
+            },
+        ];
+        testSections[0].items.map((item: DynamicFormItem) => {
+            it("Error should be shown", () => {
+                act(() => {
+                    render(<TestHook sections={testSections} />, container);
+                });
+                expect(container.innerHTML.match(`ERORR: controlType: ${item.controlType} not recognised.`)).toBeTruthy();
             });
         });
     });
