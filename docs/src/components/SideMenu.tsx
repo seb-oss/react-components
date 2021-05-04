@@ -222,7 +222,7 @@ export const SideMenu: React.FC = React.memo(() => {
 
                 <Textbox
                     id="searchTextbox"
-                    className="sidemenu-search"
+                    wrapperProps={{ className: "sidemenu-search" }}
                     name="search"
                     type="text"
                     value={search}
