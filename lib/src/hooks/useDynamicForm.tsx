@@ -363,7 +363,7 @@ const DynamicFormItemComponent: React.FC<{
 
             formItem = (
                 <>
-                    <Textarea {...rest} indicator={indicator} {...formElementAdditionalProps} />
+                    <Textarea {...rest} value={value} indicator={indicator} {...formElementAdditionalProps} />
                     {descriptionItem}
                 </>
             );
@@ -374,7 +374,7 @@ const DynamicFormItemComponent: React.FC<{
 
             formItem = (
                 <>
-                    <Textbox {...rest} indicator={indicator} type={props.item.valueType || "text"} {...formElementAdditionalProps} />
+                    <Textbox {...rest} value={value} indicator={indicator} type={props.item.valueType || "text"} {...formElementAdditionalProps} />
                     {descriptionItem}
                 </>
             );
