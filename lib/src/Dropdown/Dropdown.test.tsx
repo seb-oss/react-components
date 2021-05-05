@@ -144,6 +144,15 @@ describe("Component: Dropdown", () => {
         act(() => Simulate.change(searchField, { target: { value: "second" } as any }));
 
         expect(document.body.querySelectorAll(".custom-control")).toHaveLength(1);
+
+        // if the searchable prop is changed back to false
+        act(() => {
+            render(<Dropdown>{testOptions}</Dropdown>, container);
+        });
+
+        // The search field should be reset to empty string
+        // so all the elements should be visible again
+        expect(document.body.querySelectorAll(".custom-control")).toHaveLength(4);
     });
 
     it("Should allow the value to be cleared when clearable is enabled", () => {
