@@ -203,6 +203,10 @@ export const Dropdown: React.FC<DropdownProps> = React.forwardRef(
         }, [props.value]);
 
         React.useEffect(() => {
+            !searchable && setSearchKeyword("");
+        }, [searchable]);
+
+        React.useEffect(() => {
             if (!isMobile) {
                 const detectBlur = (event: MouseEvent) => {
                     if (!dropdownRef.current.contains(event.target as any) && !menuRef.current.contains(event.target as any)) {
