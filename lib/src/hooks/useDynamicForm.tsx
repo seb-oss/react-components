@@ -271,7 +271,7 @@ export function useDynamicForm(
         sections?.forEach(({ key: sectionKey, items }) => {
             newMeta[sectionKey] = {};
             items?.forEach(({ key, controlType }) => {
-                const itemState: DynamicFormInternalStateValue = state && state[sectionKey] && state[sectionKey][key];
+                const itemState: DynamicFormInternalStateValue | undefined | null = state && state[sectionKey] && state[sectionKey][key];
                 const hasError: boolean = !!(errorMessages && errorMessages[sectionKey] && errorMessages[sectionKey][key]?.length);
                 const isVisible: boolean = shouldRender(sectionKey, key);
                 let isValid: boolean;
@@ -288,7 +288,7 @@ export function useDynamicForm(
                         isValid = !!(itemState as string | any[])?.length;
                         break;
                     case "Checkbox":
-                        isValid = !!itemState;
+                        isValid = typeof itemState === "boolean";
                         break;
                     case "Stepper":
                         isValid = Number.isInteger(itemState);
