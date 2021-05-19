@@ -67,6 +67,16 @@ interface DynamicFormInternalState {
     [k: string]: DynamicFormInternalStateSection;
 }
 
+interface DynamicFormMetaData {
+    [k: string]: {
+        [k: string]: {
+            isVisible: boolean;
+            hasError: boolean;
+            isValid: boolean;
+        };
+    };
+}
+
 interface DynamicFormErrors {
     [k: string]: {
         [k: string]: string;
@@ -80,7 +90,7 @@ type ShouldRenderFormItem = (sectionKey: string, itemKey: string) => boolean;
 
 export function useDynamicForm(
     sections: DynamicFormSection[]
-): [() => JSX.Element, any, React.Dispatch<React.SetStateAction<DynamicFormInternalState>>, React.Dispatch<React.SetStateAction<DynamicFormErrors>>] {
+): [() => JSX.Element, any, React.Dispatch<React.SetStateAction<DynamicFormInternalState>>, React.Dispatch<React.SetStateAction<DynamicFormErrors>>, DynamicFormMetaData] {
     const initialState: DynamicFormInternalState = {};
     sections?.map((section) => {
         initialState[section?.key] = {};
@@ -254,11 +264,57 @@ export function useDynamicForm(
         },
         [state]
     );
+
+    const meta = React.useMemo(() => {
+        let newMeta: DynamicFormMetaData = {};
+
+        sections?.forEach(({ key: sectionKey, items }) => {
+            newMeta[sectionKey] = {};
+            items?.forEach(({ key, controlType }) => {
+                const itemState: DynamicFormInternalStateValue = state && state[sectionKey] && state[sectionKey][key];
+                const hasError: boolean = !!(errorMessages && errorMessages[sectionKey] && errorMessages[sectionKey][key]?.length);
+                const isVisible: boolean = shouldRender(sectionKey, key);
+                let isValid: boolean;
+
+                switch (controlType) {
+                    case "Datepicker":
+                        isValid = isValidDate(itemState as Date);
+                        break;
+                    case "Dropdown":
+                    case "Radio":
+                    case "Option":
+                    case "Text":
+                    case "Textarea":
+                        isValid = !!(itemState as string | any[])?.length;
+                        break;
+                    case "Checkbox":
+                        isValid = !!itemState;
+                        break;
+                    case "Stepper":
+                        isValid = Number.isInteger(itemState);
+                        break;
+                    default:
+                        isValid = null;
+                        console.warn(`Could not determine is state is valid for control type ${controlType}`);
+                        break;
+                }
+
+                newMeta[sectionKey][key] = {
+                    hasError,
+                    isVisible,
+                    isValid,
+                };
+            });
+        });
+
+        return newMeta;
+    }, [sections, state, errorMessages]);
+
     const renderForm = useCallback(() => {
         return <DynamicFormComponent sections={sections} errorMessages={errorMessages} state={state} onChange={onChange} shouldRender={shouldRender} />;
     }, [sections, state, onChange, shouldRender, errorMessages]);
 
-    return [renderForm, state, setState, setErrorMessages];
+    return [renderForm, state, setState, setErrorMessages, meta];
 }
 
 const DynamicFormComponent: React.FC<{
