@@ -295,7 +295,7 @@ export function useDynamicForm(
                         break;
                     default:
                         isValid = null;
-                        console.warn(`Could not determine is state is valid for control type ${controlType}`);
+                        console.warn(`Could not determine if state is valid for control type ${controlType}`);
                         break;
                 }
 
