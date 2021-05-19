@@ -70,9 +70,12 @@ interface DynamicFormInternalState {
 interface DynamicFormMetaData {
     [k: string]: {
         [k: string]: {
+            /** This field is currently visible (based on conditional rendering) */
             isVisible: boolean;
+            /** this field has an error message */
             hasError: boolean;
-            isValid: boolean;
+            /** This field has a non empty, null, undefined or otherwise falsy value (based on its controlType) */
+            hasTruthyValue: boolean;
         };
     };
 }
@@ -274,27 +277,27 @@ export function useDynamicForm(
                 const itemState: DynamicFormInternalStateValue | undefined | null = state && state[sectionKey] && state[sectionKey][key];
                 const hasError: boolean = !!(errorMessages && errorMessages[sectionKey] && errorMessages[sectionKey][key]?.length);
                 const isVisible: boolean = shouldRender(sectionKey, key);
-                let isValid: boolean;
+                let hasTruthyValue: boolean;
 
                 switch (controlType) {
                     case "Datepicker":
-                        isValid = isValidDate(itemState as Date);
+                        hasTruthyValue = isValidDate(itemState as Date);
                         break;
                     case "Dropdown":
                     case "Radio":
                     case "Option":
                     case "Text":
                     case "Textarea":
-                        isValid = !!(itemState as string | any[])?.length;
+                        hasTruthyValue = !!(itemState as string | any[])?.length;
                         break;
                     case "Checkbox":
-                        isValid = typeof itemState === "boolean";
+                        hasTruthyValue = !!itemState;
                         break;
                     case "Stepper":
-                        isValid = Number.isInteger(itemState);
+                        hasTruthyValue = Number.isInteger(itemState);
                         break;
                     default:
-                        isValid = null;
+                        hasTruthyValue = null;
                         console.warn(`Could not determine if state is valid for control type ${controlType}`);
                         break;
                 }
@@ -302,7 +305,7 @@ export function useDynamicForm(
                 newMeta[sectionKey][key] = {
                     hasError,
                     isVisible,
-                    isValid,
+                    hasTruthyValue,
                 };
             });
         });
