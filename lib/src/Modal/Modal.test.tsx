@@ -352,4 +352,15 @@ describe("Component: Modal", () => {
             document.body.removeChild(document.querySelector(".extra"));
         });
     });
+
+    it("Should cleanup side effects when unmounted", () => {
+        act(() => {
+            render(<Modal toggle />, container);
+        });
+        expect(document.body.classList.contains("modal-open")).toBeTruthy();
+        act(() => {
+            unmountComponentAtNode(container);
+        });
+        expect(document.body.classList.contains("modal-open")).toBeFalsy();
+    });
 });

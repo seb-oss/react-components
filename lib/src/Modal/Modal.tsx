@@ -45,6 +45,8 @@ export const Modal: React.FC<ModalProps> = React.memo(
             } else {
                 document.body.classList.remove("modal-open");
             }
+
+            return () => document.body.classList.remove("modal-open");
         }, [toggle]);
 
         /** Focus trap */
