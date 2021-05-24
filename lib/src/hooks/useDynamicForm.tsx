@@ -93,7 +93,7 @@ type ShouldRenderFormItem = (sectionKey: string, itemKey: string) => boolean;
 
 export function useDynamicForm(
     sections: DynamicFormSection[]
-): [() => JSX.Element, any, React.Dispatch<React.SetStateAction<DynamicFormInternalState>>, React.Dispatch<React.SetStateAction<DynamicFormErrors>>, DynamicFormMetaData, boolean] {
+): [() => JSX.Element, any, React.Dispatch<React.SetStateAction<DynamicFormInternalState>>, React.Dispatch<React.SetStateAction<DynamicFormErrors>>, DynamicFormMetaData] {
     const initialState: DynamicFormInternalState = {};
     sections?.map((section) => {
         initialState[section?.key] = {};
@@ -158,7 +158,6 @@ export function useDynamicForm(
     });
     const [state, setState] = useState<DynamicFormInternalState>(initialState);
     const [errorMessages, setErrorMessages] = useState<DynamicFormErrors>({});
-    const [touched, setTouched] = useState<boolean>(false);
 
     /**
      * SHOULD RENDER CONTROL:
@@ -211,7 +210,6 @@ export function useDynamicForm(
 
     const onChange: OnChangeFormSection = useCallback<OnChangeFormSection>(
         (section: DynamicFormSection) => (item: DynamicFormItem) => (e: InputChange) => {
-            !touched && setTouched(true);
             const sectionState: DynamicFormInternalStateSection = state && state.hasOwnProperty(section.key) ? state[section.key] : {};
             const controlType: DynamicFormType = item?.controlType || "Text";
             let newValue: DynamicFormInternalStateValue = null;
@@ -267,7 +265,7 @@ export function useDynamicForm(
                 },
             });
         },
-        [state, touched, setTouched]
+        [state]
     );
 
     const meta = React.useMemo(() => {
@@ -319,7 +317,7 @@ export function useDynamicForm(
         return <DynamicFormComponent sections={sections} errorMessages={errorMessages} state={state} onChange={onChange} shouldRender={shouldRender} />;
     }, [sections, state, onChange, shouldRender, errorMessages]);
 
-    return [renderForm, state, setState, setErrorMessages, meta, touched];
+    return [renderForm, state, setState, setErrorMessages, meta];
 }
 
 const DynamicFormComponent: React.FC<{
