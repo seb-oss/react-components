@@ -67,6 +67,19 @@ interface DynamicFormInternalState {
     [k: string]: DynamicFormInternalStateSection;
 }
 
+interface DynamicFormMetaData {
+    [k: string]: {
+        [k: string]: {
+            /** This field is currently visible (based on conditional rendering) */
+            isVisible: boolean;
+            /** this field has an error message */
+            hasError: boolean;
+            /** This field has a non empty, null, undefined or otherwise falsy value (based on its controlType) */
+            hasTruthyValue: boolean;
+        };
+    };
+}
+
 interface DynamicFormErrors {
     [k: string]: {
         [k: string]: string;
@@ -80,7 +93,7 @@ type ShouldRenderFormItem = (sectionKey: string, itemKey: string) => boolean;
 
 export function useDynamicForm(
     sections: DynamicFormSection[]
-): [() => JSX.Element, any, React.Dispatch<React.SetStateAction<DynamicFormInternalState>>, React.Dispatch<React.SetStateAction<DynamicFormErrors>>] {
+): [() => JSX.Element, any, React.Dispatch<React.SetStateAction<DynamicFormInternalState>>, React.Dispatch<React.SetStateAction<DynamicFormErrors>>, DynamicFormMetaData, boolean] {
     const initialState: DynamicFormInternalState = {};
     sections?.map((section) => {
         initialState[section?.key] = {};
@@ -145,6 +158,7 @@ export function useDynamicForm(
     });
     const [state, setState] = useState<DynamicFormInternalState>(initialState);
     const [errorMessages, setErrorMessages] = useState<DynamicFormErrors>({});
+    const [dirty, setDirty] = useState<boolean>(false);
 
     /**
      * SHOULD RENDER CONTROL:
@@ -197,6 +211,7 @@ export function useDynamicForm(
 
     const onChange: OnChangeFormSection = useCallback<OnChangeFormSection>(
         (section: DynamicFormSection) => (item: DynamicFormItem) => (e: InputChange) => {
+            !dirty && setDirty(true);
             const sectionState: DynamicFormInternalStateSection = state && state.hasOwnProperty(section.key) ? state[section.key] : {};
             const controlType: DynamicFormType = item?.controlType || "Text";
             let newValue: DynamicFormInternalStateValue = null;
@@ -252,13 +267,59 @@ export function useDynamicForm(
                 },
             });
         },
-        [state]
+        [state, dirty, setDirty]
     );
+
+    const meta = React.useMemo(() => {
+        let newMeta: DynamicFormMetaData = {};
+
+        sections?.forEach(({ key: sectionKey, items }) => {
+            newMeta[sectionKey] = {};
+            items?.forEach(({ key, controlType }) => {
+                const itemState: DynamicFormInternalStateValue | undefined | null = state && state[sectionKey] && state[sectionKey][key];
+                const hasError: boolean = !!(errorMessages && errorMessages[sectionKey] && errorMessages[sectionKey][key]?.length);
+                const isVisible: boolean = shouldRender(sectionKey, key);
+                let hasTruthyValue: boolean;
+
+                switch (controlType) {
+                    case "Datepicker":
+                        hasTruthyValue = isValidDate(itemState as Date);
+                        break;
+                    case "Dropdown":
+                    case "Radio":
+                    case "Option":
+                    case "Text":
+                    case "Textarea":
+                        hasTruthyValue = !!(itemState as string | any[])?.length;
+                        break;
+                    case "Checkbox":
+                        hasTruthyValue = !!itemState;
+                        break;
+                    case "Stepper":
+                        hasTruthyValue = Number.isInteger(itemState);
+                        break;
+                    default:
+                        hasTruthyValue = null;
+                        console.warn(`Could not determine if state is valid for control type ${controlType}`);
+                        break;
+                }
+
+                newMeta[sectionKey][key] = {
+                    hasError,
+                    isVisible,
+                    hasTruthyValue,
+                };
+            });
+        });
+
+        return newMeta;
+    }, [sections, state, errorMessages]);
+
     const renderForm = useCallback(() => {
         return <DynamicFormComponent sections={sections} errorMessages={errorMessages} state={state} onChange={onChange} shouldRender={shouldRender} />;
     }, [sections, state, onChange, shouldRender, errorMessages]);
 
-    return [renderForm, state, setState, setErrorMessages];
+    return [renderForm, state, setState, setErrorMessages, meta, dirty];
 }
 
 const DynamicFormComponent: React.FC<{
