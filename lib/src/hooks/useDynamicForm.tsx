@@ -158,7 +158,7 @@ export function useDynamicForm(
     });
     const [state, setState] = useState<DynamicFormInternalState>(initialState);
     const [errorMessages, setErrorMessages] = useState<DynamicFormErrors>({});
-    const [touched, setTouched] = useState<boolean>(false);
+    const [dirty, setDirty] = useState<boolean>(false);
 
     /**
      * SHOULD RENDER CONTROL:
@@ -211,7 +211,7 @@ export function useDynamicForm(
 
     const onChange: OnChangeFormSection = useCallback<OnChangeFormSection>(
         (section: DynamicFormSection) => (item: DynamicFormItem) => (e: InputChange) => {
-            !touched && setTouched(true);
+            !dirty && setDirty(true);
             const sectionState: DynamicFormInternalStateSection = state && state.hasOwnProperty(section.key) ? state[section.key] : {};
             const controlType: DynamicFormType = item?.controlType || "Text";
             let newValue: DynamicFormInternalStateValue = null;
@@ -267,7 +267,7 @@ export function useDynamicForm(
                 },
             });
         },
-        [state, touched, setTouched]
+        [state, dirty, setDirty]
     );
 
     const meta = React.useMemo(() => {
@@ -319,7 +319,7 @@ export function useDynamicForm(
         return <DynamicFormComponent sections={sections} errorMessages={errorMessages} state={state} onChange={onChange} shouldRender={shouldRender} />;
     }, [sections, state, onChange, shouldRender, errorMessages]);
 
-    return [renderForm, state, setState, setErrorMessages, meta, touched];
+    return [renderForm, state, setState, setErrorMessages, meta, dirty];
 }
 
 const DynamicFormComponent: React.FC<{
