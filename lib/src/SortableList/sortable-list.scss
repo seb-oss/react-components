@@ -1,0 +1,51 @@
+@import "~@sebgroup/bootstrap/scss/core";
+
+.rc.column-customiser {
+    width: 100%;
+    .drop-container {
+        position: relative;
+        width: 100%;
+        > div {
+            width: 100%;
+            cursor: grab;
+            transition: transform 500ms;
+            transform: translate3d(0, 0, 0);
+            &.hidden {
+                visibility: hidden;
+                border: 1px dashed $gray-500;
+            }
+        }
+        ul {
+            position: relative;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            li {
+                transition-duration: 300ms;
+                transform: translate3d(0, 0, 0);
+                flex-flow: row wrap;
+                padding: 0.5rem 1rem;
+                div {
+                    flex: 1;
+                }
+            }
+            &.cloned {
+                position: absolute;
+                top: 0;
+                z-index: -1;
+                li {
+                    visibility: hidden;
+                    &.show {
+                        visibility: visible;
+                    }
+                }
+            }
+        }
+    }
+}
+.ghost-item {
+    position: fixed;
+    z-index: $zindex-tooltip;
+    cursor: grabbing;
+    // transition: 0.3s cubic-bezier(0.2, 1, 0.1, 1);
+}
