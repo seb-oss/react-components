@@ -45,9 +45,8 @@ $label-selector: "label:not(.form-check-label):not(.custom-checkbox):not(.custom
         }
     }
 
-    &:not(:first-of-type):not(:last-of-type) {
+    &:not(:last-of-type) {
         > #{$label-selector} {
-            margin-top: 1rem;
             margin-bottom: 1rem;
         }
     }
