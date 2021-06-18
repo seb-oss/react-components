@@ -1,4 +1,4 @@
-@import "~@sebgroup/bootstrap/scss/core";
+@import "~@sebgroup/bootstrap/scss/_variables";
 
 .rc.custom-dropdown {
     max-width: 100%;
@@ -79,6 +79,7 @@
     left: inherit;
     float: none;
     overflow: auto;
+    z-index: $zindex-popover;
 
     > p {
         margin: 0;
