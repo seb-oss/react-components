@@ -67,6 +67,9 @@ $modal-lg-width: 800px;
             position: absolute;
         }
         &.modal-aside-right {
+            > .modal-dialog {
+                position: absolute;
+            }
             &.show > .modal-dialog {
                 animation: modal-slide-in-right 400ms forwards;
             }
@@ -75,6 +78,9 @@ $modal-lg-width: 800px;
             }
         }
         &.modal-aside-left {
+            > .modal-dialog {
+                position: absolute;
+            }
             &.show > .modal-dialog {
                 animation: modal-slide-in-left 400ms forwards;
             }
