@@ -173,5 +173,10 @@
         "name": "Video",
         "path": "/docs/video/",
         "filePath": "./src/Video/index.ts"
+    },
+    {
+        "name": "Wizard",
+        "path": "/docs/wizard/",
+        "filePath": "./src/Wizard/index.ts"
     }
 ]
