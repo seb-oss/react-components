@@ -1,0 +1,30 @@
+// WizardNavbar.scss
+.wizard-navbar {
+    .navbar {
+        height: 3.5rem;
+    }
+}
+
+// WizardActions.scss
+.wizard-actions {
+    button {
+        &:nth-of-type(n + 2) {
+            margin-left: 1rem;
+        }
+    }
+}
+
+// WizardNavigations.scss
+.list-group {
+    background: #f8f8f8;
+
+    &.list-group-ordered {
+        .list-group-item {
+            padding: 1rem 2.5rem;
+
+            &::before {
+                left: 0.5rem;
+            }
+        }
+    }
+}
