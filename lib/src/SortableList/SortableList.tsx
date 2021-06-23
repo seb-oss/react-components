@@ -1,206 +1,264 @@
-import React from "react";
 import classnames from "classnames";
+import React from "react";
 import "./sortable-list.scss";
-import { SortableItem } from "./SortableItem";
-import { createPortal } from "react-dom";
+import { SortableItemProps } from "./SortableItem";
 
-// This solution is meant to fix Gatsby build which complains that document doesn't exist in server-side rendering
-const safeDocument: Document | null = typeof document !== "undefined" ? document : null;
+const dragAndDropIcon: JSX.Element = (
+    <svg width="10px" fill="currentColor" height="16px" viewBox="0 0 10 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">
+        <g id="Symbols" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
+            <g id="Group" fill="currentColor">
+                <circle id="Oval" cx="2" cy="2" r="2" />
+                <circle id="Oval-Copy-2" cx="2" cy="8" r="2" />
+                <circle id="Oval-Copy-4" cx="2" cy="14" r="2" />
+                <circle id="Oval-Copy" cx="8" cy="2" r="2" />
+                <circle id="Oval-Copy-3" cx="8" cy="8" r="2" />
+                <circle id="Oval-Copy-5" cx="8" cy="14" r="2" />
+            </g>
+        </g>
+    </svg>
+);
 
-export const SortableList: React.FC = () => {
-    const activeItemRef = React.useRef<HTMLDivElement>();
+export type SortableListProps = JSX.IntrinsicElements["div"] & {
+    onSort: (list: Array<string>) => void;
+    disabled?: boolean;
+};
+
+type PositionDelta = {
+    x: number;
+    y: number;
+};
+
+type OrderItem = Pick<SortableItemWrapperProps, "disabled" | "uniqueKey">;
+
+export const SortableList: React.FC<SortableListProps> = ({ onSort, className, disabled, ...props }: React.PropsWithChildren<SortableListProps>) => {
     const dragContainerRef = React.useRef<HTMLDivElement>();
-    const [arr, setArr] = React.useState(["a", "b", "c", "d"]);
-    const [elRefs, setElRefs] = React.useState<Array<React.MutableRefObject<HTMLDivElement>>>(null);
-    const [draggingOrders, setDraggingOrders] = React.useState(arr);
+    const [defaultOrders, setDefaultOrders] = React.useState<OrderItem[]>([]);
+    const [draggingOrders, setDraggingOrders] = React.useState<OrderItem[]>(defaultOrders);
     const [currentItemNode, setCurrentItemNode] = React.useState<HTMLDivElement>(null);
     const [currentItem, setCurrentItem] = React.useState<number>(null);
-    const [delta, setDelta] = React.useState<any>({});
+    const [delta, setDelta] = React.useState<PositionDelta>({ x: 0, y: 0 });
+    const [dragNode, setDragNode] = React.useState<HTMLElement>(null);
     const [isDragging, setIsDragging] = React.useState<boolean>(false);
     const [isTranslating, setIsTranslating] = React.useState<boolean>(false);
+    const [affectedIndex, setAffectedIndex] = React.useState<number>(null);
+    const [affectedNode, setAffectedNode] = React.useState<HTMLDivElement>(null);
 
-    // const getOverlappedElement = () => {
-    //     const overlapped: HTMLElement = Array.from(dragContainerRef.current.children).find((element: HTMLElement) => {
-    //         return element.className.indexOf("hidden") === -1 && checkIfElementsOverlapped(element)
-    //     }) as HTMLElement;
-    //     if (overlapped) {
-    //         const nodeRect: DOMRect = overlapped.getBoundingClientRect();
-    //         const activeNodeRect: DOMRect = activeItemRef.current.getBoundingClientRect();
-    //         const isAbove: boolean = nodeRect.bottom <= activeNodeRect.top;
-    //         console.log(overlapped)
-    //         let diff = nodeRect.top - activeNodeRect.bottom;
-    //         if (isAbove) {
-    //             diff = activeNodeRect.top - nodeRect.bottom;
-    //         }
-    //         const half = Math.abs(diff) / nodeRect.height >= 0.5;
-    //         // if (half) {
-    //             // setIsTranslating(true);
-    //             overlapped.style.transform = `translate3d(0, ${isAbove ? "" : "-"}${overlapped.offsetHeight}px, 0)`;
-    //             setArr(() => {
-    //                 return arr.map((item) => item);
-    //             })
-    //         // }
-    //     }
-    // }
+    /**
+     * when user clicks on sortable item, set initial delta and selected item
+     * @param event mouse event
+     * @param index selected index
+     */
+    const onMouseDown = (event: React.MouseEvent<HTMLDivElement, MouseEvent> | React.TouchEvent<HTMLDivElement>, index: number) => {
+        const parent: HTMLDivElement = (event.target as HTMLDivElement).closest(".sortable-item-wrapper");
+        const position: React.MouseEvent = ((event as React.TouchEvent).touches ? (event as React.TouchEvent).touches[0] : event) as React.MouseEvent;
+        setDelta({
+            x: position.pageX - parent.getBoundingClientRect().left,
+            y: position.pageY - parent.getBoundingClientRect().top,
+        });
+        console.log("delta", {
+            x: position.pageX - parent.getBoundingClientRect().left,
+            y: position.pageY - parent.getBoundingClientRect().top,
+        });
+        setCurrentItem(index);
+        setCurrentItemNode(parent);
+    };
 
-    const getOverlappedElement = () => {
-        // const overlapped: HTMLElement = Array.from(dragContainerRef.current.children).find((element: HTMLElement) => {
-        //     return element.className.indexOf("hidden") === -1 && checkIfElementsOverlapped(element)
-        // }) as HTMLElement;
-        const activeNodeRect: DOMRect = activeItemRef.current.getBoundingClientRect();
-        Array.from(dragContainerRef.current.children).map((element: HTMLElement, index: number) => {
-            const nodeRect: DOMRect = element.getBoundingClientRect();
-            const isAbove: boolean = nodeRect.bottom <= activeNodeRect.top;
-            let diff = nodeRect.top - activeNodeRect.bottom;
+    /**
+     * on drag initiated, set the ghost item
+     * @param event drag event
+     */
+    const onDragStart = React.useCallback(
+        (event: React.DragEvent<HTMLDivElement>) => {
+            setIsDragging(() => {
+                const clonedNode: HTMLElement = currentItemNode.cloneNode(true) as HTMLElement;
+                clonedNode.classList.remove("is-active");
+                clonedNode.classList.add("on-drag");
+                clonedNode.style.width = `${currentItemNode.getBoundingClientRect().width}px`;
+                clonedNode.style.height = `${currentItemNode.getBoundingClientRect().height}px`;
+                document.body.appendChild(clonedNode);
+                event.dataTransfer.setDragImage(clonedNode, delta.x, delta.y);
+                event.dataTransfer.effectAllowed = "move";
+                setDragNode(clonedNode);
+                return true;
+            });
+        },
+        [currentItemNode]
+    );
+
+    /**
+     * when the dragged item is dragged over another sortable item, check if the overlapped element fulfills criteria to be swapped
+     * @param event drag event
+     * @param index overlapped index
+     */
+    const onDragOver = React.useCallback(
+        (event: React.DragEvent<HTMLDivElement>, index: number) => {
+            event.preventDefault(); // to prevent ghost image for reverting to original position
+            event.dataTransfer.dropEffect = "move";
+            const activeNodeRect: DOMRect = currentItemNode.getBoundingClientRect();
+            const parent: HTMLDivElement = (event.target as HTMLDivElement).closest(".sortable-item-wrapper");
+            const nodeRect: DOMRect = parent.getBoundingClientRect();
+            const ghostImagePositionTop: number = event.clientY - delta.y;
+            const ghostImagePositionBottom: number = ghostImagePositionTop + activeNodeRect.height; // get ghost image's actual position
+            const isAbove: boolean = nodeRect.top <= ghostImagePositionTop;
+            let positionDifference: number = nodeRect.top - ghostImagePositionBottom;
             if (isAbove) {
-                diff = activeNodeRect.top - nodeRect.bottom;
+                positionDifference = ghostImagePositionTop - nodeRect.bottom;
             }
-            const half = Math.abs(diff) / nodeRect.height >= 0.8;
-            const isOverlapped: boolean = half && element.className.indexOf("hidden") === -1 && checkIfElementsOverlapped(element);
-            element.style.transform = isOverlapped && !isTranslating ? `translate3d(0, ${isAbove ? "" : "-"}${element.offsetHeight}px, 0)` : null;
-            if (isOverlapped && !isTranslating) {
-                setIsTranslating(isOverlapped);
-                window.requestAnimationFrame((timestamp) => {
-                    // console.log(elapsed, timestamp)
-                    // if (elapsed > 200) {
-                    // setTimeout(() => {
-                    setDraggingOrders((oldOrders) => {
-                        setIsTranslating(false);
-                        const newList = oldOrders.filter((value) => value !== arr[currentItem]);
-                        newList.splice(index, 0, arr[currentItem]);
-                        return newList;
-                    });
-                    // }, 500)
-                    // }
+            const isHalfCoverage: boolean = Math.abs(positionDifference) / nodeRect.height >= 0.5; // only trigger swapping when overlapped coverage is more than 50%
+            const isOverlapped: boolean = isHalfCoverage && !isTranslating && parent.className.indexOf("on-drag") === -1;
+            parent.style.transform = null;
+            if (isOverlapped) {
+                // if the overlapped item fulfills criteria, initiate animation
+                setIsTranslating(true);
+                parent.style.transform = `translate3d(0, ${isAbove ? "" : "-"}${parent.offsetHeight}px, 0)`;
+                setAffectedNode(parent);
+                setAffectedIndex(index);
+            }
+        },
+        [currentItemNode, delta, setIsTranslating, setAffectedNode, setAffectedIndex]
+    );
+
+    /** sort dragging order on transition end */
+    const onTransitionEnd = React.useCallback(() => {
+        if (affectedNode) {
+            setDraggingOrders((oldOrders: OrderItem[]) => {
+                const newList: OrderItem[] = oldOrders.slice(0);
+                affectedNode.style.transform = null;
+                let itemIndex: number = currentItem;
+                const originalItem: OrderItem = newList.find(({ uniqueKey }: OrderItem, index: number) => {
+                    itemIndex = index;
+                    return uniqueKey === defaultOrders[currentItem].uniqueKey;
                 });
+                newList[itemIndex] = newList[affectedIndex]; // swap overlapped
+                newList[affectedIndex] = originalItem;
+                setAffectedIndex(null);
+                setAffectedNode(null);
+                setIsTranslating(false);
+                return newList;
+            });
+        }
+    }, [affectedNode, affectedIndex, setDraggingOrders, setAffectedIndex, setAffectedNode, setIsTranslating]);
+
+    /**
+     * on drag end, remove appended ghost image and style, fire on sort callback
+     * @param event drag event
+     */
+    const onDragEnd = React.useCallback(
+        (event: React.DragEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement> | React.MouseEvent<HTMLDivElement>) => {
+            setIsDragging(() => {
+                event.preventDefault(); // to prevent ghost image for reverting to original position
+                event.stopPropagation();
+                Array.from(dragContainerRef.current.children).forEach((element: HTMLElement) => {
+                    element.style.transform = null;
+                });
+                setCurrentItem(null);
+                setCurrentItemNode(null);
+                onSort(draggingOrders.map(({ uniqueKey }: OrderItem) => uniqueKey));
+                setDefaultOrders(draggingOrders);
+                dragNode?.remove();
+                return false;
+            });
+        },
+        [dragContainerRef, draggingOrders, dragNode, setIsDragging, setCurrentItem, setCurrentItemNode, onSort, setDefaultOrders]
+    );
+
+    React.useEffect(() => {
+        setDefaultOrders(() => {
+            const newOrderList: OrderItem[] = React.Children.toArray(props.children)
+                .filter((item: React.ReactChild) => React.isValidElement<React.FC<SortableItemProps>>(item) && (item?.type as any)?.displayName === "SortableItem")
+                .map(({ props }: React.ReactElement<SortableItemProps>) => ({ uniqueKey: props.uniqueKey, disabled: props.disabled }));
+            if (newOrderList.length === 0) {
+                console.warn("Please pass at least one SortableItem element to make SortableList works");
             }
+            return newOrderList;
         });
-
-        // if (overlapped) {
-        //     const nodeRect: DOMRect = overlapped.getBoundingClientRect();
-        //     const activeNodeRect: DOMRect = activeItemRef.current.getBoundingClientRect();
-        //     const isAbove: boolean = nodeRect.bottom <= activeNodeRect.top;
-        //     let diff = nodeRect.top - activeNodeRect.bottom;
-        //     if (isAbove) {
-        //         diff = activeNodeRect.top - nodeRect.bottom;
-        //     }
-        //     const half = Math.abs(diff) / nodeRect.height >= 0.5;
-        //     // if (half) {
-        //         // setIsTranslating(true);
-        //         overlapped.style.transform = `translate3d(0, ${isAbove ? "" : "-"}${overlapped.offsetHeight}px, 0)`;
-        //         setArr(() => {
-        //             return arr.map((item) => item);
-        //         })
-        //     // }
-        // }
-    };
-
-    const checkIfElementsOverlapped = (node: HTMLElement) => {
-        const nodeRect: DOMRect = node.getBoundingClientRect();
-        const activeNodeRect: DOMRect = activeItemRef.current.getBoundingClientRect();
-        return activeNodeRect.right >= nodeRect.left && activeNodeRect.left <= nodeRect.right && activeNodeRect.bottom >= nodeRect.top && activeNodeRect.top <= nodeRect.bottom;
-    };
-
-    const onMouseDown = (event: React.MouseEvent<HTMLDivElement, MouseEvent>, index) => {
-        setIsDragging(() => {
-            const parent: HTMLDivElement = (event.target as HTMLDivElement).closest(".sortable-item");
-            setDelta({
-                x: event.pageX - parent.getBoundingClientRect().left,
-                y: event.pageY - parent.getBoundingClientRect().top,
-            });
-            setCurrentItem(index);
-            setCurrentItemNode(parent);
-            return true;
-        });
-    };
-    const onMouseMove = (e) => {
-        if (isDragging) {
-            activeItemRef.current.style.top = `${Math.min(
-                // set boundary for draggable element
-                dragContainerRef.current.getBoundingClientRect().bottom,
-                Math.max(dragContainerRef.current.getBoundingClientRect().top, e.pageY - delta.y)
-            )}px`;
-            getOverlappedElement();
-        }
-    };
-
-    const onMouseUp = (e) => {
-        setIsDragging(() => {
-            setCurrentItem(null);
-            setCurrentItemNode(null);
-            elRefs.map((ref: React.MutableRefObject<HTMLElement>, index: number) => {
-                const element: HTMLElement = ref.current;
-                element.style.transform = null;
-            });
-            setArr(draggingOrders);
-            return false;
-        });
-    };
+    }, [props.children]);
 
     React.useEffect(() => {
-        if (currentItem !== null && currentItemNode && activeItemRef?.current) {
-            const position = currentItemNode.getBoundingClientRect();
-            activeItemRef.current.style.width = `${position.width}px`;
-            activeItemRef.current.style.height = `${position.height}px`;
-            activeItemRef.current.style.top = `${position.top}px`;
-            activeItemRef.current.style.left = `${position.left}px`;
-        }
-    }, [currentItem, activeItemRef, currentItemNode]);
-
-    React.useEffect(() => {
-        setIsDragging(() => {
-            // Array.from(dragContainerRef.current.children).forEach((element: HTMLElement) => {
-            //     element.style.transform = null;
-            // })
-            return false;
-        });
-        // add or remove refs
-        setElRefs((elRefs) => arr.map((_, i) => (elRefs ? elRefs[i] : React.createRef())));
-    }, [arr]);
-
-    React.useLayoutEffect(() => {
-        console.log(elRefs);
-    });
+        setDraggingOrders(defaultOrders);
+    }, [defaultOrders]);
 
     return (
-        <div className="rc column-customiser">
+        <div {...props} className={classnames("rc", "sortable-list", className, { disabled })}>
             <div className="drop-container" ref={dragContainerRef}>
-                {(currentItem === null ? arr : draggingOrders).map((item, index) => (
-                    <SortableItem
+                {(currentItem === null ? defaultOrders : draggingOrders).map((item: OrderItem, index) => (
+                    <SortableItemWrapper
                         key={index}
-                        index={item}
-                        ref={elRefs && elRefs[index]}
-                        ghostRef={activeItemRef}
-                        isActive={currentItem !== null && item === arr[currentItem]}
-                        className={"card mb-1"}
-                        onMouseDown={(ev: React.MouseEvent<HTMLDivElement, MouseEvent>) => onMouseDown(ev, index)}
+                        uniqueKey={item.uniqueKey}
+                        disabled={disabled || item.disabled}
+                        isActive={currentItem !== null && item === defaultOrders[currentItem]}
+                        isDragging={isDragging}
+                        className="sortable-item-wrapper"
+                        onMouseDown={(event: React.MouseEvent<HTMLDivElement, MouseEvent>) => onMouseDown(event, index)}
+                        onTouchStart={(event: React.TouchEvent<HTMLDivElement>) => onMouseDown(event, index)}
+                        onMouseUp={onDragEnd}
+                        onTouchEnd={onDragEnd}
+                        onDragStart={onDragStart}
+                        onDragOver={isTranslating ? null : (event: React.DragEvent<HTMLDivElement>) => onDragOver(event, index)}
+                        onDragEnd={onDragEnd}
+                        onTransitionEnd={onTransitionEnd}
                     >
-                        <div className="drag">=</div>
-                        <div>
-                            {currentItem === null ? "" : "draaagggg"}
-                            {item}
-                        </div>
-                    </SortableItem>
+                        {React.Children.map(props.children, (Child: React.ReactElement<SortableItemProps>) => {
+                            const { uniqueKey }: SortableItemProps = Child.props;
+                            const isDisabled: boolean = disabled || item.disabled;
+                            return item.uniqueKey === uniqueKey && React.isValidElement<React.FC<SortableItemProps>>(Child)
+                                ? React.cloneElement(Child, {
+                                      disabled: isDisabled,
+                                      "aria-disabled": isDisabled,
+                                  })
+                                : null;
+                        })}
+                    </SortableItemWrapper>
                 ))}
-                {currentItem !== null &&
-                    createPortal(
-                        <div
-                            onMouseDown={() => console.log("dd")}
-                            onMouseMove={onMouseMove}
-                            data-value={currentItem}
-                            onMouseUp={onMouseUp}
-                            onMouseLeave={onMouseUp}
-                            ref={activeItemRef}
-                            className={classnames("rc", "sortable-item", "ghost-item", "card mb-1")}
-                        >
-                            <div className="drag">=</div>
-                            <div>
-                                {currentItem === null ? "" : "draaagggg"}
-                                {arr[currentItem]}
-                            </div>
-                        </div>,
-                        safeDocument.body
-                    )}
+            </div>
+        </div>
+    );
+};
+
+type SortableItemWrapperProps = SortableItemProps &
+    JSX.IntrinsicElements["div"] & {
+        isActive?: boolean;
+        disabled?: boolean;
+        isDragging?: boolean;
+    };
+
+const SortableItemWrapper: React.FC<SortableItemWrapperProps> = ({
+    isActive,
+    isDragging,
+    className,
+    disabled,
+    children,
+    uniqueKey,
+    onDragStart,
+    onDragOver,
+    onDragEnd,
+    onTransitionEnd,
+    onMouseDown,
+    onMouseUp,
+    onTouchEnd,
+    onTouchStart,
+    ...props
+}: React.PropsWithChildren<SortableItemWrapperProps>) => {
+    return (
+        <div
+            {...props}
+            className={classnames("rc", "sortable-item-wrapper", className, { "is-active": isActive && isDragging, disabled })}
+            data-value={uniqueKey}
+            onTransitionEnd={disabled ? null : onTransitionEnd}
+            onDragOver={disabled ? null : isActive ? (event: React.DragEvent) => event.preventDefault() : onDragOver}
+        >
+            <div className="sort-item-content">{children}</div>
+            <div
+                className="drag-icon"
+                draggable={isActive && !disabled}
+                onMouseUp={isDragging || disabled ? null : onMouseUp}
+                onTouchEnd={isDragging || disabled ? null : onTouchEnd}
+                onMouseDown={disabled ? null : onMouseDown}
+                onTouchStart={disabled ? null : onTouchStart}
+                onDragStart={isActive || !disabled ? onDragStart : null}
+                onDragEnd={isDragging || !disabled ? onDragEnd : null}
+            >
+                {dragAndDropIcon}
             </div>
         </div>
     );
