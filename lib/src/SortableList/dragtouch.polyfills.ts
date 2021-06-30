@@ -3,6 +3,9 @@
  * drag drop touch polyfill from https://github.com/Bernardo-Castilho/dragdroptouch/blob/master/DragDropTouch.js
  * credits to: https://github.com/Bernardo-Castilho
  */
+// This solution is meant to fix Gatsby build which complains that document doesn't exist in server-side rendering
+const safeDocument: Document | null = typeof document !== "undefined" ? document : null;
+const safeNavigator: Navigator | null = typeof navigator !== "undefined" ? navigator : null;
 var DragDropTouch;
 (function (DragDropTouch_1) {
     "use strict";
@@ -144,15 +147,15 @@ var DragDropTouch;
             // detect passive event support
             // https://github.com/Modernizr/Modernizr/issues/1894
             var supportsPassive = false;
-            document.addEventListener("test", function () {}, {
+            safeDocument?.addEventListener("test", function () {}, {
                 get passive() {
                     supportsPassive = true;
                     return true;
                 },
             });
             // listen to touch events
-            if (navigator.maxTouchPoints) {
-                var d = document,
+            if (safeNavigator?.maxTouchPoints) {
+                var d = safeDocument,
                     ts = this._touchstart.bind(this),
                     tm = this._touchmove.bind(this),
                     te = this._touchend.bind(this),
@@ -326,7 +329,7 @@ var DragDropTouch;
         // get the element at a given touch event
         DragDropTouch.prototype._getTarget = function (e) {
             var pt = this._getPoint(e),
-                el = document.elementFromPoint(pt.x, pt.y);
+                el = safeDocument?.elementFromPoint(pt.x, pt.y);
             while (el && getComputedStyle(el).pointerEvents == "none") {
                 el = el.parentElement;
             }
@@ -352,7 +355,7 @@ var DragDropTouch;
             }
             // add image to document
             this._moveImage(e);
-            document.body.appendChild(this._img);
+            safeDocument?.body.appendChild(this._img);
         };
         // dispose of drag image element
         DragDropTouch.prototype._destroyImage = function () {
@@ -413,7 +416,7 @@ var DragDropTouch;
         };
         DragDropTouch.prototype._dispatchEvent = function (e, type, target) {
             if (e && target) {
-                var evt = document.createEvent("Event"),
+                var evt = safeDocument?.createEvent("Event"),
                     t = e.touches ? e.touches[0] : e;
                 evt.initEvent(type, true, true);
                 (evt as any).button = 0;
