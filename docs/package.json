@@ -9,7 +9,7 @@
     "scripts": {
         "start": "gatsby develop -p 3000",
         "build": "gatsby build --prefix-paths",
-        "serve": "gatsby serve -o",
+        "serve": "gatsby serve",
         "clean": "gatsby clean"
     },
     "license": "Apache-2.0",
