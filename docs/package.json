@@ -7,9 +7,9 @@
         "react"
     ],
     "scripts": {
-        "start": "gatsby develop -p 3000",
+        "start": "gatsby develop -H 192.168.68.100 -p 3000",
         "build": "gatsby build --prefix-paths",
-        "serve": "gatsby serve",
+        "serve": "gatsby serve -o -H 192.168.68.100",
         "clean": "gatsby clean"
     },
     "license": "Apache-2.0",

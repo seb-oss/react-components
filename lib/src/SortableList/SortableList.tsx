@@ -1,7 +1,8 @@
-import classnames from "classnames";
 import React from "react";
-import "./sortable-list.scss";
+import classnames from "classnames";
 import { SortableItemProps } from "./SortableItem";
+import "./dragtouch.polyfills";
+import "./sortable-list.scss";
 
 const dragAndDropIcon: JSX.Element = (
     <svg width="10px" fill="currentColor" height="16px" viewBox="0 0 10 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">
@@ -52,10 +53,6 @@ export const SortableList: React.FC<SortableListProps> = ({ onSort, className, d
         const parent: HTMLDivElement = (event.target as HTMLDivElement).closest(".sortable-item-wrapper");
         const position: React.MouseEvent = ((event as React.TouchEvent).touches ? (event as React.TouchEvent).touches[0] : event) as React.MouseEvent;
         setDelta({
-            x: position.pageX - parent.getBoundingClientRect().left,
-            y: position.pageY - parent.getBoundingClientRect().top,
-        });
-        console.log("delta", {
             x: position.pageX - parent.getBoundingClientRect().left,
             y: position.pageY - parent.getBoundingClientRect().top,
         });

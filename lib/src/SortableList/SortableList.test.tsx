@@ -100,4 +100,17 @@ describe("Component: SortableList", () => {
         });
         expect(props.onSort).toBeCalledWith(["2", "1", "3"]);
     });
+
+    it("Should throw error if no sortable item passed", () => {
+        const spyConsole: jest.SpyInstance = jest.spyOn(console, "warn");
+        act(() => {
+            render(
+                <SortableList {...props} disabled>
+                    test
+                </SortableList>,
+                container
+            );
+        });
+        expect(spyConsole).toBeCalled();
+    });
 });
