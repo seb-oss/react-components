@@ -20,7 +20,9 @@ const dragAndDropIcon: JSX.Element = (
 );
 
 export type SortableListProps = JSX.IntrinsicElements["div"] & {
+    /** on sort callback */
     onSort: (list: Array<string>) => void;
+    /** disable sorting */
     disabled?: boolean;
 };
 
@@ -31,6 +33,7 @@ type PositionDelta = {
 
 type OrderItem = Pick<SortableItemWrapperProps, "disabled" | "uniqueKey">;
 
+/** The component allows for sorting list by drag and drop. */
 export const SortableList: React.FC<SortableListProps> = ({ onSort, className, disabled, ...props }: React.PropsWithChildren<SortableListProps>) => {
     const dragContainerRef = React.useRef<HTMLDivElement>();
     const [defaultOrders, setDefaultOrders] = React.useState<OrderItem[]>([]);
