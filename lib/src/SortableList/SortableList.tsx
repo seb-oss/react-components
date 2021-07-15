@@ -39,7 +39,7 @@ export const SortableList: React.FC<SortableListProps> = ({ onSort, className, d
     const [defaultOrders, setDefaultOrders] = React.useState<OrderItem[]>([]);
     const [draggingOrders, setDraggingOrders] = React.useState<OrderItem[]>(defaultOrders);
     const [currentItemNode, setCurrentItemNode] = React.useState<HTMLDivElement>(null);
-    const [currentItem, setCurrentItem] = React.useState<number>(null);
+    const [currentItemIndex, setCurrentItemIndex] = React.useState<number>(null);
     const [delta, setDelta] = React.useState<PositionDelta>({ x: 0, y: 0 });
     const [dragNode, setDragNode] = React.useState<HTMLElement>(null);
     const [isDragging, setIsDragging] = React.useState<boolean>(false);
@@ -53,14 +53,14 @@ export const SortableList: React.FC<SortableListProps> = ({ onSort, className, d
      * @param index selected index
      */
     const onMouseDown = (event: React.MouseEvent<HTMLDivElement, MouseEvent> | React.TouchEvent<HTMLDivElement>, index: number) => {
-        const parent: HTMLDivElement = (event.target as HTMLDivElement).closest(".sortable-item-wrapper");
+        const itemParentNode: HTMLDivElement = (event.target as HTMLDivElement).closest(".sortable-item-wrapper");
         const position: React.MouseEvent = ((event as React.TouchEvent).touches ? (event as React.TouchEvent).touches[0] : event) as React.MouseEvent;
         setDelta({
-            x: position.pageX - parent.getBoundingClientRect().left,
-            y: position.pageY - parent.getBoundingClientRect().top,
+            x: position.pageX - itemParentNode.getBoundingClientRect().left,
+            y: position.pageY - itemParentNode.getBoundingClientRect().top,
         });
-        setCurrentItem(index);
-        setCurrentItemNode(parent);
+        setCurrentItemIndex(index);
+        setCurrentItemNode(itemParentNode);
     };
 
     /**
@@ -95,23 +95,23 @@ export const SortableList: React.FC<SortableListProps> = ({ onSort, className, d
             event.preventDefault(); // to prevent ghost image for reverting to original position
             event.dataTransfer.dropEffect = "move";
             const activeNodeRect: DOMRect = currentItemNode.getBoundingClientRect();
-            const parent: HTMLDivElement = (event.target as HTMLDivElement).closest(".sortable-item-wrapper");
-            const nodeRect: DOMRect = parent.getBoundingClientRect();
+            const itemParentNode: HTMLDivElement = (event.target as HTMLDivElement).closest(".sortable-item-wrapper");
+            const nodeRect: DOMRect = itemParentNode.getBoundingClientRect();
             const ghostImagePositionTop: number = event.clientY - delta.y;
             const ghostImagePositionBottom: number = ghostImagePositionTop + activeNodeRect.height; // get ghost image's actual position
-            const isAbove: boolean = nodeRect.top <= ghostImagePositionTop;
+            const isAboveGhostImage: boolean = nodeRect.top <= ghostImagePositionTop;
             let positionDifference: number = nodeRect.top - ghostImagePositionBottom;
-            if (isAbove) {
+            if (isAboveGhostImage) {
                 positionDifference = ghostImagePositionTop - nodeRect.bottom;
             }
             const isHalfCoverage: boolean = Math.abs(positionDifference) / nodeRect.height >= 0.5; // only trigger swapping when overlapped coverage is more than 50%
-            const isOverlapped: boolean = isHalfCoverage && !isTranslating && parent.className.indexOf("on-drag") === -1;
-            parent.style.transform = null;
+            const isOverlapped: boolean = isHalfCoverage && !isTranslating && itemParentNode.className.indexOf("on-drag") === -1;
+            itemParentNode.style.transform = null;
             if (isOverlapped) {
                 // if the overlapped item fulfills criteria, initiate animation
                 setIsTranslating(true);
-                parent.style.transform = `translate3d(0, ${isAbove ? "" : "-"}${parent.offsetHeight}px, 0)`;
-                setAffectedNode(parent);
+                itemParentNode.style.transform = `translate3d(0, ${isAboveGhostImage ? "" : "-"}${itemParentNode.offsetHeight}px, 0)`;
+                setAffectedNode(itemParentNode);
                 setAffectedIndex(index);
             }
         },
@@ -124,10 +124,10 @@ export const SortableList: React.FC<SortableListProps> = ({ onSort, className, d
             setDraggingOrders((oldOrders: OrderItem[]) => {
                 const newList: OrderItem[] = oldOrders.slice(0);
                 affectedNode.style.transform = null;
-                let itemIndex: number = currentItem;
+                let itemIndex: number = currentItemIndex;
                 const originalItem: OrderItem = newList.find(({ uniqueKey }: OrderItem, index: number) => {
                     itemIndex = index;
-                    return uniqueKey === defaultOrders[currentItem].uniqueKey;
+                    return uniqueKey === defaultOrders[currentItemIndex].uniqueKey;
                 });
                 newList[itemIndex] = newList[affectedIndex]; // swap overlapped
                 newList[affectedIndex] = originalItem;
@@ -151,7 +151,7 @@ export const SortableList: React.FC<SortableListProps> = ({ onSort, className, d
                 Array.from(dragContainerRef.current.children).forEach((element: HTMLElement) => {
                     element.style.transform = null;
                 });
-                setCurrentItem(null);
+                setCurrentItemIndex(null);
                 setCurrentItemNode(null);
                 onSort(draggingOrders.map(({ uniqueKey }: OrderItem) => uniqueKey));
                 setDefaultOrders(draggingOrders);
@@ -159,7 +159,7 @@ export const SortableList: React.FC<SortableListProps> = ({ onSort, className, d
                 return false;
             });
         },
-        [dragContainerRef, draggingOrders, dragNode, setIsDragging, setCurrentItem, setCurrentItemNode, onSort, setDefaultOrders]
+        [dragContainerRef, draggingOrders, dragNode, setIsDragging, setCurrentItemIndex, setCurrentItemNode, onSort, setDefaultOrders]
     );
 
     React.useEffect(() => {
@@ -181,12 +181,12 @@ export const SortableList: React.FC<SortableListProps> = ({ onSort, className, d
     return (
         <div {...props} className={classnames("rc", "sortable-list", className, { disabled })}>
             <div className="drop-container" ref={dragContainerRef}>
-                {(currentItem === null ? defaultOrders : draggingOrders).map((item: OrderItem, index) => (
+                {(currentItemIndex === null ? defaultOrders : draggingOrders).map((item: OrderItem, index) => (
                     <SortableItemWrapper
                         key={index}
                         uniqueKey={item.uniqueKey}
                         disabled={disabled || item.disabled}
-                        isActive={currentItem !== null && item === defaultOrders[currentItem]}
+                        isActive={currentItemIndex !== null && item === defaultOrders[currentItemIndex]}
                         isDragging={isDragging}
                         className="sortable-item-wrapper"
                         onMouseDown={(event: React.MouseEvent<HTMLDivElement, MouseEvent>) => onMouseDown(event, index)}
