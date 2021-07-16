@@ -22,6 +22,7 @@ export * from "./Rating/index";
 export * from "./Slider/index";
 export * from "./StepTracker/index";
 export * from "./Stepper/index";
+export * from "./SortableList/index";
 export * from "./Table/index";
 export * from "./Tabs/index";
 export * from "./TextLabel/index";

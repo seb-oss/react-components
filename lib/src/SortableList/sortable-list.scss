@@ -1,0 +1,74 @@
+@import "~@sebgroup/bootstrap/scss/core";
+
+.rc.sortable-list {
+    width: 100%;
+    .drop-container {
+        position: relative;
+        width: 100%;
+        > .sortable-item-wrapper {
+            width: 100%;
+            transition: transform 200ms;
+            transform: translate3d(0, 0, 0);
+            margin-bottom: 0.5rem;
+            &.is-active {
+                z-index: 0;
+                border: 1px dashed $gray-300;
+                background: transparent;
+                > .sort-item-content {
+                    > * {
+                        visibility: hidden;
+                    }
+                }
+                > .drag-icon {
+                    color: transparent;
+                }
+            }
+            &:hover {
+                border-color: $blue;
+            }
+            &:focus {
+                border-color: $blue-darker;
+            }
+            &.disabled {
+                background-color: $gray-200;
+                &:hover {
+                    border-color: $gray-300;
+                }
+                .drag-icon {
+                    &:hover {
+                        cursor: initial;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.rc.sortable-item-wrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    background-color: $white;
+    border-radius: 0.25rem;
+    border: 1px solid $gray-300;
+    padding: 0.25rem 0.75rem;
+    &.on-drag,
+    &:active {
+        cursor: grabbing;
+        border-color: $blue-darker;
+    }
+    .sort-item-content {
+        flex: 1;
+    }
+    .drag-icon {
+        flex: 0 0 2rem;
+        color: $gray-500;
+        text-align: center;
+        &:hover {
+            cursor: grab;
+        }
+        &:active {
+            cursor: grabbing;
+        }
+    }
+}
