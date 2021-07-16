@@ -120,6 +120,11 @@
         "filePath": "./src/Stepper/index.ts"
     },
     {
+        "name": "SortableList",
+        "path": "/docs/sortable-list/",
+        "filePath": "./src/SortableList/index.ts"
+    },
+    {
         "name": "Table",
         "path": "/docs/table/",
         "filePath": "./src/Table/index.ts"
