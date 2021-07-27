@@ -312,7 +312,7 @@ describe("Component: Dropdown", () => {
                 select.append(option);
             });
 
-            expect(getValueOfMultipleSelect(select)).toEqual(["2", "3"]);
+            expect(getValueOfMultipleSelect(Array.from(select.options))).toEqual(["2", "3"]);
         });
     });
 });
