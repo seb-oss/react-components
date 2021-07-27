@@ -37,11 +37,14 @@ interface UnitNames {
     year: string;
 }
 
+type InputRenderType = "custom" | "date" | "month";
+
 export const Datepicker: React.FunctionComponent<DatepickerProps> = React.forwardRef(
     (
         { monthPicker, forceCustom, className, value, min, max, disabled, onChange, localeCode = "en", wrapperProps, customPickerSelectProps, ...props }: DatepickerProps,
         ref: React.ForwardedRef<HTMLInputElement>
     ): React.ReactElement<void> => {
+        const [renderType, setRenderType] = React.useState<InputRenderType>("date");
         const isValidDate = React.useCallback((d: Date): boolean => {
             return !!(d && d instanceof Date && !isNaN(d.getTime()));
         }, []);
@@ -139,18 +142,36 @@ export const Datepicker: React.FunctionComponent<DatepickerProps> = React.forwar
         };
 
         React.useEffect(() => {
-            const day: number = monthPicker ? 1 : customDay;
-            const month: number = customMonth;
-            const year: number = customYear;
-            const dateString: string = `${padNumber(year, true)}-${padNumber(month)}-${padNumber(day)}`;
-            const date: Date = new Date(dateString);
-            const m: number = date.getMonth() + 1;
-            if (date.getFullYear() === year && m === month && date.getDate() === day) {
-                isDateInRange(date, min, max) ? onChange(date) : onChange(null);
-            } else {
-                onChange(null);
+            setRenderType(() => {
+                if (forceCustom) {
+                    return "custom";
+                }
+                if (monthPicker && supportsInputOfType("month")) {
+                    return "month";
+                }
+                if (supportsInputOfType("date")) {
+                    return "date";
+                }
+                return "custom";
+            });
+        }, [forceCustom, monthPicker]);
+
+        React.useEffect(() => {
+            if (renderType === "custom") {
+                // only call onchange when the field is custom datepicker
+                const day: number = monthPicker ? 1 : customDay;
+                const month: number = customMonth;
+                const year: number = customYear;
+                const dateString: string = `${padNumber(year, true)}-${padNumber(month)}-${padNumber(day)}`;
+                const date: Date = new Date(dateString);
+                const m: number = date.getMonth() + 1;
+                if (date.getFullYear() === year && m === month && date.getDate() === day) {
+                    isDateInRange(date, min, max) ? onChange(date) : onChange(null);
+                } else {
+                    onChange(null);
+                }
             }
-        }, [monthPicker, customDay, customMonth, customYear, min, max]);
+        }, [monthPicker, customDay, customMonth, customYear, min, max, renderType]);
 
         const getRelativeTimeFormat = React.useCallback((code: string): any => {
             if ((Intl as any)["RelativeTimeFormat"]) {
@@ -239,6 +260,10 @@ export const Datepicker: React.FunctionComponent<DatepickerProps> = React.forwar
         const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
             const { value: changeEventValue } = e.target;
             const value: Date = new Date(changeEventValue);
+            if (min > value || max < value) {
+                onChange(null);
+                return;
+            }
             onChange(value);
         };
 
@@ -312,7 +337,7 @@ export const Datepicker: React.FunctionComponent<DatepickerProps> = React.forwar
             );
         };
 
-        if (monthPicker && !forceCustom && supportsInputOfType("month")) {
+        if (renderType === "month") {
             return (
                 <input
                     {...props}
@@ -326,7 +351,7 @@ export const Datepicker: React.FunctionComponent<DatepickerProps> = React.forwar
                     onChange={handleOnChange}
                 />
             );
-        } else if (!forceCustom && supportsInputOfType("date")) {
+        } else if (renderType === "date") {
             return (
                 <input
                     {...props}

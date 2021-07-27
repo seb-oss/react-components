@@ -15,6 +15,7 @@ describe("Component: Datepicker", () => {
     beforeEach(() => {
         container = document.createElement("div");
         document.body.appendChild(container);
+        jest.clearAllMocks();
     });
 
     afterEach(() => {
@@ -95,8 +96,13 @@ describe("Component: Datepicker", () => {
 
     it("Should fire change event with null when component value is out of range and with latest value when in range", () => {
         const [min, max]: [Date, Date] = [new Date(props.value.getFullYear() - 10, 1, 1), new Date(props.value.getFullYear() + 10, 1, 1)];
+        const year: number = props.value.getFullYear();
         act(() => {
             render(<Datepicker {...props} min={max} />, container);
+        });
+        const yearElement: HTMLInputElement = container.querySelector("input");
+        act(() => {
+            Simulate.change(yearElement, { target: { value: new Date(year, 1, 1) } } as any);
         });
 
         expect(props.onChange).toHaveBeenCalledWith(null);
@@ -105,10 +111,18 @@ describe("Component: Datepicker", () => {
             render(<Datepicker {...props} max={min} />, container);
         });
 
+        act(() => {
+            Simulate.change(yearElement, { target: { value: new Date(year + 11, 1, 1) } } as any);
+        });
+
         expect(props.onChange).toHaveBeenCalledWith(null);
 
         act(() => {
             render(<Datepicker {...props} min={min} max={min} />, container);
+        });
+
+        act(() => {
+            Simulate.change(yearElement, { target: { value: new Date(year, 1, 1) } } as any);
         });
 
         expect(props.onChange).toHaveBeenCalledWith(null);
@@ -117,10 +131,18 @@ describe("Component: Datepicker", () => {
             render(<Datepicker {...props} min={max} max={max} />, container);
         });
 
+        act(() => {
+            Simulate.change(yearElement, { target: { value: new Date(year, 1, 1) } } as any);
+        });
+
         expect(props.onChange).toHaveBeenCalledWith(null);
 
         act(() => {
             render(<Datepicker {...props} min={min} max={max} />, container);
+        });
+
+        act(() => {
+            Simulate.change(yearElement, { target: { value: new Date(year, 1, 1) } } as any);
         });
 
         expect(props.onChange).toHaveBeenCalled();
@@ -130,6 +152,10 @@ describe("Component: Datepicker", () => {
 
         act(() => {
             render(<Datepicker {...props} min={min} max={max} forceCustom />, container);
+        });
+
+        act(() => {
+            Simulate.change(container.querySelector("input.seb-datepicker-custom-year"), { target: { value: year } } as any);
         });
 
         expect(props.onChange).toHaveBeenCalled();
