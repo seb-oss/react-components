@@ -86,7 +86,7 @@ export const Modal: React.FC<ModalProps> = React.memo(
         // Escape key listner
         React.useEffect(() => {
             function keyupListener(e: KeyboardEvent) {
-                e.key.toLowerCase() === "escape" && onEscape(e);
+                e.key?.toLowerCase() === "escape" && onEscape(e);
             }
 
             if (onEscape && toggle) {
