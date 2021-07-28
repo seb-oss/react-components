@@ -261,11 +261,11 @@ export const Datepicker: React.FunctionComponent<DatepickerProps> = React.forwar
         const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
             const { value: changeEventValue } = e.target;
             const value: Date = new Date(changeEventValue);
-            if (min > value || max < value) {
-                onChange(null);
+            if (isDateInRange(value, min, max)) {
+                onChange(value);
                 return;
             }
-            onChange(value);
+            onChange(null);
         };
 
         const renderCustomDatepicker = (value: Date, monthPicker: boolean, customPickerOrder: string[], unitNames: UnitNames, disabled: boolean, monthNames: string[]) => {
