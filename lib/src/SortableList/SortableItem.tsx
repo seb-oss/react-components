@@ -11,10 +11,11 @@ const SortableItem: React.FC<SortableItemProps> = React.forwardRef(
         return (
             <div {...props} ref={ref} className={classnames("rc", "sortable-item", className)}>
                 {React.Children.map(children, (Child: React.ReactElement) => {
+                    const isDisabled: boolean = disabled || Child.props?.disabled;
                     return React.isValidElement<React.FC<any>>(Child)
                         ? React.cloneElement(Child, {
-                              disabled,
-                              "aria-disabled": disabled,
+                              disabled: isDisabled,
+                              "aria-disabled": isDisabled,
                           } as any)
                         : Child;
                 })}
