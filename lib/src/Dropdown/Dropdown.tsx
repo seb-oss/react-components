@@ -22,8 +22,8 @@ const defaultText: Required<DropdownText> = {
     search: "Search...",
 };
 
-export function getValueOfMultipleSelect(select: HTMLSelectElement): string[] {
-    return Array.from(select.options)
+export function getValueOfMultipleSelect(selectOptions: Array<HTMLOptionElement>): string[] {
+    return Array.from(selectOptions)
         .filter((option) => option.selected)
         .map((option) => option.value);
 }
@@ -60,8 +60,8 @@ export const Dropdown: React.FC<DropdownProps> = React.forwardRef(
         const [searchKeyword, setSearchKeyword] = React.useState<string>("");
         const [menuStyle, setMenuStyle] = React.useState<React.CSSProperties>({});
         const [label, setLabel] = React.useState<string>();
-
-        const selectRef = useCombinedRefs<HTMLSelectElement>(ref);
+        const [selectRef, setSelectRef] = React.useState<HTMLSelectElement>(null);
+        const [selectRefOptions, setSelectRefOptions] = React.useState<Array<HTMLOptionElement>>([]);
         const searchRef = React.useRef<HTMLInputElement>();
         const menuRef = React.useRef<HTMLDivElement>();
         const dropdownRef = React.useRef<HTMLDivElement>();
@@ -71,41 +71,39 @@ export const Dropdown: React.FC<DropdownProps> = React.forwardRef(
         const handleChange = React.useCallback(
             (e: React.ChangeEvent<HTMLInputElement>) => {
                 if (props.multiple) {
-                    const current = Array.from(selectRef.current.options).find((option) => option.value == e.target.value);
+                    const current = selectRefOptions.find((option) => option.value == e.target.value);
                     current.selected = !current.selected;
                 } else {
-                    selectRef.current.value = e.target.value;
+                    selectRef.value = e.target.value;
                     setShow(false);
                 }
-                selectRef.current.dispatchEvent(new Event("change", { bubbles: true }));
-                props.multiple && onMultipleChange && onMultipleChange(getValueOfMultipleSelect(selectRef.current));
+                selectRef.dispatchEvent(new Event("change", { bubbles: true }));
+                props.multiple && onMultipleChange && onMultipleChange(getValueOfMultipleSelect(selectRefOptions));
             },
-            [isMobile, props.multiple, onMultipleChange]
+            [isMobile, props.multiple, onMultipleChange, selectRefOptions]
         );
 
         const selectAll = React.useCallback(
             (forceValue?: boolean | React.ChangeEvent<HTMLInputElement>) => {
-                Array.from(selectRef.current.options).forEach((_, i) => {
-                    const option = selectRef.current.options.item(i);
+                selectRefOptions.forEach((option: HTMLOptionElement) => {
                     if (!option.disabled) {
                         option.selected = typeof forceValue === "boolean" ? forceValue : !allSelected;
                     } else {
                         option.selected = false;
                     }
                 });
-                typeof forceValue === "boolean" && (selectRef.current.value = "");
-                selectRef.current.dispatchEvent(new Event("change", { bubbles: true }));
-                props.multiple && onMultipleChange && onMultipleChange(getValueOfMultipleSelect(selectRef.current));
+                typeof forceValue === "boolean" && (selectRef.value = "");
+                selectRef.dispatchEvent(new Event("change", { bubbles: true }));
+                props.multiple && onMultipleChange && onMultipleChange(getValueOfMultipleSelect(selectRefOptions));
             },
-            [allSelected, props.multiple]
+            [allSelected, props.multiple, selectRefOptions, selectRef]
         );
 
-        const isAllSelected = (): boolean => {
-            return Array.from(selectRef.current.options).every((_, i) => {
-                const option: HTMLOptionElement = selectRef.current.options.item(i);
+        const isAllSelected = React.useCallback((): boolean => {
+            return selectRefOptions.every((option: HTMLOptionElement) => {
                 return option.disabled ? true : option.selected;
             });
-        };
+        }, [selectRefOptions]);
 
         const toggleMenu = React.useCallback(
             (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -130,7 +128,7 @@ export const Dropdown: React.FC<DropdownProps> = React.forwardRef(
 
         const onChange = React.useCallback(
             (event: React.ChangeEvent<HTMLSelectElement>) => {
-                props.multiple && onMultipleChange && onMultipleChange(getValueOfMultipleSelect(event.target));
+                props.multiple && onMultipleChange && onMultipleChange(getValueOfMultipleSelect(Array.from(event.target.options)));
                 props.onChange && props.onChange(event);
             },
             [props.multiple, props.onChange, onMultipleChange]
@@ -198,13 +196,31 @@ export const Dropdown: React.FC<DropdownProps> = React.forwardRef(
             return list?.length ? list : searchKeyword ? <p>{text.noResult || defaultText.noResult}</p> : <p>{text.emptyList || defaultText.emptyList}</p>;
         };
 
+        const measuredSelectRef = React.useCallback((node: HTMLSelectElement) => {
+            if (typeof ref === "function") {
+                // to pass ref back to parents
+                ref(node);
+            } else if (!!ref) {
+                (ref as any).current = node;
+            }
+            if (node !== null) {
+                setSelectRef(node);
+            }
+        }, []);
+
         React.useEffect(() => {
             !isMobile && props.multiple && setAllSelected(isAllSelected());
-        }, [props.value]);
+        }, [props.value, props.multiple, isAllSelected]);
 
         React.useEffect(() => {
             !searchable && setSearchKeyword("");
         }, [searchable]);
+
+        React.useEffect(() => {
+            if (!!selectRef) {
+                setSelectRefOptions(Array.from(selectRef.options));
+            }
+        }, [selectRef]);
 
         React.useEffect(() => {
             if (!isMobile) {
@@ -303,7 +319,7 @@ export const Dropdown: React.FC<DropdownProps> = React.forwardRef(
                     </div>
                 )}
                 <FeedbackIndicator type={indicator?.type} message={indicator?.message}>
-                    <select {...props} ref={selectRef} onChange={onChange} className={classnames("custom-select", props.className)} hidden={!isMobile}>
+                    <select {...props} ref={measuredSelectRef} onChange={onChange} className={classnames("custom-select", props.className)} hidden={!isMobile}>
                         {/* select always picks the first item by default. Therefore the first needs to be initialized here */}
                         {!props.value && (
                             <option disabled value="" hidden>

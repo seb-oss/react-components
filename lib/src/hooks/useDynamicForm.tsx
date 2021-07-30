@@ -249,7 +249,7 @@ export function useDynamicForm(
                 }
                 case "Dropdown": {
                     const target = (e as React.ChangeEvent<HTMLSelectElement>).target;
-                    newValue = target.multiple ? getValueOfMultipleSelect(target) : target.value;
+                    newValue = target.multiple ? getValueOfMultipleSelect(Array.from(target.options)) : target.value;
                     break;
                 }
 

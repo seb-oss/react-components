@@ -37,11 +37,14 @@ interface UnitNames {
     year: string;
 }
 
+type InputRenderType = "custom" | "date" | "month";
+
 export const Datepicker: React.FunctionComponent<DatepickerProps> = React.forwardRef(
     (
         { monthPicker, forceCustom, className, value, min, max, disabled, onChange, localeCode = "en", wrapperProps, customPickerSelectProps, ...props }: DatepickerProps,
         ref: React.ForwardedRef<HTMLInputElement>
     ): React.ReactElement<void> => {
+        const [renderType, setRenderType] = React.useState<InputRenderType>("date");
         const isValidDate = React.useCallback((d: Date): boolean => {
             return !!(d && d instanceof Date && !isNaN(d.getTime()));
         }, []);
@@ -82,6 +85,21 @@ export const Datepicker: React.FunctionComponent<DatepickerProps> = React.forwar
             }
         }, []);
 
+        const onCustomDatepickerChange = React.useCallback(
+            (day: number, month: number, year: number) => {
+                day = monthPicker ? 1 : day;
+                const dateString: string = `${padNumber(year, true)}-${padNumber(month)}-${padNumber(day)}`;
+                const date: Date = new Date(dateString);
+                // as long as all custom input fields are not null and is valid date, fire onChange
+                if (!!day && !!month && !!year && isValidDate(date) && isDateInRange(date, min, max)) {
+                    onChange(date);
+                } else {
+                    onChange(null);
+                }
+            },
+            [isDateInRange, onChange, min, max, monthPicker]
+        );
+
         const initCustomDay = React.useCallback(
             (value: Date, monthPicker: boolean): number => {
                 const inputRawValue: string = getInputRawValue(value, monthPicker);
@@ -94,13 +112,6 @@ export const Datepicker: React.FunctionComponent<DatepickerProps> = React.forwar
         );
 
         const [customDay, setCustomDay] = React.useState<number>(initCustomDay(value, monthPicker));
-
-        const handleChangeCustomDay = (e: React.ChangeEvent<HTMLInputElement>): void => {
-            if (!monthPicker) {
-                const v: number = e.target?.value && !Number.isNaN(Number(e.target?.value)) ? Number(e.target.value) : null;
-                setCustomDay(v);
-            }
-        };
 
         const initCustomMonth = React.useCallback(
             (value: Date, monthPicker: boolean): number => {
@@ -115,11 +126,6 @@ export const Datepicker: React.FunctionComponent<DatepickerProps> = React.forwar
 
         const [customMonth, setCustomMonth] = React.useState<number>(initCustomMonth(value, monthPicker));
 
-        const handleChangeCustomMonth = (e: React.ChangeEvent<HTMLSelectElement>): void => {
-            const v: number = e.target?.value && !Number.isNaN(Number(e.target?.value)) ? Number(e.target.value) : null;
-            setCustomMonth(v);
-        };
-
         const initCustomYear = React.useCallback(
             (value: Date, monthPicker: boolean): number => {
                 const inputRawValue: string = getInputRawValue(value, monthPicker);
@@ -133,24 +139,40 @@ export const Datepicker: React.FunctionComponent<DatepickerProps> = React.forwar
 
         const [customYear, setCustomYear] = React.useState<number>(initCustomYear(value, monthPicker));
 
-        const handleChangeCustomYear = (e: React.ChangeEvent<HTMLInputElement>): void => {
-            const v: number = e.target?.value && !Number.isNaN(Number(e.target?.value)) ? Number(e.target.value) : null;
-            setCustomYear(v);
-        };
+        const handleChangeCustomDay = React.useCallback(
+            (e: React.ChangeEvent<HTMLInputElement>): void => {
+                if (!monthPicker) {
+                    const v: number = e.target?.value && !Number.isNaN(Number(e.target?.value)) ? Number(e.target.value) : null;
+                    setCustomDay(() => {
+                        onCustomDatepickerChange(v, customMonth, customYear);
+                        return v;
+                    });
+                }
+            },
+            [customMonth, customYear, onCustomDatepickerChange]
+        );
 
-        React.useEffect(() => {
-            const day: number = monthPicker ? 1 : customDay;
-            const month: number = customMonth;
-            const year: number = customYear;
-            const dateString: string = `${padNumber(year, true)}-${padNumber(month)}-${padNumber(day)}`;
-            const date: Date = new Date(dateString);
-            const m: number = date.getMonth() + 1;
-            if (date.getFullYear() === year && m === month && date.getDate() === day) {
-                isDateInRange(date, min, max) ? onChange(date) : onChange(null);
-            } else {
-                onChange(null);
-            }
-        }, [monthPicker, customDay, customMonth, customYear, min, max]);
+        const handleChangeCustomMonth = React.useCallback(
+            (e: React.ChangeEvent<HTMLSelectElement>): void => {
+                const v: number = e.target?.value && !Number.isNaN(Number(e.target?.value)) ? Number(e.target.value) : null;
+                setCustomMonth(() => {
+                    onCustomDatepickerChange(customDay, v, customYear);
+                    return v;
+                });
+            },
+            [customDay, customYear, onCustomDatepickerChange]
+        );
+
+        const handleChangeCustomYear = React.useCallback(
+            (e: React.ChangeEvent<HTMLInputElement>): void => {
+                const v: number = e.target?.value && !Number.isNaN(Number(e.target?.value)) ? Number(e.target.value) : null;
+                setCustomYear(() => {
+                    onCustomDatepickerChange(customDay, customMonth, v);
+                    return v;
+                });
+            },
+            [customDay, customMonth, onCustomDatepickerChange]
+        );
 
         const getRelativeTimeFormat = React.useCallback((code: string): any => {
             if ((Intl as any)["RelativeTimeFormat"]) {
@@ -239,7 +261,11 @@ export const Datepicker: React.FunctionComponent<DatepickerProps> = React.forwar
         const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
             const { value: changeEventValue } = e.target;
             const value: Date = new Date(changeEventValue);
-            onChange(value);
+            if (isDateInRange(value, min, max)) {
+                onChange(value);
+                return;
+            }
+            onChange(null);
         };
 
         const renderCustomDatepicker = (value: Date, monthPicker: boolean, customPickerOrder: string[], unitNames: UnitNames, disabled: boolean, monthNames: string[]) => {
@@ -312,7 +338,22 @@ export const Datepicker: React.FunctionComponent<DatepickerProps> = React.forwar
             );
         };
 
-        if (monthPicker && !forceCustom && supportsInputOfType("month")) {
+        React.useEffect(() => {
+            setRenderType(() => {
+                if (forceCustom) {
+                    return "custom";
+                }
+                if (monthPicker && supportsInputOfType("month")) {
+                    return "month";
+                }
+                if (supportsInputOfType("date")) {
+                    return "date";
+                }
+                return "custom";
+            });
+        }, [forceCustom, monthPicker]);
+
+        if (renderType === "month") {
             return (
                 <input
                     {...props}
@@ -326,7 +367,7 @@ export const Datepicker: React.FunctionComponent<DatepickerProps> = React.forwar
                     onChange={handleOnChange}
                 />
             );
-        } else if (!forceCustom && supportsInputOfType("date")) {
+        } else if (renderType === "date") {
             return (
                 <input
                     {...props}
