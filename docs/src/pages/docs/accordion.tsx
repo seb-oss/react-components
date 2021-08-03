@@ -30,7 +30,7 @@ const AccordionPage: React.FC = () => {
             importedFiles={importedFiles}
             example={
                 <Accordion className="w-100" inverted={controls.inverted} alternative={controls.alternative} defaultValue={0}>
-                    <AccordionItem header="A simple accordion item">
+                    <AccordionItem header="A simple accordion item" onToggle={() => console.log("simple")}>
                         <p>Illum amet voluptas minus aut esse totam blanditiis. Et corporis vel aspernatur dicta fugit et est placeat. Beatae dolor nisi aut minus placeat et at accusantium.</p>
                     </AccordionItem>
                     <AccordionItem header="An accordion item with headers and paragraphs" subHeader="A sub-header text to add some context">
@@ -42,7 +42,7 @@ const AccordionPage: React.FC = () => {
                         <h5>Exercitationem fugit earum</h5>
                         <p>Suscipit quis quia. Et veniam sit est vero. Aut ut est. Et porro saepe aspernatur dolorum rem beatae blanditiis. Repudiandae veritatis ut.</p>
                     </AccordionItem>
-                    <AccordionItem header="More complex structures">
+                    <AccordionItem header="More complex structures" onToggle={() => console.log("struc")}>
                         <form onSubmit={(e) => e.preventDefault()}>
                             <fieldset>
                                 <legend>Register your interest</legend>

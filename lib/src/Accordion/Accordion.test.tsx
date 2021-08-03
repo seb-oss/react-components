@@ -1,5 +1,5 @@
 import React from "react";
-import { act } from "react-dom/test-utils";
+import { act, MockedComponentClass } from "react-dom/test-utils";
 import { unmountComponentAtNode, render } from "react-dom";
 import { Accordion, AccordionItem } from ".";
 
@@ -122,5 +122,45 @@ describe("Component: Accordion", () => {
             });
             expect(container.querySelector<HTMLButtonElement>("button").getAttribute("aria-expanded")).toEqual("true");
         });
+    });
+
+    it("Should fire on toggle", () => {
+        const mockFn: jest.Mock = jest.fn();
+        act(() => {
+            render(
+                <Accordion onToggle={mockFn}>
+                    <AccordionItem header="First" />
+                    <AccordionItem header="Second" />
+                </Accordion>,
+                container
+            );
+        });
+        const firstButton: HTMLButtonElement = container.querySelectorAll<HTMLButtonElement>("button.btn-link").item(0);
+        act(() => {
+            firstButton.click();
+        });
+        expect(mockFn).toBeCalled();
+    });
+
+    it("Should fire accordion item callback on toggle", () => {
+        const mockFn: jest.Mock = jest.fn();
+        act(() => {
+            render(
+                <Accordion>
+                    <AccordionItem header="First" onToggle={mockFn} />
+                    <AccordionItem header="Second" />
+                </Accordion>,
+                container
+            );
+        });
+        const firstButton: HTMLButtonElement = container.querySelectorAll<HTMLButtonElement>("button.btn-link").item(0);
+        act(() => {
+            firstButton.click();
+        });
+        expect(mockFn).toBeCalled();
+        act(() => {
+            firstButton.click();
+        });
+        expect(mockFn).toBeCalled();
     });
 });
