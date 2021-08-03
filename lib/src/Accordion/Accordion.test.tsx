@@ -1,5 +1,5 @@
 import React from "react";
-import { act, MockedComponentClass } from "react-dom/test-utils";
+import { act } from "react-dom/test-utils";
 import { unmountComponentAtNode, render } from "react-dom";
 import { Accordion, AccordionItem } from ".";
 
