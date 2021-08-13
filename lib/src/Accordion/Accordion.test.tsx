@@ -158,9 +158,5 @@ describe("Component: Accordion", () => {
             firstButton.click();
         });
         expect(mockFn).toBeCalled();
-        act(() => {
-            firstButton.click();
-        });
-        expect(mockFn).toBeCalled();
     });
 });
