@@ -21,12 +21,6 @@ export const Accordion: React.FC<AccordionProps> = React.memo(
         const [active, setActive] = React.useState<number>(props.defaultValue);
         const [id, setId] = React.useState<string>(props.id);
 
-        /** Sets custom id if the user din't pass any */
-        React.useEffect(() => setId(props.id || randomId("accordion-")), [props.id]);
-        React.useEffect(() => {
-            typeof props.defaultValue === "number" && setActive(props.defaultValue);
-        }, [props.defaultValue]);
-
         /**
          * Handles accordion item click event
          * @param {React.MouseEvent<HTMLButtonElement>} e MouseEvent
@@ -36,12 +30,35 @@ export const Accordion: React.FC<AccordionProps> = React.memo(
             !isNaN(index) && setActive((val: number) => (val === index ? -1 : index));
         }, []);
 
+        /**
+         * handles accordion item click callback
+         * @param {React.MouseEvent<HTMLButtonElement>} e MouseEvent
+         * @param {React.MouseEvent<HTMLButtonElement>} itemToggleFn item onToggle callback
+         */
+        const onAccordionItemToggle = React.useCallback(
+            (e: React.MouseEvent<HTMLButtonElement>, itemToggleFn?: React.MouseEventHandler<HTMLButtonElement>) => {
+                if (onToggle) {
+                    onToggle(e);
+                } else {
+                    onToggleInner(e);
+                }
+                itemToggleFn && itemToggleFn(e); // allows user to pass specific on toggle function for each accordion item
+            },
+            [onToggle, onToggleInner]
+        );
+
+        /** Sets custom id if the user din't pass any */
+        React.useEffect(() => setId(props.id || randomId("accordion-")), [props.id]);
+        React.useEffect(() => {
+            typeof props.defaultValue === "number" && setActive(props.defaultValue);
+        }, [props.defaultValue]);
+
         return (
             <div {...props} ref={ref} className={classnames(["rc", "accordion", { alternative }, { inverted }, props.className])} id={id}>
                 {React.Children.map(props.children, (Child: React.ReactElement<AccordionItemProps>, i: number) => {
                     return React.isValidElement<React.FC<AccordionItemProps>>(Child)
                         ? React.cloneElement<any>(Child, {
-                              onToggle: onToggle || onToggleInner,
+                              onToggle: (e: React.MouseEvent<HTMLButtonElement>) => onAccordionItemToggle(e, Child.props.onToggle),
                               defaultChecked: typeof active !== "number" ? Child.props.defaultChecked : active === i,
                               "data-parent-id": id,
                               "data-index-number": i,
