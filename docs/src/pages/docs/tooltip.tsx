@@ -20,6 +20,7 @@ const TooltipPage: React.FC = () => {
     const checkboxControls: Array<DynamicFormOption> = [
         { label: "Callback on visibility change", value: "isVisibleChanged", key: "isVisibleChanged" },
         { label: "Disable autoposition", value: "disableAutoPosition", key: "disableAutoPosition" },
+        { label: "Force show tooltip", value: "forceShow", key: "forceShow" },
         { label: "Render node as tooltip content", value: "isCustomContent", key: "isCustomContent" },
         { label: "Define custom tooltip reference", value: "isCustomReference", key: "isCustomReference" },
     ];
@@ -104,6 +105,7 @@ const TooltipPage: React.FC = () => {
                         theme={(controls as any)?.theme}
                         trigger={(controls as any)?.trigger}
                         disableAutoPosition={checkSelectedKey("disableAutoPosition")}
+                        forceShow={checkSelectedKey("forceShow")}
                         onVisibleChange={checkSelectedKey("isVisibleChanged") && (() => setNotifcationToggle(true))}
                     >
                         {checkSelectedKey("isCustomReference") && <abbr className="custom-tooltip text-help">This is custom tooltip reference</abbr>}

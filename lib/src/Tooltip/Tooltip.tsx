@@ -1,8 +1,7 @@
 import React from "react";
-import { ElementPosition } from "./placement";
-import { randomId } from "@sebgroup/frontend-tools/randomId";
 import { Overlay } from "./Overlay";
 import classnames from "classnames";
+import { ElementPosition } from "./useOverlay";
 import "./tooltip.scss";
 
 const InfoCircleIcon: JSX.Element = (
@@ -26,121 +25,99 @@ export type TooltipProps = Omit<JSX.IntrinsicElements["div"], "ref"> & {
     trigger?: TooltipTrigger;
     /** Force tooltip to be at certain position */
     disableAutoPosition?: boolean;
+    /** Force show tooltip */
+    forceShow?: boolean;
     /** callback on tooltip visibility status change */
     onVisibleChange?: (event: React.MouseEvent<HTMLDivElement> | React.FocusEvent<HTMLElement> | React.TouchEvent<HTMLDivElement>, visible: boolean) => void;
     /** tooltip content wrapper props */
     tooltipWrapperProps?: JSX.IntrinsicElements["div"];
 };
-interface TooltipState {
-    visible: boolean;
-    referenceId: string;
-}
 
-/** A text label that acts as a helper to a specific item */
-export class Tooltip extends React.Component<TooltipProps, TooltipState> {
-    private containerRef: React.RefObject<HTMLDivElement> = React.createRef();
-    private contentRef: React.RefObject<HTMLDivElement> = React.createRef();
+// This solution is meant to fix Gatsby build which complains that document and window doesn't exist in server-side rendering
+const safeWindow: Window | null = typeof window !== "undefined" ? window : null;
 
-    constructor(props: TooltipProps) {
-        super(props);
+const isMobile: boolean = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(safeWindow?.navigator?.userAgent);
 
-        this.state = {
-            visible: false,
-            referenceId: randomId("tooltip-ref"),
-        };
-    }
-
-    /**
-     * Forces the tooltip to show
-     */
-    forceShow = (): void => {
-        !this.state.visible && this.onTooltipToggle(null, true);
-    };
-
-    onTooltipContentBlur = (e: React.FocusEvent<HTMLDivElement>): void => {
-        const triggeredNode: Node = (e.relatedTarget as Node) || document.activeElement;
-        const isWithinTriggerNode: boolean = this.containerRef.current.contains(triggeredNode);
-        if (this.state.visible && !isWithinTriggerNode) {
-            this.onTooltipToggle(e, false);
-        } else if (this.props.trigger === "focus" && isWithinTriggerNode) {
-            this.contentRef?.current?.focus();
-        }
-    };
-
-    onHover = (e: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>, toggleOn: boolean) => {
-        this.props.trigger === "hover" && this.onTooltipToggle(e, toggleOn);
-    };
-
-    onClickEvent = (e: React.MouseEvent<HTMLDivElement>) => {
-        (!this.props.trigger || this.props.trigger === "click") && this.onTooltipToggle(e);
-    };
-
-    onMouseEnterEvent = (e: React.MouseEvent<HTMLDivElement>) => this.onHover(e, true);
-    onMouseLeaveEvent = (e: React.MouseEvent<HTMLDivElement>) => this.onHover(e, false);
-    onTouchStartEvent = (e: React.TouchEvent<HTMLDivElement>) => this.onHover(e, true);
-    onTouchEndEvent = (e: React.TouchEvent<HTMLDivElement>) => this.onHover(e, false);
-    onFocusEvent = (e: React.FocusEvent<HTMLDivElement>) => this.props.trigger === "focus" && this.onTooltipToggle(e, true);
-
-    render() {
-        const { position, theme, content, trigger, disableAutoPosition, onVisibleChange, tooltipWrapperProps, className, ...props } = this.props;
-        return (
-            <div className={classnames("tooltip-container", className)} {...props}>
-                <div
-                    id={this.state.referenceId}
-                    ref={this.containerRef}
-                    className={classnames("tooltip-reference", { cursor: this.props.trigger === "click" })}
-                    tabIndex={-1}
-                    onClick={this.onClickEvent}
-                    onMouseEnter={this.onMouseEnterEvent}
-                    onMouseLeave={this.onMouseLeaveEvent}
-                    onTouchStart={this.onTouchStartEvent}
-                    onTouchEnd={this.onTouchEndEvent}
-                    onFocus={this.onFocusEvent}
-                >
-                    {this.props.children ? (
-                        React.Children.count(this.props.children) === 1 ? (
-                            React.Children.map(this.props.children, (Child: React.ReactElement) => {
-                                return Object(Child) !== Child ? <span className="text-help">{Child}</span> : Child;
-                            })
-                        ) : (
-                            this.props.children
-                        )
-                    ) : (
-                        <div className="default-content">{InfoCircleIcon}</div>
-                    )}
-                </div>
-                <TooltipContentContainer
-                    {...tooltipWrapperProps}
-                    position={position}
-                    theme={theme}
-                    content={content}
-                    disableAutoPosition={disableAutoPosition}
-                    ref={this.contentRef}
-                    onContentBlur={this.onTooltipContentBlur}
-                    show={this.state.visible}
-                    tooltipReference={() => this.containerRef.current}
-                />
-            </div>
-        );
-    }
+export const Tooltip: React.FC<TooltipProps> = ({
+    className,
+    position,
+    theme,
+    content,
+    trigger = "click",
+    disableAutoPosition,
+    forceShow,
+    onVisibleChange,
+    tooltipWrapperProps,
+    ...props
+}: TooltipProps) => {
+    const containerRef: React.RefObject<HTMLDivElement> = React.useRef();
+    const contentRef: React.RefObject<HTMLDivElement> = React.useRef();
+    const [show, setShow] = React.useState<boolean>(false);
 
     /**
      * toggle tooltip
      * @param toggle boolean
      * @param e event triggering the changes
      */
-    private onTooltipToggle = (e?: React.MouseEvent<HTMLDivElement> | React.FocusEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>, toggle?: boolean): void => {
-        const isVisible: boolean = toggle !== undefined ? toggle : !this.state.visible;
-        this.setState(
-            {
-                visible: isVisible,
-            },
-            () => {
-                this.props.onVisibleChange && this.props.onVisibleChange(e, isVisible);
-            }
-        );
+    const onTooltipToggle = (e?: React.MouseEvent<HTMLDivElement> | React.FocusEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>, toggle?: boolean): void => {
+        const isVisible: boolean = toggle !== undefined ? toggle : !show;
+        setShow(isVisible);
+        onVisibleChange && onVisibleChange(e, isVisible);
     };
-}
+
+    const onTouch = (e: React.TouchEvent<HTMLDivElement>, toggleOn: boolean) => {
+        onTooltipToggle(e, toggleOn);
+    };
+
+    const onHover = (e: React.MouseEvent<HTMLDivElement>, toggleOn: boolean) => {
+        onTooltipToggle(e, toggleOn);
+    };
+
+    const onMouseEnterEvent = (e: React.MouseEvent<HTMLDivElement>) => onHover(e, true);
+    const onMouseLeaveEvent = (e: React.MouseEvent<HTMLDivElement>) => onHover(e, false);
+    const onTouchStartEvent = (e: React.TouchEvent<HTMLDivElement>) => onTouch(e, true);
+    const onTouchEndEvent = (e: React.TouchEvent<HTMLDivElement>) => onTouch(e, false);
+    const onFocusEvent = (e: React.FocusEvent<HTMLDivElement>) => onTooltipToggle(e, true);
+
+    return (
+        <div className={classnames("tooltip-container", className)} {...props}>
+            <div
+                ref={containerRef}
+                className={classnames("tooltip-reference", { cursor: trigger === "click" })}
+                tabIndex={-1}
+                onClick={trigger === "click" ? onTooltipToggle : null}
+                onMouseEnter={trigger === "hover" && !isMobile ? onMouseEnterEvent : null}
+                onMouseLeave={trigger === "hover" && !isMobile ? onMouseLeaveEvent : null}
+                onTouchStart={trigger === "hover" && isMobile ? onTouchStartEvent : null}
+                onTouchEnd={trigger === "hover" && isMobile ? onTouchEndEvent : null}
+                onFocus={trigger === "focus" ? onFocusEvent : null}
+            >
+                {props.children ? (
+                    React.Children.count(props.children) === 1 ? (
+                        React.Children.map(props.children, (Child: React.ReactElement) => {
+                            return Object(Child) !== Child ? <span className="text-help">{Child}</span> : Child;
+                        })
+                    ) : (
+                        props.children
+                    )
+                ) : (
+                    <div className="default-content">{InfoCircleIcon}</div>
+                )}
+            </div>
+            <TooltipContentContainer
+                {...tooltipWrapperProps}
+                position={position}
+                theme={theme}
+                content={content}
+                disableAutoPosition={disableAutoPosition}
+                ref={contentRef}
+                onContentBlur={() => setShow(false)}
+                show={show || forceShow}
+                tooltipReference={() => containerRef.current}
+            />
+        </div>
+    );
+};
 
 type TooltipContentContainerProps = JSX.IntrinsicElements["div"] &
     Pick<TooltipProps, "theme" | "position" | "content" | "disableAutoPosition"> & {
@@ -149,7 +126,7 @@ type TooltipContentContainerProps = JSX.IntrinsicElements["div"] &
         onContentBlur: (event: React.FocusEvent<HTMLDivElement>) => void;
     };
 const TooltipContentContainer: React.FC<TooltipContentContainerProps> = React.forwardRef(
-    ({ show, tooltipReference, onContentBlur, theme = "default", position, content, disableAutoPosition, ...props }: TooltipContentContainerProps, forwardedRef: React.RefObject<HTMLDivElement>) => {
+    ({ show, tooltipReference, theme = "default", position, content, disableAutoPosition, onContentBlur, ...props }: TooltipContentContainerProps, forwardedRef: React.RefObject<HTMLDivElement>) => {
         return (
             <Overlay ref={forwardedRef} show={show} onBlur={onContentBlur} position={position} disableAutoPosition={disableAutoPosition} overlayReference={tooltipReference}>
                 <div className={classnames(`tooltip`, theme, { show: show }, props.className)} role="tooltip" {...props}>

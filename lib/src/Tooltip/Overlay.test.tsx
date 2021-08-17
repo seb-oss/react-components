@@ -1,14 +1,7 @@
 import React from "react";
 import { unmountComponentAtNode, render } from "react-dom";
 import { act } from "react-dom/test-utils";
-import { ElementPosition } from "./placement";
 import { Overlay, OverlayProps } from "./Overlay";
-
-type PositionTestCase = {
-    position: ElementPosition;
-    mockRefBoundingClientRect: ClientRect;
-    mockTooltipBoundingClientRect: ClientRect;
-};
 
 describe("Component: Overlay", () => {
     let container: HTMLDivElement = null;
@@ -17,6 +10,7 @@ describe("Component: Overlay", () => {
         onBlur: jest.fn(),
         show: false,
     };
+
     beforeEach(() => {
         container = document.createElement("div");
         document.body.appendChild(container);
@@ -35,7 +29,9 @@ describe("Component: Overlay", () => {
             render(
                 <div>
                     <div className="ref">ref</div>
-                    <Overlay {...newProps}>overlay</Overlay>
+                    <Overlay {...newProps} show>
+                        overlay
+                    </Overlay>
                 </div>,
                 container
             );
@@ -50,7 +46,9 @@ describe("Component: Overlay", () => {
             render(
                 <div>
                     <div className="ref">ref</div>
-                    <Overlay {...newProps}>{content}</Overlay>
+                    <Overlay {...newProps} show>
+                        {content}
+                    </Overlay>
                 </div>,
                 container
             );
@@ -116,7 +114,7 @@ describe("Component: Overlay", () => {
                 container
             );
         });
-        expect(document.body.querySelector(".overlay-container:focus")).toBeFalsy();
+        expect(document.body.querySelector(".overlay-container")).toBeNull();
         const updatedProps: OverlayProps = { ...newProps, show: true };
         await act(async () => {
             render(

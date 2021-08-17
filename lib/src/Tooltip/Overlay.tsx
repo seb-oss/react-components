@@ -1,7 +1,7 @@
 import React from "react";
 import classnames from "classnames";
 import { createPortal } from "react-dom";
-import { ElementPosition, ElementPlacementWithCoord, OverlayPositionChecker } from "./placement";
+import { ElementPosition, useOverlay } from "./useOverlay";
 import "./overlay.scss";
 
 export type OverlayProps = React.PropsWithChildren<{
@@ -17,83 +17,39 @@ export type OverlayProps = React.PropsWithChildren<{
 // This solution is meant to fix Gatsby build which complains that document doesn't exist in server-side rendering
 const safeDocument: Document | null = typeof document !== "undefined" ? document : null;
 
-export const Overlay: React.FC<OverlayProps> = React.forwardRef((props: OverlayProps, ref: React.RefObject<HTMLDivElement>) => {
-    const overlayContentRef: React.MutableRefObject<HTMLDivElement> = React.useRef(null);
-    const [placementWithCoords, setPlacementWithCoords] = React.useState<ElementPlacementWithCoord>(null);
-    const [overlayPositionChecker, setOverlayPositionChecker] = React.useState<OverlayPositionChecker>(null);
-    const [isInitiated, setIsInitiated] = React.useState<boolean>(false);
+export const Overlay: React.FC<OverlayProps> = React.forwardRef(({ disableAutoPosition, ...props }: OverlayProps, ref: React.RefObject<HTMLDivElement>) => {
+    const [overlayContentRef, setOverlayContentRef] = React.useState<HTMLDivElement>(null);
+    const { style, currentPosition } = useOverlay(props.overlayReference(), overlayContentRef, props.show, props.position, { disableAutoPosition });
+
+    const getOverlayContentRef = React.useCallback((node: HTMLDivElement) => {
+        if (node) {
+            setOverlayContentRef(node);
+        }
+    }, []);
 
     React.useImperativeHandle(ref, () => ({
-        ...ref?.current,
-        focus: () => overlayContentRef.current.focus(),
-        blur: () => overlayContentRef.current.blur(),
+        ...ref.current,
+        focus: () => overlayContentRef?.focus(),
+        blur: () => overlayContentRef?.blur(),
     }));
 
     React.useEffect(() => {
-        overlayPositionChecker && overlayPositionChecker.disableAutoPlacement(props.disableAutoPosition);
-    }, [props.disableAutoPosition]);
+        !!overlayContentRef && overlayContentRef.focus();
+    }, [overlayContentRef]);
 
-    React.useEffect(() => {
-        setOverlayPositionChecker(() => {
-            const newPositionChecker: OverlayPositionChecker = new OverlayPositionChecker(props.overlayReference(), props.disableAutoPosition);
-            newPositionChecker.addOverlayContainer(overlayContentRef.current);
-            return newPositionChecker;
-        });
-    }, [props.overlayReference]);
-
-    React.useEffect(() => {
-        if (props.show) {
-            getWithinViewportPosition();
-            window.addEventListener("scroll", onScroll, true);
-        } else {
-            overlayContentRef.current.blur();
-            window.removeEventListener("scroll", onScroll, true);
-        }
-    }, [props.show]);
-
-    React.useEffect(() => {
-        if (overlayPositionChecker && !isInitiated) {
-            getWithinViewportPosition(true);
-            setIsInitiated(true);
-        }
-    }, [overlayPositionChecker]);
-
-    /**
-     * onScroll handler
-     * @param {Event} ev The window scroll event
-     */
-    async function onScroll(ev: Event) {
-        const target: HTMLElement = ev.target as HTMLElement;
-        if (props.show && target.contains(props.overlayReference())) {
-            const referenceDomRect: DOMRect = props.overlayReference().getBoundingClientRect();
-            if (referenceDomRect.bottom < 0 || referenceDomRect.right < 0 || referenceDomRect.left > window.innerWidth || referenceDomRect.top > window.innerHeight) {
-                overlayContentRef?.current?.blur();
-            }
-            overlayPositionChecker.getPosition(props.position || "top").then(setPlacementWithCoords);
-        }
-    }
-
-    /** Get position within view port */
-    async function getWithinViewportPosition(disableFocus?: boolean) {
-        overlayPositionChecker.getPosition(props.position || "top").then((position: ElementPlacementWithCoord) => {
-            setPlacementWithCoords(position);
-            !disableFocus && overlayContentRef.current.focus();
-        });
-    }
-
-    return !safeDocument
-        ? null
-        : createPortal(
+    return safeDocument && props.show
+        ? createPortal(
               <div
-                  className={classnames("overlay-container", props.className, placementWithCoords ? placementWithCoords.position : props.position || "top", { show: props.show })}
-                  ref={overlayContentRef}
+                  className={classnames("overlay-container", props.className, currentPosition || "top", { show: props.show && overlayContentRef })}
+                  ref={getOverlayContentRef}
                   tabIndex={-1}
-                  onBlur={props.show ? props.onBlur : null}
+                  onBlur={props.onBlur}
                   aria-hidden={!props.show}
-                  style={placementWithCoords ? placementWithCoords.coord : {}}
+                  style={style}
               >
                   {props.children}
               </div>,
               safeDocument.body
-          );
+          )
+        : null;
 });
