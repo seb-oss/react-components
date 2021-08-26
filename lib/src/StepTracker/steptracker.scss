@@ -53,7 +53,7 @@ $transition-time: 200ms;
                 right: 0;
                 bottom: 0;
                 border-radius: 50%;
-                transition: all $transition-time/2;
+                transition: all $transition-time * 0.5;
             }
             svg {
                 position: absolute;
@@ -63,7 +63,7 @@ $transition-time: 200ms;
                 top: 50%;
                 fill: $white;
                 transform: translate(-50%, -50%) scale(1);
-                transition: all $transition-time/2 $transition-time;
+                transition: all $transition-time * 0.05 $transition-time;
             }
             .number {
                 user-select: none;

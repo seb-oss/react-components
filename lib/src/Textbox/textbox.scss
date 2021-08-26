@@ -8,7 +8,7 @@ $transition-time: 200ms;
         position: relative;
         > .input-box-group-wrapper {
             color: $body-color;
-            transition: border $transition-time / 2;
+            transition: border $transition-time * 0.5;
             position: relative;
             width: 100%;
             height: 42px;
