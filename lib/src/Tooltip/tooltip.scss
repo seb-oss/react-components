@@ -3,6 +3,7 @@
 $arrow-size: 8px;
 $icon-size: 20px;
 $tooltip-distance: 4px;
+$tooltip-margin: 0.25rem;
 
 @mixin theme($background-color, $font-color) {
     .tooltip-inner {
@@ -178,19 +179,20 @@ $tooltip-distance: 4px;
     &.top-left,
     &.bottom-left {
         @include arrow-position {
-            left: 5px;
+            right: 5px;
         }
     }
     &.top-right,
     &.bottom-right {
         @include arrow-position {
-            right: 5px;
+            left: 5px;
         }
     }
     &.top,
     &.top-left,
     &.top-right {
         padding-bottom: $tooltip-distance;
+        margin-bottom: $tooltip-margin;
         @include arrow-position {
             bottom: -8px;
             &::before {
@@ -203,6 +205,7 @@ $tooltip-distance: 4px;
     &.right-top,
     &.right-bottom {
         padding-left: $tooltip-distance;
+        margin-left: $tooltip-margin;
         @include arrow-position {
             left: -8px;
             &::before {
@@ -215,6 +218,7 @@ $tooltip-distance: 4px;
     &.bottom-left,
     &.bottom-right {
         padding-top: $tooltip-distance;
+        margin-top: $tooltip-margin;
         @include arrow-position {
             top: -8px;
             &::before {
@@ -227,6 +231,7 @@ $tooltip-distance: 4px;
     &.left-top,
     &.left-bottom {
         padding-right: $tooltip-distance;
+        margin-right: $tooltip-margin;
         @include arrow-position {
             right: -8px;
             &::before {

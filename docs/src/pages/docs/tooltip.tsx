@@ -1,5 +1,6 @@
 import React from "react";
 import Docs from "@common/Docs";
+import { CodeSnippet } from "@common/CodeSnippet";
 import { Tooltip } from "@sebgroup/react-components/Tooltip";
 import { Notification } from "@sebgroup/react-components/Notification";
 import { DynamicFormOption, DynamicFormSection, useDynamicForm } from "@sebgroup/react-components/hooks/useDynamicForm";
@@ -20,6 +21,7 @@ const TooltipPage: React.FC = () => {
     const checkboxControls: Array<DynamicFormOption> = [
         { label: "Callback on visibility change", value: "isVisibleChanged", key: "isVisibleChanged" },
         { label: "Disable autoposition", value: "disableAutoPosition", key: "disableAutoPosition" },
+        { label: "Force show tooltip", value: "forceShow", key: "forceShow" },
         { label: "Render node as tooltip content", value: "isCustomContent", key: "isCustomContent" },
         { label: "Define custom tooltip reference", value: "isCustomReference", key: "isCustomReference" },
     ];
@@ -104,12 +106,24 @@ const TooltipPage: React.FC = () => {
                         theme={(controls as any)?.theme}
                         trigger={(controls as any)?.trigger}
                         disableAutoPosition={checkSelectedKey("disableAutoPosition")}
+                        forceShow={checkSelectedKey("forceShow")}
                         onVisibleChange={checkSelectedKey("isVisibleChanged") && (() => setNotifcationToggle(true))}
                     >
                         {checkSelectedKey("isCustomReference") && <abbr className="custom-tooltip text-help">This is custom tooltip reference</abbr>}
                     </Tooltip>
                 }
                 code={code}
+                note={
+                    <>
+                        <h4>To force show a tooltip</h4>
+                        <p>
+                            Developers are allowed to force show a tooltip by setting <code>forceShow</code> attribute. It will look something like this:
+                        </p>
+                        <CodeSnippet className="card" language="jsx">
+                            {`<Tooltip content="content" forceShow>Reference</Tooltip>`}
+                        </CodeSnippet>
+                    </>
+                }
                 controls={renderForm()}
             />
             <Notification toggle={notificationToggle} type="slide" dismissTimeout={3000} onDismiss={() => setNotifcationToggle(false)}>
