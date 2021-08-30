@@ -1,6 +1,6 @@
 import React from "react";
 import { unmountComponentAtNode, render } from "react-dom";
-import { act } from "react-dom/test-utils";
+import { act, Simulate } from "react-dom/test-utils";
 import { Overlay, OverlayProps } from "./Overlay";
 
 describe("Component: Overlay", () => {
@@ -21,10 +21,11 @@ describe("Component: Overlay", () => {
         container.remove();
         container = null;
         document.body.innerHTML = "";
+        jest.clearAllMocks();
     });
 
     it("Should render", async () => {
-        const newProps: OverlayProps = { ...overlayProps, overlayReference: () => container.querySelector(".ref") };
+        const newProps: OverlayProps = { ...overlayProps, position: null, overlayReference: () => container.querySelector(".ref") };
         await act(async () => {
             render(
                 <div>
@@ -127,8 +128,45 @@ describe("Component: Overlay", () => {
         });
         expect(document.body.querySelector(".overlay-container:focus")).toBeTruthy();
         await act(async () => {
-            const holderElement: Element = container.querySelector(".ref-holder");
-            holderElement.dispatchEvent(new Event("scroll", { bubbles: true }));
+            Simulate.scroll(container.querySelector(".ref-holder"));
         });
+    });
+
+    it("Should hide overlay if overlay container is not focus", async () => {
+        const newProps: OverlayProps = { ...overlayProps, overlayReference: () => container.querySelector(".ref") };
+        await act(async () => {
+            render(
+                <div>
+                    <div className="ref">ref</div>
+                    <Overlay {...newProps} show>
+                        overlay
+                    </Overlay>
+                </div>,
+                container
+            );
+        });
+        await act(async () => {
+            Simulate.blur(document.body.querySelector(".overlay-container"));
+        });
+        expect(newProps.onBlur).toBeCalled();
+    });
+
+    it("Should remain focused on overlay if reference container is focused", async () => {
+        const newProps: OverlayProps = { ...overlayProps, overlayReference: () => container.querySelector(".ref") };
+        await act(async () => {
+            render(
+                <div>
+                    <div className="ref">ref</div>
+                    <Overlay {...newProps} show>
+                        overlay
+                    </Overlay>
+                </div>,
+                container
+            );
+        });
+        await act(async () => {
+            Simulate.blur(document.body.querySelector(".overlay-container"), { relatedTarget: container.querySelector(".ref") });
+        });
+        expect(newProps.onBlur).not.toBeCalled();
     });
 });

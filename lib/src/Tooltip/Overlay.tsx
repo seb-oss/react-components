@@ -27,6 +27,17 @@ export const Overlay: React.FC<OverlayProps> = React.forwardRef(({ disableAutoPo
         }
     }, []);
 
+    const onContentBlur = (e: React.FocusEvent<HTMLDivElement>): void => {
+        const triggeredNode: Node = (e.relatedTarget as Node) || document.activeElement;
+        const isWithinTriggerNode: boolean = props.overlayReference().contains(triggeredNode);
+        if (props.show && !isWithinTriggerNode) {
+            // to check if blur event is triggered from reference element
+            props.onBlur(e);
+        } else if (isWithinTriggerNode) {
+            overlayContentRef.focus();
+        }
+    };
+
     React.useImperativeHandle(ref, () => ({
         ...ref.current,
         focus: () => overlayContentRef?.focus(),
@@ -43,7 +54,7 @@ export const Overlay: React.FC<OverlayProps> = React.forwardRef(({ disableAutoPo
                   className={classnames("overlay-container", props.className, currentPosition || "top", { show: props.show && overlayContentRef })}
                   ref={getOverlayContentRef}
                   tabIndex={-1}
-                  onBlur={props.onBlur}
+                  onBlur={onContentBlur}
                   aria-hidden={!props.show}
                   style={style}
               >
