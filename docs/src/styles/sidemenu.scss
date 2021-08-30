@@ -106,7 +106,7 @@ aside.side-menu {
             fill: $black;
             width: 1rem;
             height: 1rem;
-            transition: fill $base-transition-time/2 linear, transform $base-transition-time/4 linear;
+            transition: fill $base-transition-time * 0.5 linear, transform $base-transition-time * 0.25 linear;
         }
         &:hover {
             background-color: $gray-200;
@@ -223,7 +223,7 @@ aside.side-menu > .sidemenu-content > .rc.input-box-group.sidemenu-search {
     > .input-group {
         .input-box-group-wrapper {
             direction: ltr;
-            transition: all $base-transition-time/2 linear;
+            transition: all $base-transition-time * 0.5 linear;
             &:hover,
             &:focus-within {
                 box-shadow: $shadow-light;
