@@ -11,8 +11,8 @@ type DummyComponentType = {
 
 type PositionTestCase = {
     position: ElementPosition;
-    mockRefBoundingClientRect: ClientRect;
-    mockTooltipBoundingClientRect: ClientRect;
+    mockRefBoundingClientRect: Partial<ClientRect>;
+    mockTooltipBoundingClientRect: Partial<ClientRect>;
 };
 
 type OverflowTestCase = PositionTestCase & {

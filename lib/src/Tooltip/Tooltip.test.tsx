@@ -13,8 +13,8 @@ type TriggerTestCase = {
 
 type PositionTestCase = {
     position: TooltipPosition;
-    mockRefBoundingClientRect: ClientRect;
-    mockTooltipBoundingClientRect: ClientRect;
+    mockRefBoundingClientRect: Partial<ClientRect>;
+    mockTooltipBoundingClientRect: Partial<ClientRect>;
 };
 
 type OverflowTestCase = PositionTestCase & {
