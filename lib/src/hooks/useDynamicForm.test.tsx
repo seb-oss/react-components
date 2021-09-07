@@ -101,18 +101,15 @@ describe("hook: useDynamicForm", () => {
             {
                 statement: "Should render with no wrapper",
                 wrappingElement: "none",
-                result: "div",
+                result: "label",
             },
         ];
-        testCases.map((testCase: WrapperElementTestCase) => {
-            it(testCase.statement, () => {
+        testCases.map(({ statement, wrappingElement, result }: WrapperElementTestCase) => {
+            it(statement, () => {
                 act(() => {
-                    render(<TestHook sections={[{ ...sections[0], wrappingElement: testCase.wrappingElement }]} />, container);
+                    render(<TestHook sections={[{ ...sections[0], wrappingElement }]} />, container);
                 });
-                expect(container.querySelector("h4").nextElementSibling.tagName.toLowerCase()).toBe(testCase.result);
-                if (testCase.wrappingElement === "none") {
-                    expect(container.querySelector("h4").nextElementSibling.classList).toContain("rc");
-                }
+                expect(container.querySelector("h4.dynamic-form-section-header").nextElementSibling.tagName.toLowerCase()).toBe(result);
             });
         });
     });
@@ -529,7 +526,7 @@ describe("hook: useDynamicForm", () => {
         });
     });
 
-    describe("Should display error if unsupported controlType is used", () => {
+    describe("Should show label and description only for unsupported control types", () => {
         const testSections: any[] = [
             {
                 title: "Extra Info",
@@ -537,6 +534,8 @@ describe("hook: useDynamicForm", () => {
                 items: [
                     {
                         key: "i-have-unknown-control",
+                        label: "TestLabel",
+                        description: "TestDescription",
                         controlType: "UNKNOWN",
                     },
                 ],
@@ -547,7 +546,9 @@ describe("hook: useDynamicForm", () => {
                 act(() => {
                     render(<TestHook sections={testSections} />, container);
                 });
-                expect(container.innerHTML.match(`ERORR: controlType: ${item.controlType} not recognised.`)).toBeTruthy();
+                expect(container.querySelector(".dynamic-form-label")).toBeTruthy();
+                expect(container.querySelector(".dynamic-form-description")).toBeTruthy();
+                expect(container.querySelector("input")).toBeFalsy();
             });
         });
     });
