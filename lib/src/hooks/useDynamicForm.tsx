@@ -102,7 +102,7 @@ type isDynamicFormDirty = boolean;
 export type UseDynamicForm = [FormRenderFunction, DynamicFormInternalState, SetDynamicFormState, SetDynamicFormErrors, SetDynamicFormWarnings, DynamicFormMetaData, isDynamicFormDirty];
 export function useDynamicForm(sections: DynamicFormSection[]): UseDynamicForm {
     const initialState: DynamicFormInternalState = useMemo(() => {
-        let initialFormState: DynamicFormInternalState = {};
+        const initialFormState: DynamicFormInternalState = {};
         sections?.map((section: DynamicFormSection) => {
             initialFormState[section?.key] = {};
             section.items?.map((item) => {
