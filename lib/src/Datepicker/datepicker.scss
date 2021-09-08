@@ -1,0 +1,29 @@
+@import "~@sebgroup/bootstrap/scss/variables";
+
+input.form-control.seb-datepicker-native {
+    padding-right: 0.5rem;
+
+    &::-webkit-calendar-picker-indicator {
+        color: rgba(0, 0, 0, 0);
+        cursor: pointer;
+        background: url(./seb-calendar-icon.svg) no-repeat 0.25rem;
+    }
+}
+
+.input-group.seb-datepicker-custom {
+    > input.seb-datepicker-custom-day,
+    > input.seb-datepicker-custom-year {
+        -moz-appearance: textfield;
+
+        &::-webkit-outer-spin-button,
+        &::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+    }
+    > select.custom-select.seb-datepicker-custom-month {
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+    }
+}

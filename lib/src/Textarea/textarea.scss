@@ -1,0 +1,11 @@
+@import "~@sebgroup/bootstrap/scss/variables";
+
+$transition-time: 200ms;
+
+.rc.text-area {
+    textarea.form-control {
+        &:not(.resizable) {
+            resize: none;
+        }
+    }
+}

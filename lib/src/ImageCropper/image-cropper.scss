@@ -1,0 +1,136 @@
+@import "~@sebgroup/bootstrap/scss/core";
+
+.rc.image-cropper {
+    > .image-preview {
+        > .preview {
+            position: relative;
+            background-color: $gray-400;
+            border-top-left-radius: 4px;
+            border-top-right-radius: 4px;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 200ms, box-shadow 200ms;
+
+            > * {
+                transition: filter 200ms;
+            }
+
+            &:hover {
+                background-color: $gray-600;
+                box-shadow: inset 0 0 20px 4px rgba(white, 0.7);
+
+                > *:not(button) {
+                    filter: blur(5px);
+                }
+                > button.select {
+                    opacity: 1;
+                }
+            }
+
+            &:focus-within {
+                > *:not(button) {
+                    filter: blur(5px);
+                }
+            }
+
+            > button {
+                background: none;
+                border: none;
+                color: white;
+                position: absolute;
+                font-weight: bold;
+
+                &:focus {
+                    outline: 1px solid black;
+                }
+            }
+
+            > button.select {
+                transition: opacity 200ms;
+                width: 100%;
+                height: 100%;
+                padding: 0;
+
+                &:not(:focus):not(:hover) {
+                    opacity: 0;
+                }
+            }
+
+            > button.reset {
+                top: 0;
+                right: 0;
+                padding: 5px 10px;
+
+                &:hover {
+                    background: linear-gradient(to bottom left, rgba(black, 0.7), rgba(black, 0.2), transparent);
+                    backdrop-filter: blur(10px);
+                }
+            }
+        }
+    }
+}
+
+.image-cropper-modal {
+    .modal-body {
+        text-align: center;
+        // prettier-ignore
+        background-image:
+            linear-gradient(45deg, $gray-600 25%, transparent 25%),
+            linear-gradient(-45deg, $gray-600 25%, transparent 25%),
+            linear-gradient(45deg, transparent 75%, $gray-600 75%),
+            linear-gradient(-45deg, transparent 75%, $gray-600 75%);
+        background-color: $gray-200;
+        background-size: 20px 20px;
+        background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+        padding: 0;
+        overflow: hidden;
+
+        .cropping-area {
+            position: relative;
+            display: inline-block;
+            max-width: 100%;
+
+            > img {
+                max-height: 85vh;
+                max-width: 100%;
+                user-select: none;
+            }
+
+            > img:not(.crop-box) {
+                filter: brightness(0.5);
+            }
+            > .crop-box {
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                right: 0;
+                left: 0;
+                background-size: contain;
+                cursor: move;
+            }
+
+            > .handle {
+                background-color: $blue-dark;
+                width: 10px;
+                height: 10px;
+                display: inline-block;
+                position: absolute;
+                background-color: $blue;
+                border: 1px solid $blue;
+
+                &.top-left,
+                &.bottom-right {
+                    cursor: nwse-resize;
+                }
+
+                &.top-right,
+                &.bottom-left {
+                    cursor: nesw-resize;
+                }
+            }
+        }
+    }
+}

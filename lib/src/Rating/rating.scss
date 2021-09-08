@@ -1,0 +1,24 @@
+.rc.rating {
+    display: grid;
+    input {
+        opacity: 0;
+        cursor: pointer;
+        align-self: center;
+    }
+    input[type="range"] {
+        -webkit-appearance: none;
+        -moz-apperance: none;
+        height: 100%;
+    }
+    input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none !important;
+        background-color: black;
+        height: 2px;
+        width: 2px;
+    }
+    input,
+    .rating-icons {
+        grid-column: 1;
+        grid-row: 1;
+    }
+}

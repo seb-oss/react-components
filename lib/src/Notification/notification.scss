@@ -1,0 +1,108 @@
+@import "./mixins";
+
+.rc.notification {
+    position: fixed;
+    z-index: $zindex-popover;
+    overflow: hidden;
+    box-shadow: 0 4px 4px -2px rgba(black, 0.25), 3px 4px 15px rgba(black, 0.5);
+
+    &:not(.show):not(.hide) {
+        display: none;
+    }
+    > .content-wrapper {
+        position: relative;
+        min-height: 30px;
+        padding: 8px 13px;
+
+        > .notification-header {
+            font-weight: 500;
+            padding-right: 10px;
+        }
+        > .notification-body {
+            font-size: 0.8rem;
+            padding-right: 18px;
+        }
+        > .close {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+        }
+    }
+
+    &.type-bar {
+        left: 0;
+        right: 0;
+
+        &.top {
+            top: 0;
+
+            &.show {
+                @include animate(drop-in-top);
+            }
+            &.hide {
+                @include animate(drop-out-top);
+            }
+        }
+
+        &.bottom {
+            bottom: 0;
+
+            &.show {
+                @include animate(drop-in-bottom);
+            }
+            &.hide {
+                @include animate(drop-out-bottom);
+            }
+        }
+    }
+
+    &.type-slide {
+        width: 300px;
+        border-radius: 4px;
+
+        > .content-wrapper > .notification-header {
+            margin-bottom: 0.5rem;
+        }
+
+        &[class*="top-"] {
+            top: 20px;
+        }
+
+        &[class*="bottom-"] {
+            bottom: 20px;
+        }
+
+        &[class*="-left"] {
+            left: 20px;
+            &.show {
+                @include animate(slide-in-left);
+            }
+
+            &.hide {
+                @include animate(slide-out-left);
+            }
+        }
+
+        &[class*="-right"] {
+            right: 20px;
+            &.show {
+                @include animate(slide-in-right);
+            }
+
+            &.hide {
+                @include animate(slide-out-right);
+            }
+        }
+    }
+
+    @include apply-themes();
+}
+
+@include create-animation("drop-in-top");
+@include create-animation("drop-out-top");
+@include create-animation("drop-in-bottom");
+@include create-animation("drop-out-bottom");
+@include create-animation("slide-in-left");
+@include create-animation("slide-out-left");
+@include create-animation("slide-in-right");
+@include create-animation("slide-out-right");

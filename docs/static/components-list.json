@@ -1,0 +1,182 @@
+[
+    {
+        "name": "Accordion",
+        "path": "/docs/accordion/",
+        "filePath": "./src/Accordion/index.ts"
+    },
+    {
+        "name": "Breadcrumb",
+        "path": "/docs/breadcrumb/",
+        "filePath": "./src/Breadcrumb/index.ts"
+    },
+    {
+        "name": "Button",
+        "path": "/docs/button/",
+        "filePath": "./src/Button/index.ts"
+    },
+    {
+        "name": "ButtonGroup",
+        "path": "/docs/buttongroup/",
+        "filePath": "./src/ButtonGroup/index.ts"
+    },
+    {
+        "name": "Carousel",
+        "path": "/docs/carousel/",
+        "filePath": "./src/Carousel/index.ts"
+    },
+    {
+        "name": "Checkbox",
+        "path": "/docs/checkbox/",
+        "filePath": "./src/Checkbox/index.ts"
+    },
+    {
+        "name": "Chip",
+        "path": "/docs/chip/",
+        "filePath": "./src/Chip/index.ts"
+    },
+    {
+        "name": "CloseButton",
+        "path": "/docs/closebutton/",
+        "filePath": "./src/CloseButton/index.ts"
+    },
+    {
+        "name": "Collapse",
+        "path": "/docs/collapse/",
+        "filePath": "./src/Collapse/index.ts"
+    },
+    {
+        "name": "Datepicker",
+        "path": "/docs/datepicker/",
+        "filePath": "./src/Datepicker/index.ts"
+    },
+    {
+        "name": "Dropdown",
+        "path": "/docs/dropdown/",
+        "filePath": "./src/Dropdown/index.ts"
+    },
+    {
+        "name": "FeedbackIndicator",
+        "path": "/docs/feedbackindicator/",
+        "filePath": "./src/FeedbackIndicator/index.ts"
+    },
+    {
+        "name": "Image",
+        "path": "/docs/image/",
+        "filePath": "./src/Image/index.ts"
+    },
+    {
+        "name": "ImageCropper",
+        "path": "/docs/imagecropper/",
+        "filePath": "./src/ImageCropper/index.ts"
+    },
+    {
+        "name": "Loader",
+        "path": "/docs/loader/",
+        "filePath": "./src/Loader/index.ts"
+    },
+    {
+        "name": "Modal",
+        "path": "/docs/modal/",
+        "filePath": "./src/Modal/index.ts"
+    },
+    {
+        "name": "Notification",
+        "path": "/docs/notification/",
+        "filePath": "./src/Notification/index.ts"
+    },
+    {
+        "name": "Pagination",
+        "path": "/docs/pagination/",
+        "filePath": "./src/Pagination/index.ts"
+    },
+    {
+        "name": "ProgressBar",
+        "path": "/docs/progressbar/",
+        "filePath": "./src/ProgressBar/index.ts"
+    },
+    {
+        "name": "RadioButton",
+        "path": "/docs/radiobutton/",
+        "filePath": "./src/RadioButton/index.ts"
+    },
+    {
+        "name": "Rating",
+        "path": "/docs/rating/",
+        "filePath": "./src/Rating/index.ts"
+    },
+    {
+        "name": "Slider",
+        "path": "/docs/slider/",
+        "filePath": "./src/Slider/index.ts"
+    },
+    {
+        "name": "StepTracker",
+        "path": "/docs/steptracker/",
+        "filePath": "./src/StepTracker/index.ts"
+    },
+    {
+        "name": "Stepper",
+        "path": "/docs/stepper/",
+        "filePath": "./src/Stepper/index.ts"
+    },
+    {
+        "name": "SortableList",
+        "path": "/docs/sortable-list/",
+        "filePath": "./src/SortableList/index.ts"
+    },
+    {
+        "name": "Table",
+        "path": "/docs/table/",
+        "filePath": "./src/Table/index.ts"
+    },
+    {
+        "name": "Tabs",
+        "path": "/docs/tabs/",
+        "filePath": "./src/Tabs/index.ts"
+    },
+    {
+        "name": "Textarea",
+        "path": "/docs/textarea/",
+        "filePath": "./src/Textarea/index.ts"
+    },
+    {
+        "name": "Textbox",
+        "path": "/docs/textbox/",
+        "filePath": "./src/Textbox/index.ts"
+    },
+    {
+        "name": "TextLabel",
+        "path": "/docs/textlabel/",
+        "filePath": "./src/TextLabel/index.ts"
+    },
+    {
+        "name": "Timeline",
+        "path": "/docs/timeline/",
+        "filePath": "./src/Timeline/index.ts"
+    },
+    {
+        "name": "Timer",
+        "path": "/docs/timer/",
+        "filePath": "./src/Timer/index.ts"
+    },
+    {
+        "name": "Toggle",
+        "path": "/docs/toggle/",
+        "filePath": "./src/Toggle/index.ts"
+    },
+    {
+        "name": "ToggleSelector",
+        "path": "/docs/toggle-selector/",
+        "filePath": "./src/ToggleSelector/index.ts"
+    },
+    {
+        "name": "Tooltip",
+        "path": "/docs/tooltip/",
+        "filePath": "./src/Tooltip/index.ts"
+    },
+    {
+        "name": "Video",
+        "path": "/docs/video/",
+        "filePath": "./src/Video/index.ts"
+    }
+]

@@ -1,0 +1,26 @@
+@import "variables";
+
+.doc-page {
+    margin-top: 3rem;
+    > .doc-page-tabs {
+        margin-bottom: 2rem;
+    }
+    .apis {
+        table {
+            margin: 0;
+        }
+    }
+    > .card,
+    .apis > .card,
+    .note .card {
+        border-radius: $border-radius;
+        overflow: hidden;
+        margin-bottom: 1rem;
+    }
+
+    .note {
+        padding-bottom: 2rem;
+    }
+
+    @import "playground";
+}

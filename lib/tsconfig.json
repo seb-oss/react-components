@@ -1,0 +1,14 @@
+{
+    "compilerOptions": {
+        "outDir": "dist",
+        "rootDir": "src",
+        "target": "ES5",
+        "jsx": "react",
+        "declaration": true,
+        "declarationDir": "dist",
+        "sourceMap": true,
+        "esModuleInterop": true,
+        "resolveJsonModule": true
+    },
+    "exclude": ["coverage", "dist"]
+}

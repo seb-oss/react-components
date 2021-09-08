@@ -1,0 +1,39 @@
+@import "~@sebgroup/bootstrap/scss/core";
+
+$inverted: black;
+
+$colors: (
+    purple: $purple-dark,
+    primary: $blue-darker,
+    danger: $red-dark,
+    success: $green-darker,
+    warning: $yellow-dark,
+    inverted: $inverted,
+);
+
+@mixin apply-theme {
+    @each $name, $color in $colors {
+        &.theme-#{"" + $name} {
+            color: $color;
+
+            &::-webkit-progress-value {
+                background: $color;
+            }
+
+            &::-moz-progress-bar {
+                background: $color;
+            }
+        }
+    }
+}
+
+.rc.progress-bar {
+    width: 100%;
+
+    @include apply-theme();
+}
+
+.rc.progress-bar,
+.rc.progress-bar::-webkit-progress-bar {
+    background-color: $gray-200;
+}

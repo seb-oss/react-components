@@ -1,0 +1,47 @@
+@import "~@sebgroup/bootstrap/scss/core";
+
+header {
+    .navbar {
+        padding-left: 2rem;
+        padding-right: 2rem;
+        background-color: $gray-800;
+        justify-content: space-between;
+        align-items: baseline;
+        flex-wrap: wrap;
+        > .navbar-brand {
+            padding-left: 0;
+            &::before {
+                content: none;
+            }
+        }
+        > .navbar-content {
+            @include media-breakpoint-up(sm) {
+                text-align: right;
+            }
+            @include media-breakpoint-down(sm) {
+                text-align: left;
+                flex-basis: 100%;
+                margin-left: -1rem;
+            }
+            > .navbar-collapse {
+                flex-direction: row-reverse;
+                .nav {
+                    @include media-breakpoint-down(sm) {
+                        flex-direction: column;
+                    }
+                    > .nav-item {
+                        margin: auto 0;
+                    }
+                    &.nav-dark {
+                        a {
+                            color: white;
+                            &:hover {
+                                text-decoration: underline;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

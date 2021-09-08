@@ -1,0 +1,39 @@
+@import "~@sebgroup/bootstrap/scss/variables";
+
+.rc .pagination {
+    align-items: center;
+
+    .h-flipped {
+        transform: rotate(180deg);
+    }
+
+    &.dotnav {
+        .page-item {
+            border-radius: 100%;
+            overflow: hidden;
+            transition: transform 200ms linear;
+            border: 1px solid $blue;
+
+            &:not(:last-of-type) {
+                margin-right: 5px;
+            }
+
+            &:not([class$="-nav"]) {
+                width: 15px;
+                height: 15px;
+            }
+            &[class$="-nav"] {
+                width: 10px;
+                height: 10px;
+            }
+
+            &.active {
+                transform: scale(1.2);
+            }
+
+            > .page-link {
+                border: 0px;
+            }
+        }
+    }
+}

@@ -1,0 +1,69 @@
+@import "~@sebgroup/bootstrap/scss/core";
+
+@mixin style-checkbox($color) {
+    .custom-checkbox > .custom-control-label::before {
+        border-color: $color;
+    }
+}
+
+@mixin style-radiobutton($color) {
+    .custom-control-label::before {
+        border-color: $color;
+    }
+}
+
+@mixin style-toggle-selector($color) {
+    .rc.toggle-selector-item > input:not(:disabled) + label {
+        border-color: $color;
+    }
+}
+
+.rc-d.feedback {
+    &:before {
+        content: none;
+    }
+    &:not(.feedback-0):not(.feedback-message) {
+        border-radius: 4px;
+
+        &.feedback-10 {
+            &:not(.no-border) {
+                border: 1px solid $red-dark;
+            }
+            & + .feedback-message {
+                color: $red-dark;
+            }
+
+            @include style-checkbox($red-dark);
+            @include style-radiobutton($red-dark);
+            @include style-toggle-selector($red-dark);
+        }
+        &.feedback-50 {
+            &:not(.no-border) {
+                border: 1px solid $yellow-darker;
+            }
+            & + .feedback-message {
+                color: $yellow-darker;
+            }
+
+            @include style-checkbox($yellow-darker);
+            @include style-radiobutton($yellow-darker);
+            @include style-toggle-selector($yellow-darker);
+        }
+        &.feedback-100 {
+            &:not(.no-border) {
+                border: 1px solid $green-darker;
+            }
+            & + .feedback-message {
+                color: $green-darker;
+            }
+
+            @include style-checkbox($green-darker);
+            @include style-radiobutton($green-darker);
+            @include style-toggle-selector($green-darker);
+        }
+    }
+}
+
+.rc-d.feedback-message {
+    margin: 0;
+}

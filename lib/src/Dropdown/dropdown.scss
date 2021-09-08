@@ -1,0 +1,151 @@
+@import "~@sebgroup/bootstrap/scss/_variables";
+
+.rc.custom-dropdown {
+    max-width: 100%;
+    position: relative;
+
+    .dropdown.show .dropdown-toggle::after,
+    .dropdown.active .dropdown-toggle::after,
+    .dropdown-toggle:active::after,
+    .dropdown-toggle.active::after {
+        transform: rotate3d(1, 0, 0, 180deg);
+    }
+    > .dropdown {
+        &.show {
+            .rc.close-btn {
+                color: white;
+                &:hover,
+                &:active {
+                    background-color: rgba(white, 0.2);
+                }
+            }
+        }
+
+        .dropdown-toggle {
+            width: 100%;
+            overflow: hidden;
+            min-height: 44px;
+
+            > span {
+                width: 100%;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                text-align: left;
+            }
+
+            &:empty::after {
+                margin-left: auto;
+            }
+
+            &::after {
+                transition: transform 200ms ease-in-out;
+            }
+
+            &:disabled {
+                border-color: $gray-500;
+                background-color: $gray-100;
+                cursor: default;
+
+                &::after {
+                    filter: grayscale(1);
+                    transition: none;
+                    transform: none;
+                }
+            }
+        }
+
+        &.clearable {
+            .dropdown-toggle > span {
+                margin-right: 2.5rem;
+            }
+        }
+    }
+
+    .close-btn {
+        position: absolute;
+        right: 2.5rem;
+        top: 50%;
+        font-size: 0.9rem;
+        transform: translateY(-50%);
+        &:not(:disabled) {
+            color: $blue-dark;
+        }
+    }
+}
+
+.rc.dropdown-menu {
+    position: fixed;
+    top: inherit;
+    left: inherit;
+    float: none;
+    overflow: auto;
+    z-index: $zindex-popover;
+
+    > p {
+        margin: 0;
+        padding: 0.5rem 1rem;
+    }
+
+    > input[type="search"] {
+        border-radius: 0;
+        border-bottom-color: $blue-dark;
+        border-bottom-width: 2px;
+        outline: none;
+        box-shadow: none;
+    }
+    .dropdown-divider {
+        margin: 0;
+    }
+    .optgroup-label {
+        padding: 0.5rem;
+        width: 100%;
+    }
+
+    .custom-control {
+        padding: 0;
+
+        > input {
+            &[type="radio"] {
+                &:checked + label {
+                    &:not(:hover) {
+                        background-color: $blue-darker;
+                        color: white;
+                    }
+                    &::before {
+                        content: "\2713";
+                        position: absolute;
+                        left: 10px;
+                    }
+                }
+            }
+
+            &:disabled + label {
+                color: $gray-500;
+                &:hover {
+                    background-color: $gray-300;
+                }
+            }
+        }
+
+        > label {
+            width: 100%;
+            height: 100%;
+            padding: 0.5rem 0.5rem 0.5rem 2rem;
+            cursor: pointer;
+            margin: 0;
+
+            &:hover {
+                background-color: $blue;
+                color: white;
+            }
+
+            &.custom-control-label {
+                &::before,
+                &::after {
+                    top: 0.8rem;
+                    left: 0.5rem;
+                }
+            }
+        }
+    }
+}

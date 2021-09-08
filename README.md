@@ -1,5 +1,6 @@
 # SEB React Components
 
+[![https://img.shields.io/npm/v/@sebgroup/react-components](https://img.shields.io/npm/v/@sebgroup/react-components)](https://www.npmjs.com/package/@sebgroup/react-components)
 ![Deployment](https://github.com/sebgroup/react-components/workflows/Deployment/badge.svg)
 ![Github Pages](https://github.com/sebgroup/react-components/workflows/Github%20Pages/badge.svg)
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
@@ -18,9 +19,9 @@ This is a set of react components some of which are based on SEB's bootstrap. Th
 
 This version of components has been developed with:
 
--   React `^16.12`
--   Typescript `^3.7`
--   SEB Bootstrap `^5.1`
+-   React
+-   Typescript
+-   SEB Bootstrap
 
 ## Installation
 
@@ -43,7 +44,7 @@ For `Visual Studio Code` users, please install the [recommended plugins](.vscode
 
 ## Development
 
-This project uses `prettier` for a more consistent (less annoying) coding. We are using 4 different builds for this project. The `src` folder is where the actual components exist with all their necessary dependencies. and `develop` folder is where we develop and test those components. Unit tests are based on `jest` and `enzyme`.
+This project uses `prettier` for a more consistent (less annoying) coding. We are using 4 different builds for this project. The `src` folder is where the actual components exist with all their necessary dependencies. and `develop` folder is where we develop and test those components.
 
 1. Development: `npm start`
 2. Check formatting rules, Compile components and Create Docs folder: `npm run build`
@@ -57,19 +58,19 @@ This project uses `prettier` for a more consistent (less annoying) coding. We ar
 For performance benefits we are not combining all the components into single Index rather they are chunked into their subpackage. Therefore, to use a component, you need to import the `Component` submodule from the `dist` folder, in whichever Class you want to use it. Here is a sample of how to import a `Button` component in a page.
 
 ```javascript
-import { Button } from "@sebgroup/react-components/dist/Button";
+import { Button } from "@sebgroup/react-components";
 
-const Comp = () => {
+const Component = () => {
     const onClick = (e) => {
         console.log("Im Clicked");
     }
 
     return (
         <div>
-            <Button label="a button" onClick={onClick} />
+            <Button onClick={onClick}>Button label</Button>
         </div>
     );
 }
 
-export default Comp;
+export default Component;
 ```

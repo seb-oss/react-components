@@ -1,0 +1,150 @@
+@import "~@sebgroup/bootstrap/scss/core";
+
+.rc.accordion {
+    > .card {
+        overflow: visible;
+        &:not(.collapsed) > .card-header > button.btn-link > h4:before {
+            transform: translateY(-50%) rotateX(-180deg);
+        }
+        > .card-header {
+            padding: $accordion-header-padding;
+            > button.btn-link {
+                width: 100%;
+                text-align: left;
+                border: 1px solid transparent;
+                white-space: normal;
+                text-decoration: none;
+                padding: $accordion-item-padding-y $accordion-item-padding-x $accordion-item-padding-y 3rem;
+                > h4 {
+                    position: relative;
+                    margin-bottom: 0rem;
+                    &:before {
+                        content: "";
+                        display: inline-block;
+                        width: $accordion-size;
+                        height: $accordion-size;
+                        margin-right: 0.5rem;
+                        background: $accordion-icon;
+                        background-repeat: no-repeat;
+                        background-size: $accordion-size;
+                        background-position: center;
+                        transition: transform 300ms;
+                        position: absolute;
+                        left: -2rem;
+                        top: 50%;
+                        transform: translateY(-50%);
+                    }
+                }
+                > h6 {
+                    padding: 0.4rem 0rem 0rem;
+                    margin: 0rem;
+                }
+                &:hover {
+                    text-decoration: none;
+                }
+                &:focus {
+                    border-color: rgba($blue, 0.5);
+                    box-shadow: 0 0 4px 1px rgba($blue, 0.56);
+                }
+            }
+        }
+        > .collapse {
+            &:not(.show) {
+                display: block;
+            }
+            > .card-body {
+                overflow: hidden;
+                transition: height 200ms, background-color 200ms, opacity 400ms;
+                padding: 0rem;
+                will-change: height;
+                > .content {
+                    padding: $accordion-body-padding;
+                    padding-left: 3rem;
+                }
+            }
+        }
+    }
+    /** Default theme */
+    &:not(.alternative) {
+        > .card {
+            &:not(.collapsed) {
+                > .card-header > button.btn-link {
+                    background-color: $accordion-body-bg-active;
+                }
+                > .collapse > .card-body {
+                    background-color: $accordion-body-bg-active;
+                }
+            }
+            > .card-header {
+                > button.btn-link {
+                    text-decoration: none;
+                    transition: background-color 100ms;
+                    > h4 {
+                        margin-bottom: 0rem;
+                    }
+                    &:hover {
+                        background-color: $accordion-bg-hover;
+                        > svg {
+                            fill: $blue;
+                        }
+                    }
+                    &:active {
+                        background-color: darken($color: $accordion-bg-hover, $amount: 5);
+                    }
+                }
+            }
+        }
+    }
+    /** Alternative theme */
+    &.alternative {
+        > .card {
+            border: none;
+            &:not(.collapsed) {
+                > .card-header {
+                    > button.btn-link {
+                        background-color: $accordion-body-bg;
+                    }
+                }
+                > .collapse {
+                    > .card-body {
+                        background-color: $accordion-body-bg;
+                    }
+                }
+            }
+            > .card-header {
+                > button.btn-link {
+                    &:not(:focus) {
+                        border-color: transparent;
+                    }
+                    &:hover {
+                        > h4 {
+                            text-decoration: underline;
+                        }
+                    }
+                    > h4 {
+                        font-size: $font-size-base;
+                        color: $blue;
+                    }
+                }
+            }
+        }
+    }
+    &.inverted {
+        > .card {
+            > .card-header > button.btn-link {
+                padding: 0.5rem 3rem 0.5rem 1rem;
+                > h4:before {
+                    right: -2rem;
+                    left: auto;
+                    top: 50%;
+                }
+            }
+            &.collapsed > .card-header > button.btn-link > h4:before {
+                transform: translateY(-50%);
+            }
+            .collapse > .card-body > .content {
+                padding-left: 1rem;
+            }
+        }
+    }
+}

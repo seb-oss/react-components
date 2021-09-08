@@ -5,26 +5,120 @@ on:
     branches: [master, beta]
 
 jobs:
-  gh_pages:
+  get_tags:
     runs-on: ubuntu-latest
-
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+      - name: Get list of releases 📋
+        uses: octokit/request-action@v2.x
+        id: get_latest_release
+        with:
+          route: GET /repos/kherp/react-components/tags
+          owner: octokit
+          repo: request-action
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Convert list of releases to json and filter out versions less than minimum version 📝
+        id: set-matrix
+        run: |
+          arr=( $(echo $data | jq -r '.[].name') )
+          major=""
+          JSON="{\"include\":["
+          for i in "${arr[@]}"
+          do
+            if [ "$(printf '%s\n' "$minver" "$i" | sort -V | head -n1)" = "$minver" ]; then 
+              if [ "$major" != "$(echo $i | cut -d. -f1)" ]; then
+                major=`echo $i | cut -d. -f1`
+                JSON="$JSON$(printf '{"name": "%s"}, ' "${i}")"
+              fi
+            fi
+          done
+          JSON="${JSON%,*} ${JSON##*,}"
+          JSON="$JSON]}"
+          echo "test: $JSON"
+          echo "::set-output name=matrix::$JSON"
+        env:
+          data: ${{steps.get_latest_release.outputs.data}}
+          minver: v4.0.0
+  gh_pages:
+    needs: get_tags
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ needs.get_tags.outputs.matrix }}
+      path: ${{ steps.get_version_list.outputs.path }}
+      file: ${{ steps.get_version_list.outputs.file }}
     steps:
       - uses: actions/checkout@v2
 
-      - name: Setup Node
+      - name: Setup Node 🏗️
         uses: actions/setup-node@v2
         with:
-          node-version: 14.x
+          node-version: 15.x
 
-      - name: Installing dependencies
+      - name: Installing dependencies ⏳
         run: npm ci
-
-      - name: Building docs
+      - name: Generating versions list
+        id: get_version_list
+        run: |
+          echo "$data" > $jsonPath$jsonFileName
+          echo "::set-output name=path::$jsonPath"
+          echo "::set-output name=file::$jsonFileName"
+        env:
+          data: ${{needs.get_tags.outputs.matrix}}
+          jsonPath: ./docs/src/assets/jsons/
+          jsonFileName: versions.json
+      - name: Building docs 🔨
         run: npm run build:docs
 
-      - name: Publish
+      - name: Publish 🚀
         uses: crazy-max/ghaction-github-pages@v2.2.0
         with:
           build_dir: docs/public
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+  build_docs:
+    needs: gh_pages
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 1
+      matrix: ${{fromJson(needs.gh_pages.outputs.matrix)}}
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ matrix.name }}
+      - name: Setup Node 🏗️
+        uses: actions/setup-node@v2
+        with:
+          node-version: 15.x
+      - name: Installing dependencies ⏳
+        run: npm ci
+      - name: Building docs 🔨
+        id: get_doc_folder
+        run: |
+          if [ "$(printf '%s\n' "$requiredver" "$currentver" | sort -V | head -n1)" = "$requiredver" ]; then 
+            echo "base=\"/react-components/${currentver}\"" >> .env
+            mkdir -p $jsonPath && touch $jsonPath$jsonFile
+            echo "$data" > $jsonPath$jsonFile
+            npm run build:docs
+            echo "::set-output name=doc_folder::docs/public"
+          else
+            npm run docs
+            echo "::set-output name=doc_folder::docs"
+          fi
+        env:
+          requiredver: v5.0.0 # oldest version where gatsby is implemented
+          data: ${{needs.gh_pages.outputs.matrix}}
+          jsonPath: ${{ needs.gh_pages.outputs.path }}
+          jsonFile: ${{ needs.gh_pages.outputs.file }}
+          currentver: ${{ matrix.name }}
+      - name: Deploy 🚀
+        uses: JamesIves/github-pages-deploy-action@3.7.1
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: gh-pages # The branch the action should deploy to.
+          FOLDER: ${{steps.get_doc_folder.outputs.doc_folder}} # The folder the action should deploy.
+          TARGET_FOLDER: ${{ matrix.name }}
+          CLEAN: true # Automatically remove deleted files from the deploy branch
+          CLEAN_EXCLUDE: '["version"]'
+          

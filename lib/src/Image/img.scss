@@ -1,0 +1,19 @@
+@import "~@sebgroup/bootstrap/scss/core";
+
+img.rc.img {
+    &.img-rounded {
+        border-radius: $border-radius-utility;
+    }
+}
+
+div.rc.img {
+    &.img-fluid {
+        height: 100%;
+        background-size: 100%;
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+    &.img-fixed {
+        background-attachment: fixed;
+    }
+}

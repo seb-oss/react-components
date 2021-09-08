@@ -1,0 +1,31 @@
+@import "~@sebgroup/bootstrap/scss/variables";
+
+.rc.chip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: 4px;
+    background-color: $gray-200;
+    height: 32px;
+    padding: 0 8px;
+    font-size: $font-size-base;
+    &:hover {
+        background-color: $gray-100;
+        > .chip-close {
+            color: $red;
+        }
+    }
+    > button {
+        border: none;
+        box-shadow: none;
+        background-color: transparent;
+        padding-right: 0;
+        outline: none;
+        &:hover {
+            color: $red;
+        }
+        &:active {
+            color: $red-darker;
+        }
+    }
+}
