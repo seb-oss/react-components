@@ -103,7 +103,7 @@ export type UseDynamicForm = [FormRenderFunction, DynamicFormInternalState, SetD
 export function useDynamicForm(sections: DynamicFormSection[]): UseDynamicForm {
     const initialState: DynamicFormInternalState = useMemo(() => {
         let initialFormState: DynamicFormInternalState = {};
-        sections?.map((section) => {
+        sections?.map((section: DynamicFormSection) => {
             initialFormState[section?.key] = {};
             section.items?.map((item) => {
                 const { key, value, multi, controlType }: DynamicFormItem = item;
