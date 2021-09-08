@@ -479,7 +479,7 @@ export default ShowMeEverything;
                             <TableCell>
                                 <code>string</code>
                             </TableCell>
-                            <TableCell>An optional description displayed below the form field.</TableCell>
+                            <TableCell>An optional description displayed below the label and above the form field.</TableCell>
                         </TableRow>
                         <TableRow>
                             <TableCell>
