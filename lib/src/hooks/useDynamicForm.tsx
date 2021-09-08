@@ -112,7 +112,7 @@ export function useDynamicForm(sections: DynamicFormSection[]): UseDynamicForm {
                 switch (controlType) {
                     case "Dropdown": {
                         if (multi) {
-                            if (value !== null && value !== undefined && Array.isArray(value) && (value as any[]).every((x) => typeof x === "string")) {
+                            if (Array.isArray(value) && (value as any[]).every((x) => typeof x === "string")) {
                                 initialValue = value as string[];
                             } else {
                                 initialValue = [];
