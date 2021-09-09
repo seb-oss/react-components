@@ -20,14 +20,14 @@ export const RadioButton: React.FC<RadioButtonProps> = React.forwardRef(({ child
     return (
         <FeedbackIndicator {...indicator}>
             <div {...wrapperProps} className={classnames("rc radio-button", wrapperProps.className)}>
-                <div className="rc custom-radio custom-control">
+                <label htmlFor={id} className="rc custom-radio custom-control">
                     <input {...props} ref={ref} className={classnames("custom-control-input", props.className)} type="radio" id={id} />
                     {children && (
-                        <label className="custom-control-label" htmlFor={id}>
+                        <label htmlFor={id} className="custom-control-label">
                             {children}
                         </label>
                     )}
-                </div>
+                </label>
             </div>
         </FeedbackIndicator>
     );

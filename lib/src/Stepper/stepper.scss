@@ -4,7 +4,7 @@ $transition-time: 200ms;
 $stepper-font-size: 24px;
 
 .rc.custom-stepper {
-    display: inline-block;
+    width: max-content;
     .stepper-container {
         height: 44px;
         border-radius: 4px;
