@@ -19,14 +19,12 @@ export type TableProps = JSX.IntrinsicElements["table"] & {
 };
 
 export const Table: React.FunctionComponent<TableProps> = React.memo(
-    React.forwardRef(
-        ({ onRowSelect, onRowExpand, onSort, sortedColumn, theme = "light", className, ...props }: TableProps, ref: React.ForwardedRef<HTMLTableElement>): React.ReactElement<void> => {
-            const [tableState, setTableState] = React.useState({ expandedRows: [], sortedColumn });
-            return (
-                <TableContext.Provider value={{ tableState, onSort, onRowSelect, onRowExpand, setTableState }}>
-                    <table {...props} className={classnames("table", className, theme)} ref={ref} />
-                </TableContext.Provider>
-            );
-        }
-    )
+    React.forwardRef(({ onRowSelect, onRowExpand, onSort, sortedColumn, theme = "light", className, ...props }: TableProps, ref: React.ForwardedRef<HTMLTableElement>): React.ReactElement<void> => {
+        const [tableState, setTableState] = React.useState({ expandedRows: [], sortedColumn });
+        return (
+            <TableContext.Provider value={{ tableState, onSort, onRowSelect, onRowExpand, setTableState }}>
+                <table {...props} className={classnames("table", className, theme)} ref={ref} />
+            </TableContext.Provider>
+        );
+    })
 );
