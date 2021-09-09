@@ -209,7 +209,14 @@ describe("hook: useDynamicForm", () => {
                 }
 
                 if (!isHidden) {
-                    expect(container.querySelector("label").innerHTML).toBe(props.label);
+                    if (props.controlType === "Checkbox") {
+                        // get the last label element since chekbox is wrapped in a label to fix the hitbox issue
+                        const labelElements = container.querySelectorAll("label");
+                        expect(labelElements.item(labelElements.length - 1).innerHTML).toBe(props.label);
+                    } else {
+                        // just get the first label element normally
+                        expect(container.querySelector("label").innerHTML).toBe(props.label);
+                    }
                 }
 
                 if (!isLabelOnly && !isHidden) {

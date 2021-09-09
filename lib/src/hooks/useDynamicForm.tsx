@@ -11,7 +11,7 @@ import { RadioButton, RadioGroup } from "../RadioButton";
 import { isEmpty } from "@sebgroup/frontend-tools/isEmpty";
 import { isValidDate } from "@sebgroup/frontend-tools/isValidDate";
 
-export type DynamicFormInternalStateValue = string | string[] | Date | boolean | number | null;
+export type DynamicFormInternalStateValue = string | string[] | Date | boolean | number;
 export interface DynamicFormItem {
     key: string;
     controlType: DynamicFormType;
@@ -431,7 +431,11 @@ const DynamicFormItemComponent: React.FC<{
     const descriptionItem: ReactNode = props.item?.description ? <p className="rc dynamic-form dynamic-form-description text-muted m-0">{props.item?.description}</p> : <></>;
 
     const indicator: Indicator = React.useMemo(() => {
-        return props.errorMessage ? { type: "danger", message: props.errorMessage } : props.warningMessage ? { type: "warning", message: props.warningMessage } : null;
+        return props.errorMessage
+            ? { type: "danger", message: props.errorMessage }
+            : props.warningMessage
+            ? { type: "warning", message: props.warningMessage }
+            : { type: "none", noBorder: true, message: "" };
     }, [props.errorMessage, props.warningMessage]);
 
     switch (controlType) {
@@ -467,7 +471,7 @@ const DynamicFormItemComponent: React.FC<{
                 <>
                     {labelItem}
                     {descriptionItem}
-                    <FeedbackIndicator type={indicator?.type} message={indicator?.message}>
+                    <FeedbackIndicator {...indicator}>
                         <RadioGroup {...{ name, onChange, value }} {...formElementAdditionalProps}>
                             {props.item?.options?.map((option: DynamicFormOption, i) => (
                                 <RadioButton key={i} value={option?.value} {...(option?.additionalProps || {})}>
@@ -518,7 +522,7 @@ const DynamicFormItemComponent: React.FC<{
                 <>
                     {labelItem}
                     {descriptionItem}
-                    <FeedbackIndicator type={indicator?.type} message={indicator?.message}>
+                    <FeedbackIndicator {...indicator}>
                         <Datepicker {...{ value, onChange, name }} min={props.item?.min} max={props.item?.max} {...formElementAdditionalProps} />
                     </FeedbackIndicator>
                 </>
@@ -554,7 +558,7 @@ const DynamicFormItemComponent: React.FC<{
                 <>
                     {labelItem}
                     {descriptionItem}
-                    <FeedbackIndicator type={indicator?.type} message={indicator?.message}>
+                    <FeedbackIndicator {...indicator}>
                         <div className="d-flex flex-wrap" role="group" {...formElementAdditionalProps}>
                             {props.item?.options?.map((option: DynamicFormOption, i) => {
                                 const active: boolean = !!(value as string[])?.find((e: string) => option.value === e);
