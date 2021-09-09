@@ -2,7 +2,7 @@ import React from "react";
 import classnames from "classnames";
 import "./feedback-indicator.scss";
 
-export type IndicatorType = "danger" | "warning" | "success";
+export type IndicatorType = "danger" | "warning" | "success" | "none";
 export type Indicator = FeedbackIndicatorProps;
 
 type FeedbackIndicatorProps = React.PropsWithChildren<{
@@ -39,7 +39,7 @@ export const FeedbackIndicator: React.FC<FeedbackIndicatorProps> = (props: Feedb
         return React.isValidElement(Child) ? (
             <>
                 {React.cloneElement<any>(Child as any, {
-                    className: classnames((Child.props as any).className, `rc-d feedback feedback-${indicatorValue}`, { "no-border": props.noBorder }),
+                    className: classnames((Child.props as any).className, `rc-d feedback feedback-${indicatorValue}`, { "no-border": props.noBorder }, { "mb-0": props.message }),
                 })}
                 {props.type && <p className={classnames("rc-d feedback-message")}>{props.message}</p>}
             </>
