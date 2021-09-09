@@ -21,12 +21,12 @@ export const Checkbox: React.FC<CheckboxProps> = React.forwardRef(({ inline, wra
     return (
         <FeedbackIndicator {...indicator}>
             <div {...wrapperProps} className={classnames("rc", "checkbox", { inline }, wrapperProps?.className)}>
-                <div className={classnames("custom-control", "custom-checkbox", { "custom-control-inline": inline })}>
+                <label htmlFor={id} className={classnames("custom-control", "custom-checkbox", { "custom-control-inline": inline })}>
                     <input {...props} type="checkbox" id={id} className={classnames("custom-control-input", props.className)} ref={ref} />
-                    <label className="custom-control-label" htmlFor={id}>
+                    <label htmlFor={id} className="custom-control-label">
                         {children}
                     </label>
-                </div>
+                </label>
             </div>
         </FeedbackIndicator>
     );

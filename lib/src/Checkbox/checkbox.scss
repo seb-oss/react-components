@@ -4,11 +4,10 @@
  TODO: This padding matches the checkbox with design library guidelines.
  Should be removed when it's updated in Bootstrap
  */
-$checkbox-padding: 0.563rem;
-$checkbox-padding-left: 2.23rem;
-$checkbox-padding: $checkbox-padding $checkbox-padding $checkbox-padding $checkbox-padding-left;
 
 .rc.checkbox {
+    padding: 0.5rem 0.75rem;
+
     &.inline {
         display: inline-block;
         vertical-align: top;
@@ -16,21 +15,19 @@ $checkbox-padding: $checkbox-padding $checkbox-padding $checkbox-padding $checkb
             margin-right: 1rem;
         }
     }
-    .custom-checkbox.custom-control {
-        padding: $checkbox-padding;
+    label.custom-checkbox.custom-control {
         border: 1px solid transparent;
         border-radius: 4px;
         transition: border-color 200ms;
+        margin-bottom: 0;
 
         > .checkbox-description {
-            margin: 0;
             color: $gray-600;
             font-size: $font-size-sm;
             line-height: 1.5rem;
         }
         &.custom-control-inline {
             flex-direction: column;
-            margin: 0;
         }
 
         > .custom-control-input {
