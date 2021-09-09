@@ -87,10 +87,7 @@ const TablePage: React.FC = (): React.ReactElement<void> => {
     const enableFilter = checkDynamicFormSelectedKey("enableFilter", controls);
     const enableDark = checkDynamicFormSelectedKey("enableDark", controls);
 
-    const defaultData: Array<TableDataProps> = React.useMemo(
-        () => makeData<Array<TableDataProps>>([enablePagination ? 100 : 10, 5]),
-        [enablePagination]
-    );
+    const defaultData: Array<TableDataProps> = React.useMemo(() => makeData<Array<TableDataProps>>([enablePagination ? 100 : 10, 5]), [enablePagination]);
     const [data, setData] = React.useState<Array<GenericTableRow<TableDataProps>>>([...defaultData]);
 
     const statusDropdownList: string[] = ["single", "in relationship"];
