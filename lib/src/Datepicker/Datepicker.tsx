@@ -81,11 +81,7 @@ export const Datepicker: React.FunctionComponent<DatepickerProps> = React.forwar
                     return false;
                 }
             } else if (max && d <= max) {
-                if (!min || (min && d >= min)) {
-                    return true;
-                } else {
-                    return false;
-                }
+                return !min || (min && d >= min);
             } else {
                 return false;
             }
