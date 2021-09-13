@@ -78,6 +78,8 @@ export interface DynamicFormMetaDataItem {
     isVisible: boolean;
     /** this field has an error message */
     hasError: boolean;
+    /** this field has an error message */
+    hasWarning: boolean;
     /** This field has a non empty, null, undefined or otherwise falsy value (based on its controlType) */
     hasTruthyValue: boolean;
 }
@@ -98,8 +100,12 @@ export type FormRenderFunction = () => JSX.Element;
 export type SetDynamicFormState = React.Dispatch<React.SetStateAction<DynamicFormInternalState>>;
 export type SetDynamicFormErrors = React.Dispatch<React.SetStateAction<DynamicFormErrors>>;
 export type SetDynamicFormWarnings = React.Dispatch<React.SetStateAction<DynamicFormErrors>>;
-type isDynamicFormDirty = boolean;
-export type UseDynamicForm = [FormRenderFunction, DynamicFormInternalState, SetDynamicFormState, SetDynamicFormErrors, SetDynamicFormWarnings, DynamicFormMetaData, isDynamicFormDirty];
+export interface FormInfo {
+    dirty: boolean;
+    hasErrors: boolean;
+    hasWarnings: boolean;
+}
+export type UseDynamicForm = [FormRenderFunction, DynamicFormInternalState, SetDynamicFormState, SetDynamicFormErrors, SetDynamicFormWarnings, DynamicFormMetaData, FormInfo];
 export function useDynamicForm(sections: DynamicFormSection[]): UseDynamicForm {
     const initialState: DynamicFormInternalState = useMemo(() => {
         const initialFormState: DynamicFormInternalState = {};
@@ -291,6 +297,7 @@ export function useDynamicForm(sections: DynamicFormSection[]): UseDynamicForm {
             items?.forEach(({ key, controlType }) => {
                 const itemState: DynamicFormInternalStateValue | undefined | null = state && state[sectionKey] && state[sectionKey][key];
                 const hasError: boolean = !!(errorMessages && errorMessages[sectionKey] && errorMessages[sectionKey][key]?.length);
+                const hasWarning: boolean = !!(warningMessages && warningMessages[sectionKey] && warningMessages[sectionKey][key]?.length);
                 const isVisible: boolean = shouldRender(sectionKey, key);
                 let hasTruthyValue: boolean;
 
@@ -318,6 +325,7 @@ export function useDynamicForm(sections: DynamicFormSection[]): UseDynamicForm {
 
                 newMeta[sectionKey][key] = {
                     hasError,
+                    hasWarning,
                     isVisible,
                     hasTruthyValue,
                 };
@@ -325,13 +333,39 @@ export function useDynamicForm(sections: DynamicFormSection[]): UseDynamicForm {
         });
 
         return newMeta;
-    }, [shouldRender, errorMessages]);
+    }, [shouldRender, errorMessages, warningMessages]);
+
+    const checkMetaDataIf = useCallback(
+        (method: "some" | "every", condition: keyof DynamicFormMetaDataItem) => {
+            return Object.values(meta)[method]((s: DynamicFormMetaData[string]) => Object.values(s)[method]((v: DynamicFormMetaDataItem) => v.isVisible && v[condition]));
+        },
+        [meta]
+    );
+
+    //** Does at least one of all the currently visible elements have an error message */
+    const hasErrors: boolean = useMemo(() => {
+        return checkMetaDataIf("some", "hasError");
+    }, [checkMetaDataIf]);
+
+    //** Does at least one of all the currently visible elements have a warning message */
+    const hasWarnings: boolean = useMemo(() => {
+        return checkMetaDataIf("some", "hasWarning");
+    }, [checkMetaDataIf]);
+
+    //** Does every currently visible form element have a truthy value */
+    const isAllTruthy: boolean = useMemo(() => {
+        return checkMetaDataIf("every", "hasTruthyValue");
+    }, [checkMetaDataIf]);
 
     const renderForm = useCallback(() => {
         return <DynamicFormComponent sections={sections} errorMessages={errorMessages} warningMessages={warningMessages} state={state} onChange={onChange} shouldRender={shouldRender} />;
     }, [onChange, shouldRender, errorMessages, warningMessages]);
 
-    return [renderForm, state, setState, setErrorMessages, setWarningMessages, meta, dirty];
+    const formInfo: FormInfo = useMemo(() => {
+        return { dirty, hasErrors, hasWarnings, isAllTruthy };
+    }, [dirty, hasErrors, hasWarnings, isAllTruthy]);
+
+    return [renderForm, state, setState, setErrorMessages, setWarningMessages, meta, formInfo];
 }
 
 const DynamicFormComponent: React.FC<{
