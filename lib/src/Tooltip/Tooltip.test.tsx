@@ -176,9 +176,9 @@ describe("Component: Tooltip", () => {
                 trigger: "focus",
             },
             {
-                toggleEvent: new MouseEvent("mouseover", { bubbles: true }),
+                toggleEvent: new PointerEvent("pointover", { bubbles: true }),
                 toggleEventElementClass: ".default-content",
-                untoggleEvent: new Event("mouseout", { bubbles: true }),
+                untoggleEvent: new PointerEvent("pointout", { bubbles: true }),
                 untoggleEventElementClass: ".default-content",
                 trigger: "hover",
             },

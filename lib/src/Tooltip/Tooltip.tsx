@@ -86,8 +86,8 @@ export const Tooltip: React.FC<TooltipProps> = ({
                 className={classnames("tooltip-reference", { cursor: trigger === "click" })}
                 tabIndex={-1}
                 onClick={trigger === "click" ? onTooltipToggle : null}
-                onMouseEnter={trigger === "hover" && !isMobile ? onMouseEnterEvent : null}
-                onMouseLeave={trigger === "hover" && !isMobile ? onMouseLeaveEvent : null}
+                onPointerOver={trigger === "hover" && !isMobile ? onMouseEnterEvent : null}
+                onPointerOut={trigger === "hover" && !isMobile ? onMouseLeaveEvent : null}
                 onTouchStart={trigger === "hover" && isMobile ? onTouchStartEvent : null}
                 onTouchEnd={trigger === "hover" && isMobile ? onTouchEndEvent : null}
                 onFocus={trigger === "focus" ? onFocusEvent : null}
