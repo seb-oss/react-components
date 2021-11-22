@@ -73,4 +73,18 @@ describe("Component: RadioGroup", () => {
 
         expect(container.firstElementChild.textContent).toContain("test");
     });
+
+    it("Should render component with label", () => {
+        const label: string = "Element label";
+        act(() => {
+            render(
+                <RadioGroup label={label} name="test">
+                    {radios}
+                </RadioGroup>,
+                container
+            );
+        });
+
+        expect(container.querySelector("legend").textContent).toContain(label);
+    });
 });
