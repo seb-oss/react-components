@@ -2,9 +2,15 @@ import React from "react";
 import { unmountComponentAtNode, render } from "react-dom";
 import { Textarea } from ".";
 import { act } from "react-dom/test-utils";
+import { TextareaProps } from "@sebgroup/react-components";
 
 describe("Component: Textarea", () => {
     let container: HTMLDivElement = null;
+    const renderComponent = (props: TextareaProps = {}) => {
+        act(() => {
+            render(<Textarea {...props} />, container);
+        });
+    };
 
     beforeEach(() => {
         container = document.createElement("div");
@@ -18,9 +24,19 @@ describe("Component: Textarea", () => {
     });
 
     it("Should render", () => {
-        act(() => {
-            render(<Textarea />, container);
-        });
+        renderComponent();
         expect(container).toBeDefined();
+    });
+
+    it("Should render with label", () => {
+        const label: string = "element label";
+        renderComponent({ label });
+        expect(container.querySelector("label").textContent).toBe(label);
+    });
+
+    it("Should render with custom id", () => {
+        const id: string = "custom id";
+        renderComponent({ id });
+        expect(container.querySelector("textarea").id).toBe(id);
     });
 });
