@@ -1,8 +1,7 @@
 import React from "react";
 import { unmountComponentAtNode, render } from "react-dom";
-import { Textarea } from ".";
+import { Textarea, TextareaProps } from ".";
 import { act } from "react-dom/test-utils";
-import { TextareaProps } from "@sebgroup/react-components";
 
 describe("Component: Textarea", () => {
     let container: HTMLDivElement = null;
