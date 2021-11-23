@@ -2,7 +2,7 @@ import React from "react";
 import { unmountComponentAtNode, render } from "react-dom";
 import { Textbox } from ".";
 import { act, Simulate } from "react-dom/test-utils";
-import { TextboxProps } from "@sebgroup/react-components/Textbox";
+import { TextboxProps } from "@sebgroup/react-components";
 
 type PrefixSuffixTestCase = {
     statement: string;
