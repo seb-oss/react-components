@@ -43,7 +43,7 @@ const TextboxPage: React.FC = React.memo(() => {
     ]);
 
     const indicator: Indicator = React.useMemo(() => {
-        return controls.indicator ? { type: controls.indicatorType, message: "Indicator message" } : null;
+        return controls.indicator ? { type: controls.indicatorType as IndicatorType, message: "Indicator message" } : null;
     }, [controls.indicator, controls.indicatorType]);
 
     return (
@@ -58,7 +58,7 @@ const TextboxPage: React.FC = React.memo(() => {
                         leftSlot={controls.leftport === iconOption.value ? <SearchIcon /> : controls.leftport === textOption.value ? "Kr" : null}
                         rightSlot={controls.rightport === iconOption.value ? <SearchIcon /> : controls.rightport === textOption.value ? "Kr" : null}
                         onChange={(e) => setValue(e.target.value)}
-                        disabled={controls.disabled}
+                        disabled={!!controls.disabled}
                         indicator={indicator}
                     />
                 </div>
