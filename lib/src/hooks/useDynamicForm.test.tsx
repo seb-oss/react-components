@@ -377,7 +377,7 @@ describe("hook: useDynamicForm", () => {
                             Simulate.change(container.querySelector("select"), { target: { value } } as any);
                             break;
                         case "Stepper":
-                            Simulate.click(document.querySelector(`[aria-labelledby="${value > 0 ? "increment" : "decrement"}"]`));
+                            Simulate.click(document.querySelector(`.stepper-${value > 0 ? "increment" : "decrement"}`));
                             break;
                         case "Option":
                             Simulate.click(document.querySelector(`button`));
