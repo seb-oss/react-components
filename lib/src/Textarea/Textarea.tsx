@@ -24,7 +24,7 @@ export const Textarea: React.FC<TextareaProps> = React.forwardRef(({ indicator, 
         <div {...wrapperProps} className={classnames("rc text-area input-field", wrapperProps.className)}>
             {label && <label htmlFor={id}>{label}</label>}
             <FeedbackIndicator {...indicator}>
-                <textarea {...props} ref={ref} className={classnames("form-control", { resizable }, props.className)} />
+                <textarea {...props} id={id} ref={ref} className={classnames("form-control", { resizable }, props.className)} />
             </FeedbackIndicator>
         </div>
     );

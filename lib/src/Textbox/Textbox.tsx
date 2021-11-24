@@ -30,13 +30,14 @@ export type TextboxProps = JSX.IntrinsicElements["input"] & {
 export const Textbox: React.FC<TextboxProps> = React.forwardRef(
     ({ leftSlot, leftSlotTitle, onLeftClick, rightSlot, rightSlotTitle, onRightClick, indicator, wrapperProps = {}, ...props }: TextboxProps, ref: React.ForwardedRef<HTMLInputElement>) => {
         const [customId, setCustomId] = React.useState<string>(null);
+        const labelId: string = randomId("tbgl-");
 
         React.useEffect(() => setCustomId(props.id ? props.id : props.label ? randomId("tbg-") : null), [props.id]);
 
         return (
             <div {...wrapperProps} className={classnames("rc input-box-group", wrapperProps.className)}>
                 {props.label && (
-                    <label className="custom-label" htmlFor={customId}>
+                    <label id={labelId} className="custom-label" htmlFor={customId}>
                         {props.label}
                     </label>
                 )}
@@ -44,7 +45,14 @@ export const Textbox: React.FC<TextboxProps> = React.forwardRef(
                     <FeedbackIndicator {...indicator}>
                         <div className="input-box-group-wrapper">
                             {leftSlot && (
-                                <div className={classnames("input-group-prepend", { clickable: onLeftClick })} role={onLeftClick ? "button" : ""} onClick={onLeftClick}>
+                                <div
+                                    className={classnames("input-group-prepend", { clickable: onLeftClick })}
+                                    role={onLeftClick ? "button" : null}
+                                    onClick={onLeftClick}
+                                    tabIndex={onLeftClick ? 0 : null}
+                                    aria-hidden={onLeftClick ? null : "true"}
+                                    aria-describedby={leftSlotTitle ? null : labelId}
+                                >
                                     <span className="input-group-text" title={leftSlotTitle}>
                                         {leftSlot}
                                     </span>
@@ -52,7 +60,14 @@ export const Textbox: React.FC<TextboxProps> = React.forwardRef(
                             )}
                             <input {...props} ref={ref} id={customId} className={classnames("form-control", props.className)} />
                             {rightSlot && (
-                                <div className={classnames("input-group-append", { clickable: onRightClick })} onClick={onRightClick} role={onRightClick ? "button" : ""}>
+                                <div
+                                    className={classnames("input-group-append", { clickable: onRightClick })}
+                                    onClick={onRightClick}
+                                    role={onRightClick ? "button" : null}
+                                    tabIndex={onRightClick ? 0 : null}
+                                    aria-hidden={onRightClick ? null : "true"}
+                                    aria-describedby={rightSlotTitle ? null : labelId}
+                                >
                                     <span className="input-group-text" title={rightSlotTitle}>
                                         {rightSlot}
                                     </span>
