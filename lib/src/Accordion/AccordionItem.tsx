@@ -18,31 +18,32 @@ export const AccordionItem: React.FC<AccordionItemProps> = React.memo(
 
         return (
             <div {...props} ref={ref} className={classnames("rc", "card", { collapsed: !props.defaultChecked }, props.className)}>
-                <div className="card-header" id={uniqueId + "-header"}>
+                <div className="card-header" id={`${uniqueId}--header`}>
                     <button
                         className="btn btn-link"
                         type="button"
-                        data-toggle="collapse"
-                        aria-expanded={props.defaultChecked}
-                        data-target={`#${uniqueId}`}
                         aria-controls={uniqueId}
-                        onClick={onToggle}
+                        aria-disabled={props.defaultChecked}
+                        aria-expanded={props.defaultChecked}
                         data-index-number={props["data-index-number"]}
+                        data-target={`#${uniqueId}`}
+                        data-toggle="collapse"
+                        onClick={onToggle}
                     >
                         <h4>{header}</h4>
                         {subHeader && <h6>{subHeader}</h6>}
                     </button>
                 </div>
-                <div
+                <section
                     id={uniqueId}
                     className={classnames("collapse", { collapsed: !props.defaultChecked })}
-                    aria-labelledby={uniqueId + "--header"}
+                    aria-labelledby={`${uniqueId}--header`}
                     data-parent={props["data-parent-id"] ? `#${props["data-parent-id"]}` : null}
                 >
                     <Collapse className="card-body" toggle={props.defaultChecked}>
                         <div className="content">{props.children}</div>
                     </Collapse>
-                </div>
+                </section>
             </div>
         );
     })
