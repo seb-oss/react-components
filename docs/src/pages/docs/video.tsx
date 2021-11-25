@@ -52,6 +52,7 @@ const VideoPage: React.FC = () => {
             example={
                 <Video
                     name="myVideo"
+                    title="Sample Video"
                     src={(controls as any)?.src || defaultSrc}
                     width={(controls as any)?.width || defaultWidth}
                     height={(controls as any)?.height || defaultHeight}
