@@ -17,13 +17,13 @@ export const Timer: React.FC<TimerProps> = ({ duration, callback, timerPrefix, t
     const [timer, setTimer] = React.useState<string>("00:00");
 
     const startInterval = (timeout: number): void => {
-        setTimer(convertMStoTime(timeout));
+        setTimer(formatMilitaryTime(timeout));
         clearInterval();
         setInnerInterval(
             setInterval(() => {
                 if (timeout > 0) {
                     timeout = timeout - 1000;
-                    setTimer(convertMStoTime(timeout));
+                    setTimer(formatMilitaryTime(timeout));
                     if (timeout === 0) {
                         callback?.();
                         clearInterval();
@@ -40,15 +40,15 @@ export const Timer: React.FC<TimerProps> = ({ duration, callback, timerPrefix, t
         }
     };
 
-    const convertToTwoDigits = (rawNumber: number): string => `${rawNumber < 10 ? "0" : ""}${rawNumber}`;
+    const formatTwoDigits = (time: number): string => `${time}`.padStart(2, "0");
 
-    const convertMStoTime = (milliseconds: number): string => {
+    const formatMilitaryTime = (milliseconds: number): string => {
         const rawSeconds: number = milliseconds / 1000;
         const rawMinutes: number = rawSeconds / 60;
         const displaySeconds: number = rawSeconds % 60;
         const displayMinutes: number = Math.floor(rawMinutes % 60); // get remainder minutes
         const displayHours: number = Math.floor(rawMinutes / 60); // get converted hours
-        return (displayHours > 0 ? displayHours + ":" : "") + convertToTwoDigits(displayMinutes) + ":" + convertToTwoDigits(displaySeconds);
+        return (displayHours > 0 ? displayHours + ":" : "") + formatTwoDigits(displayMinutes) + ":" + formatTwoDigits(displaySeconds);
     };
 
     React.useEffect(() => {

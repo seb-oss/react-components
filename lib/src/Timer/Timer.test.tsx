@@ -21,15 +21,16 @@ describe("Component: Timer", () => {
         act(() => {
             render(<Timer />, container);
         });
-        expect(container.querySelector(`[role="presentation"]`)).not.toBeNull();
+        expect(container.querySelector(`[role="timer"]`)).not.toBeNull();
     });
 
     it("Should call callback when countdown is done", () => {
-        jest.useFakeTimers();
+        const duration: number = 10000;
         jest.spyOn(global, "setInterval");
         const callback: jest.Mock = jest.fn();
+        jest.advanceTimersByTime(duration);
         act(() => {
-            render(<Timer duration={10000} callback={callback} />, container);
+            render(<Timer duration={duration} callback={callback} />, container);
         });
         expect(setInterval).toBeCalled();
         expect(callback).toBeCalled();
