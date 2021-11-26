@@ -6,80 +6,67 @@ export type TimerProps = JSX.IntrinsicElements["div"] & {
     callback?: VoidFunction;
     /** Timer's duration in milliseconds */
     duration?: number;
+    /** Additional timer prefix */
+    timerPrefix?: React.ReactNode;
+    /** Additional timer suffix */
+    timerSuffix?: React.ReactNode;
 };
 
-interface TimerState {
-    timer: string;
-}
-/** A timer is a component for measuring time intervals */
-export class Timer extends React.Component<TimerProps, TimerState> {
-    private innerInterval: any;
-    constructor(props: TimerProps) {
-        super(props);
+export const Timer: React.FC<TimerProps> = ({ duration, callback, timerPrefix, timerSuffix, ...props }: TimerProps) => {
+    const [innerInterval, setInnerInterval] = React.useState<NodeJS.Timeout>();
+    const [timer, setTimer] = React.useState<string>("00:00");
 
-        this.state = {
-            timer: "00:00",
-        };
-    }
-
-    startInterval(timeout: number): void {
-        this.setState({ timer: this.convertMStoTime(timeout) }, () => {
-            this.clearInterval();
-            this.innerInterval = setInterval(() => {
+    const startInterval = (timeout: number): void => {
+        setTimer(convertMStoTime(timeout));
+        clearInterval();
+        setInnerInterval(
+            setInterval(() => {
                 if (timeout > 0) {
                     timeout = timeout - 1000;
-                    this.setState({ timer: this.convertMStoTime(timeout) }, () => {
-                        if (timeout === 0) {
-                            this.props.callback();
-                            this.clearInterval();
-                        }
-                    });
+                    setTimer(convertMStoTime(timeout));
+                    if (timeout === 0) {
+                        callback?.();
+                        clearInterval();
+                    }
                 }
-            }, 1000);
-        });
-    }
-
-    clearInterval(): void {
-        if (this.innerInterval) {
-            clearTimeout(this.innerInterval);
-            this.innerInterval = null;
-        }
-    }
-
-    convertMStoTime(value: number): string {
-        const date: Date = new Date(value);
-        return (
-            (date.getUTCHours() > 0 ? date.getUTCHours() + ":" : "") +
-            (date.getUTCMinutes() < 10 ? "0" + date.getUTCMinutes() : date.getUTCMinutes()) +
-            ":" +
-            (date.getUTCSeconds() < 10 ? "0" + date.getUTCSeconds() : date.getUTCSeconds())
+            }, 1000)
         );
-    }
+    };
 
-    componentDidMount() {
-        if (this.props.duration !== null && this.props.duration !== undefined) {
-            this.startInterval(this.props.duration);
+    const clearInnerInterval = (): void => {
+        if (innerInterval) {
+            clearInterval(innerInterval);
+            setInnerInterval(null);
         }
-    }
+    };
 
-    componentWillUnmount() {
-        this.clearInterval();
-    }
+    const convertToTwoDigits = (rawNumber: number): string => `${rawNumber < 10 ? "0" : ""}${rawNumber}`;
 
-    componentDidUpdate(prevProps: TimerProps): void {
-        if (prevProps.duration !== this.props.duration) {
-            if (this.props.duration !== null && this.props.duration !== undefined) {
-                this.startInterval(this.props.duration);
-            }
+    const convertMStoTime = (milliseconds: number): string => {
+        const rawSeconds: number = milliseconds / 1000;
+        const rawMinutes: number = rawSeconds / 60;
+        const displaySeconds: number = rawSeconds % 60;
+        const displayMinutes: number = Math.floor(rawMinutes % 60); // get remainder minutes
+        const displayHours: number = Math.floor(rawMinutes / 60); // get converted hours
+        return (displayHours > 0 ? displayHours + ":" : "") + convertToTwoDigits(displayMinutes) + ":" + convertToTwoDigits(displaySeconds);
+    };
+
+    React.useEffect(() => {
+        if (duration >= 1000) {
+            // only start timer if there's at least 1 second set
+            clearInnerInterval();
+            startInterval(duration);
         }
-    }
+        return () => {
+            clearInnerInterval();
+        };
+    }, [duration]);
 
-    render(): React.ReactNode {
-        const { callback, duration, ...props } = this.props;
-        return (
-            <div className={classnames("custom-timer", props.className)} {...props}>
-                {this.state.timer}
-            </div>
-        );
-    }
-}
+    return (
+        <div {...props} className={classnames("custom-timer", props.className)} role="timer" aria-live="polite" aria-atomic="true">
+            {timerPrefix}
+            {timer}
+            {timerSuffix}
+        </div>
+    );
+};
