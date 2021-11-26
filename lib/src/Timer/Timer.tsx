@@ -18,19 +18,19 @@ export const Timer: React.FC<TimerProps> = ({ duration, callback, timerPrefix, t
 
     const startInterval = (timeout: number): void => {
         setTimer(formatMilitaryTime(timeout));
-        clearInterval();
-        setInnerInterval(
-            setInterval(() => {
+        setInnerInterval(() => {
+            const newInterval = setInterval(() => {
+                timeout -= 1000;
                 if (timeout > 0) {
-                    timeout = timeout - 1000;
                     setTimer(formatMilitaryTime(timeout));
-                    if (timeout === 0) {
-                        callback?.();
-                        clearInterval();
-                    }
+                } else {
+                    setTimer(formatMilitaryTime(0));
+                    clearInterval(newInterval);
+                    callback?.();
                 }
-            }, 1000)
-        );
+            }, 1000);
+            return newInterval;
+        });
     };
 
     const clearInnerInterval = (): void => {
@@ -45,18 +45,14 @@ export const Timer: React.FC<TimerProps> = ({ duration, callback, timerPrefix, t
     const formatMilitaryTime = (milliseconds: number): string => {
         const rawSeconds: number = milliseconds / 1000;
         const rawMinutes: number = rawSeconds / 60;
-        const displaySeconds: number = rawSeconds % 60;
+        const displaySeconds: number = Math.floor(rawSeconds % 60);
         const displayMinutes: number = Math.floor(rawMinutes % 60); // get remainder minutes
         const displayHours: number = Math.floor(rawMinutes / 60); // get converted hours
         return (displayHours > 0 ? displayHours + ":" : "") + formatTwoDigits(displayMinutes) + ":" + formatTwoDigits(displaySeconds);
     };
 
     React.useEffect(() => {
-        if (duration >= 1000) {
-            // only start timer if there's at least 1 second set
-            clearInnerInterval();
-            startInterval(duration);
-        }
+        startInterval(duration);
         return () => {
             clearInnerInterval();
         };

@@ -1,14 +1,22 @@
 import React from "react";
 import { unmountComponentAtNode, render } from "react-dom";
-import { Timer } from ".";
+import { Timer, TimerProps } from ".";
 import { act } from "react-dom/test-utils";
 
 describe("Component: Timer", () => {
     let container: HTMLDivElement = null;
+    const duration: number = 10000;
+
+    const renderComponent = (props: TimerProps = {}) => {
+        act(() => {
+            render(<Timer {...props} />, container);
+        });
+    };
 
     beforeEach(() => {
         container = document.createElement("div");
         document.body.appendChild(container);
+        jest.useFakeTimers();
     });
 
     afterEach(() => {
@@ -18,37 +26,27 @@ describe("Component: Timer", () => {
     });
 
     it("Should render", () => {
-        act(() => {
-            render(<Timer />, container);
-        });
+        renderComponent();
         expect(container.querySelector(`[role="timer"]`)).not.toBeNull();
     });
 
     it("Should call callback when countdown is done", () => {
-        const duration: number = 10000;
-        jest.spyOn(global, "setInterval");
         const callback: jest.Mock = jest.fn();
-        jest.advanceTimersByTime(duration);
+        jest.spyOn(global, "setInterval");
+        renderComponent({ duration, callback });
         act(() => {
-            render(<Timer duration={duration} callback={callback} />, container);
+            jest.advanceTimersByTime(duration);
         });
         expect(setInterval).toBeCalled();
         expect(callback).toBeCalled();
     });
 
-    it("Should render with prefix", () => {
-        const prefix: React.ReactElement = <div className="prefix">hello</div>;
-        act(() => {
-            render(<Timer timerPrefix={prefix} />, container);
-        });
+    it("Should render with prefix and suffix", () => {
+        const timerPrefix: React.ReactElement = <div className="prefix">hello</div>;
+        const timerSuffix: React.ReactElement = <div className="suffix">hello</div>;
+        renderComponent({ duration, timerPrefix });
         expect(container.querySelector(`.prefix`)).not.toBeNull();
-    });
-
-    it("Should render with suffix", () => {
-        const suffix: React.ReactElement = <div className="suffix">hello</div>;
-        act(() => {
-            render(<Timer timerSuffix={suffix} />, container);
-        });
+        renderComponent({ duration, timerSuffix });
         expect(container.querySelector(`.suffix`)).not.toBeNull();
     });
 });
