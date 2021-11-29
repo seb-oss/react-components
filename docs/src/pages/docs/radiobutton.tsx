@@ -65,7 +65,7 @@ const RadioButtonPage: React.FC = () => {
     const isIndividual: boolean = controls.indicatorGrouping === "1";
     const isGrouped: boolean = controls.indicatorGrouping === "2";
     const indicator: Indicator = React.useMemo(() => {
-        return controls.indicator ? { type: controls.indicatorType, message: "Indicator message" } : null;
+        return controls.indicator ? { type: controls.indicatorType as IndicatorType, message: "Indicator message" } : null;
     }, [controls.indicator, controls.indicatorType]);
 
     return (
@@ -73,7 +73,14 @@ const RadioButtonPage: React.FC = () => {
             mainFile={importString}
             example={
                 <div className="w-100">
-                    <RadioGroup name="test-group" value={value} onChange={(e) => setValue(e.target.value)} disabled={controls?.disabled} indicator={isGrouped ? indicator : null}>
+                    <RadioGroup
+                        name="test-group"
+                        label="Element label"
+                        value={value}
+                        onChange={(e) => setValue(e.target.value)}
+                        disabled={!!controls?.disabled}
+                        indicator={isGrouped ? indicator : null}
+                    >
                         <RadioButton value="Yes" wrapperProps={controls.inline ? { className: "d-inline-block" } : {}} indicator={isIndividual ? indicator : null}>
                             Yes
                             <p className="text-muted m-0">Express yourself here</p>
