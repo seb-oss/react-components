@@ -51,10 +51,11 @@ export const Carousel: React.FC<CarouselProps> = React.forwardRef(
         const [className, setClassName] = React.useState<string>("carousel");
         const [swipePos, setSwipePos] = React.useState<number>();
         const carouselRef = useCombinedRefs<HTMLDivElement>(ref);
-        const id = React.useMemo(() => props.id || randomId("carousel-"), [props.id]);
+        const id: string = React.useMemo(() => props.id || randomId("carousel-"), [props.id]);
         const interrupted: React.MutableRefObject<boolean> = React.useRef<boolean>(false);
         const timer: React.MutableRefObject<NodeJS.Timeout | number> = React.useRef<NodeJS.Timeout | number>();
 
+        const headerId: string = `${id}--header`;
         const size: number = React.Children.toArray(props.children).length;
 
         /** ----- Utilities ----- */
@@ -203,7 +204,7 @@ export const Carousel: React.FC<CarouselProps> = React.forwardRef(
                 ref={carouselRef}
                 id={id}
                 className={className}
-                aria-labelledby={`${id}--header`}
+                aria-labelledby={headerId}
                 aria-roledescription="carousel"
                 data-ride="carousel"
                 onMouseDown={handleSwipe}
@@ -212,7 +213,7 @@ export const Carousel: React.FC<CarouselProps> = React.forwardRef(
                 onMouseLeave={interruptionHandler}
             >
                 {props["aria-label"] && props["aria-level"] && (
-                    <div id={`${id}--header`} className="sr-only" role="heading" aria-level={props["aria-level"]}>
+                    <div id={headerId} className="sr-only" role="heading" aria-level={props["aria-level"]}>
                         {props["aria-label"]}
                     </div>
                 )}
