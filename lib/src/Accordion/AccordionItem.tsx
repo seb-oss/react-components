@@ -1,7 +1,7 @@
+import { randomId } from "@sebgroup/frontend-tools/randomId";
+import classnames from "classnames";
 import React from "react";
 import { Collapse } from "../Collapse/Collapse";
-import classnames from "classnames";
-import { randomId } from "@sebgroup/frontend-tools/randomId";
 
 export type AccordionItemProps = JSX.IntrinsicElements["div"] & {
     /** The header of the accordion item */
@@ -15,10 +15,11 @@ export type AccordionItemProps = JSX.IntrinsicElements["div"] & {
 export const AccordionItem: React.FC<AccordionItemProps> = React.memo(
     React.forwardRef(({ header, subHeader, onToggle, ...props }: AccordionItemProps, ref: React.ForwardedRef<HTMLDivElement>) => {
         const [uniqueId] = React.useState<string>(randomId("accordion-item-"));
+        const headerId: string = `${uniqueId}--header`;
 
         return (
             <div {...props} ref={ref} className={classnames("rc", "card", { collapsed: !props.defaultChecked }, props.className)}>
-                <div className="card-header" id={`${uniqueId}--header`}>
+                <div className="card-header" id={headerId}>
                     <button
                         className="btn btn-link"
                         type="button"
@@ -37,7 +38,7 @@ export const AccordionItem: React.FC<AccordionItemProps> = React.memo(
                 <section
                     id={uniqueId}
                     className={classnames("collapse", { collapsed: !props.defaultChecked })}
-                    aria-labelledby={`${uniqueId}--header`}
+                    aria-labelledby={headerId}
                     data-parent={props["data-parent-id"] ? `#${props["data-parent-id"]}` : null}
                 >
                     <Collapse className="card-body" toggle={props.defaultChecked}>
