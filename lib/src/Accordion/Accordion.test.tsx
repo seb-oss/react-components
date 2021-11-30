@@ -1,5 +1,5 @@
 import React from "react";
-import { act } from "react-dom/test-utils";
+import { act, Simulate } from "react-dom/test-utils";
 import { unmountComponentAtNode, render } from "react-dom";
 import { Accordion, AccordionItem } from ".";
 
@@ -158,5 +158,66 @@ describe("Component: Accordion", () => {
             firstButton.click();
         });
         expect(mockFn).toBeCalled();
+    });
+
+    describe("Keyboard support", () => {
+        function renderAccordion(): void {
+            act(() => {
+                render(
+                    <Accordion>
+                        <AccordionItem header="First" />
+                        <AccordionItem header="Second" />
+                    </Accordion>,
+                    container
+                );
+            });
+            container.querySelector<HTMLButtonElement>("button").focus();
+        }
+
+        function pressKey(key: string): void {
+            act(() => Simulate.keyDown(document.activeElement, { key }));
+        }
+
+        function assertFocusedElement(element: HTMLElement): void {
+            expect(document.activeElement).toEqual(element);
+        }
+
+        it("Should focus on next header when down arrow button is pressed", () => {
+            renderAccordion();
+            assertFocusedElement(container.querySelectorAll<HTMLButtonElement>("button")[0]);
+            pressKey("ArrowDown");
+            assertFocusedElement(container.querySelectorAll<HTMLButtonElement>("button")[1]);
+            pressKey("ArrowDown");
+            assertFocusedElement(container.querySelectorAll<HTMLButtonElement>("button")[0]);
+        });
+
+        it("Should focus on previous header when up arrow button is pressed", () => {
+            renderAccordion();
+            assertFocusedElement(container.querySelectorAll<HTMLButtonElement>("button")[0]);
+            pressKey("ArrowUp");
+            assertFocusedElement(container.querySelectorAll<HTMLButtonElement>("button")[1]);
+            pressKey("ArrowUp");
+            assertFocusedElement(container.querySelectorAll<HTMLButtonElement>("button")[0]);
+        });
+
+        it("Should focus on first header when home button is pressed", () => {
+            renderAccordion();
+            assertFocusedElement(container.querySelectorAll<HTMLButtonElement>("button")[0]);
+            pressKey("ArrowDown");
+            assertFocusedElement(container.querySelectorAll<HTMLButtonElement>("button")[1]);
+            pressKey("Home");
+            assertFocusedElement(container.querySelectorAll<HTMLButtonElement>("button")[0]);
+        });
+
+        it("Should focus on last header when end button is pressed", () => {
+            renderAccordion();
+            assertFocusedElement(container.querySelectorAll<HTMLButtonElement>("button")[0]);
+            pressKey("End");
+            assertFocusedElement(container.querySelectorAll<HTMLButtonElement>("button")[1]);
+        });
+
+        it("Should not handle button event when button is pressed on element aside from accordion header", () => {
+            // TODO: this does not seemed possible to mimic for now as only accordion header is focusable
+        });
     });
 });
