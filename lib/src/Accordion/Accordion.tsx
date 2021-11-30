@@ -1,8 +1,9 @@
-import React from "react";
 import { randomId } from "@sebgroup/frontend-tools/randomId";
 import classnames from "classnames";
-import { AccordionItemProps } from "./AccordionItem";
+import React from "react";
+import { useCombinedRefs } from "../hooks/useCombinedRef";
 import "./accordion.scss";
+import { AccordionItemProps } from "./AccordionItem";
 
 export type AccordionProps = JSX.IntrinsicElements["div"] & {
     /** An alternative version of the accordion */
@@ -18,6 +19,7 @@ export type AccordionProps = JSX.IntrinsicElements["div"] & {
 /** Accordions show and hide information that is not necessary at all time with one click. */
 export const Accordion: React.FC<AccordionProps> = React.memo(
     React.forwardRef(({ alternative, onToggle, inverted, ...props }: AccordionProps, ref: React.ForwardedRef<HTMLDivElement>) => {
+        const accordionRef: React.MutableRefObject<HTMLDivElement> = useCombinedRefs(ref);
         const [active, setActive] = React.useState<number>(props.defaultValue);
         const [id, setId] = React.useState<string>(props.id);
 
@@ -47,6 +49,44 @@ export const Accordion: React.FC<AccordionProps> = React.memo(
             [onToggle, onToggleInner]
         );
 
+        /**
+         * handles accordion keyboard support @see https://www.w3.org/TR/wai-aria-practices-1.1/examples/accordion/accordion.html
+         */
+        const onAccordionKeyDown = React.useCallback(
+            (e: React.KeyboardEvent<HTMLDivElement>) => {
+                const accordionHeaderRefs: HTMLElement[] = Array.from(accordionRef.current.querySelectorAll<HTMLElement>(".card-header > .btn"));
+                const isAccordionHeader: boolean = accordionHeaderRefs.includes(e.target as HTMLElement);
+
+                if (isAccordionHeader) {
+                    const eventKeyCode: string = e.key;
+                    const headerLength: number = accordionHeaderRefs.length;
+                    const currentFocusedIndex: number = accordionHeaderRefs.indexOf(e.target as HTMLElement);
+
+                    switch (eventKeyCode) {
+                        case "ArrowDown":
+                        case "ArrowUp": {
+                            e.preventDefault();
+                            const direction: number = eventKeyCode === "ArrowDown" ? 1 : -1;
+                            const nextFocusIndex: number = (currentFocusedIndex + headerLength + direction) % headerLength;
+                            accordionHeaderRefs[nextFocusIndex].focus();
+                            break;
+                        }
+                        case "Home": {
+                            e.preventDefault();
+                            accordionHeaderRefs[0].focus();
+                            break;
+                        }
+                        case "End": {
+                            e.preventDefault();
+                            accordionHeaderRefs[headerLength - 1].focus();
+                            break;
+                        }
+                    }
+                }
+            },
+            [accordionRef]
+        );
+
         /** Sets custom id if the user din't pass any */
         React.useEffect(() => setId(props.id || randomId("accordion-")), [props.id]);
         React.useEffect(() => {
@@ -54,7 +94,7 @@ export const Accordion: React.FC<AccordionProps> = React.memo(
         }, [props.defaultValue]);
 
         return (
-            <div {...props} ref={ref} className={classnames(["rc", "accordion", { alternative }, { inverted }, props.className])} id={id}>
+            <div {...props} ref={accordionRef} className={classnames(["rc", "accordion", { alternative }, { inverted }, props.className])} id={id} onKeyDown={onAccordionKeyDown}>
                 {React.Children.map(props.children, (Child: React.ReactElement<AccordionItemProps>, i: number) => {
                     return React.isValidElement<React.FC<AccordionItemProps>>(Child)
                         ? React.cloneElement<any>(Child, {
