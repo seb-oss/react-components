@@ -57,6 +57,7 @@ export const Stepper: React.FC<StepperProps> = React.forwardRef(
         };
 
         const onKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+            event.preventDefault();
             switch (event.key) {
                 case "ArrowDown":
                     onDecrement(event);
