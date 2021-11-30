@@ -16,7 +16,7 @@ const DocsAPI: React.FC<DocsAPIProps> = (props: DocsAPIProps) => {
 
     return (
         !!props.list?.length && (
-            <div className="apis">
+            <div className="apis" role="tabpanel" tabIndex={0}>
                 <h3>Inputs</h3>
                 <div className="card">
                     <table className="table table-striped">

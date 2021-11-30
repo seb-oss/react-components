@@ -27,7 +27,7 @@ const TabsPage: React.FC = React.memo(() => {
                 <Tabs value={value} onTabChange={setValue} autoSelectOnFocus={!!controls.autoSelectOnFocus} onTabDelete={(index: number) => console.log("on delete", index)}>
                     <TabItem>First</TabItem>
                     <TabItem>Second</TabItem>
-                    <TabItem disabled={false}>Third</TabItem>
+                    <TabItem>Third</TabItem>
                     <TabItem disabled>Fourth</TabItem>
                 </Tabs>
             }
