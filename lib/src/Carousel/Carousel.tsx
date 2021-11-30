@@ -55,7 +55,6 @@ export const Carousel: React.FC<CarouselProps> = React.forwardRef(
         const interrupted: React.MutableRefObject<boolean> = React.useRef<boolean>(false);
         const timer: React.MutableRefObject<NodeJS.Timeout | number> = React.useRef<NodeJS.Timeout | number>();
 
-        const headerId: string = `${id}--header`;
         const size: number = React.Children.toArray(props.children).length;
 
         /** ----- Utilities ----- */
@@ -204,7 +203,6 @@ export const Carousel: React.FC<CarouselProps> = React.forwardRef(
                 ref={carouselRef}
                 id={id}
                 className={className}
-                aria-labelledby={headerId}
                 aria-roledescription="carousel"
                 data-ride="carousel"
                 onMouseDown={handleSwipe}
@@ -212,11 +210,6 @@ export const Carousel: React.FC<CarouselProps> = React.forwardRef(
                 onMouseEnter={interruptionHandler}
                 onMouseLeave={interruptionHandler}
             >
-                {props["aria-label"] && props["aria-level"] && (
-                    <div id={headerId} className="sr-only" role="heading" aria-level={props["aria-level"]}>
-                        {props["aria-label"]}
-                    </div>
-                )}
                 <ul className="carousel-inner">
                     {React.Children.map(props.children, (Child: React.ReactElement<CarouselItemProps>, i: number) =>
                         React.isValidElement<CarouselItemProps>(Child)

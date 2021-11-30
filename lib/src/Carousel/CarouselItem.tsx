@@ -1,4 +1,3 @@
-import { randomId } from "@sebgroup/frontend-tools/randomId";
 import classnames from "classnames";
 import React from "react";
 import { defaultTransitionDuration, NavigationDirection } from "./Carousel";
@@ -21,9 +20,6 @@ export const CarouselItem: React.FC<CarouselItemProps> = React.memo(
     React.forwardRef(({ nav, transitionDuration, afterTransition, translateX, ...props }: CarouselItemProps, ref: React.ForwardedRef<HTMLLIElement>) => {
         const [className, setClassName] = React.useState<string>("carousel-item");
         const [style, setStyle] = React.useState<React.CSSProperties>({});
-        const id: string = React.useMemo(() => props.id || randomId("carousel-item-"), [props.id]);
-
-        const headerId: string = `${id}--header`;
 
         /**
          * Handles resetting class name after transition or animation ends
@@ -63,22 +59,7 @@ export const CarouselItem: React.FC<CarouselItemProps> = React.memo(
         }, [transitionDuration, props.defaultChecked, translateX]);
 
         return (
-            <li
-                {...props}
-                ref={ref}
-                className={className}
-                style={style}
-                role="group"
-                aria-labelledby={props["aria-labelledby"] || headerId}
-                aria-roledescription="slide"
-                onTransitionEnd={afterSlidehandler}
-                onAnimationEnd={afterSlidehandler}
-            >
-                {!props["aria-labelledby"] && props["aria-label"] && props["aria-level"] && (
-                    <div id={headerId} className="sr-only" role="heading" aria-level={props["aria-level"]}>
-                        {props["aria-label"]}
-                    </div>
-                )}
+            <li {...props} ref={ref} className={className} style={style} role="group" aria-roledescription="slide" onTransitionEnd={afterSlidehandler} onAnimationEnd={afterSlidehandler}>
                 {props.children}
             </li>
         );

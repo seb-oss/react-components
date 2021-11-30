@@ -321,13 +321,4 @@ describe("Component: Carousel", () => {
 
         jest.clearAllTimers();
     });
-
-    it("Should render heading for screen reader", () => {
-        act(() => {
-            render(<Carousel aria-label="heading for screen reader" aria-level={3} />, container);
-        });
-        const screenReader: HTMLElement = container.querySelector(".sr-only");
-        expect(screenReader.innerHTML).toEqual("heading for screen reader");
-        expect(screenReader.getAttribute("aria-level")).toEqual("3");
-    });
 });

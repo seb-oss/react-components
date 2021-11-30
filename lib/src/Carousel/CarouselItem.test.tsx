@@ -83,15 +83,6 @@ describe("Component: Carousel", () => {
         });
         expect(container.firstElementChild.getAttribute("style")).toContain(`transform: translate3d(${swipeDistance}px, 0, 0);`);
     });
-
-    it("Should render heading for screen reader", () => {
-        act(() => {
-            render(<CarouselItem aria-label="heading for screen reader" aria-level={3} />, container);
-        });
-        const screenReader: HTMLElement = container.querySelector(".sr-only");
-        expect(screenReader.innerHTML).toEqual("heading for screen reader");
-        expect(screenReader.getAttribute("aria-level")).toEqual("3");
-    });
 });
 
 const Testbed: React.FC<CarouselItemProps> = (props: CarouselItemProps) => {
