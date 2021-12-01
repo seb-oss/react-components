@@ -1,11 +1,11 @@
-import React from "react";
-import classnames from "classnames";
 import { randomId } from "@sebgroup/frontend-tools/randomId";
-import { CarouselItemProps, AfterSlideEvent } from "./CarouselItem";
-import { CarouselIndicators } from "./CarouselIndicators";
-import { CarouselNavs } from "./CarouselNavs";
-import "./carousel.scss";
+import classnames from "classnames";
+import React from "react";
 import { useCombinedRefs } from "../hooks";
+import "./carousel.scss";
+import { CarouselIndicators } from "./CarouselIndicators";
+import { AfterSlideEvent, CarouselItemProps } from "./CarouselItem";
+import { CarouselNavs } from "./CarouselNavs";
 
 export type CarouselProps = JSX.IntrinsicElements["div"] & {
     /** Event handler triggered after change have happened to the carousel returning the index of the new active carousel slide */
@@ -29,8 +29,8 @@ export type CarouselProps = JSX.IntrinsicElements["div"] & {
 export const defaultTransitionDuration: number = 600;
 export const defaultAutoplaySpeed: number = 5000;
 export type NavigationDirection = "next" | "prev";
-type NavigateTrigger = React.MouseEvent<HTMLLIElement | HTMLAnchorElement | HTMLDivElement> | React.TouchEvent<HTMLDivElement> | React.KeyboardEvent<HTMLAnchorElement>;
-type SwipeEvent = React.TouchEvent<HTMLDivElement> | React.MouseEvent<HTMLDivElement>;
+type NavigateTrigger = React.MouseEvent<HTMLLIElement | HTMLAnchorElement | HTMLElement> | React.TouchEvent<HTMLElement> | React.KeyboardEvent<HTMLAnchorElement>;
+type SwipeEvent = React.TouchEvent<HTMLElement> | React.MouseEvent<HTMLElement>;
 
 export const Carousel: React.FC<CarouselProps> = React.forwardRef(
     (
@@ -48,10 +48,10 @@ export const Carousel: React.FC<CarouselProps> = React.forwardRef(
     ) => {
         const [active, setActive] = React.useState<number>(0);
         const [nav, setNav] = React.useState<NavigationDirection>("next");
-        const [id, setId] = React.useState<string>("");
         const [className, setClassName] = React.useState<string>("carousel");
         const [swipePos, setSwipePos] = React.useState<number>();
         const carouselRef = useCombinedRefs<HTMLDivElement>(ref);
+        const id: string = React.useMemo(() => props.id || randomId("carousel-"), [props.id]);
         const interrupted: React.MutableRefObject<boolean> = React.useRef<boolean>(false);
         const timer: React.MutableRefObject<NodeJS.Timeout | number> = React.useRef<NodeJS.Timeout | number>();
 
@@ -184,8 +184,6 @@ export const Carousel: React.FC<CarouselProps> = React.forwardRef(
         };
 
         /** ----- Effects ----- */
-        /** Set a custom ID if there is none */
-        React.useEffect(() => setId(props.id || randomId("carousel-")), [props.id]);
         /** Sets the default value, if any. Otherwise default to the first item */
         React.useEffect(() => setActive(props.defaultValue || 0), [props.defaultValue]);
         /** Set class names */
@@ -200,19 +198,19 @@ export const Carousel: React.FC<CarouselProps> = React.forwardRef(
         }, []);
 
         return (
-            <div
+            <section
                 {...props}
                 ref={carouselRef}
                 id={id}
                 className={className}
+                aria-roledescription="carousel"
                 data-ride="carousel"
                 onMouseDown={handleSwipe}
                 onTouchStart={handleSwipe}
                 onMouseEnter={interruptionHandler}
                 onMouseLeave={interruptionHandler}
             >
-                {showIndicators && <CarouselIndicators active={active} size={size} parentId={id} onIndicatorClicked={goToSlide} />}
-                <div className="carousel-inner">
+                <ul className="carousel-inner">
                     {React.Children.map(props.children, (Child: React.ReactElement<CarouselItemProps>, i: number) =>
                         React.isValidElement<CarouselItemProps>(Child)
                             ? React.cloneElement<any>(Child, {
@@ -225,9 +223,10 @@ export const Carousel: React.FC<CarouselProps> = React.forwardRef(
                               })
                             : Child
                     )}
-                </div>
+                </ul>
                 <CarouselNavs onNavigate={goToSlide} parentId={id} />
-            </div>
+                {showIndicators && <CarouselIndicators active={active} size={size} parentId={id} onIndicatorClicked={goToSlide} />}
+            </section>
         );
     }
 );

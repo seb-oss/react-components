@@ -1,8 +1,8 @@
-import React from "react";
 import classnames from "classnames";
-import { NavigationDirection, defaultTransitionDuration } from "./Carousel";
+import React from "react";
+import { defaultTransitionDuration, NavigationDirection } from "./Carousel";
 
-export type CarouselItemProps = JSX.IntrinsicElements["div"] & {
+export type CarouselItemProps = JSX.IntrinsicElements["li"] & {
     /** Navigation direction, whether the next slide is next in line or previous. (Managed by Carousel) */
     nav?: NavigationDirection;
     /** The duration it takes (in milliseconds) the carousel to transition to the next. (Managed by Carousel) */
@@ -14,10 +14,10 @@ export type CarouselItemProps = JSX.IntrinsicElements["div"] & {
 };
 
 export type TransitionDirection = "right" | "left";
-export type AfterSlideEvent = React.AnimationEvent<HTMLDivElement> | React.TransitionEvent<HTMLDivElement>;
+export type AfterSlideEvent = React.AnimationEvent<HTMLLIElement> | React.TransitionEvent<HTMLLIElement>;
 
 export const CarouselItem: React.FC<CarouselItemProps> = React.memo(
-    React.forwardRef(({ nav, transitionDuration, afterTransition, translateX, ...props }: CarouselItemProps, ref: React.ForwardedRef<HTMLDivElement>) => {
+    React.forwardRef(({ nav, transitionDuration, afterTransition, translateX, ...props }: CarouselItemProps, ref: React.ForwardedRef<HTMLLIElement>) => {
         const [className, setClassName] = React.useState<string>("carousel-item");
         const [style, setStyle] = React.useState<React.CSSProperties>({});
 
@@ -33,9 +33,9 @@ export const CarouselItem: React.FC<CarouselItemProps> = React.memo(
                     afterTransition(e);
                 }
                 if (e.type === "transitionend") {
-                    props.onTransitionEnd && props.onTransitionEnd(e as React.TransitionEvent<HTMLDivElement>);
+                    props.onTransitionEnd && props.onTransitionEnd(e as React.TransitionEvent<HTMLLIElement>);
                 } else {
-                    props.onAnimationEnd && props.onAnimationEnd(e as React.AnimationEvent<HTMLDivElement>);
+                    props.onAnimationEnd && props.onAnimationEnd(e as React.AnimationEvent<HTMLLIElement>);
                 }
             },
             [props.defaultChecked, props.className, afterTransition, props.onTransitionEnd, props.onAnimationEnd]
@@ -59,9 +59,9 @@ export const CarouselItem: React.FC<CarouselItemProps> = React.memo(
         }, [transitionDuration, props.defaultChecked, translateX]);
 
         return (
-            <div {...props} ref={ref} className={className} style={style} onTransitionEnd={afterSlidehandler} onAnimationEnd={afterSlidehandler}>
+            <li {...props} ref={ref} className={className} style={style} role="group" aria-roledescription="slide" onTransitionEnd={afterSlidehandler} onAnimationEnd={afterSlidehandler}>
                 {props.children}
-            </div>
+            </li>
         );
     })
 );

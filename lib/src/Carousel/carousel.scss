@@ -2,6 +2,12 @@
 
 .rc.carousel {
     width: 100%;
+
+    .carousel-inner {
+        margin: 0;
+        padding: 0;
+    }
+
     .carousel-item {
         text-align: center;
         &.carousel-item-next,
@@ -17,6 +23,12 @@
             -webkit-user-select: none;
             -ms-user-select: none;
         }
+    }
+
+    .carousel-navs {
+        margin: 0;
+        padding: 0;
+        list-style-type: none;
     }
 
     /**
