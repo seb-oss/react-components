@@ -1,7 +1,8 @@
-import React from "react";
-import { padNumber } from "./formatters";
+import { randomId } from "@sebgroup/frontend-tools/randomId";
 import classnames from "classnames";
+import React from "react";
 import "./datepicker.scss";
+import { padNumber } from "./formatters";
 
 interface OverriddenNativeProps extends React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> {
     value: any;
@@ -272,8 +273,19 @@ export const Datepicker: React.FunctionComponent<DatepickerProps> = React.forwar
 
         const renderCustomDatepicker = (value: Date, monthPicker: boolean, customPickerOrder: string[], unitNames: UnitNames, disabled: boolean, monthNames: string[]) => {
             const order: string[] = monthPicker ? [...customPickerOrder.filter((x: string) => x !== "day")] : customPickerOrder;
+            const dateValueLabel: string = randomId("seb-datepicker-custom-value-");
             return (
-                <div {...wrapperProps} ref={ref} className={classnames("input-group", "seb-datepicker-custom", wrapperProps?.className)}>
+                <div
+                    {...wrapperProps}
+                    ref={ref}
+                    className={classnames("input-group", "seb-datepicker-custom", wrapperProps?.className)}
+                    role="group"
+                    aria-labelledby={`${wrapperProps?.["aria-labelledby"] ? `${wrapperProps?.["aria-labelledby"]} ` : ""}${dateValueLabel}`}
+                >
+                    <div id={dateValueLabel} className="sr-only">
+                        {monthPicker ? "" : `${customDay} `}
+                        {monthNames[customMonth]}, {customYear}
+                    </div>
                     {order?.map((unit: string, unitIndex: number) => {
                         switch (unit) {
                             case "day":
