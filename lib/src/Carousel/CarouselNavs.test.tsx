@@ -26,19 +26,22 @@ describe("Component: Carousel", () => {
         act(() => {
             render(<CarouselNavs {...props} />, container);
         });
-        expect(container.firstElementChild.classList.contains("carousel-control-prev")).toBeTruthy();
-        expect(container.lastElementChild.classList.contains("carousel-control-next")).toBeTruthy();
+        const prevButton: HTMLElement = container.querySelector(".carousel-control-prev");
+        const nextButton: HTMLElement = container.querySelector(".carousel-control-next");
 
-        expect(container.firstElementChild.getAttribute("href")).toEqual(`#${props.parentId}`);
-        expect(container.lastElementChild.getAttribute("href")).toEqual(`#${props.parentId}`);
+        expect(prevButton).toBeDefined();
+        expect(nextButton).toBeDefined();
 
-        expect(container.firstElementChild.lastElementChild.innerHTML).toEqual("Previous");
-        expect(container.lastElementChild.lastElementChild.innerHTML).toEqual("Next");
+        expect(prevButton.getAttribute("href")).toEqual(`#${props.parentId}`);
+        expect(nextButton.getAttribute("href")).toEqual(`#${props.parentId}`);
 
-        act(() => Simulate.click(container.firstElementChild));
-        act(() => Simulate.keyUp(container.firstElementChild));
-        act(() => Simulate.click(container.lastElementChild));
-        act(() => Simulate.keyUp(container.lastElementChild));
+        expect(prevButton.querySelector(".sr-only").innerHTML).toEqual("Previous");
+        expect(nextButton.querySelector(".sr-only").innerHTML).toEqual("Next");
+
+        act(() => Simulate.click(prevButton));
+        act(() => Simulate.keyUp(prevButton));
+        act(() => Simulate.click(nextButton));
+        act(() => Simulate.keyUp(nextButton));
         expect(props.onNavigate).toBeCalledTimes(4);
     });
 
@@ -50,7 +53,7 @@ describe("Component: Carousel", () => {
             render(<CarouselNavs {...props} previousText={previousText} nextText={nextText} />, container);
         });
 
-        expect(container.firstElementChild.lastElementChild.innerHTML).toEqual(previousText);
-        expect(container.lastElementChild.lastElementChild.innerHTML).toEqual(nextText);
+        expect(container.querySelector(".carousel-control-prev .sr-only").innerHTML).toEqual(previousText);
+        expect(container.querySelector(".carousel-control-next .sr-only").innerHTML).toEqual(nextText);
     });
 });
