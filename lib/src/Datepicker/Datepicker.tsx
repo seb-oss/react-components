@@ -40,12 +40,22 @@ interface UnitNames {
 
 type InputRenderType = "custom" | "date" | "month";
 
+const CURRENT_YEAR: number = new Date().getFullYear();
+const MAX_DAY: number = 31;
+const MIN_DAY: number = 1;
+const MAX_YEAR: number = CURRENT_YEAR + 200;
+const MIN_YEAR: number = CURRENT_YEAR - 200;
+const PAGE_STEP: number = 5;
+
 export const Datepicker: React.FunctionComponent<DatepickerProps> = React.forwardRef(
     (
         { monthPicker, forceCustom, className, value, min, max, disabled, onChange, localeCode = "en", wrapperProps, customPickerSelectProps, ...props }: DatepickerProps,
         ref: React.ForwardedRef<HTMLInputElement>
     ): React.ReactElement<void> => {
+        const maxYearRange = React.useMemo(() => max?.getFullYear() || MAX_YEAR, []);
+        const minYearRange = React.useMemo(() => min?.getFullYear() || MIN_YEAR, []);
         const [renderType, setRenderType] = React.useState<InputRenderType>("date");
+
         const isValidDate = React.useCallback((d: Date): boolean => {
             return !!(d && d instanceof Date && !isNaN(d.getTime()));
         }, []);
@@ -142,39 +152,147 @@ export const Datepicker: React.FunctionComponent<DatepickerProps> = React.forwar
 
         const [customYear, setCustomYear] = React.useState<number>(initCustomYear(value, monthPicker));
 
-        const handleChangeCustomDay = React.useCallback(
-            (e: React.ChangeEvent<HTMLInputElement>): void => {
-                if (!monthPicker) {
-                    const v: number = e.target?.value && !Number.isNaN(Number(e.target?.value)) ? Number(e.target.value) : null;
-                    setCustomDay(() => {
-                        onCustomDatepickerChange(v, customMonth, customYear);
-                        return v;
-                    });
-                }
+        const changeCustomDay = React.useCallback(
+            (day: number) => {
+                setCustomDay(() => {
+                    onCustomDatepickerChange(day, customMonth, customYear);
+                    return day;
+                });
             },
             [customMonth, customYear, onCustomDatepickerChange]
         );
 
-        const handleChangeCustomMonth = React.useCallback(
-            (e: React.ChangeEvent<HTMLSelectElement>): void => {
-                const v: number = e.target?.value && !Number.isNaN(Number(e.target?.value)) ? Number(e.target.value) : null;
+        const changeCustomMonth = React.useCallback(
+            (month: number) => {
                 setCustomMonth(() => {
-                    onCustomDatepickerChange(customDay, v, customYear);
-                    return v;
+                    onCustomDatepickerChange(customDay, month, customYear);
+                    return month;
                 });
             },
             [customDay, customYear, onCustomDatepickerChange]
         );
 
-        const handleChangeCustomYear = React.useCallback(
-            (e: React.ChangeEvent<HTMLInputElement>): void => {
-                const v: number = e.target?.value && !Number.isNaN(Number(e.target?.value)) ? Number(e.target.value) : null;
+        const changeCustomYear = React.useCallback(
+            (year: number) => {
                 setCustomYear(() => {
-                    onCustomDatepickerChange(customDay, customMonth, v);
-                    return v;
+                    onCustomDatepickerChange(customDay, customMonth, year);
+                    return year;
                 });
             },
             [customDay, customMonth, onCustomDatepickerChange]
+        );
+
+        const getEventValue = React.useCallback((e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+            const value = Number(e.target?.value);
+            return Number.isNaN(value) ? null : value;
+        }, []);
+
+        const handleChangeCustomDay = React.useCallback(
+            (e: React.ChangeEvent<HTMLInputElement>): void => {
+                if (!monthPicker) {
+                    const day: number = getEventValue(e);
+                    changeCustomDay(day);
+                }
+            },
+            [changeCustomDay]
+        );
+
+        const handleChangeCustomMonth = React.useCallback(
+            (e: React.ChangeEvent<HTMLSelectElement>): void => {
+                const month: number = getEventValue(e);
+                changeCustomMonth(month);
+            },
+            [changeCustomMonth]
+        );
+
+        const handleChangeCustomYear = React.useCallback(
+            (e: React.ChangeEvent<HTMLInputElement>): void => {
+                const year: number = getEventValue(e);
+                changeCustomYear(year);
+            },
+            [changeCustomMonth]
+        );
+
+        const handleKeyDownCustomDay = React.useCallback(
+            (e: React.KeyboardEvent<HTMLInputElement>) => {
+                if (!hasModifierKey(e)) {
+                    let newCustomDay = null;
+
+                    switch (e.key) {
+                        case "ArrowDown":
+                            newCustomDay = customDay - 1;
+                            break;
+                        case "ArrowUp":
+                            newCustomDay = customDay + 1;
+                            break;
+                        case "PageDown":
+                            newCustomDay = customDay - PAGE_STEP;
+                            break;
+                        case "PageUp":
+                            newCustomDay = customDay + PAGE_STEP;
+                            break;
+                        case "Home":
+                            newCustomDay = MIN_DAY;
+                            break;
+                        case "End":
+                            newCustomDay = MAX_DAY;
+                            break;
+                    }
+
+                    if (newCustomDay !== null) {
+                        e.preventDefault();
+                        /**
+                         * Sanitize the custom day value. If the value is larger than the maximum day of 31,
+                         * it will be reduced down to the remainder of <custom day % 31> (32 % 31 = 1); if
+                         * the value is lesser than the minimum day of 1, it will be increment up to the
+                         * product of <custom day + 31> (-1 + 31 = 30). This handling ensures that the custom
+                         * day value will always be in the range of the maximum and minimum day allowed.
+                         */
+                        const sanitizedDay: number = newCustomDay > MAX_DAY ? newCustomDay % MAX_DAY : newCustomDay < MIN_DAY ? newCustomDay + MAX_DAY : newCustomDay;
+                        changeCustomDay(sanitizedDay);
+                    }
+                }
+            },
+            [customDay, changeCustomDay]
+        );
+
+        const handleKeyDownCustomYear = React.useCallback(
+            (e: React.KeyboardEvent<HTMLInputElement>) => {
+                if (!hasModifierKey(e)) {
+                    let newCustomYear = null;
+
+                    switch (e.key) {
+                        case "ArrowDown":
+                            newCustomYear = customYear - 1;
+                            break;
+                        case "ArrowUp":
+                            newCustomYear = customYear + 1;
+                            break;
+                        case "PageDown":
+                            newCustomYear = customYear - PAGE_STEP;
+                            break;
+                        case "PageUp":
+                            newCustomYear = customYear + PAGE_STEP;
+                            break;
+                        case "Home":
+                            newCustomYear = minYearRange;
+                            break;
+                        case "End":
+                            newCustomYear = maxYearRange;
+                            break;
+                    }
+
+                    if (newCustomYear !== null) {
+                        e.preventDefault();
+                        /**
+                         * Sanitize the custom year value so that they are within the max and min year range.
+                         */
+                        const sanitizedYear: number = newCustomYear > maxYearRange ? maxYearRange : newCustomYear < minYearRange ? minYearRange : newCustomYear;
+                        changeCustomYear(sanitizedYear);
+                    }
+                }
+            },
+            [customYear, maxYearRange, minYearRange, changeCustomYear]
         );
 
         const getRelativeTimeFormat = React.useCallback((code: string): any => {
@@ -295,12 +413,13 @@ export const Datepicker: React.FunctionComponent<DatepickerProps> = React.forwar
                                         key={unitIndex}
                                         className={classnames("form-control", "seb-datepicker-custom-day", className)}
                                         type="number"
-                                        min="1"
-                                        max="31"
+                                        min={MIN_DAY}
+                                        max={MAX_DAY}
                                         placeholder={unitNames.day}
                                         disabled={disabled}
                                         value={isDateInRange(value, min, max) ? customDay || "" : ""}
                                         onChange={handleChangeCustomDay}
+                                        onKeyDown={handleKeyDownCustomDay}
                                     />
                                 );
 
@@ -342,6 +461,7 @@ export const Datepicker: React.FunctionComponent<DatepickerProps> = React.forwar
                                         disabled={disabled}
                                         value={isDateInRange(value, min, max) ? customYear || "" : ""}
                                         onChange={handleChangeCustomYear}
+                                        onKeyDown={handleKeyDownCustomYear}
                                     />
                                 );
                             default:
@@ -400,3 +520,13 @@ export const Datepicker: React.FunctionComponent<DatepickerProps> = React.forwar
         }
     }
 );
+
+/**
+ * Detect if a modifier key is pressed along with the current key event.
+ *
+ * @param {object} event - Keyboard event
+ * @returns true if key pressed is combined with modifier key, false otherwise
+ */
+function hasModifierKey({ altKey, ctrlKey, metaKey, shiftKey }: React.KeyboardEvent) {
+    return altKey || ctrlKey || metaKey || shiftKey;
+}
