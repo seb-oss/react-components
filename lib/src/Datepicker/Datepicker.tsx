@@ -46,6 +46,11 @@ const MIN_DAY: number = 1;
 const MAX_YEAR: number = CURRENT_YEAR + 200;
 const MIN_YEAR: number = CURRENT_YEAR - 200;
 const PAGE_STEP: number = 5;
+const UNIT_NAMES: UnitNames = {
+    month: "Month",
+    day: "Day",
+    year: "Year",
+};
 
 export const Datepicker: React.FunctionComponent<DatepickerProps> = React.forwardRef(
     (
@@ -320,25 +325,19 @@ export const Datepicker: React.FunctionComponent<DatepickerProps> = React.forwar
             return locale;
         }, []);
 
-        const unitNames: UnitNames = {
-            month: "Month",
-            day: "Day",
-            year: "Year",
-        };
-
-        const monthNames = () => {
+        const monthNames: string[] = React.useMemo(() => {
             const date: Date = new Date(2012, 0, 5);
             const locale: Intl.DateTimeFormat = getLocaleOrDefault(localeCode);
 
-            const names: string[] = [unitNames.month];
+            const names: string[] = [UNIT_NAMES.month];
             [...Array(12)].map((_, i) => {
                 date.setMonth(i);
                 names.push(locale.format(date));
             });
             return names;
-        };
+        }, [localeCode, getLocaleOrDefault]);
 
-        const customPickerOrder = () => {
+        const customPickerOrder = React.useMemo(() => {
             const date: Date = new Date(2012, 0, 5);
             const rtf: any = getRelativeTimeFormat(localeCode);
             let order: string[] = ["day", "month", "year"];
@@ -355,7 +354,7 @@ export const Datepicker: React.FunctionComponent<DatepickerProps> = React.forwar
             });
 
             order?.map((unit) => {
-                unitNames[unit] =
+                UNIT_NAMES[unit] =
                     rtf
                         ?.formatToParts(1, unit)
                         ?.filter((x) => x.type === "literal")[1]
@@ -363,7 +362,7 @@ export const Datepicker: React.FunctionComponent<DatepickerProps> = React.forwar
             });
 
             return order;
-        };
+        }, [localeCode, getRelativeTimeFormat, getLocaleOrDefault]);
 
         const supportsInputOfType = (type: "date" | "month"): boolean => {
             if (typeof document !== "undefined") {
@@ -516,7 +515,7 @@ export const Datepicker: React.FunctionComponent<DatepickerProps> = React.forwar
                 />
             );
         } else {
-            return <>{renderCustomDatepicker(value, monthPicker, customPickerOrder(), unitNames, disabled, monthNames())}</>;
+            return <>{renderCustomDatepicker(value, monthPicker, customPickerOrder, UNIT_NAMES, disabled, monthNames)}</>;
         }
     }
 );
