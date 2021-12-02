@@ -57,8 +57,8 @@ export const Datepicker: React.FunctionComponent<DatepickerProps> = React.forwar
         { monthPicker, forceCustom, className, value, min, max, disabled, onChange, localeCode = "en", wrapperProps, customPickerSelectProps, ...props }: DatepickerProps,
         ref: React.ForwardedRef<HTMLInputElement>
     ): React.ReactElement<void> => {
-        const maxYearRange = React.useMemo(() => max?.getFullYear() || MAX_YEAR, []);
-        const minYearRange = React.useMemo(() => min?.getFullYear() || MIN_YEAR, []);
+        const maxYearRange: number = React.useMemo(() => max?.getFullYear() || MAX_YEAR, []);
+        const minYearRange: number = React.useMemo(() => min?.getFullYear() || MIN_YEAR, []);
         const [renderType, setRenderType] = React.useState<InputRenderType>("date");
 
         const isValidDate = React.useCallback((d: Date): boolean => {
@@ -188,7 +188,7 @@ export const Datepicker: React.FunctionComponent<DatepickerProps> = React.forwar
         );
 
         const getEventValue = React.useCallback((e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-            const value = Number(e.target?.value);
+            const value: number = Number(e.target?.value);
             return Number.isNaN(value) ? null : value;
         }, []);
 
@@ -221,7 +221,7 @@ export const Datepicker: React.FunctionComponent<DatepickerProps> = React.forwar
         const handleKeyDownCustomDay = React.useCallback(
             (e: React.KeyboardEvent<HTMLInputElement>) => {
                 if (!hasModifierKey(e)) {
-                    let newCustomDay = null;
+                    let newCustomDay: number = null;
 
                     switch (e.key) {
                         case "ArrowDown":
@@ -264,7 +264,7 @@ export const Datepicker: React.FunctionComponent<DatepickerProps> = React.forwar
         const handleKeyDownCustomYear = React.useCallback(
             (e: React.KeyboardEvent<HTMLInputElement>) => {
                 if (!hasModifierKey(e)) {
-                    let newCustomYear = null;
+                    let newCustomYear: number = null;
 
                     switch (e.key) {
                         case "ArrowDown":
