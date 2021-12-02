@@ -32,7 +32,21 @@ const DatepickerPage: React.FC = () => {
     return (
         <Docs
             mainFile={importString}
-            example={<Datepicker value={exampleDate} onChange={setExampleDate} monthPicker={!!controls.monthPicker} forceCustom={!!controls.forceCustom} localeCode={controls.localeCode as string} />}
+            example={
+                <div className="w-100">
+                    <label id="chooseDate">Choose a date:</label>
+                    <Datepicker
+                        value={exampleDate}
+                        onChange={setExampleDate}
+                        monthPicker={!!controls.monthPicker}
+                        forceCustom={!!controls.forceCustom}
+                        localeCode={controls.localeCode as string}
+                        wrapperProps={{
+                            "aria-labelledby": "chooseDate",
+                        }}
+                    />
+                </div>
+            }
             code={code}
             controls={renderControls()}
         />
