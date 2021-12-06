@@ -12,9 +12,9 @@ export type StepperProps = JSX.IntrinsicElements["input"] & {
     /** minimum value for the element */
     min: number;
     /** callback when element value is decreased */
-    onDecrease: (event: React.MouseEvent<HTMLButtonElement> | React.KeyboardEvent<HTMLDivElement>) => void;
+    onDecrease: (event: React.MouseEvent<HTMLButtonElement> | React.KeyboardEvent<HTMLDivElement>, isMin?: boolean) => void;
     /** callback when element value is increased */
-    onIncrease: (event: React.MouseEvent<HTMLButtonElement> | React.KeyboardEvent<HTMLDivElement>) => void;
+    onIncrease: (event: React.MouseEvent<HTMLButtonElement> | React.KeyboardEvent<HTMLDivElement>, isMax?: boolean) => void;
     /** Feedback indicator */
     indicator?: Indicator;
     /** Props for the wrapper element (div) */
@@ -46,30 +46,32 @@ export const Stepper: React.FC<StepperProps> = React.forwardRef(
 
         const isDecrementDisabled: boolean = props.disabled || props.value === props.min;
 
-        const onDecrement = (event: React.MouseEvent<HTMLButtonElement> | React.KeyboardEvent<HTMLDivElement>) => {
-            return isDecrementDisabled ? null : onDecrease(event);
+        const onDecrement = (event: React.MouseEvent<HTMLButtonElement> | React.KeyboardEvent<HTMLDivElement>, isMin: boolean = false) => {
+            return isDecrementDisabled ? null : onDecrease(event, isMin);
         };
 
         const isIncrementDisabled: boolean = props.disabled || props.value === props.max;
 
-        const onIncrement = (event: React.MouseEvent<HTMLButtonElement> | React.KeyboardEvent<HTMLDivElement>) => {
-            return isIncrementDisabled ? null : onIncrease(event);
+        const onIncrement = (event: React.MouseEvent<HTMLButtonElement> | React.KeyboardEvent<HTMLDivElement>, isMax: boolean = false) => {
+            return isIncrementDisabled ? null : onIncrease(event, isMax);
         };
 
         const onKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
             event.preventDefault();
             switch (event.key) {
                 case "ArrowDown":
-                    onDecrement(event);
-                    break;
                 case "ArrowLeft":
                     onDecrement(event);
                     break;
-                case "ArrowUp":
-                    onIncrement(event);
+                case "End":
+                    onDecrement(event, true);
                     break;
+                case "ArrowUp":
                 case "ArrowRight":
                     onIncrement(event);
+                    break;
+                case "Home":
+                    onIncrement(event, true);
                     break;
             }
         };

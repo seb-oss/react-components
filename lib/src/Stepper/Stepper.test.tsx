@@ -77,6 +77,7 @@ describe("Component: Stepper", () => {
             { statement: "on + button clicked", triggerEvent: () => Simulate.click(container.querySelector(".stepper-increment")) },
             { statement: "on arrow up button pressed", triggerEvent: () => Simulate.keyDown(container.querySelector(".stepper-preview"), { key: "ArrowUp" }) },
             { statement: "on arrow right button click", triggerEvent: () => Simulate.keyDown(container.querySelector(".stepper-preview"), { key: "ArrowRight" }) },
+            { statement: "on home button click", triggerEvent: () => Simulate.keyDown(container.querySelector(".stepper-preview"), { key: "Home" }) },
         ];
         testCases.forEach((testCase: OnchangeTestCase) => {
             it(testCase.statement, () => {
@@ -93,6 +94,7 @@ describe("Component: Stepper", () => {
             { statement: "on - button clicked", triggerEvent: () => Simulate.click(container.querySelector(".stepper-decrement")) },
             { statement: "on arrow down button pressed", triggerEvent: () => Simulate.keyDown(container.querySelector(".stepper-preview"), { key: "ArrowDown" }) },
             { statement: "on arrow left button click", triggerEvent: () => Simulate.keyDown(container.querySelector(".stepper-preview"), { key: "ArrowLeft" }) },
+            { statement: "on end button click", triggerEvent: () => Simulate.keyDown(container.querySelector(".stepper-preview"), { key: "End" }) },
         ];
         testCases.forEach((testCase: OnchangeTestCase) => {
             it(testCase.statement, () => {
