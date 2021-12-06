@@ -19,7 +19,7 @@ export const Toggle: React.FC<ToggleProps> = React.forwardRef(({ wrapperProps, l
 
     return (
         <div {...wrapperProps} className={classnames("rc", "custom-control", "custom-slide-toggle", { inline }, wrapperProps?.className)}>
-            <input {...props} ref={ref} className={classnames("custom-control-input", props.className)} id={id} type="checkbox" role={props.role || "switch"} />
+            <input {...props} ref={ref} className={classnames("custom-control-input", props.className)} id={id} type="checkbox" />
             {label && (
                 <label className="custom-control-label" htmlFor={id}>
                     {label}
