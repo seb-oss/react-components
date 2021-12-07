@@ -10,11 +10,11 @@ export const CustomDropdownItem: React.FC<CustomDropdownItemProps> = ({ multiple
     const [id] = React.useState<string>(randomId("ddi-"));
 
     return (
-        <div className={classnames("custom-control", { "custom-checkbox": multiple })}>
+        <li className={classnames("custom-control", { "custom-checkbox": multiple })} role="option" aria-selected={props.checked || null}>
             <input {...props} type={multiple ? "checkbox" : "radio"} id={id} className={classnames({ "custom-control-input": multiple }) || null} hidden={!multiple} />
             <label className={classnames({ "custom-control-label": multiple, "custom-radio": !multiple })} htmlFor={id}>
                 {children}
             </label>
-        </div>
+        </li>
     );
 };

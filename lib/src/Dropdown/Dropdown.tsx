@@ -63,7 +63,7 @@ export const Dropdown: React.FC<DropdownProps> = React.forwardRef(
         const [selectRef, setSelectRef] = React.useState<HTMLSelectElement>(null);
         const [selectRefOptions, setSelectRefOptions] = React.useState<Array<HTMLOptionElement>>([]);
         const searchRef = React.useRef<HTMLInputElement>();
-        const menuRef = React.useRef<HTMLDivElement>();
+        const menuRef = React.useRef<HTMLUListElement>();
         const dropdownRef = React.useRef<HTMLDivElement>();
 
         const isMobile: boolean = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(safeWindow?.navigator?.userAgent);
@@ -272,8 +272,9 @@ export const Dropdown: React.FC<DropdownProps> = React.forwardRef(
                                 type="button"
                                 id={toggleId}
                                 data-toggle="dropdown"
-                                aria-haspopup="true"
-                                aria-expanded="false"
+                                aria-expanded={show || null}
+                                aria-haspopup="listbox"
+                                aria-labelledby={`${props["aria-labelledby"] ? `${props["aria-labelledby"]} ` : ""}${toggleId}`}
                                 onClick={toggleMenu}
                                 disabled={props.disabled}
                             >
@@ -284,7 +285,15 @@ export const Dropdown: React.FC<DropdownProps> = React.forwardRef(
                         {!safeDocument
                             ? null
                             : createPortal(
-                                  <div className={classnames("rc dropdown-menu", { show })} aria-labelledby={toggleId} ref={menuRef} style={{ ...menuStyle }}>
+                                  <ul
+                                      ref={menuRef}
+                                      className={classnames("rc dropdown-menu", { show })}
+                                      role="listbox"
+                                      aria-labelledby={props["aria-labelledby"]}
+                                      aria-activedescendant={"TODO: add logic to find focused listbox item"}
+                                      style={{ ...menuStyle }}
+                                      tabIndex={-1}
+                                  >
                                       {searchable && (
                                           <input
                                               className="form-control"
@@ -313,7 +322,7 @@ export const Dropdown: React.FC<DropdownProps> = React.forwardRef(
                                       ) : null}
 
                                       {getOptions()}
-                                  </div>,
+                                  </ul>,
                                   safeDocument.body
                               )}
                     </div>
