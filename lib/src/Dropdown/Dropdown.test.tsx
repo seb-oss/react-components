@@ -1,7 +1,8 @@
 import React from "react";
-import { unmountComponentAtNode, render } from "react-dom";
-import { Dropdown, DropdownText, getValueOfMultipleSelect } from ".";
+import { render, unmountComponentAtNode } from "react-dom";
 import { act, Simulate } from "react-dom/test-utils";
+import { Dropdown, DropdownProps, DropdownText, getValueOfMultipleSelect } from ".";
+import { Key } from "../utils/keyboardHelper";
 
 const testOptions: React.ReactElement[] = [
     <option key={1} value="1">
@@ -20,6 +21,14 @@ const testOptions: React.ReactElement[] = [
 
 describe("Component: Dropdown", () => {
     let container: HTMLDivElement = null;
+
+    function toggleDropdown(): void {
+        act(() => Simulate.click(container.querySelector(".dropdown-toggle")));
+    }
+
+    function assertDropdownMenuVisibility(visible: boolean): void {
+        expect(document.querySelector(".dropdown-menu").classList.contains("show")).toBe(visible);
+    }
 
     beforeEach(() => {
         container = document.createElement("div");
@@ -313,6 +322,159 @@ describe("Component: Dropdown", () => {
             });
 
             expect(getValueOfMultipleSelect(Array.from(select.options))).toEqual(["2", "3"]);
+        });
+    });
+
+    it("Should toggle dropdown menu when the dropdown toggle is clicked", () => {
+        act(() => {
+            render(<Dropdown multiple>{testOptions}</Dropdown>, container);
+        });
+        assertDropdownMenuVisibility(false);
+        toggleDropdown();
+        assertDropdownMenuVisibility(true);
+        toggleDropdown();
+        assertDropdownMenuVisibility(false);
+    });
+
+    describe("Keyboard support", () => {
+        function renderDropDown(props?: Partial<DropdownProps>): void {
+            act(() => {
+                render(<Dropdown {...props}>{testOptions}</Dropdown>, container);
+            });
+        }
+
+        function pressKey(key: string): void {
+            act(() => Simulate.keyDown(document.activeElement, { key }));
+        }
+
+        function searchKeyword(keyword: string): void {
+            act(() => Simulate.change(document.querySelector("input[type=search]"), { target: { value: keyword } as any }));
+        }
+
+        function assertDropdownValue(value: string): void {
+            expect(container.querySelector<HTMLSelectElement>(".custom-select").value).toEqual(value);
+        }
+
+        function assertFocusedLabel(label: string): void {
+            const focusedLabel: string = document.querySelector<HTMLLabelElement>(".custom-control.focused label")?.innerHTML;
+            if (label) {
+                expect(focusedLabel).toEqual(label);
+            } else {
+                expect(focusedLabel).toBeUndefined();
+            }
+        }
+
+        function assertSearchKeyword(keyword: string): void {
+            expect(document.querySelector<HTMLInputElement>("input[type=search]").value).toEqual(keyword);
+        }
+
+        it("Should dismiss dropdown menu when escape button is pressed", () => {
+            renderDropDown();
+            toggleDropdown();
+            assertDropdownMenuVisibility(true);
+            pressKey(Key.Escape);
+            assertDropdownMenuVisibility(false);
+        });
+
+        it("Should dismiss dropdown menu when tab button is pressed", () => {
+            renderDropDown();
+            toggleDropdown();
+            assertDropdownMenuVisibility(true);
+            pressKey(Key.Tab);
+            assertDropdownMenuVisibility(false);
+        });
+
+        it("Should focused on next option when down arrow button is pressed", () => {
+            renderDropDown();
+            toggleDropdown();
+            assertFocusedLabel("First");
+            pressKey(Key.ArrowDown);
+            assertFocusedLabel("Second");
+            pressKey(Key.ArrowDown);
+            assertFocusedLabel("Third");
+        });
+
+        it("Should focused on previous option when up arrow button is pressed", () => {
+            renderDropDown();
+            toggleDropdown();
+            assertFocusedLabel("First");
+            pressKey(Key.ArrowUp);
+            assertFocusedLabel("Disabled");
+            pressKey(Key.ArrowUp);
+            assertFocusedLabel("Third");
+        });
+
+        it("Should focused on first option when home button is pressed", () => {
+            renderDropDown();
+            toggleDropdown();
+            assertFocusedLabel("First");
+            pressKey(Key.ArrowDown);
+            assertFocusedLabel("Second");
+            pressKey(Key.Home);
+            assertFocusedLabel("First");
+        });
+
+        it("Should focused on last option when end button is pressed", () => {
+            renderDropDown();
+            toggleDropdown();
+            assertFocusedLabel("First");
+            pressKey(Key.End);
+            assertFocusedLabel("Disabled");
+        });
+
+        it("Should focused on relevant option when alphanumeric character button is pressed", () => {
+            renderDropDown();
+            toggleDropdown();
+            // TODO: add assertion when printable characters keyboard support is added
+            pressKey("A");
+        });
+
+        it("Should toggle focused option and dismiss dropdown menu when enter button is pressed", () => {
+            renderDropDown();
+            toggleDropdown();
+            assertDropdownValue("1");
+            pressKey(Key.ArrowDown);
+            pressKey(Key.Enter);
+            assertDropdownValue("2");
+            assertDropdownMenuVisibility(false);
+        });
+
+        it("Should toggle focused option and dismiss dropdown menu when space button is pressed", () => {
+            renderDropDown();
+            toggleDropdown();
+            assertDropdownValue("1");
+            pressKey(Key.ArrowDown);
+            pressKey(Key.Space);
+            assertDropdownValue("2");
+            assertDropdownMenuVisibility(false);
+        });
+
+        it("Should toggle focused option and retain dropdown menu when space button is pressed on multiple dropdown", () => {
+            renderDropDown({ multiple: true });
+            toggleDropdown();
+            assertDropdownValue("");
+            pressKey(Key.Space);
+            assertDropdownValue("1");
+            assertDropdownMenuVisibility(true);
+        });
+
+        it("Should erased searchable keyword and dimiss dropdown menu when escape button is pressed on searchable dropdown", () => {
+            renderDropDown({ searchable: true });
+            toggleDropdown();
+            assertSearchKeyword("");
+            searchKeyword("i");
+            assertSearchKeyword("i");
+            pressKey(Key.Escape);
+            assertSearchKeyword("");
+            assertDropdownMenuVisibility(false);
+        });
+
+        it("Should not toggle option when space button is pressed on searchable dropdown", () => {
+            renderDropDown({ searchable: true });
+            toggleDropdown();
+            assertFocusedLabel(undefined);
+            pressKey(Key.Space);
+            assertFocusedLabel(undefined);
         });
     });
 });
