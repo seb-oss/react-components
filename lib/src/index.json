@@ -36,6 +36,7 @@
         "Toggle": "./src/Toggle/index.ts",
         "ToggleSelector": "./src/ToggleSelector/index.ts",
         "Tooltip": "./src/Tooltip/index.ts",
+        "utils": "./src/utils/index.ts",
         "Video": "./src/Video/index.ts"
     },
     "indexes": [
@@ -75,6 +76,7 @@
         "./src/Toggle/index.ts",
         "./src/ToggleSelector/index.ts",
         "./src/Tooltip/index.ts",
+        "./src/utils/index.ts",
         "./src/Video/index.ts"
     ]
 }
