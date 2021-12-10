@@ -95,7 +95,7 @@ export const Slider: React.FC<SliderProps> = React.forwardRef(
                 const backgroundColor: string = style?.getPropertyValue("--slider-background-color");
                 const primaryColor: string = style?.getPropertyValue("--slider-primary-color");
                 const percent: number = Math.abs(((value - minValue) / (maxValue - minValue)) * 100);
-                newTrackBackground = `linear-gradient(to right, ${primaryColor} calc(${inputStyle.paddingLeft} / 0.25), ${primaryColor} calc(${inputStyle.paddingLeft} * 2 + ${percent}%), ${backgroundColor} ${percent}%, ${backgroundColor} 100%)`;
+                newTrackBackground = `linear-gradient(to right, ${primaryColor} calc(${inputStyle.marginLeft} / 0.25), ${primaryColor} calc(${inputStyle.marginLeft} * 2 + ${percent}%), ${backgroundColor} ${percent}%, ${backgroundColor} 100%)`;
             }
             setSliderTrackBackground(newTrackBackground);
         }, [inputWrapperRef, value, theme, disabled]);

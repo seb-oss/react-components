@@ -64,8 +64,8 @@ $themes: (
 }
 
 @mixin slider-track($thumbWidth: $sliderThumbWidth) {
-    width: calc(100% + $thumbWidth / 2);
-    padding: 0 #{$thumbWidth * 0.25};
+    width: 100%;
+    margin: 0 #{$thumbWidth * 0.25};
     height: $sliderTrackHeight;
     cursor: pointer;
     border-radius: $sliderTrackBorderRadius;

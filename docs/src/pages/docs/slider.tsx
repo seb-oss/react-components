@@ -80,7 +80,7 @@ const SliderPage: React.FC = (): React.ReactElement<void> => {
             mainFile={importString}
             example={
                 <div className="w-100">
-                    <Slider {...controls} label="slider label" value={value} indicator={indicator} onChange={(e) => setValue(Number(e.target.value))} labels={controls.labels ? labels : null} />
+                    <Slider {...controls} value={value} indicator={indicator} onChange={(e) => setValue(Number(e.target.value))} labels={controls.labels ? labels : null} />
                 </div>
             }
             code={code}
