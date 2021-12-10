@@ -176,7 +176,7 @@ export const Dropdown: React.FC<DropdownProps> = React.forwardRef(
                         break;
                     case Key.Enter:
                         toggleOption(e);
-                        setShow(false);
+                        !props.multiple && setShow(false);
                         break;
                     case Key.Space:
                         !searchable && toggleOption(e);
