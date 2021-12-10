@@ -62,16 +62,17 @@ const SliderPage: React.FC = (): React.ReactElement<void> => {
         },
     ]);
 
-    const center: number = Math.floor((controls.max - controls.min) / 2) + controls.min;
+    const center: number = Math.floor(((controls.max as number) - (controls.min as number)) / 2) + (controls.min as number);
 
     const labels: SliderLabel[] = [
-        { position: controls.min, label: controls.min },
+        { position: controls.min as number, label: controls.min },
+        { position: 2, label: 2 },
         { position: center, label: center },
-        { position: controls.max, label: controls.max },
+        { position: controls.max as number, label: controls.max },
     ];
 
     const indicator: Indicator = React.useMemo(() => {
-        return controls.indicator ? { type: controls.indicatorType, message: "Indicator message" } : null;
+        return controls.indicator ? { type: controls.indicatorType as IndicatorType, message: "Indicator message" } : null;
     }, [controls.indicator, controls.indicatorType]);
 
     return (
@@ -79,7 +80,7 @@ const SliderPage: React.FC = (): React.ReactElement<void> => {
             mainFile={importString}
             example={
                 <div className="w-100">
-                    <Slider {...controls} value={value} indicator={indicator} onChange={(e) => setValue(Number(e.target.value))} labels={controls.labels ? labels : null} />
+                    <Slider {...controls} label="slider label" value={value} indicator={indicator} onChange={(e) => setValue(Number(e.target.value))} labels={controls.labels ? labels : null} />
                 </div>
             }
             code={code}
