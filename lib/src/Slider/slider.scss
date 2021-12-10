@@ -59,7 +59,7 @@ $themes: (
     border-radius: $sliderThumbAltBorderRadius;
     margin-top: getThumbMarginTop($sliderThumbAltHeight);
     background-image: url("data:image/svg+xml," + $sliderThumbAltChevronLeft), url("data:image/svg+xml," + $sliderThumbAltChevronRight);
-    background-position: calc($sliderThumbAltWidth * 0.2), calc($sliderThumbAltWidth * 0.6);
+    background-position: #{$sliderThumbAltWidth * 0.2}, #{$sliderThumbAltWidth * 0.6};
     background-repeat: no-repeat;
 }
 
