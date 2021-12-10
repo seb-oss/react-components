@@ -1,3 +1,4 @@
+@use "sass:math";
 @import "~@sebgroup/bootstrap/scss/variables";
 
 $step-label-component-name: "step-label";
@@ -26,8 +27,8 @@ $step-line-height: 100%;
         content: "";
         position: absolute;
         height: $step-line-height;
-        top: calc(50% + #{$step-number-height / 2});
-        left: calc(#{$step-number-width / 2} - #{$step-line / 2});
+        top: calc(50% + #{math.div($step-number-height, 2)});
+        left: calc(#{math.div($step-number-width, 2)} - #{math.div($step-line, 2)});
         width: $step-line;
         background: linear-gradient(to left, $gray-300 50%, $blue-darker 50%) right;
         background-size: 300% 100%;
@@ -85,7 +86,7 @@ $step-line-height: 100%;
     flex-direction: row-reverse;
     @include tracker-line() {
         left: unset;
-        right: calc(#{$step-number-width / 2} - #{$step-line / 2});
+        right: calc(#{math.div($step-number-width, 2)} - #{math.div($step-line, 2)});
     }
 }
 
@@ -95,8 +96,8 @@ $step-line-height: 100%;
     padding-bottom: 0;
     @include tracker-line() {
         height: $step-line;
-        top: calc(#{$step-number-width / 2} - #{$step-line / 2});
-        left: calc(50% + #{$step-number-width / 2});
+        top: calc(#{math.div($step-number-width, 2)} - #{math.div($step-line, 2)});
+        left: calc(50% + #{math.div($step-number-width, 2)});
         width: $step-line-height;
     }
 }
@@ -109,8 +110,8 @@ $step-line-height: 100%;
     flex-direction: column-reverse;
     @include tracker-line() {
         top: unset;
-        bottom: calc(#{$step-number-width / 2});
-        left: calc(50% + #{$step-number-width / 2});
+        bottom: calc(#{math.div($step-number-width, 2)});
+        left: calc(50% + #{math.div($step-number-width, 2)});
         width: $step-line-height;
     }
 }
