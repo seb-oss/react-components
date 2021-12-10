@@ -53,6 +53,7 @@ export type DropdownProps = Omit<JSX.IntrinsicElements["select"], "value"> & {
 
 export const Dropdown: React.FC<DropdownProps> = React.forwardRef(
     ({ wrapperProps = {}, text = {}, onMultipleChange, searchable, clearable, selectedLabel, indicator, ...props }: DropdownProps, ref) => {
+        const [dropdownId] = React.useState<string>(randomId("dd-"));
         const [toggleId] = React.useState<string>(randomId("ddt-"));
         const [selectAllId] = React.useState<string>(randomId("sa-"));
         const [show, setShow] = React.useState<boolean>(false);
@@ -383,20 +384,26 @@ export const Dropdown: React.FC<DropdownProps> = React.forwardRef(
                                       className={classnames("rc dropdown-menu", { show })}
                                       role="listbox"
                                       aria-labelledby={props["aria-labelledby"]}
-                                      aria-activedescendant={getOptionsRef()[focusedIndex]?.querySelector<HTMLInputElement>("input").id}
+                                      aria-activedescendant={show ? getOptionsRef()[focusedIndex]?.querySelector<HTMLInputElement>("input").id : null}
                                       style={{ ...menuStyle }}
                                       tabIndex={-1}
                                       onKeyDown={onDropDownKeyDown}
                                   >
                                       {searchable && (
                                           <input
+                                              ref={searchRef}
+                                              type="text"
                                               className="form-control"
-                                              type="search"
+                                              role="combobox"
+                                              aria-activedescendant={show ? getOptionsRef()[focusedIndex]?.querySelector<HTMLInputElement>("input").id : null}
+                                              aria-autocomplete="list"
+                                              aria-expanded={show}
+                                              aria-haspopup="true"
+                                              aria-owns={dropdownId}
                                               placeholder={text.search || defaultText.search}
                                               value={searchKeyword}
                                               onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchKeyword(e.target.value)}
                                               onKeyDown={onSearchInputKeyDown}
-                                              ref={searchRef}
                                           />
                                       )}
                                       {/* Select all button */}
