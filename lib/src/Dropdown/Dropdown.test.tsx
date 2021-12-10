@@ -145,7 +145,7 @@ describe("Component: Dropdown", () => {
             render(<Dropdown searchable>{testOptions}</Dropdown>, container);
         });
 
-        const searchField = document.body.querySelector("input[type=search]");
+        const searchField = document.body.querySelector("input[type=text]");
 
         expect(searchField).not.toBeNull();
         expect(document.body.querySelectorAll(".custom-control")).toHaveLength(4);
@@ -194,7 +194,7 @@ describe("Component: Dropdown", () => {
                     render(<Dropdown text={text} searchable multiple />, container);
                 });
                 expect(document.body.querySelector(".dropdown-menu > p").textContent).toEqual((text || defaultText).emptyList);
-                expect(document.body.querySelector("input[type=search]").getAttribute("placeholder")).toEqual((text || defaultText).search);
+                expect(document.body.querySelector("input[type=text]").getAttribute("placeholder")).toEqual((text || defaultText).search);
 
                 act(() => {
                     render(
@@ -206,7 +206,7 @@ describe("Component: Dropdown", () => {
                 });
                 expect(document.body.querySelector(".select-all .custom-control-label").textContent).toEqual(defaultText.selectAll);
 
-                act(() => Simulate.change(document.body.querySelector("input[type=search]"), { target: { value: "unknowntext" } as any }));
+                act(() => Simulate.change(document.body.querySelector("input[type=text]"), { target: { value: "unknowntext" } as any }));
                 expect(document.body.querySelector(".dropdown-menu > p").textContent).toEqual((text || defaultText).noResult);
             });
         }
@@ -348,7 +348,7 @@ describe("Component: Dropdown", () => {
         }
 
         function searchKeyword(keyword: string): void {
-            act(() => Simulate.change(document.querySelector("input[type=search]"), { target: { value: keyword } as any }));
+            act(() => Simulate.change(document.querySelector("input[type=text]"), { target: { value: keyword } as any }));
         }
 
         function assertDropdownValue(value: string): void {
@@ -365,7 +365,7 @@ describe("Component: Dropdown", () => {
         }
 
         function assertSearchKeyword(keyword: string): void {
-            expect(document.querySelector<HTMLInputElement>("input[type=search]").value).toEqual(keyword);
+            expect(document.querySelector<HTMLInputElement>("input[type=text]").value).toEqual(keyword);
         }
 
         it("Should dismiss dropdown menu when escape button is pressed", () => {
