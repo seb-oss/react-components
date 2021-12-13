@@ -1,13 +1,16 @@
 @use "sass:math";
 @import "~@sebgroup/bootstrap/scss/variables";
 
-$step-label-component-name: "step-label";
-$step-label-label-element-name: "__label";
-$step-label-name-element-name: "__name";
 $step-number-height: 20px;
 $step-number-width: $step-number-height;
 $step-line: 4px;
 $step-line-height: 100%;
+
+@mixin component-root() {
+    .step-label {
+        @content;
+    }
+}
 
 @mixin tracker-line() {
     &:not(:last-of-type) {
@@ -17,12 +20,13 @@ $step-line-height: 100%;
     }
 }
 
-.#{$step-label-component-name} {
+@include component-root() {
     display: flex;
     flex: 1;
     position: relative;
     gap: 0.5rem;
     align-items: center;
+
     @include tracker-line() {
         content: "";
         position: absolute;
@@ -35,88 +39,90 @@ $step-line-height: 100%;
         background-position: right;
         transition: background-position 200ms ease-out;
     }
+
     &:hover {
         cursor: pointer;
     }
-}
 
-.#{$step-label-component-name}#{$step-label-label-element-name} {
-    flex: 0 0 $step-number-width;
-    border-radius: 50%;
-    border: 2px solid $gray-300;
-    background-color: $gray-300;
-    height: $step-number-height;
-    width: $step-number-width;
-    text-align: center;
-}
+    &__label {
+        flex: 0 0 $step-number-width;
+        border-radius: 50%;
+        border: 2px solid $gray-300;
+        background-color: $gray-300;
+        height: $step-number-height;
+        width: $step-number-width;
+        text-align: center;
 
-.#{$step-label-component-name}#{$step-label-name-element-name} {
-    position: relative;
-    font-size: $font-size-sm;
-    flex: 1;
-    line-height: $step-number-height;
-}
-
-.#{$step-label-component-name}--active {
-    .#{$step-label-component-name}#{$step-label-name-element-name} {
-        color: $blue-darker;
-    }
-    .#{$step-label-component-name}#{$step-label-label-element-name} {
-        border-color: $blue-darker;
-    }
-}
-
-.#{$step-label-component-name}--completed {
-    @include tracker-line() {
-        background-position: left;
-    }
-    .#{$step-label-component-name}#{$step-label-label-element-name} {
-        color: $white;
-        border-color: $blue-darker;
-        background-color: $blue-darker;
-        > svg {
-            width: $font-size-xs;
-            height: $font-size-xs;
-            vertical-align: $step-line;
+        &--numbered {
+            line-height: unset;
+            font-size: $font-size-xs;
         }
     }
-}
 
-.#{$step-label-component-name}--left {
-    flex-direction: row-reverse;
-    @include tracker-line() {
-        left: unset;
-        right: calc(#{math.div($step-number-width, 2)} - #{math.div($step-line, 2)});
+    &__name {
+        position: relative;
+        font-size: $font-size-sm;
+        flex: 1;
+        line-height: $step-number-height;
     }
-}
 
-.#{$step-label-component-name}--bottom,
-.#{$step-label-component-name}--top {
-    flex-direction: column;
-    padding-bottom: 0;
-    @include tracker-line() {
-        height: $step-line;
-        top: calc(#{math.div($step-number-width, 2)} - #{math.div($step-line, 2)});
-        left: calc(50% + #{math.div($step-number-width, 2)});
-        width: $step-line-height;
+    &--active {
+        @include component-root() {
+            &__name {
+                color: $blue-darker;
+            }
+            &__label {
+                border-color: $blue-darker;
+            }
+        }
     }
-}
 
-.#{$step-label-component-name}--bottom {
-    flex-direction: column;
-}
+    &--completed {
+        @include tracker-line() {
+            background-position: left;
+        }
 
-.#{$step-label-component-name}--top {
-    flex-direction: column-reverse;
-    @include tracker-line() {
-        top: unset;
-        bottom: calc(#{math.div($step-number-width, 2)});
-        left: calc(50% + #{math.div($step-number-width, 2)});
-        width: $step-line-height;
+        @include component-root() {
+            &__label {
+                color: $white;
+                border-color: $blue-darker;
+                background-color: $blue-darker;
+                > svg {
+                    width: $font-size-xs;
+                    height: $font-size-xs;
+                    vertical-align: $step-line;
+                }
+            }
+        }
     }
-}
 
-.#{$step-label-component-name}#{$step-label-label-element-name}--numbered {
-    line-height: unset;
-    font-size: $font-size-xs;
+    &--left {
+        flex-direction: row-reverse;
+        @include tracker-line() {
+            left: unset;
+            right: calc(#{math.div($step-number-width, 2)} - #{math.div($step-line, 2)});
+        }
+    }
+
+    &--bottom,
+    &--top {
+        flex-direction: column;
+        padding-bottom: 0;
+        @include tracker-line() {
+            height: $step-line;
+            top: calc(#{math.div($step-number-width, 2)} - #{math.div($step-line, 2)});
+            left: calc(50% + #{math.div($step-number-width, 2)});
+            width: $step-line-height;
+        }
+    }
+
+    &--top {
+        flex-direction: column-reverse;
+        @include tracker-line() {
+            top: unset;
+            bottom: calc(#{math.div($step-number-width, 2)});
+            left: calc(50% + #{math.div($step-number-width, 2)});
+            width: $step-line-height;
+        }
+    }
 }
