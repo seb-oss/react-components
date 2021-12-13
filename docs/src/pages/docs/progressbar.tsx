@@ -31,7 +31,7 @@ const ProgressBarPage: React.FC = (): React.ReactElement<void> => {
             mainFile={importString}
             example={
                 <div className="w-100">
-                    <ProgressBar value={value} max={100} theme={controls.theme} />
+                    <ProgressBar id="progress-bar" aria-label="Sample progress bar" value={value} max={100} theme={controls.theme as ProgressBarProps["theme"]} />
                 </div>
             }
             code={code}
@@ -39,7 +39,7 @@ const ProgressBarPage: React.FC = (): React.ReactElement<void> => {
                 <>
                     {renderControls()}
                     <br />
-                    <Slider label="Value" min={0} max={100} value={value} onChange={(e) => setValue(parseInt(e.target.value))} />
+                    <Slider label="Value" min={0} max={100} value={value} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setValue(parseInt(e.target.value))} />
                 </>
             }
         />
