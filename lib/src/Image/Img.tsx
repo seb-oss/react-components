@@ -64,6 +64,7 @@ export const Img: React.FC<ImgProps> = React.memo(
 
                 return (
                     <div
+                        role="img"
                         {...(props as DivImageProps)}
                         ref={ref}
                         className={classnames(
