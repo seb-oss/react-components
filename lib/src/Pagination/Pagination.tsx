@@ -75,18 +75,20 @@ export const Pagination: React.FunctionComponent<PaginationProps> = React.memo(
 
             const renderPages = (): React.ReactElement[] => {
                 const childrenArray: React.ReactElement[] =
-                    React.Children.map(props.children, (Child: React.ReactElement<PageProps>, i: number) =>
-                        React.isValidElement<PageProps>(Child)
+                    React.Children.map(props.children, (Child: React.ReactElement<PageProps>, i: number) => {
+                        const anchorProps: JSX.IntrinsicElements["a"] = { "aria-current": value === i };
+                        return React.isValidElement<PageProps>(Child)
                             ? React.cloneElement<any>(Child, {
                                   "data-active": value === i,
                                   "data-index-number": i,
                                   key: i,
+                                  anchorProps: Child.props.anchorProps ? { ...Child.props.anchorProps, ...anchorProps } : anchorProps,
                                   onClick: (e: React.MouseEvent<HTMLLIElement>) => {
                                       onPageChange && onPageChange(parseInt(e.currentTarget.dataset.indexNumber, 10));
                                   },
                               })
-                            : Child
-                    ) || [];
+                            : Child;
+                    }) || [];
 
                 if (offset) {
                     /** The distance between the current value and the offset from the left. Example: ...👉|3|4|👈|(5)|6|7|... */
@@ -139,7 +141,7 @@ export const Pagination: React.FunctionComponent<PaginationProps> = React.memo(
             const disableLast: boolean = disableNext || filteredPages[filteredPages.length - 1].key !== "post-ellipsis";
 
             return (
-                <nav {...props} ref={ref} className={classnames("rc", props.className)}>
+                <nav {...props} role="navigation" ref={ref} className={classnames("rc", props.className)}>
                     <ul className={classnames("pagination", { [`pagination-${size}`]: size, dotnav: useDotNav })}>
                         {props.children && (
                             <>

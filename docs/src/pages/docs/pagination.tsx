@@ -79,7 +79,7 @@ const PaginationPage: React.FC = (): React.ReactElement<void> => {
                         previousPageLinkProps={{ "aria-label": "Previous page" }}
                     >
                         {(controls.useCustomPages ? customPaginations : [...Array(10)]).map((_: undefined, i: number) => (
-                            <Page key={i} href={`/pages/${i + 1}`} anchorProps={{ "aria-label": `${page === i ? "Current page:" : "Go to page"} ${i + 1}`, "aria-current": page === i }}>
+                            <Page key={i} href={`/pages/${i + 1}`} anchorProps={{ "aria-label": `${page === i ? "Current page:" : "Go to page"} ${i + 1}` }}>
                                 {controls.useCustomPages ? _ : i + 1}
                             </Page>
                         ))}
