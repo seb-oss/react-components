@@ -1,12 +1,30 @@
 import React from "react";
-import { unmountComponentAtNode, render } from "react-dom";
-import { act, Simulate } from "react-dom/test-utils";
-import { Modal, ModalPosition, ModalProps, ModalSize } from "./Modal";
-
-type FocusableElements = HTMLInputElement | HTMLButtonElement | HTMLAnchorElement;
+import { render, unmountComponentAtNode } from "react-dom";
+import { act, Simulate, SyntheticEventData } from "react-dom/test-utils";
+import { ModalProps } from ".";
+import { Key } from "../utils";
+import { Modal, ModalPosition, ModalSize } from "./Modal";
 
 describe("Component: Modal", () => {
     let container: HTMLDivElement = null;
+    const MOCK_MODAL_BODY: React.ReactNode = (
+        <div className="modal-body">
+            <input id="test-input" type="text" />
+            <button id="test-button" />
+        </div>
+    );
+
+    function renderModal(props: ModalProps = {}): void {
+        act(() => {
+            render(<Modal toggle {...props} />, container);
+        });
+
+        act(() => Simulate.animationEnd(document.querySelector(props.fullscreen ? ".modal" : ".modal-dialog")));
+    }
+
+    function pressKey(data: Partial<SyntheticEventData>, element: Element = document.activeElement): void {
+        act(() => Simulate.keyDown(element, data));
+    }
 
     beforeEach(() => {
         container = document.createElement("div");
@@ -20,10 +38,7 @@ describe("Component: Modal", () => {
     });
 
     it("Should render correctly", () => {
-        act(() => {
-            render(<Modal />, container);
-        });
-
+        renderModal({ toggle: false });
         const modal: HTMLDivElement = document.body.querySelector<HTMLDivElement>("div.rc.modal");
         expect(modal).not.toBeNull();
         expect(modal.classList.contains("show")).toBeFalsy();
@@ -32,331 +47,189 @@ describe("Component: Modal", () => {
         expect(modal.firstElementChild.firstElementChild.classList.contains("modal-content")).toBeTruthy();
     });
 
-    it("Should allow it to be centered", () => {
-        act(() => {
-            render(<Modal toggle centered />, container);
-        });
-
+    it("Should be centered when configured", () => {
+        renderModal({ centered: true });
         expect(document.querySelector(".modal").classList.contains("modal-centered")).toBeTruthy();
     });
 
-    it("Should allow it to be rendered in fullscreen", () => {
-        act(() => {
-            render(<Modal toggle fullscreen />, container);
-        });
-
+    it("Should be fullscreen when configured", () => {
+        renderModal({ fullscreen: true });
         expect(document.querySelector(".modal").classList.contains("modal-fullscreen")).toBeTruthy();
     });
 
-    it("Should fire onBackdropDismiss when passed, should also fire onClick", () => {
-        act(() => {
-            const onClick: jest.Mock = jest.fn();
-            const onBackdropDismiss: jest.Mock = jest.fn();
-
-            act(() => {
-                render(<Modal onClick={onClick} onBackdropDismiss={onBackdropDismiss} />, container);
-            });
-
-            act(() => Simulate.click(document.querySelector(".modal-dialog")));
-            expect(onClick).toBeCalled();
-            expect(onBackdropDismiss).not.toBeCalled();
-
-            act(() => Simulate.click(document.querySelector(".modal")));
-            expect(onBackdropDismiss).toBeCalled();
-        });
+    it("Should fire animation handler when animation has ended", () => {
+        const onAnimationEnd: jest.Mock = jest.fn();
+        expect(onAnimationEnd).not.toHaveBeenCalled();
+        renderModal({ fullscreen: true, onAnimationEnd });
+        expect(onAnimationEnd).toHaveBeenCalled();
     });
 
-    it("Should fire onEscape when passed", () => {
+    it("Should fire backdrop handler when backdrop is dismissed", () => {
+        const onBackdropDismiss: jest.Mock = jest.fn();
+        const onClick: jest.Mock = jest.fn();
+
+        renderModal({ onBackdropDismiss, onClick });
+        expect(onClick).not.toBeCalled();
+        act(() => Simulate.click(document.querySelector(".modal-dialog")));
+        expect(onClick).toBeCalled();
+        expect(onBackdropDismiss).not.toBeCalled();
+        act(() => Simulate.click(document.querySelector(".modal")));
+        expect(onBackdropDismiss).toBeCalled();
+    });
+
+    it("Should fire escape handler when escape key is pressed", () => {
         const onEscape: jest.Mock = jest.fn();
 
-        act(() => {
-            render(<Modal toggle onEscape={onEscape} />, container);
-        });
-
-        act(() => {
-            document.dispatchEvent(new KeyboardEvent("keyup", { key: "Escape" }));
-        });
-
+        renderModal({ onEscape });
+        expect(onEscape).not.toBeCalled();
+        pressKey({ key: Key.Escape }, document.querySelector(".rc.modal"));
         expect(onEscape).toBeCalled();
     });
 
-    describe("Auto focus", () => {
-        beforeEach(() => {
-            act(() => document.body.focus());
-        });
-
-        describe("Should auto focus when there is an input and it is toggled", () => {
-            test("default", () => {
-                act(() => {
-                    render(
-                        <Modal toggle autoFocus>
-                            <div className="modal-body">
-                                <input id="test-input" type="test" />
-                            </div>
-                        </Modal>,
-                        container
-                    );
-                });
-
-                act(() => Simulate.animationEnd(document.querySelector(".modal-dialog")));
-                expect(document.activeElement).toBe(document.getElementById("test-input"));
-            });
-
-            test("fullscreen", () => {
-                const onAnimationEnd: jest.Mock = jest.fn();
-
-                act(() => {
-                    render(
-                        <Modal toggle autoFocus fullscreen onAnimationEnd={onAnimationEnd}>
-                            <div className="modal-body">
-                                <input id="test-input" type="test" />
-                            </div>
-                        </Modal>,
-                        container
-                    );
-                });
-
-                act(() => Simulate.animationEnd(document.querySelector(".modal")));
-                expect(document.activeElement).toBe(document.getElementById("test-input"));
-                expect(onAnimationEnd).toBeCalled();
-            });
-        });
-
-        describe("Should not focus if it is not toggled", () => {
-            test("default", () => {
-                act(() => {
-                    render(
-                        <Modal autoFocus>
-                            <div className="modal-body">
-                                <input id="test-input" type="test" />
-                            </div>
-                        </Modal>,
-                        container
-                    );
-                });
-
-                act(() => Simulate.animationEnd(document.querySelector(".modal-dialog")));
-                expect(document.activeElement).toBe(document.body);
-            });
-
-            test("fullscreen", () => {
-                act(() => {
-                    render(
-                        <Modal autoFocus fullscreen>
-                            <div className="modal-body">
-                                <input id="test-input" type="test" />
-                            </div>
-                        </Modal>,
-                        container
-                    );
-                });
-
-                act(() => Simulate.animationEnd(document.querySelector(".modal")));
-                expect(document.activeElement).toBe(document.body);
-            });
-        });
-
-        describe("Should not focus if there is not input inside the modal", () => {
-            test("default", () => {
-                act(() => {
-                    render(
-                        <Modal toggle autoFocus>
-                            <div className="modal-body"></div>
-                        </Modal>,
-                        container
-                    );
-                });
-
-                act(() => Simulate.animationEnd(document.querySelector(".modal-dialog")));
-                expect(document.activeElement).toBe(document.body);
-            });
-
-            test("fullscreen", () => {
-                act(() => {
-                    render(
-                        <Modal toggle autoFocus fullscreen>
-                            <div className="modal-body"></div>
-                        </Modal>,
-                        container
-                    );
-                });
-
-                act(() => Simulate.animationEnd(document.querySelector(".modal")));
-                expect(document.activeElement).toBe(document.body);
-            });
-        });
-    });
-
-    describe("Should render in all supported sizes", () => {
+    describe("Sizes", () => {
         const sizes: ModalSize[] = ["sm", "md", "lg"];
         sizes.forEach((size: ModalSize) => {
-            test(size, () => {
-                act(() => {
-                    render(<Modal toggle size={size} />, container);
-                });
-
+            it(`Should render size (${size}) when configured`, () => {
+                renderModal({ size });
                 expect(document.querySelector(".modal-dialog").classList.contains(`modal-${size}`)).toBeTruthy();
             });
         });
     });
 
-    describe("Should allow it to be rendered in different positions", () => {
+    describe("Positions", () => {
         const positions: ModalPosition[] = ["left", "right"];
         positions.forEach((position: ModalPosition) =>
-            test(position, () => {
-                act(() => {
-                    render(<Modal toggle position={position} />, container);
-                });
-
+            it(`Should render position (${position}) when configured`, () => {
+                renderModal({ position });
                 expect(document.querySelector(".modal").classList.contains("modal-aside")).toBeTruthy();
                 expect(document.querySelector(".modal").classList.contains(`modal-aside-${position}`)).toBeTruthy();
             })
         );
 
-        test("default", () => {
-            act(() => {
-                render(<Modal toggle position="default" />, container);
-            });
-
+        it("Should render position (default) when configured", () => {
+            renderModal({ position: "default" });
             expect(document.querySelector(".modal").classList.contains("modal-aside")).toBeFalsy();
         });
 
-        it("Fullscreen should override any position", () => {
-            act(() => {
-                render(<Modal toggle position="left" fullscreen />, container);
-            });
-
+        it("Should be overridden when fullscreen is configured", () => {
+            renderModal({ fullscreen: true, position: "left" });
             expect(document.querySelector(".modal").classList.contains("modal-aside")).toBeFalsy();
             expect(document.querySelector(".modal").classList.contains("modal-aside-left")).toBeFalsy();
         });
     });
 
-    describe("Should trap focus when enabled", () => {
-        function tabForward() {
-            const focusableElements: FocusableElements[] = Array.from(document.querySelectorAll<FocusableElements>("input, button, a"));
-            const currentIndex: number = focusableElements.findIndex((el) => el === document.activeElement);
-
-            // Tabbing to the next element doesn't work in test, therefore, it is simulated here
-            if (currentIndex === -1) {
-                focusableElements[0].focus();
-            } else {
-                if (currentIndex === focusableElements.length - 1) {
-                    focusableElements[0].focus();
-                } else {
-                    focusableElements[currentIndex + 1].focus();
-                }
-            }
-
-            document.dispatchEvent(new KeyboardEvent("keyup", { key: "Tab" }));
-        }
-        function tabBackward() {
-            const focusableElements: FocusableElements[] = Array.from(document.querySelectorAll<FocusableElements>("input, button, a"));
-            const currentIndex: number = focusableElements.findIndex((el) => el === document.activeElement);
-
-            // Tabbing to the previous element doesn't work in test, therefore, it is simulated here
-            if (currentIndex === -1) {
-                focusableElements[focusableElements.length - 1].focus();
-            } else {
-                if (currentIndex === 0) {
-                    focusableElements[focusableElements.length - 1].focus();
-                } else {
-                    focusableElements[currentIndex - 1].focus();
-                }
-            }
-
-            document.dispatchEvent(new KeyboardEvent("keyup", { key: "Tab", shiftKey: true }));
-        }
-
-        test("Descending tabbing", () => {
-            const extraButton = document.createElement("button");
-            extraButton.className = "extra";
-
-            document.body.appendChild(extraButton);
-
-            act(() => {
-                render(
-                    <Modal toggle trapFocus>
-                        <input id="test-input" type="text" />
-                        <button id="test-button" />
-                    </Modal>,
-                    container
-                );
+    describe("Auto focus", () => {
+        describe("Should focus on first input when modal is visible", () => {
+            it("default mode", () => {
+                renderModal({ children: MOCK_MODAL_BODY });
+                expect(document.activeElement).toBe(document.getElementById("test-input"));
             });
 
-            document.body.appendChild(extraButton.cloneNode());
+            it("fullscreen mode", () => {
+                renderModal({
+                    children: MOCK_MODAL_BODY,
+                    fullscreen: true,
+                });
+                expect(document.activeElement).toBe(document.getElementById("test-input"));
+            });
+        });
 
-            expect(document.querySelector(".last-focusable-element")).not.toBeNull();
+        describe("Should not focus on first input when modal not visible", () => {
+            it("default mode", () => {
+                renderModal({
+                    children: MOCK_MODAL_BODY,
+                    toggle: false,
+                });
+                expect(document.activeElement).toBe(document.body);
+            });
 
-            act(() => tabForward());
-            expect(document.activeElement).toBe(document.getElementById("test-input"));
+            it("fullscreen mode", () => {
+                renderModal({
+                    children: MOCK_MODAL_BODY,
+                    fullscreen: true,
+                    toggle: false,
+                });
+                expect(document.activeElement).toBe(document.body);
+            });
+        });
 
-            act(() => tabForward());
-            expect(document.activeElement).toBe(document.getElementById("test-button"));
+        describe("Should retain focus body when input is not available in modal", () => {
+            it("default mode", () => {
+                renderModal({ children: <div className="modal-body"></div> });
+                expect(document.activeElement).toBe(document.body);
+            });
 
-            act(() => tabForward());
-            expect(document.activeElement).toBe(document.getElementById("test-input"));
+            it("fullscreen mode", () => {
+                renderModal({ children: <div className="modal-body"></div>, fullscreen: true });
+                expect(document.activeElement).toBe(document.body);
+            });
+        });
+    });
 
-            document.body.removeChild(document.querySelector(".extra"));
+    describe("Should trap focus", () => {
+        function tabForward() {
+            act(() => pressKey({ key: Key.Tab }, document.querySelector(".rc.modal")));
+        }
+
+        function tabBackward() {
+            act(() => pressKey({ key: Key.Tab, shiftKey: true }, document.querySelector(".rc.modal")));
+        }
+
+        beforeEach(() => {
+            const extraButton = document.createElement("button");
+            extraButton.className = "extra";
+            document.body.appendChild(extraButton);
+        });
+
+        afterEach(() => {
             document.body.removeChild(document.querySelector(".extra"));
         });
 
-        test("Ascending tabbing", () => {
-            const extraButton = document.createElement("button");
-            extraButton.className = "extra";
+        it("Descending tabbing", () => {
+            renderModal({ children: MOCK_MODAL_BODY });
 
-            document.body.appendChild(extraButton);
-
-            act(() => {
-                render(
-                    <Modal toggle trapFocus>
-                        <input id="test-input" type="text" />
-                        <button id="test-button" />
-                    </Modal>,
-                    container
-                );
-            });
-
-            expect(document.querySelector(".last-focusable-element")).not.toBeNull();
-
-            act(() => tabBackward());
-            expect(document.activeElement).toBe(document.getElementById("test-button"));
-
-            act(() => tabBackward());
             expect(document.activeElement).toBe(document.getElementById("test-input"));
 
-            act(() => tabBackward());
+            tabForward();
             expect(document.activeElement).toBe(document.getElementById("test-button"));
 
-            document.body.removeChild(document.querySelector(".extra"));
+            tabForward();
+            expect(document.activeElement).toBe(document.getElementById("test-input"));
+
+            tabForward();
+            expect(document.activeElement).toBe(document.getElementById("test-button"));
+        });
+
+        it("Ascending tabbing", () => {
+            renderModal({ children: MOCK_MODAL_BODY });
+
+            expect(document.activeElement).toBe(document.getElementById("test-input"));
+
+            tabBackward();
+            expect(document.activeElement).toBe(document.getElementById("test-button"));
+
+            tabBackward();
+            expect(document.activeElement).toBe(document.getElementById("test-input"));
+
+            tabBackward();
+            expect(document.activeElement).toBe(document.getElementById("test-button"));
         });
 
         it("Shouldn not do anything when there is no focusable elements in the modal or the event is not a tab", () => {
-            const extraButton = document.createElement("button");
-            extraButton.className = "extra";
+            renderModal();
 
-            document.body.appendChild(extraButton);
-
-            act(() => {
-                render(<Modal toggle trapFocus />, container);
-            });
-
-            document.body.appendChild(extraButton.cloneNode());
-
-            act(() => tabForward());
             expect(document.activeElement.className === "extra");
 
-            document.dispatchEvent(new KeyboardEvent("keyup", { key: "Enter", shiftKey: true }));
+            tabForward();
             expect(document.activeElement.className === "extra");
 
-            document.body.removeChild(document.querySelector(".extra"));
-            document.body.removeChild(document.querySelector(".extra"));
+            tabBackward();
+            expect(document.activeElement.className === "extra");
         });
     });
 
     it("Should cleanup side effects when unmounted", () => {
-        act(() => {
-            render(<Modal toggle />, container);
-        });
+        renderModal();
         expect(document.body.classList.contains("modal-open")).toBeTruthy();
         act(() => {
             unmountComponentAtNode(container);
