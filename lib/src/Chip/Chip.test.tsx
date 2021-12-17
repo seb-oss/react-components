@@ -1,7 +1,7 @@
 import React from "react";
-import { unmountComponentAtNode, render } from "react-dom";
-import { Chip } from ".";
+import { render, unmountComponentAtNode } from "react-dom";
 import { act, Simulate } from "react-dom/test-utils";
+import { Chip } from ".";
 
 describe("Component: Chip", () => {
     let container: HTMLDivElement = null;
@@ -31,11 +31,36 @@ describe("Component: Chip", () => {
         expect(container.querySelector(".content").textContent).toEqual("Test");
     });
 
-    it("Should trigger onClose callback when clicked", () => {
+    it("Should trigger onClose callback when close button is clicked", () => {
         act(() => {
             render(<Chip onClose={onClose}>Test</Chip>, container);
         });
         act(() => Simulate.click(container.querySelector("button")));
         expect(onClose).toHaveBeenCalled();
+    });
+
+    describe("Keyboard support", () => {
+        function renderChip(): void {
+            act(() => render(<Chip onClose={onClose}>Chip</Chip>, container));
+            container.querySelector<HTMLButtonElement>(".chip").focus();
+        }
+
+        function pressKey(key: string): void {
+            act(() => Simulate.keyDown(document.activeElement, { key }));
+        }
+
+        it("Should trigger onClose when Backspace button is pressed", () => {
+            renderChip();
+            expect(onClose).not.toHaveBeenCalled();
+            pressKey("Backspace");
+            expect(onClose).toHaveBeenCalledTimes(1);
+        });
+
+        it("Should trigger onClose when Delete button is pressed", () => {
+            renderChip();
+            expect(onClose).not.toHaveBeenCalled();
+            pressKey("Delete");
+            expect(onClose).toHaveBeenCalledTimes(1);
+        });
     });
 });
