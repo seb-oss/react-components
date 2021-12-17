@@ -1,10 +1,10 @@
-import React from "react";
-import Docs from "@common/Docs";
-import { DynamicFormOption, useDynamicForm } from "@sebgroup/react-components/hooks/useDynamicForm";
-import { Button } from "@sebgroup/react-components/Button";
-import { Modal, ModalSize, ModalPosition } from "@sebgroup/react-components/Modal";
-import { Textbox } from "@sebgroup/react-components/Textbox";
 import { CodeSnippet } from "@common/CodeSnippet";
+import Docs from "@common/Docs";
+import { Button } from "@sebgroup/react-components/Button";
+import { DynamicFormOption, useDynamicForm } from "@sebgroup/react-components/hooks/useDynamicForm";
+import { Modal, ModalPosition, ModalSize } from "@sebgroup/react-components/Modal";
+import { Textbox } from "@sebgroup/react-components/Textbox";
+import React from "react";
 
 const importString: string = require("!raw-loader!@sebgroup/react-components/Modal/Modal");
 const code: string = `<Modal toggle={toggle}>
@@ -26,6 +26,7 @@ const positions: Array<DynamicFormOption<ModalPosition>> = [
 
 const NotificationPage: React.FC = () => {
     const [toggle, setToggle] = React.useState<boolean>(false);
+    const toggleButtonRef = React.useRef<HTMLButtonElement>();
 
     const [renderForm, { controls }] = useDynamicForm([
         {
@@ -35,22 +36,26 @@ const NotificationPage: React.FC = () => {
                 { key: "position", label: "Position", controlType: "Radio", options: positions, value: positions[0].value },
                 { key: "centered", label: "centered", controlType: "Checkbox", value: false },
                 { key: "fullscreen", label: "fullscreen", controlType: "Checkbox", value: false },
-                { key: "trapfocus", label: "trapfocus", controlType: "Checkbox", value: false },
-                { key: "autoFocus", label: "autoFocus", description: "Automatically focus on the first input element", controlType: "Checkbox", value: false },
+                { key: "autoFocus", label: "autoFocus", description: "Automatically focus on first focusable element. Auto focus will be enabled by default.", controlType: "Checkbox", value: true },
                 { key: "onEscape", label: "onEscape", controlType: "Checkbox", value: false },
                 { key: "onBackdropDismiss", label: "onBackdropDismiss", controlType: "Checkbox", value: false },
             ],
         },
     ]);
 
-    const dismiss = React.useCallback(() => setToggle(false), []);
+    const dismiss = React.useCallback(() => {
+        setToggle(false);
+        toggleButtonRef.current?.focus();
+    }, []);
 
     return (
         <Docs
             mainFile={importString}
             example={
                 <>
-                    <Button onClick={() => setToggle(!toggle)}>Toggle Modal</Button>
+                    <Button ref={toggleButtonRef} onClick={() => setToggle(!toggle)}>
+                        Toggle Modal
+                    </Button>
                     <Modal
                         toggle={toggle}
                         position={controls.position}
@@ -61,12 +66,10 @@ const NotificationPage: React.FC = () => {
                         onEscape={controls.onEscape ? dismiss : null}
                         onBackdropDismiss={controls.onBackdropDismiss ? dismiss : null}
                         autoFocus={controls.autoFocus}
+                        aria-labelledby="modalHeader"
+                        aria-describedby="modalDescription"
                     >
-                        <div className="modal-header">
-                            <h3>Header</h3>
-                            <button className="close" type="button" onClick={dismiss} />
-                        </div>
-                        <div className="modal-body">
+                        <div id="modalDescription" className="modal-body order-1">
                             {controls.trapfocus || controls.autoFocus ? (
                                 <form>
                                     <fieldset>
@@ -90,8 +93,12 @@ const NotificationPage: React.FC = () => {
                                 </>
                             )}
                         </div>
-                        <div className="modal-footer">
+                        <div className="modal-footer order-2">
                             <Button onClick={dismiss}>Close Modal</Button>
+                        </div>
+                        <div className="modal-header order-0">
+                            <h3 id="modalHeader">Header</h3>
+                            <button className="close" type="button" onClick={dismiss} />
                         </div>
                     </Modal>
                 </>
