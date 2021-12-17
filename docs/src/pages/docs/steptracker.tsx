@@ -1,8 +1,7 @@
 import React from "react";
 import Docs from "@common/Docs";
 import { DynamicFormOption, DynamicFormSection, useDynamicForm } from "@sebgroup/react-components/hooks/useDynamicForm";
-import { StepTracker } from "@sebgroup/react-components/StepTracker";
-import StepLabel, { StepLabelProps } from "@sebgroup/react-components/StepTracker/StepLabel";
+import { StepTracker, StepLabel, StepLabelProps } from "@sebgroup/react-components/StepTracker";
 
 const StepTrackerPage: React.FC = React.memo(() => {
     const importString: string = require("!raw-loader!@sebgroup/react-components/StepTracker/StepTracker");
@@ -79,17 +78,30 @@ const StepTrackerPage: React.FC = React.memo(() => {
         <Docs
             mainFile={importString}
             example={
-                <StepTracker
-                    step={value}
-                    onClick={setValue}
-                    orientation={(form.controls as any)?.orientation}
-                    labelPosition={(form.controls as any)?.direction}
-                    useNumbers={(form.controls as any)?.useNumbers}
-                >
-                    {stepList.map((item, i) => (
-                        <StepLabel label={item.label} key={i} />
-                    ))}
-                </StepTracker>
+                <>
+                    <div
+                        className="sr-only"
+                        id="step-tracker-progress"
+                        role="progressbar"
+                        aria-label={`Step ${value + 1} out of ${stepList.length}: ${stepList[value].label}`}
+                        aria-valuenow={value}
+                        aria-valuemin={1}
+                        aria-valuemax={stepList.length + 1}
+                        aria-live="polite"
+                    />
+                    <StepTracker
+                        aria-describedby="step-tracker-progress"
+                        step={value}
+                        onClick={setValue}
+                        orientation={(form.controls as any)?.orientation}
+                        labelPosition={(form.controls as any)?.direction}
+                        useNumbers={(form.controls as any)?.useNumbers}
+                    >
+                        {stepList.map((item, i) => (
+                            <StepLabel label={item.label} key={i} />
+                        ))}
+                    </StepTracker>
+                </>
             }
             code={code}
             controls={renderForm()}
