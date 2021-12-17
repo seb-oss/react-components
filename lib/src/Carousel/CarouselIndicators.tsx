@@ -1,5 +1,5 @@
-import React from "react";
 import classnames from "classnames";
+import React from "react";
 
 export type CarouselIndicatorsProps = JSX.IntrinsicElements["ol"] & {
     /** Active state. (Managed by Carousel) */
@@ -13,17 +13,16 @@ export type CarouselIndicatorsProps = JSX.IntrinsicElements["ol"] & {
 };
 
 export const CarouselIndicators: React.FC<CarouselIndicatorsProps> = React.memo(
-    React.forwardRef(({ active, size, parentId, onIndicatorClicked, ...props }: CarouselIndicatorsProps, ref: React.ForwardedRef<HTMLOListElement>) => {
-        const [className, setClassName] = React.useState<string>("carousel-indicators");
-
-        React.useEffect(() => setClassName(classnames("carousel-indicators", props.className)), [props.className]);
-
-        return (
-            <ol {...props} ref={ref} className={className}>
-                {[...Array(size)].map((v: undefined, i: number) => (
-                    <li key={i} data-target={parentId ? `#${parentId}` : null} data-slide-to={i} className={classnames({ active: active === i })} onClick={active !== i ? onIndicatorClicked : null} />
-                ))}
-            </ol>
-        );
-    })
+    React.forwardRef(({ active, size, parentId, onIndicatorClicked, ...props }: CarouselIndicatorsProps, ref: React.ForwardedRef<HTMLOListElement>) => (
+        <ol {...props} ref={ref} className={classnames("carousel-indicators", props.className)}>
+            {[...Array(size)].map((v: undefined, i: number) => {
+                const isActive: boolean = active === i;
+                return (
+                    <li key={i} className={classnames({ active: isActive })} data-slide-to={i} data-target={parentId ? `#${parentId}` : null} onClick={!isActive ? onIndicatorClicked : null}>
+                        {isActive && <span className="sr-only">(Current)</span>}
+                    </li>
+                );
+            })}
+        </ol>
+    ))
 );
