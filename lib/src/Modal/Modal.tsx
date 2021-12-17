@@ -1,8 +1,9 @@
+import classnames from "classnames";
 import React from "react";
 import { createPortal } from "react-dom";
-import classnames from "classnames";
-import "./modal.scss";
 import { useCombinedRefs } from "../hooks";
+import { Key } from "../utils";
+import "./modal.scss";
 
 export type ModalPosition = "left" | "right" | "default";
 export type ModalSize = "lg" | "md" | "sm";
@@ -23,20 +24,44 @@ export type ModalProps = JSX.IntrinsicElements["div"] & {
     position?: ModalPosition;
     /** Modal toggle */
     toggle?: boolean;
-    /** To only allow tab to focus within modal */
-    trapFocus?: boolean;
-    /** Automatically focuses on the first input element in the modal dialog */
+    /** Automatically focuses on the first focusable element in the modal dialog */
     autoFocus?: boolean;
 };
 
+const FOCUSABLE_ELEMENTS_SELECTOR: string = "input, button, a";
 // This solution is meant to fix Gatsby build which complains that document doesn't exist in server-side rendering
 const safeDocument: Document | null = typeof document !== "undefined" ? document : null;
 
 /** The modal component provides a solid foundation for creating dialogs or slideout modals */
 export const Modal: React.FC<ModalProps> = React.memo(
-    React.forwardRef(({ trapFocus, autoFocus, centered, size, fullscreen, onEscape, onBackdropDismiss, position, toggle, ...props }: ModalProps, ref: React.ForwardedRef<HTMLDivElement>) => {
+    React.forwardRef(({ autoFocus = true, centered, size, fullscreen, onEscape, onBackdropDismiss, position, toggle, ...props }: ModalProps, ref: React.ForwardedRef<HTMLDivElement>) => {
         const dialogRef: React.MutableRefObject<HTMLDivElement> = useCombinedRefs(ref);
         const [isPristine, setIsPristine] = React.useState<boolean>(true);
+
+        const onDialogKeyDown = React.useCallback<(e: React.KeyboardEvent) => void>(
+            (e: React.KeyboardEvent) => {
+                switch (e.key) {
+                    case Key.Escape:
+                        onEscape && onEscape(e as unknown as KeyboardEvent);
+                        break;
+                    case Key.Tab:
+                        // focus on next focusable element and trap the focus within the dialog (focus trap)
+                        e.preventDefault();
+                        const focusableElements: FocusableElements[] = Array.from(dialogRef.current.querySelectorAll<FocusableElements>(FOCUSABLE_ELEMENTS_SELECTOR));
+                        const focusableElementsLength: number = focusableElements.length;
+
+                        if (focusableElementsLength > 0) {
+                            const currentFocusedIndex: number = focusableElements.indexOf(document.activeElement as FocusableElements);
+                            const direction: number = e.shiftKey ? -1 : 1;
+                            const nextFocusIndex: number = (currentFocusedIndex + direction + focusableElementsLength) % focusableElementsLength;
+                            focusableElements[nextFocusIndex]?.focus();
+                        }
+
+                        break;
+                }
+            },
+            [dialogRef, onEscape]
+        );
 
         React.useEffect(() => {
             if (toggle) {
@@ -48,55 +73,6 @@ export const Modal: React.FC<ModalProps> = React.memo(
 
             return () => document.body.classList.remove("modal-open");
         }, [toggle]);
-
-        /** Focus trap */
-        React.useEffect(() => {
-            function tabHandler(e: KeyboardEvent) {
-                if (e.key.toLowerCase() === "tab") {
-                    const lastFocusable: string = "last-focusable-element";
-                    const focusableElements: FocusableElements[] = Array.from(dialogRef.current.querySelectorAll<FocusableElements>("input, button, a")).filter((el) => el.className !== lastFocusable);
-
-                    if (focusableElements.length) {
-                        if (!e.shiftKey) {
-                            // Descending focus
-                            if (document.activeElement.className === lastFocusable && dialogRef.current.contains(document.activeElement)) {
-                                dialogRef.current.querySelector<FocusableElements>("input, button, a").focus();
-                            } else if (!dialogRef.current.contains(document.activeElement)) {
-                                dialogRef.current.querySelector<FocusableElements>("input, button, a").focus();
-                            }
-                        } else {
-                            // Ascending focus
-                            if ((document.activeElement.className === lastFocusable && dialogRef.current.contains(document.activeElement)) || !dialogRef.current.contains(document.activeElement)) {
-                                focusableElements[focusableElements.length - 1].focus();
-                            }
-                        }
-                    }
-                }
-            }
-
-            if (trapFocus && toggle) {
-                document.addEventListener("keyup", tabHandler);
-            } else {
-                document.removeEventListener("keyup", tabHandler);
-            }
-
-            return () => document.removeEventListener("keyup", tabHandler);
-        }, [trapFocus, toggle]);
-
-        // Escape key listner
-        React.useEffect(() => {
-            function keyupListener(e: KeyboardEvent) {
-                e.key?.toLowerCase() === "escape" && onEscape(e);
-            }
-
-            if (onEscape && toggle) {
-                document.addEventListener("keyup", keyupListener);
-            } else {
-                document.removeEventListener("keyup", keyupListener);
-            }
-
-            return () => document.removeEventListener("keyup", keyupListener);
-        }, [onEscape, toggle]);
 
         return !safeDocument
             ? null
@@ -121,7 +97,6 @@ export const Modal: React.FC<ModalProps> = React.memo(
                       aria-modal="true"
                       onClick={(e) => {
                           props.onClick && props.onClick(e);
-
                           const target: HTMLDivElement = e.target as any;
 
                           if (onBackdropDismiss && target.classList.contains("rc") && target.classList.contains("modal")) {
@@ -131,27 +106,23 @@ export const Modal: React.FC<ModalProps> = React.memo(
                       onAnimationEnd={(e) => {
                           props.onAnimationEnd && props.onAnimationEnd(e);
 
-                          if (fullscreen && autoFocus && toggle && !dialogRef.current.contains(document.activeElement)) {
-                              dialogRef.current.querySelector("input")?.focus();
+                          if (fullscreen && toggle && autoFocus && !dialogRef.current.contains(document.activeElement)) {
+                              dialogRef.current.querySelector<HTMLElement>(FOCUSABLE_ELEMENTS_SELECTOR)?.focus();
                           }
                       }}
+                      onKeyDown={onDialogKeyDown}
                   >
                       <div
                           ref={dialogRef}
                           role="document"
                           className={classnames("modal-dialog", { [`modal-${size}`]: size })}
                           onAnimationEnd={() => {
-                              if (autoFocus && toggle && !dialogRef.current.contains(document.activeElement)) {
-                                  dialogRef.current.querySelector("input")?.focus();
+                              if (toggle && autoFocus && !dialogRef.current.contains(document.activeElement)) {
+                                  dialogRef.current.querySelector<HTMLElement>(FOCUSABLE_ELEMENTS_SELECTOR)?.focus();
                               }
                           }}
                       >
                           <div className="modal-content">{props.children}</div>
-                          {trapFocus && (
-                              <a className="last-focusable-element" href="#">
-                                  <div className="sr-only">End of focus</div>
-                              </a>
-                          )}
                       </div>
                   </div>,
                   safeDocument.body
