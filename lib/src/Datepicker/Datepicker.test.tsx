@@ -271,7 +271,9 @@ describe("Component: Datepicker", () => {
         }
 
         function renderCustomDatepicker(customProps?: Partial<DatepickerProps>): void {
-            act(() => render(<Datepicker {...{ ...props, value: new Date("2020-01-01"), ...customProps }} forceCustom />, container));
+            act(() => {
+                render(<Datepicker {...{ ...props, value: new Date("2020-01-01"), ...customProps }} forceCustom />, container);
+            });
         }
 
         describe("Day picker", () => {

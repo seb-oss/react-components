@@ -147,5 +147,12 @@
                 }
             }
         }
+
+        &.focused {
+            > label {
+                background-color: $blue;
+                color: white;
+            }
+        }
     }
 }
