@@ -260,4 +260,178 @@ describe("Component: Datepicker", () => {
         // change back to correct system date!
         clear();
     });
+
+    describe("Custom picker keyboard support", () => {
+        function changeValue(element: Element, value: number) {
+            act(() => Simulate.change(element, { target: { value } } as any));
+        }
+
+        function pressKey(element: Element, key: string): void {
+            act(() => Simulate.keyDown(element, { key }));
+        }
+
+        function renderCustomDatepicker(customProps?: Partial<DatepickerProps>): void {
+            act(() => {
+                render(<Datepicker {...{ ...props, value: new Date("2020-01-01"), ...customProps }} forceCustom />, container);
+            });
+        }
+
+        describe("Day picker", () => {
+            function getDayInputElement(): HTMLInputElement {
+                return container.querySelector(".seb-datepicker-custom-day");
+            }
+
+            beforeEach(() => {
+                renderCustomDatepicker();
+            });
+
+            it("Should decrease day value when down arrow button is pressed", () => {
+                const customDayInput: HTMLInputElement = getDayInputElement();
+                expect(customDayInput.value).toEqual("1");
+                pressKey(customDayInput, "ArrowDown");
+                expect(customDayInput.value).toEqual("31");
+                pressKey(customDayInput, "ArrowDown");
+                expect(customDayInput.value).toEqual("30");
+            });
+
+            it("Should increase day value when up arrow button is pressed", () => {
+                const customDayInput: HTMLInputElement = getDayInputElement();
+                changeValue(customDayInput, 31);
+                expect(customDayInput.value).toEqual("31");
+                pressKey(customDayInput, "ArrowUp");
+                expect(customDayInput.value).toEqual("1");
+                pressKey(customDayInput, "ArrowUp");
+                expect(customDayInput.value).toEqual("2");
+            });
+
+            it("Should decrease day value by 5 when page down arrow button is pressed", () => {
+                const customDayInput: HTMLInputElement = getDayInputElement();
+                expect(customDayInput.value).toEqual("1");
+                pressKey(customDayInput, "PageDown");
+                expect(customDayInput.value).toEqual("27");
+                pressKey(customDayInput, "PageDown");
+                expect(customDayInput.value).toEqual("22");
+            });
+
+            it("Should increase day value by 5 when page up arrow button is pressed", () => {
+                const customDayInput: HTMLInputElement = getDayInputElement();
+                changeValue(customDayInput, 31);
+                expect(customDayInput.value).toEqual("31");
+                pressKey(customDayInput, "PageUp");
+                expect(customDayInput.value).toEqual("5");
+                pressKey(customDayInput, "PageUp");
+                expect(customDayInput.value).toEqual("10");
+            });
+
+            it("Should decrease day value to minimum day value when home button is pressed", () => {
+                const customDayInput: HTMLInputElement = getDayInputElement();
+                changeValue(customDayInput, 15);
+                expect(customDayInput.value).toEqual("15");
+                pressKey(customDayInput, "Home");
+                expect(customDayInput.value).toEqual("1");
+                pressKey(customDayInput, "Home");
+                expect(customDayInput.value).toEqual("1");
+            });
+
+            it("Should increase day value to maximum day value when end button is pressed", () => {
+                const customDayInput: HTMLInputElement = getDayInputElement();
+                changeValue(customDayInput, 15);
+                expect(customDayInput.value).toEqual("15");
+                pressKey(customDayInput, "End");
+                expect(customDayInput.value).toEqual("31");
+                pressKey(customDayInput, "End");
+                expect(customDayInput.value).toEqual("31");
+            });
+        });
+
+        describe("Year picker", () => {
+            const CURRENT_YEAR: number = new Date().getFullYear();
+
+            function getYearInputElement(): HTMLInputElement {
+                return container.querySelector(".seb-datepicker-custom-year");
+            }
+
+            it("Should decrease year value when down arrow button is pressed", () => {
+                renderCustomDatepicker();
+                const customYearInput: HTMLInputElement = getYearInputElement();
+                expect(customYearInput.value).toEqual("2020");
+                pressKey(customYearInput, "ArrowDown");
+                expect(customYearInput.value).toEqual("2019");
+                pressKey(customYearInput, "ArrowDown");
+                expect(customYearInput.value).toEqual("2018");
+            });
+
+            it("Should increase year value when up arrow button is pressed", () => {
+                renderCustomDatepicker();
+                const customYearInput: HTMLInputElement = getYearInputElement();
+                expect(customYearInput.value).toEqual("2020");
+                pressKey(customYearInput, "ArrowUp");
+                expect(customYearInput.value).toEqual("2021");
+                pressKey(customYearInput, "ArrowUp");
+                expect(customYearInput.value).toEqual("2022");
+            });
+
+            it("Should decrease year value by 5 when page down arrow button is pressed", () => {
+                renderCustomDatepicker();
+                const customYearInput: HTMLInputElement = getYearInputElement();
+                expect(customYearInput.value).toEqual("2020");
+                pressKey(customYearInput, "PageDown");
+                expect(customYearInput.value).toEqual("2015");
+                pressKey(customYearInput, "PageDown");
+                expect(customYearInput.value).toEqual("2010");
+            });
+
+            it("Should increase year value by 5 when page up arrow button is pressed", () => {
+                renderCustomDatepicker();
+                const customYearInput: HTMLInputElement = getYearInputElement();
+                expect(customYearInput.value).toEqual("2020");
+                pressKey(customYearInput, "PageUp");
+                expect(customYearInput.value).toEqual("2025");
+                pressKey(customYearInput, "PageUp");
+                expect(customYearInput.value).toEqual("2030");
+            });
+
+            it("Should decrease year value to default minimum year value when home button is pressed", () => {
+                renderCustomDatepicker();
+                const MIN_YEAR: string = `${CURRENT_YEAR - 200}`;
+                const customYearInput: HTMLInputElement = getYearInputElement();
+                expect(customYearInput.value).toEqual("2020");
+                pressKey(customYearInput, "Home");
+                expect(customYearInput.value).toEqual(MIN_YEAR);
+                pressKey(customYearInput, "Home");
+                expect(customYearInput.value).toEqual(MIN_YEAR);
+            });
+
+            it("Should decrease year value to custom minimum year value when home button is pressed", () => {
+                renderCustomDatepicker({ min: new Date("2000-01-01") });
+                const customYearInput: HTMLInputElement = getYearInputElement();
+                expect(customYearInput.value).toEqual("2020");
+                pressKey(customYearInput, "Home");
+                expect(customYearInput.value).toEqual("2000");
+                pressKey(customYearInput, "Home");
+                expect(customYearInput.value).toEqual("2000");
+            });
+
+            it("Should increase year value to default maximum year value when end button is pressed", () => {
+                renderCustomDatepicker();
+                const MAX_YEAR: string = `${CURRENT_YEAR + 200}`;
+                const customYearInput: HTMLInputElement = getYearInputElement();
+                expect(customYearInput.value).toEqual("2020");
+                pressKey(customYearInput, "End");
+                expect(customYearInput.value).toEqual(MAX_YEAR);
+                pressKey(customYearInput, "End");
+                expect(customYearInput.value).toEqual(MAX_YEAR);
+            });
+
+            it("Should increase year value to custom maximum year value when end button is pressed", () => {
+                renderCustomDatepicker({ max: new Date("2050-01-01") });
+                const customYearInput: HTMLInputElement = getYearInputElement();
+                expect(customYearInput.value).toEqual("2020");
+                pressKey(customYearInput, "End");
+                expect(customYearInput.value).toEqual("2050");
+                pressKey(customYearInput, "End");
+                expect(customYearInput.value).toEqual("2050");
+            });
+        });
+    });
 });
