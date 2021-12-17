@@ -15,6 +15,8 @@ export type TableRowProps<T = any> = JSX.IntrinsicElements["tr"] & {
     parentKey?: string;
     isExpanded?: boolean;
     isSubRow?: boolean;
+    collapseButtonProps?: JSX.IntrinsicElements["button"];
+    checkboxProps?: JSX.IntrinsicElements["input"];
 };
 
 const angleDown: JSX.Element = (
@@ -30,7 +32,20 @@ const angleRightIcon: JSX.Element = (
 
 const TableRow: React.FC<TableRowProps> = React.forwardRef(
     (
-        { className, isHeaderRow, hideSelect, uniqueKey, parentKey, checked = false, indeterminate = false, isSubRow = false, isExpanded = false, ...props }: TableRowProps,
+        {
+            className,
+            isHeaderRow,
+            hideSelect,
+            uniqueKey,
+            parentKey,
+            checked = false,
+            indeterminate = false,
+            isSubRow = false,
+            isExpanded = false,
+            checkboxProps = {},
+            collapseButtonProps = {},
+            ...props
+        }: TableRowProps,
         ref: React.ForwardedRef<HTMLTableRowElement>
     ) => {
         const context = React.useContext(TableContext);
@@ -91,7 +106,7 @@ const TableRow: React.FC<TableRowProps> = React.forwardRef(
                 {!!context.onRowExpand && (
                     <Cell {...columnProps} className={classnames({ "collapse-control": isParentRow })}>
                         {isParentRow && (
-                            <button className="btn btn-sm" onClick={() => context.onRowExpand(!isExpanded, uniqueId)}>
+                            <button {...collapseButtonProps} className={classnames("btn btn-sm", collapseButtonProps.className)} onClick={() => context.onRowExpand(!isExpanded, uniqueId)}>
                                 <div className="icon-holder">{expanded ? angleDown : angleRightIcon}</div>
                             </button>
                         )}
@@ -101,6 +116,7 @@ const TableRow: React.FC<TableRowProps> = React.forwardRef(
                     <Cell {...columnProps} className={classnames({ "select-control": !(hideSelect || isSubRow) })}>
                         {!(hideSelect || isSubRow) && (
                             <Checkbox
+                                {...checkboxProps}
                                 checked={checked}
                                 ref={(input: HTMLInputElement) => {
                                     if (input) {
