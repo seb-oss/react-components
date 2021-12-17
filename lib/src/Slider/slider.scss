@@ -1,433 +1,214 @@
 @import "~@sebgroup/bootstrap/scss/variables";
 
-$transition-time: 80ms;
+@function getTheme($color1, $color2) {
+    @return (thumbColor: $color1, trackColor: $color2);
+}
+
 $box-shadow: rgba(85, 85, 85, 0.4) 0 2px 5px;
-$disabled-selected: $gray-500;
-$disabled-unselected: #cccccc;
-$disabled-thumb-bg: #9a9a9a;
-$disabled-thumb-border-color: #8c8c8c;
-$slider-width-normal: 24px;
-$slider-height-normal: $slider-width-normal;
-$slider-width-alternative: 56px;
-$slider-height-alternative: 32px;
+$sliderName: "custom-slider";
+$sliderInputFieldName: "#{$sliderName}__input-field";
+$sliderTickmarkName: "#{$sliderName}__tickmarks";
+$sliderTickmarkLabelName: "#{$sliderName}__tickmarks-label";
+$sliderTooltipName: "#{$sliderName}__tooltip";
+$sliderTooltipWrapperName: "#{$sliderName}__tooltip-wrapper";
+// slider thumb variables
+$sliderThumbBrowserList: "-moz-range-thumb", "-webkit-slider-thumb";
+$sliderThumbHeight: 24px;
+$sliderThumbWidth: $sliderThumbHeight;
+// slider thumb alternative variables
+$sliderThumbAltHeight: 32px;
+$sliderThumbAltWidth: 56px;
+$sliderThumbAltBorderRadius: 3px;
+$sliderThumbAltChevronLeft: '<svg name="angle-left" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 512" style="fill: %23fff;"><path d="M25.1 247.5l117.8-116c4.7-4.7 12.3-4.7 17 0l7.1 7.1c4.7 4.7 4.7 12.3 0 17L64.7 256l102.2 100.4c4.7 4.7 4.7 12.3 0 17l-7.1 7.1c-4.7 4.7-12.3 4.7-17 0L25 264.5c-4.6-4.7-4.6-12.3.1-17z" /></svg>';
+$sliderThumbAltChevronRight: '<svg name="angle-right" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 512" style="fill: %23fff;"> <path d="M166.9 264.5l-117.8 116c-4.7 4.7-12.3 4.7-17 0l-7.1-7.1c-4.7-4.7-4.7-12.3 0-17L127.3 256 25.1 155.6c-4.7-4.7-4.7-12.3 0-17l7.1-7.1c4.7-4.7 12.3-4.7 17 0l117.8 116c4.6 4.7 4.6 12.3-.1 17z" /> </svg>';
+// slider track variables
+$sliderTrackBrowserList: "-moz-range-track", "-webkit-slider-runnable-track";
+$sliderTrackHeight: 0.25rem;
+$sliderTrackBorderRadius: 4rem;
+// tooltip
+$sliderTooltipHeight: 25px;
+// theme
+$themes: (
+    "inverted": getTheme($gray-800, $black),
+    "success": getTheme($green, $green-darker),
+    "danger": getTheme($red, $red-darker),
+    "warning": getTheme($yellow, $yellow-darker),
+    "purple": getTheme($purple, $purple-darker),
+    "disabled": getTheme($gray-300, $gray-500),
+);
 
-@mixin transform($props) {
-    -webkit-transform: $props;
-    -moz-transform: $props;
-    -o-transform: $props;
-    transform: $props;
+@function getThumbMarginTop($height) {
+    @return calc(-#{$height} / 2);
 }
 
-@mixin user-select($props) {
-    -webkit-user-select: $props;
-    -moz-user-select: $props;
-    -ms-user-select: $props;
-    user-select: $props;
-}
-
-@mixin track-styles {
+@mixin slider-thumb() {
     appearance: none;
-    background: transparent;
-    color: transparent;
+    height: $sliderThumbHeight;
+    width: $sliderThumbWidth;
+    border-radius: 50%;
     border: 0;
-    outline: 0;
-    box-shadow: 0;
-    height: 4px;
+    background-color: $blue-dark;
+    cursor: pointer;
+    margin-top: getThumbMarginTop($sliderThumbHeight);
+    box-shadow: $box-shadow, 0px 2px 2px 0 rgba($blue-dark, 0.45);
 }
 
-@mixin thumb-styles-normal {
-    appearance: none;
-    width: $slider-width-normal;
-    height: $slider-height-normal;
-    background: transparent;
-    border-radius: 2px;
-    border: 0;
-    outline: 0;
-    box-shadow: 0;
-    transform: translateY(-10px);
-
-    &:not(:disabled) {
-        cursor: pointer;
-    }
+@mixin slider-thumb-alt() {
+    height: $sliderThumbAltHeight;
+    width: $sliderThumbAltWidth;
+    border-radius: $sliderThumbAltBorderRadius;
+    margin-top: getThumbMarginTop($sliderThumbAltHeight);
+    background-image: url("data:image/svg+xml," + $sliderThumbAltChevronLeft), url("data:image/svg+xml," + $sliderThumbAltChevronRight);
+    background-position: #{$sliderThumbAltWidth * 0.2}, #{$sliderThumbAltWidth * 0.6};
+    background-repeat: no-repeat;
 }
 
-@mixin thumb-styles-alternative {
-    height: $slider-height-alternative;
-    width: $slider-width-alternative;
+@mixin slider-track($thumbWidth: $sliderThumbWidth) {
+    width: 100%;
+    margin: 0 #{$thumbWidth * 0.25};
+    height: $sliderTrackHeight;
+    cursor: pointer;
+    border-radius: $sliderTrackBorderRadius;
 }
 
-@mixin setTheme($dark, $light) {
-    .custom-slider-track {
-        .custom-slider-slider-after {
-            background-color: $light;
-        }
-        .custom-slider-thumb {
-            background-color: $light;
-            border: 0;
-            &::after {
-                background-color: $dark;
+@mixin slider-tickmark-track() {
+    position: absolute;
+    width: calc(100% - #{$sliderThumbWidth * 1.5});
+    left: $sliderThumbWidth;
+}
+
+@mixin slider-tickmark-track-alt() {
+    width: calc(100% - #{$sliderThumbAltWidth * 1.5});
+    left: #{$sliderThumbAltWidth * 0.85};
+}
+
+.#{$sliderInputFieldName} {
+    --slider-background-color: #{$gray-300};
+    --slider-primary-color: #{$blue-darker};
+    position: relative;
+    z-index: 0;
+    input[type="range"] {
+        appearance: none; /* hide original slider */
+        background: $gray-300;
+        @include slider-track();
+        @each $browser in $sliderThumbBrowserList {
+            &::#{$browser} {
+                @include slider-thumb();
             }
         }
+        @each $browser in $sliderTrackBrowserList {
+            &::#{$browser} {
+                @include slider-track();
+            }
+        }
+        &:active + .#{$sliderTooltipWrapperName} {
+            display: block;
+        }
     }
 }
 
-@mixin tooltip-theme($color) {
-    background-color: $color;
+.#{$sliderTickmarkName} {
+    @include slider-tickmark-track();
+    padding-top: 0px;
+    top: 1.25rem;
+    z-index: -1;
+}
+
+.#{$sliderTooltipWrapperName} {
+    @include slider-tickmark-track();
+    display: none;
+}
+
+.#{$sliderTooltipName} {
+    pointer-events: none;
+    font-size: $font-size-sm;
+    padding: 0 10px;
+    height: $sliderTooltipHeight;
+    white-space: nowrap;
+    position: absolute;
+    text-align: center;
+    color: $white;
+    user-select: none;
+    transform: translateX(-49%);
+    background-color: $blue-darker;
+    box-shadow: $box-shadow, 0px 2px 2px 0 rgba($blue-darker, 0.45);
+    top: -3.5rem;
     &:after {
-        border-color: $color transparent transparent transparent;
+        content: " ";
+        width: 0;
+        height: 0;
+        border: #{$font-size-sm * 0.6} solid;
+        position: absolute;
+        bottom: -$font-size-sm;
+        left: 50%;
+        border-color: $blue-darker transparent transparent transparent;
+        transform: translateX(-50%);
     }
 }
 
-.rc.custom-slider {
-    padding-right: 5px;
-    .input-field {
-        position: relative;
-        input[type="range"] {
-            position: relative;
-            display: inline-block;
-            width: 100%;
-            appearance: none;
-            background: transparent;
-            cursor: pointer;
-            margin-top: 10px;
-            margin-bottom: 7px;
-            // Thumb
-            &::-webkit-slider-thumb {
-                @include thumb-styles-normal();
-            }
-            &::-moz-range-thumb {
-                @include thumb-styles-normal();
-                transform: none;
-            }
-            &::-ms-thumb {
-                @include thumb-styles-normal();
-            }
-            // Track
-            &::-webkit-slider-runnable-track {
-                @include track-styles();
-            }
-            &::-moz-range-track {
-                @include track-styles();
-            }
-            &::-ms-track {
-                @include track-styles();
-            } // Tooltip
-            &::-ms-tooltip {
-                display: none;
-            } // IE Specific
-            &::-ms-fill {
-                background-color: transparent;
-            }
-            &::-ms-fill-lower {
-                background-color: transparent;
-                border: 0;
-            }
-            &::-ms-ticks,
-            &::-ms-ticks-after,
-            &::-ms-ticks-after {
-                display: none;
-                color: transparent;
-            }
-            &:not(:disabled) {
-                &:focus {
-                    outline: none;
-                    & + .custom-slider-holder {
-                        > .custom-slider-track {
-                            > .custom-slider-thumb {
-                                box-shadow: $box-shadow, 0px 0 0px 2px rgba($blue-dark, 0.45);
-                            }
-                        }
-                    }
-                }
-                &:hover {
-                    & + .custom-slider-holder {
-                        > .custom-slider-track {
-                            > .custom-slider-thumb {
-                                transform: translateX(-50%) scale(1.1);
-                            }
-                        }
-                    }
-                }
-                &:active {
-                    & + .custom-slider-holder {
-                        > .custom-slider-track {
-                            > .custom-slider-thumb {
-                                transform: translateX(-50%) scale(1.05);
-                                .custom-slider-preview:not(.always-show) {
-                                    display: block;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        .custom-slider-holder {
-            position: absolute;
-            top: 15px;
-            pointer-events: none;
-            padding: 0 12px;
-            right: 0;
-            left: 0;
-            height: 4px;
-            .custom-slider-track {
-                position: relative;
-                width: 100%;
-                height: 4px;
-                border-radius: 8px;
-                pointer-events: none;
-                z-index: 2;
-                top: 50%;
-                transform: translateY(-50%);
-                cursor: pointer;
-                [class^="custom-slider-slider-"] {
-                    position: absolute;
-                    top: 0;
-                    bottom: 0;
-                    height: 100%;
-                    z-index: 2;
-                }
-                .custom-slider-slider-before {
-                    left: 0px;
-                    width: calc(100% + #{$slider-width-normal});
-                    margin: 0 -12px;
-                    background-color: $gray-500;
-                    border-radius: 2px;
-                }
-                .custom-slider-slider-after {
-                    will-change: width;
-                    transform-origin: left;
-                    margin: 0 -12px;
-                    transform: rotateY(0deg);
-                    border-radius: 2px;
-                }
-                .custom-slider-thumb {
-                    position: relative;
-                    height: $slider-height-normal;
-                    width: $slider-width-normal;
-                    background-color: $blue-dark;
-                    border-radius: 12px;
-                    top: -10px;
-                    transform-origin: center;
-                    transform: translateX(-50%);
-                    pointer-events: none;
-                    box-shadow: $box-shadow;
-                    will-change: left;
-                    transition: transform $transition-time ease-in-out, box-shadow $transition-time ease-in;
-                    z-index: 2;
-                    .custom-slider-preview {
-                        pointer-events: none;
-                        font-size: 14px;
-                        padding: 0 10px;
-                        display: none;
-                        height: 25px;
-                        white-space: nowrap;
-                        position: absolute;
-                        top: -30px;
-                        text-align: center;
-                        color: $white;
-                        user-select: none;
-                        transform: translateX(-49%);
-                        left: 50%;
-                        &:after {
-                            content: " ";
-                            width: 0px;
-                            height: 0px;
-                            border: 8px solid;
-                            position: absolute;
-                            bottom: -15px;
-                            left: 50%;
-                            transform: translateX(-50%);
-                        }
-                        &.always-show {
-                            display: block;
-                        }
-                        &.primary {
-                            @include tooltip-theme($blue-darker);
-                        }
-                        &.inverted {
-                            @include tooltip-theme($black);
-                        }
-                        &.success {
-                            @include tooltip-theme($green-darker);
-                        }
-                        &.danger {
-                            @include tooltip-theme($red-darker);
-                        }
-                        &.warning {
-                            @include tooltip-theme($yellow-darker);
-                        }
-                        &.purple {
-                            @include tooltip-theme($purple-darker);
-                        }
-                    }
-                    [class*="custom-slider-icon-"] {
-                        position: absolute;
-                        top: 50%;
-                        transform: translateY(-50%);
-                        svg {
-                            width: 12px;
-                            fill: $white;
-                        }
-                    }
-                    .custom-slider-icon-left {
-                        left: 12px;
-                    }
-                    .custom-slider-icon-right {
-                        right: 12px;
-                    }
-                }
-                .custom-slider-label {
-                    position: absolute;
-                    top: 20px;
-                    font-size: 12px;
-                    white-space: nowrap;
-                    transform: translateX(-46%);
-                    &.show-ticks {
-                        &:before {
-                            content: "|";
-                            position: absolute;
-                            left: 50%;
-                            transform: translateX(-50%);
-                            top: -12px;
-                            font-size: 8px;
-                            line-height: 1;
-                            font-weight: bold;
-                        }
-                    }
-                }
-                &.with-transitions {
-                    .custom-slider-slider-after {
-                        transition: width $transition-time ease-out, transform $transition-time linear;
-                    }
-                    .custom-slider-thumb {
-                        transition: left $transition-time ease-out, transform $transition-time ease-in-out, box-shadow $transition-time ease-in;
-                    }
-                }
-            }
-        }
-        &.has-labels {
-            input[type="range"] {
-                margin-bottom: 30px;
-            }
-        }
+.#{$sliderTickmarkLabelName} {
+    top: 0.5rem;
+    position: absolute;
+    font-size: $font-size-xs;
+    white-space: nowrap;
+    transform: translateX(-50%);
+}
 
-        &.alternative {
-            input[type="range"] {
-                // Thumb
-                &::-webkit-slider-thumb {
-                    @include thumb-styles-alternative();
-                }
-                &::-moz-range-thumb {
-                    @include thumb-styles-alternative();
-                    transform: none;
-                }
-                &::-ms-thumb {
-                    @include thumb-styles-alternative();
-                }
-            }
-
-            .custom-slider-holder {
-                padding: 0 28px;
-                .custom-slider-track {
-                    .custom-slider-slider-before {
-                        width: calc(100% + #{$slider-width-alternative});
-                        margin: 0 -28px;
-                    }
-                    .custom-slider-slider-after {
-                        margin: 0 -28px;
-                    }
-                    .custom-slider-thumb {
-                        border-radius: 4px;
-                        width: $slider-width-alternative;
-                        height: $slider-height-alternative;
-                        top: -14px;
-                    }
-                }
-            }
-        }
-    }
-    &.disabled {
-        > div.input-field {
-            > input[type="range"] {
-                cursor: default;
-            }
-            > div.custom-slider-holder {
-                > div.custom-slider-track {
-                    > div.custom-slider-slider-before {
-                        background-color: $disabled-unselected;
-                        &:before {
-                            background-color: $disabled-unselected;
-                        }
-                    }
-                    > div.custom-slider-slider-after {
-                        background-color: $disabled-selected;
-                        &:after {
-                            background-color: $disabled-selected;
-                        }
-                    }
-                    > div.custom-slider-thumb {
-                        background-color: $disabled-thumb-bg;
-                        border-color: $disabled-thumb-border-color;
-                    }
-                }
-            }
-        }
-    }
-    .alert {
-        padding: 0px 2px;
-        margin: 0;
-        &.alert-danger {
-            color: $red;
-            background: none;
-            border: none;
-            border-radius: 0px;
-            width: 100%;
-        }
-    } // Themes
-    .input-field .custom-slider-holder {
-        &.primary {
-            @include setTheme($blue-darker, $blue-dark);
-        }
-        &.inverted {
-            @include setTheme($black, $black);
-        }
-        &.success {
-            @include setTheme($green-darker, $green-dark);
-        }
-        &.danger {
-            @include setTheme($red-darker, $red-dark);
-        }
-        &.warning {
-            @include setTheme($yellow-darker, $yellow-dark);
-        }
-        &.purple {
-            @include setTheme($purple-darker, $purple-dark);
-        }
-    }
-    > .progress-feedback {
-        &:before {
-            display: none;
-        }
+.#{$sliderTickmarkLabelName}--ticks {
+    &:before {
+        content: "|";
+        position: absolute;
+        left: 50%;
+        top: -($font-size-xs * 0.85);
+        font-size: ($font-size-xs * 0.55);
+        line-height: 1;
+        font-weight: bold;
     }
 }
 
-// IE
-@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
-    .form-group.custom-slider {
-        .input-field {
-            input[type="range"] {
-                padding: 0;
+.#{$sliderInputFieldName}--alt {
+    input[type="range"] {
+        @each $browser in $sliderThumbBrowserList {
+            &::#{$browser} {
+                @include slider-thumb-alt();
+            }
+        }
+        @each $browser in $sliderTrackBrowserList {
+            &::#{$browser} {
+                @include slider-track($sliderThumbAltWidth);
             }
         }
     }
+    .#{$sliderTickmarkName},
+    .#{$sliderTooltipWrapperName} {
+        @include slider-tickmark-track-alt();
+    }
 }
 
-@-moz-document url-prefix() {
-    .form-group.custom-slider {
-        .input-field {
+.#{$sliderTooltipWrapperName}--force-show {
+    display: block;
+}
+
+@each $name, $theme in $themes {
+    .#{$sliderName}--#{$name} {
+        .#{$sliderInputFieldName} {
+            --slider-primary-color: #{map-get($theme, "trackColor")};
             input[type="range"] {
-                padding: 0;
+                @each $browser in $sliderThumbBrowserList {
+                    &::#{$browser} {
+                        background-color: map-get($theme, "thumbColor");
+                        box-shadow: $box-shadow, 0px 2px 2px 0 rgba(map-get($theme, "thumbColor"), 0.45);
+                    }
+                }
+            }
+        }
+    }
+    .#{$sliderTooltipWrapperName}--#{$name} {
+        .#{$sliderTooltipName} {
+            background-color: map-get($theme, "trackColor");
+            box-shadow: $box-shadow, 0px 2px 2px 0 rgba(map-get($theme, "trackColor"), 0.45);
+            &::after {
+                border-color: #{map-get($theme, "trackColor")} transparent transparent transparent;
             }
         }
     }

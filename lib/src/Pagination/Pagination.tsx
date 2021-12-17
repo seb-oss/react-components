@@ -39,11 +39,35 @@ export type PaginationProps = JSX.IntrinsicElements["nav"] & {
     showFirstAndLast?: boolean;
     /** The index of the current page. The index is based on the children rendered starting from 0. */
     value?: number;
+    /** First page link props */
+    firstPageLinkProps?: PageProps;
+    /** Last page link props */
+    lastPageLinkProps?: PageProps;
+    /** Next page link props */
+    nextPageLinkProps?: PageProps;
+    /** Previous page link props */
+    previousPageLinkProps?: PageProps;
 };
 
 export const Pagination: React.FunctionComponent<PaginationProps> = React.memo(
     React.forwardRef(
-        ({ navs = {}, offset = 5, onPageChange, size = "md", useDotNav, showFirstAndLast: useFirstAndLast, value = 0, ...props }: PaginationProps, ref: React.ForwardedRef<HTMLElement>) => {
+        (
+            {
+                navs = {},
+                offset = 5,
+                onPageChange,
+                size = "md",
+                useDotNav,
+                showFirstAndLast: useFirstAndLast,
+                value = 0,
+                firstPageLinkProps = {},
+                lastPageLinkProps = {},
+                nextPageLinkProps = {},
+                previousPageLinkProps = {},
+                ...props
+            }: PaginationProps,
+            ref: React.ForwardedRef<HTMLElement>
+        ) => {
             const total: number = React.Children.count(props.children);
             const indexOfLastItem: number = total - 1;
             const disablePrev: boolean = total < 2 || value === 0;
@@ -51,18 +75,20 @@ export const Pagination: React.FunctionComponent<PaginationProps> = React.memo(
 
             const renderPages = (): React.ReactElement[] => {
                 const childrenArray: React.ReactElement[] =
-                    React.Children.map(props.children, (Child: React.ReactElement<PageProps>, i: number) =>
-                        React.isValidElement<PageProps>(Child)
+                    React.Children.map(props.children, (Child: React.ReactElement<PageProps>, i: number) => {
+                        const anchorProps: JSX.IntrinsicElements["a"] = { "aria-current": value === i };
+                        return React.isValidElement<PageProps>(Child)
                             ? React.cloneElement<any>(Child, {
                                   "data-active": value === i,
                                   "data-index-number": i,
                                   key: i,
+                                  anchorProps: Child.props.anchorProps ? { ...Child.props.anchorProps, ...anchorProps } : anchorProps,
                                   onClick: (e: React.MouseEvent<HTMLLIElement>) => {
                                       onPageChange && onPageChange(parseInt(e.currentTarget.dataset.indexNumber, 10));
                                   },
                               })
-                            : Child
-                    ) || [];
+                            : Child;
+                    }) || [];
 
                 if (offset) {
                     /** The distance between the current value and the offset from the left. Example: ...👉|3|4|👈|(5)|6|7|... */
@@ -115,17 +141,29 @@ export const Pagination: React.FunctionComponent<PaginationProps> = React.memo(
             const disableLast: boolean = disableNext || filteredPages[filteredPages.length - 1].key !== "post-ellipsis";
 
             return (
-                <nav {...props} ref={ref} className={classnames("rc", props.className)}>
+                <nav {...props} role="navigation" ref={ref} className={classnames("rc", props.className)}>
                     <ul className={classnames("pagination", { [`pagination-${size}`]: size, dotnav: useDotNav })}>
                         {props.children && (
                             <>
                                 {showFirst && (
-                                    <Page className="first-nav" onClick={() => !disableFirst && onPageChange(0)} data-disabled={disableFirst} href={props.children[0]?.props?.href}>
+                                    <Page
+                                        {...firstPageLinkProps}
+                                        className="first-nav"
+                                        onClick={() => !disableFirst && onPageChange(0)}
+                                        data-disabled={disableFirst}
+                                        href={props.children[0]?.props?.href}
+                                    >
                                         {navs?.first || ChevronDoubleLeftIcon}
                                     </Page>
                                 )}
                                 {!useDotNav && (
-                                    <Page className="previous-nav" onClick={() => !disablePrev && onPageChange(value - 1)} data-disabled={disablePrev} href={props.children[value - 1]?.props?.href}>
+                                    <Page
+                                        {...previousPageLinkProps}
+                                        className="previous-nav"
+                                        onClick={() => !disablePrev && onPageChange(value - 1)}
+                                        data-disabled={disablePrev}
+                                        href={props.children[value - 1]?.props?.href}
+                                    >
                                         {navs?.previous || ChevronLeftIcon}
                                     </Page>
                                 )}
@@ -133,12 +171,19 @@ export const Pagination: React.FunctionComponent<PaginationProps> = React.memo(
                                 {filteredPages}
 
                                 {!useDotNav && (
-                                    <Page className="next-nav" onClick={() => !disableNext && onPageChange(value + 1)} data-disabled={disableNext} href={props.children[value + 1]?.props?.href}>
+                                    <Page
+                                        {...nextPageLinkProps}
+                                        className="next-nav"
+                                        onClick={() => !disableNext && onPageChange(value + 1)}
+                                        data-disabled={disableNext}
+                                        href={props.children[value + 1]?.props?.href}
+                                    >
                                         {navs?.next || React.cloneElement(ChevronLeftIcon, { className: "h-flipped" })}
                                     </Page>
                                 )}
                                 {showLast && (
                                     <Page
+                                        {...lastPageLinkProps}
                                         className="last-nav"
                                         onClick={() => !disableLast && onPageChange(indexOfLastItem)}
                                         data-disabled={disableLast}

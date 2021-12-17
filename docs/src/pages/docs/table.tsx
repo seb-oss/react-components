@@ -8,9 +8,10 @@ import { checkDynamicFormSelectedKey } from "@utils/helpers";
 import { Textbox } from "@sebgroup/react-components/Textbox";
 import { filterArrayByColumns, onRowSelect, paginate, searchTextByColumns, sortArray } from "@sebgroup/react-components/Table/parts/helperFunctions";
 import { SortedColumn } from "@sebgroup/react-components/Table/TableContextProvider";
-import { FilterColumn, GenericTableRow } from "@sebgroup/react-components/Table/table-typings";
+import { FilterColumn, GenericTableRow, SortDirection } from "@sebgroup/react-components/Table/table-typings";
 import { NumberedPagination } from "@sebgroup/react-components/Pagination/NumberedPagination";
 import { CodeSnippet } from "@common/CodeSnippet";
+import { Button } from "@sebgroup/react-components/Button";
 
 const importString: string = require("!raw-loader!@sebgroup/react-components/Table/Table");
 const code: string = `<Table>
@@ -48,6 +49,9 @@ interface Column<T = TableDataProps> {
     label: string;
 }
 
+const ascendingLabel: "ascending" = `ascending`;
+const descendingLabel: "descending" = `descending`;
+
 const TablePage: React.FC = (): React.ReactElement<void> => {
     const [paginationValue, setPaginationValue] = React.useState<number>(0);
     const [pages, setPages] = React.useState<number>(0);
@@ -56,6 +60,7 @@ const TablePage: React.FC = (): React.ReactElement<void> => {
     const [selectAllIndicator, setSelectAllIndicator] = React.useState<any>({ checked: false, indeterminate: false });
     const [dropDownListSelected, setDropdownListSelected] = React.useState<Array<string>>([]);
     const [filterColumns, setFilterColumns] = React.useState<Array<FilterColumn>>([]);
+    const [sortedColumn, setSortedColumn] = React.useState<SortedColumn>(null);
 
     const [renderControls, { controls }] = useDynamicForm([
         {
@@ -113,6 +118,17 @@ const TablePage: React.FC = (): React.ReactElement<void> => {
         [searchText]
     );
 
+    const getSortOrder = (column: Column) => {
+        if (!sortedColumn || sortedColumn?.accessor !== column.accessor) {
+            return "none";
+        }
+        return sortedColumn?.sortDirection === SortDirection.ASC ? ascendingLabel : descendingLabel;
+    };
+
+    const getSortOrderLabel = (column: Column) => {
+        return sortedColumn?.accessor === column.accessor && sortedColumn?.sortDirection === SortDirection.DESC ? ascendingLabel : descendingLabel;
+    };
+
     React.useEffect(() => setData(filterArrayByColumns(defaultData, filterColumns)), [filterColumns]);
     React.useEffect(() => setDropdownListSelected([]), [enableFilter]);
     React.useEffect(() => setPages(Math.floor(defaultData.length / pagingSize)), [pagingSize, defaultData]);
@@ -127,7 +143,12 @@ const TablePage: React.FC = (): React.ReactElement<void> => {
                     <Table
                         theme={enableDark ? "dark" : "light"}
                         onSort={
-                            enableSorting ? (sortedColumn: SortedColumn) => sortedColumn && setData(sortArray(data, sortedColumn.accessor as keyof TableDataProps, sortedColumn.sortDirection)) : null
+                            enableSorting
+                                ? (newSortedColumn: SortedColumn) => {
+                                      setSortedColumn(newSortedColumn);
+                                      newSortedColumn && setData(sortArray(data, newSortedColumn.accessor as keyof TableDataProps, newSortedColumn.sortDirection));
+                                  }
+                                : null
                         }
                         onRowSelect={
                             enableRowSelection
@@ -154,10 +175,16 @@ const TablePage: React.FC = (): React.ReactElement<void> => {
                         }
                     >
                         <TableHeader>
-                            <TableRow {...selectAllIndicator}>
+                            <TableRow {...selectAllIndicator} checkboxProps={{ "aria-label": "Select all rows" }}>
                                 {columns.map((item: Column, index: number) => (
-                                    <TableHeaderCell {...item} key={index}>
-                                        {item.label}
+                                    <TableHeaderCell {...item} key={index} scope="col" aria-sort={getSortOrder(item)}>
+                                        {enableSorting ? (
+                                            <Button theme="secondary" className="p-0 text-dark" aria-label={`sort by ${item.label} in ${getSortOrderLabel(item)} order`}>
+                                                {item.label}
+                                            </Button>
+                                        ) : (
+                                            item.label
+                                        )}
                                     </TableHeaderCell>
                                 ))}
                             </TableRow>
@@ -165,7 +192,18 @@ const TablePage: React.FC = (): React.ReactElement<void> => {
                         <TableBody>
                             {data.map((row: GenericTableRow<TableDataProps>, rowIndex: number) => (
                                 <React.Fragment key={`row-${rowIndex}`}>
-                                    <TableRow uniqueKey={row.firstName} checked={row.checked} isExpanded={row.expanded}>
+                                    <TableRow
+                                        uniqueKey={row.firstName}
+                                        checked={row.checked}
+                                        isExpanded={row.expanded}
+                                        checkboxProps={{
+                                            "aria-label": `Select row ${row.firstName} ${row.lastName}`,
+                                        }}
+                                        collapseButtonProps={{
+                                            "aria-controls": row.subRows.map((_, subIndex: number) => `${row.firstName}-sub-${subIndex}`).join(" "),
+                                            "aria-label": `Expand details for ${row.firstName} ${row.lastName}`,
+                                        }}
+                                    >
                                         {columns.map((item: Column, index: number) => {
                                             return (
                                                 <TableCell {...item} key={index}>
@@ -176,7 +214,7 @@ const TablePage: React.FC = (): React.ReactElement<void> => {
                                     </TableRow>
                                     {enableSubRows &&
                                         row.subRows?.map((sub: TableDataProps, subIndex: number) => (
-                                            <TableRow isSubRow key={`rowsub-${subIndex}`}>
+                                            <TableRow isSubRow key={`rowsub-${subIndex}`} id={`${row.firstName}-sub-${subIndex}`}>
                                                 {columns.map((item, index) => {
                                                     return (
                                                         <TableCell {...item} key={`rowsub-${subIndex}-${index}`}>
