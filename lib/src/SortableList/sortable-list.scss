@@ -5,6 +5,8 @@
     .drop-container {
         position: relative;
         width: 100%;
+        list-style: none;
+        padding-inline-start: 0;
         > .sortable-item-wrapper {
             width: 100%;
             transition: transform 200ms;
@@ -52,6 +54,14 @@
     border-radius: 0.25rem;
     border: 1px solid $gray-300;
     padding: 0.25rem 0.75rem;
+    &.on-drag {
+        background-color: $white;
+        position: fixed;
+        top: -$zindex-tooltip;
+        left: -$zindex-tooltip;
+        opacity: 1;
+        z-index: $zindex-tooltip;
+    }
     &.on-drag,
     &:active {
         cursor: grabbing;
