@@ -183,14 +183,12 @@ export const SortableList: React.FC<SortableListProps> = ({ onSort, className, d
                 case Key.Space:
                 case Key.Enter:
                     event.preventDefault();
-                    console.log(selectedItemIndex, currentItemIndex);
                     setCurrentItemIndex((oldItemIndex: number) => (oldItemIndex === null ? selectedItemIndex : null));
                     break;
                 case Key.ArrowRight:
                 case Key.ArrowDown:
                     event.preventDefault();
                     setCurrentItemIndex((oldItemIndex: number) => {
-                        console.log(event.key, oldItemIndex, oldItemIndex !== null, selectedItemIndex, defaultOrders.length - 1);
                         if (oldItemIndex !== null && selectedItemIndex < defaultOrders.length - 1) {
                             onItemSwap(selectedItemIndex, selectedItemIndex + 1, (event.target as HTMLDivElement).nextElementSibling as HTMLDivElement);
                             return selectedItemIndex;

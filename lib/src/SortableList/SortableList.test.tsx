@@ -179,9 +179,6 @@ describe("Component: SortableList", () => {
                     });
                 },
             },
-            // { statement: "on arrow up button pressed", result: [], triggerEvent: () => Simulate.keyDown(container.querySelector(".stepper-preview"), { key: "ArrowUp" }) },
-            // { statement: "on arrow right button click", result: [], triggerEvent: () => Simulate.keyDown(container.querySelector(".stepper-preview"), { key: "ArrowRight" }) },
-            // { statement: "on home button click", result: [], triggerEvent: () => Simulate.keyDown(container.querySelector(".stepper-preview"), { key: "Home" }) },
         ];
         testCases.map((testCase: ListTestCase) => {
             it(testCase.statement, () => {
