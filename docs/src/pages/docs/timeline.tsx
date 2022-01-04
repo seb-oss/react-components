@@ -32,7 +32,7 @@ const TimelinePage: React.FC = React.memo(() => {
         <Docs
             mainFile={importString}
             example={
-                <Timeline direction={controls.direction}>
+                <Timeline direction={controls.direction as TimelineDirection} aria-label={"Timeline for good old days"}>
                     <TimelineItem header="Current Day" time="2016 - Present" onClick={handleClick} data-index-number="0">
                         {contents[0]}
                     </TimelineItem>

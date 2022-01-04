@@ -63,6 +63,8 @@ export interface VideoProps {
     startTime?: number;
     /** `Support Youtube only` specifies the time, measured in seconds from the start of the video, when the player should stop playing the video. */
     endTime?: number;
+    /** Video title */
+    title?: string;
     /** `Support Vimeo only` to enable informal error messages in the player */
     vimeoFunMode?: boolean;
     /** `Support Youtube only` identifies the URL where the player is embedded */

@@ -37,7 +37,7 @@ export const Video: React.FC<VideoProps> = (props: VideoProps) => {
 
     return (
         <div className={classnames("rc", "video-holder-component", props.className)} id={props.id}>
-            <iframe src={src} height={props.height} width={props.width} allowFullScreen={props.allowFullScreen} name={props.name} frameBorder={0} />
+            <iframe title={props.title} src={src} height={props.height} width={props.width} allowFullScreen={props.allowFullScreen} name={props.name} frameBorder={0} />
         </div>
     );
 };

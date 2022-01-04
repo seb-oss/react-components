@@ -58,6 +58,7 @@ const ImagePage: React.FC = (): React.ReactElement<void> => {
                 <div className="w-100 h-100">
                     <Img
                         src={withPrefix("/images/rabbit-on-the-spot.jpg")}
+                        alt="Cute rabbit"
                         type={controls.imgType}
                         width={controls.width}
                         height={controls.height}
@@ -65,6 +66,7 @@ const ImagePage: React.FC = (): React.ReactElement<void> => {
                         thumbnail={controls.thumbnail}
                         responsive={controls.responsive}
                         bgFixed={controls.bgFixed}
+                        aria-label="Cute rabbit"
                     >
                         {controls.showChildren && (
                             <div className="p-3">
