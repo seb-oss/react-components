@@ -26,7 +26,7 @@ const positions: Array<DynamicFormOption<ModalPosition>> = [
 
 const NotificationPage: React.FC = () => {
     const [toggle, setToggle] = React.useState<boolean>(false);
-    const toggleButtonRef = React.useRef<HTMLButtonElement>();
+    const toggleButtonRef: React.MutableRefObject<HTMLButtonElement> = React.useRef<HTMLButtonElement>();
 
     const [renderForm, { controls }] = useDynamicForm([
         {
