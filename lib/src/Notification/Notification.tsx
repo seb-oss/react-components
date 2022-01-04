@@ -14,6 +14,8 @@ type CommonProps = JSX.IntrinsicElements["div"] & {
     theme?: "purple" | "primary" | "danger" | "success" | "warning" | "inverted";
     /** Property sets whether the notification is toggled */
     toggle?: boolean;
+    /** content wrapper props */
+    contentWrapperProps?: JSX.IntrinsicElements["div"];
 };
 
 interface SlideNotification extends CommonProps {
@@ -37,8 +39,12 @@ const safeDocument: Document | null = typeof document !== "undefined" ? document
 
 /** An alert which pops up on the page to inform the user of an event which occured and optionally provide actions to perform. */
 export const Notification: React.FC<NotificationProps> = React.forwardRef(
-    ({ toggle, type = "slide", theme = "purple", position = "bottom-left", onDismiss, dismissTimeout = 5000, persist, ...props }: NotificationProps, ref: React.ForwardedRef<HTMLDivElement>) => {
+    (
+        { toggle, type = "slide", theme = "purple", position = "bottom-left", onDismiss, dismissTimeout = 5000, persist, contentWrapperProps = {}, ...props }: NotificationProps,
+        ref: React.ForwardedRef<HTMLDivElement>
+    ) => {
         const timerRef: React.MutableRefObject<any> = React.useRef();
+        const [isAnimationEnded, setIsAnimationEnded] = React.useState<boolean>(false);
         const [disableAnimation, setDisableAnimation] = React.useState<boolean>(true);
 
         React.useEffect(() => {
@@ -52,6 +58,7 @@ export const Notification: React.FC<NotificationProps> = React.forwardRef(
                 }
             } else {
                 clearTimeout(timerRef.current);
+                setIsAnimationEnded(false);
             }
         }, [toggle]);
 
@@ -63,6 +70,7 @@ export const Notification: React.FC<NotificationProps> = React.forwardRef(
             ? null
             : createPortal(
                   <div
+                      {...props}
                       ref={ref}
                       className={classnames(
                           "rc",
@@ -76,13 +84,13 @@ export const Notification: React.FC<NotificationProps> = React.forwardRef(
                           position,
                           props.className
                       )}
-                      {...props}
                       onAnimationEnd={(e) => {
                           props.onAnimationEnd && props.onAnimationEnd(e);
                           !toggle && setDisableAnimation(true);
+                          setIsAnimationEnded(toggle);
                       }}
                   >
-                      <div className={classnames(`content-wrapper`, { clickable: props.onClick })} {...props}>
+                      <div {...contentWrapperProps} className={classnames(`content-wrapper`, { clickable: props.onClick, visible: isAnimationEnded })}>
                           {props.children}
                           <button className="close" onClick={onDismiss}></button>
                       </div>
