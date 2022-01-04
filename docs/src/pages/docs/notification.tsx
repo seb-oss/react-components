@@ -44,6 +44,7 @@ const NotificationPage: React.FC = () => {
                 { key: "theme", label: "theme", controlType: "Dropdown", options: themes, value: themes[0].value },
                 { key: "persist", label: "persist", value: false, controlType: "Checkbox", description: "Disable timer and persist the notification until dismissed" },
                 { key: "type", label: "type", controlType: "Radio", options: types, value: types[0].value },
+                { key: "header", label: "header", controlType: "Text", value: "Sunt qui quasi nam." },
                 { key: "slidePosition", label: "position", controlType: "Dropdown", options: slidePositions, value: slidePositions[0].value, rulerKey: "type", condition: types[0].value },
                 { key: "barPosition", label: "position", controlType: "Radio", options: barPositions, value: barPositions[0].value, rulerKey: "type", condition: types[1].value },
             ],
@@ -58,13 +59,14 @@ const NotificationPage: React.FC = () => {
                     <Button onClick={() => setToggle(!toggle)}>Toggle notification</Button>
                     <Notification
                         toggle={toggle}
-                        type={controls.type}
-                        theme={controls.theme}
-                        position={controls.type === "slide" ? controls.slidePosition : controls.barPosition}
+                        type={controls.type as any}
+                        theme={controls.theme as NotificationProps["theme"]}
+                        position={(controls.type === "slide" ? controls.slidePosition : controls.barPosition) as NotificationProps["position"]}
                         onDismiss={() => setToggle(false)}
-                        persist={controls.persist}
+                        persist={controls.persist as NotificationProps["persist"]}
+                        aria-live="polite"
                     >
-                        <div className="notification-header">Sunt qui quasi nam.</div>
+                        <div className="notification-header">{controls.header}</div>
                         <div className="notification-body">
                             Eaque dolorem nisi qui ut nemo perferendis. Veniam voluptates alias voluptatum ratione. Et alias incidunt maiores provident rem ea molestiae ea.
                         </div>

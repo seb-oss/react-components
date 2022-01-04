@@ -13,6 +13,11 @@
         position: relative;
         min-height: 30px;
         padding: 8px 13px;
+        > * {
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 200ms;
+        }
 
         > .notification-header {
             font-weight: 500;
@@ -26,6 +31,13 @@
             position: absolute;
             top: 5px;
             right: 5px;
+        }
+
+        &.visible {
+            > * {
+                visibility: visible;
+                opacity: 1;
+            }
         }
     }
 
