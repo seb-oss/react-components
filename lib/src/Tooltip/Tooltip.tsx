@@ -3,6 +3,7 @@ import { Overlay } from "./Overlay";
 import classnames from "classnames";
 import { ElementPosition } from "./useOverlay";
 import "./tooltip.scss";
+import { randomId } from "@sebgroup/frontend-tools/randomId";
 
 const InfoCircleIcon: JSX.Element = (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
@@ -48,10 +49,12 @@ export const Tooltip: React.FC<TooltipProps> = ({
     forceShow,
     onVisibleChange,
     tooltipWrapperProps,
+    id,
     ...props
 }: TooltipProps) => {
     const containerRef: React.RefObject<HTMLDivElement> = React.useRef();
     const contentRef: React.RefObject<HTMLDivElement> = React.useRef();
+    const [tooltipId, setTooltipId] = React.useState<string>(id);
     const [show, setShow] = React.useState<boolean>(false);
 
     /**
@@ -79,8 +82,12 @@ export const Tooltip: React.FC<TooltipProps> = ({
     const onTouchEndEvent = (e: React.TouchEvent<HTMLDivElement>) => onTouch(e, false);
     const onFocusEvent = (e: React.FocusEvent<HTMLDivElement>) => onTooltipToggle(e, true);
 
+    React.useEffect(() => {
+        setTooltipId(id || randomId("rc-tooltip-"));
+    }, [id]);
+
     return (
-        <div className={classnames("tooltip-container", className)} {...props}>
+        <div {...props} className={classnames("tooltip-container", className)} id={tooltipId}>
             <div
                 ref={containerRef}
                 className={classnames("tooltip-reference", { cursor: trigger === "click" })}
@@ -95,13 +102,21 @@ export const Tooltip: React.FC<TooltipProps> = ({
                 {props.children ? (
                     React.Children.count(props.children) === 1 ? (
                         React.Children.map(props.children, (Child: React.ReactElement) => {
-                            return Object(Child) !== Child ? <span className="text-help">{Child}</span> : Child;
+                            return Object(Child) !== Child ? (
+                                <span className="text-help" aria-describedby={tooltipId}>
+                                    {Child}
+                                </span>
+                            ) : (
+                                Child
+                            );
                         })
                     ) : (
                         props.children
                     )
                 ) : (
-                    <div className="default-content">{InfoCircleIcon}</div>
+                    <div className="default-content" aria-describedby={tooltipId}>
+                        {InfoCircleIcon}
+                    </div>
                 )}
             </div>
             <TooltipContentContainer
