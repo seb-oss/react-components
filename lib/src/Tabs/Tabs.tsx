@@ -2,6 +2,7 @@ import React from "react";
 import { TabItemProps } from "./TabItem";
 import classnames from "classnames";
 import { useCombinedRefs } from "../hooks/useCombinedRef";
+import { Key } from "../utils";
 
 export type TabsProps = JSX.IntrinsicElements["ul"] & {
     /** Index of focsued tab */
@@ -17,6 +18,7 @@ export type TabsProps = JSX.IntrinsicElements["ul"] & {
 export const Tabs: React.FC<TabsProps> = React.forwardRef(({ value, onTabChange, autoSelectOnFocus, onTabDelete, ...props }: TabsProps, ref: React.ForwardedRef<HTMLUListElement>) => {
     const tabsRef: React.MutableRefObject<HTMLUListElement> = useCombinedRefs(ref);
     const [focusedIndex, setFocusedIndex] = React.useState<number>(value);
+    const [listItems, setListItems] = React.useState<HTMLAnchorElement[]>([]);
 
     const navigateToTab = (target: HTMLAnchorElement, event: React.MouseEvent | React.KeyboardEvent) => {
         const nextFocusedIndex: number = parseInt(target.dataset.indexNumber);
@@ -30,30 +32,43 @@ export const Tabs: React.FC<TabsProps> = React.forwardRef(({ value, onTabChange,
         navigateToTab(event.currentTarget, event);
     };
 
+    const focusTab = (index: number, event: React.KeyboardEvent<HTMLUListElement>) => {
+        setFocusedIndex(index);
+        listItems[index]?.focus();
+        if (autoSelectOnFocus) {
+            navigateToTab(listItems[index], event);
+        }
+    };
+
     const onKeyDown = (event: React.KeyboardEvent<HTMLUListElement>) => {
-        const items: HTMLAnchorElement[] = Array.from(tabsRef.current.querySelectorAll(".nav-tabs > .rc.nav-item > .nav-link"));
         switch (event.key) {
-            case "Enter":
-            case " ":
+            case Key.Enter:
+            case Key.Space:
                 navigateToTab(event.target as HTMLAnchorElement, event);
                 break;
-            case "ArrowLeft":
-            case "ArrowRight":
-                const direction: number = event.key === "ArrowLeft" ? -1 : 1;
-                const nextFocusedIndex: number = focusedIndex + direction;
-                if (nextFocusedIndex >= 0 && nextFocusedIndex < items.length) {
-                    setFocusedIndex(nextFocusedIndex);
-                    items[nextFocusedIndex]?.focus();
-                    if (autoSelectOnFocus) {
-                        navigateToTab(items[nextFocusedIndex], event);
-                    }
+            case Key.ArrowLeft:
+            case Key.ArrowRight:
+                const direction: number = event.key === Key.ArrowLeft ? -1 : 1;
+                const nextFocusedIndex: number = (focusedIndex + listItems.length + direction) % listItems.length;
+                if (nextFocusedIndex >= 0 && nextFocusedIndex < listItems.length) {
+                    focusTab(nextFocusedIndex, event);
                 }
                 break;
-            case "Delete":
+            case Key.Home:
+                focusTab(0, event);
+                break;
+            case Key.End:
+                focusTab(listItems.length - 1, event);
+                break;
+            case Key.Delete:
                 onTabDelete && onTabDelete(focusedIndex);
                 break;
         }
     };
+
+    React.useLayoutEffect(() => {
+        setListItems(tabsRef.current ? Array.from(tabsRef.current.querySelectorAll(".nav-tabs > .rc.nav-item > .nav-link")) : []);
+    }, [tabsRef]);
 
     return (
         <ul {...props} ref={tabsRef} className={classnames("rc nav nav-tabs", props.className)} role={props.role || "tablist"} onKeyDown={onKeyDown}>

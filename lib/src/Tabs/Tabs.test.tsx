@@ -90,6 +90,18 @@ describe("Component: Tabs", () => {
                 props: { value: 1 },
             },
             {
+                statement: "focus first element on home button pressed",
+                triggerEvent: () => Simulate.keyDown(container.querySelector(".nav-tabs"), { key: "Home" }),
+                expectedOutcome: () => expect(document.activeElement.textContent).toBe(tabItems[0]),
+                props: { value: 1 },
+            },
+            {
+                statement: "focus first element on end button pressed",
+                triggerEvent: () => Simulate.keyDown(container.querySelector(".nav-tabs"), { key: "End" }),
+                expectedOutcome: () => expect(document.activeElement.textContent).toBe(tabItems[tabItems.length - 1]),
+                props: { value: 1 },
+            },
+            {
                 statement: "set tab item as active on spacebar pressed",
                 triggerEvent: () => Simulate.keyDown(container.querySelector(".nav-tabs"), { key: " " }),
                 expectedOutcome: () => expect(onTabChange).toBeCalled(),
