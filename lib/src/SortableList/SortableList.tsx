@@ -182,7 +182,6 @@ export const SortableList: React.FC<SortableListProps> = ({ onSort, className, d
             switch (event.key) {
                 case Key.Space:
                 case Key.Enter:
-                    event.preventDefault();
                     setCurrentItemIndex((oldItemIndex: number) => (oldItemIndex === null ? selectedItemIndex : null));
                     break;
                 case Key.ArrowRight:
