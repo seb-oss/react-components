@@ -18,9 +18,10 @@ export const TabItem: React.FC<TabItemProps> = React.forwardRef(({ wrapperProps 
                 href={props.href || "#"}
                 ref={ref}
                 role="tab"
-                tabIndex={0}
+                tabIndex={active ? 0 : -1}
                 aria-selected={active}
                 aria-controls={props["aria-controls"] || `link-${props.id}`}
+                data-disabled={disabled}
                 className={classnames("nav-link", { active, disabled }, props.className)}
             />
         </li>
