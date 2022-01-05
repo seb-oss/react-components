@@ -27,7 +27,7 @@ describe("Component: TimelineItem", () => {
         });
 
         expect(container).toBeDefined();
-        expect(container.firstElementChild.tagName.toLowerCase()).toEqual("div");
+        expect(container.firstElementChild.tagName.toLowerCase()).toEqual("li");
         expect(container.firstElementChild.classList.contains("rc")).toBeTruthy();
         expect(container.firstElementChild.classList.contains("timeline-item")).toBeTruthy();
         expect(container.querySelector(".content-wrapper")).not.toBeNull();

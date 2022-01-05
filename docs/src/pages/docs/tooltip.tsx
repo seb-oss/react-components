@@ -101,6 +101,7 @@ const TooltipPage: React.FC = () => {
                 mainFile={importString}
                 example={
                     <Tooltip
+                        id="tooltip-id"
                         content={checkSelectedKey("isCustomContent") ? nodeTooltipContent : defaultTooltipContent}
                         position={(controls as any)?.position}
                         theme={(controls as any)?.theme}
@@ -109,7 +110,11 @@ const TooltipPage: React.FC = () => {
                         forceShow={checkSelectedKey("forceShow")}
                         onVisibleChange={checkSelectedKey("isVisibleChanged") && (() => setNotifcationToggle(true))}
                     >
-                        {checkSelectedKey("isCustomReference") && <abbr className="custom-tooltip text-help">This is custom tooltip reference</abbr>}
+                        {checkSelectedKey("isCustomReference") && (
+                            <abbr className="custom-tooltip text-help" aria-describedby="tooltip-id">
+                                This is custom tooltip reference
+                            </abbr>
+                        )}
                     </Tooltip>
                 }
                 code={code}

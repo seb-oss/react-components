@@ -44,10 +44,12 @@ const CarouselPage: React.FC = (): React.ReactElement<void> => {
                         autoplay={controls.autoplay}
                         infinite={controls.infinite}
                         transitionStyle={controls.transitionStyle}
+                        aria-label="Image gallery"
+                        aria-level={2}
                     >
                         {images.map((image, i) => (
-                            <CarouselItem key={i}>
-                                <Img src={withPrefix(image)} responsive width="100%" />
+                            <CarouselItem key={i} aria-label={`image canvas ${i + 1}`} aria-level={3}>
+                                <Img src={withPrefix(image)} responsive width="100%" alt={`image ${i + 1}`} />
                             </CarouselItem>
                         ))}
                     </Carousel>

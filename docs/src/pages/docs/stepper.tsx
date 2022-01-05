@@ -46,7 +46,7 @@ const StepTrackerPage: React.FC = React.memo(() => {
     ]);
 
     const indicator: Indicator = React.useMemo(() => {
-        return controls.indicator ? { type: controls.indicatorType, message: "Indicator message" } : null;
+        return controls.indicator ? ({ type: controls.indicatorType, message: "Indicator message" } as Indicator) : null;
     }, [controls.indicator, controls.indicatorType]);
 
     return (
@@ -56,11 +56,11 @@ const StepTrackerPage: React.FC = React.memo(() => {
                 <div className="w-100">
                     <Stepper
                         label="Element label"
-                        min={controls.min}
-                        max={controls.max}
-                        onIncrease={() => setValue(value + 1)}
-                        onDecrease={() => setValue(value - 1)}
-                        disabled={controls.disabled}
+                        min={Number(controls.min)}
+                        max={Number(controls.max)}
+                        onIncrease={(_, isMax: boolean) => setValue(isMax ? Number(controls.max) : value + 1)}
+                        onDecrease={(_, isMin: boolean) => setValue(isMin ? Number(controls.min) : value - 1)}
+                        disabled={!!controls.disabled}
                         value={value}
                         indicator={indicator}
                     />

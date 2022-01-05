@@ -67,14 +67,19 @@ const PaginationPage: React.FC = (): React.ReactElement<void> => {
                     <Pagination
                         value={page}
                         onPageChange={setPage}
-                        offset={controls.offset}
-                        size={controls.size}
-                        useDotNav={controls.useDotNav}
-                        showFirstAndLast={controls.showFirstAndLast}
+                        offset={controls.offset as PaginationProps["offset"]}
+                        size={controls.size as PaginationProps["size"]}
+                        useDotNav={controls.useDotNav as PaginationProps["useDotNav"]}
+                        showFirstAndLast={controls.showFirstAndLast as PaginationProps["showFirstAndLast"]}
                         navs={controls.useCustomNavs ? customNavs : null}
+                        aria-label="Pagination example"
+                        firstPageLinkProps={{ "aria-label": "First page" }}
+                        lastPageLinkProps={{ "aria-label": "Last page" }}
+                        nextPageLinkProps={{ "aria-label": "Next page" }}
+                        previousPageLinkProps={{ "aria-label": "Previous page" }}
                     >
                         {(controls.useCustomPages ? customPaginations : [...Array(10)]).map((_: undefined, i: number) => (
-                            <Page key={i} href={`/pages/${i + 1}`}>
+                            <Page key={i} href={`/pages/${i + 1}`} anchorProps={{ "aria-label": `${page === i ? "Current page:" : "Go to page"} ${i + 1}` }}>
                                 {controls.useCustomPages ? _ : i + 1}
                             </Page>
                         ))}

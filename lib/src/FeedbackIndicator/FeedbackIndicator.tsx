@@ -1,5 +1,5 @@
-import React from "react";
 import classnames from "classnames";
+import React from "react";
 import "./feedback-indicator.scss";
 
 export type IndicatorType = "danger" | "warning" | "success" | "none";
@@ -12,6 +12,8 @@ type FeedbackIndicatorProps = React.PropsWithChildren<{
     message?: React.ReactNode;
     /** Disable feedback indicator border */
     noBorder?: boolean;
+    /** The feedback indicator identifier. */
+    id?: string;
 }>;
 /** A helper component to display feedback for children content */
 export const FeedbackIndicator: React.FC<FeedbackIndicatorProps> = (props: FeedbackIndicatorProps) => {
@@ -41,7 +43,11 @@ export const FeedbackIndicator: React.FC<FeedbackIndicatorProps> = (props: Feedb
                 {React.cloneElement<any>(Child as any, {
                     className: classnames((Child.props as any).className, `rc-d feedback feedback-${indicatorValue}`, { "no-border": props.noBorder }, { "mb-0": props.message }),
                 })}
-                {props.type && <p className={classnames("rc-d feedback-message")}>{props.message}</p>}
+                {props.type && (
+                    <p className={classnames("rc-d feedback-message")} role="alert" id={props.id}>
+                        {props.message}
+                    </p>
+                )}
             </>
         ) : (
             Child
