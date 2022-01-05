@@ -1,6 +1,8 @@
 export enum Key {
     ArrowDown = "ArrowDown",
     ArrowUp = "ArrowUp",
+    ArrowLeft = "ArrowLeft",
+    ArrowRight = "ArrowRight",
     Escape = "Escape",
     End = "End",
     Enter = "Enter",
@@ -9,6 +11,7 @@ export enum Key {
     PageUp = "PageUp",
     Space = " ",
     Tab = "Tab",
+    Delete = "Delete",
 }
 
 /**
