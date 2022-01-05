@@ -36,6 +36,7 @@ const NotificationPage: React.FC = () => {
                 { key: "position", label: "Position", controlType: "Radio", options: positions, value: positions[0].value },
                 { key: "centered", label: "centered", controlType: "Checkbox", value: false },
                 { key: "fullscreen", label: "fullscreen", controlType: "Checkbox", value: false },
+                { key: "trapfocus", label: "trapfocus", description: "Deprecated. Trap focus would be enabled by default.", controlType: "Checkbox", value: true },
                 { key: "autoFocus", label: "autoFocus", description: "Automatically focus on first focusable element. Auto focus will be enabled by default.", controlType: "Checkbox", value: true },
                 { key: "onEscape", label: "onEscape", controlType: "Checkbox", value: false },
                 { key: "onBackdropDismiss", label: "onBackdropDismiss", controlType: "Checkbox", value: false },
