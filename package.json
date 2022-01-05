@@ -5,13 +5,6 @@
     "license": "Apache-2.0",
     "main": "./index.js",
     "module": "./esm/index.js",
-    "exports": {
-        "./": {
-            "import": "./esm/",
-            "require": "./",
-            "default": "./"
-        }
-    },
     "keywords": [
         "react",
         "components",

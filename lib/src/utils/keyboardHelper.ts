@@ -11,6 +11,7 @@ export enum Key {
     PageUp = "PageUp",
     Space = " ",
     Tab = "Tab",
+    Delete = "Delete",
 }
 
 /**
