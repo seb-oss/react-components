@@ -24,6 +24,8 @@ export type ModalProps = JSX.IntrinsicElements["div"] & {
     position?: ModalPosition;
     /** Modal toggle */
     toggle?: boolean;
+    /** @deprecated since version 6.0.0. Trap focus would be enabled by default. */
+    trapFocus?: boolean;
     /** Automatically focuses on the first focusable element in the modal dialog */
     autoFocus?: boolean;
 };
