@@ -104,6 +104,7 @@ export interface FormInfo {
     dirty: boolean;
     hasErrors: boolean;
     hasWarnings: boolean;
+    isAllTruthy: boolean;
 }
 export type UseDynamicForm = [FormRenderFunction, DynamicFormInternalState, SetDynamicFormState, SetDynamicFormErrors, SetDynamicFormWarnings, DynamicFormMetaData, FormInfo];
 export function useDynamicForm(sections: DynamicFormSection[]): UseDynamicForm {
