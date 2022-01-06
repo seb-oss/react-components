@@ -3,6 +3,7 @@ import classnames from "classnames";
 import { SortableItemProps } from "./SortableItem";
 import "./dragtouch.polyfills";
 import "./sortable-list.scss";
+import { Key } from "../utils";
 
 const dragAndDropIcon: JSX.Element = (
     <svg width="10px" fill="currentColor" height="16px" viewBox="0 0 10 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">
@@ -162,6 +163,54 @@ export const SortableList: React.FC<SortableListProps> = ({ onSort, className, d
         [dragContainerRef, draggingOrders, dragNode, setIsDragging, setCurrentItemIndex, setCurrentItemNode, onSort, setDefaultOrders]
     );
 
+    const onItemSwap = React.useCallback(
+        (currentIndex: number, swapIndex: number, focusTarget: HTMLDivElement) => {
+            const newList: OrderItem[] = defaultOrders.slice(0);
+            const swapItem = newList[swapIndex];
+            newList[swapIndex] = newList[currentIndex]; // swap overlapped
+            newList[currentIndex] = swapItem;
+            onSort(newList.map(({ uniqueKey }: OrderItem) => uniqueKey));
+            setDefaultOrders(newList);
+            focusTarget.focus();
+        },
+        [defaultOrders]
+    );
+
+    const onKeyDown = React.useCallback(
+        (event: React.KeyboardEvent<HTMLDivElement>) => {
+            const selectedItemIndex: number = Number((event.target as HTMLDivElement).dataset?.index);
+            switch (event.key) {
+                case Key.Space:
+                case Key.Enter:
+                    setCurrentItemIndex((oldItemIndex: number) => (oldItemIndex === null ? selectedItemIndex : null));
+                    break;
+                case Key.ArrowRight:
+                case Key.ArrowDown:
+                    event.preventDefault();
+                    setCurrentItemIndex((oldItemIndex: number) => {
+                        if (oldItemIndex !== null && selectedItemIndex < defaultOrders.length - 1) {
+                            onItemSwap(selectedItemIndex, selectedItemIndex + 1, (event.target as HTMLDivElement).nextElementSibling as HTMLDivElement);
+                            return selectedItemIndex;
+                        }
+                        return oldItemIndex;
+                    });
+                    break;
+                case Key.ArrowLeft:
+                case Key.ArrowUp:
+                    event.preventDefault();
+                    setCurrentItemIndex((oldItemIndex: number) => {
+                        if (oldItemIndex !== null && selectedItemIndex > 0) {
+                            onItemSwap(selectedItemIndex, selectedItemIndex - 1, (event.target as HTMLDivElement).previousElementSibling as HTMLDivElement);
+                            return selectedItemIndex;
+                        }
+                        return oldItemIndex;
+                    });
+                    break;
+            }
+        },
+        [onItemSwap, defaultOrders]
+    );
+
     React.useEffect(() => {
         setDefaultOrders(() => {
             const newOrderList: OrderItem[] = React.Children.toArray(props.children)
@@ -179,11 +228,12 @@ export const SortableList: React.FC<SortableListProps> = ({ onSort, className, d
     }, [defaultOrders]);
 
     return (
-        <div {...props} className={classnames("rc", "sortable-list", className, { disabled })}>
-            <div className="drop-container" ref={dragContainerRef}>
-                {(currentItemIndex === null ? defaultOrders : draggingOrders).map((item: OrderItem, index) => (
+        <div role="application" className={classnames("rc", "sortable-list", className, { disabled })}>
+            <div {...props} className="drop-container" tabIndex={0} role="list" ref={dragContainerRef} onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => onKeyDown(event)}>
+                {(currentItemIndex === null ? defaultOrders : draggingOrders).map((item: OrderItem, index: number) => (
                     <SortableItemWrapper
                         key={index}
+                        index={index}
                         uniqueKey={item.uniqueKey}
                         disabled={disabled || item.disabled}
                         isActive={currentItemIndex !== null && item === defaultOrders[currentItemIndex]}
@@ -197,6 +247,7 @@ export const SortableList: React.FC<SortableListProps> = ({ onSort, className, d
                         onDragOver={isTranslating ? null : (event: React.DragEvent<HTMLDivElement>) => onDragOver(event, index)}
                         onDragEnd={onDragEnd}
                         onTransitionEnd={onTransitionEnd}
+                        aria-grabbed={currentItemIndex === index}
                     >
                         {React.Children.map(props.children, (Child: React.ReactElement<SortableItemProps>) => {
                             const { uniqueKey }: SortableItemProps = Child.props;
@@ -220,6 +271,7 @@ type SortableItemWrapperProps = SortableItemProps &
         isActive?: boolean;
         disabled?: boolean;
         isDragging?: boolean;
+        index: number;
     };
 
 const SortableItemWrapper: React.FC<SortableItemWrapperProps> = ({
@@ -229,6 +281,7 @@ const SortableItemWrapper: React.FC<SortableItemWrapperProps> = ({
     disabled,
     children,
     uniqueKey,
+    index,
     onDragStart,
     onDragOver,
     onDragEnd,
@@ -242,8 +295,11 @@ const SortableItemWrapper: React.FC<SortableItemWrapperProps> = ({
     return (
         <div
             {...props}
+            tabIndex={0}
+            role="listitem"
             className={classnames("rc", "sortable-item-wrapper", className, { "is-active": isActive && isDragging, disabled })}
             data-value={uniqueKey}
+            data-index={index}
             onTransitionEnd={disabled ? null : onTransitionEnd}
             onDragOver={disabled ? null : isActive ? (event: React.DragEvent) => event.preventDefault() : onDragOver}
         >
