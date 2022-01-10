@@ -19,7 +19,10 @@ const code: string = `<Breadcrumb onNavigate={(e) => e.preventDefault(); /** Or 
 </Breadcrumb>`;
 
 const BreadcrumbPage: React.FC = () => {
-    const [renderControls, { controls }] = useDynamicForm([
+    const {
+        renderForm: renderControls,
+        state: { controls },
+    } = useDynamicForm([
         {
             key: "controls",
             items: [{ key: "light", label: "light", description: "Enable light mode", controlType: "Checkbox" }],
@@ -37,7 +40,7 @@ const BreadcrumbPage: React.FC = () => {
                         e.preventDefault();
                         alert(`'${e.currentTarget.title}' clicked`);
                     }}
-                    light={controls.light}
+                    light={!!controls.light}
                 >
                     <BreadcrumbItem title="Home">{homeIcon}</BreadcrumbItem>
                     <BreadcrumbItem title="Users">Users</BreadcrumbItem>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Docs from "@common/Docs";
 import { DynamicFormOption, useDynamicForm } from "@sebgroup/react-components/hooks/useDynamicForm";
 import { Stepper } from "@sebgroup/react-components/Stepper";
@@ -23,27 +23,33 @@ const indicators: Array<DynamicFormOption<IndicatorType>> = [
 const StepTrackerPage: React.FC = React.memo(() => {
     const [value, setValue] = React.useState<number>(0);
 
-    const [renderForm, { controls }] = useDynamicForm([
+    const {
+        renderForm,
+        state: { controls },
+        setHidden,
+    } = useDynamicForm([
         {
             key: "controls",
             items: [
-                { key: "min", value: 0, min: 0, max: 100, label: "Min", controlType: "Stepper" },
-                { key: "max", value: 10, min: 0, max: 100, label: "Max", controlType: "Stepper" },
+                { key: "min", initialValue: 0, min: 0, max: 100, label: "Min", controlType: "Stepper" },
+                { key: "max", initialValue: 10, min: 0, max: 100, label: "Max", controlType: "Stepper" },
                 { key: "disabled", label: "disabled", controlType: "Checkbox" },
                 { key: "indicator", label: "indicator", controlType: "Checkbox" },
                 {
                     key: "indicatorType",
-                    rulerKey: "indicator",
-                    condition: true,
                     label: "Indicator type",
                     options: indicators,
                     controlType: "Radio",
-                    value: indicators[0].value,
+                    initialValue: indicators[0].value,
                     formElementAdditionalProps: { className: "indent pl-3 pt-2" },
                 },
             ],
         },
     ]);
+
+    useEffect(() => {
+        setHidden("controls", "indicatorType", !controls.indicator);
+    }, [controls.indicator]);
 
     const indicator: Indicator = React.useMemo(() => {
         return controls.indicator ? ({ type: controls.indicatorType, message: "Indicator message" } as Indicator) : null;

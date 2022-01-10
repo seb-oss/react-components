@@ -17,10 +17,13 @@ const directionList: Array<DynamicFormOption<TimelineDirection>> = [
 const contents = [...Array(3)].map(() => loremIpsum({ units: "paragraph" }));
 
 const TimelinePage: React.FC = React.memo(() => {
-    const [renderForm, { controls }] = useDynamicForm([
+    const {
+        renderForm,
+        state: { controls },
+    } = useDynamicForm([
         {
             key: "controls",
-            items: [{ key: "direction", label: "Direction", value: directionList[0].value, options: directionList, controlType: "Radio" }],
+            items: [{ key: "direction", label: "Direction", initialValue: directionList[0].value, options: directionList, controlType: "Radio" }],
         },
     ]);
 

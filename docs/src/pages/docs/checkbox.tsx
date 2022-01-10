@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Docs from "@common/Docs";
 import { Checkbox } from "@sebgroup/react-components/Checkbox/Checkbox";
 import { DynamicFormOption, useDynamicForm } from "@sebgroup/react-components/hooks/useDynamicForm";
@@ -24,35 +24,40 @@ const indicatorGrouping: Array<DynamicFormOption> = [
 ];
 
 const CheckboxPage: React.FC = (): React.ReactElement<void> => {
-    const [renderControls, { controls }] = useDynamicForm([
+    const {
+        renderForm: renderControls,
+        state: { controls },
+        setHidden,
+    }: any = useDynamicForm([
         {
             key: "controls",
             items: [
-                { key: "inline", label: "inline", controlType: "Checkbox", value: false },
-                { key: "indicator", label: "indicator", controlType: "Checkbox", value: false },
+                { key: "inline", label: "inline", controlType: "Checkbox", initialValue: false },
+                { key: "indicator", label: "indicator", controlType: "Checkbox", initialValue: false },
                 {
                     key: "indicatorType",
-                    rulerKey: "indicator",
-                    condition: true,
                     label: "Indicator type",
                     options: indicators,
                     controlType: "Radio",
-                    value: indicators[0].value,
+                    initialValue: indicators[0].value,
                     formElementAdditionalProps: { className: "indent pl-3 pt-2" },
                 },
                 {
                     key: "indicatorGrouping",
                     label: "Indicator choices",
                     controlType: "Radio",
-                    rulerKey: "indicator",
-                    condition: true,
                     options: indicatorGrouping,
-                    value: indicatorGrouping[0].value,
+                    initialValue: indicatorGrouping[0].value,
                     formElementAdditionalProps: { className: "indent pl-3 pt-2" },
                 },
             ],
         },
     ]);
+
+    useEffect(() => {
+        setHidden("controls", "indicatorType", !controls.indicator);
+        setHidden("controls", "indicatorGrouping", !controls.indicator);
+    }, [controls.indicator]);
 
     const isIndividual: boolean = controls.indicatorGrouping === "1";
     const isGrouped: boolean = controls.indicatorGrouping === "2";

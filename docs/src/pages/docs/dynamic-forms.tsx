@@ -495,7 +495,7 @@ const FormWithErrors: React.FC = () => {
                         </TableRow>
                         <TableRow>
                             <TableCell>
-                                <b>additionalProps</b>
+                                <b>formElementAdditionalProps</b>
                             </TableCell>
                             <TableCell>&#10004;</TableCell>
                             <TableCell>
@@ -585,14 +585,14 @@ const FormWithErrors: React.FC = () => {
                         </TableRow>
                         <TableRow>
                             <TableCell>
-                                <b>formElementAdditionalProps</b>
+                                <b>additionalProps</b>
                             </TableCell>
                             <TableCell>&#10004;</TableCell>
                             <TableCell>
                                 <code>{`{ [k: string]: any; }`}</code>
                             </TableCell>
                             <TableCell>
-                                Any additional element props to be mapped to the element. Depends on the <b>controlType</b>. Must be a valid prop for that element.
+                                Any additional element props to be mapped to the underlying option element. Depends on the <b>controlType</b>. Must be a valid prop for that element.
                             </TableCell>
                         </TableRow>
                     </TableBody>

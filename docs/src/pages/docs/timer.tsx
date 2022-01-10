@@ -14,7 +14,7 @@ const TimerPage: React.FC = () => {
             items: [
                 {
                     key: "duration",
-                    value: defaultTimer,
+                    initialValue: defaultTimer,
                     label: "Duration (ms)",
                     placeholder: "Duration",
                     controlType: "Text",
@@ -22,9 +22,12 @@ const TimerPage: React.FC = () => {
             ],
         },
     ];
-    const [renderForm, { controls }] = useDynamicForm(fields);
+    const {
+        renderForm,
+        state: { controls },
+    } = useDynamicForm(fields);
 
-    return <Docs mainFile={importString} example={<Timer duration={controls.duration || defaultTimer} callback={() => {}} />} code={code} controls={renderForm()} />;
+    return <Docs mainFile={importString} example={<Timer duration={Number(controls.duration) || defaultTimer} callback={() => {}} />} code={code} controls={renderForm()} />;
 };
 
 export default TimerPage;

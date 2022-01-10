@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { withPrefix } from "gatsby";
 import Docs from "@common/Docs";
 import { Img, ImgProps } from "@sebgroup/react-components/Image/Img";
@@ -14,7 +14,11 @@ const imgTypes: Array<DynamicFormOption<ImgProps["type"]>> = [
 ];
 
 const ImagePage: React.FC = (): React.ReactElement<void> => {
-    const [renderControls, { controls }] = useDynamicForm([
+    const {
+        renderForm: renderControls,
+        state: { controls },
+        setHidden,
+    }: any = useDynamicForm([
         {
             key: "controls",
             items: [
@@ -24,32 +28,34 @@ const ImagePage: React.FC = (): React.ReactElement<void> => {
                     description: "The image can be rendered as a native img tag or div tag. Each has pros and cons.",
                     controlType: "Radio",
                     options: imgTypes,
-                    value: imgTypes[0].value,
+                    initialValue: imgTypes[0].value,
                 },
                 {
                     key: "bgFixed",
                     label: "bgFixed",
-                    rulerKey: "imgType",
                     formElementAdditionalProps: { className: "indent pl-3 pt-2" },
-                    condition: imgTypes[1].value,
                     description: "Fixing the background allows it to have parallax effect when scrolling. Only available for div image type.",
                     controlType: "Checkbox",
                 },
                 {
                     key: "showChildren",
                     label: "Render children inside div image",
-                    rulerKey: "imgType",
                     formElementAdditionalProps: { className: "indent pl-3 pt-2" },
-                    condition: imgTypes[1].value,
                     description: "One advantage of a div image is that you can render children inside the image",
                     controlType: "Checkbox",
                 },
                 { key: "rounded", label: "rounded", controlType: "Checkbox" },
                 { key: "thumbnail", label: "thumbnail", description: "Thumbnail images are also responsive", controlType: "Checkbox" },
-                { key: "responsive", label: "responsive", description: "Makes sure that the image scales with it's container", value: true, controlType: "Checkbox" },
+                { key: "responsive", label: "responsive", description: "Makes sure that the image scales with it's container", initialValue: true, controlType: "Checkbox" },
             ],
         },
     ]);
+
+    useEffect(() => {
+        const isHidden: boolean = controls.imgType !== imgTypes[1].value;
+        setHidden("controls", "bgFixed", isHidden);
+        setHidden("controls", "showChildren", isHidden);
+    }, [controls.imgType]);
 
     return (
         <Docs

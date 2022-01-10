@@ -62,7 +62,10 @@ const TablePage: React.FC = (): React.ReactElement<void> => {
     const [filterColumns, setFilterColumns] = React.useState<Array<FilterColumn>>([]);
     const [sortedColumn, setSortedColumn] = React.useState<SortedColumn>(null);
 
-    const [renderControls, { controls }] = useDynamicForm([
+    const {
+        renderForm: renderControls,
+        state: { controls },
+    } = useDynamicForm([
         {
             key: "controls",
             items: [

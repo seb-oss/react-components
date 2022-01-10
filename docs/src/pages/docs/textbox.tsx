@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Docs from "@common/Docs";
 import SearchIcon from "../../../static/icons/search.svg";
 import { Textbox } from "@sebgroup/react-components/Textbox";
-import { DynamicFormOption, DynamicFormSection, useDynamicForm } from "@sebgroup/react-components/hooks/useDynamicForm";
+import { DynamicFormOption, useDynamicForm } from "@sebgroup/react-components/hooks/useDynamicForm";
 import { Indicator, IndicatorType } from "@sebgroup/react-components/FeedbackIndicator";
 
 const importString: string = require("!raw-loader!@sebgroup/react-components/Textbox/Textbox");
@@ -20,27 +20,33 @@ const indicators: Array<DynamicFormOption<IndicatorType>> = [
 const TextboxPage: React.FC = React.memo(() => {
     const [value, setValue] = React.useState<string>("");
 
-    const [renderForm, { controls }] = useDynamicForm([
+    const {
+        renderForm,
+        state: { controls },
+        setHidden,
+    } = useDynamicForm([
         {
             key: "controls",
             items: [
-                { key: "leftport", value: defaultPortOption.value, label: "Left icon or text?", options: [defaultPortOption, iconOption, textOption], controlType: "Dropdown" },
-                { key: "rightport", value: defaultPortOption.value, label: "Right icon or text?", options: [defaultPortOption, iconOption, textOption], controlType: "Dropdown" },
+                { key: "leftport", initialValue: defaultPortOption.value, label: "Left icon or text?", options: [defaultPortOption, iconOption, textOption], controlType: "Dropdown" },
+                { key: "rightport", initialValue: defaultPortOption.value, label: "Right icon or text?", options: [defaultPortOption, iconOption, textOption], controlType: "Dropdown" },
                 { key: "disabled", label: "disabled", controlType: "Checkbox" },
                 { key: "indicator", label: "indicator", controlType: "Checkbox" },
                 {
                     key: "indicatorType",
-                    rulerKey: "indicator",
-                    condition: true,
                     label: "Indicator type",
                     options: indicators,
                     controlType: "Radio",
-                    value: indicators[0].value,
+                    initialValue: indicators[0].value,
                     formElementAdditionalProps: { className: "indent pl-3 pt-2" },
                 },
             ],
         },
     ]);
+
+    useEffect(() => {
+        setHidden("controls", "indicatorType", !controls.indicator);
+    }, [controls.indicator]);
 
     const indicator: Indicator = React.useMemo(() => {
         return controls.indicator ? { type: controls.indicatorType as IndicatorType, message: "Indicator message" } : null;

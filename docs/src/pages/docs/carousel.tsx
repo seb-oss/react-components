@@ -18,16 +18,19 @@ const transitionStyles: Array<DynamicFormOption<CarouselProps["transitionStyle"]
 ];
 
 const CarouselPage: React.FC = (): React.ReactElement<void> => {
-    const [renderControls, { controls }] = useDynamicForm([
+    const {
+        renderForm: renderControls,
+        state: { controls },
+    }: any = useDynamicForm([
         {
             key: "controls",
             items: [
-                { key: "autoplaySpeed", label: "autoplaySpeed", controlType: "Text", value: 2000 },
-                { key: "transitionDuration", label: "transitionDuration", controlType: "Text", value: 500 },
-                { key: "infinite", label: "infinite", controlType: "Checkbox", value: false },
-                { key: "autoplay", label: "autoplay", controlType: "Checkbox", value: false },
+                { key: "autoplaySpeed", label: "autoplaySpeed", controlType: "Text", initialValue: 2000 },
+                { key: "transitionDuration", label: "transitionDuration", controlType: "Text", initialValue: 500 },
+                { key: "infinite", label: "infinite", controlType: "Checkbox", initialValue: false },
+                { key: "autoplay", label: "autoplay", controlType: "Checkbox", initialValue: false },
                 { key: "showIndicators", label: "showIndicators", controlType: "Checkbox" },
-                { key: "transitionStyle", label: "transitionStyle", controlType: "Radio", options: transitionStyles, value: transitionStyles[0].value },
+                { key: "transitionStyle", label: "transitionStyle", controlType: "Radio", options: transitionStyles, initialValue: transitionStyles[0].value },
             ],
         },
     ]);

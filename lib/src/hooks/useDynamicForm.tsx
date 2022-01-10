@@ -499,7 +499,7 @@ const DynamicFormItemComponent: React.FC<{
                     {labelItem}
                     {descriptionItem}
                     <FeedbackIndicator {...indicator}>
-                        <RadioGroup {...{ name, onChange, value }} {...formElementAdditionalProps}>
+                        <RadioGroup {...{ name, onChange, value }} {...formElementAdditionalProps} className={`mt-0 ${formElementAdditionalProps?.className || ""}`}>
                             {props.item?.options?.map((option: DynamicFormOption, i) => (
                                 <RadioButton key={i} value={option?.value} {...(option?.additionalProps || {})}>
                                     {option?.label}

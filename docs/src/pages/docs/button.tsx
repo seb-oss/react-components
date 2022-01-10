@@ -23,11 +23,14 @@ const buttonThemes: Array<DynamicFormOption<ButtonTheme>> = [
 ];
 
 const ButtonPage: React.FC = () => {
-    const [renderControls, { controls }] = useDynamicForm([
+    const {
+        renderForm: renderControls,
+        state: { controls },
+    } = useDynamicForm([
         {
             key: "controls",
             items: [
-                { key: "size", label: "size", options: buttonSizes, controlType: "Radio" },
+                { key: "size", label: "size", options: buttonSizes, controlType: "Radio", formElementAdditionalProps: { className: "testing" } },
                 { key: "theme", label: "theme", options: buttonThemes, controlType: "Dropdown", placeholder: "Select theme" },
                 { key: "disabled", label: "disabled", controlType: "Checkbox" },
                 { key: "block", label: "block", description: "Sets the display of the button to block so it can take up the container width", controlType: "Checkbox" },
@@ -39,11 +42,7 @@ const ButtonPage: React.FC = () => {
         <Docs
             exampleTheme={controls.theme === "light" ? "dark" : controls.theme === "dark" ? "warning" : null}
             mainFile={importString}
-            example={
-                <Button size={controls.size} theme={controls.theme} disabled={controls.disabled} block={controls.block}>
-                    Click me
-                </Button>
-            }
+            example={<Button {...(controls as { [k: string]: any })}>Click me</Button>}
             code={code}
             controls={renderControls()}
         />
