@@ -30,7 +30,7 @@ const ButtonPage: React.FC = () => {
         {
             key: "controls",
             items: [
-                { key: "size", label: "size", options: buttonSizes, controlType: "Radio", formElementAdditionalProps: { className: "testing" } },
+                { key: "size", label: "size", options: buttonSizes, controlType: "Radio" },
                 { key: "theme", label: "theme", options: buttonThemes, controlType: "Dropdown", placeholder: "Select theme" },
                 { key: "disabled", label: "disabled", controlType: "Checkbox" },
                 { key: "block", label: "block", description: "Sets the display of the button to block so it can take up the container width", controlType: "Checkbox" },
