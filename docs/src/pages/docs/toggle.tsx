@@ -13,7 +13,7 @@ const TogglePage: React.FC = () => {
             items: [
                 {
                     key: "label",
-                    value: defaultLabel,
+                    initialValue: defaultLabel,
                     label: "Label",
                     placeholder: "Label",
                     controlType: "Text",
@@ -27,18 +27,21 @@ const TogglePage: React.FC = () => {
             ],
         },
     ];
-    const [renderForm, { controls }] = useDynamicForm(fields);
+    const {
+        renderForm,
+        state: { controls },
+    } = useDynamicForm(fields);
     const code: string = `<Toggle name="myToggle" value={this.state.toggleValue} onChange={(event) => { this.setState({ toggleValue: event.target.checked }); }} />`;
 
     /** check if key selected */
     const checkSelectedKey = (key: string) => {
-        return controls.checkboxes?.find((item: string) => item === key);
+        return (controls.checkboxes as string[])?.find((item: string) => item === key);
     };
 
     return (
         <Docs
             mainFile={importString}
-            example={<Toggle name="myToggle" disabled={checkSelectedKey("disabled")} label={(controls as any)?.label || defaultLabel} />}
+            example={<Toggle name="myToggle" disabled={!!checkSelectedKey("disabled")} label={(controls as any)?.label || defaultLabel} />}
             code={code}
             controls={renderForm()}
         />

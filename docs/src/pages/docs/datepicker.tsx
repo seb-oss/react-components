@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Docs from "@common/Docs";
 import { Datepicker } from "@sebgroup/react-components/Datepicker";
 import { useDynamicForm } from "@sebgroup/react-components/hooks/useDynamicForm";
@@ -9,7 +9,11 @@ const code: string = `<Datepicker value={dateValue} onChange={setDateValue} />`;
 const DatepickerPage: React.FC = () => {
     const [exampleDate, setExampleDate] = React.useState<Date>(new Date());
 
-    const [renderControls, { controls }] = useDynamicForm([
+    const {
+        renderForm: renderControls,
+        state: { controls },
+        setHidden,
+    } = useDynamicForm([
         {
             key: "controls",
             items: [
@@ -17,8 +21,6 @@ const DatepickerPage: React.FC = () => {
                 { key: "forceCustom", label: "Custom date picker", description: "This picker is the automatic fallback on browsers that don't support html5 datepicker", controlType: "Checkbox" },
                 {
                     key: "localeCode",
-                    rulerKey: "forceCustom",
-                    condition: true,
                     label: "Locale code:",
                     description: "Set a locale for the custom picker (defaults to system locale).",
                     controlType: "Text",
@@ -28,6 +30,10 @@ const DatepickerPage: React.FC = () => {
             ],
         },
     ]);
+
+    useEffect(() => {
+        setHidden("controls", "localeCode", !controls.forceCustom);
+    }, [controls.forceCustom]);
 
     return (
         <Docs

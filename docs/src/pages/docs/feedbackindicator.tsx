@@ -15,13 +15,16 @@ const typeList: Array<DynamicFormOption<IndicatorType>> = [
 ];
 
 const FeedbackIndicatorPage: React.FC = () => {
-    const [renderForm, { controls }] = useDynamicForm([
+    const {
+        renderForm,
+        state: { controls },
+    } = useDynamicForm([
         {
             key: "controls",
             items: [
-                { key: "message", value: "Indicator message", label: "Message", placeholder: "Message", controlType: "Text" },
-                { key: "noBorder", value: false, label: "noBorder", controlType: "Checkbox" },
-                { key: "type", value: typeList[0].value, label: "Type", options: typeList, controlType: "Radio" },
+                { key: "message", initialValue: "Indicator message", label: "Message", placeholder: "Message", controlType: "Text" },
+                { key: "noBorder", initialValue: false, label: "noBorder", controlType: "Checkbox" },
+                { key: "type", initialValue: typeList[0].value, label: "Type", options: typeList, controlType: "Radio" },
             ],
         },
     ]);

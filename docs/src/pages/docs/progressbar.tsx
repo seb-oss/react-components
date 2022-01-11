@@ -19,10 +19,13 @@ const themes: Array<DynamicFormOption<ProgressBarProps["theme"]>> = [
 const ProgressBarPage: React.FC = (): React.ReactElement<void> => {
     const [value, setValue] = React.useState<number>(50);
 
-    const [renderControls, { controls }] = useDynamicForm([
+    const {
+        renderForm: renderControls,
+        state: { controls },
+    } = useDynamicForm([
         {
             key: "controls",
-            items: [{ key: "theme", label: "theme", controlType: "Dropdown", options: themes, value: themes[0].value }],
+            items: [{ key: "theme", label: "theme", controlType: "Dropdown", options: themes, initialValue: themes[0].value }],
         },
     ]);
 

@@ -13,7 +13,10 @@ const code: string = `<Tabs value={value} onTabChange={setValue}>
 const TabsPage: React.FC = React.memo(() => {
     const [value, setValue] = React.useState<number>(0);
 
-    const [renderForm, { controls }] = useDynamicForm([
+    const {
+        renderForm,
+        state: { controls },
+    } = useDynamicForm([
         {
             key: "controls",
             items: [{ key: "autoSelectOnFocus", label: "Auto select on focus", controlType: "Checkbox" }],

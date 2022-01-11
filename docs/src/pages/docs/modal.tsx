@@ -28,18 +28,27 @@ const NotificationPage: React.FC = () => {
     const [toggle, setToggle] = React.useState<boolean>(false);
     const toggleButtonRef: React.MutableRefObject<HTMLButtonElement> = React.useRef<HTMLButtonElement>();
 
-    const [renderForm, { controls }] = useDynamicForm([
+    const {
+        renderForm,
+        state: { controls },
+    } = useDynamicForm([
         {
             key: "controls",
             items: [
-                { key: "size", label: "Size", controlType: "Radio", options: sizses, value: sizses[1].value },
-                { key: "position", label: "Position", controlType: "Radio", options: positions, value: positions[0].value },
-                { key: "centered", label: "centered", controlType: "Checkbox", value: false },
-                { key: "fullscreen", label: "fullscreen", controlType: "Checkbox", value: false },
-                { key: "trapfocus", label: "trapfocus", description: "Deprecated. Trap focus would be enabled by default.", controlType: "Checkbox", value: true },
-                { key: "autoFocus", label: "autoFocus", description: "Automatically focus on first focusable element. Auto focus will be enabled by default.", controlType: "Checkbox", value: true },
-                { key: "onEscape", label: "onEscape", controlType: "Checkbox", value: false },
-                { key: "onBackdropDismiss", label: "onBackdropDismiss", controlType: "Checkbox", value: false },
+                { key: "size", label: "Size", controlType: "Radio", options: sizses, initialValue: sizses[1].value },
+                { key: "position", label: "Position", controlType: "Radio", options: positions, initialValue: positions[0].value },
+                { key: "centered", label: "centered", controlType: "Checkbox", initialValue: false },
+                { key: "fullscreen", label: "fullscreen", controlType: "Checkbox", initialValue: false },
+                { key: "trapfocus", label: "trapfocus", description: "Deprecated. Trap focus would be enabled by default.", controlType: "Checkbox", initialValue: true },
+                {
+                    key: "autoFocus",
+                    label: "autoFocus",
+                    description: "Automatically focus on first focusable element. Auto focus will be enabled by default.",
+                    controlType: "Checkbox",
+                    initialValue: true,
+                },
+                { key: "onEscape", label: "onEscape", controlType: "Checkbox", initialValue: false },
+                { key: "onBackdropDismiss", label: "onBackdropDismiss", controlType: "Checkbox", initialValue: false },
             ],
         },
     ]);
@@ -48,6 +57,8 @@ const NotificationPage: React.FC = () => {
         setToggle(false);
         toggleButtonRef.current?.focus();
     }, []);
+
+    const { position, size, fullscreen, centered, trapfocus, autoFocus } = controls as { [k: string]: any };
 
     return (
         <Docs
@@ -59,14 +70,9 @@ const NotificationPage: React.FC = () => {
                     </Button>
                     <Modal
                         toggle={toggle}
-                        position={controls.position}
-                        size={controls.size}
-                        fullscreen={controls.fullscreen}
-                        centered={controls.centered}
-                        trapFocus={controls.trapfocus}
+                        {...{ position, size, fullscreen, centered, trapfocus, autoFocus }}
                         onEscape={controls.onEscape ? dismiss : null}
                         onBackdropDismiss={controls.onBackdropDismiss ? dismiss : null}
-                        autoFocus={controls.autoFocus}
                         aria-labelledby="modalHeader"
                         aria-describedby="modalDescription"
                     >
@@ -77,7 +83,9 @@ const NotificationPage: React.FC = () => {
                                         <legend>Use tab to see focus trap in action</legend>
                                         <Textbox label="Firstname" />
                                         <Textbox label="Lastname" />
-                                        <Button type="button">Submit</Button>
+                                        <Button className="mt-3" type="button">
+                                            Submit
+                                        </Button>
                                     </fieldset>
                                 </form>
                             ) : (

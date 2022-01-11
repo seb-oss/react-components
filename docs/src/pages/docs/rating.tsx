@@ -9,25 +9,28 @@ const code: string = `<Rating value={number} onChange={(e) => setValue(e.target.
 
 const RatingPage: React.FC = (): React.ReactElement<void> => {
     const [value, setValue] = React.useState<number>(1);
-    const [renderControls, { controls }] = useDynamicForm([
+    const {
+        renderForm: renderControls,
+        state: { controls },
+    } = useDynamicForm([
         {
             key: "controls",
             items: [
-                { key: "max", label: "Max", controlType: "Text", value: 5 },
-                { key: "min", label: "Min", description: "Should no be smaller than step", controlType: "Text", value: 1 },
-                { key: "step", label: "Step", controlType: "Text", value: 1 },
-                { key: "dimension", label: "Icon Dimension", controlType: "Text", value: 30 },
-                { key: "readOnly", label: "Read only", controlType: "Checkbox", value: false },
-                { key: "disabled", label: "Disabled", controlType: "Checkbox", value: false },
-                { key: "customSvg", label: "Custom SVG", controlType: "Checkbox", value: false },
+                { key: "max", label: "Max", controlType: "Text", initialValue: 5 },
+                { key: "min", label: "Min", description: "Should no be smaller than step", controlType: "Text", initialValue: 1 },
+                { key: "step", label: "Step", controlType: "Text", initialValue: 1 },
+                { key: "dimension", label: "Icon Dimension", controlType: "Text", initialValue: 30 },
+                { key: "readOnly", label: "Read only", controlType: "Checkbox", initialValue: false },
+                { key: "disabled", label: "Disabled", controlType: "Checkbox", initialValue: false },
+                { key: "customSvg", label: "Custom SVG", controlType: "Checkbox", initialValue: false },
                 {
-                    key: "colors",
-                    label: "Colors",
+                    key: "color",
+                    label: "Color",
                     options: [
                         { key: "default", label: "Default color", value: "" },
                         { key: "greyandblack", label: "Grey & Black", value: "greyandblack" },
                         { key: "lightblueandblue", label: "Light blue & blue", value: "lightblueandblue" },
-                        { key: "lightgreenandGreen", label: "Light green & green", value: "lg" },
+                        { key: "lightgreenandGreen", label: "Light green & green", value: "lightgreenandGreen" },
                     ],
                     controlType: "Radio",
                 },
@@ -35,8 +38,12 @@ const RatingPage: React.FC = (): React.ReactElement<void> => {
         },
     ]);
 
+    const { color, readOnly, disabled, dimension, max, min, step } = controls as { [k: string]: any };
+
+    console.log(color);
+
     const getColor = React.useCallback((): [string, string] => {
-        switch (controls.colors?.key) {
+        switch (color) {
             case "greyandblack":
                 return ["grey", "black"];
             case "lightblueandblue":
@@ -46,7 +53,7 @@ const RatingPage: React.FC = (): React.ReactElement<void> => {
             default:
                 return null;
         }
-    }, [controls.colors]);
+    }, [color]);
 
     return (
         <Docs
@@ -56,12 +63,7 @@ const RatingPage: React.FC = (): React.ReactElement<void> => {
                     <Rating
                         id="some-id"
                         className="custom-class"
-                        readOnly={controls.readOnly}
-                        disabled={controls.disabled}
-                        dimension={controls.dimension}
-                        max={controls.max}
-                        min={controls.min}
-                        step={controls.step}
+                        {...{ readOnly, disabled, dimension, max, min, step }}
                         svgname="custom name"
                         colors={getColor()}
                         customSVG={controls.customSvg ? <HeartSVG /> : null}

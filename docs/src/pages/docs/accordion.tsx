@@ -14,7 +14,10 @@ const code: string = `<Accordion>
 </Accordion>`;
 
 const AccordionPage: React.FC = () => {
-    const [renderControls, { controls }] = useDynamicForm([
+    const {
+        renderForm: renderControls,
+        state: { controls },
+    } = useDynamicForm([
         {
             key: "controls",
             items: [
@@ -29,7 +32,7 @@ const AccordionPage: React.FC = () => {
             mainFile={importString}
             importedFiles={importedFiles}
             example={
-                <Accordion className="w-100" inverted={controls.inverted} alternative={controls.alternative} defaultValue={0}>
+                <Accordion className="w-100" inverted={!!controls.inverted} alternative={!!controls.alternative} defaultValue={0}>
                     <AccordionItem header="A simple accordion item">
                         <p>Illum amet voluptas minus aut esse totam blanditiis. Et corporis vel aspernatur dicta fugit et est placeat. Beatae dolor nisi aut minus placeat et at accusantium.</p>
                     </AccordionItem>

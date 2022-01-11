@@ -41,16 +41,19 @@ const DropdownPage: React.FC = (): React.ReactElement<void> => {
     const [multiValue, setMultiValue] = React.useState<string[]>([]);
     const [list, setList] = React.useState<React.ReactElement[]>([]);
 
-    const [renderControls, { controls }] = useDynamicForm([
+    const {
+        renderForm: renderControls,
+        state: { controls },
+    } = useDynamicForm([
         {
             key: "controls",
             items: [
-                { key: "multiple", label: "multiple", controlType: "Checkbox", value: false },
-                { key: "searchable", label: "searchable", controlType: "Checkbox", value: false },
-                { key: "clearable", label: "clearable", controlType: "Checkbox", value: false },
-                { key: "disabled", label: "disabled", controlType: "Checkbox", value: false },
-                { key: "useGroups", label: "Render in groups", description: "Wrap dropdown items with optgroup to group them", controlType: "Checkbox", value: false },
-                { key: "useDividers", label: "Add dividers", description: "Dividers are added using div with className dropdown-divider", controlType: "Checkbox", value: false },
+                { key: "multiple", label: "multiple", controlType: "Checkbox", initialValue: false },
+                { key: "searchable", label: "searchable", controlType: "Checkbox", initialValue: false },
+                { key: "clearable", label: "clearable", controlType: "Checkbox", initialValue: false },
+                { key: "disabled", label: "disabled", controlType: "Checkbox", initialValue: false },
+                { key: "useGroups", label: "Render in groups", description: "Wrap dropdown items with optgroup to group them", controlType: "Checkbox", initialValue: false },
+                { key: "useDividers", label: "Add dividers", description: "Dividers are added using div with className dropdown-divider", controlType: "Checkbox", initialValue: false },
             ],
         },
     ]);
@@ -100,10 +103,10 @@ const DropdownPage: React.FC = (): React.ReactElement<void> => {
                         onChange={controls.multiple ? null : (e) => setValue(e.target.value)}
                         onMultipleChange={setMultiValue}
                         placeholder="Select..."
-                        multiple={controls.multiple}
-                        searchable={controls.searchable}
-                        clearable={controls.clearable}
-                        disabled={controls.disabled}
+                        multiple={!!controls.multiple}
+                        searchable={!!controls.searchable}
+                        clearable={!!controls.clearable}
+                        disabled={!!controls.disabled}
                     >
                         {list}
                     </Dropdown>

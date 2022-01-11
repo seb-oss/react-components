@@ -11,12 +11,11 @@ import { RadioButton, RadioGroup } from "../RadioButton";
 import { isEmpty } from "@sebgroup/frontend-tools/isEmpty";
 import { isValidDate } from "@sebgroup/frontend-tools/isValidDate";
 
-export type DynamicFormInternalStateValue = string | string[] | Date | boolean | number;
+export type DynamicFormInternalStateValue = string | string[] | Date | boolean | number | null;
 export interface DynamicFormItem {
     key: string;
     controlType: DynamicFormType;
-    value?: DynamicFormInternalStateValue;
-    order?: number;
+    initialValue?: DynamicFormInternalStateValue;
     label?: string;
     description?: string;
     multi?: boolean;
@@ -24,9 +23,7 @@ export interface DynamicFormItem {
     max?: any;
     placeholder?: string;
     options?: Array<DynamicFormOption>;
-    valueType?: "string" | "number";
-    rulerKey?: string;
-    condition?: DynamicFormInternalStateValue;
+    initiallyHidden?: boolean;
     formElementAdditionalProps?: {
         [k: string]: any;
     };
@@ -36,12 +33,11 @@ export interface DynamicFormItem {
     };
 }
 
-export type DynamicFormType = "Hidden" | "Text" | "Textarea" | "Checkbox" | "Dropdown" | "Datepicker" | "Radio" | "Option" | "LabelOnly" | "Stepper";
+export type DynamicFormType = "Text" | "Textarea" | "Checkbox" | "Dropdown" | "Datepicker" | "Radio" | "Option" | "LabelOnly" | "Stepper";
 
 export interface DynamicFormSection {
     key: string;
     title?: string;
-    order?: number;
     items?: Array<DynamicFormItem>;
     wrappingElement?: "div" | "section" | "none";
     additionalProps?: {
@@ -67,6 +63,17 @@ export interface DynamicFormInternalState {
     [k: string]: DynamicFormInternalStateSection;
 }
 
+export interface DynamicFormIndicatorState {
+    [k: string]: {
+        [k: string]: Indicator;
+    };
+}
+
+export interface DynamicFormVisibilityState {
+    [k: string]: {
+        [k: string]: boolean;
+    };
+}
 export interface DynamicFormMetaData {
     [k: string]: {
         [k: string]: DynamicFormMetaDataItem;
@@ -76,44 +83,44 @@ export interface DynamicFormMetaData {
 export interface DynamicFormMetaDataItem {
     /** This field is currently visible (based on conditional rendering) */
     isVisible: boolean;
-    /** this field has an error message */
-    hasError: boolean;
-    /** this field has an error message */
-    hasWarning: boolean;
+    /** this field has an indicator */
+    hasIndicator: boolean;
     /** This field has a non empty, null, undefined or otherwise falsy value (based on its controlType) */
     hasTruthyValue: boolean;
-}
-
-export type DynamicFormWarnings = DynamicFormErrors;
-export interface DynamicFormErrors {
-    [k: string]: {
-        [k: string]: string;
-    };
 }
 
 type OnChangeFormSection = (section: DynamicFormSection) => OnChangeFormItem;
 type OnChangeFormItem = (item: DynamicFormItem) => OnChangeInput;
 type OnChangeInput = (e: InputChange) => void;
-type ShouldRenderFormItem = (sectionKey: string, itemKey: string) => boolean;
 
 export type FormRenderFunction = () => JSX.Element;
 export type SetDynamicFormState = React.Dispatch<React.SetStateAction<DynamicFormInternalState>>;
-export type SetDynamicFormErrors = React.Dispatch<React.SetStateAction<DynamicFormErrors>>;
-export type SetDynamicFormWarnings = React.Dispatch<React.SetStateAction<DynamicFormErrors>>;
 export interface FormInfo {
     dirty: boolean;
-    hasErrors: boolean;
-    hasWarnings: boolean;
+    hasIndicators: boolean;
     isAllTruthy: boolean;
 }
-export type UseDynamicForm = [FormRenderFunction, DynamicFormInternalState, SetDynamicFormState, SetDynamicFormErrors, SetDynamicFormWarnings, DynamicFormMetaData, FormInfo];
+
+export type PatchState = (section: string, key: string, value: DynamicFormInternalStateValue) => void;
+export type SetIndicator = (section: string, key: string, indicator: Indicator) => void;
+export type SetHidden = (section: string, key: string, hidden: boolean) => void;
+
+export type UseDynamicForm = {
+    renderForm: FormRenderFunction;
+    state: DynamicFormInternalState;
+    patchState: PatchState;
+    setIndicator: SetIndicator;
+    setHidden: SetHidden;
+    meta: DynamicFormMetaData;
+    info: FormInfo;
+};
 export function useDynamicForm(sections: DynamicFormSection[]): UseDynamicForm {
     const initialState: DynamicFormInternalState = useMemo(() => {
         const initialFormState: DynamicFormInternalState = {};
         sections?.map((section: DynamicFormSection) => {
             initialFormState[section?.key] = {};
             section.items?.map((item) => {
-                const { key, value, multi, controlType }: DynamicFormItem = item;
+                const { key, initialValue: value, multi, controlType }: DynamicFormItem = item;
                 let initialValue: any;
 
                 switch (controlType) {
@@ -175,59 +182,22 @@ export function useDynamicForm(sections: DynamicFormSection[]): UseDynamicForm {
         return initialFormState;
     }, []);
 
+    const initialVisibility: DynamicFormVisibilityState = useMemo(() => {
+        const initialVisibilityState: DynamicFormVisibilityState = {};
+        sections?.map(({ key: sectionKey, items }: DynamicFormSection) => {
+            initialVisibilityState[sectionKey] = {};
+            items?.map(({ initiallyHidden, key }: DynamicFormItem) => {
+                initialVisibilityState[sectionKey][key] = !initiallyHidden;
+            });
+        });
+
+        return initialVisibilityState;
+    }, [initialState]);
+
     const [state, setState] = useState<DynamicFormInternalState>(initialState);
-    const [errorMessages, setErrorMessages] = useState<DynamicFormErrors>({});
-    const [warningMessages, setWarningMessages] = useState<DynamicFormWarnings>({});
+    const [indicators, setIndicators] = useState<DynamicFormIndicatorState>({});
+    const [visibility, setVisibility] = useState<DynamicFormVisibilityState>(initialVisibility);
     const [dirty, setDirty] = useState<boolean>(false);
-
-    /**
-     * SHOULD RENDER CONTROL:
-     * Determines if the form control should be rendered or not.
-     * @param sectionKey section key
-     * @param itemKey section key
-     */
-    const shouldRender: ShouldRenderFormItem = useCallback<ShouldRenderFormItem>(
-        (sectionKey: string, itemKey: string): boolean => {
-            const { rulerKey, condition, controlType }: Partial<DynamicFormItem> =
-                sections?.find((item: DynamicFormSection) => item.key === sectionKey)?.items?.find((item: DynamicFormItem) => item.key === itemKey) || {};
-            if (controlType === "Hidden") {
-                // Marked as hidden, don't render
-                return false;
-            }
-            if (typeof rulerKey === "string" && !!rulerKey.length) {
-                let rulerState: DynamicFormInternalStateValue;
-
-                if (!isEmpty(state) && !isEmpty(state[sectionKey])) {
-                    rulerState = (state[sectionKey] as DynamicFormInternalStateSection)[rulerKey];
-                }
-
-                if (rulerState === undefined || condition === undefined) {
-                    return false;
-                }
-
-                if (typeof rulerState === "string" && rulerState === condition) {
-                    return shouldRender(sectionKey, rulerKey);
-                } else if (rulerState && condition && typeof condition === "object" && Array.isArray(condition)) {
-                    for (const conditionItem of condition as any[]) {
-                        if (conditionItem) {
-                            if (typeof rulerState === "object" && Array.isArray(rulerState)) {
-                                for (const rulerValueItem of rulerState) {
-                                    if (rulerValueItem && typeof rulerValueItem === "string" && rulerValueItem === conditionItem) {
-                                        return shouldRender(sectionKey, rulerKey);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                } else if (rulerState && typeof rulerState === "boolean") {
-                    return shouldRender(sectionKey, rulerKey);
-                }
-                return false;
-            }
-            return true;
-        },
-        [state]
-    );
 
     const onChange: OnChangeFormSection = useCallback<OnChangeFormSection>(
         (section: DynamicFormSection) => (item: DynamicFormItem) => (e: InputChange) => {
@@ -240,7 +210,6 @@ export function useDynamicForm(sections: DynamicFormSection[]): UseDynamicForm {
                 case "Text":
                 case "Textarea":
                     newValue = (e as React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>).target.value;
-                    newValue = item.valueType === "number" ? Number(newValue) : newValue;
                     break;
                 case "Option": {
                     let newOptions: string[] = [...((sectionState[item.key] as string[]) || [])];
@@ -297,9 +266,8 @@ export function useDynamicForm(sections: DynamicFormSection[]): UseDynamicForm {
             newMeta[sectionKey] = {};
             items?.forEach(({ key, controlType }) => {
                 const itemState: DynamicFormInternalStateValue | undefined | null = state && state[sectionKey] && state[sectionKey][key];
-                const hasError: boolean = !!(errorMessages && errorMessages[sectionKey] && errorMessages[sectionKey][key]?.length);
-                const hasWarning: boolean = !!(warningMessages && warningMessages[sectionKey] && warningMessages[sectionKey][key]?.length);
-                const isVisible: boolean = shouldRender(sectionKey, key);
+                const hasIndicator: boolean = !!(indicators && indicators[sectionKey] && !isEmpty(indicators[sectionKey][key]));
+                const isVisible: boolean = !!(visibility && visibility[sectionKey] && !!visibility[sectionKey][key]);
                 let hasTruthyValue: boolean;
 
                 switch (controlType) {
@@ -325,8 +293,7 @@ export function useDynamicForm(sections: DynamicFormSection[]): UseDynamicForm {
                 }
 
                 newMeta[sectionKey][key] = {
-                    hasError,
-                    hasWarning,
+                    hasIndicator,
                     isVisible,
                     hasTruthyValue,
                 };
@@ -334,7 +301,7 @@ export function useDynamicForm(sections: DynamicFormSection[]): UseDynamicForm {
         });
 
         return newMeta;
-    }, [shouldRender, errorMessages, warningMessages]);
+    }, [state, visibility, indicators]);
 
     const checkMetaDataIf = useCallback(
         (method: "some" | "every", condition: keyof DynamicFormMetaDataItem) => {
@@ -343,14 +310,9 @@ export function useDynamicForm(sections: DynamicFormSection[]): UseDynamicForm {
         [meta]
     );
 
-    //** Does at least one of all the currently visible elements have an error message */
-    const hasErrors: boolean = useMemo(() => {
-        return checkMetaDataIf("some", "hasError");
-    }, [checkMetaDataIf]);
-
     //** Does at least one of all the currently visible elements have a warning message */
-    const hasWarnings: boolean = useMemo(() => {
-        return checkMetaDataIf("some", "hasWarning");
+    const hasIndicators: boolean = useMemo(() => {
+        return checkMetaDataIf("some", "hasIndicator");
     }, [checkMetaDataIf]);
 
     //** Does every currently visible form element have a truthy value */
@@ -359,23 +321,62 @@ export function useDynamicForm(sections: DynamicFormSection[]): UseDynamicForm {
     }, [checkMetaDataIf]);
 
     const renderForm = useCallback(() => {
-        return <DynamicFormComponent sections={sections} errorMessages={errorMessages} warningMessages={warningMessages} state={state} onChange={onChange} shouldRender={shouldRender} />;
-    }, [onChange, shouldRender, errorMessages, warningMessages]);
+        return <DynamicFormComponent sections={sections} indicators={indicators} state={state} onChange={onChange} visibility={visibility} />;
+    }, [onChange, visibility, indicators]);
 
     const formInfo: FormInfo = useMemo(() => {
-        return { dirty, hasErrors, hasWarnings, isAllTruthy };
-    }, [dirty, hasErrors, hasWarnings, isAllTruthy]);
+        return { dirty, hasIndicators, isAllTruthy };
+    }, [dirty, hasIndicators, isAllTruthy]);
 
-    return [renderForm, state, setState, setErrorMessages, setWarningMessages, meta, formInfo];
+    const handlePatchState: PatchState = (section: string, key: string, value: DynamicFormInternalStateValue) => {
+        setState((existingState) => ({
+            ...existingState,
+            [section]: {
+                ...(existingState[section] || {}),
+                [key]: value,
+            },
+        }));
+    };
+
+    const handleSetIndicator: SetIndicator = (section: string, key: string, indicator: Indicator) => {
+        setIndicators((existingState) => ({
+            ...existingState,
+            [section]: {
+                ...(existingState[section] || {}),
+                [key]: indicator,
+            },
+        }));
+    };
+
+    const handleSetHidden: SetHidden = (section: string, key: string, hidden: boolean) => {
+        const visible: boolean = !hidden;
+
+        setVisibility((existingState) => ({
+            ...existingState,
+            [section]: {
+                ...(existingState[section] || {}),
+                [key]: visible,
+            },
+        }));
+    };
+
+    return {
+        renderForm,
+        state,
+        patchState: handlePatchState,
+        setIndicator: handleSetIndicator,
+        setHidden: handleSetHidden,
+        meta,
+        info: formInfo,
+    };
 }
 
 const DynamicFormComponent: React.FC<{
     sections: DynamicFormSection[];
-    errorMessages: DynamicFormErrors;
-    warningMessages: DynamicFormWarnings;
+    indicators: DynamicFormIndicatorState;
+    visibility: DynamicFormVisibilityState;
     state: DynamicFormInternalState;
     onChange: OnChangeFormSection;
-    shouldRender: ShouldRenderFormItem;
 }> = (props) => {
     return (
         <>
@@ -385,9 +386,8 @@ const DynamicFormComponent: React.FC<{
                     <DynamicFormSectionComponent
                         key={i}
                         section={section}
-                        errors={!isEmpty(props.errorMessages) && !isEmpty(props.errorMessages[section.key]) ? props.errorMessages[section.key] : {}}
-                        warnings={!isEmpty(props.warningMessages) && !isEmpty(props.warningMessages[section.key]) ? props.warningMessages[section.key] : {}}
-                        shouldRender={props.shouldRender}
+                        indicators={!isEmpty(props.indicators) && !isEmpty(props.indicators[section.key]) ? props.indicators[section.key] : {}}
+                        visibility={!isEmpty(props.visibility) && !isEmpty(props.visibility[section.key]) ? props.visibility[section.key] : {}}
                         onChange={props.onChange(section)}
                         state={props.state && props.state.hasOwnProperty(section.key) ? props.state[section.key] : null}
                     />
@@ -400,22 +400,20 @@ const DynamicFormComponent: React.FC<{
 const DynamicFormSectionComponent: React.FC<{
     section: DynamicFormSection;
     state: DynamicFormInternalStateSection;
-    errors: { [k: string]: string };
-    warnings: { [k: string]: string };
+    indicators: { [k: string]: Indicator };
+    visibility: { [k: string]: boolean };
     onChange: OnChangeFormItem;
-    shouldRender: ShouldRenderFormItem;
 }> = (props) => {
     const { wrappingElement = "none", additionalProps = {} } = props.section;
 
     const getSections = (): JSX.Element[] =>
         props.section?.items?.map((item, i) => {
-            if (props.shouldRender(props.section.key, item.key)) {
+            if (!!props.visibility[item.key]) {
                 return (
                     <DynamicFormItemComponent
                         key={i}
                         item={item}
-                        errorMessage={!isEmpty(props.errors) && !isEmpty(props.errors[item.key]) ? props.errors[item.key] : null}
-                        warningMessage={!isEmpty(props.warnings) && !isEmpty(props.warnings[item.key]) ? props.warnings[item.key] : null}
+                        indicator={!isEmpty(props.indicators) && !isEmpty(props.indicators[item.key]) ? props.indicators[item.key] : null}
                         onChange={props.onChange(item)}
                         state={props.state ? (props.state as DynamicFormInternalStateSection)[item.key] : null}
                     />
@@ -437,8 +435,7 @@ const DynamicFormSectionComponent: React.FC<{
 const DynamicFormItemComponent: React.FC<{
     item: DynamicFormItem;
     state: DynamicFormInternalStateValue;
-    errorMessage: string | null;
-    warningMessage: string | null;
+    indicator: Indicator;
     onChange: OnChangeInput;
 }> = (props) => {
     const controlType: DynamicFormType = props.item?.controlType || "Text";
@@ -466,12 +463,8 @@ const DynamicFormItemComponent: React.FC<{
     const descriptionItem: ReactNode = props.item?.description ? <p className="rc dynamic-form dynamic-form-description text-muted m-0">{props.item?.description}</p> : <></>;
 
     const indicator: Indicator = React.useMemo(() => {
-        return props.errorMessage
-            ? { type: "danger", message: props.errorMessage }
-            : props.warningMessage
-            ? { type: "warning", message: props.warningMessage }
-            : { type: "none", noBorder: true, message: "" };
-    }, [props.errorMessage, props.warningMessage]);
+        return !isEmpty(props.indicator) ? props.indicator : { type: "none", noBorder: true, message: "" };
+    }, [props.indicator]);
 
     switch (controlType) {
         case "Textarea": {
@@ -493,7 +486,7 @@ const DynamicFormItemComponent: React.FC<{
                 <>
                     {labelItem}
                     {descriptionItem}
-                    <Textbox {...rest} value={value} indicator={indicator} type={props.item.valueType || "text"} {...formElementAdditionalProps} />
+                    <Textbox {...rest} value={value} indicator={indicator} {...formElementAdditionalProps} />
                 </>
             );
             break;
@@ -507,7 +500,7 @@ const DynamicFormItemComponent: React.FC<{
                     {labelItem}
                     {descriptionItem}
                     <FeedbackIndicator {...indicator}>
-                        <RadioGroup {...{ name, onChange, value }} {...formElementAdditionalProps}>
+                        <RadioGroup {...{ name, onChange, value }} {...formElementAdditionalProps} className={`mt-0 ${formElementAdditionalProps?.className || ""}`}>
                             {props.item?.options?.map((option: DynamicFormOption, i) => (
                                 <RadioButton key={i} value={option?.value} {...(option?.additionalProps || {})}>
                                     {option?.label}

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Docs from "@common/Docs";
 import { ToggleSelector, ToggleSelectorItem } from "@sebgroup/react-components/ToggleSelector";
 import { DynamicFormOption, useDynamicForm } from "@sebgroup/react-components/hooks/useDynamicForm";
@@ -25,20 +25,22 @@ const ToggleSelectorPage: React.FC = (): React.ReactElement<void> => {
     const [singleValue, setSingleValue] = React.useState<number>();
     const [multipleValues, setMultipleValues] = React.useState<number[]>();
 
-    const [renderControls, { controls }] = useDynamicForm([
+    const {
+        renderForm: renderControls,
+        state: { controls },
+        setHidden,
+    } = useDynamicForm([
         {
             key: "controls",
             items: [
                 { key: "multiple", label: "multiple", controlType: "Checkbox", description: "Select multiple items at the same time" },
                 { key: "disabled", label: "disabled", description: "You can disable individual buttons or disable all toggles", controlType: "Checkbox" },
-                { key: "indicator", label: "indicator", controlType: "Checkbox", value: false },
+                { key: "indicator", label: "indicator", controlType: "Checkbox", initialValue: false },
                 {
                     key: "indicatorType",
                     label: "Indicator type",
                     options: indicators,
                     controlType: "Radio",
-                    rulerKey: "indicator",
-                    condition: true,
                     formElementAdditionalProps: { className: "indent pl-3 pt-2" },
                 },
                 { key: "icons", label: "With icons as children", controlType: "Checkbox", description: "Find this example in the notes" },
@@ -46,8 +48,12 @@ const ToggleSelectorPage: React.FC = (): React.ReactElement<void> => {
         },
     ]);
 
+    useEffect(() => {
+        setHidden("controls", "indicatorType", !controls.indicator);
+    }, [controls.indicator]);
+
     const indicator: Indicator = React.useMemo(() => {
-        return controls.indicator ? { type: controls.indicatorType, message: "Indicator message" } : null;
+        return controls.indicator ? { type: controls.indicatorType as IndicatorType, message: "Indicator message" } : null;
     }, [controls.indicator, controls.indicatorType]);
 
     return (
@@ -57,9 +63,9 @@ const ToggleSelectorPage: React.FC = (): React.ReactElement<void> => {
                 <ToggleSelector
                     className="m-auto"
                     value={controls.multiple ? multipleValues : (singleValue as any)}
-                    onChange={(e: number | number[]) => (controls.multiple ? setMultipleValues(e as number[]) : setSingleValue(e as number))}
-                    multiple={controls.multiple}
-                    disabled={controls.disabled}
+                    onChange={(e) => (controls.multiple ? setMultipleValues(e as number[]) : setSingleValue(e as number))}
+                    multiple={!!controls.multiple}
+                    disabled={!!controls.disabled}
                     indicator={controls.indicator ? indicator : null}
                 >
                     <ToggleSelectorItem>

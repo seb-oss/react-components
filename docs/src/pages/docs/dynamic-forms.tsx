@@ -1,11 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Helmet } from "react-helmet";
 import Layout from "@common/Layout";
 import { CodeSnippet } from "@common/CodeSnippet";
-import { useDynamicForm, DynamicFormSection, DynamicFormItem, DynamicFormOption } from "@sebgroup/react-components/hooks";
+import { useDynamicForm, DynamicFormSection } from "@sebgroup/react-components/hooks";
 import { Table, TableBody, TableCell, TableHeader, TableHeaderCell, TableRow } from "@sebgroup/react-components/Table";
-import { Button } from "@sebgroup/react-components/Button";
-import { isEmpty } from "@sebgroup/frontend-tools";
+import { Indicator } from "@sebgroup/react-components/FeedbackIndicator";
 
 const DynamicForms: React.FC = React.memo(() => {
     return (
@@ -27,47 +26,37 @@ const DynamicForms: React.FC = React.memo(() => {
                 </p>
                 <CodeSnippet language="javascript">
                     {`
-import { useDynamicForm } from "@sebgroup/react-components/hooks/useDynamicForm";
-
-const Component = () => {
-  const sections = [
-    {
-      title: "Login",
-      key: "section-1-login",
-      items: [
+const Component: React.FC = () => {
+    const sections: DynamicFormSection[] = [
         {
-          key: "name",
-          label: "Name",
-          order: 1,
-          controlType: "Text"
+            title: "Login",
+            key: "section-1-login",
+            items: [
+                {
+                    key: "name",
+                    label: "Name",
+                    controlType: "Text",
+                },
+                {
+                    key: "email",
+                    label: "Email",
+                    placeholder: "name@domain.com",
+                    controlType: "Text",
+                },
+                {
+                    key: "user-accepted",
+                    label: "I understand",
+                    initialValue: true,
+                    controlType: "Checkbox",
+                },
+            ],
         },
-        {
-          key: "email",
-          label: "Email",
-          placeholder: "name@domain.com",
-          order: 2,
-          controlType: "Text"
-        },
-        {
-          key: "user-accepted",
-          label: "I understand",
-          order: 3,
-          value: true,
-          controlType: "Checkbox"
-        }
-      ]
-    }
-  ];
+    ];
 
-  const [renderForm, state] = useDynamicForm(sections);
+    const { renderForm } = useDynamicForm(sections);
 
-  // the state of the form with all the current values
-  console.log(state)
-
-  return <div>{renderForm()}</div>;
+    return <div>{renderForm()}</div>;
 };
-
-export default Component;
                     `}
                 </CodeSnippet>
 
@@ -78,13 +67,9 @@ export default Component;
                 <hr />
 
                 <h2 className="pt-3 pb-3">Conditional rendering example</h2>
-                <p>
-                    Define the <b>condition</b> and the <b>rulerKey</b> of the <code>DynamicFormItem</code> to render that item based on the value of another item.
-                </p>
+                <p>Every form element can be hidden based on any condition you define yourself. Simply set the visibility for that key as shown in the code snippet below.</p>
                 <CodeSnippet language="javascript">
                     {`
-import { useDynamicForm } from "@sebgroup/react-components/hooks/useDynamicForm";
-
 const ComponentConditionalRender: React.FC = () => {
     const sections: DynamicFormSection[] = [
         {
@@ -94,30 +79,33 @@ const ComponentConditionalRender: React.FC = () => {
                 {
                     key: "have-additional-info",
                     label: "I have additional information",
-                    order: 1,
-                    value: false,
-                    controlType: "Checkbox"
+                    controlType: "Checkbox",
                 },
                 {
                     key: "info",
-                    order: 2,
                     placeholder: "Additional information",
                     controlType: "Text",
-                    // this component will be shown only when 
-                    // "have-additional-info" component's value is true
-                    rulerKey: "have-additional-info",
-                    condition: true
-                }
+                },
             ],
         },
     ];
 
-    const [renderForm, state] = useDynamicForm(sections);
+    const { 
+        renderForm, 
+        meta: {
+            "section-2-extra-info": {
+                "have-additional-info": { hasTruthyValue }
+            }
+        }, 
+        setHidden,
+    } = useDynamicForm(sections);
+
+    useEffect(() => {
+        setHidden("section-2-extra-info", "info", !hasTruthyValue)
+    }, [hasTruthyValue])
 
     return <div>{renderForm()}</div>;
 };
-
-export default ComponentConditionalRender;
                     `}
                 </CodeSnippet>
                 <div className="p-3 rounded bg-white">
@@ -127,59 +115,59 @@ export default ComponentConditionalRender;
                 <hr />
 
                 <h2 className="pt-3 pb-3">Form errors example</h2>
-                <p>Every form element defined can display an error message based on any validation rules you define yourself. Simply set the errors for that key as shown in the code snippet below.</p>
+                <p>
+                    Every form element defined can display an error message based on any validation rules you define yourself. Simply set the indicator for that key as shown in the code snippet below.
+                </p>
                 <CodeSnippet language="javascript">
                     {`
-import { useDynamicForm } from "@sebgroup/react-components/hooks/useDynamicForm";
-import { isEmpty } from "@sebgroup/frontend-tools";
-
 const FormWithErrors: React.FC = () => {
     const sections: DynamicFormSection[] = [
         {
-            key: "section-3-errors",
+            key: "section",
             items: [
                 {
-                    key: "normal",
-                    label: "Non mandatory field",
-                    order: 1,
-                    value: false,
-                    controlType: "Checkbox",
-                },
-                {
-                    key: "with-error",
-                    order: 2,
-                    label: "Mandatory field",
+                    key: "field",
+                    description: "This is a mandatory field, but it shouldn't be too long",
                     controlType: "Text",
                 },
             ],
         },
     ];
 
-    const [renderForm, state, , setErrors] = useDynamicForm(sections);
+    const {
+        renderForm,
+        state: {
+            "section": {
+                "field": value
+            }
+        },
+        setIndicator
+    } = useDynamicForm(sections);
 
-    const validate = () => {
-        if (!isEmpty(state) && !isEmpty(state["section-3-errors"])) {
-            setErrors((existing) => {
-                return {
-                    ...existing,
-                    "section-3-errors": {
-                        ...existing["section-3-errors"],
-                        "with-error": !state["section-3-errors"]["with-error"] ? "Please fill in this field" : null,
-                    },
-                };
-            });
+    useEffect(() => {
+        let indicator: Indicator = {
+            type: "success",
+            message: "Perfect :)"
+        };
+        if (!value) {
+            indicator = {
+                type: "danger",
+                message: "Please fill in this field!"  
+            }
+        } else if ((value as string)?.length > 15) {
+            indicator = {
+                type: "warning",
+                message: "Too long :("  
+            }
         }
-    };
+
+        setIndicator("section", "field", indicator);
+    }, [value]);
 
     return (
-        <>
             <div>{renderForm()}</div>
-            <Button className="mt-3" onClick={validate}>Validate</Button>
-        </>
     );
 };
-
-export default FormWithErrors;
                     `}
                 </CodeSnippet>
                 <div className="p-3 rounded bg-white">
@@ -188,148 +176,124 @@ export default FormWithErrors;
 
                 <hr />
 
-                <h2 className="pt-3 pb-3">Full example</h2>
-                <p>A complete example of every form element with label, description and optional error message. All form elements use responsive layout.</p>
-                <CodeSnippet language="javascript">
-                    {`
-import { useDynamicForm, DynamicFormSection, DynamicFormItem, DynamicFormOption } from "@sebgroup/react-components/hooks";
-
-const ShowMeEverything: React.FC = () => {
-    const COMMON_ITEM: Partial<DynamicFormItem> = {
-        wrappingElement: "div",
-        additionalProps: {
-            className: "col-12 col-sm-6 col-md-4 mb-2",
-        },
-    };
-
-    const valueItems: DynamicFormItem[] = (["Text", "Textarea", "Datepicker", "Stepper", "Checkbox"] as DynamicFormItem["controlType"][]).map(
-        (controlType: DynamicFormItem["controlType"], i: number) => {
-            return {
-                key: controlType,
-                label: \`\${controlType} label\`,
-                description: \`\${controlType} description\`,
-                order: i,
-                controlType,
-                ...COMMON_ITEM,
-            };
-        }
-    );
-
-    const options: DynamicFormOption[] = [
-        { key: "one", label: "One", value: "1" },
-        { key: "two", label: "Two", value: "2" },
-        { key: "three", label: "Three", value: "3" },
-    ];
-
-    const multiSingleItems: DynamicFormItem[] = (["Radio", "Dropdown"] as DynamicFormItem["controlType"][]).map((controlType: DynamicFormItem["controlType"], i: number) => {
-        return {
-            key: controlType,
-            label: \`\${controlType} label\`,
-            description: \`\${controlType} description\`,
-            multi: false,
-            order: i,
-            options: [
-                ...options.map((e) => {
-                    return { ...e, key: \`\${e.key}-multi-single\` };
-                }),
-            ],
-            controlType,
-            ...COMMON_ITEM,
-        };
-    });
-
-    const multiManyItems: DynamicFormItem[] = (["Dropdown", "Option"] as DynamicFormItem["controlType"][]).map((controlType: DynamicFormItem["controlType"], i: number) => {
-        return {
-            key: controlType,
-            label: \`\${controlType} label\`,
-            description: \`\${controlType} description\`,
-            multi: true,
-            order: i,
-            options: [
-                ...options.map((e) => {
-                    return { ...e, key: \`\${e.key}-multi-many\` };
-                }),
-            ],
-            controlType,
-            ...COMMON_ITEM,
-        };
-    });
-
-    const COMMON_SECTION: Partial<DynamicFormItem> = {
-        wrappingElement: "section",
-        additionalProps: {
-            className: "row d-flex flex-wrap mb-2",
-        },
-    };
-
-    const sections: DynamicFormSection[] = [
-        {
-            key: "value-items-section",
-            title: "Simple single values only",
-            items: valueItems,
-            ...COMMON_SECTION,
-        },
-        {
-            key: "multi-single-items-section",
-            title: "Choose one of many options",
-            items: multiSingleItems,
-            ...COMMON_SECTION,
-        },
-        {
-            key: "multi-many-items-section",
-            title: "Choose any of multiple options",
-            items: multiManyItems,
-            ...COMMON_SECTION,
-        },
-    ];
-
-    const [renderForm, state,, setErrors] = useDynamicForm(sections);
-
-    const validate = () => {
-        setErrors({
-            "value-items-section": {
-                Text: "Text error message",
-                Textarea: "Textarea error message",
-                Checkbox: "Checkbox error message",
-                Datepicker: "Datepicker error message",
-                Stepper: "Stepper error message",
-            },
-            "multi-single-items-section": {
-                Radio: "Radio error message",
-                Dropdown: "Dropdown error message",
-            },
-            "multi-many-items-section": {
-                Dropdown: "Dropdown error message",
-                Option: "Option error message",
-            },
-        });
-    };
-
-    return (
-        <>
-            <div>{renderForm()}</div>
-            <div>
-                <Button onClick={validate}>
-                    Show errors
-                </Button>
-                <Button className="ml-3" onClick={() => alert(JSON.stringify(state, null, 4))}>
-                    Show current values
-                </Button>
-            </div>
-        </>
-    );
-};
-
-export default ShowMeEverything;
-                    `}
-                </CodeSnippet>
-                <div className="p-3 rounded bg-white">
-                    <ShowMeEverything />
-                </div>
-
-                <hr />
-
                 <h2 className="pt-3 pb-3">Dynamic forms API</h2>
+
+                <h3 className="pt-3 pb-3">
+                    <code>useDynamicForm</code>
+                </h3>
+                <p>
+                    <code>type DynamicFormInternalStateValue = string | string[] | Date | boolean | number | null;</code>
+                </p>
+                <p>
+                    <code>{`type DynamicFormMetaDataItem = { isVisible: boolean; hasIndicator: boolean; hasTruthyValue: boolean; }`}</code>
+                </p>
+                <Table>
+                    <TableHeader>
+                        <TableRow>
+                            <TableHeaderCell>Property name</TableHeaderCell>
+                            <TableHeaderCell>Value type</TableHeaderCell>
+                            <TableHeaderCell>Info</TableHeaderCell>
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        <TableRow>
+                            <TableCell>
+                                <b>renderForm</b>
+                            </TableCell>
+                            <TableCell>
+                                <code>
+                                    <pre style={{ color: "currentcolor" }}>{`
+() => JSX.Element
+                                `}</pre>
+                                </code>
+                            </TableCell>
+                            <TableCell>The callback function which will render the entire form.</TableCell>
+                        </TableRow>
+                        <TableRow>
+                            <TableCell>
+                                <b>state</b>
+                            </TableCell>
+                            <TableCell>
+                                <code>
+                                    <pre style={{ color: "currentcolor" }}>{`
+[k: string]: {
+    [k: string]: DynamicFormInternalStateValue;
+};
+                                `}</pre>
+                                </code>
+                            </TableCell>
+                            <TableCell>The current state of the form.</TableCell>
+                        </TableRow>
+                        <TableRow>
+                            <TableCell>
+                                <b>patchState</b>
+                            </TableCell>
+                            <TableCell>
+                                <code>
+                                    <pre style={{ color: "currentcolor" }}>{`
+(section: string, key: string, value: DynamicFormInternalStateValue) => void;
+`}</pre>
+                                </code>
+                            </TableCell>
+                            <TableCell>A helper utility to change the value of a particular item.</TableCell>
+                        </TableRow>
+                        <TableRow>
+                            <TableCell>
+                                <b>setIndicator</b>
+                            </TableCell>
+                            <TableCell>
+                                <code>
+                                    <pre style={{ color: "currentcolor" }}>{`
+(section: string, key: string, indicator: FeedbackIndicatorProps) => void;
+`}</pre>
+                                </code>
+                            </TableCell>
+                            <TableCell>A helper utility to set a feedback indicator of a particular item.</TableCell>
+                        </TableRow>
+                        <TableRow>
+                            <TableCell>
+                                <b>setHidden</b>
+                            </TableCell>
+                            <TableCell>
+                                <code>
+                                    <pre style={{ color: "currentcolor" }}>{`
+(section: string, key: string, hidden: boolean) => void;
+`}</pre>
+                                </code>
+                            </TableCell>
+                            <TableCell>A helper utility to set visibility of a particular item.</TableCell>
+                        </TableRow>
+                        <TableRow>
+                            <TableCell>
+                                <b>meta</b>
+                            </TableCell>
+                            <TableCell>
+                                <code>
+                                    <pre style={{ color: "currentcolor" }}>{`
+[k: string]: {
+    [k: string]: DynamicFormMetaDataItem;
+};
+                                `}</pre>
+                                </code>
+                            </TableCell>
+                            <TableCell>The metadata of each current field value in the form. Shows if each field is visible, has an indicator active or has a truthy value.</TableCell>
+                        </TableRow>
+                        <TableRow>
+                            <TableCell>
+                                <b>info</b>
+                            </TableCell>
+                            <TableCell>
+                                <code>
+                                    <pre style={{ color: "currentcolor" }}>{`
+{ dirty: boolean; hasIndicators: boolean; isAllTruthy: boolean; }
+                                `}</pre>
+                                </code>
+                            </TableCell>
+                            <TableCell>Additional information about current state of the form.</TableCell>
+                        </TableRow>
+                    </TableBody>
+                </Table>
+
                 <h3 className="pt-3 pb-3">
                     <code>DynamicFormSection</code>
                 </h3>
@@ -362,18 +326,6 @@ export default ShowMeEverything;
                                 <code>string</code>
                             </TableCell>
                             <TableCell>The title of the header of the section</TableCell>
-                        </TableRow>
-                        <TableRow>
-                            <TableCell>
-                                <b>order</b>
-                            </TableCell>
-                            <TableCell>&#10004;</TableCell>
-                            <TableCell>
-                                <code>number</code>
-                            </TableCell>
-                            <TableCell>
-                                Optional order of the section. Any number, lower number will be displayed before. If order is not provided the original order of the array will be used.
-                            </TableCell>
                         </TableRow>
                         <TableRow>
                             <TableCell>
@@ -443,23 +395,13 @@ export default ShowMeEverything;
                         </TableRow>
                         <TableRow>
                             <TableCell>
-                                <b>value</b>
+                                <b>initialValue</b>
                             </TableCell>
                             <TableCell>&#10004;</TableCell>
                             <TableCell>
                                 <code>{`string | string[] | Date | boolean | number | null`}</code>
                             </TableCell>
                             <TableCell>Optional initial value of the element when it gets created.</TableCell>
-                        </TableRow>
-                        <TableRow>
-                            <TableCell>
-                                <b>order</b>
-                            </TableCell>
-                            <TableCell>&#10004;</TableCell>
-                            <TableCell>
-                                <code>number</code>
-                            </TableCell>
-                            <TableCell>The order of this item. Any number, lower number will be displayed before.</TableCell>
                         </TableRow>
                         <TableRow>
                             <TableCell>
@@ -553,45 +495,7 @@ export default ShowMeEverything;
                         </TableRow>
                         <TableRow>
                             <TableCell>
-                                <b>valueType</b>
-                            </TableCell>
-                            <TableCell>&#10004;</TableCell>
-                            <TableCell>
-                                <code>{`"string" | "number"`}</code>
-                            </TableCell>
-                            <TableCell>
-                                Sets the <code>type</code> property of the <code>Text</code> component.
-                            </TableCell>
-                        </TableRow>
-                        <TableRow>
-                            <TableCell>
-                                <b>rulerKey</b>
-                            </TableCell>
-                            <TableCell>&#10004;</TableCell>
-                            <TableCell>
-                                <code>string</code>
-                            </TableCell>
-                            <TableCell>
-                                <b>Conditional rendering:</b> The key of the element within the same section to check and decide if this element should be visible. The <b>condition</b> property must
-                                also be set.
-                            </TableCell>
-                        </TableRow>
-                        <TableRow>
-                            <TableCell>
-                                <b>condition</b>
-                            </TableCell>
-                            <TableCell>&#10004;</TableCell>
-                            <TableCell>
-                                <code>{`string | string[] | Date | boolean | number | null`}</code>
-                            </TableCell>
-                            <TableCell>
-                                <b>Conditional rendering:</b> The exact value of the <b>rulerKey</b> element, as the condition for this element to be rendered. The type of value must be the same as
-                                the <b>rulerKey</b> item.
-                            </TableCell>
-                        </TableRow>
-                        <TableRow>
-                            <TableCell>
-                                <b>additionalProps</b>
+                                <b>formElementAdditionalProps</b>
                             </TableCell>
                             <TableCell>&#10004;</TableCell>
                             <TableCell>
@@ -681,14 +585,14 @@ export default ShowMeEverything;
                         </TableRow>
                         <TableRow>
                             <TableCell>
-                                <b>formElementAdditionalProps</b>
+                                <b>additionalProps</b>
                             </TableCell>
                             <TableCell>&#10004;</TableCell>
                             <TableCell>
                                 <code>{`{ [k: string]: any; }`}</code>
                             </TableCell>
                             <TableCell>
-                                Any additional element props to be mapped to the element. Depends on the <b>controlType</b>. Must be a valid prop for that element.
+                                Any additional element props to be mapped to the underlying option element. Depends on the <b>controlType</b>. Must be a valid prop for that element.
                             </TableCell>
                         </TableRow>
                     </TableBody>
@@ -709,28 +613,25 @@ const Component: React.FC = () => {
                 {
                     key: "name",
                     label: "Name",
-                    order: 1,
                     controlType: "Text",
                 },
                 {
                     key: "email",
                     label: "Email",
                     placeholder: "name@domain.com",
-                    order: 2,
                     controlType: "Text",
                 },
                 {
                     key: "user-accepted",
                     label: "I understand",
-                    order: 3,
-                    value: true,
+                    initialValue: true,
                     controlType: "Checkbox",
                 },
             ],
         },
     ];
 
-    const [renderForm, state] = useDynamicForm(sections);
+    const { renderForm } = useDynamicForm(sections);
 
     return <div>{renderForm()}</div>;
 };
@@ -744,23 +645,30 @@ const ComponentConditionalRender: React.FC = () => {
                 {
                     key: "have-additional-info",
                     label: "I have additional information",
-                    order: 1,
-                    value: false,
                     controlType: "Checkbox",
                 },
                 {
                     key: "info",
-                    order: 2,
                     placeholder: "Additional information",
                     controlType: "Text",
-                    rulerKey: "have-additional-info",
-                    condition: true,
                 },
             ],
         },
     ];
 
-    const [renderForm, state] = useDynamicForm(sections);
+    const {
+        renderForm,
+        meta: {
+            "section-2-extra-info": {
+                "have-additional-info": { hasTruthyValue },
+            },
+        },
+        setHidden,
+    } = useDynamicForm(sections);
+
+    useEffect(() => {
+        setHidden("section-2-extra-info", "info", !hasTruthyValue);
+    }, [hasTruthyValue]);
 
     return <div>{renderForm()}</div>;
 };
@@ -768,171 +676,44 @@ const ComponentConditionalRender: React.FC = () => {
 const FormWithErrors: React.FC = () => {
     const sections: DynamicFormSection[] = [
         {
-            key: "section-3-errors",
+            key: "section",
             items: [
                 {
-                    key: "normal",
-                    label: "Non mandatory field",
-                    order: 1,
-                    value: false,
-                    controlType: "Checkbox",
-                },
-                {
-                    key: "with-error",
-                    order: 2,
-                    label: "Mandatory field",
+                    key: "field",
+                    description: "This is a mandatory field, but it shouldn't be too long",
                     controlType: "Text",
                 },
             ],
         },
     ];
 
-    const [renderForm, state, , setErrors] = useDynamicForm(sections);
-
-    const validate = () => {
-        if (!isEmpty(state) && !isEmpty(state["section-3-errors"])) {
-            setErrors((existing) => {
-                return {
-                    ...existing,
-                    "section-3-errors": {
-                        ...existing["section-3-errors"],
-                        "with-error": !state["section-3-errors"]["with-error"] ? "Please fill in this field" : null,
-                    },
-                };
-            });
-        }
-    };
-
-    return (
-        <>
-            <div>{renderForm()}</div>
-            <Button className="mt-3" onClick={validate}>
-                Validate
-            </Button>
-        </>
-    );
-};
-
-const ShowMeEverything: React.FC = () => {
-    const COMMON_ITEM: Partial<DynamicFormItem> = {
-        wrappingElement: "div",
-        additionalProps: {
-            className: "col-12 col-sm-6 col-md-4 mb-2",
+    const {
+        renderForm,
+        state: {
+            section: { field: value },
         },
-    };
+        setIndicator,
+    } = useDynamicForm(sections);
 
-    const valueItems: DynamicFormItem[] = (["Text", "Textarea", "Datepicker", "Stepper", "Checkbox"] as DynamicFormItem["controlType"][]).map(
-        (controlType: DynamicFormItem["controlType"], i: number) => {
-            return {
-                key: controlType,
-                label: `${controlType} label`,
-                description: `${controlType} description`,
-                order: i,
-                controlType,
-                ...COMMON_ITEM,
+    useEffect(() => {
+        let indicator: Indicator = {
+            type: "success",
+            message: "Perfect :)",
+        };
+        if (!value) {
+            indicator = {
+                type: "danger",
+                message: "Please fill in this field!",
+            };
+        } else if ((value as string)?.length > 15) {
+            indicator = {
+                type: "warning",
+                message: "Too long :(",
             };
         }
-    );
 
-    const options: DynamicFormOption[] = [
-        { key: "one", label: "One", value: "1" },
-        { key: "two", label: "Two", value: "2" },
-        { key: "three", label: "Three", value: "3" },
-    ];
+        setIndicator("section", "field", indicator);
+    }, [value]);
 
-    const multiSingleItems: DynamicFormItem[] = (["Radio", "Dropdown"] as DynamicFormItem["controlType"][]).map((controlType: DynamicFormItem["controlType"], i: number) => {
-        return {
-            key: controlType,
-            label: `${controlType} label`,
-            description: `${controlType} description`,
-            multi: false,
-            order: i,
-            options: [
-                ...options.map((e) => {
-                    return { ...e, key: `${e.key}-multi-single` };
-                }),
-            ],
-            controlType,
-            ...COMMON_ITEM,
-        };
-    });
-
-    const multiManyItems: DynamicFormItem[] = (["Dropdown", "Option"] as DynamicFormItem["controlType"][]).map((controlType: DynamicFormItem["controlType"], i: number) => {
-        return {
-            key: controlType,
-            label: `${controlType} label`,
-            description: `${controlType} description`,
-            multi: true,
-            order: i,
-            options: [
-                ...options.map((e) => {
-                    return { ...e, key: `${e.key}-multi-many` };
-                }),
-            ],
-            controlType,
-            ...COMMON_ITEM,
-        };
-    });
-
-    const COMMON_SECTION: Partial<DynamicFormItem> = {
-        wrappingElement: "section",
-        additionalProps: {
-            className: "row d-flex flex-wrap mb-2",
-        },
-    };
-
-    const sections: DynamicFormSection[] = [
-        {
-            key: "value-items-section",
-            title: "Simple single values only",
-            items: valueItems,
-            ...COMMON_SECTION,
-        },
-        {
-            key: "multi-single-items-section",
-            title: "Choose one of many options",
-            items: multiSingleItems,
-            ...COMMON_SECTION,
-        },
-        {
-            key: "multi-many-items-section",
-            title: "Choose any of multiple options",
-            items: multiManyItems,
-            ...COMMON_SECTION,
-        },
-    ];
-
-    const [renderForm, state, , setErrors] = useDynamicForm(sections);
-
-    const validate = () => {
-        setErrors({
-            "value-items-section": {
-                Text: "Text error message",
-                Textarea: "Textarea error message",
-                Checkbox: "Checkbox error message",
-                Datepicker: "Datepicker error message",
-                Stepper: "Stepper error message",
-            },
-            "multi-single-items-section": {
-                Radio: "Radio error message",
-                Dropdown: "Dropdown error message",
-            },
-            "multi-many-items-section": {
-                Dropdown: "Dropdown error message",
-                Option: "Option error message",
-            },
-        });
-    };
-
-    return (
-        <>
-            <div>{renderForm()}</div>
-            <div>
-                <Button onClick={validate}>Show errors</Button>
-                <Button className="ml-3" onClick={() => alert(JSON.stringify(state, null, 4))}>
-                    Show current values
-                </Button>
-            </div>
-        </>
-    );
+    return <div>{renderForm()}</div>;
 };

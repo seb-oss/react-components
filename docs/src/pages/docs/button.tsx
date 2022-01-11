@@ -23,7 +23,10 @@ const buttonThemes: Array<DynamicFormOption<ButtonTheme>> = [
 ];
 
 const ButtonPage: React.FC = () => {
-    const [renderControls, { controls }] = useDynamicForm([
+    const {
+        renderForm: renderControls,
+        state: { controls },
+    } = useDynamicForm([
         {
             key: "controls",
             items: [
@@ -39,11 +42,7 @@ const ButtonPage: React.FC = () => {
         <Docs
             exampleTheme={controls.theme === "light" ? "dark" : controls.theme === "dark" ? "warning" : null}
             mainFile={importString}
-            example={
-                <Button size={controls.size} theme={controls.theme} disabled={controls.disabled} block={controls.block}>
-                    Click me
-                </Button>
-            }
+            example={<Button {...(controls as { [k: string]: any })}>Click me</Button>}
             code={code}
             controls={renderControls()}
         />

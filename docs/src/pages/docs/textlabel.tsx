@@ -18,12 +18,15 @@ const TextLabelPage: React.FC = React.memo(() => {
             ],
         },
     ];
-    const [renderForm, { controls }] = useDynamicForm(fields);
+    const {
+        renderForm,
+        state: { controls },
+    } = useDynamicForm(fields);
     const code: string = `<TextLabel value="Some text value" label="Some text label" />`;
 
     /** check if key selected */
     const checkSelectedKey = (key: string) => {
-        return controls.checkboxes?.find((item: string) => item === key);
+        return (controls.checkboxes as string[])?.find((item: string) => item === key);
     };
 
     return (

@@ -1,10 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Docs from "@common/Docs";
 import { DynamicFormOption, useDynamicForm } from "@sebgroup/react-components/hooks/useDynamicForm";
 import { RadioButton, RadioGroup } from "@sebgroup/react-components/RadioButton";
 import { CodeSnippet } from "@common/CodeSnippet";
 import { Indicator, IndicatorType } from "@sebgroup/react-components/FeedbackIndicator";
-import { Checkbox } from "@sebgroup/react-components/Checkbox";
 
 const importString: string = require("!raw-loader!@sebgroup/react-components/RadioButton/RadioButton");
 const code: string = `{/* Use them in our RadioGroup helper component */}
@@ -33,34 +32,39 @@ const indicatorGrouping: Array<DynamicFormOption> = [
 const RadioButtonPage: React.FC = () => {
     const [value, setValue] = React.useState<React.ReactText>("Yes");
 
-    const [renderControls, { controls }] = useDynamicForm([
+    const {
+        renderForm: renderControls,
+        state: { controls },
+        setHidden,
+    } = useDynamicForm([
         {
             key: "controls",
             items: [
-                { key: "inline", label: "inline", controlType: "Checkbox", value: false, description: "Displays them inline" },
-                { key: "disabled", label: "disabled", controlType: "Checkbox", value: false },
-                { key: "indicator", label: "indicator", controlType: "Checkbox", value: false },
+                { key: "inline", label: "inline", controlType: "Checkbox", initialValue: false, description: "Displays them inline" },
+                { key: "disabled", label: "disabled", controlType: "Checkbox", initialValue: false },
+                { key: "indicator", label: "indicator", controlType: "Checkbox", initialValue: false },
                 {
                     key: "indicatorGrouping",
                     label: "Indicator choices",
                     controlType: "Radio",
-                    rulerKey: "indicator",
-                    condition: true,
                     options: indicatorGrouping,
-                    value: indicatorGrouping[0].value,
+                    initialValue: indicatorGrouping[0].value,
                 },
                 {
                     key: "indicatorType",
                     label: "Indicator type",
                     controlType: "Radio",
-                    rulerKey: "indicator",
-                    condition: true,
                     options: indicators,
-                    value: indicators[0].value,
+                    initialValue: indicators[0].value,
                 },
             ],
         },
     ]);
+
+    useEffect(() => {
+        setHidden("controls", "indicatorType", !controls.indicator);
+        setHidden("controls", "indicatorGrouping", !controls.indicator);
+    }, [controls.indicator]);
 
     const isIndividual: boolean = controls.indicatorGrouping === "1";
     const isGrouped: boolean = controls.indicatorGrouping === "2";

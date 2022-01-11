@@ -23,12 +23,28 @@ type ConditionalFormFieldTestCase = {
     onChange: () => void;
 };
 
-const TestHook: React.FC<{ sections: DynamicFormSection[]; onFormChange?: (state: any) => void }> = ({ sections, onFormChange }) => {
-    const [renderForm, state] = useDynamicForm(sections);
+const TestHook: React.FC<{
+    sections: DynamicFormSection[];
+    onFormChange?: (state: any) => void;
+    hidePath?: [string, string];
+    indicatorPath?: [string, string];
+}> = ({ sections, onFormChange, hidePath, indicatorPath }) => {
+    const { renderForm, state, setHidden, setIndicator } = useDynamicForm(sections);
 
     React.useEffect(() => {
         onFormChange && onFormChange(state);
     }, [state]);
+
+    React.useEffect(() => {
+        // hide the element if path provided
+        hidePath && setHidden(...hidePath, true);
+    }, [hidePath]);
+
+    React.useEffect(() => {
+        // give element an error indicator if path provided
+        indicatorPath && setIndicator(...indicatorPath, { type: "danger" });
+    }, [indicatorPath]);
+
     return <div>{renderForm()}</div>;
 };
 
@@ -42,21 +58,18 @@ describe("hook: useDynamicForm", () => {
                 {
                     key: "name",
                     label: "Name",
-                    order: 1,
                     controlType: "Text",
                 },
                 {
                     key: "email",
                     label: "Email",
                     placeholder: "name@domain.com",
-                    order: 2,
                     controlType: "Text",
                 },
                 {
                     key: "user-accepted",
                     label: "I understand",
-                    order: 3,
-                    value: true,
+                    initialValue: true,
                     controlType: "Checkbox",
                 },
             ],
@@ -170,7 +183,6 @@ describe("hook: useDynamicForm", () => {
                     { label: "item 2", value: "item 2", key: "item 2" },
                 ],
             },
-            { key: "name", label: "Name", controlType: "Hidden", result: "" },
             { key: "name", label: "Name", controlType: "LabelOnly", result: "" },
             {
                 key: "name",
@@ -199,27 +211,21 @@ describe("hook: useDynamicForm", () => {
         testCases.map((testCase: DynamicFormFieldTestCase) => {
             const { result, ...props } = testCase;
             it(props.controlType, () => {
-                const isHidden: boolean = props.controlType === "Hidden";
                 const isLabelOnly: boolean = props.controlType === "LabelOnly";
                 act(() => {
                     render(<TestHook sections={[{ ...sections[0], items: [{ ...props }] }]} />, container);
                 });
-                if (isHidden) {
-                    expect(container.querySelector("h4").nextElementSibling).toBeNull();
+
+                if (props.controlType === "Checkbox") {
+                    // get the last label element since chekbox is wrapped in a label to fix the hitbox issue
+                    const labelElements = container.querySelectorAll("label");
+                    expect(labelElements.item(labelElements.length - 1).innerHTML).toBe(props.label);
+                } else {
+                    // just get the first label element normally
+                    expect(container.querySelector("label").innerHTML).toBe(props.label);
                 }
 
-                if (!isHidden) {
-                    if (props.controlType === "Checkbox") {
-                        // get the last label element since chekbox is wrapped in a label to fix the hitbox issue
-                        const labelElements = container.querySelectorAll("label");
-                        expect(labelElements.item(labelElements.length - 1).innerHTML).toBe(props.label);
-                    } else {
-                        // just get the first label element normally
-                        expect(container.querySelector("label").innerHTML).toBe(props.label);
-                    }
-                }
-
-                if (!isLabelOnly && !isHidden) {
+                if (!isLabelOnly) {
                     expect(container.querySelector(`.${result}`)).not.toBeNull();
                 }
             });
@@ -228,10 +234,10 @@ describe("hook: useDynamicForm", () => {
 
     describe("Should render field with initial value correctly", () => {
         const testCases: DynamicFormFieldTestCase[] = [
-            { key: "name", label: "Name", controlType: "Checkbox", result: "", value: true },
-            { key: "name", label: "Name", controlType: "Datepicker", result: "2020-11-20", value: "2020-11-20" },
-            { key: "name", label: "Name", controlType: "Datepicker", result: "", value: "aa" },
-            { key: "name", label: "Name", controlType: "Datepicker", result: "2020-11-20", value: new Date("2020-11-20") },
+            { key: "name", label: "Name", controlType: "Checkbox", result: "", initialValue: true },
+            { key: "name", label: "Name", controlType: "Datepicker", result: "2020-11-20", initialValue: "2020-11-20" },
+            { key: "name", label: "Name", controlType: "Datepicker", result: "", initialValue: "aa" },
+            { key: "name", label: "Name", controlType: "Datepicker", result: "2020-11-20", initialValue: new Date("2020-11-20") },
             {
                 key: "name",
                 label: "Name",
@@ -241,14 +247,14 @@ describe("hook: useDynamicForm", () => {
                     { label: "item 1", value: "item 1", key: "item 1" },
                     { label: "item 2", value: "item 2", key: "item 2" },
                 ],
-                value: "item 1",
+                initialValue: "item 1",
             },
             {
                 key: "name",
                 label: "Name",
                 controlType: "Dropdown",
                 multi: true,
-                value: ["item 1"],
+                initialValue: ["item 1"],
                 result: "item 1",
                 options: [
                     { label: "item 1", value: "item 1", key: "item 1" },
@@ -264,15 +270,15 @@ describe("hook: useDynamicForm", () => {
                     { label: "item 1", value: "item 1", key: "item 1" },
                     { label: "item 2", value: "item 2", key: "item 2" },
                 ],
-                value: "item 1",
+                initialValue: "item 1",
             },
-            { key: "name", label: "Name", controlType: "Stepper", result: "1", value: "1" },
-            { key: "name", label: "Name", controlType: "Text", result: "test", value: "test" },
-            { key: "name", label: "Name", controlType: "Textarea", result: "test", value: "test" },
+            { key: "name", label: "Name", controlType: "Stepper", result: "1", initialValue: "1" },
+            { key: "name", label: "Name", controlType: "Text", result: "test", initialValue: "test" },
+            { key: "name", label: "Name", controlType: "Textarea", result: "test", initialValue: "test" },
         ];
         testCases.map((testCase: DynamicFormFieldTestCase) => {
             const { result, ...props } = testCase;
-            it(`${props.controlType} with value: ${props.value}`, () => {
+            it(`${props.controlType} with value: ${props.initialValue}`, () => {
                 act(() => {
                     render(<TestHook sections={[{ ...sections[0], items: [{ ...props }] }]} />, container);
                 });
@@ -295,8 +301,8 @@ describe("hook: useDynamicForm", () => {
 
     describe("Should be able to update field", () => {
         const testCases: DynamicFormFieldTestCase[] = [
-            { key: "name", label: "Name", controlType: "Checkbox", result: true, value: true },
-            { key: "name", label: "Name", controlType: "Datepicker", result: new Date("2020-11-20T00:00:00.000Z"), value: "2020-11-20" },
+            { key: "name", label: "Name", controlType: "Checkbox", result: true, initialValue: true },
+            { key: "name", label: "Name", controlType: "Datepicker", result: new Date("2020-11-20T00:00:00.000Z"), initialValue: "2020-11-20" },
             {
                 key: "name",
                 label: "Name",
@@ -306,7 +312,7 @@ describe("hook: useDynamicForm", () => {
                     { label: "item 1", value: "item 1", key: "item 1" },
                     { label: "item 2", value: "item 2", key: "item 2" },
                 ],
-                value: "item 1",
+                initialValue: "item 1",
             },
             {
                 key: "name",
@@ -318,7 +324,7 @@ describe("hook: useDynamicForm", () => {
                     { label: "item 1", value: "item 1", key: "item 1" },
                     { label: "item 2", value: "item 2", key: "item 2" },
                 ],
-                value: ["item 1"],
+                initialValue: ["item 1"],
             },
             {
                 key: "name",
@@ -340,7 +346,7 @@ describe("hook: useDynamicForm", () => {
                     { label: "item 1", value: "item 1", key: "item 1" },
                     { label: "item 2", value: "item 2", key: "item 2" },
                 ],
-                value: "item 1",
+                initialValue: "item 1",
             },
             {
                 key: "name",
@@ -351,16 +357,16 @@ describe("hook: useDynamicForm", () => {
                     { label: "item 1", value: "item 1", key: "item 1" },
                     { label: "item 2", value: "item 2", key: "item 2" },
                 ],
-                value: "item 1",
+                initialValue: "item 1",
             },
-            { key: "name", label: "Name", controlType: "Stepper", result: 1, value: 1 },
-            { key: "name", label: "Name", controlType: "Stepper", result: -1, value: -1, min: -2 },
-            { key: "name", label: "Name", controlType: "Text", result: "test", value: "test" },
-            { key: "name", label: "Name", controlType: "Textarea", result: "test", value: "test" },
+            { key: "name", label: "Name", controlType: "Stepper", result: 1, initialValue: 1 },
+            { key: "name", label: "Name", controlType: "Stepper", result: -1, initialValue: -1, min: -2 },
+            { key: "name", label: "Name", controlType: "Text", result: "test", initialValue: "test" },
+            { key: "name", label: "Name", controlType: "Textarea", result: "test", initialValue: "test" },
         ];
         testCases.map((testCase: DynamicFormFieldTestCase) => {
             const onChange: jest.Mock = jest.fn();
-            const { result, value, ...props } = testCase;
+            const { result, initialValue: value, ...props } = testCase;
             it(`${props.controlType} with value: ${value}`, async () => {
                 act(() => {
                     render(<TestHook sections={[{ ...sections[0], items: [{ ...props }] }]} onFormChange={onChange} />, container);
@@ -392,144 +398,69 @@ describe("hook: useDynamicForm", () => {
         });
     });
 
-    describe("Should display conditional field", () => {
-        const testCases: ConditionalFormFieldTestCase[] = [
+    describe("Should hide the form element if the setHidden utility is used", () => {
+        const testSections: DynamicFormSection[] = [
             {
-                statement: "conditonal field based on checkbox",
-                sections: [
+                title: "Hidden examples",
+                key: "section",
+                items: [
                     {
-                        title: "Extra Info",
-                        key: "section-2-extra-info",
-                        items: [
-                            {
-                                key: "have-additional-info",
-                                label: "I have additional information",
-                                order: 1,
-                                value: false,
-                                controlType: "Checkbox",
-                            },
-                            {
-                                key: "info",
-                                order: 2,
-                                placeholder: "Additional information",
-                                controlType: "Text",
-                                rulerKey: "have-additional-info",
-                                condition: true,
-                            },
-                        ],
+                        key: "not-hidden",
+                        controlType: "Text",
+                        initiallyHidden: false,
+                    },
+                    {
+                        key: "initially-hidden",
+                        controlType: "Text",
+                        initiallyHidden: true,
                     },
                 ],
-                onChange: () => {
-                    Simulate.change(container.querySelector("input"), { target: { checked: true } as any });
-                },
-            },
-            {
-                statement: "conditonal field based on textfield",
-                sections: [
-                    {
-                        title: "Extra Info",
-                        key: "section-2-extra-info",
-                        items: [
-                            {
-                                key: "have-additional-info",
-                                label: "I have additional information",
-                                order: 1,
-                                value: "",
-                                controlType: "Text",
-                            },
-                            {
-                                key: "info",
-                                order: 2,
-                                placeholder: "Additional information",
-                                controlType: "Text",
-                                rulerKey: "have-additional-info",
-                                condition: "hello",
-                            },
-                        ],
-                    },
-                ],
-                onChange: () => {
-                    Simulate.change(container.querySelector("input"), { target: { value: "hello" } as any });
-                },
-            },
-            {
-                statement: "conditonal field based on multi dropdown",
-                sections: [
-                    {
-                        title: "Extra Info",
-                        key: "section-2-extra-info",
-                        items: [
-                            {
-                                key: "have-additional-info",
-                                label: "I have additional information",
-                                order: 1,
-                                multi: true,
-                                options: [
-                                    { label: "item 1", value: "item 1", key: "item 1" },
-                                    { label: "item 2", value: "item 2", key: "item 2" },
-                                ],
-                                controlType: "Dropdown",
-                            },
-                            {
-                                key: "info",
-                                order: 2,
-                                placeholder: "Additional information",
-                                controlType: "Text",
-                                rulerKey: "have-additional-info",
-                                condition: ["item 1"],
-                            },
-                        ],
-                    },
-                ],
-                onChange: () => {
-                    Simulate.change(container.querySelector("select"), { target: { value: ["item 1"] } as any });
-                },
             },
         ];
-        testCases.map((item: ConditionalFormFieldTestCase) => {
-            it(item.statement, () => {
-                act(() => {
-                    render(<TestHook sections={item.sections} />, container);
-                });
-                act(() => {
-                    item.onChange();
-                });
-                expect(container.querySelector(`input[name='${item.sections[0].items[1].key}']`)).not.toBeNull();
+
+        it("should not be shown", () => {
+            act(() => {
+                render(<TestHook sections={testSections} />, container);
             });
+            expect(container.querySelector(`input[name='not-hidden']`)).toBeTruthy();
+            expect(container.querySelector(`input[name='initially-hidden']`)).toBeNull();
+
+            act(() => {
+                render(<TestHook sections={testSections} hidePath={[testSections[0].key, testSections[0].items[0].key]} />, container);
+            });
+            expect(container.querySelector(`input[name='not-hidden']`)).toBeNull();
+            expect(container.querySelector(`input[name='initially-hidden']`)).toBeNull();
         });
     });
 
-    describe("Should not display field if hidden or conditional render properties not set correctly", () => {
+    describe("Should show an indicastor if the setIndicator utility is used", () => {
         const testSections: DynamicFormSection[] = [
             {
-                title: "Extra Info",
-                key: "section-2-extra-info",
+                title: "Feedback examples",
+                key: "section",
                 items: [
                     {
-                        key: "hidden-field",
-                        controlType: "Hidden",
+                        key: "indicator",
+                        controlType: "Text",
                     },
                     {
-                        key: "my-ruler-has-no-value",
+                        key: "no-indicator",
                         controlType: "Text",
-                        rulerKey: "hidden-field",
-                        condition: "hello",
-                    },
-                    {
-                        key: "i-have-no-condition",
-                        controlType: "Text",
-                        rulerKey: "hidden-field",
                     },
                 ],
             },
         ];
-        testSections[0].items.map((item: DynamicFormItem) => {
-            it("should not be shown", () => {
-                act(() => {
-                    render(<TestHook sections={testSections} />, container);
-                });
-                expect(container.querySelector(`input[name='${item.key}']`)).toBeNull();
+
+        it("Indicator should be visible", () => {
+            act(() => {
+                render(<TestHook sections={testSections} />, container);
             });
+            expect(container.querySelector(`.feedback.feedback-10`)).toBeNull();
+
+            act(() => {
+                render(<TestHook sections={testSections} indicatorPath={[testSections[0].key, testSections[0].items[0].key]} />, container);
+            });
+            expect(container.querySelector(`.feedback.feedback-10`)).toBeTruthy();
         });
     });
 
