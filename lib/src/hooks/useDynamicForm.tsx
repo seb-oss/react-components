@@ -329,32 +329,34 @@ export function useDynamicForm(sections: DynamicFormSection[]): UseDynamicForm {
         return { dirty, hasIndicators, isAllTruthy };
     }, [dirty, hasIndicators, isAllTruthy]);
 
-    const handlePatchState: PatchState = (s, k, v) => {
-        setState((e) => ({
-            ...e,
-            [s]: {
-                ...(e[s] || {}),
-                [k]: v,
+    const handlePatchState: PatchState = (section: string, key: string, value: DynamicFormInternalStateValue) => {
+        setState((existingState) => ({
+            ...existingState,
+            [section]: {
+                ...(existingState[section] || {}),
+                [key]: value,
             },
         }));
     };
 
-    const handleSetIndicator: SetIndicator = (s, k, i) => {
-        setIndicators((e) => ({
-            ...e,
-            [s]: {
-                ...(e[s] || {}),
-                [k]: i,
+    const handleSetIndicator: SetIndicator = (section: string, key: string, indicator: Indicator) => {
+        setIndicators((existingState) => ({
+            ...existingState,
+            [section]: {
+                ...(existingState[section] || {}),
+                [key]: indicator,
             },
         }));
     };
 
-    const handleSetHidden: SetHidden = (s, k, h) => {
-        setVisibility((e) => ({
-            ...e,
-            [s]: {
-                ...(e[s] || {}),
-                [k]: !h,
+    const handleSetHidden: SetHidden = (section: string, key: string, hidden: boolean) => {
+        const visible: boolean = !hidden;
+
+        setVisibility((existingState) => ({
+            ...existingState,
+            [section]: {
+                ...(existingState[section] || {}),
+                [key]: visible,
             },
         }));
     };
