@@ -184,11 +184,10 @@ export function useDynamicForm(sections: DynamicFormSection[]): UseDynamicForm {
 
     const initialVisibility: DynamicFormVisibilityState = useMemo(() => {
         const initialVisibilityState: DynamicFormVisibilityState = {};
-        sections?.map((section: DynamicFormSection) => {
-            initialVisibilityState[section?.key] = {};
-            section.items?.map((item) => {
-                const { initiallyHidden, key }: DynamicFormItem = item;
-                initialVisibilityState[section?.key][key] = !initiallyHidden;
+        sections?.map(({ key: sectionKey, items }: DynamicFormSection) => {
+            initialVisibilityState[sectionKey] = {};
+            items?.map(({ initiallyHidden, key }: DynamicFormItem) => {
+                initialVisibilityState[sectionKey][key] = !initiallyHidden;
             });
         });
 
