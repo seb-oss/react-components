@@ -24,17 +24,20 @@ const VideoPage: React.FC = () => {
         {
             key: "controls",
             items: [
-                { key: "src", value: defaultSrc, label: "Source", placeholder: "Source of video", controlType: "Text" },
-                { key: "width", value: defaultWidth, label: "Width", placeholder: "Width of video", controlType: "Text" },
-                { key: "height", value: defaultHeight, label: "Height", placeholder: "Height of video", controlType: "Text" },
-                { key: "language", value: null, label: "Language", placeholder: "Language of video player", controlType: "Text" },
-                { key: "startTime", value: null, label: "Start time of playback", placeholder: "Playback starts at", controlType: "Text" },
-                { key: "endTime", value: null, label: "End time of playback", placeholder: "Playback ends at", controlType: "Text" },
-                { label: "Optional configurations", key: "checkboxes", value: defaultCheckboxControls.map((e) => e.value), controlType: "Option", options: checkboxControls },
+                { key: "src", initialValue: defaultSrc, label: "Source", placeholder: "Source of video", controlType: "Text" },
+                { key: "width", initialValue: defaultWidth, label: "Width", placeholder: "Width of video", controlType: "Text" },
+                { key: "height", initialValue: defaultHeight, label: "Height", placeholder: "Height of video", controlType: "Text" },
+                { key: "language", initialValue: null, label: "Language", placeholder: "Language of video player", controlType: "Text" },
+                { key: "startTime", initialValue: null, label: "Start time of playback", placeholder: "Playback starts at", controlType: "Text" },
+                { key: "endTime", initialValue: null, label: "End time of playback", placeholder: "Playback ends at", controlType: "Text" },
+                { label: "Optional configurations", key: "checkboxes", initialValue: defaultCheckboxControls.map((e) => e.value), controlType: "Option", options: checkboxControls },
             ],
         },
     ];
-    const [renderForm, { controls }] = useDynamicForm(fields);
+    const {
+        renderForm,
+        state: { controls },
+    } = useDynamicForm(fields);
     const code: string = `<Video [src]="src"
         [width]="width"
         [height]="height"
@@ -42,7 +45,7 @@ const VideoPage: React.FC = () => {
 
     /** check if key selected */
     const checkSelectedKey = (key: string) => {
-        return controls.checkboxes?.some((item: DynamicFormOption) => item.key === key);
+        return (controls.checkboxes as string[])?.some((item: string) => item === key);
     };
 
     return (
@@ -52,6 +55,7 @@ const VideoPage: React.FC = () => {
             example={
                 <Video
                     name="myVideo"
+                    title="Sample Video"
                     src={(controls as any)?.src || defaultSrc}
                     width={(controls as any)?.width || defaultWidth}
                     height={(controls as any)?.height || defaultHeight}

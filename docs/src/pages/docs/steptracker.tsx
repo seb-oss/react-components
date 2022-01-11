@@ -1,8 +1,7 @@
 import React from "react";
 import Docs from "@common/Docs";
 import { DynamicFormOption, DynamicFormSection, useDynamicForm } from "@sebgroup/react-components/hooks/useDynamicForm";
-import { StepTracker } from "@sebgroup/react-components/StepTracker";
-import StepLabel, { StepLabelProps } from "@sebgroup/react-components/StepTracker/StepLabel";
+import { StepTracker, StepLabel, StepLabelProps } from "@sebgroup/react-components/StepTracker";
 
 const StepTrackerPage: React.FC = React.memo(() => {
     const importString: string = require("!raw-loader!@sebgroup/react-components/StepTracker/StepTracker");
@@ -18,78 +17,61 @@ const StepTrackerPage: React.FC = React.memo(() => {
         { label: "left", value: "left", key: "left" },
     ];
     const [value, setValue] = React.useState<number>(0);
-    const fields: Array<DynamicFormSection> = React.useMemo(
-        () => [
-            {
-                key: "controls",
-                items: [
-                    {
-                        key: "orientation",
-                        value: orientationList[0].value,
-                        label: "Orientation",
-                        options: orientationList,
-                        controlType: "Dropdown",
-                    },
-                    {
-                        key: "direction",
-                        value: directionlist[0].value,
-                        label: "Direction",
-                        options: directionlist,
-                        controlType: "Dropdown",
-                    },
-                    {
-                        key: "step",
-                        value: value,
-                        min: 0,
-                        max: 3,
-                        label: "Step",
-                        controlType: "Stepper",
-                    },
-                    {
-                        label: "Use numbers",
-                        key: "useNumbers",
-                        value: false,
-                        controlType: "Checkbox",
-                    },
-                ],
-            },
-        ],
-        [value]
-    );
-    const [renderForm, form, setForm] = useDynamicForm(fields);
+    const {
+        renderForm,
+        state: { controls },
+    } = useDynamicForm([
+        {
+            key: "controls",
+            items: [
+                {
+                    key: "orientation",
+                    initialValue: orientationList[0].value,
+                    label: "Orientation",
+                    options: orientationList,
+                    controlType: "Dropdown",
+                },
+                {
+                    key: "labelPosition",
+                    initialValue: directionlist[0].value,
+                    label: "Direction",
+                    options: directionlist,
+                    controlType: "Dropdown",
+                },
+                {
+                    label: "Use numbers",
+                    key: "useNumbers",
+                    initialValue: false,
+                    controlType: "Checkbox",
+                },
+            ],
+        },
+    ]);
     const code: string = `<StepTracker list={[{ label: "hello" }]} step={0} onClick={null} />`;
 
-    React.useEffect(() => {
-        setValue((form.controls as any)?.step);
-    }, [(form.controls as any)?.step]);
-
-    React.useEffect(() => {
-        if (value !== form.controls.step) {
-            setForm({
-                ...form,
-                controls: {
-                    ...form.controls,
-                    step: value,
-                },
-            });
-        }
-    }, [value]);
+    const { orientation, labelPosition, useNumbers } = controls as { [k: string]: any };
 
     return (
         <Docs
             mainFile={importString}
             example={
-                <StepTracker
-                    step={value}
-                    onClick={setValue}
-                    orientation={(form.controls as any)?.orientation}
-                    labelPosition={(form.controls as any)?.direction}
-                    useNumbers={(form.controls as any)?.useNumbers}
-                >
-                    {stepList.map((item, i) => (
-                        <StepLabel label={item.label} key={i} />
-                    ))}
-                </StepTracker>
+                <>
+                    <div
+                        className="sr-only"
+                        id="step-tracker-progress"
+                        role="progressbar"
+                        aria-label={`Step ${value + 1} out of ${stepList.length}: ${stepList[value].label}`}
+                        aria-valuenow={value}
+                        aria-valuemin={1}
+                        aria-valuemax={stepList.length + 1}
+                        aria-live="polite"
+                    />
+                    <StepTracker aria-describedby="step-tracker-progress" step={value} onClick={setValue} {...{ orientation, labelPosition, useNumbers }}>
+                        {stepList.map((item, i) => (
+                            <StepLabel label={item.label} key={i} />
+                        ))}
+                    </StepTracker>
+                </>
             }
             code={code}
             controls={renderForm()}

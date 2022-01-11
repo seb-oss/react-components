@@ -31,7 +31,7 @@ const TooltipPage: React.FC = () => {
             items: [
                 {
                     key: "position",
-                    value: defaultPosition.value,
+                    initialValue: defaultPosition.value,
                     label: "Position",
                     options: [
                         { label: "Top", value: "top", key: "top" },
@@ -51,7 +51,7 @@ const TooltipPage: React.FC = () => {
                 },
                 {
                     key: "theme",
-                    value: defaultTheme.value,
+                    initialValue: defaultTheme.value,
                     label: "Theme",
                     options: [
                         { label: "Primary", value: "primary", key: "primary" },
@@ -66,7 +66,7 @@ const TooltipPage: React.FC = () => {
                 },
                 {
                     key: "trigger",
-                    value: defaultTriggerMethod.value,
+                    initialValue: defaultTriggerMethod.value,
                     label: "Trigger method",
                     options: [
                         { label: "Click", value: "click", key: "click" },
@@ -84,7 +84,10 @@ const TooltipPage: React.FC = () => {
             ],
         },
     ];
-    const [renderForm, { controls }] = useDynamicForm(fields);
+    const {
+        renderForm,
+        state: { controls },
+    } = useDynamicForm(fields);
     const code: string = `<Tooltip
         content="Tooltip message could be long, therefore, controlling the position and width is important"
         position="right"
@@ -92,7 +95,7 @@ const TooltipPage: React.FC = () => {
 
     /** check if key selected */
     const checkSelectedKey = (key: string) => {
-        return controls.checkboxes?.find((item: string) => item === key);
+        return (controls.checkboxes as string[])?.find((item: string) => item === key);
     };
 
     return (
@@ -101,15 +104,20 @@ const TooltipPage: React.FC = () => {
                 mainFile={importString}
                 example={
                     <Tooltip
+                        id="tooltip-id"
                         content={checkSelectedKey("isCustomContent") ? nodeTooltipContent : defaultTooltipContent}
                         position={(controls as any)?.position}
                         theme={(controls as any)?.theme}
                         trigger={(controls as any)?.trigger}
-                        disableAutoPosition={checkSelectedKey("disableAutoPosition")}
-                        forceShow={checkSelectedKey("forceShow")}
+                        disableAutoPosition={!!checkSelectedKey("disableAutoPosition")}
+                        forceShow={!!checkSelectedKey("forceShow")}
                         onVisibleChange={checkSelectedKey("isVisibleChanged") && (() => setNotifcationToggle(true))}
                     >
-                        {checkSelectedKey("isCustomReference") && <abbr className="custom-tooltip text-help">This is custom tooltip reference</abbr>}
+                        {checkSelectedKey("isCustomReference") && (
+                            <abbr className="custom-tooltip text-help" aria-describedby="tooltip-id">
+                                This is custom tooltip reference
+                            </abbr>
+                        )}
                     </Tooltip>
                 }
                 code={code}

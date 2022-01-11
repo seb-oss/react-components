@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Docs from "@common/Docs";
 import { Notification, NotificationProps } from "@sebgroup/react-components/Notification";
 import { DynamicFormOption, useDynamicForm } from "@sebgroup/react-components/hooks/useDynamicForm";
@@ -37,18 +37,28 @@ const barPositions: Array<DynamicFormOption<NotificationProps["position"]>> = [
 const NotificationPage: React.FC = () => {
     const [toggle, setToggle] = React.useState<boolean>(false);
 
-    const [renderForm, { controls }] = useDynamicForm([
+    const {
+        renderForm,
+        state: { controls },
+        setHidden,
+    } = useDynamicForm([
         {
             key: "controls",
             items: [
-                { key: "theme", label: "theme", controlType: "Dropdown", options: themes, value: themes[0].value },
-                { key: "persist", label: "persist", value: false, controlType: "Checkbox", description: "Disable timer and persist the notification until dismissed" },
-                { key: "type", label: "type", controlType: "Radio", options: types, value: types[0].value },
-                { key: "slidePosition", label: "position", controlType: "Dropdown", options: slidePositions, value: slidePositions[0].value, rulerKey: "type", condition: types[0].value },
-                { key: "barPosition", label: "position", controlType: "Radio", options: barPositions, value: barPositions[0].value, rulerKey: "type", condition: types[1].value },
+                { key: "theme", label: "theme", controlType: "Dropdown", options: themes, initialValue: themes[0].value },
+                { key: "persist", label: "persist", initialValue: false, controlType: "Checkbox", description: "Disable timer and persist the notification until dismissed" },
+                { key: "type", label: "type", controlType: "Radio", options: types, initialValue: types[0].value },
+                { key: "header", label: "header", controlType: "Text", initialValue: "Sunt qui quasi nam." },
+                { key: "slidePosition", label: "position", controlType: "Dropdown", options: slidePositions, initialValue: slidePositions[0].value },
+                { key: "barPosition", label: "position", controlType: "Radio", options: barPositions, initialValue: barPositions[0].value },
             ],
         },
     ]);
+
+    useEffect(() => {
+        setHidden("controls", "slidePosition", controls.type !== types[0].value);
+        setHidden("controls", "barPosition", controls.type !== types[1].value);
+    }, [controls.type]);
 
     return (
         <Docs
@@ -58,13 +68,14 @@ const NotificationPage: React.FC = () => {
                     <Button onClick={() => setToggle(!toggle)}>Toggle notification</Button>
                     <Notification
                         toggle={toggle}
-                        type={controls.type}
-                        theme={controls.theme}
-                        position={controls.type === "slide" ? controls.slidePosition : controls.barPosition}
+                        type={controls.type as any}
+                        theme={controls.theme as NotificationProps["theme"]}
+                        position={(controls.type === "slide" ? controls.slidePosition : controls.barPosition) as NotificationProps["position"]}
                         onDismiss={() => setToggle(false)}
-                        persist={controls.persist}
+                        persist={controls.persist as NotificationProps["persist"]}
+                        aria-live="polite"
                     >
-                        <div className="notification-header">Sunt qui quasi nam.</div>
+                        <div className="notification-header">{controls.header}</div>
                         <div className="notification-body">
                             Eaque dolorem nisi qui ut nemo perferendis. Veniam voluptates alias voluptatum ratione. Et alias incidunt maiores provident rem ea molestiae ea.
                         </div>

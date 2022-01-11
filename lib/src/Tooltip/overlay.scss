@@ -1,7 +1,7 @@
 @import "~@sebgroup/bootstrap/scss/core";
 
 .overlay-container {
-    position: absolute;
+    position: fixed;
     outline: none;
     z-index: $zindex-tooltip;
     height: 0;

@@ -164,18 +164,21 @@ export function useOverlay(reference: HTMLElement, overlayReference: HTMLElement
         });
     }, [getPosition, isOverflow, overlayRect, positionList, presetPosition]);
 
-    React.useEffect(() => {
+    React.useLayoutEffect(() => {
         if (!reference) {
             return;
         }
         if (show) {
             updateRect();
             window.addEventListener("scroll", debouncedUpdateRect, true);
+            window.addEventListener("resize", debouncedUpdateRect, true);
         } else {
             window.removeEventListener("scroll", debouncedUpdateRect, true);
+            window.removeEventListener("resize", debouncedUpdateRect, true);
         }
         return () => {
             window.removeEventListener("scroll", debouncedUpdateRect, true);
+            window.removeEventListener("resize", debouncedUpdateRect, true);
         };
     }, [reference, show, updateRect, debouncedUpdateRect]);
 

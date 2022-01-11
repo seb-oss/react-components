@@ -23,36 +23,35 @@ const displayTypes: Array<DynamicFormOption> = [
 ];
 
 const LoaderPage: React.FC = (): React.ReactElement<void> => {
-    const [renderControls, { controls }, setState] = useDynamicForm([
+    const {
+        renderForm: renderControls,
+        state: { controls },
+        patchState: setState,
+    } = useDynamicForm([
         {
             key: "controls",
             items: [
-                { key: "size", label: "size", options: sizes, controlType: "Radio", value: sizes[1].value },
-                { key: "type", label: "type", options: types, controlType: "Radio", value: types[0].value },
-                { key: "display", label: "Display types", options: displayTypes, controlType: "Radio", value: displayTypes[0].value },
-                { key: "backdrop", label: "backdrop", controlType: "Checkbox", value: false },
-                { key: "children", label: "Render children to be displayed under the loader", controlType: "Checkbox", value: false },
+                { key: "size", label: "size", options: sizes, controlType: "Radio", initialValue: sizes[1].value },
+                { key: "type", label: "type", options: types, controlType: "Radio", initialValue: types[0].value },
+                { key: "display", label: "Display types", options: displayTypes, controlType: "Radio", initialValue: displayTypes[0].value },
+                { key: "backdrop", label: "backdrop", controlType: "Checkbox", initialValue: false },
+                { key: "children", label: "Render children to be displayed under the loader", controlType: "Checkbox", initialValue: false },
             ],
         },
     ]);
+
+    const { size, type, backdrop, display } = controls as { [k: string]: any };
 
     return (
         <Docs
             mainFile={importString}
             example={
                 <Loader
-                    size={controls.size}
-                    type={controls.type}
-                    backdrop={controls.backdrop}
-                    fullscreen={controls.display === "fullscreen" && controls}
-                    cover={controls.display === "cover"}
+                    {...{ size, type, backdrop }}
+                    fullscreen={display === "fullscreen" && !!controls}
+                    cover={display === "cover"}
                     onClick={() => {
-                        controls.display === "fullscreen" &&
-                            setState((prevState) => {
-                                return {
-                                    controls: { ...prevState.controls, display: displayTypes[0].value },
-                                };
-                            });
+                        display === "fullscreen" && setState("controls", "display", displayTypes[0].value);
                     }}
                 >
                     {controls.children && <p className="mt-2">Loading...</p>}

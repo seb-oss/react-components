@@ -18,16 +18,19 @@ const transitionStyles: Array<DynamicFormOption<CarouselProps["transitionStyle"]
 ];
 
 const CarouselPage: React.FC = (): React.ReactElement<void> => {
-    const [renderControls, { controls }] = useDynamicForm([
+    const {
+        renderForm: renderControls,
+        state: { controls },
+    }: any = useDynamicForm([
         {
             key: "controls",
             items: [
-                { key: "autoplaySpeed", label: "autoplaySpeed", controlType: "Text", value: 2000 },
-                { key: "transitionDuration", label: "transitionDuration", controlType: "Text", value: 500 },
-                { key: "infinite", label: "infinite", controlType: "Checkbox", value: false },
-                { key: "autoplay", label: "autoplay", controlType: "Checkbox", value: false },
+                { key: "autoplaySpeed", label: "autoplaySpeed", controlType: "Text", initialValue: 2000 },
+                { key: "transitionDuration", label: "transitionDuration", controlType: "Text", initialValue: 500 },
+                { key: "infinite", label: "infinite", controlType: "Checkbox", initialValue: false },
+                { key: "autoplay", label: "autoplay", controlType: "Checkbox", initialValue: false },
                 { key: "showIndicators", label: "showIndicators", controlType: "Checkbox" },
-                { key: "transitionStyle", label: "transitionStyle", controlType: "Radio", options: transitionStyles, value: transitionStyles[0].value },
+                { key: "transitionStyle", label: "transitionStyle", controlType: "Radio", options: transitionStyles, initialValue: transitionStyles[0].value },
             ],
         },
     ]);
@@ -44,10 +47,12 @@ const CarouselPage: React.FC = (): React.ReactElement<void> => {
                         autoplay={controls.autoplay}
                         infinite={controls.infinite}
                         transitionStyle={controls.transitionStyle}
+                        aria-label="Image gallery"
+                        aria-level={2}
                     >
                         {images.map((image, i) => (
-                            <CarouselItem key={i}>
-                                <Img src={withPrefix(image)} responsive width="100%" />
+                            <CarouselItem key={i} aria-label={`image canvas ${i + 1}`} aria-level={3}>
+                                <Img src={withPrefix(image)} responsive width="100%" alt={`image ${i + 1}`} />
                             </CarouselItem>
                         ))}
                     </Carousel>

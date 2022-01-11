@@ -35,6 +35,8 @@
             font-size: $h4-font-size;
             &.active {
                 border-bottom-color: $green-dark;
+                background-color: transparent;
+                color: $blue-darker;
             }
             &:not(.active) {
                 cursor: pointer;

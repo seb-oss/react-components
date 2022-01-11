@@ -36,7 +36,8 @@
         "ToggleSelector": "./src/ToggleSelector/index.ts",
         "Tooltip": "./src/Tooltip/index.ts",
         "Video": "./src/Video/index.ts",
-        "hooks": "./src/hooks/index.ts"
+        "hooks": "./src/hooks/index.ts",
+        "utils": "./src/utils/index.ts"
     },
     "indexes": [
         "./src/Accordion/index.ts",
@@ -75,6 +76,7 @@
         "./src/ToggleSelector/index.ts",
         "./src/Tooltip/index.ts",
         "./src/Video/index.ts",
-        "./src/hooks/index.ts"
+        "./src/hooks/index.ts",
+        "./src/utils/index.ts"
     ]
 }

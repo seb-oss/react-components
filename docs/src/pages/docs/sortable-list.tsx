@@ -44,7 +44,10 @@ const SortableListPage: React.FC = (): React.ReactElement<void> => {
         },
     ]);
 
-    const [renderControls, { controls }] = useDynamicForm([
+    const {
+        renderForm: renderControls,
+        state: { controls },
+    } = useDynamicForm([
         {
             key: "controls",
             items: [
@@ -65,7 +68,7 @@ const SortableListPage: React.FC = (): React.ReactElement<void> => {
             example={
                 <div className="w-100 d-flex justify-content-center">
                     <SortableList
-                        disabled={controls.disabled}
+                        disabled={!!controls.disabled}
                         onSort={(list: string[]) => setArray((oldArray: Example[]) => oldArray.sort((a: Example, b: Example) => list.indexOf(a.value) - list.indexOf(b.value)))}
                     >
                         {array.map((item: Example, index: number) => (

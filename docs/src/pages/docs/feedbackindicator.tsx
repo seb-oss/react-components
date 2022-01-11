@@ -15,13 +15,16 @@ const typeList: Array<DynamicFormOption<IndicatorType>> = [
 ];
 
 const FeedbackIndicatorPage: React.FC = () => {
-    const [renderForm, { controls }] = useDynamicForm([
+    const {
+        renderForm,
+        state: { controls },
+    } = useDynamicForm([
         {
             key: "controls",
             items: [
-                { key: "message", value: "Indicator message", label: "Message", placeholder: "Message", controlType: "Text" },
-                { key: "noBorder", value: false, label: "noBorder", controlType: "Checkbox" },
-                { key: "type", value: typeList[0].value, label: "Type", options: typeList, controlType: "Radio" },
+                { key: "message", initialValue: "Indicator message", label: "Message", placeholder: "Message", controlType: "Text" },
+                { key: "noBorder", initialValue: false, label: "noBorder", controlType: "Checkbox" },
+                { key: "type", initialValue: typeList[0].value, label: "Type", options: typeList, controlType: "Radio" },
             ],
         },
     ]);
@@ -31,9 +34,13 @@ const FeedbackIndicatorPage: React.FC = () => {
             mainFile={importString}
             example={
                 <div className="w-100">
-                    <FeedbackIndicator type={controls.type} message={controls?.message} noBorder={controls.noBorder}>
-                        <Checkbox>A Checkbox</Checkbox>
-                        <RadioButton>A Radio button</RadioButton>
+                    <FeedbackIndicator id="indicator" type={controls.type as IndicatorType} message={controls?.message} noBorder={controls.noBorder as boolean}>
+                        <Checkbox aria-describedby="indicator" aria-invalid={(controls.type as IndicatorType) === "danger"}>
+                            A Checkbox
+                        </Checkbox>
+                        <RadioButton aria-describedby="indicator" aria-invalid={(controls.type as IndicatorType) === "danger"}>
+                            A Radio button
+                        </RadioButton>
                         <div className="px-3 pb-2">Some content 🦾</div>
                     </FeedbackIndicator>
                 </div>

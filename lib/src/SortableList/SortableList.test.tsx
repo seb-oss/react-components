@@ -3,13 +3,25 @@ import { SortableList, SortableItem, SortableItemProps, SortableListProps } from
 import { unmountComponentAtNode, render } from "react-dom";
 import { act, Simulate } from "react-dom/test-utils";
 
+type ListTestCase = {
+    statement: string;
+    triggerEvent: () => void;
+    onExpect: () => void;
+};
+
 describe("Component: SortableList", () => {
     let container: HTMLDivElement = null;
+    const children: { key: string; label: string }[] = [
+        { key: "1", label: "1" },
+        { key: "2", label: "2" },
+        { key: "3", label: "3" },
+    ];
     const props: SortableListProps = { onSort: jest.fn() };
 
     beforeEach(() => {
         container = document.createElement("div");
         document.body.appendChild(container);
+        jest.clearAllMocks();
     });
 
     afterEach(() => {
@@ -62,11 +74,6 @@ describe("Component: SortableList", () => {
     });
 
     it("Should allow to sort children by drag and drop", () => {
-        const children: { key: string; label: string }[] = [
-            { key: "1", label: "1" },
-            { key: "2", label: "2" },
-            { key: "3", label: "3" },
-        ];
         act(() => {
             render(
                 <SortableList {...props}>
@@ -112,5 +119,85 @@ describe("Component: SortableList", () => {
             );
         });
         expect(spyConsole).toBeCalled();
+    });
+
+    describe("Should support keyboard event", () => {
+        const testCases: Array<ListTestCase> = [
+            {
+                statement: "should swap with previous item on arrow up click",
+                onExpect: () => {
+                    expect(props.onSort).toBeCalledWith(["2", "1", "3"]);
+                },
+                triggerEvent: () => {
+                    act(() => {
+                        Simulate.keyDown(container.querySelector(".drop-container"), { key: " ", target: container.querySelectorAll(".sortable-item-wrapper")[1] });
+                    });
+                    act(() => {
+                        Simulate.keyDown(container.querySelector(".drop-container"), { key: "ArrowUp", target: container.querySelectorAll(".sortable-item-wrapper")[1] });
+                    });
+                },
+            },
+            {
+                statement: "should not swap with previous item on arrow left click if item is first item",
+                onExpect: () => {
+                    expect(props.onSort).not.toBeCalled();
+                },
+                triggerEvent: () => {
+                    act(() => {
+                        Simulate.keyDown(container.querySelector(".drop-container"), { key: " ", target: container.querySelectorAll(".sortable-item-wrapper")[0] });
+                    });
+                    act(() => {
+                        Simulate.keyDown(container.querySelector(".drop-container"), { key: "ArrowLeft", target: container.querySelectorAll(".sortable-item-wrapper")[0] });
+                    });
+                },
+            },
+            {
+                statement: "should swap with next item on arrow down click",
+                onExpect: () => {
+                    expect(props.onSort).toBeCalledWith(["1", "3", "2"]);
+                },
+                triggerEvent: () => {
+                    act(() => {
+                        Simulate.keyDown(container.querySelector(".drop-container"), { key: "Enter", target: container.querySelectorAll(".sortable-item-wrapper")[1] });
+                    });
+                    act(() => {
+                        Simulate.keyDown(container.querySelector(".drop-container"), { key: "ArrowDown", target: container.querySelectorAll(".sortable-item-wrapper")[1] });
+                    });
+                },
+            },
+            {
+                statement: "should not swap with next item on arrow right click if item is last item",
+                onExpect: () => {
+                    expect(props.onSort).not.toBeCalled();
+                },
+                triggerEvent: () => {
+                    act(() => {
+                        Simulate.keyDown(container.querySelector(".drop-container"), { key: "Enter", target: container.querySelectorAll(".sortable-item-wrapper")[2] });
+                    });
+                    act(() => {
+                        Simulate.keyDown(container.querySelector(".drop-container"), { key: "ArrowRight", target: container.querySelectorAll(".sortable-item-wrapper")[2] });
+                    });
+                },
+            },
+        ];
+        testCases.map((testCase: ListTestCase) => {
+            it(testCase.statement, () => {
+                act(() => {
+                    render(
+                        <SortableList {...props}>
+                            {children.map((item) => (
+                                <SortableItem key={item.key} uniqueKey={item.key}>
+                                    {item.label}
+                                </SortableItem>
+                            ))}
+                        </SortableList>,
+                        container
+                    );
+                });
+
+                testCase.triggerEvent();
+                testCase.onExpect();
+            });
+        });
     });
 });

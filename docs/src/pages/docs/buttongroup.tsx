@@ -18,7 +18,10 @@ const sizes: Array<DynamicFormOption<ButtonGroupProps["size"]>> = [
 ];
 
 const ButtonGroupPage: React.FC = (): React.ReactElement<void> => {
-    const [renderControls, { controls }] = useDynamicForm([
+    const {
+        renderForm: renderControls,
+        state: { controls },
+    }: any = useDynamicForm([
         {
             key: "controls",
             items: [

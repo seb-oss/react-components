@@ -39,20 +39,35 @@ const customNavs: CustomNavs = {
 const PaginationPage: React.FC = (): React.ReactElement<void> => {
     const [page, setPage] = React.useState<number>(0);
 
-    const [renderControls, { controls }] = useDynamicForm([
+    const {
+        renderForm: renderControls,
+        state: { controls },
+    } = useDynamicForm([
         {
             key: "controls",
             items: [
-                { key: "size", label: "Size", value: PaginationSizes[1].value, options: PaginationSizes, controlType: "Radio" },
-                { key: "offset", min: 1, max: 10, value: 5, label: "Offset", controlType: "Stepper" },
-                { key: "useDotNav", label: "Use dot navigation", value: false, controlType: "Checkbox" },
-                { key: "showFirstAndLast", label: "Show first and last buttons", description: "Show buttons for the first and last page when available.", value: false, controlType: "Checkbox" },
-                { key: "useCustomPages", label: "Use non numbered navigations", description: "You can pass anything as a pagination button. Get creative! 👨‍🎨", value: false, controlType: "Checkbox" },
+                { key: "size", label: "Size", initialValue: PaginationSizes[1].value, options: PaginationSizes, controlType: "Radio" },
+                { key: "offset", min: 1, max: 10, initialValue: 5, label: "Offset", controlType: "Stepper" },
+                { key: "useDotNav", label: "Use dot navigation", initialValue: false, controlType: "Checkbox" },
+                {
+                    key: "showFirstAndLast",
+                    label: "Show first and last buttons",
+                    description: "Show buttons for the first and last page when available.",
+                    initialValue: false,
+                    controlType: "Checkbox",
+                },
+                {
+                    key: "useCustomPages",
+                    label: "Use non numbered navigations",
+                    description: "You can pass anything as a pagination button. Get creative! 👨‍🎨",
+                    initialValue: false,
+                    controlType: "Checkbox",
+                },
                 {
                     key: "useCustomNavs",
                     label: "Use custom navigation buttons",
                     description: "You can pass custom navigation content replacing the chevron icons used by default",
-                    value: false,
+                    initialValue: false,
                     controlType: "Checkbox",
                 },
             ],
@@ -67,14 +82,19 @@ const PaginationPage: React.FC = (): React.ReactElement<void> => {
                     <Pagination
                         value={page}
                         onPageChange={setPage}
-                        offset={controls.offset}
-                        size={controls.size}
-                        useDotNav={controls.useDotNav}
-                        showFirstAndLast={controls.showFirstAndLast}
+                        offset={controls.offset as PaginationProps["offset"]}
+                        size={controls.size as PaginationProps["size"]}
+                        useDotNav={controls.useDotNav as PaginationProps["useDotNav"]}
+                        showFirstAndLast={controls.showFirstAndLast as PaginationProps["showFirstAndLast"]}
                         navs={controls.useCustomNavs ? customNavs : null}
+                        aria-label="Pagination example"
+                        firstPageLinkProps={{ "aria-label": "First page" }}
+                        lastPageLinkProps={{ "aria-label": "Last page" }}
+                        nextPageLinkProps={{ "aria-label": "Next page" }}
+                        previousPageLinkProps={{ "aria-label": "Previous page" }}
                     >
                         {(controls.useCustomPages ? customPaginations : [...Array(10)]).map((_: undefined, i: number) => (
-                            <Page key={i} href={`/pages/${i + 1}`}>
+                            <Page key={i} href={`/pages/${i + 1}`} anchorProps={{ "aria-label": `${page === i ? "Current page:" : "Go to page"} ${i + 1}` }}>
                                 {controls.useCustomPages ? _ : i + 1}
                             </Page>
                         ))}
