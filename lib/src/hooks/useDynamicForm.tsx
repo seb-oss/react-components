@@ -328,44 +328,53 @@ export function useDynamicForm(sections: DynamicFormSection[]): UseDynamicForm {
         return { dirty, hasIndicators, isAllTruthy };
     }, [dirty, hasIndicators, isAllTruthy]);
 
-    const handlePatchState: PatchState = (section: string, key: string, value: DynamicFormInternalStateValue) => {
-        setState((existingState) => ({
-            ...existingState,
-            [section]: {
-                ...(existingState[section] || {}),
-                [key]: value,
-            },
-        }));
-    };
+    const patchState: PatchState = useCallback(
+        (section: string, key: string, value: DynamicFormInternalStateValue) => {
+            setState((existingState) => ({
+                ...existingState,
+                [section]: {
+                    ...(existingState[section] || {}),
+                    [key]: value,
+                },
+            }));
+        },
+        [setState]
+    );
 
-    const handleSetIndicator: SetIndicator = (section: string, key: string, indicator: Indicator) => {
-        setIndicators((existingState) => ({
-            ...existingState,
-            [section]: {
-                ...(existingState[section] || {}),
-                [key]: indicator,
-            },
-        }));
-    };
+    const setIndicator: SetIndicator = useCallback(
+        (section: string, key: string, indicator: Indicator | null) => {
+            setIndicators((existingState) => ({
+                ...existingState,
+                [section]: {
+                    ...(existingState[section] || {}),
+                    [key]: indicator,
+                },
+            }));
+        },
+        [setIndicators]
+    );
 
-    const handleSetHidden: SetHidden = (section: string, key: string, hidden: boolean) => {
-        const visible: boolean = !hidden;
+    const setHidden: SetHidden = useCallback(
+        (section: string, key: string, hidden: boolean) => {
+            const visible: boolean = !hidden;
 
-        setVisibility((existingState) => ({
-            ...existingState,
-            [section]: {
-                ...(existingState[section] || {}),
-                [key]: visible,
-            },
-        }));
-    };
+            setVisibility((existingState) => ({
+                ...existingState,
+                [section]: {
+                    ...(existingState[section] || {}),
+                    [key]: visible,
+                },
+            }));
+        },
+        [setVisibility]
+    );
 
     return {
         renderForm,
         state,
-        patchState: handlePatchState,
-        setIndicator: handleSetIndicator,
-        setHidden: handleSetHidden,
+        patchState,
+        setIndicator,
+        setHidden,
         meta,
         info: formInfo,
     };
