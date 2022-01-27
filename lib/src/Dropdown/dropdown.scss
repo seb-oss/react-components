@@ -80,6 +80,7 @@
     float: none;
     overflow: auto;
     z-index: $zindex-popover;
+    overscroll-behavior: contain;
 
     > p {
         margin: 0;
