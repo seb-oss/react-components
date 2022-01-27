@@ -353,10 +353,10 @@ export const Dropdown: React.FC<DropdownProps> = React.forwardRef(
             }
         }, [props.value, props.placeholder, selectedLabel]);
 
-        // React.useEffect(() => {
-        //     // scroll the focused item into view
-        //     getOptionsRef()?.[focusedIndex]?.scrollIntoView(false);
-        // }, [focusedIndex, getOptionsRef]);
+        React.useEffect(() => {
+            // scroll the focused item into view
+            getOptionsRef()?.[focusedIndex]?.scrollIntoView(false);
+        }, [focusedIndex, getOptionsRef]);
 
         return (
             <div {...wrapperProps} className={classnames("rc custom-dropdown", wrapperProps.className)}>
