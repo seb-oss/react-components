@@ -70,6 +70,8 @@ export const Dropdown: React.FC<DropdownProps> = React.forwardRef(
         const menuRef = React.useRef<HTMLUListElement>();
         const searchRef = React.useRef<HTMLInputElement>();
 
+        const [prestine, setPrestine] = React.useState<boolean>(true);
+
         const isMobile: boolean = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(safeWindow?.navigator?.userAgent);
 
         const changeValue = React.useCallback(
@@ -130,8 +132,9 @@ export const Dropdown: React.FC<DropdownProps> = React.forwardRef(
                     }
                     setShow(true);
                 }
+                prestine && setPrestine(false);
             },
-            [show]
+            [show, prestine]
         );
 
         const toggleOption = React.useCallback(
@@ -327,7 +330,7 @@ export const Dropdown: React.FC<DropdownProps> = React.forwardRef(
                     document.addEventListener("click", detectBlur);
                     window.addEventListener("wheel", handleScroll);
                 } else {
-                    buttonRef.current?.focus();
+                    !prestine && buttonRef.current?.focus();
                     document.removeEventListener("click", detectBlur);
                     window.removeEventListener("wheel", handleScroll);
                 }
@@ -337,7 +340,7 @@ export const Dropdown: React.FC<DropdownProps> = React.forwardRef(
                     window.removeEventListener("wheel", handleScroll);
                 };
             }
-        }, [show]);
+        }, [show, prestine]);
 
         React.useEffect(() => {
             if (selectedLabel && typeof selectedLabel === "string") {
