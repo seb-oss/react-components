@@ -76,7 +76,6 @@ export const Dropdown: React.FC<DropdownProps> = React.forwardRef(
 
         const changeValue = React.useCallback(
             (value: string) => {
-                console.log(value);
                 if (props.multiple) {
                     const current = selectRefOptions.find((option) => option.value === value);
                     current.selected = !current.selected;
