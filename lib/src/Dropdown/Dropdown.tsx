@@ -355,7 +355,7 @@ export const Dropdown: React.FC<DropdownProps> = React.forwardRef(
 
         React.useEffect(() => {
             // scroll the focused item into view
-            getOptionsRef()?.[focusedIndex]?.scrollIntoView(false);
+            getOptionsRef()?.[focusedIndex]?.scrollIntoView?.(false);
         }, [focusedIndex, getOptionsRef]);
 
         return (
