@@ -6,6 +6,13 @@ import { CloseButton } from "../CloseButton";
 import { FeedbackIndicator, Indicator } from "../FeedbackIndicator/FeedbackIndicator";
 import { Key } from "../utils/keyboardHelper";
 import { CustomDropdownItem } from "./CustomDropdownItem";
+import { disableBodyScroll, enableBodyScroll, clearAllBodyScrollLocks } from "body-scroll-lock";
+import type { BodyScrollOptions } from "body-scroll-lock";
+
+const bodyScrollOptions: BodyScrollOptions = {
+    reserveScrollBarGap: true,
+};
+
 import "./dropdown.scss";
 
 export interface DropdownText {
@@ -74,6 +81,16 @@ export const Dropdown: React.FC<DropdownProps> = React.forwardRef(
 
         const isMobile: boolean = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(safeWindow?.navigator?.userAgent);
 
+        const handleDropdownMenuOpen = React.useCallback(() => {
+            setShow(true);
+            disableBodyScroll(menuRef.current, bodyScrollOptions);
+        }, [menuRef]);
+
+        const handleDropdownMenuClose = React.useCallback(() => {
+            setShow(false);
+            enableBodyScroll(menuRef.current);
+        }, [menuRef]);
+
         const changeValue = React.useCallback(
             (value: string) => {
                 if (props.multiple) {
@@ -81,12 +98,12 @@ export const Dropdown: React.FC<DropdownProps> = React.forwardRef(
                     current.selected = !current.selected;
                 } else {
                     selectRef.value = value;
-                    setShow(false);
+                    handleDropdownMenuClose();
                 }
                 selectRef.dispatchEvent(new Event("change", { bubbles: true }));
                 props.multiple && onMultipleChange && onMultipleChange(getValueOfMultipleSelect(selectRefOptions));
             },
-            [props.multiple, selectRef, selectRefOptions, onMultipleChange]
+            [props.multiple, selectRef, selectRefOptions, onMultipleChange, handleDropdownMenuClose]
         );
 
         const getOptionsRef = React.useCallback(() => Array.from(menuRef.current?.querySelectorAll<HTMLLIElement>(".custom-control") || []), [searchKeyword]);
@@ -118,7 +135,7 @@ export const Dropdown: React.FC<DropdownProps> = React.forwardRef(
         const toggleMenu = React.useCallback(
             (event: React.MouseEvent<HTMLButtonElement>) => {
                 if (show) {
-                    setShow(false);
+                    handleDropdownMenuClose();
                 } else {
                     const rect = event.currentTarget.getBoundingClientRect();
                     const top: number = rect.top + rect.height;
@@ -130,11 +147,11 @@ export const Dropdown: React.FC<DropdownProps> = React.forwardRef(
                     } else {
                         setMenuStyle({ minWidth, top, left, maxHeight: window.innerHeight - top - 12 });
                     }
-                    setShow(true);
+                    handleDropdownMenuOpen();
                 }
                 prestine && setPrestine(false);
             },
-            [show, prestine]
+            [show, prestine, handleDropdownMenuOpen, handleDropdownMenuClose]
         );
 
         const toggleOption = React.useCallback(
@@ -163,7 +180,7 @@ export const Dropdown: React.FC<DropdownProps> = React.forwardRef(
 
                 switch (e.key) {
                     case Key.Escape:
-                        setShow(false);
+                        handleDropdownMenuClose();
                         break;
                     case Key.ArrowDown:
                     case Key.ArrowUp:
@@ -179,15 +196,15 @@ export const Dropdown: React.FC<DropdownProps> = React.forwardRef(
                         break;
                     case Key.Enter:
                         toggleOption(e);
-                        !props.multiple && setShow(false);
+                        !props.multiple && handleDropdownMenuClose();
                         break;
                     case Key.Space:
                         !searchable && toggleOption(e);
-                        !props.multiple && setShow(false);
+                        !props.multiple && handleDropdownMenuClose();
                         break;
                     case Key.Tab:
                         e.preventDefault();
-                        setShow(false);
+                        handleDropdownMenuClose();
                         break;
                     default:
                         if (!searchable) {
@@ -196,21 +213,24 @@ export const Dropdown: React.FC<DropdownProps> = React.forwardRef(
                         break;
                 }
             },
-            [props.multiple, searchable, getOptionsRef, toggleOption]
+            [props.multiple, searchable, getOptionsRef, toggleOption, handleDropdownMenuClose]
         );
 
-        const onSearchInputKeyDown = React.useCallback((e: React.KeyboardEvent) => {
-            switch (e.key) {
-                case Key.Escape:
-                    e.stopPropagation();
-                    setSearchKeyword("");
-                    setShow(false);
-                    break;
-                case Key.Space:
-                    e.stopPropagation();
-                    break;
-            }
-        }, []);
+        const onSearchInputKeyDown = React.useCallback(
+            (e: React.KeyboardEvent) => {
+                switch (e.key) {
+                    case Key.Escape:
+                        e.stopPropagation();
+                        setSearchKeyword("");
+                        handleDropdownMenuClose();
+                        break;
+                    case Key.Space:
+                        e.stopPropagation();
+                        break;
+                }
+            },
+            [handleDropdownMenuClose]
+        );
 
         /** TODO: Can be extracted to a component */
         const getOptions = () => {
@@ -313,13 +333,13 @@ export const Dropdown: React.FC<DropdownProps> = React.forwardRef(
             if (!isMobile) {
                 const detectBlur = (event: MouseEvent) => {
                     if (!dropdownRef.current.contains(event.target as any) && !menuRef.current.contains(event.target as any)) {
-                        setShow(false);
+                        handleDropdownMenuClose();
                     }
                 };
 
                 const handleScroll = (event: WheelEvent): void => {
                     if (!menuRef.current.contains(event.target as any)) {
-                        setShow(false);
+                        handleDropdownMenuClose();
                     }
                 };
 
@@ -340,7 +360,7 @@ export const Dropdown: React.FC<DropdownProps> = React.forwardRef(
                     window.removeEventListener("wheel", handleScroll);
                 };
             }
-        }, [show, prestine]);
+        }, [show, prestine, handleDropdownMenuClose]);
 
         React.useEffect(() => {
             if (selectedLabel && typeof selectedLabel === "string") {
@@ -357,6 +377,12 @@ export const Dropdown: React.FC<DropdownProps> = React.forwardRef(
             // scroll the focused item into view
             getOptionsRef()?.[focusedIndex]?.scrollIntoView?.(false);
         }, [focusedIndex, getOptionsRef]);
+
+        React.useEffect(() => {
+            return () => {
+                clearAllBodyScrollLocks();
+            };
+        }, []);
 
         return (
             <div {...wrapperProps} className={classnames("rc custom-dropdown", wrapperProps.className)}>
