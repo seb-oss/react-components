@@ -1,9 +1,9 @@
+import { randomId } from "@sebgroup/frontend-tools/randomId";
+import classnames from "classnames";
 import React from "react";
 import { Overlay } from "./Overlay";
-import classnames from "classnames";
-import { ElementPosition } from "./useOverlay";
 import "./tooltip.scss";
-import { randomId } from "@sebgroup/frontend-tools/randomId";
+import { ElementPosition } from "./useOverlay";
 
 const InfoCircleIcon: JSX.Element = (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
@@ -81,6 +81,7 @@ export const Tooltip: React.FC<TooltipProps> = ({
     const onTouchStartEvent = (e: React.TouchEvent<HTMLDivElement>) => onTouch(e, true);
     const onTouchEndEvent = (e: React.TouchEvent<HTMLDivElement>) => onTouch(e, false);
     const onFocusEvent = (e: React.FocusEvent<HTMLDivElement>) => onTooltipToggle(e, true);
+    const onBlurEvent = (e: React.FocusEvent<HTMLDivElement>) => onTooltipToggle(e, false);
 
     React.useEffect(() => {
         setTooltipId(id || randomId("rc-tooltip-"));
@@ -98,6 +99,7 @@ export const Tooltip: React.FC<TooltipProps> = ({
                 onTouchStart={trigger === "hover" && isMobile ? onTouchStartEvent : null}
                 onTouchEnd={trigger === "hover" && isMobile ? onTouchEndEvent : null}
                 onFocus={trigger === "focus" ? onFocusEvent : null}
+                onBlur={trigger === "focus" ? onBlurEvent : null}
             >
                 {props.children ? (
                     React.Children.count(props.children) === 1 ? (
@@ -126,7 +128,10 @@ export const Tooltip: React.FC<TooltipProps> = ({
                 content={content}
                 disableAutoPosition={disableAutoPosition}
                 ref={contentRef}
-                onContentBlur={() => setShow(false)}
+                onContentBlur={(event: React.FocusEvent<HTMLDivElement>) => {
+                    setShow(false);
+                    onVisibleChange && onVisibleChange(event, false);
+                }}
                 show={show || forceShow}
                 tooltipReference={() => containerRef.current}
             />
