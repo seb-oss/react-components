@@ -9,6 +9,7 @@ export * from "./CloseButton/index";
 export * from "./Collapse/index";
 export * from "./Datepicker/index";
 export * from "./Dropdown/index";
+export * from "./ErrorBoundary/index";
 export * from "./FeedbackIndicator/index";
 export * from "./Image/index";
 export * from "./ImageCropper/index";
