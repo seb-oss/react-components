@@ -1,7 +1,7 @@
 import React from "react";
 
 interface ErrorBoundaryProps {
-    children: React.ReactNode;
+    /** The error view to be shown */
     errorView: React.ReactNode;
 }
 
