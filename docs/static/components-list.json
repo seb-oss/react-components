@@ -55,6 +55,11 @@
         "filePath": "./src/Dropdown/index.ts"
     },
     {
+        "name": "ErrorBoundary",
+        "path": "/docs/error-boundary/",
+        "filePath": "./src/ErrorBoundary/index.ts"
+    },
+    {
         "name": "FeedbackIndicator",
         "path": "/docs/feedbackindicator/",
         "filePath": "./src/FeedbackIndicator/index.ts"
