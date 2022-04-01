@@ -2,9 +2,9 @@ import { isEmpty } from "@sebgroup/frontend-tools/isEmpty";
 import pupa from "pupa";
 import React from "react";
 
-type TranslationValues = string | Array<Translation>;
+export type TranslationValues = string | Array<Translation>;
 
-interface Translation {
+export interface Translation {
     [key: string]: TranslationValues;
 }
 
@@ -35,7 +35,7 @@ export interface TranslationProviderProps {
      */
     fallbackTranslation?: Translation;
     /**
-     * The response path to the translation, defaulted to "result.content".
+     * The response path to the translation, defaulted to `result.content`.
      * This is to map the response into actual translation key mapping.
      */
     translationPath?: string;
