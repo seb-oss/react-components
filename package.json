@@ -61,7 +61,7 @@
         "commitizen": "^4.2.4",
         "coveralls": "^3.1.1",
         "cz-conventional-changelog": "^3.3.0",
-        "husky": "^7.0.4",
+        "husky": "^4.3.6",
         "jest-date-mock": "^1.0.8",
         "jest-fetch-mock": "^3.0.3",
         "ncp": "^2.0.0",
