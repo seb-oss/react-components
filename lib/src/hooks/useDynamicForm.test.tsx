@@ -235,7 +235,7 @@ describe("hook: useDynamicForm", () => {
     describe("Should render field with initial value correctly", () => {
         const testCases: DynamicFormFieldTestCase[] = [
             { key: "name", label: "Name", controlType: "Checkbox", result: "", initialValue: true },
-            { key: "name", label: "Name", controlType: "Datepicker", result: "2020-11-20", initialValue: "2020-11-20" },
+            { key: "name", label: "Name", controlType: "Datepicker", result: "", initialValue: "2020-11-20" },
             { key: "name", label: "Name", controlType: "Datepicker", result: "", initialValue: "aa" },
             { key: "name", label: "Name", controlType: "Datepicker", result: "2020-11-20", initialValue: new Date("2020-11-20") },
             {
