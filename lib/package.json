@@ -3,7 +3,7 @@
     "version": "1.0.0",
     "description": "The components library containing SEB's React components",
     "scripts": {
-        "prebuild": "rimraf dist/* && npm run test",
+        "prebuild": "rimraf dist/*",
         "build": "rollup -c",
         "postbuild": "rimraf dist/**/*.test.d.ts && node scripts/post-build.js",
         "pretest": "rimraf coverage/*",
