@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { render, unmountComponentAtNode } from "react-dom";
 import { act, Simulate } from "react-dom/test-utils";
 import { ErrorBoundary } from ".";
@@ -33,10 +33,15 @@ describe("Component: ErrorBoundary", () => {
     });
 
     it("Should render error view when error occurs", () => {
+        const ComponentWithError: React.FC<{}> = () => {
+            throw new Error();
+            return <div>I will never render :(</div>;
+        };
+
         act(() => {
             render(
                 <ErrorBoundary errorView={<div className="error-view">error view</div>}>
-                    <div className="component">{new Error()}</div>
+                    <div className="component">{<ComponentWithError />}</div>
                 </ErrorBoundary>,
                 container
             );

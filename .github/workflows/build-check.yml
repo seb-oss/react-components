@@ -5,20 +5,29 @@ on: pull_request
 jobs:
   build_check:
     runs-on: ubuntu-latest
+    
     strategy:
       matrix:
-        node: [ '15' ]
+        node: [ '16' ]
+
     name: Node ${{ matrix.node }}
+
     steps:
       - uses: actions/checkout@v2
+
       - name: Setup node
         uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node }}
+
       - name: Installing dependencies
         run: npm ci
+
       - name: Testing
         run: npm test
+
       - name: Building
+        env:
+          NODE_OPTIONS: "--max-old-space-size=8192"
         run: npm run build
         

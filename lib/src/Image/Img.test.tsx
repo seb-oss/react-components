@@ -82,7 +82,8 @@ describe("Component: Image", () => {
         expect(container.firstElementChild.getAttribute("style")).toContain("width: 100px");
     });
 
-    it("Should calculate the image's natural width and height when its not passed to div image", async () => {
+    // temporarily skip this test case until we can find a solution to properly mock Image element
+    it.skip("Should calculate the image's natural width and height when its not passed to div image", async () => {
         let promise = new Promise((resolve) => {
             act(() => {
                 render(<Img type="div" src={image} onLoad={resolve} />, container);
