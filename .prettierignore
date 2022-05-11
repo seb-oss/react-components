@@ -7,7 +7,6 @@ package-lock.json
 # Directories
 .github/
 .vscode/
-test/
 coverage/
 node_modules/
 dist/

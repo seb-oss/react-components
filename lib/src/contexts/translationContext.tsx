@@ -45,7 +45,7 @@ const DEFAULT_TRANSLATION_PATH: string = "result.content";
 
 const TranslationContext = React.createContext<TranslationContextInterface | undefined>(undefined);
 
-const TranslationProvider: React.FC<TranslationProviderProps> = ({ children, fallbackTranslation, translationPath = DEFAULT_TRANSLATION_PATH, url }) => {
+const TranslationProvider: React.FC<React.PropsWithChildren<TranslationProviderProps>> = ({ children, fallbackTranslation, translationPath = DEFAULT_TRANSLATION_PATH, url }) => {
     const [isLoading, setLoading] = React.useState<boolean>(true);
     const [translation, setTranslation] = React.useState<Translation>();
 

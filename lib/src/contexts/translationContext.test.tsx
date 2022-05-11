@@ -6,9 +6,9 @@ import { TranslationProvider, useTranslationContext } from "./translationContext
 
 enableFetchMocks();
 
-const TestContext: React.FC<{ data?: any; translationKey: string }> = ({ data, translationKey }) => {
+const TestContext: React.FC<React.PropsWithChildren<{ data?: any; translationKey: string }>> = ({ data, translationKey }) => {
     const { isLoading, t } = useTranslationContext();
-    return <div>{isLoading ? <span className="loading-screen">loading...</span> : <p className="translated-text">{t(translationKey, data)}</p>}</div>;
+    return <div>{isLoading ? <span className="loading-screen">loading...</span> : <p className="translated-text">{t(translationKey, data) as string}</p>}</div>;
 };
 
 const MOCK_TRANSLATION_RESULT: any = { result: { content: { title_translation: "title_translation" } } };

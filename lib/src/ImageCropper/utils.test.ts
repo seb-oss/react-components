@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction } from "react";
 import { ClipRect } from ".";
-import { readImage, getMovement, Movement, moveHandler, resizeHandler, Position, addListener, crop } from "./utils";
+import { addListener, crop, getMovement, moveHandler, Movement, Position, readImage, resizeHandler } from "./utils";
 
 const image: string = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=";
 
@@ -25,7 +25,7 @@ describe("Component: ImageCropper - utils", () => {
             expect(readImage({ target: { value: "image/url" } } as any)).rejects.toEqual("No files found");
         });
 
-        it("Should read the file and resolves", async (done: jest.DoneCallback) => {
+        it("Should read the file and resolves", (done: jest.DoneCallback) => {
             readImage({ target: { value: "image/url", files: [makeblob(image)] } } as any).then((image: string) => {
                 expect(image).toEqual(image);
                 done();
