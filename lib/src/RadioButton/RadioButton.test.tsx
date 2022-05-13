@@ -9,11 +9,11 @@ describe("Component: RadioButton", () => {
     });
 
     it("Should pass custom class and id", () => {
-        const className: string = "myRadiobuttonClass";
-        const wrapperClassname: string = "myWrapperClassname";
-        const { container }: RenderResult = render(<RadioButton className={className} wrapperProps={{ className: wrapperClassname }} />);
+        const className: string = "my-custom-radio";
+        const wrapperClassname: string = "my-custom-wrapper";
+        render(<RadioButton className={className} wrapperProps={{ className: wrapperClassname }} />);
         expect(screen.getByRole("radio")).toHaveClass(className);
-        expect(container.firstElementChild.classList.contains(wrapperClassname)).toBeTruthy();
+        expect(screen.getByRole("radio").closest(".radio-button")).toHaveClass(wrapperClassname);
     });
 
     it("Should render with random id if id is not passed", () => {
