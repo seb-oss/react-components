@@ -1,87 +1,57 @@
+import { fireEvent, render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import React from "react";
-import { act, Simulate } from "react-dom/test-utils";
-import { unmountComponentAtNode, render } from "react-dom";
 import { CarouselItem, CarouselItemProps } from ".";
 
 describe("Component: Carousel", () => {
-    let container: HTMLDivElement = null;
-    jest.useFakeTimers();
-
-    function element(i: number): HTMLDivElement {
-        return container.querySelectorAll<HTMLDivElement>(".carousel-item").item(i);
+    function element(i: number): HTMLLIElement {
+        return screen.getAllByRole<HTMLLIElement>("group")[i];
     }
 
-    beforeEach(() => {
-        container = document.createElement("div");
-        document.body.appendChild(container);
-    });
-
-    afterEach(() => {
-        unmountComponentAtNode(container);
-        container.remove();
-        container = null;
-    });
-
     it("Should render", () => {
-        act(() => {
-            render(<CarouselItem />, container);
-        });
-        expect(container.firstElementChild).not.toBeNull();
-        expect(container.firstElementChild.classList.contains("carousel-item")).toBeTruthy();
+        render(<CarouselItem />);
+        expect(screen.getByRole("group")).toHaveClass("carousel-item");
     });
 
-    it("Should transition correctly and call afterTransition", () => {
+    it("Should transition correctly and call afterTransition", async () => {
         const afterTransition: jest.Mock = jest.fn();
-        act(() => {
-            render(<Testbed afterTransition={afterTransition} />, container);
-        });
-
-        expect(element(0).classList.contains("active")).toBeTruthy();
-        expect(element(1).classList.contains("active")).toBeFalsy();
-
-        act(() => Simulate.click(container.querySelector("#test")));
-
-        expect(element(0).classList.contains("carousel-item-left")).toBeTruthy();
-        expect(element(1).classList.contains("carousel-item-left")).toBeTruthy();
-        expect(element(1).classList.contains("carousel-item-next")).toBeTruthy();
-
-        act(() => Simulate.transitionEnd(element(0)));
-        act(() => Simulate.animationEnd(element(1)));
-
-        expect(element(0).classList.contains("active")).toBeFalsy();
-        expect(element(1).classList.contains("active")).toBeTruthy();
+        render(<Testbed afterTransition={afterTransition} />);
+        expect(element(0)).toHaveClass("active");
+        expect(element(1)).not.toHaveClass("active");
+        await userEvent.click(screen.getByRole("button"));
+        expect(element(0)).toHaveClass("carousel-item-left");
+        expect(element(1)).toHaveClass("carousel-item-left", "carousel-item-next");
+        fireEvent.transitionEnd(element(0));
+        fireEvent.animationEnd(element(1));
+        expect(element(0)).not.toHaveClass("active");
+        expect(element(1)).toHaveClass("active");
         expect(afterTransition).toBeCalled();
     });
 
-    it("Should call onTransitionEnd and onAnimationEnd when passed", () => {
+    it("Should call onTransitionEnd and onAnimationEnd when passed", async () => {
         const onTransitionEnd: jest.Mock = jest.fn();
         const onAnimationEnd: jest.Mock = jest.fn();
-        act(() => {
-            render(<Testbed onTransitionEnd={onTransitionEnd} onAnimationEnd={onAnimationEnd} />, container);
-        });
-
-        act(() => Simulate.click(container.querySelector("#test")));
-        act(() => Simulate.transitionEnd(element(0)));
-        act(() => Simulate.animationEnd(element(1)));
+        render(<Testbed onTransitionEnd={onTransitionEnd} onAnimationEnd={onAnimationEnd} />);
+        await userEvent.click(screen.getByRole("button"));
+        fireEvent.transitionEnd(element(0));
+        fireEvent.animationEnd(element(1));
         expect(onTransitionEnd).toBeCalled();
         expect(onAnimationEnd).toBeCalled();
     });
 
     it("Should accept custom transition duration", () => {
         const transitionDuration: number = 10000;
-        act(() => {
-            render(<CarouselItem transitionDuration={transitionDuration} />, container);
+        render(<CarouselItem transitionDuration={transitionDuration} />);
+        expect(screen.getByRole("group")).toHaveStyle({
+            "transition-duration": `${transitionDuration}ms`,
+            "animation-duration": `${transitionDuration}ms`,
         });
-        expect(container.firstElementChild.getAttribute("style")).toContain(`transition-duration: ${transitionDuration}ms;`);
-        expect(container.firstElementChild.getAttribute("style")).toContain(`animation-duration: ${transitionDuration}ms;`);
     });
 
     it("Should render translate value passed when swiping", () => {
         const swipeDistance: number = 200;
-        act(() => {
-            render(<CarouselItem translateX={swipeDistance} defaultChecked />, container);
-        });
-        expect(container.firstElementChild.getAttribute("style")).toContain(`transform: translate3d(${swipeDistance}px, 0, 0);`);
+        render(<CarouselItem translateX={swipeDistance} defaultChecked />);
+        expect(screen.getByRole("group")).toHaveStyle({ transform: `translate3d(${swipeDistance}px, 0, 0)` });
     });
 });
 
