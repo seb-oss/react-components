@@ -1,58 +1,41 @@
+import { render, screen } from "@testing-library/react";
 import React from "react";
-import { render, unmountComponentAtNode } from "react-dom";
-import { act } from "react-dom/test-utils";
 import { CustomDropdownItem } from "./CustomDropdownItem";
 
 describe("Component: CustomDropdownItem", () => {
-    let container: HTMLDivElement = null;
-
-    beforeEach(() => {
-        container = document.createElement("div");
-        document.body.appendChild(container);
-    });
-
-    afterEach(() => {
-        unmountComponentAtNode(container);
-        container.remove();
-        container = null;
-    });
+    const content: string = "my content";
 
     it("Should render correction", () => {
-        const content: string = "my content";
-        act(() => {
-            render(<CustomDropdownItem>{content}</CustomDropdownItem>, container);
-        });
-        expect(container.firstElementChild).not.toBeNull();
-        expect(container.firstElementChild.classList.contains("custom-control")).toBeTruthy();
-        // Should not show up until multiple is set to true
-        expect(container.firstElementChild.classList.contains("custom-checkbox")).toBeFalsy();
-        expect(container.firstElementChild.classList.contains("focused")).toBeFalsy();
-        expect(container.querySelector("input")).not.toBeNull();
-        expect(container.querySelector("input").type).toEqual("radio");
-        expect(container.querySelector("label")).not.toBeNull();
-        // Should be set to radio until multiple is set to true
-        expect(container.querySelector("label").classList.contains("custom-radio")).toBeTruthy();
-        expect(container.querySelector("label").textContent).toEqual(content);
+        render(<CustomDropdownItem>{content}</CustomDropdownItem>);
+        // Dropdown item classes
+        const dropdownItem: HTMLOptionElement = screen.getByRole("option");
+        expect(dropdownItem).toHaveClass("custom-control");
+        expect(dropdownItem).not.toHaveClass("custom-checkbox", "focused");
+        // Input element classes
+        const inputElement: HTMLInputElement = screen.getByLabelText(content);
+        expect(inputElement).toBeInTheDocument();
+        expect(inputElement).toHaveAttribute("type", "radio");
+        expect(inputElement).not.toHaveClass("custom-control-input");
+        // Input label classes
+        const inputLabel: HTMLElement = screen.getByText(content);
+        expect(inputLabel).toBeInTheDocument();
+        expect(inputLabel).toHaveClass("custom-radio");
+        expect(inputLabel).not.toHaveClass("custom-control-label");
         // Should have a random id
-        expect(container.querySelector("input").id.length > 0).toBeTruthy();
-        expect(container.querySelector("label").htmlFor.length > 0).toBeTruthy();
-        expect(container.querySelector("label").htmlFor).toEqual(container.querySelector("input").id);
+        expect(inputElement).toHaveAttribute("id", expect.any(String));
     });
 
     it("Should render correctly with multiple", () => {
-        act(() => {
-            render(<CustomDropdownItem multiple />, container);
-        });
-        expect(container.firstElementChild.classList.contains("custom-checkbox")).toBeTruthy();
-        expect(container.querySelector("input").type).toEqual("checkbox");
-        expect(container.querySelector("input").classList.contains("custom-control-input")).toBeTruthy();
-        expect(container.querySelector("label").classList.contains("custom-control-label")).toBeTruthy();
+        render(<CustomDropdownItem multiple>{content}</CustomDropdownItem>);
+        expect(screen.getByRole("option")).toHaveClass("custom-checkbox");
+        const inputElement: HTMLInputElement = screen.getByLabelText(content);
+        expect(inputElement).toHaveAttribute("type", "checkbox");
+        expect(inputElement).toHaveClass("custom-control-input");
+        expect(screen.getByText(content)).toHaveClass("custom-control-label");
     });
 
     it("Should render correctly with focused", () => {
-        act(() => {
-            render(<CustomDropdownItem focused />, container);
-        });
-        expect(container.firstElementChild.classList.contains("focused")).toBeTruthy();
+        render(<CustomDropdownItem focused />);
+        expect(screen.getByRole("option")).toHaveClass("focused");
     });
 });
