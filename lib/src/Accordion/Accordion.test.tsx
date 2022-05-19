@@ -12,9 +12,6 @@ describe("Component: Accordion", () => {
         return JSON.parse(button.getAttribute("aria-expanded"));
     }
 
-    /** To disable Collapse setTimeout calls */
-    // beforeAll(() => jest.useFakeTimers());
-
     it("Should render correctly", () => {
         const { container }: RenderResult = render(<Accordion />);
         expect(container.firstElementChild.classList.contains("rc")).toBeTruthy();
