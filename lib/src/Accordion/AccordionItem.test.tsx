@@ -1,30 +1,12 @@
+import { render, RenderResult, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import React from "react";
-import { act } from "react-dom/test-utils";
-import { unmountComponentAtNode, render } from "react-dom";
-import { AccordionItem } from ".";
 import { renderToStaticMarkup } from "react-dom/server";
+import { AccordionItem } from ".";
 
 describe("Component: Accordion", () => {
-    let container: HTMLDivElement = null;
-
-    /** To disable Collapse setTimeout calls */
-    beforeAll(() => jest.useFakeTimers());
-
-    beforeEach(() => {
-        container = document.createElement("div");
-        document.body.appendChild(container);
-    });
-
-    afterEach(() => {
-        unmountComponentAtNode(container);
-        container.remove();
-        container = null;
-    });
-
     it("Should render correctly", () => {
-        act(() => {
-            render(<AccordionItem header="test" />, container);
-        });
+        const { container }: RenderResult = render(<AccordionItem header="test" />);
         expect(container.firstElementChild.classList.contains("card")).toBeTruthy();
         expect(container.firstElementChild.classList.contains("collapsed")).toBeTruthy();
         expect(container.firstElementChild.children.length).toBe(2);
@@ -42,56 +24,42 @@ describe("Component: Accordion", () => {
         const header: string = "myHeader";
         const subHeader: string = "mySubHeader";
         const content: string = "myContent";
-        act(() => {
-            render(
-                <AccordionItem header={header} subHeader={subHeader}>
-                    {content}
-                </AccordionItem>,
-                container
-            );
-        });
-        expect(container.querySelector("h4").innerHTML).toEqual(header);
-        expect(container.querySelector("h6").innerHTML).toEqual(subHeader);
-        expect(container.querySelector(".content").innerHTML).toEqual(content);
+        render(
+            <AccordionItem header={header} subHeader={subHeader}>
+                {content}
+            </AccordionItem>
+        );
+        expect(screen.getByText(header)).toBeInTheDocument();
+        expect(screen.getByText(subHeader)).toBeInTheDocument();
+        expect(screen.getByText(content)).toBeInTheDocument();
     });
 
     it("Should be default to expanded when defaultValue is set to true", () => {
-        act(() => {
-            render(<AccordionItem header="test" defaultChecked />, container);
-        });
+        const { container }: RenderResult = render(<AccordionItem header="test" defaultChecked />);
         expect(container.firstElementChild.classList.contains("collapsed")).toBeFalsy();
         expect(container.firstElementChild.lastElementChild.classList.contains("collapsed")).toBeFalsy();
     });
 
     it("Should render parent id in collapse div when available", () => {
         const parentId: string = "123";
-        act(() => {
-            render(<AccordionItem header="test" data-parent-id={parentId} />, container);
-        });
+        const { container }: RenderResult = render(<AccordionItem header="test" data-parent-id={parentId} />);
         expect(container.querySelector(".collapse").getAttribute("data-parent")).toEqual(`#${parentId}`);
     });
 
-    it("Should trigger onToggle when button is clicked", () => {
+    it("Should trigger onToggle when button is clicked", async () => {
         const onToggle: jest.Mock = jest.fn();
-        act(() => {
-            render(<AccordionItem header="test" onToggle={onToggle} />, container);
-        });
-        act(() => {
-            container.querySelector("button").click();
-        });
+        render(<AccordionItem header="test" onToggle={onToggle} />);
+        await userEvent.click(screen.getByRole("button"));
         expect(onToggle).toBeCalled();
     });
 
     it("Should allow rendering nodes in header, subheader, and children", () => {
         const element: JSX.Element = <p>test</p>;
-        act(() => {
-            render(
-                <AccordionItem header={element} subHeader={element}>
-                    {element}
-                </AccordionItem>,
-                container
-            );
-        });
+        const { container }: RenderResult = render(
+            <AccordionItem header={element} subHeader={element}>
+                {element}
+            </AccordionItem>
+        );
         expect(container.querySelector("h4").innerHTML).toEqual(renderToStaticMarkup(element));
         expect(container.querySelector("h6").innerHTML).toEqual(renderToStaticMarkup(element));
         expect(container.querySelector(".content").innerHTML).toEqual(renderToStaticMarkup(element));

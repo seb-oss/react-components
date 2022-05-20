@@ -1,39 +1,20 @@
+import { render, screen } from "@testing-library/react";
 import React from "react";
-import { act } from "react-dom/test-utils";
-import { unmountComponentAtNode, render } from "react-dom";
-import { Button, ButtonTheme, ButtonSize } from ".";
+import { Button, ButtonSize, ButtonTheme } from ".";
 
 type ButtonTestItem<T, K> = { value: T; expected: K };
 
 describe("Component: Button", () => {
-    let container: HTMLDivElement = null;
-
-    beforeEach(() => {
-        container = document.createElement("div");
-        document.body.appendChild(container);
-    });
-
-    afterEach(() => {
-        unmountComponentAtNode(container);
-        container.remove();
-        container = null;
-    });
-
     it("Should render", () => {
         const text: string = "Test";
-        act(() => {
-            render(<Button>{text}</Button>, container);
-        });
-        expect(container.firstElementChild).toBeDefined();
-        expect(container.firstElementChild.innerHTML).toEqual(text);
+        render(<Button>{text}</Button>);
+        expect(screen.getByText(text)).toBeInTheDocument();
     });
 
     it("Should render custom className", () => {
         const className: string = "myButtonClass";
-        act(() => {
-            render(<Button className={className} />, container);
-        });
-        expect(container.firstElementChild.classList.contains(className)).toBeTruthy();
+        render(<Button className={className} />);
+        expect(screen.getByRole("button")).toHaveClass(className);
     });
 
     describe("Should render supported themes", () => {
@@ -49,10 +30,8 @@ describe("Component: Button", () => {
         ];
         list.map((item: ButtonTestItem<ButtonTheme, string>) => {
             it(`Size: ${item.value} - Expected to render (${item.expected})`, () => {
-                act(() => {
-                    render(<Button theme={item.value} />, container);
-                });
-                expect(container.firstElementChild.classList.contains(item.expected)).toBeTruthy();
+                render(<Button theme={item.value} />);
+                expect(screen.getByRole("button")).toHaveClass(item.expected);
             });
         });
     });
@@ -65,24 +44,19 @@ describe("Component: Button", () => {
         ];
         list.map((item: ButtonTestItem<ButtonSize, string>) => {
             it(`Size: ${item.value} - Expected to render (btn-${item.expected})`, () => {
-                act(() => {
-                    render(<Button size={item.value} />, container);
-                });
-                expect(container.firstElementChild.classList.contains(item.expected)).toBeTruthy();
+                render(<Button size={item.value} />);
+                expect(screen.getByRole("button")).toHaveClass(item.expected);
             });
         });
     });
 
     it("Should render icon inside button", () => {
-        act(() => {
-            render(
-                <Button>
-                    <svg id="mySvg" />
-                </Button>,
-                container
-            );
-        });
-        expect(container.firstElementChild.firstElementChild).toBeDefined();
-        expect(container.firstElementChild.firstElementChild.id).toEqual("mySvg");
+        const testId: string = "mySvg";
+        render(
+            <Button>
+                <svg data-testid={testId} />
+            </Button>
+        );
+        expect(screen.getByTestId(testId)).toBeInTheDocument();
     });
 });
