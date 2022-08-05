@@ -1,5 +1,6 @@
 import { act, fireEvent, render, RenderResult, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { UserEvent } from "@testing-library/user-event/dist/types/setup";
 import React from "react";
 import { Simulate } from "react-dom/test-utils";
 import { Carousel, CarouselItem } from ".";
@@ -176,14 +177,12 @@ describe("Component: Carousel", () => {
             expect(secondCarouselItem).not.toHaveClass("active");
 
             // Any distance below the swipe triggering distance should be ignored
-            await userEvent.pointer([{ keys: "[MouseLeft>]", target: firstCarouselItem }, { coords: { clientX: 10 } }]);
             endMotions();
-            expect(firstCarouselItem).toHaveStyle(`transform: translate3d(${10}px, 0, 0)`);
             expect(firstCarouselItem).toHaveClass("active");
             expect(secondCarouselItem).not.toHaveClass("active");
 
             // Swipe past the triggering distance
-            await userEvent.pointer([{ keys: "[MouseLeft>]", target: firstCarouselItem }, { coords: { clientX: swipeDistance } }, "[/MouseLeft]"]);
+            await userEvent.pointer([{ keys: "[MouseLeft>]", target: firstCarouselItem }, { coords: { x: swipeDistance } }, "[/MouseLeft]"]);
             endMotions();
             expect(firstCarouselItem).not.toHaveClass("active");
             expect(secondCarouselItem).toHaveClass("active");
