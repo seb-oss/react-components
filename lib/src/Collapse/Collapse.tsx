@@ -24,14 +24,14 @@ export const Collapse: React.FC<CollapseProps> = React.memo(
             setStyles({ ...styles, display: "block" });
             /** This async delay is needed for the height change to take effect */
             setTimeout(() => {
-                setStyles({ display: "block", height: collapseRef.current.scrollHeight, opacity: 1 });
+                setStyles({ display: "block", height: collapseRef.current?.scrollHeight, opacity: 1 });
             }, 10);
         }, [styles]);
 
         /** Collapse the content */
         const collapse = React.useCallback((): void => {
             /** Since height `auto` will not transition, we need to change it to pixels */
-            setStyles({ ...styles, height: collapseRef.current.scrollHeight });
+            setStyles({ ...styles, height: collapseRef.current?.scrollHeight });
             /** This async delay is needed for the height change to take effect */
             setTimeout(() => {
                 setStyles({ ...styles, height: 0, opacity: 0 });
