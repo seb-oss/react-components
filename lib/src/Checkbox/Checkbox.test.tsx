@@ -1,38 +1,63 @@
-import { render, RenderResult, screen } from "@testing-library/react";
 import React from "react";
+import { act } from "react-dom/test-utils";
+import { unmountComponentAtNode, render } from "react-dom";
 import { Checkbox } from ".";
 
 describe("Component: Checkbox", () => {
+    let container: HTMLDivElement = null;
+
+    beforeEach(() => {
+        container = document.createElement("div");
+        document.body.appendChild(container);
+    });
+
+    afterEach(() => {
+        unmountComponentAtNode(container);
+        container.remove();
+        container = null;
+    });
+
     it("Should render", () => {
-        render(<Checkbox />);
-        expect(screen.getByRole("checkbox")).toBeInTheDocument();
+        act(() => {
+            render(<Checkbox />, container);
+        });
+        expect(container.firstElementChild).not.toBeNull();
     });
 
     it("Should render checkbox inline and render label", () => {
         const label: string = "Some label";
-        render(<Checkbox inline>{label}</Checkbox>);
-        expect(screen.getByRole("checkbox").closest(".checkbox")).toHaveClass("inline");
-        expect(screen.getByRole("checkbox").closest(".custom-control")).toHaveClass("custom-control-inline");
-        expect(screen.getByLabelText(label)).toBeInTheDocument();
+        act(() => {
+            render(<Checkbox inline>{label}</Checkbox>, container);
+        });
+        expect(container.firstElementChild.classList.contains("inline")).toBeTruthy();
+        expect(container.querySelector(".custom-control").classList.contains("custom-control-inline")).toBeTruthy();
+        expect(container.querySelector(".custom-control-label")).not.toBeNull();
+        expect(container.querySelector(".custom-control-label").innerHTML).toEqual(label);
     });
 
     it("Should pass wrapper props when passed", () => {
-        const className: string = "my-custom-checkbox";
-        const wrapperClassname: string = "my-custom-wrapper";
-        render(<Checkbox className={className} wrapperProps={{ className: wrapperClassname }} />);
-        expect(screen.getByRole("checkbox")).toHaveClass(className);
-        expect(screen.getByRole("checkbox").closest(".checkbox")).toHaveClass(wrapperClassname);
+        const className: string = "wrapper-classname";
+        act(() => {
+            render(<Checkbox wrapperProps={{ className }} />, container);
+        });
+        expect(container.firstElementChild.classList.contains(className)).toBeTruthy();
     });
 
     it("Should render random id when there is a label and no id passed", () => {
         const id: string = "some-id";
-        const { rerender }: RenderResult = render(<Checkbox />);
-        expect(screen.getByRole("checkbox").getAttribute("id")).toBeNull();
+        act(() => {
+            render(<Checkbox />, container);
+        });
+        expect(container.querySelector("input").id).toEqual("");
 
-        rerender(<Checkbox>some label</Checkbox>);
-        expect(screen.getByRole("checkbox")).toHaveAttribute("id", expect.any(String));
+        act(() => {
+            render(<Checkbox>some label</Checkbox>, container);
+        });
+        expect(container.querySelector("input").id).not.toEqual("");
 
-        rerender(<Checkbox id={id}>some label</Checkbox>);
-        expect(screen.getByRole("checkbox")).toHaveAttribute("id", id);
+        act(() => {
+            render(<Checkbox id={id}>some label</Checkbox>, container);
+        });
+        expect(container.querySelector("input").id).toEqual(id);
     });
 });

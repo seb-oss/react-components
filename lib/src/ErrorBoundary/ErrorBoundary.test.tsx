@@ -1,33 +1,54 @@
-import { render, screen } from "@testing-library/react";
-import React from "react";
+import React, { useEffect } from "react";
+import { render, unmountComponentAtNode } from "react-dom";
+import { act, Simulate } from "react-dom/test-utils";
 import { ErrorBoundary } from ".";
 
 describe("Component: ErrorBoundary", () => {
-    const consoleErrorSpy = jest.spyOn(console, "error");
+    let container: HTMLDivElement = null;
+
+    beforeEach(() => {
+        container = document.createElement("div");
+        document.body.appendChild(container);
+    });
+
+    afterEach(() => {
+        unmountComponentAtNode(container);
+        container.remove();
+        container = null;
+    });
 
     it("Should render correction", () => {
-        render(
-            <ErrorBoundary errorView={<div data-testid="errorView">error view</div>}>
-                <div>some component</div>
-            </ErrorBoundary>
-        );
-        expect(screen.getByText("some component")).toBeInTheDocument();
-        expect(screen.queryByTestId("errorView")).toBeNull();
+        act(() => {
+            render(
+                <ErrorBoundary errorView={<div className="error-view">error view</div>}>
+                    <div className="component">some component</div>
+                </ErrorBoundary>,
+                container
+            );
+        });
+
+        expect(container.firstElementChild.tagName.toLowerCase()).toEqual("div");
+        expect(container.firstElementChild.textContent).toEqual("some component");
+        expect(container.querySelector(".error-view")).toBeNull();
     });
 
     it("Should render error view when error occurs", () => {
-        consoleErrorSpy.mockImplementation(jest.fn());
         const ComponentWithError: React.FC<{}> = () => {
             throw new Error();
             return <div>I will never render :(</div>;
         };
-        render(
-            <ErrorBoundary errorView={<div>error view</div>}>
-                <div data-testid="component">{<ComponentWithError />}</div>
-            </ErrorBoundary>
-        );
-        expect(screen.getByText("error view")).toBeInTheDocument();
-        expect(screen.queryByTestId("component")).toBeNull();
-        consoleErrorSpy.mockClear();
+
+        act(() => {
+            render(
+                <ErrorBoundary errorView={<div className="error-view">error view</div>}>
+                    <div className="component">{<ComponentWithError />}</div>
+                </ErrorBoundary>,
+                container
+            );
+        });
+
+        expect(container.firstElementChild.tagName.toLowerCase()).toEqual("div");
+        expect(container.firstElementChild.textContent).toEqual("error view");
+        expect(container.querySelector(".component")).toBeNull();
     });
 });

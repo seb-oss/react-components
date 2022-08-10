@@ -1,91 +1,116 @@
-import { createEvent, fireEvent, render, screen, waitFor } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
 import React from "react";
-import { act } from "react-dom/test-utils";
+import { render, unmountComponentAtNode } from "react-dom";
 import { Collapse } from "./Collapse";
-
-type TransitionProperty = "height" | "width";
+import { act, Simulate } from "react-dom/test-utils";
 
 describe("Util: Collapse", () => {
-    const collapsedStyle: Record<string, unknown> = {
-        display: "none",
-        opacity: 0,
-    };
-    const expandedStyle: Record<string, unknown> = {
-        display: "block",
-        opacity: 1,
-    };
+    let container: HTMLDivElement = null;
 
-    function simulateTransition(collapse: HTMLElement, property: TransitionProperty): void {
-        const transitionEndEvent = createEvent.transitionEnd(collapse, { bubbles: true, cancelable: false });
-        (transitionEndEvent as any).propertyName = property;
-        fireEvent(collapse, transitionEndEvent);
-    }
+    beforeEach(() => {
+        container = document.createElement("div");
+        document.body.appendChild(container);
+        jest.useFakeTimers();
+    });
+
+    afterEach(() => {
+        unmountComponentAtNode(container);
+        container.remove();
+        container = null;
+        jest.clearAllMocks();
+    });
 
     it("Should render", () => {
-        render(
-            <Collapse toggle={null}>
-                <div>Test</div>
-            </Collapse>
-        );
-        expect(screen.getByText("Test")).toBeInTheDocument();
+        act(() => {
+            render(
+                <Collapse toggle={null}>
+                    <div>Test</div>
+                </Collapse>,
+                container
+            );
+        });
+        expect(container).toBeDefined();
     });
 
     it("Should call custom transitionEnd when transition is triggered", () => {
         const onTransitionEnd: jest.Mock = jest.fn();
-        render(
-            <Collapse data-testid="collapse" toggle onTransitionEnd={onTransitionEnd}>
-                <div>Test</div>
-            </Collapse>
-        );
-        const collapse: HTMLDivElement = screen.getByTestId("collapse");
-        simulateTransition(collapse, "height");
-        simulateTransition(collapse, "width");
+        act(() => {
+            jest.useFakeTimers();
+            render(
+                <Collapse toggle onTransitionEnd={onTransitionEnd}>
+                    <div>Test</div>
+                </Collapse>,
+                container
+            );
+        });
+        act(() => {
+            Simulate.transitionEnd(container.firstElementChild, { bubbles: true, propertyName: "height" } as any);
+            Simulate.transitionEnd(container.firstElementChild, { bubbles: true, propertyName: "width" } as any);
+        });
         expect(onTransitionEnd).toBeCalledTimes(2);
     });
 
-    it("Should expand and collapse correctly", async () => {
-        const mockScrollHeight: number = 200;
-        jest.useFakeTimers();
-        render(<TestBed />);
-        const collapse: HTMLDivElement = screen.getByTestId("collapse");
-        jest.spyOn(collapse, "scrollHeight", "get").mockImplementation(() => mockScrollHeight);
+    it("Should expand and collapse correctly", () => {
+        act(() => {
+            jest.useFakeTimers();
+            render(<TestBed />, container);
+        });
+
+        jest.spyOn(container.firstElementChild, "scrollHeight", "get").mockImplementation(() => 200);
 
         // Default state collapsed
-        expect(collapse).toHaveStyle(collapsedStyle);
+        expect(container.firstElementChild.getAttribute("style")).toContain("opacity: 0;");
+        expect(container.firstElementChild.getAttribute("style")).toContain("display: none;");
+        expect(container.firstElementChild.getAttribute("style")).toContain("height: 0px;");
 
         // Expanding
-        userEvent.click(screen.getByRole("button"));
-        await waitFor(() => expect(collapse).toHaveStyle(`height: ${mockScrollHeight}px`));
+        act(() => {
+            Simulate.click(container.querySelector("#toggle"));
+        });
+        expect(container.firstElementChild.getAttribute("style")).toContain("display: block;");
+
         act(() => {
             jest.advanceTimersByTime(20);
         });
-        await waitFor(() => expect(collapse).toHaveStyle(expandedStyle));
-        simulateTransition(collapse, "height");
-        expect(collapse).toHaveStyle({ height: "auto" });
+        expect(container.firstElementChild.getAttribute("style")).toContain("opacity: 1;");
+        expect(container.firstElementChild.getAttribute("style")).toContain("height: 200px;");
+        act(() => {
+            Simulate.transitionEnd(container.firstElementChild, { bubbles: true, propertyName: "height" } as any);
+        });
+        expect(container.firstElementChild.getAttribute("style")).toContain("height: auto;");
 
         // Collapsing
-        userEvent.click(screen.getByRole("button"));
-        await waitFor(() => expect(collapse).not.toHaveStyle({ height: "auto" }));
+        act(() => {
+            Simulate.click(container.querySelector("#toggle"));
+        });
+        expect(container.firstElementChild.getAttribute("style")).toContain("display: block;");
         act(() => {
             jest.advanceTimersByTime(20);
         });
-        simulateTransition(collapse, "height");
-        await waitFor(() => expect(collapse).toHaveStyle(collapsedStyle));
-        jest.clearAllTimers();
+        expect(container.firstElementChild.getAttribute("style")).toContain("opacity: 0;");
+        expect(container.firstElementChild.getAttribute("style")).toContain("height: 0px;");
+        act(() => {
+            Simulate.transitionEnd(container.firstElementChild, { bubbles: true, propertyName: "height" } as any);
+        });
+        expect(container.firstElementChild.getAttribute("style")).toContain("display: none;");
     });
 
     it("Should render correctly when toggle is not initialized", () => {
-        render(<Collapse data-testid="collapse" />);
-        expect(screen.getByTestId("collapse")).toHaveStyle(collapsedStyle);
+        act(() => {
+            render(<Collapse />, container);
+        });
+
+        expect(container.firstElementChild.getAttribute("style")).toContain("opacity: 0;");
+        expect(container.firstElementChild.getAttribute("style")).toContain("display: none;");
+        expect(container.firstElementChild.getAttribute("style")).toContain("height: 0px;");
     });
 });
 
 const TestBed: React.FC = () => {
     const [toggle, setToggle] = React.useState<boolean>(false);
+
     return (
         <>
-            <Collapse data-testid="collapse" toggle={toggle}>
+            <Collapse toggle={toggle}>
                 <div>test</div>
             </Collapse>
             <button id="toggle" onClick={() => setToggle(!toggle)}>

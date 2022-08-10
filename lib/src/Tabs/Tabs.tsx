@@ -44,7 +44,7 @@ export const Tabs: React.FC<TabsProps> = React.forwardRef(({ value, onTabChange,
         switch (event.key) {
             case Key.Enter:
             case Key.Space:
-                navigateToTab(event.target as any, event);
+                navigateToTab(event.target as HTMLAnchorElement, event);
                 break;
             case Key.ArrowLeft:
             case Key.ArrowRight:
