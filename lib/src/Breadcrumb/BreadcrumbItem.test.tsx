@@ -1,55 +1,76 @@
-import { render, RenderResult, screen } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
 import React from "react";
 import { Breadcrumb, BreadcrumbItem } from ".";
+import { unmountComponentAtNode, render } from "react-dom";
+import { act } from "react-dom/test-utils";
 
 describe("Component: Breadcrumb", () => {
-    it("Should render correctly", () => {
-        const { container }: RenderResult = render(<BreadcrumbItem>Home</BreadcrumbItem>);
-        expect(container.firstElementChild.tagName).toEqual("LI");
-        expect(container.firstElementChild.firstElementChild.tagName).toEqual("A");
-        expect(screen.getByText("Home"));
+    let container: HTMLDivElement = null;
+
+    beforeEach(() => {
+        container = document.createElement("div");
+        document.body.appendChild(container);
     });
 
-    it("Should pass data-index-number and title to anchor tag, pass href and onNavigate if not last item", async () => {
+    afterEach(() => {
+        unmountComponentAtNode(container);
+        container.remove();
+        container = null;
+    });
+
+    it("Should render correctly", () => {
+        act(() => {
+            render(<BreadcrumbItem>Home</BreadcrumbItem>, container);
+        });
+        expect(container.firstElementChild.tagName).toEqual("LI");
+        expect(container.firstElementChild.firstElementChild.tagName).toEqual("A");
+        expect(container.firstElementChild.firstElementChild.innerHTML).toEqual("Home");
+    });
+
+    it("Should pass data-index-number and title to anchor tag, pass href and onNavigate if not last item", () => {
         const href: string = "#/home";
         const title: string = "myTitle";
         const onNavigate: jest.Mock = jest.fn();
-        const { container }: RenderResult = render(
-            <Breadcrumb onNavigate={onNavigate}>
-                <BreadcrumbItem href={href} title={title}>
-                    First
-                </BreadcrumbItem>
-                <BreadcrumbItem href={href} title={title}>
-                    Second
-                </BreadcrumbItem>
-            </Breadcrumb>
-        );
-        // using `querySelectorAll` instead of `screen.getByRole('link')` because the latter does not recognize anchor without `href` as link
+        act(() => {
+            render(
+                <Breadcrumb onNavigate={onNavigate}>
+                    <BreadcrumbItem href={href} title={title}>
+                        First
+                    </BreadcrumbItem>
+                    <BreadcrumbItem href={href} title={title}>
+                        Second
+                    </BreadcrumbItem>
+                </Breadcrumb>,
+                container
+            );
+        });
         const links: NodeListOf<HTMLAnchorElement> = container.querySelectorAll<HTMLAnchorElement>("a");
         expect(links.item(0).title).toEqual(title);
         expect(links.item(0).hash).toEqual(href);
         expect(links.item(0).dataset.indexNumber).toEqual("0");
         expect(links.item(1).hash).toBe("");
-
-        for (const link of links as any) {
-            await userEvent.click(link);
-        }
-
+        act(() => {
+            links.forEach((link: HTMLAnchorElement) => link.click());
+        });
         expect(onNavigate).toBeCalledTimes(1);
     });
 
-    it("Should change active state when another item is added", async () => {
-        const { container }: RenderResult = render(<TestBed />);
+    it("Should change active state when another item is added", () => {
+        act(() => {
+            render(<TestBed />, container);
+        });
         let items: NodeListOf<HTMLLIElement> = container.querySelectorAll<HTMLLIElement>(".breadcrumb-item");
-        expect(items[0]).not.toHaveClass("active");
-        expect(items[1]).toHaveClass("active");
+        expect(items[0].classList.contains("active")).toBeFalsy();
+        expect(items[1].classList.contains("active")).toBeTruthy();
         expect(items[2]).toBeUndefined();
-        await userEvent.click(screen.getByRole("checkbox"));
+
+        act(() => {
+            container.querySelector<HTMLInputElement>("#trigger").click();
+        });
+
         items = container.querySelectorAll<HTMLLIElement>(".breadcrumb-item");
-        expect(items[0]).not.toHaveClass("active");
-        expect(items[1]).not.toHaveClass("active");
-        expect(items[2]).toHaveClass("active");
+        expect(items[0].classList.contains("active")).toBeFalsy();
+        expect(items[1].classList.contains("active")).toBeFalsy();
+        expect(items[2].classList.contains("active")).toBeTruthy();
     });
 });
 

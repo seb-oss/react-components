@@ -1,285 +1,299 @@
-import { act, fireEvent, render, RenderResult, screen } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
-import { UserEvent } from "@testing-library/user-event/dist/types/setup";
 import React from "react";
-import { Simulate } from "react-dom/test-utils";
+import { act, Simulate, SyntheticEventData } from "react-dom/test-utils";
+import { unmountComponentAtNode, render } from "react-dom";
 import { Carousel, CarouselItem } from ".";
-import { Key } from "../utils";
 
 type EventType = keyof HTMLElementEventMap;
 type Listener = EventListener;
 
 describe("Component: Carousel", () => {
-    function endMotions(): void {
-        const [firstCarouselItem, secondCarouselItem]: Array<HTMLLIElement> = screen.getAllByRole("group");
-        fireEvent.transitionEnd(firstCarouselItem);
-        fireEvent.animationEnd(secondCarouselItem);
+    let container: HTMLDivElement = null;
+
+    const events: Map<EventType, Listener> = new Map<EventType, Listener>();
+    document.body.addEventListener = jest.fn((type: EventType, listener: Listener) => {
+        events.set(type, listener);
+    });
+    document.body.removeEventListener = jest.fn((type: EventType, listener: Listener) => {
+        events.delete(type);
+    });
+
+    function element(i: number): HTMLDivElement {
+        return container.querySelectorAll<HTMLDivElement>(".carousel-item").item(i);
     }
 
+    function simulateTimes(times: number, selector: string, type: "click" | "keyUp", options: SyntheticEventData = {}): void {
+        [...Array(times)].map(() => {
+            act(() => Simulate[type](container.querySelector(selector), options));
+            act(() => Simulate.transitionEnd(element(0)));
+            act(() => Simulate.animationEnd(element(1)));
+        });
+    }
+    beforeEach(() => {
+        container = document.createElement("div");
+        document.body.appendChild(container);
+    });
+
+    afterEach(() => {
+        unmountComponentAtNode(container);
+        container.remove();
+        container = null;
+    });
+
     it("Should render", () => {
-        render(<Carousel data-testid="carousel" />);
-        expect(screen.getByTestId("carousel")).toBeInTheDocument();
+        act(() => {
+            render(<Carousel />, container);
+        });
+        expect(container.firstElementChild).not.toBeNull();
     });
 
     it("Should render with a list, children, or both", () => {
-        render(
-            <Carousel>
-                <CarouselItem>First</CarouselItem>
-                <CarouselItem>Second</CarouselItem>
-            </Carousel>
-        );
-        expect(screen.getAllByRole("listitem")).toHaveLength(2);
+        act(() => {
+            render(
+                <Carousel>
+                    <CarouselItem>First</CarouselItem>
+                    <CarouselItem>Second</CarouselItem>
+                </Carousel>,
+                container
+            );
+        });
+        expect(container.querySelectorAll(".carousel-item")).toHaveLength(2);
     });
 
     it("Should render indicators when enabled", () => {
-        render(
-            <Carousel showIndicators>
-                <CarouselItem>test</CarouselItem>
-                <CarouselItem>test</CarouselItem>
-            </Carousel>
-        );
-        const [, , indicators]: Array<HTMLElement> = screen.getAllByRole("list");
-        expect(indicators).toBeInTheDocument();
+        act(() => {
+            render(
+                <Carousel showIndicators>
+                    <CarouselItem>test</CarouselItem>
+                    <CarouselItem>test</CarouselItem>
+                </Carousel>,
+                container
+            );
+        });
+        expect(container.querySelector(".carousel-indicators")).not.toBeNull();
     });
 
-    it("Should trigger carousel items and allow custom duration", async () => {
+    it("Should trigger carousel items and allow custom duration", () => {
         const transitionDuration: number = 10000;
         const afterChange: jest.Mock = jest.fn();
-        render(
-            <Carousel transitionDuration={transitionDuration} afterChange={afterChange}>
-                <CarouselItem>test</CarouselItem>
-                <CarouselItem>test</CarouselItem>
-                test
-            </Carousel>
-        );
-        const [, nextButton]: Array<HTMLButtonElement> = screen.getAllByRole("button");
-        expect(afterChange).not.toHaveBeenCalled();
-        await userEvent.click(nextButton);
-        endMotions();
+        act(() => {
+            render(
+                <Carousel transitionDuration={transitionDuration} afterChange={afterChange}>
+                    <CarouselItem>test</CarouselItem>
+                    <CarouselItem>test</CarouselItem>
+                    test
+                </Carousel>,
+                container
+            );
+        });
+
+        act(() => Simulate.click(container.querySelector(".carousel-control-next")));
+        act(() => Simulate.transitionEnd(element(0)));
+        act(() => Simulate.animationEnd(element(1)));
         expect(afterChange).toBeCalledTimes(1);
     });
 
-    it("Should navigate between slides using nav clicks and keyboard arrows", async () => {
+    it("Should navigate between slides using nav clicks and keyboard arrows", () => {
         const afterChange: jest.Mock = jest.fn();
-        render(
-            <Carousel data-testid="carousel" afterChange={afterChange} showIndicators>
-                <CarouselItem>First</CarouselItem>
-                <CarouselItem>Second</CarouselItem>
-            </Carousel>
-        );
-        const [prevButton, nextButton]: Array<HTMLButtonElement> = screen.getAllByRole("button");
+        act(() => {
+            render(
+                <Carousel showIndicators afterChange={afterChange}>
+                    <CarouselItem>First</CarouselItem>
+                    <CarouselItem>Second</CarouselItem>
+                </Carousel>,
+                container
+            );
+        });
 
-        // Click next - 1
-        await userEvent.click(nextButton);
-        endMotions();
+        // Click next
+        simulateTimes(2, ".carousel-control-next", "click");
 
-        // Click prev - 2
-        await userEvent.click(prevButton);
-        endMotions();
+        // Click prev
+        simulateTimes(2, ".carousel-control-prev", "click");
 
-        // Right arrow key - 3
-        await userEvent.keyboard(`{${Key.ArrowRight}}`);
-        endMotions();
+        // Right arrow key
+        simulateTimes(2, ".carousel-control-prev", "keyUp", { key: "arrowright" });
 
-        // Left arrow key - 4
-        await userEvent.keyboard(`{${Key.ArrowLeft}}`);
-        endMotions();
+        // Left arrow key
+        simulateTimes(2, ".carousel-control-prev", "keyUp", { key: "arrowleft" });
 
-        // Space arrow key - 5
-        await userEvent.keyboard(`{${Key.Space}}`);
-        endMotions();
+        // Space arrow key
+        simulateTimes(2, ".carousel-control-prev", "keyUp", { key: " " });
+        simulateTimes(2, ".carousel-control-prev", "keyUp", { key: "space" });
 
-        // Indicator clicked - 6
-        const [, , indicators]: Array<HTMLElement> = screen.getAllByRole("list");
+        // Indicator clicked
+        simulateTimes(2, ".carousel-indicators > li:not(.active)", "click");
 
-        for (const indicator of indicators.querySelectorAll("li:not(.active)") as any) {
-            await userEvent.click(indicator);
-            endMotions();
-        }
-
-        expect(afterChange).toBeCalledTimes(6);
+        expect(afterChange).toBeCalledTimes(14);
     });
 
-    it("Should not allow looping when infinite is disabled", async () => {
-        render(
-            <Carousel infinite={false}>
-                <CarouselItem>First</CarouselItem>
-                <CarouselItem>Second</CarouselItem>
-            </Carousel>
-        );
-        const [firstCarouselItem, secondCarouselItem]: Array<HTMLLIElement> = screen.getAllByRole("group");
-        const [prevButton, nextButton]: Array<HTMLButtonElement> = screen.getAllByRole("button");
+    it("Should not allow looping when infinite is disabled", () => {
+        act(() => {
+            render(
+                <Carousel infinite={false}>
+                    <CarouselItem>First</CarouselItem>
+                    <CarouselItem>Second</CarouselItem>
+                </Carousel>,
+                container
+            );
+        });
 
-        await userEvent.click(nextButton);
-        endMotions();
-        await userEvent.click(nextButton);
-        endMotions();
-        await userEvent.click(nextButton);
-        endMotions();
-        expect(firstCarouselItem).not.toHaveClass("active");
-        expect(secondCarouselItem).toHaveClass("active");
+        simulateTimes(2, ".carousel-control-next", "click");
+        expect(container.querySelectorAll(".carousel-item").item(1).classList.contains("active")).toBeTruthy();
 
-        await userEvent.click(prevButton);
-        endMotions();
-        await userEvent.click(prevButton);
-        endMotions();
-        await userEvent.click(prevButton);
-        endMotions();
-        expect(firstCarouselItem).toHaveClass("active");
-        expect(secondCarouselItem).not.toHaveClass("active");
+        simulateTimes(2, ".carousel-control-prev", "click");
+        expect(container.querySelectorAll(".carousel-item").item(0).classList.contains("active")).toBeTruthy();
     });
 
-    it("Should not allow navigating when transition is occuring", async () => {
+    it("Should not allow navigating when transition is occuring", () => {
         const afterChange: jest.Mock = jest.fn();
-        render(
-            <Carousel infinite={false} afterChange={afterChange}>
-                <CarouselItem>First</CarouselItem>
-                <CarouselItem>Second</CarouselItem>
-            </Carousel>
-        );
-        const [, nextButton]: Array<HTMLButtonElement> = screen.getAllByRole("button");
-        expect(afterChange).not.toHaveBeenCalled();
-        await userEvent.click(nextButton);
-        expect(afterChange).not.toHaveBeenCalled();
+        act(() => {
+            render(
+                <Carousel infinite={false} afterChange={afterChange}>
+                    <CarouselItem>First</CarouselItem>
+                    <CarouselItem>Second</CarouselItem>
+                </Carousel>,
+                container
+            );
+        });
+
+        afterChange.mockReset();
+        simulateTimes(1, ".carousel-control-next", "click");
+        expect(afterChange).toBeCalledTimes(1);
     });
 
     it("Should render with fade style", () => {
-        render(
-            <Carousel data-testid="carousel" transitionStyle="fade">
-                <CarouselItem>First</CarouselItem>
-                <CarouselItem>Second</CarouselItem>
-            </Carousel>
-        );
-        expect(screen.getByTestId("carousel")).toHaveClass("carousel-fade");
+        act(() => {
+            render(
+                <Carousel transitionStyle="fade">
+                    <CarouselItem>First</CarouselItem>
+                    <CarouselItem>Second</CarouselItem>
+                </Carousel>,
+                container
+            );
+        });
+        expect(container.firstElementChild.classList.contains("carousel-fade")).toBeTruthy();
     });
 
     describe("Should allow swiping with mouse and touch", () => {
         const totalWidth: number = 1000;
         const swipeDistance: number = totalWidth / 4 + 1;
 
-        test("Mouse", async () => {
+        test("Mouse", () => {
             const onMouseDown: jest.Mock = jest.fn();
-            const { container }: RenderResult = render(
-                <Carousel onMouseDown={onMouseDown}>
-                    <CarouselItem>First</CarouselItem>
-                    <CarouselItem>Second</CarouselItem>
-                </Carousel>
-            );
+
+            act(() => {
+                render(
+                    <Carousel onMouseDown={onMouseDown}>
+                        <CarouselItem>First</CarouselItem>
+                        <CarouselItem>Second</CarouselItem>
+                    </Carousel>,
+                    container
+                );
+            });
             jest.spyOn(container.firstElementChild, "clientWidth", "get").mockImplementation(() => totalWidth);
-            const [firstCarouselItem, secondCarouselItem]: Array<HTMLLIElement> = screen.getAllByRole("group");
-            expect(firstCarouselItem).toHaveClass("active");
-            expect(secondCarouselItem).not.toHaveClass("active");
+
+            expect(container.querySelector(".carousel-item").classList.contains("active")).toBeTruthy();
 
             // Mouse swipe
-            await userEvent.pointer({ keys: "[MouseLeft]" });
-            endMotions();
-            expect(firstCarouselItem).toHaveClass("active");
-            expect(secondCarouselItem).not.toHaveClass("active");
+            act(() => Simulate.mouseDown(container.firstElementChild, { clientX: 0 }));
+            expect(events.has("mousemove")).toBeTruthy();
 
-            // Any distance below the swipe triggering distance should be ignored
-            endMotions();
-            expect(firstCarouselItem).toHaveClass("active");
-            expect(secondCarouselItem).not.toHaveClass("active");
+            // Any distance below he swipe triggering distance should be ignored
+            act(() => events.get("mousemove")(new MouseEvent("mousemove", { clientX: 10 })));
+            act(() => events.get("mouseup")(new MouseEvent("mouseup")));
+            expect(container.querySelectorAll(".carousel-item").item(0).classList.contains("carousel-item-right")).toBeFalsy();
 
-            // Swipe past the triggering distance
-            await userEvent.pointer([{ keys: "[MouseLeft>]", target: firstCarouselItem }, { coords: { x: swipeDistance } }, "[/MouseLeft]"]);
-            endMotions();
-            expect(firstCarouselItem).not.toHaveClass("active");
-            expect(secondCarouselItem).toHaveClass("active");
+            act(() => Simulate.mouseDown(container.firstElementChild, { clientX: 0 }));
+            act(() => events.get("mousemove")(new MouseEvent("mousemove", { clientX: swipeDistance })));
+            expect(container.querySelector(".carousel-item.active").getAttribute("style")).toContain(`transform: translate3d(${swipeDistance}px, 0, 0);`);
+            act(() => events.get("mouseup")(new MouseEvent("mouseup")));
+            expect(events.has("mousemove")).toBeFalsy();
+            expect(container.querySelectorAll(".carousel-item").item(0).classList.contains("carousel-item-right")).toBeTruthy();
             expect(onMouseDown).toBeCalled();
         });
 
-        /**
-         * TODO: find a way to mock touch event as current method is rigid and explicit
-         */
-        test("Touch", async () => {
-            const events: Map<EventType, Listener> = new Map<EventType, Listener>();
-
-            document.body.addEventListener = jest.fn((type: EventType, listener: Listener) => {
-                events.set(type, listener);
-            });
-            document.body.removeEventListener = jest.fn((type: EventType) => {
-                events.delete(type);
-            });
-
+        test("Touch", () => {
             const onTouchStart: jest.Mock = jest.fn();
-            render(
-                <Carousel onTouchStart={onTouchStart}>
-                    <CarouselItem>First</CarouselItem>
-                    <CarouselItem>Second</CarouselItem>
-                </Carousel>
-            );
-            const [firstCarouselItem, secondCarouselItem]: Array<HTMLLIElement> = screen.getAllByRole("group");
-            const ev: TouchEvent = document.createEvent("TouchEvent");
+
+            act(() => {
+                render(
+                    <Carousel onTouchStart={onTouchStart}>
+                        <CarouselItem>First</CarouselItem>
+                        <CarouselItem>Second</CarouselItem>
+                    </Carousel>,
+                    container
+                );
+            });
 
             // Touch swipe
-            act(() => Simulate.touchStart(firstCarouselItem, { touches: { item: () => ({ clientX: 0 }) } as any }));
+            act(() => Simulate.touchStart(container.firstElementChild, { cancelable: true, touches: { item: () => ({ clientX: 0 }) } as any }));
             expect(events.has("touchmove")).toBeTruthy();
+            const ev: TouchEvent = document.createEvent("TouchEvent");
+            ev.initEvent("touchmove", true);
 
             // It shouldn't change when clientX is undefined
             jest.spyOn(ev, "touches", "get").mockImplementation(() => ({ item: () => ({ clientX: undefined }) } as any));
             act(() => events.get("touchmove")(ev));
-            expect(firstCarouselItem).not.toHaveStyle(`transform: translate3d(${-swipeDistance}px, 0, 0);`);
+            expect(container.querySelector(".carousel-item.active").getAttribute("style")).not.toContain(`transform: translate3d(${-swipeDistance}px, 0, 0);`);
 
             // It should change when clientX is defined
             jest.spyOn(ev, "touches", "get").mockImplementation(() => ({ item: () => ({ clientX: -swipeDistance }) } as any));
             act(() => events.get("touchmove")(ev));
-            expect(firstCarouselItem).toHaveStyle(`transform: translate3d(${-swipeDistance}px, 0, 0);`);
+            expect(container.querySelector(".carousel-item.active").getAttribute("style")).toContain(`transform: translate3d(${-swipeDistance}px, 0, 0);`);
             act(() => events.get("touchend")(new TouchEvent("touchend")));
             expect(events.has("touchmove")).toBeFalsy();
-            endMotions();
-            expect(firstCarouselItem).not.toHaveClass("active");
-            expect(secondCarouselItem).toHaveClass("active");
+            expect(container.querySelectorAll(".carousel-item").item(0).classList.contains("carousel-item-left")).toBeTruthy();
             expect(onTouchStart).toBeCalled();
         });
     });
 
     it("Should allow autoplay", () => {
-        jest.useFakeTimers();
-        render(
-            <Carousel autoplay>
-                <CarouselItem>First</CarouselItem>
-                <CarouselItem>Second</CarouselItem>
-            </Carousel>
-        );
-        const [firstCarouselItem, secondCarouselItem]: Array<HTMLLIElement> = screen.getAllByRole("group");
-        expect(firstCarouselItem).toHaveClass("active");
-        expect(secondCarouselItem).not.toHaveClass("active");
+        act(() => {
+            jest.useFakeTimers();
+            render(
+                <Carousel autoplay>
+                    <CarouselItem>First</CarouselItem>
+                    <CarouselItem>Second</CarouselItem>
+                </Carousel>,
+                container
+            );
+        });
         act(() => jest.advanceTimersToNextTimer());
-        endMotions();
-        expect(secondCarouselItem).toHaveClass("active");
+        expect(element(0).classList.contains("carousel-item-left")).toBeTruthy();
+        act(() => Simulate.transitionEnd(element(0)));
+        act(() => Simulate.animationEnd(element(1)));
+        expect(element(1).classList.contains("active")).toBeTruthy();
+
         jest.clearAllTimers();
     });
 
     it("Should be interrupted on hover", () => {
-        jest.useFakeTimers();
         const onMouseEnter: jest.Mock = jest.fn();
         const onMouseLeave: jest.Mock = jest.fn();
-        render(
-            <Carousel onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} autoplay>
-                <CarouselItem>First</CarouselItem>
-                <CarouselItem>Second</CarouselItem>
-            </Carousel>
-        );
-        const [firstCarouselItem, secondCarouselItem]: Array<HTMLLIElement> = screen.getAllByRole("group");
 
-        fireEvent.mouseEnter(firstCarouselItem);
+        act(() => {
+            jest.useFakeTimers();
+            render(
+                <Carousel onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} autoplay>
+                    <CarouselItem>First</CarouselItem>
+                    <CarouselItem>Second</CarouselItem>
+                </Carousel>,
+                container
+            );
+        });
+        act(() => Simulate.mouseEnter(container.firstElementChild));
         act(() => jest.advanceTimersToNextTimer());
-        expect(firstCarouselItem).toHaveClass("active");
-        expect(secondCarouselItem).not.toHaveClass("active");
+        expect(element(0).classList.contains("carousel-item-left")).toBeFalsy();
 
-        fireEvent.mouseLeave(firstCarouselItem);
+        act(() => Simulate.mouseLeave(container.firstElementChild));
         act(() => {
             jest.advanceTimersByTime(1000);
         });
-        expect(firstCarouselItem).toHaveClass("active");
-        expect(secondCarouselItem).not.toHaveClass("active");
+        expect(element(0).classList.contains("carousel-item-left")).toBeFalsy();
 
-        fireEvent.mouseLeave(firstCarouselItem);
+        act(() => Simulate.mouseLeave(container.firstElementChild));
         act(() => jest.advanceTimersToNextTimer());
-        endMotions();
-        expect(firstCarouselItem).not.toHaveClass("active");
-        expect(secondCarouselItem).toHaveClass("active");
+        expect(element(0).classList.contains("carousel-item-left")).toBeTruthy();
 
         expect(onMouseEnter).toBeCalled();
         expect(onMouseLeave).toBeCalled();
@@ -289,19 +303,22 @@ describe("Component: Carousel", () => {
 
     it("Should allow passing custom autoplayspeed", () => {
         const autoplaySpeed: number = 9000;
-        jest.useFakeTimers();
-        render(
-            <Carousel autoplay autoplaySpeed={autoplaySpeed}>
-                <CarouselItem>First</CarouselItem>
-                <CarouselItem>Second</CarouselItem>
-            </Carousel>
-        );
-        const [firstCarouselItem, secondCarouselItem]: Array<HTMLLIElement> = screen.getAllByRole("group");
-        expect(firstCarouselItem).toHaveClass("active");
-        expect(secondCarouselItem).not.toHaveClass("active");
-        act(() => jest.advanceTimersToNextTimer());
-        endMotions();
-        expect(secondCarouselItem).toHaveClass("active");
+        act(() => {
+            jest.useFakeTimers();
+            render(
+                <Carousel autoplay autoplaySpeed={autoplaySpeed}>
+                    <CarouselItem>First</CarouselItem>
+                    <CarouselItem>Second</CarouselItem>
+                </Carousel>,
+                container
+            );
+        });
+
+        act(() => {
+            jest.advanceTimersByTime(autoplaySpeed);
+        });
+        expect(element(0).classList.contains("carousel-item-left")).toBeTruthy();
+
         jest.clearAllTimers();
     });
 });
