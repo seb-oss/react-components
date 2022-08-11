@@ -7,8 +7,8 @@
         "react"
     ],
     "scripts": {
-        "start": "gatsby develop -p 3000",
-        "build": "gatsby build --prefix-paths",
+        "start": "NODE_OPTIONS=--max-old-space-size=8192 gatsby develop -p 3000",
+        "build": "NODE_OPTIONS=--max-old-space-size=8192 gatsby build --prefix-paths",
         "serve": "gatsby serve",
         "clean": "gatsby clean"
     },
@@ -17,7 +17,7 @@
         "@sebgroup/frontend-tools": "^2.1.1",
         "browser-typescript-parser": "^2.6.7",
         "classnames": "^2.3.1",
-        "gatsby": "^4.11.2",
+        "gatsby": "^4.20.0",
         "gatsby-plugin-manifest": "^4.11.1",
         "gatsby-plugin-offline": "^5.11.1",
         "gatsby-plugin-polyfill-io": "^1.1.0",
