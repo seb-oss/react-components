@@ -48,6 +48,9 @@ declare interface NPMPackage {
     devDependencies: {
         [key: string]: string;
     };
+    config: {
+        [key: string]: string;
+    };
 }
 
 declare interface ApiSection<T = any> {
