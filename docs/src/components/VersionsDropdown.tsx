@@ -1,8 +1,9 @@
 import React from "react";
 import classnames from "classnames";
 import { Dropdown } from "@sebgroup/react-components/Dropdown";
-import "../styles/versions-dropdown.scss";
 import pkg from "@pkg";
+import "../styles/versions-dropdown.scss";
+
 const versions = require("../assets/jsons/versions.json").include;
 
 interface VersionItem {
