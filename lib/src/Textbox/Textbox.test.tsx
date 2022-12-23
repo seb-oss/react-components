@@ -45,6 +45,12 @@ describe("Component: Textbox", () => {
         expect(container.querySelector("label").textContent).toBe(label);
     });
 
+    it("Should render with instruction", () => {
+        const instruction: string = "Element instruction";
+        renderComponent({ instruction });
+        expect(container.querySelector(".custom-instruction").textContent).toBe(instruction);
+    });
+
     describe("Textbox prefix or suffix", () => {
         const text: string = "kr";
         const mockClickFn: jest.Mock = jest.fn();
