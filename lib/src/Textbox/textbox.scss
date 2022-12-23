@@ -4,6 +4,21 @@ $transition-time: 200ms;
 
 .rc.input-box-group {
     position: relative;
+    .custom-label:not(.form-check-label):not(.custom-checkbox):not(.custom-radio):not(.custom-control-label),
+    .custom-instruction {
+        margin-bottom: 0;
+        line-height: 1.25;
+    }
+    .custom-instruction {
+        font-size: $font-size-sm;
+        font-weight: $font-weight-normal;
+    }
+    .custom-label,
+    .custom-instruction {
+        + .input-group {
+            margin-top: 0.5rem;
+        }
+    }
     > .input-group {
         position: relative;
         > .input-box-group-wrapper {
@@ -77,6 +92,7 @@ $transition-time: 200ms;
                 border: none;
                 border-radius: 0;
                 height: 42px;
+                line-height: 1.25;
                 &:focus {
                     box-shadow: none;
                 }
