@@ -1,6 +1,6 @@
-import React from "react";
 import { randomId } from "@sebgroup/frontend-tools/randomId";
 import classnames from "classnames";
+import React from "react";
 import { FeedbackIndicator, Indicator } from "../FeedbackIndicator";
 import "./textbox.scss";
 
