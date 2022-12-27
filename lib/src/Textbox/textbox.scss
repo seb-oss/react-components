@@ -4,23 +4,28 @@ $transition-time: 200ms;
 
 .rc.input-box-group {
     position: relative;
+
     .custom-label:not(.form-check-label):not(.custom-checkbox):not(.custom-radio):not(.custom-control-label),
     .custom-instruction {
         margin-bottom: 0;
         line-height: 1.25;
     }
+
     .custom-instruction {
         font-size: $font-size-sm;
         font-weight: $font-weight-normal;
     }
+
     .custom-label,
     .custom-instruction {
-        + .input-group {
+        & + .input-group {
             margin-top: 0.5rem;
         }
     }
+
     > .input-group {
         position: relative;
+
         > .input-box-group-wrapper {
             color: $body-color;
             transition: border $transition-time * 0.5;
@@ -32,20 +37,24 @@ $transition-time: 200ms;
             overflow: hidden;
             display: flex;
             align-items: center;
+
             &:hover {
                 border-color: $blue;
                 background-color: $white;
             }
+
             &:focus-within {
                 border-color: $blue-darker;
                 box-shadow: none;
                 background-color: $white;
+
                 &:active {
                     border-color: $blue-darker;
                     box-shadow: none;
                     background-color: $white;
                 }
             }
+
             > .input-group-prepend,
             > .input-group-append {
                 position: relative;
@@ -55,6 +64,7 @@ $transition-time: 200ms;
                 height: 42px;
                 vertical-align: top;
                 margin: 0;
+
                 > .input-group-text {
                     position: relative;
                     border: 0;
@@ -64,28 +74,35 @@ $transition-time: 200ms;
                     width: 100%;
                     height: 100%;
                     justify-content: center;
+
                     svg {
                         width: 16px;
                         height: 16px;
                         fill: $black;
                     }
                 }
+
                 &.clickable {
                     cursor: pointer;
+
                     > .input-group-text {
                         color: $blue;
+
                         svg {
                             fill: $blue;
                         }
+
                         &:hover {
                             color: $blue-dark;
                         }
                     }
                 }
             }
+
             > .input-group-prepend + input.form-control {
                 padding-left: 0;
             }
+
             > input.form-control {
                 display: inline-flex;
                 z-index: 1;
@@ -93,38 +110,45 @@ $transition-time: 200ms;
                 border-radius: 0;
                 height: 42px;
                 line-height: 1.25;
+
                 &:focus {
                     box-shadow: none;
                 }
+
                 &::-webkit-inner-spin-button,
                 &::-webkit-textfield-decoration-container {
                     -webkit-appearance: none;
                     -moz-appearance: none;
                     appearance: none;
                 }
+
                 &:nth-child(2):not(:last-child),
                 &:first-child:not(:last-child) {
                     padding-right: 0;
                 }
             }
         }
+
         &.disabled {
             .input-box-group-wrapper {
                 background-color: $gray-100;
                 border-color: $gray-500;
+
                 .input-group-prepend,
                 .input-group-append,
                 .form-control {
                     color: $gray-500;
                     background-color: $gray-100;
                 }
+
                 .input-group-prepend .input-group-text,
-                .form-control,
-                .input-group-append .input-group-text {
+                .input-group-append .input-group-text,
+                .form-control {
+                    color: $gray-500;
+
                     svg {
                         fill: $gray-500;
                     }
-                    color: $gray-500;
                 }
             }
         }
