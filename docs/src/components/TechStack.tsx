@@ -9,7 +9,7 @@ function clean(version: string): string {
 
 const reactVersion: string = clean(pkg.dependencies["react"]);
 const bootstrapVersion: string = clean(pkg.dependencies["@sebgroup/bootstrap"]);
-const typescriptVersion: string = clean(pkg.devDependencies.typescript);
+const typescriptVersion: string = clean(pkg.dependencies["typescript"]);
 
 export const TechStack: React.FC = React.memo(() => {
     return (
