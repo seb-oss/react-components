@@ -1,0 +1,32 @@
+@import "~@sebgroup/bootstrap/scss/core";
+
+.rc.table-list {
+    figcaption {
+        padding: 0.5rem 1rem;
+        font-size: $font-size-sm;
+        background-color: $gray-100;
+    }
+
+    dl {
+        margin-bottom: 0;
+    }
+
+    dt {
+        margin-right: auto;
+        margin-bottom: 0;
+        font-weight: 400;
+    }
+
+    dd {
+        margin-bottom: 0;
+        font-weight: $font-weight-medium;
+    }
+}
+
+@include media-breakpoint-down(sm) {
+    .rc.table-list {
+        dt {
+            font-size: $font-size-xs;
+        }
+    }
+}

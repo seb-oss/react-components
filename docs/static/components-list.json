@@ -135,6 +135,11 @@
         "filePath": "./src/Table/index.ts"
     },
     {
+        "name": "TableList",
+        "path": "/docs/tablelist/",
+        "filePath": "./src/TableList/index.ts"
+    },
+    {
         "name": "Tabs",
         "path": "/docs/tabs/",
         "filePath": "./src/Tabs/index.ts"
