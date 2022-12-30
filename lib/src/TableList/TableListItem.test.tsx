@@ -18,4 +18,9 @@ describe("Component: TableListItem", () => {
         expect(screen.getByText("value"));
         expect(screen.getByText("value 2"));
     });
+
+    it("Should render values inline", () => {
+        render(<TableListItem name="name" values={["value", "value 2"]} inline />);
+        expect(screen.getByRole("group")).toHaveClass("table-list-item--inline");
+    });
 });
