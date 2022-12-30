@@ -99,7 +99,7 @@ jobs:
         id: get_doc_folder
         run: |
           if [ "$(printf '%s\n' "$requiredver" "$currentver" | sort -V | head -n1)" = "$requiredver" ]; then 
-            echo "base=\"/react-components\"" >> .env
+            echo "base=\"/react-components/${currentver}\"" >> .env
             mkdir -p $jsonPath && touch $jsonPath$jsonFile
             echo "$data" > $jsonPath$jsonFile
             npm run build:docs
