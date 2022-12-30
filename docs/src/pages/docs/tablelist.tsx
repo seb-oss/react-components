@@ -8,6 +8,7 @@ const importedFiles: Array<string> = [require("!raw-loader!@sebgroup/react-compo
 const code: string = `<TableList header="list header">
     <TableListItem name="item name" values={["item value"]} />
     <TableListItem name="item name" values={["item value", "item value 2"]} />
+    <TableListItem name="item name" values={["item value", "item value 2", "item value 3"]} inline />
 </TableList>`;
 
 const ListPage: React.FC = () => {
@@ -29,6 +30,7 @@ const ListPage: React.FC = () => {
                 <TableList header={controls.header as string} wrapperProps={{ className: "w-100" }}>
                     <TableListItem name="item name" values={["item value"]} />
                     <TableListItem name="item name" values={["item value", "item value 2"]} />
+                    <TableListItem name="item name" values={["item value", "item value 2", "item value 3"]} inline />
                 </TableList>
             }
             code={code}
