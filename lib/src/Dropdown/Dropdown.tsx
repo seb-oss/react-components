@@ -327,7 +327,7 @@ export const Dropdown: React.FC<DropdownProps> = React.forwardRef(
             if (!!selectRef) {
                 setSelectRefOptions(Array.from(selectRef.options));
             }
-        }, [selectRef]);
+        }, [selectRef, props.children]);
 
         React.useEffect(() => {
             if (!isMobile) {
