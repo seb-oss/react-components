@@ -1,0 +1,60 @@
+@import "~@sebgroup/bootstrap/scss/core";
+
+.rc.table-list {
+    figcaption {
+        padding: 0.5rem 1rem;
+        font-size: $font-size-sm;
+        background-color: $gray-100;
+    }
+
+    dl,
+    dt,
+    dd {
+        margin-bottom: 0;
+        line-height: 1.25;
+    }
+
+    dt {
+        align-self: center;
+        margin-right: auto;
+        font-size: $font-size-xs;
+        font-weight: 400;
+    }
+
+    dd {
+        font-weight: $font-weight-medium;
+    }
+
+    .table-list-item {
+        display: flex;
+        flex-direction: column;
+        border-bottom: $border-width solid $border-color;
+        padding: $spacer;
+    }
+}
+
+@include media-breakpoint-up(md) {
+    .rc.table-list {
+        dt {
+            font-size: $font-size-base;
+        }
+
+        .table-list-item {
+            flex-direction: row;
+
+            &--inline {
+                .table-list-item__values {
+                    display: flex;
+
+                    dd + dd {
+                        margin-left: 0.5rem;
+                    }
+                }
+            }
+
+            &__values {
+                text-align: right;
+            }
+        }
+    }
+}

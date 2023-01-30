@@ -1,12 +1,14 @@
-import React from "react";
 import { randomId } from "@sebgroup/frontend-tools/randomId";
 import classnames from "classnames";
+import React from "react";
 import { FeedbackIndicator, Indicator } from "../FeedbackIndicator";
 import "./textbox.scss";
 
 export type TextboxProps = JSX.IntrinsicElements["input"] & {
     /** Element label */
     label?: string;
+    /** Element instruction */
+    instruction?: string;
     /** Element prefix slot */
     leftSlot?: React.ReactNode;
     /** Element prefix title */
@@ -41,6 +43,7 @@ export const Textbox: React.FC<TextboxProps> = React.forwardRef(
                         {props.label}
                     </label>
                 )}
+                {props.instruction && <p className="custom-instruction">{props.instruction}</p>}
                 <div className={classnames("rc input-group", { disabled: props.disabled })}>
                     <FeedbackIndicator {...indicator}>
                         <div className="input-box-group-wrapper">

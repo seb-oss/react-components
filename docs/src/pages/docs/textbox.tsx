@@ -60,6 +60,7 @@ const TextboxPage: React.FC = React.memo(() => {
                     <Textbox
                         value={value}
                         label="Element label"
+                        instruction="Element instruction"
                         placeholder="Type here"
                         leftSlot={controls.leftport === iconOption.value ? <SearchIcon /> : controls.leftport === textOption.value ? "Kr" : null}
                         rightSlot={controls.rightport === iconOption.value ? <SearchIcon /> : controls.rightport === textOption.value ? "Kr" : null}

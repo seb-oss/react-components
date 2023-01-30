@@ -18,8 +18,6 @@ export interface VersionsDropdownProps {
     className?: string;
 }
 
-const basePath: string = pkg.config.base;
-
 const VersionsDropdown: React.FC<React.PropsWithChildren<VersionsDropdownProps>> = (props: VersionsDropdownProps) => {
     const [currentVersion, setCurrentVersion] = React.useState<string>("");
     const [formattedList, setFormattedList] = React.useState<Array<FormattedVersionItem>>([]);
@@ -49,7 +47,7 @@ const VersionsDropdown: React.FC<React.PropsWithChildren<VersionsDropdownProps>>
             wrapperProps={{ className: classnames("version-dropdown", props.className) }}
             value={currentVersion}
             selectedLabel={(value: string) => formattedList.find((item: FormattedVersionItem) => item.value === value)?.label}
-            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => (window.location.href = `${window.location.origin}${basePath}/${e.target.value}/`)}
+            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => (window.location.href = `${pkg.config.base}/${e.target.value}`)}
         >
             {formattedList.map((item: FormattedVersionItem, index: number) => (
                 <option key={index} value={item.value}>
