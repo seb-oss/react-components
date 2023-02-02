@@ -1,10 +1,10 @@
-import React, { useEffect } from "react";
 import Docs from "@common/Docs";
 import { Datepicker } from "@sebgroup/react-components/Datepicker";
 import { useDynamicForm } from "@sebgroup/react-components/hooks/useDynamicForm";
+import React, { useEffect } from "react";
 
 const importString: string = require("!raw-loader!@sebgroup/react-components/Datepicker/Datepicker");
-const code: string = `<Datepicker value={dateValue} onChange={setDateValue} />`;
+const code = `<Datepicker value={dateValue} onChange={setDateValue} />`;
 
 const DatepickerPage: React.FC = () => {
     const [exampleDate, setExampleDate] = React.useState<Date>(new Date());
@@ -17,6 +17,18 @@ const DatepickerPage: React.FC = () => {
         {
             key: "controls",
             items: [
+                {
+                    key: "min",
+                    label: "Min date:",
+                    description: "Set the minimum date",
+                    controlType: "Datepicker",
+                },
+                {
+                    key: "max",
+                    label: "Max date:",
+                    description: "Set the maximum date",
+                    controlType: "Datepicker",
+                },
                 { key: "monthPicker", label: "Month picker", description: "Switch to month picker only", controlType: "Checkbox" },
                 { key: "forceCustom", label: "Custom date picker", description: "This picker is the automatic fallback on browsers that don't support html5 datepicker", controlType: "Checkbox" },
                 {
@@ -33,7 +45,7 @@ const DatepickerPage: React.FC = () => {
 
     useEffect(() => {
         setHidden("controls", "localeCode", !controls.forceCustom);
-    }, [controls.forceCustom]);
+    }, [controls.forceCustom, setHidden]);
 
     return (
         <Docs
@@ -44,6 +56,8 @@ const DatepickerPage: React.FC = () => {
                     <Datepicker
                         value={exampleDate}
                         onChange={setExampleDate}
+                        min={isValidDate(controls.min as Date) ? (controls.min as Date) : undefined}
+                        max={isValidDate(controls.max as Date) ? (controls.max as Date) : undefined}
                         monthPicker={!!controls.monthPicker}
                         forceCustom={!!controls.forceCustom}
                         localeCode={controls.localeCode as string}
@@ -58,5 +72,9 @@ const DatepickerPage: React.FC = () => {
         />
     );
 };
+
+function isValidDate(d: Date): boolean {
+    return !!(d && d instanceof Date && !isNaN(d.getTime()));
+}
 
 export default DatepickerPage;
