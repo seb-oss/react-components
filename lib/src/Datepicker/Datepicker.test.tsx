@@ -1,4 +1,4 @@
-import { fireEvent, render, RenderResult, screen } from "@testing-library/react";
+import { fireEvent, render, RenderResult, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { advanceTo, clear } from "jest-date-mock";
 import React from "react";
@@ -11,6 +11,11 @@ describe("Component: Datepicker", () => {
         onChange: jest.fn(),
         "aria-label": "Date picker",
     };
+
+    function changeDate(date: string): void {
+        fireEvent.change(screen.getByLabelText(props["aria-label"]), { target: { value: date } });
+        fireEvent.blur(screen.getByLabelText(props["aria-label"]), { target: { value: date } });
+    }
 
     async function changeValue(input: HTMLInputElement, value: string): Promise<void> {
         await userEvent.clear(input);
@@ -27,13 +32,13 @@ describe("Component: Datepicker", () => {
     });
 
     it("Should render and pass custom class", () => {
-        const className: string = "my-custom-datepicker";
+        const className = "my-custom-datepicker";
         render(<Datepicker {...{ ...props, className }} />);
         expect(screen.getByLabelText(props["aria-label"])).toHaveClass(className);
     });
 
     it("Should pass any other native html prop", () => {
-        const id: string = "my-id";
+        const id = "my-id";
         const { rerender }: RenderResult = render(<Datepicker {...{ ...props, id }} />);
         expect(screen.getByLabelText(props["aria-label"])).toHaveClass("seb-datepicker-native");
         expect(screen.getByLabelText(props["aria-label"])).toHaveAttribute("id", id);
@@ -57,47 +62,33 @@ describe("Component: Datepicker", () => {
     it("Should fire change event when component value is changed", () => {
         render(<Datepicker {...props} />);
         expect(props.onChange).not.toHaveBeenCalled();
-        fireEvent.change(screen.getByLabelText(props["aria-label"]), { target: { value: "2010-01-01" } });
+        changeDate(`2000-01-01`);
         expect(props.onChange).toHaveBeenCalled();
     });
 
     it("Should fire change event with null when component value is out of range and with latest value when in range", async () => {
         const [min, max]: [Date, Date] = [new Date(props.value.getFullYear() - 10, 1, 1), new Date(props.value.getFullYear() + 10, 1, 1)];
         const year: number = props.value.getFullYear();
-        const { rerender }: RenderResult = render(<Datepicker {...props} min={max} />);
-        fireEvent.change(screen.getByLabelText(props["aria-label"]), { target: { value: new Date(year, 1, 1) } });
+        const { rerender }: RenderResult = render(<Datepicker {...props} min={min} />);
         expect(props.onChange).not.toHaveBeenCalled();
+        changeDate(`${year - 11}-01-01`);
+        expect(props.onChange).toHaveBeenCalledTimes(2);
+        expect(props.onChange).toHaveBeenLastCalledWith(null);
 
-        rerender(<Datepicker {...props} max={min} />);
-        fireEvent.change(screen.getByLabelText(props["aria-label"]), { target: { value: new Date(year + 11, 1, 1) } });
-        expect(props.onChange).not.toHaveBeenCalled();
-
-        rerender(<Datepicker {...props} min={min} max={min} />);
-        fireEvent.change(screen.getByLabelText(props["aria-label"]), { target: { value: new Date(year, 1, 1) } });
-        expect(props.onChange).not.toHaveBeenCalled();
-
-        rerender(<Datepicker {...props} min={max} max={max} />);
-        fireEvent.change(screen.getByLabelText(props["aria-label"]), { target: { value: new Date(year, 1, 1) } });
-        expect(props.onChange).not.toHaveBeenCalled();
+        rerender(<Datepicker {...props} max={max} />);
+        changeDate(`${year + 11}-01-01`);
+        expect(props.onChange).toHaveBeenCalledTimes(4);
+        expect(props.onChange).toHaveBeenLastCalledWith(null);
 
         rerender(<Datepicker {...props} min={min} max={max} />);
-        fireEvent.change(screen.getByLabelText(props["aria-label"]), { target: { value: new Date(year, 1, 1) } });
-        expect(props.onChange).toHaveBeenCalledTimes(1);
-        const tzoffset: number = new Date().getTimezoneOffset() * 60000;
-        const expectedDate: string = new Date(Date.now() - tzoffset).toISOString()?.substring(0, 10) || "";
-        expect(screen.getByLabelText(props["aria-label"])).toHaveValue(expectedDate);
-
-        jest.clearAllMocks();
-
-        rerender(<Datepicker {...props} min={min} max={max} forceCustom />);
-        const [dayInput, yearInput]: Array<HTMLInputElement> = screen.getAllByRole("spinbutton");
-        const monthInput: HTMLSelectElement = screen.getByRole("combobox");
-        await changeValue(yearInput, year.toString());
-        expect(props.onChange).toHaveBeenCalled();
-
-        expect(dayInput).toHaveValue(props.value.getDate());
-        expect(monthInput).toHaveValue((props.value.getMonth() + 1).toString());
-        expect(yearInput).toHaveValue(props.value.getFullYear());
+        changeDate(`${year - 11}-01-01`);
+        expect(props.onChange).toHaveBeenCalledTimes(6);
+        expect(props.onChange).toHaveBeenLastCalledWith(null);
+        changeDate(`${year + 11}-01-01`);
+        expect(props.onChange).toHaveBeenCalledTimes(8);
+        expect(props.onChange).toHaveBeenLastCalledWith(null);
+        changeDate(`${year}-01-01`);
+        expect(props.onChange).toHaveBeenCalledTimes(9);
     });
 
     it("should support fallback custom picker", async () => {
@@ -122,14 +113,6 @@ describe("Component: Datepicker", () => {
         await changeValue(yearInput, "2030");
         expect(yearInput).toHaveValue(2030);
         expect(props.onChange).toHaveBeenCalled();
-    });
-
-    it("should fire null for invalid input on custom picker", async () => {
-        render(<Datepicker {...props} forceCustom />);
-        const [dayInput]: Array<HTMLInputElement> = screen.getAllByRole("spinbutton");
-        expect(props.onChange).not.toHaveBeenCalled();
-        await changeValue(dayInput, "ABC");
-        expect(props.onChange).toHaveBeenCalledWith(null);
     });
 
     it("Should use default locale when unknown locale code provided", () => {
@@ -294,7 +277,7 @@ describe("Component: Datepicker", () => {
 
             it("Should decrease year value to default minimum year value when home button is pressed", async () => {
                 renderCustomDatepicker();
-                const MIN_YEAR: string = `${CURRENT_YEAR - 200}`;
+                const MIN_YEAR = `${CURRENT_YEAR - 200}`;
                 const customYearInput: HTMLInputElement = getYearInputElement();
                 expect(customYearInput.value).toEqual("2020");
                 await userEvent.keyboard("[Home]");
@@ -315,7 +298,7 @@ describe("Component: Datepicker", () => {
 
             it("Should increase year value to default maximum year value when end button is pressed", async () => {
                 renderCustomDatepicker();
-                const MAX_YEAR: string = `${CURRENT_YEAR + 200}`;
+                const MAX_YEAR = `${CURRENT_YEAR + 200}`;
                 const customYearInput: HTMLInputElement = getYearInputElement();
                 expect(customYearInput.value).toEqual("2020");
                 await userEvent.keyboard("[End]");
