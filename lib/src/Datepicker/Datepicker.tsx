@@ -106,9 +106,9 @@ export const Datepicker: React.FunctionComponent<DatepickerProps> = React.forwar
 
             return "custom";
         }, [forceCustom, monthPicker]);
-        const [customDay, setCustomDay] = React.useState<number>(getCustomDateValue(value?.getDate(), monthPicker));
-        const [customMonth, setCustomMonth] = React.useState<number>(getCustomDateValue(value?.getMonth() + 1, monthPicker));
-        const [customYear, setCustomYear] = React.useState<number>(getCustomDateValue(value?.getFullYear(), monthPicker));
+        const [customDay, setCustomDay] = React.useState<number>(getCustomDateValue(value?.getDate?.(), monthPicker));
+        const [customMonth, setCustomMonth] = React.useState<number>(getCustomDateValue(value?.getMonth?.() + 1, monthPicker));
+        const [customYear, setCustomYear] = React.useState<number>(getCustomDateValue(value?.getFullYear?.(), monthPicker));
 
         const onCustomDatepickerChange = React.useCallback(
             (day: number, month: number, year: number) => {

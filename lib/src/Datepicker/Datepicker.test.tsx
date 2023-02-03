@@ -59,6 +59,11 @@ describe("Component: Datepicker", () => {
         expect(screen.queryByRole("combobox")).not.toBeInTheDocument();
     });
 
+    it("Should render when value prop is empty string", () => {
+        render(<Datepicker {...props} value={"" as unknown as Date} />);
+        expect(screen.getByLabelText(props["aria-label"])).toBeInTheDocument();
+    });
+
     it("Should fire change event when component value is changed", () => {
         render(<Datepicker {...props} />);
         expect(props.onChange).not.toHaveBeenCalled();
