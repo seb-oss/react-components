@@ -1,4 +1,4 @@
-import { fireEvent, render, RenderResult, screen, waitFor } from "@testing-library/react";
+import { fireEvent, render, RenderResult, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { advanceTo, clear } from "jest-date-mock";
 import React from "react";
@@ -71,29 +71,34 @@ describe("Component: Datepicker", () => {
         expect(props.onChange).toHaveBeenCalled();
     });
 
-    it("Should fire change event with null when component value is out of range and with latest value when in range", async () => {
-        const [min, max]: [Date, Date] = [new Date(props.value.getFullYear() - 10, 1, 1), new Date(props.value.getFullYear() + 10, 1, 1)];
-        const year: number = props.value.getFullYear();
+    it("Should fire change event with null when component value is out of range and with latest value when in range", () => {
+        const year = props.value.getFullYear();
+        const maxYear = year + 10;
+        const minYear = year - 10;
+        const [max, min] = [new Date(maxYear, 0, 1), new Date(minYear, 0, 1)];
+
         const { rerender }: RenderResult = render(<Datepicker {...props} min={min} />);
         expect(props.onChange).not.toHaveBeenCalled();
-        changeDate(`${year - 11}-01-01`);
+        changeDate(`${minYear - 1}-01-01`);
         expect(props.onChange).toHaveBeenCalledTimes(2);
         expect(props.onChange).toHaveBeenLastCalledWith(null);
 
         rerender(<Datepicker {...props} max={max} />);
-        changeDate(`${year + 11}-01-01`);
+        changeDate(`${maxYear + 1}-01-01`);
         expect(props.onChange).toHaveBeenCalledTimes(4);
         expect(props.onChange).toHaveBeenLastCalledWith(null);
 
         rerender(<Datepicker {...props} min={min} max={max} />);
-        changeDate(`${year - 11}-01-01`);
+        changeDate(`${minYear - 1}-01-01`);
         expect(props.onChange).toHaveBeenCalledTimes(6);
         expect(props.onChange).toHaveBeenLastCalledWith(null);
-        changeDate(`${year + 11}-01-01`);
+        changeDate(`${maxYear + 1}-01-01`);
         expect(props.onChange).toHaveBeenCalledTimes(8);
         expect(props.onChange).toHaveBeenLastCalledWith(null);
-        changeDate(`${year}-01-01`);
+        changeDate(`${minYear}-01-01`);
         expect(props.onChange).toHaveBeenCalledTimes(9);
+        changeDate(`${maxYear}-01-01`);
+        expect(props.onChange).toHaveBeenCalledTimes(10);
     });
 
     it("should support fallback custom picker", async () => {
