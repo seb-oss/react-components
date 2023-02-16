@@ -1,4 +1,4 @@
-import { isDateAfter } from "@sebgroup/frontend-tools";
+import { isDateAfter, isSameDate } from "@sebgroup/frontend-tools";
 import { isDateBefore } from "@sebgroup/frontend-tools/isDateBefore";
 import { randomId } from "@sebgroup/frontend-tools/randomId";
 import classnames from "classnames";
@@ -456,8 +456,8 @@ function hasModifierKey({ altKey, ctrlKey, metaKey, shiftKey }: React.KeyboardEv
 }
 
 function isDateInRange(d: Date, min: Date, max: Date): boolean {
-    const isAfterMinDate = !min || !isDateBefore(d, min);
-    const isBeforeMaxDate = !max || !isDateAfter(d, max);
+    const isAfterMinDate = !min || isDateAfter(d, min) || isSameDate(d, min);
+    const isBeforeMaxDate = !max || isDateBefore(d, max) || isSameDate(d, max);
     return isAfterMinDate && isBeforeMaxDate;
 }
 

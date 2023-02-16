@@ -97,8 +97,10 @@ describe("Component: Datepicker", () => {
         expect(props.onChange).toHaveBeenLastCalledWith(null);
         changeDate(`${minYear}-01-01`);
         expect(props.onChange).toHaveBeenCalledTimes(9);
+        expect(props.onChange).not.toHaveBeenLastCalledWith(null);
         changeDate(`${maxYear}-01-01`);
         expect(props.onChange).toHaveBeenCalledTimes(10);
+        expect(props.onChange).not.toHaveBeenLastCalledWith(null);
     });
 
     it("should support fallback custom picker", async () => {
