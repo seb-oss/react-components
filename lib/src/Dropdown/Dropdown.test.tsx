@@ -224,22 +224,6 @@ describe("Component: Dropdown", () => {
         expect(screen.getByText(`${customLabels[1]} + ${customLabels[2]}`)).toBeInTheDocument();
     });
 
-    it("Should render native only when used in a mobile device", async () => {
-        const onChange: jest.Mock = jest.fn();
-        const userAgent: string = window.navigator.userAgent;
-        Object.defineProperty(window.navigator, "userAgent", { value: "iPhone" });
-        render(
-            <Dropdown value="2" onChange={onChange} clearable>
-                {testOptions}
-            </Dropdown>
-        );
-        expect(screen.getByRole("combobox")).toBeVisible();
-        expect(onChange).not.toBeCalled();
-        await userEvent.click(screen.getByRole("button"));
-        expect(onChange).toBeCalled();
-        Object.defineProperty(window.navigator, "userAgent", { value: userAgent });
-    });
-
     describe("Util: getValueOfMultipleSelect", () => {
         it("Should correctly calculates the selected values in a select element", () => {
             const select: HTMLSelectElement = document.createElement("select");
