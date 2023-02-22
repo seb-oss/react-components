@@ -1,8 +1,8 @@
-import React from "react";
+import { CodeSnippet } from "@common/CodeSnippet";
 import Docs from "@common/Docs";
 import { Dropdown } from "@sebgroup/react-components/Dropdown";
 import { useDynamicForm } from "@sebgroup/react-components/hooks/useDynamicForm";
-import { CodeSnippet } from "@common/CodeSnippet";
+import React from "react";
 
 const importString: string = require("!raw-loader!@sebgroup/react-components/Dropdown/Dropdown");
 const code: string = `<Dropdown value={value} onChange={e => setValue(e.target.value)}>
@@ -48,6 +48,7 @@ const DropdownPage: React.FC = (): React.ReactElement<void> => {
         {
             key: "controls",
             items: [
+                { key: "isAllSelectable", label: "isAllSelectable", description: "Toggle the all selection checkbox", controlType: "Checkbox", initialValue: true },
                 { key: "multiple", label: "multiple", controlType: "Checkbox", initialValue: false },
                 { key: "searchable", label: "searchable", controlType: "Checkbox", initialValue: false },
                 { key: "clearable", label: "clearable", controlType: "Checkbox", initialValue: false },
@@ -103,6 +104,7 @@ const DropdownPage: React.FC = (): React.ReactElement<void> => {
                         onChange={controls.multiple ? null : (e) => setValue(e.target.value)}
                         onMultipleChange={setMultiValue}
                         placeholder="Select..."
+                        isAllSelectable={!!controls.isAllSelectable}
                         multiple={!!controls.multiple}
                         searchable={!!controls.searchable}
                         clearable={!!controls.clearable}

@@ -1,4 +1,6 @@
 import { randomId } from "@sebgroup/frontend-tools/randomId";
+import type { BodyScrollOptions } from "body-scroll-lock";
+import { clearAllBodyScrollLocks, disableBodyScroll, enableBodyScroll } from "body-scroll-lock";
 import classnames from "classnames";
 import React from "react";
 import { createPortal } from "react-dom";
@@ -6,13 +8,6 @@ import { CloseButton } from "../CloseButton";
 import { FeedbackIndicator, Indicator } from "../FeedbackIndicator/FeedbackIndicator";
 import { Key } from "../utils/keyboardHelper";
 import { CustomDropdownItem } from "./CustomDropdownItem";
-import { disableBodyScroll, enableBodyScroll, clearAllBodyScrollLocks } from "body-scroll-lock";
-import type { BodyScrollOptions } from "body-scroll-lock";
-
-const bodyScrollOptions: BodyScrollOptions = {
-    reserveScrollBarGap: true,
-};
-
 import "./dropdown.scss";
 
 export interface DropdownText {
@@ -35,10 +30,6 @@ export function getValueOfMultipleSelect(selectOptions: Array<HTMLOptionElement>
         .map((option) => option.value);
 }
 
-// This solution is meant to fix Gatsby build which complains that document and window doesn't exist in server-side rendering
-const safeDocument: Document | null = typeof document !== "undefined" ? document : null;
-const safeWindow: Window | null = typeof window !== "undefined" ? window : null;
-
 export type DropdownProps = Omit<JSX.IntrinsicElements["select"], "value"> & {
     /** Props for the select's wrapper (div) */
     wrapperProps?: JSX.IntrinsicElements["div"];
@@ -48,6 +39,8 @@ export type DropdownProps = Omit<JSX.IntrinsicElements["select"], "value"> & {
     onMultipleChange?: (selected: string[]) => void;
     /** Allows searching throw the dropdown */
     searchable?: boolean;
+    /** Allows all selection of the dropdown */
+    isAllSelectable?: boolean;
     /** Allows clearing the dropdown with a clear button */
     clearable?: boolean;
     /** Allows setting custom label to be displayed for selected item */
@@ -58,8 +51,15 @@ export type DropdownProps = Omit<JSX.IntrinsicElements["select"], "value"> & {
     indicator?: Indicator;
 };
 
+const bodyScrollOptions: BodyScrollOptions = { reserveScrollBarGap: true };
+// This solution is meant to fix Gatsby build which complains that document and window doesn't exist in server-side rendering
+const safeDocument: Document | null = typeof document !== "undefined" ? document : null;
+const safeWindow: Window | null = typeof window !== "undefined" ? window : null;
+const isMobile: boolean = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(safeWindow?.navigator?.userAgent);
+
 export const Dropdown: React.FC<DropdownProps> = React.forwardRef(
-    ({ wrapperProps = {}, text = {}, onMultipleChange, searchable, clearable, selectedLabel, indicator, ...props }: DropdownProps, ref) => {
+    ({ wrapperProps = {}, text = {}, onMultipleChange, clearable, indicator, isAllSelectable = true, searchable, selectedLabel, ...props }: DropdownProps, ref) => {
+        const { multiple, onChange } = props;
         const [dropdownId] = React.useState<string>(randomId("dd-"));
         const [toggleId] = React.useState<string>(randomId("ddt-"));
         const [selectAllId] = React.useState<string>(randomId("sa-"));
@@ -71,15 +71,12 @@ export const Dropdown: React.FC<DropdownProps> = React.forwardRef(
         const [selectRef, setSelectRef] = React.useState<HTMLSelectElement>(null);
         const [selectRefOptions, setSelectRefOptions] = React.useState<Array<HTMLOptionElement>>([]);
         // focused index should be defaulted to the first valued option (not `select-all` option) if dropdown is not searchable
-        const [focusedIndex, setFocusedIndex] = React.useState<number>(searchable ? -1 : props.multiple ? 1 : 0);
+        const [focusedIndex, setFocusedIndex] = React.useState<number>(searchable ? -1 : multiple && isAllSelectable ? 1 : 0);
         const buttonRef = React.useRef<HTMLButtonElement>();
         const dropdownRef = React.useRef<HTMLDivElement>();
         const menuRef = React.useRef<HTMLUListElement>();
         const searchRef = React.useRef<HTMLInputElement>();
-
         const [prestine, setPrestine] = React.useState<boolean>(true);
-
-        const isMobile: boolean = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(safeWindow?.navigator?.userAgent);
 
         const handleDropdownMenuOpen = React.useCallback(() => {
             setShow(true);
@@ -93,7 +90,7 @@ export const Dropdown: React.FC<DropdownProps> = React.forwardRef(
 
         const changeValue = React.useCallback(
             (value: string) => {
-                if (props.multiple) {
+                if (multiple) {
                     const current = selectRefOptions.find((option) => option.value === value);
                     current.selected = !current.selected;
                 } else {
@@ -101,12 +98,12 @@ export const Dropdown: React.FC<DropdownProps> = React.forwardRef(
                     handleDropdownMenuClose();
                 }
                 selectRef.dispatchEvent(new Event("change", { bubbles: true }));
-                props.multiple && onMultipleChange && onMultipleChange(getValueOfMultipleSelect(selectRefOptions));
+                multiple && onMultipleChange && onMultipleChange(getValueOfMultipleSelect(selectRefOptions));
             },
-            [props.multiple, selectRef, selectRefOptions, onMultipleChange, handleDropdownMenuClose]
+            [multiple, selectRef, selectRefOptions, onMultipleChange, handleDropdownMenuClose]
         );
 
-        const getOptionsRef = React.useCallback(() => Array.from(menuRef.current?.querySelectorAll<HTMLLIElement>(".custom-control") || []), [searchKeyword]);
+        const getOptionsRef = React.useCallback(() => Array.from(menuRef.current?.querySelectorAll<HTMLLIElement>(".custom-control") || []), []);
 
         const handleChange = React.useCallback((e: React.ChangeEvent<HTMLInputElement>) => changeValue(e.target.value), [changeValue]);
 
@@ -121,9 +118,9 @@ export const Dropdown: React.FC<DropdownProps> = React.forwardRef(
                 });
                 typeof forceValue === "boolean" && (selectRef.value = "");
                 selectRef.dispatchEvent(new Event("change", { bubbles: true }));
-                props.multiple && onMultipleChange && onMultipleChange(getValueOfMultipleSelect(selectRefOptions));
+                multiple && onMultipleChange && onMultipleChange(getValueOfMultipleSelect(selectRefOptions));
             },
-            [allSelected, props.multiple, selectRefOptions, selectRef]
+            [allSelected, multiple, selectRefOptions, selectRef, onMultipleChange]
         );
 
         const isAllSelected = React.useCallback((): boolean => {
@@ -166,12 +163,12 @@ export const Dropdown: React.FC<DropdownProps> = React.forwardRef(
             [focusedIndex, changeValue, getOptionsRef, selectAll]
         );
 
-        const onChange = React.useCallback(
+        const onDropDownChange = React.useCallback(
             (event: React.ChangeEvent<HTMLSelectElement>) => {
-                props.multiple && onMultipleChange && onMultipleChange(getValueOfMultipleSelect(Array.from(event.target.options)));
-                props.onChange && props.onChange(event);
+                multiple && onMultipleChange && onMultipleChange(getValueOfMultipleSelect(Array.from(event.target.options)));
+                onChange && onChange(event);
             },
-            [props.multiple, props.onChange, onMultipleChange]
+            [multiple, onChange, onMultipleChange]
         );
 
         const onDropDownKeyDown = React.useCallback(
@@ -183,11 +180,12 @@ export const Dropdown: React.FC<DropdownProps> = React.forwardRef(
                         handleDropdownMenuClose();
                         break;
                     case Key.ArrowDown:
-                    case Key.ArrowUp:
+                    case Key.ArrowUp: {
                         e.preventDefault();
                         const direction: number = e.key === Key.ArrowDown ? 1 : -1;
                         setFocusedIndex((focusedIndex) => (focusedIndex + direction + optionsRef.length) % optionsRef.length);
                         break;
+                    }
                     case Key.Home:
                         setFocusedIndex(0);
                         break;
@@ -196,11 +194,11 @@ export const Dropdown: React.FC<DropdownProps> = React.forwardRef(
                         break;
                     case Key.Enter:
                         toggleOption(e);
-                        !props.multiple && handleDropdownMenuClose();
+                        !multiple && handleDropdownMenuClose();
                         break;
                     case Key.Space:
                         !searchable && toggleOption(e);
-                        !props.multiple && handleDropdownMenuClose();
+                        !multiple && handleDropdownMenuClose();
                         break;
                     case Key.Tab:
                         e.preventDefault();
@@ -213,7 +211,7 @@ export const Dropdown: React.FC<DropdownProps> = React.forwardRef(
                         break;
                 }
             },
-            [props.multiple, searchable, getOptionsRef, toggleOption, handleDropdownMenuClose]
+            [multiple, searchable, getOptionsRef, toggleOption, handleDropdownMenuClose]
         );
 
         const onSearchInputKeyDown = React.useCallback(
@@ -240,7 +238,7 @@ export const Dropdown: React.FC<DropdownProps> = React.forwardRef(
              *
              * `select-all` option is only visible when search keyword is empty or multiple flag is true
              */
-            let runningIndex: number = searchKeyword.length > 0 || !props.multiple ? 0 : 1;
+            let runningIndex: number = searchKeyword.length > 0 || !(multiple && isAllSelectable) ? 0 : 1;
             const list = React.Children.map(props.children, (Child) => {
                 if (!React.isValidElement(Child)) {
                     return Child;
@@ -259,13 +257,13 @@ export const Dropdown: React.FC<DropdownProps> = React.forwardRef(
                         return false;
                     };
                     /** Radio buttons should be grouped with a name */
-                    const name: string = props.multiple ? null : toggleId;
+                    const name: string = multiple ? null : toggleId;
                     switch (type) {
                         case "option":
                             return filteredBySearch(Child) ? null : (
                                 <CustomDropdownItem
                                     {...Child.props}
-                                    multiple={props.multiple}
+                                    multiple={multiple}
                                     name={name}
                                     value={Child.props.value}
                                     checked={Array.isArray(props.value) ? props.value.includes(Child.props.value) : props.value == Child.props.value}
@@ -275,7 +273,7 @@ export const Dropdown: React.FC<DropdownProps> = React.forwardRef(
                                     {Child.props.children}
                                 </CustomDropdownItem>
                             );
-                        case "optgroup":
+                        case "optgroup": {
                             const label = <label className="optgroup-label">{Child.props?.label}</label>;
                             return [
                                 searchKeyword ? null : label,
@@ -283,7 +281,7 @@ export const Dropdown: React.FC<DropdownProps> = React.forwardRef(
                                     return filteredBySearch(groupChild) ? null : (
                                         <CustomDropdownItem
                                             {...groupChild.props}
-                                            multiple={props.multiple}
+                                            multiple={multiple}
                                             name={name}
                                             value={groupChild.props.value}
                                             checked={Array.isArray(props.value) ? props.value.includes(groupChild.props.value) : props.value == groupChild.props.value}
@@ -295,6 +293,7 @@ export const Dropdown: React.FC<DropdownProps> = React.forwardRef(
                                     );
                                 }),
                             ];
+                        }
                         default:
                             return searchKeyword ? null : Child;
                     }
@@ -303,28 +302,31 @@ export const Dropdown: React.FC<DropdownProps> = React.forwardRef(
             return list?.length ? list : searchKeyword ? <p>{text.noResult || defaultText.noResult}</p> : <p>{text.emptyList || defaultText.emptyList}</p>;
         };
 
-        const measuredSelectRef = React.useCallback((node: HTMLSelectElement) => {
-            if (typeof ref === "function") {
-                // to pass ref back to parents
-                ref(node);
-            } else if (!!ref) {
-                (ref as any).current = node;
-            }
-            if (node !== null) {
-                setSelectRef(node);
-            }
-        }, []);
+        const measuredSelectRef = React.useCallback(
+            (node: HTMLSelectElement) => {
+                if (typeof ref === "function") {
+                    // to pass ref back to parents
+                    ref(node);
+                } else if (ref) {
+                    (ref as any).current = node;
+                }
+                if (node !== null) {
+                    setSelectRef(node);
+                }
+            },
+            [ref]
+        );
 
         React.useEffect(() => {
-            !isMobile && props.multiple && setAllSelected(isAllSelected());
-        }, [props.value, props.multiple, isAllSelected]);
+            !isMobile && multiple && setAllSelected(isAllSelected());
+        }, [multiple, props.value, isAllSelected]);
 
         React.useEffect(() => {
             !searchable && setSearchKeyword("");
         }, [searchable]);
 
         React.useEffect(() => {
-            if (!!selectRef) {
+            if (selectRef) {
                 setSelectRefOptions(Array.from(selectRef.options));
             }
         }, [selectRef, props.children]);
@@ -360,7 +362,7 @@ export const Dropdown: React.FC<DropdownProps> = React.forwardRef(
                     window.removeEventListener("wheel", handleScroll);
                 };
             }
-        }, [show, prestine, handleDropdownMenuClose]);
+        }, [prestine, searchable, show, getOptionsRef, handleDropdownMenuClose]);
 
         React.useEffect(() => {
             if (selectedLabel && typeof selectedLabel === "string") {
@@ -436,7 +438,7 @@ export const Dropdown: React.FC<DropdownProps> = React.forwardRef(
                                           />
                                       )}
                                       {/* Select all button */}
-                                      {props.multiple && !searchKeyword ? (
+                                      {multiple && !searchKeyword && isAllSelectable ? (
                                           React.Children.count(props.children) ? (
                                               <>
                                                   <li className={classnames("custom-control custom-checkbox select-all", { focused: focusedIndex === 0 })}>
@@ -459,7 +461,7 @@ export const Dropdown: React.FC<DropdownProps> = React.forwardRef(
                     </div>
                 )}
                 <FeedbackIndicator type={indicator?.type} message={indicator?.message}>
-                    <select {...props} ref={measuredSelectRef} onChange={onChange} className={classnames("custom-select", props.className)} hidden={!isMobile}>
+                    <select {...props} ref={measuredSelectRef} onChange={onDropDownChange} className={classnames("custom-select", props.className)} hidden={!isMobile}>
                         {/* select always picks the first item by default. Therefore the first needs to be initialized here */}
                         {!props.value && (
                             <option disabled value="" hidden>
