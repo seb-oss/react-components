@@ -8,11 +8,6 @@ import { CloseButton } from "../CloseButton";
 import { FeedbackIndicator, Indicator } from "../FeedbackIndicator/FeedbackIndicator";
 import { Key } from "../utils/keyboardHelper";
 import { CustomDropdownItem } from "./CustomDropdownItem";
-
-const bodyScrollOptions: BodyScrollOptions = {
-    reserveScrollBarGap: true,
-};
-
 import "./dropdown.scss";
 
 export interface DropdownText {
@@ -35,10 +30,6 @@ export function getValueOfMultipleSelect(selectOptions: Array<HTMLOptionElement>
         .map((option) => option.value);
 }
 
-// This solution is meant to fix Gatsby build which complains that document and window doesn't exist in server-side rendering
-const safeDocument: Document | null = typeof document !== "undefined" ? document : null;
-const safeWindow: Window | null = typeof window !== "undefined" ? window : null;
-
 export type DropdownProps = Omit<JSX.IntrinsicElements["select"], "value"> & {
     /** Props for the select's wrapper (div) */
     wrapperProps?: JSX.IntrinsicElements["div"];
@@ -48,6 +39,8 @@ export type DropdownProps = Omit<JSX.IntrinsicElements["select"], "value"> & {
     onMultipleChange?: (selected: string[]) => void;
     /** Allows searching throw the dropdown */
     searchable?: boolean;
+    /** Allows all selection of the dropdown */
+    isAllSelectable?: boolean;
     /** Allows clearing the dropdown with a clear button */
     clearable?: boolean;
     /** Allows setting custom label to be displayed for selected item */
@@ -58,10 +51,15 @@ export type DropdownProps = Omit<JSX.IntrinsicElements["select"], "value"> & {
     indicator?: Indicator;
 };
 
-export const Dropdown: React.FC<DropdownProps> = React.forwardRef(
-    ({ wrapperProps = {}, text = {}, onMultipleChange, searchable, clearable, selectedLabel, indicator, ...props }: DropdownProps, ref) => {
-        const { multiple, onChange } = props;
+const bodyScrollOptions: BodyScrollOptions = { reserveScrollBarGap: true };
+// This solution is meant to fix Gatsby build which complains that document and window doesn't exist in server-side rendering
+const safeDocument: Document | null = typeof document !== "undefined" ? document : null;
+const safeWindow: Window | null = typeof window !== "undefined" ? window : null;
+const isMobile: boolean = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(safeWindow?.navigator?.userAgent);
 
+export const Dropdown: React.FC<DropdownProps> = React.forwardRef(
+    ({ wrapperProps = {}, text = {}, onMultipleChange, clearable, indicator, isAllSelectable = true, searchable, selectedLabel, ...props }: DropdownProps, ref) => {
+        const { multiple, onChange } = props;
         const [dropdownId] = React.useState<string>(randomId("dd-"));
         const [toggleId] = React.useState<string>(randomId("ddt-"));
         const [selectAllId] = React.useState<string>(randomId("sa-"));
@@ -73,15 +71,12 @@ export const Dropdown: React.FC<DropdownProps> = React.forwardRef(
         const [selectRef, setSelectRef] = React.useState<HTMLSelectElement>(null);
         const [selectRefOptions, setSelectRefOptions] = React.useState<Array<HTMLOptionElement>>([]);
         // focused index should be defaulted to the first valued option (not `select-all` option) if dropdown is not searchable
-        const [focusedIndex, setFocusedIndex] = React.useState<number>(searchable ? -1 : multiple ? 1 : 0);
+        const [focusedIndex, setFocusedIndex] = React.useState<number>(searchable ? -1 : multiple && isAllSelectable ? 1 : 0);
         const buttonRef = React.useRef<HTMLButtonElement>();
         const dropdownRef = React.useRef<HTMLDivElement>();
         const menuRef = React.useRef<HTMLUListElement>();
         const searchRef = React.useRef<HTMLInputElement>();
-
         const [prestine, setPrestine] = React.useState<boolean>(true);
-
-        const isMobile: boolean = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(safeWindow?.navigator?.userAgent);
 
         const handleDropdownMenuOpen = React.useCallback(() => {
             setShow(true);
@@ -243,7 +238,7 @@ export const Dropdown: React.FC<DropdownProps> = React.forwardRef(
              *
              * `select-all` option is only visible when search keyword is empty or multiple flag is true
              */
-            let runningIndex: number = searchKeyword.length > 0 || !multiple ? 0 : 1;
+            let runningIndex: number = searchKeyword.length > 0 || !(multiple && isAllSelectable) ? 0 : 1;
             const list = React.Children.map(props.children, (Child) => {
                 if (!React.isValidElement(Child)) {
                     return Child;
@@ -324,7 +319,7 @@ export const Dropdown: React.FC<DropdownProps> = React.forwardRef(
 
         React.useEffect(() => {
             !isMobile && multiple && setAllSelected(isAllSelected());
-        }, [isMobile, multiple, isAllSelected]);
+        }, [multiple, props.value, isAllSelected]);
 
         React.useEffect(() => {
             !searchable && setSearchKeyword("");
@@ -367,7 +362,7 @@ export const Dropdown: React.FC<DropdownProps> = React.forwardRef(
                     window.removeEventListener("wheel", handleScroll);
                 };
             }
-        }, [isMobile, searchable, show, prestine, getOptionsRef, handleDropdownMenuClose]);
+        }, [prestine, searchable, show, getOptionsRef, handleDropdownMenuClose]);
 
         React.useEffect(() => {
             if (selectedLabel && typeof selectedLabel === "string") {
@@ -378,7 +373,7 @@ export const Dropdown: React.FC<DropdownProps> = React.forwardRef(
             } else {
                 !isMobile && setLabel((Array.isArray(props.value) ? props.value.join(", ") : props.value) || props.placeholder);
             }
-        }, [isMobile, props.value, props.placeholder, selectedLabel]);
+        }, [props.value, props.placeholder, selectedLabel]);
 
         React.useEffect(() => {
             // scroll the focused item into view
@@ -443,7 +438,7 @@ export const Dropdown: React.FC<DropdownProps> = React.forwardRef(
                                           />
                                       )}
                                       {/* Select all button */}
-                                      {multiple && !searchKeyword ? (
+                                      {multiple && !searchKeyword && isAllSelectable ? (
                                           React.Children.count(props.children) ? (
                                               <>
                                                   <li className={classnames("custom-control custom-checkbox select-all", { focused: focusedIndex === 0 })}>
