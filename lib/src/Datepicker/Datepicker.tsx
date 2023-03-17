@@ -83,7 +83,7 @@ export const Datepicker: React.FunctionComponent<DatepickerProps> = React.forwar
         }, [localeCode]);
         const monthNames: string[] = React.useMemo(() => {
             const date: Date = new Date(2012, 0, 5);
-            const locale: Intl.DateTimeFormat = getLocaleOrDefault(localeCode);
+            const locale: Intl.DateTimeFormat = getLocaleMonthNames(localeCode);
             const names: string[] = [UNIT_NAMES.month];
             [...Array(12)].forEach((_, i) => {
                 date.setMonth(i);
@@ -428,6 +428,15 @@ function getEventValue(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement
 }
 
 function getLocaleOrDefault(localeCode: string): Intl.DateTimeFormat {
+    try {
+        return new Intl.DateTimeFormat(localeCode);
+    } catch (error) {
+        console.warn(`Locale with code: ${localeCode} was not recognised. Using locale 'en' instead.`);
+        return new Intl.DateTimeFormat("en");
+    }
+}
+
+function getLocaleMonthNames(localeCode: string): Intl.DateTimeFormat {
     try {
         return new Intl.DateTimeFormat(localeCode, { month: "long" });
     } catch (error) {
