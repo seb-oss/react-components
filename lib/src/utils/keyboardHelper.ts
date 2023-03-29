@@ -10,6 +10,7 @@ export enum Key {
     PageDown = "PageDown",
     PageUp = "PageUp",
     Space = " ",
+    Shift = "Shift",
     Tab = "Tab",
     Delete = "Delete",
 }

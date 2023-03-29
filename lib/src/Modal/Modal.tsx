@@ -30,7 +30,7 @@ export type ModalProps = JSX.IntrinsicElements["div"] & {
     autoFocus?: boolean;
 };
 
-const FOCUSABLE_ELEMENTS_SELECTOR: string = "input, button, a";
+const FOCUSABLE_ELEMENTS_SELECTOR: string = "input:not([type='hidden']), button, a";
 // This solution is meant to fix Gatsby build which complains that document doesn't exist in server-side rendering
 const safeDocument: Document | null = typeof document !== "undefined" ? document : null;
 
@@ -38,17 +38,21 @@ const safeDocument: Document | null = typeof document !== "undefined" ? document
 export const Modal: React.FC<ModalProps> = React.memo(
     React.forwardRef(({ autoFocus = true, centered, size, fullscreen, onEscape, onBackdropDismiss, position, toggle, ...props }: ModalProps, ref: React.ForwardedRef<HTMLDivElement>) => {
         const dialogRef: React.MutableRefObject<HTMLDivElement> = useCombinedRefs(ref);
+        const triggerRef: React.MutableRefObject<HTMLElement> = React.useRef();
         const [isPristine, setIsPristine] = React.useState<boolean>(true);
 
         const onDialogKeyDown = React.useCallback<(e: React.KeyboardEvent) => void>(
             (e: React.KeyboardEvent) => {
                 switch (e.key) {
-                    case Key.Escape:
+                    case Key.Escape: {
                         onEscape && onEscape(e as unknown as KeyboardEvent);
+                        triggerRef.current?.focus();
                         break;
-                    case Key.Tab:
+                    }
+                    case Key.Tab: {
                         // focus on next focusable element and trap the focus within the dialog (focus trap)
                         e.preventDefault();
+                        e.stopPropagation();
                         const focusableElements: FocusableElements[] = Array.from(dialogRef.current.querySelectorAll<FocusableElements>(FOCUSABLE_ELEMENTS_SELECTOR));
                         const focusableElementsLength: number = focusableElements.length;
 
@@ -60,6 +64,7 @@ export const Modal: React.FC<ModalProps> = React.memo(
                         }
 
                         break;
+                    }
                 }
             },
             [dialogRef, onEscape]
@@ -69,11 +74,12 @@ export const Modal: React.FC<ModalProps> = React.memo(
             if (toggle) {
                 isPristine && setIsPristine(false);
                 document.body.classList.add("modal-open");
-            } else {
-                document.body.classList.remove("modal-open");
             }
 
-            return () => document.body.classList.remove("modal-open");
+            return () => {
+                document.body.classList.remove("modal-open");
+                triggerRef.current?.focus();
+            };
         }, [toggle]);
 
         return !safeDocument
@@ -103,12 +109,15 @@ export const Modal: React.FC<ModalProps> = React.memo(
 
                           if (onBackdropDismiss && target.classList.contains("rc") && target.classList.contains("modal")) {
                               onBackdropDismiss(e);
+                              triggerRef.current?.focus();
                           }
                       }}
                       onAnimationEnd={(e) => {
+                          e.stopPropagation();
                           props.onAnimationEnd && props.onAnimationEnd(e);
 
                           if (fullscreen && toggle && autoFocus && !dialogRef.current.contains(document.activeElement)) {
+                              triggerRef.current = document.activeElement as HTMLElement;
                               dialogRef.current.querySelector<HTMLElement>(FOCUSABLE_ELEMENTS_SELECTOR)?.focus();
                           }
                       }}
@@ -118,8 +127,11 @@ export const Modal: React.FC<ModalProps> = React.memo(
                           ref={dialogRef}
                           role="document"
                           className={classnames("modal-dialog", { [`modal-${size}`]: size })}
-                          onAnimationEnd={() => {
+                          onAnimationEnd={(e) => {
+                              e.stopPropagation();
+
                               if (toggle && autoFocus && !dialogRef.current.contains(document.activeElement)) {
+                                  triggerRef.current = document.activeElement as HTMLElement;
                                   dialogRef.current.querySelector<HTMLElement>(FOCUSABLE_ELEMENTS_SELECTOR)?.focus();
                               }
                           }}
