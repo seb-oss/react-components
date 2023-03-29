@@ -26,7 +26,6 @@ const positions: Array<DynamicFormOption<ModalPosition>> = [
 
 const NotificationPage: React.FC = () => {
     const [toggle, setToggle] = React.useState<boolean>(false);
-    const toggleButtonRef: React.MutableRefObject<HTMLButtonElement> = React.useRef<HTMLButtonElement>();
 
     const {
         renderForm,
@@ -55,7 +54,6 @@ const NotificationPage: React.FC = () => {
 
     const dismiss = React.useCallback(() => {
         setToggle(false);
-        toggleButtonRef.current?.focus();
     }, []);
 
     const { position, size, fullscreen, centered, trapfocus, autoFocus } = controls as { [k: string]: any };
@@ -65,9 +63,7 @@ const NotificationPage: React.FC = () => {
             mainFile={importString}
             example={
                 <>
-                    <Button ref={toggleButtonRef} onClick={() => setToggle(!toggle)}>
-                        Toggle Modal
-                    </Button>
+                    <Button onClick={() => setToggle(!toggle)}>Toggle Modal</Button>
                     <Modal
                         toggle={toggle}
                         {...{ position, size, fullscreen, centered, trapfocus, autoFocus }}
