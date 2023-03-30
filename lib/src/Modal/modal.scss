@@ -8,6 +8,8 @@ $modal-lg-width: 800px;
     height: 0;
     background-color: rgba(black, 0.6);
     transition: opacity 200ms linear;
+    transition: visibility 200ms ease-in-out;
+    visibility: hidden;
 
     > .modal-dialog {
         margin: 0;
@@ -21,6 +23,7 @@ $modal-lg-width: 800px;
 
     &.show {
         animation: fade-in-modal-container 200ms forwards;
+        visibility: visible;
     }
     &.hide {
         animation: fade-out-modal-container 400ms forwards;
