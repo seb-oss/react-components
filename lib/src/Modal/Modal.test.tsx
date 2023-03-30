@@ -1,60 +1,53 @@
+import { fireEvent, render, RenderResult, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { UserEvent } from "@testing-library/user-event/dist/types/setup";
 import React from "react";
-import { render, unmountComponentAtNode } from "react-dom";
-import { act, Simulate, SyntheticEventData } from "react-dom/test-utils";
 import { ModalProps } from ".";
 import { Key } from "../utils";
 import { Modal, ModalPosition, ModalSize } from "./Modal";
 
 describe("Component: Modal", () => {
-    let container: HTMLDivElement = null;
     const MOCK_MODAL_BODY: React.ReactNode = (
         <div className="modal-body">
-            <input id="test-input" type="text" />
-            <button id="test-button" />
+            <input id="test-input" data-testid="test-input" type="text" />
+            <button id="test-button" data-testid="test-button" />
         </div>
     );
 
-    function renderModal(props: ModalProps = {}): void {
-        act(() => {
-            render(<Modal toggle {...props} />, container);
-        });
-
-        act(() => Simulate.animationEnd(document.querySelector(props.fullscreen ? ".modal" : ".modal-dialog")));
+    function renderModal(props: ModalProps = {}, sibling?: React.ReactNode): RenderResult {
+        const result = render(
+            <>
+                <Modal toggle {...props} />
+                {sibling}
+            </>
+        );
+        fireEvent.animationEnd(screen.getByRole(props.fullscreen ? "dialog" : "document"));
+        return result;
     }
-
-    function pressKey(data: Partial<SyntheticEventData>, element: Element = document.activeElement): void {
-        act(() => Simulate.keyDown(element, data));
-    }
-
-    beforeEach(() => {
-        container = document.createElement("div");
-        document.body.appendChild(container);
-    });
-
-    afterEach(() => {
-        unmountComponentAtNode(container);
-        container.remove();
-        container = null;
-    });
 
     it("Should render correctly", () => {
-        renderModal({ toggle: false });
-        const modal: HTMLDivElement = document.body.querySelector<HTMLDivElement>("div.rc.modal");
-        expect(modal).not.toBeNull();
-        expect(modal.classList.contains("show")).toBeFalsy();
-        expect(modal.classList.contains("hide")).toBeFalsy();
-        expect(modal.firstElementChild.classList.contains("modal-dialog")).toBeTruthy();
-        expect(modal.firstElementChild.firstElementChild.classList.contains("modal-content")).toBeTruthy();
+        renderModal();
+        expect(screen.getByRole("dialog")).toBeInTheDocument();
+        expect(screen.getByRole("document")).toBeInTheDocument();
+    });
+
+    it("Should toggle visibility correctly", () => {
+        const { rerender } = renderModal();
+        expect(screen.getByRole("dialog")).not.toHaveClass("hide");
+        expect(screen.getByRole("dialog")).toHaveClass("show");
+        rerender(<Modal />);
+        expect(screen.getByRole("dialog")).not.toHaveClass("show");
+        expect(screen.getByRole("dialog")).toHaveClass("hide");
     });
 
     it("Should be centered when configured", () => {
         renderModal({ centered: true });
-        expect(document.querySelector(".modal").classList.contains("modal-centered")).toBeTruthy();
+        expect(screen.getByRole("dialog")).toHaveClass("modal-centered");
     });
 
     it("Should be fullscreen when configured", () => {
         renderModal({ fullscreen: true });
-        expect(document.querySelector(".modal").classList.contains("modal-fullscreen")).toBeTruthy();
+        expect(screen.getByRole("dialog")).toHaveClass("modal-fullscreen");
     });
 
     it("Should fire animation handler when animation has ended", () => {
@@ -64,57 +57,54 @@ describe("Component: Modal", () => {
         expect(onAnimationEnd).toHaveBeenCalled();
     });
 
-    it("Should fire backdrop handler when backdrop is dismissed", () => {
+    it("Should fire backdrop handler when backdrop is dismissed", async () => {
+        const user: UserEvent = userEvent.setup();
         const onBackdropDismiss: jest.Mock = jest.fn();
         const onClick: jest.Mock = jest.fn();
-
         renderModal({ onBackdropDismiss, onClick });
         expect(onClick).not.toBeCalled();
-        act(() => Simulate.click(document.querySelector(".modal-dialog")));
+        await user.click(screen.getByRole("document"));
         expect(onClick).toBeCalled();
         expect(onBackdropDismiss).not.toBeCalled();
-        act(() => Simulate.click(document.querySelector(".modal")));
+        await user.click(screen.getByRole("dialog"));
         expect(onBackdropDismiss).toBeCalled();
     });
 
-    it("Should fire escape handler when escape key is pressed", () => {
+    it("Should fire escape handler when escape key is pressed", async () => {
+        const user: UserEvent = userEvent.setup();
         const onEscape: jest.Mock = jest.fn();
-
         renderModal({ onEscape });
         expect(onEscape).not.toBeCalled();
-        pressKey({ key: Key.Escape }, document.querySelector(".rc.modal"));
+        await user.click(screen.getByRole("document"));
+        await user.keyboard(`[${Key.Escape}]`);
         expect(onEscape).toBeCalled();
     });
 
     describe("Sizes", () => {
-        const sizes: ModalSize[] = ["sm", "md", "lg"];
-        sizes.forEach((size: ModalSize) => {
+        ["sm", "md", "lg"].forEach((size: ModalSize) => {
             it(`Should render size (${size}) when configured`, () => {
                 renderModal({ size });
-                expect(document.querySelector(".modal-dialog").classList.contains(`modal-${size}`)).toBeTruthy();
+                expect(screen.getByRole("document")).toHaveClass(`modal-${size}`);
             });
         });
     });
 
     describe("Positions", () => {
-        const positions: ModalPosition[] = ["left", "right"];
-        positions.forEach((position: ModalPosition) =>
+        ["left", "right"].forEach((position: ModalPosition) =>
             it(`Should render position (${position}) when configured`, () => {
                 renderModal({ position });
-                expect(document.querySelector(".modal").classList.contains("modal-aside")).toBeTruthy();
-                expect(document.querySelector(".modal").classList.contains(`modal-aside-${position}`)).toBeTruthy();
+                expect(screen.getByRole("dialog")).toHaveClass("modal-aside", `modal-aside-${position}`);
             })
         );
 
         it("Should render position (default) when configured", () => {
             renderModal({ position: "default" });
-            expect(document.querySelector(".modal").classList.contains("modal-aside")).toBeFalsy();
+            expect(screen.getByRole("dialog")).not.toHaveClass("modal-aside");
         });
 
         it("Should be overridden when fullscreen is configured", () => {
             renderModal({ fullscreen: true, position: "left" });
-            expect(document.querySelector(".modal").classList.contains("modal-aside")).toBeFalsy();
-            expect(document.querySelector(".modal").classList.contains("modal-aside-left")).toBeFalsy();
+            expect(screen.getByRole("dialog")).not.toHaveClass("modal-aside", "modal-aside-left");
         });
     });
 
@@ -122,118 +112,98 @@ describe("Component: Modal", () => {
         describe("Should focus on first input when modal is visible", () => {
             it("default mode", () => {
                 renderModal({ children: MOCK_MODAL_BODY });
-                expect(document.activeElement).toBe(document.getElementById("test-input"));
+                expect(screen.getByTestId("test-input")).toHaveFocus();
             });
 
             it("fullscreen mode", () => {
-                renderModal({
-                    children: MOCK_MODAL_BODY,
-                    fullscreen: true,
-                });
-                expect(document.activeElement).toBe(document.getElementById("test-input"));
+                renderModal({ children: MOCK_MODAL_BODY, fullscreen: true });
+                expect(screen.getByTestId("test-input")).toHaveFocus();
             });
         });
 
         describe("Should not focus on first input when modal not visible", () => {
             it("default mode", () => {
-                renderModal({
-                    children: MOCK_MODAL_BODY,
-                    toggle: false,
-                });
-                expect(document.activeElement).toBe(document.body);
+                renderModal({ children: MOCK_MODAL_BODY, toggle: false });
+                expect(document.body).toHaveFocus();
             });
 
             it("fullscreen mode", () => {
-                renderModal({
-                    children: MOCK_MODAL_BODY,
-                    fullscreen: true,
-                    toggle: false,
-                });
-                expect(document.activeElement).toBe(document.body);
+                renderModal({ children: MOCK_MODAL_BODY, fullscreen: true, toggle: false });
+                expect(document.body).toHaveFocus();
             });
         });
 
         describe("Should retain focus body when input is not available in modal", () => {
             it("default mode", () => {
                 renderModal({ children: <div className="modal-body"></div> });
-                expect(document.activeElement).toBe(document.body);
+                expect(document.body).toHaveFocus();
             });
 
             it("fullscreen mode", () => {
                 renderModal({ children: <div className="modal-body"></div>, fullscreen: true });
-                expect(document.activeElement).toBe(document.body);
+                expect(document.body).toHaveFocus();
             });
         });
     });
 
     describe("Should trap focus", () => {
-        function tabForward() {
-            act(() => pressKey({ key: Key.Tab }, document.querySelector(".rc.modal")));
+        const extraButton = <button data-testid="extra" />;
+
+        async function tabForward() {
+            const user: UserEvent = userEvent.setup();
+            await user.tab();
         }
 
-        function tabBackward() {
-            act(() => pressKey({ key: Key.Tab, shiftKey: true }, document.querySelector(".rc.modal")));
+        async function tabBackward() {
+            const user: UserEvent = userEvent.setup();
+            await user.tab({ shift: true });
         }
 
-        beforeEach(() => {
-            const extraButton = document.createElement("button");
-            extraButton.className = "extra";
-            document.body.appendChild(extraButton);
+        it("Descending tabbing", async () => {
+            renderModal({ children: MOCK_MODAL_BODY }, extraButton);
+            expect(screen.getAllByRole("button")).toHaveLength(2);
+            expect(screen.getByTestId("test-input")).toHaveFocus();
+            await tabForward();
+            expect(screen.getByTestId("test-button")).toHaveFocus();
+            await tabForward();
+            expect(screen.getByTestId("test-input")).toHaveFocus();
+            await tabForward();
+            expect(screen.getByTestId("test-button")).toHaveFocus();
         });
 
-        afterEach(() => {
-            document.body.removeChild(document.querySelector(".extra"));
-        });
-
-        it("Descending tabbing", () => {
-            renderModal({ children: MOCK_MODAL_BODY });
-
-            expect(document.activeElement).toBe(document.getElementById("test-input"));
-
-            tabForward();
-            expect(document.activeElement).toBe(document.getElementById("test-button"));
-
-            tabForward();
-            expect(document.activeElement).toBe(document.getElementById("test-input"));
-
-            tabForward();
-            expect(document.activeElement).toBe(document.getElementById("test-button"));
-        });
-
-        it("Ascending tabbing", () => {
-            renderModal({ children: MOCK_MODAL_BODY });
-
-            expect(document.activeElement).toBe(document.getElementById("test-input"));
-
-            tabBackward();
-            expect(document.activeElement).toBe(document.getElementById("test-button"));
-
-            tabBackward();
-            expect(document.activeElement).toBe(document.getElementById("test-input"));
-
-            tabBackward();
-            expect(document.activeElement).toBe(document.getElementById("test-button"));
+        it("Ascending tabbing", async () => {
+            renderModal({ children: MOCK_MODAL_BODY }, extraButton);
+            expect(screen.getAllByRole("button")).toHaveLength(2);
+            expect(screen.getByTestId("test-input")).toHaveFocus();
+            await tabBackward();
+            expect(screen.getByTestId("test-button")).toHaveFocus();
+            await tabBackward();
+            expect(screen.getByTestId("test-input")).toHaveFocus();
+            await tabBackward();
+            expect(screen.getByTestId("test-button")).toHaveFocus();
         });
 
         it("Shouldn not do anything when there is no focusable elements in the modal or the event is not a tab", () => {
             renderModal();
-
-            expect(document.activeElement.className === "extra");
-
+            expect(document.body).toHaveFocus();
             tabForward();
-            expect(document.activeElement.className === "extra");
-
+            expect(document.body).toHaveFocus();
             tabBackward();
-            expect(document.activeElement.className === "extra");
+            expect(document.body).toHaveFocus();
         });
     });
 
     it("Should cleanup side effects when unmounted", () => {
-        renderModal();
-        expect(document.body.classList.contains("modal-open")).toBeTruthy();
-        act(() => {
-            unmountComponentAtNode(container);
-        });
-        expect(document.body.classList.contains("modal-open")).toBeFalsy();
+        const { unmount } = renderModal();
+        expect(document.body).toHaveClass("modal-open");
+        unmount();
+        expect(document.body).not.toHaveClass("modal-open");
+    });
+
+    it("Should return focus when unmounted", () => {
+        const { unmount } = renderModal({ children: MOCK_MODAL_BODY });
+        expect(screen.getByTestId("test-input")).toHaveFocus();
+        unmount();
+        expect(document.body).toHaveFocus();
     });
 });
