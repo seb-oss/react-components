@@ -42,9 +42,9 @@
                 &:hover {
                     text-decoration: none;
                 }
-                &:focus {
-                    border-color: rgba($blue, 0.5);
-                    box-shadow: 0 0 4px 1px rgba($blue, 0.56);
+                &:focus-visible {
+                    box-shadow: $btn-focus-box-shadow;
+                    outline: none;
                 }
             }
         }
@@ -132,11 +132,12 @@
     &.inverted {
         > .card {
             > .card-header > button.btn-link {
-                padding: 0.5rem 3rem 0.5rem 1rem;
+                padding: $spacer;
                 > h4:before {
-                    right: -2rem;
-                    left: auto;
                     top: 50%;
+                    right: 0;
+                    left: auto;
+                    filter: brightness(0.2);
                 }
             }
             &.collapsed > .card-header > button.btn-link > h4:before {
