@@ -19,6 +19,12 @@ button.rc.close-btn {
         &:active {
             color: white;
         }
+        &:focus {
+            outline: none;
+        }
+        &:focus-visible {
+            box-shadow: $btn-focus-box-shadow;
+        }
     }
 
     &::after {
