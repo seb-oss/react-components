@@ -17,11 +17,11 @@ This is a set of react components some of which are based on SEB's bootstrap. Th
 
 ---
 
-### :rotating_light: NOTICE: `@sebgroup/react-components` support has officially ended as of March 2023.
+#### :rotating_light: NOTICE: `@sebgroup/react-components` support has officially ended as of March 2023.
 
 **What does this mean?**
 
-The code will remain accessible on [GitHub](https://github.com/sebgroup/ng-components) and [npm](https://github.com/sebgroup/ng-components). This website will remain here indefinitely.
+The code will remain accessible on GitHub and [npm](https://www.npmjs.com/package/@sebgroup/react-components). This website will remain here indefinitely.
 
 The project will be in an archived state, meaning that no new development will be made _unless_:
 
