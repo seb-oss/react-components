@@ -46,7 +46,6 @@ export const Modal: React.FC<ModalProps> = React.memo(
                 switch (e.key) {
                     case Key.Escape: {
                         onEscape && onEscape(e as unknown as KeyboardEvent);
-                        triggerRef.current?.focus();
                         break;
                     }
                     case Key.Tab: {
@@ -79,8 +78,9 @@ export const Modal: React.FC<ModalProps> = React.memo(
             return () => {
                 document.body.classList.remove("modal-open");
                 triggerRef.current?.focus();
+                triggerRef.current = undefined;
             };
-        }, [toggle]);
+        }, [isPristine, toggle]);
 
         return !safeDocument
             ? null
@@ -109,7 +109,6 @@ export const Modal: React.FC<ModalProps> = React.memo(
 
                           if (onBackdropDismiss && target.classList.contains("rc") && target.classList.contains("modal")) {
                               onBackdropDismiss(e);
-                              triggerRef.current?.focus();
                           }
                       }}
                       onAnimationEnd={(e) => {
