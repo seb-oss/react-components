@@ -49,6 +49,8 @@ export type DropdownProps = Omit<JSX.IntrinsicElements["select"], "value"> & {
     text?: DropdownText;
     /** Indicator for error, warning or success */
     indicator?: Indicator;
+    /** Props for (ul) element */
+    itemWrapperProps?: JSX.IntrinsicElements["ul"];
 };
 
 const bodyScrollOptions: BodyScrollOptions = { reserveScrollBarGap: true };
@@ -58,7 +60,7 @@ const safeWindow: Window | null = typeof window !== "undefined" ? window : null;
 const isMobile: boolean = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(safeWindow?.navigator?.userAgent);
 
 export const Dropdown: React.FC<DropdownProps> = React.forwardRef(
-    ({ wrapperProps = {}, text = {}, onMultipleChange, clearable, indicator, isAllSelectable = true, searchable, selectedLabel, ...props }: DropdownProps, ref) => {
+    ({ wrapperProps = {}, text = {}, onMultipleChange, clearable, indicator, isAllSelectable = true, searchable, selectedLabel, itemWrapperProps, ...props }: DropdownProps, ref) => {
         const { multiple, onChange } = props;
         const [dropdownId] = React.useState<string>(randomId("dd-"));
         const [toggleId] = React.useState<string>(randomId("ddt-"));
@@ -419,6 +421,7 @@ export const Dropdown: React.FC<DropdownProps> = React.forwardRef(
                                       style={{ ...menuStyle }}
                                       tabIndex={-1}
                                       onKeyDown={onDropDownKeyDown}
+                                      {...itemWrapperProps}
                                   >
                                       {searchable && (
                                           <input
